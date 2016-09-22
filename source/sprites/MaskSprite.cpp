@@ -18,6 +18,17 @@ MaskSprite* MaskSprite::Clone() const
 	return new MaskSprite(*this);
 }
 
+void MaskSprite::OnMessage(Message msg)
+{
+	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
+	if (const Sprite* base = sym->GetBase()) {
+		const_cast<Sprite*>(base)->OnMessage(msg);
+	}
+	if (const Sprite* mask = sym->GetMask()) {
+		const_cast<Sprite*>(mask)->OnMessage(msg);
+	}
+}
+
 bool MaskSprite::Update(const RenderParams& params)
 {
 	bool dirty = false;

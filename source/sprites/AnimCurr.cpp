@@ -61,6 +61,16 @@ AnimCurr::~AnimCurr()
 	}
 }
 
+void AnimCurr::OnMessage(Message msg)
+{
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
+		const Layer& layer = m_layers[i];
+		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
+			layer.frame.sprs[j]->OnMessage(msg);
+		}
+	}
+}
+
 bool AnimCurr::Update(const RenderParams& params, bool loop,
 					  float interval, int fps)
 {

@@ -345,6 +345,10 @@
 			Name="sprites"
 			>
 			<File
+				RelativePath="..\..\..\include\sprite2\S2_Message.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\sprites\S2_Sprite.cpp"
 				>
 			</File>

@@ -67,6 +67,15 @@ Particle3dSprite* Particle3dSprite::Clone() const
 	return new Particle3dSprite(*this);
 }
 
+void Particle3dSprite::OnMessage(Message msg)
+{
+	if (msg == MSG_START) {
+		if (m_spr) {
+			p3d_emitter_start(m_spr->et);
+		}
+	}
+}
+
 bool Particle3dSprite::Update(const RenderParams& params)
 {
 	if (!m_spr) {

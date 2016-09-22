@@ -1,0 +1,14 @@
+#ifndef _SPRITE2_MESSAGE_H_
+#define _SPRITE2_MESSAGE_H_
+
+namespace s2
+{
+
+enum Message
+{
+	MSG_START = 0,
+};
+
+}
+
+#endif // _SPRITE2_MESSAGE_H_

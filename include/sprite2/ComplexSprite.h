@@ -22,6 +22,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
+	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& params);
 	virtual Sprite* FetchChild(const std::string& name) const;
 

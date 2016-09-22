@@ -58,6 +58,15 @@ Particle2dSprite* Particle2dSprite::Clone() const
 	return new Particle2dSprite(*this);
 }
 
+void Particle2dSprite::OnMessage(Message msg)
+{
+	if (msg == MSG_START) {
+		if (m_et) {
+			p2d_emitter_start(m_et);
+		}
+	}
+}
+
 bool Particle2dSprite::Update(const RenderParams& params)
 {
 	if (!m_et) {

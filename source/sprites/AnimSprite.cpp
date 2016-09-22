@@ -18,12 +18,21 @@ AnimSprite::AnimSprite(Symbol* sym)
 	, m_interval(0)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 {
-	Start();
+	m_curr.Start();
 }
 
 AnimSprite* AnimSprite::Clone() const
 {
 	return new AnimSprite(*this);
+}
+
+void AnimSprite::OnMessage(Message msg)
+{
+	m_curr.OnMessage(msg);
+
+	if (msg == MSG_START) {
+		m_curr.Start();
+	}
 }
 
 bool AnimSprite::Update(const RenderParams& params)
@@ -34,11 +43,6 @@ bool AnimSprite::Update(const RenderParams& params)
 Sprite* AnimSprite::FetchChild(const std::string& name) const
 {
 	return m_curr.FetchChild(name);
-}
-
-void AnimSprite::Start()
-{
-	m_curr.Start();
 }
 
 void AnimSprite::SetActive(bool active)

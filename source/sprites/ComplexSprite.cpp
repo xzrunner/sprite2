@@ -23,6 +23,14 @@ ComplexSprite* ComplexSprite::Clone() const
 	return new ComplexSprite(*this);
 }
 
+void ComplexSprite::OnMessage(Message msg)
+{
+	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	for (int i = 0, n = children.size(); i < n; ++i) {
+		children[i]->OnMessage(msg);
+	}
+}
+
 bool ComplexSprite::Update(const RenderParams& params)
 {
 	RenderParams p = params;

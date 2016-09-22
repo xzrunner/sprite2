@@ -58,6 +58,15 @@ TrailSprite* TrailSprite::Clone() const
 	return new TrailSprite(*this);
 }
 
+void TrailSprite::OnMessage(Message msg)
+{
+	if (msg == MSG_START) {
+		if (m_et) {
+			t2d_emitter_start(m_et);
+		}
+	}
+}
+
 bool TrailSprite::Update(const RenderParams& params)
 {
 	float time = Trail::Instance()->GetTime();

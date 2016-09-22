@@ -28,6 +28,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
+	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& params);
 
 	void Draw(const s2::RenderParams& params) const;

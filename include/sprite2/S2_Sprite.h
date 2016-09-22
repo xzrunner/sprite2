@@ -5,6 +5,7 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
+#include "S2_Message.h"
 
 #include <SM_Vector.h>
 #include <SM_Matrix.h>
@@ -28,6 +29,8 @@ public:
 	Sprite& operator = (const Sprite& spr);
 	Sprite(Symbol* sym);
 	virtual ~Sprite();
+
+	virtual void OnMessage(Message msg) {}
 
 	virtual void Translate(const sm::vec2& offset);
 	virtual void Rotate(float delta);

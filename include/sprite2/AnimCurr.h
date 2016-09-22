@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_ANIM_CURR_H_
 #define _SPRITE2_ANIM_CURR_H_
 
+#include "S2_Message.h"
+
 #include <vector>
 
 namespace s2
@@ -18,6 +20,8 @@ public:
 	AnimCurr& operator = (const AnimCurr& curr);
 	AnimCurr(AnimSymbol* sym);
 	~AnimCurr();
+
+	void OnMessage(Message msg);
 
 	bool Update(const RenderParams& params, bool loop = true, 
 		float interval = 0, int fps = 30);

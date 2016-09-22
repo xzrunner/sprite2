@@ -159,6 +159,15 @@ void AnimCurr::Start()
 	LoadFromSym();
 }
 
+void AnimCurr::SetTime(float time)
+{
+	static const float dt = 0.01f;
+	m_curr_time = Animation::Instance()->GetTime() - dt;
+	m_start_time = m_curr_time - time;
+	m_stop_time = 0;
+	m_stop_during = -dt;
+}
+
 void AnimCurr::SetActive(bool active) 
 {
 	if (m_active == active) {

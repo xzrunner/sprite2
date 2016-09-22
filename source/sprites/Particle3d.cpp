@@ -68,7 +68,7 @@ blend_end_func()
 
 static void 
 render_func(void* sym, float* mat, float x, float y, float angle, float scale, 
-            struct ps_color* mul_col, struct ps_color* add_col, const void* ud)
+            struct ps_color* mul_col, struct ps_color* add_col, const void* ud, float time)
 {
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
@@ -106,6 +106,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 	}
 
 	DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+	s2_sym->Update(params, time);
 
 	// todo bind
 	// 	if (p->bind_ps) {

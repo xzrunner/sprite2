@@ -45,6 +45,7 @@ public:
 	 *    Symbol
 	 */
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
+	virtual bool Update(const RenderParams& params, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }

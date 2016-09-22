@@ -31,6 +31,8 @@ public:
 
 	void Start();
 
+	void SetTime(float time);
+
 	void SetActive(bool active);
 	bool IsActive() const { return m_active; }
 

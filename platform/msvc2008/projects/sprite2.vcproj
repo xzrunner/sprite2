@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\wx\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

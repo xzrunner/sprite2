@@ -76,6 +76,8 @@ public:
 
 	bool IsVisible() const { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
+	bool IsEditable() const { return m_editable; }
+	void SetEditable(bool editable) { m_editable = editable; }
 
 	sm::mat4 GetTransMatrix() const;
 	sm::mat4 GetTransInvMatrix() const;
@@ -111,9 +113,10 @@ protected:
 	RenderCamera			m_camera;
 
 	/************************************************************************/
-	/* message                                                              */
+	/* edit                                                                 */
 	/************************************************************************/
 	bool					m_visible;
+	bool					m_editable;
 
 // 	/************************************************************************/
 // 	/* extend                                                               */

@@ -26,7 +26,7 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
  		return;
  	}
 
-	s2::RenderParams p = params;
+	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * p.mt;
 		p.color = spr->Color() * p.color;

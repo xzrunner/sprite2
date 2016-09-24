@@ -25,7 +25,7 @@ ImageSymbol::~ImageSymbol()
 
 void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	s2::RenderParams p = params;
+	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * params.mt;
 		p.color = spr->Color() * params.color;

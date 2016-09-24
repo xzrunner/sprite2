@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\wx\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -947,6 +947,58 @@
 						</File>
 					</Filter>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="skeleton"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\Bone.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Bone.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Joint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Joint.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SkeletonSprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SkeletonSprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SkeletonSymbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SkeletonSymbol.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Skin.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Skin.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Slot.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Slot.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

@@ -53,12 +53,12 @@ sm::rect MaskSymbol::GetBounding(const Sprite* spr) const
 	}
 }
 
-void MaskSymbol::SetBase(s2::Sprite* base)
+void MaskSymbol::SetBase(Sprite* base)
 {
 	cu::RefCountObjAssign(m_base, base);
 }
 
-void MaskSymbol::SetMask(s2::Sprite* mask)
+void MaskSymbol::SetMask(Sprite* mask)
 {
 	cu::RefCountObjAssign(m_mask, mask);
 }

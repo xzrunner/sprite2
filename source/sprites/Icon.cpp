@@ -107,7 +107,7 @@ void Icon::GenVertices(float process, const sm::vec2* texcoords,
 	}
 }
 
-void Icon::SetImage(s2::ImageSymbol* img)
+void Icon::SetImage(ImageSymbol* img)
 {
 	cu::RefCountObjAssign(m_img, img);
 	Update();

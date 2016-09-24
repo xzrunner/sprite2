@@ -29,8 +29,8 @@ public:
 	void GenVertices(float process, const sm::vec2* texcoords,
 		sm::vec2* vertices) const;
 
-	void SetImage(s2::ImageSymbol* img);
-	const s2::ImageSymbol* GetImage() const { return m_img; }
+	void SetImage(ImageSymbol* img);
+	const ImageSymbol* GetImage() const { return m_img; }
 
 protected:
 	virtual void GetQuad(float process, sm::vec2 quad[4]) const = 0;

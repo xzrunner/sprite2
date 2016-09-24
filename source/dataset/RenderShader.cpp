@@ -64,7 +64,7 @@ RenderShader RenderShader::operator * (const RenderShader& rs) const
 	return ret;
 }
 
-void RenderShader::SetFilter(s2::FilterMode mode)
+void RenderShader::SetFilter(FilterMode mode)
 {
 	if (filter && filter->GetMode() == mode) {
 		return;

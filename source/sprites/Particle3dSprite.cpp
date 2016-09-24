@@ -22,7 +22,6 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	, m_alone(spr.m_alone)
 	, m_reuse(spr.m_reuse)
 	, m_rp(spr.m_rp)
-	, m_spr_ref(spr.m_spr_ref)
 {
 	CreateSpr();
 }
@@ -34,7 +33,6 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	m_alone = spr.m_alone;
 	m_reuse = spr.m_reuse;
 	m_rp = spr.m_rp;
-	m_spr_ref = false;
 
 	return *this;
 }
@@ -49,17 +47,14 @@ Particle3dSprite::Particle3dSprite(Symbol* sym)
 
 Particle3dSprite::~Particle3dSprite()
 {
-	if (!m_spr_ref && m_spr) 
-	{
-		if (!m_alone) {
-			p3d_emitter_release(m_spr->et);
-		} else {
-			if (m_spr->et->loop) {
-				p3d_buffer_remove(m_spr);
-				p3d_sprite_release(m_spr);
-			}
-		}
+	if (!m_spr) {
+		return;
 	}
+
+	if (m_spr->et->loop) {
+		p3d_buffer_remove(m_spr);
+	}
+	p3d_sprite_release(m_spr);
 }
 
 Particle3dSprite* Particle3dSprite::Clone() const
@@ -85,7 +80,7 @@ bool Particle3dSprite::Update(const RenderParams& params)
 	} else {
 		p3d_emitter* et = m_spr->et;
 
-		float time = s2::Particle3d::Instance()->GetTime();
+		float time = Particle3d::Instance()->GetTime();
 		assert(et->time <= time);
 		if (et->time == time) {
 			return false;
@@ -108,7 +103,7 @@ bool Particle3dSprite::Update(const RenderParams& params)
 	}
 }
 
-void Particle3dSprite::Draw(const s2::RenderParams& params) const
+void Particle3dSprite::Draw(const RenderParams& params) const
 {
 	if (!m_alone && m_spr) {
 		m_rp.mat = params.mt;
@@ -183,6 +178,7 @@ void Particle3dSprite::SetReuse(bool reuse)
 
 	if (m_spr->et) {
 		p3d_emitter_release(m_spr->et);
+		m_spr->et = NULL;
 	}
 
 	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);

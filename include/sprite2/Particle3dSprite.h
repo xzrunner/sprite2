@@ -31,7 +31,7 @@ public:
 	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& params);
 
-	void Draw(const s2::RenderParams& params) const;
+	void Draw(const RenderParams& params) const;
 
 	void SetOuterMatrix(const sm::mat4& mat) const;
 
@@ -56,9 +56,7 @@ protected:
 	bool m_alone;
 	bool m_reuse;
 
-	mutable s2::P3dRenderParams m_rp;
-
-	bool m_spr_ref;
+	mutable P3dRenderParams m_rp;
 
 	VI_DUMMY_FUNC
 

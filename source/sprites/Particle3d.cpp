@@ -1,7 +1,13 @@
 #include "Particle3d.h"
 #include "FastBlendMode.h"
 #include "S2_Symbol.h"
+#include "S2_Sprite.h"
 #include "DrawNode.h"
+
+#include "TrailSymbol.h"
+#include "TrailSprite.h"
+#include "Particle3dSymbol.h"
+#include "Particle3dSprite.h"
 
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
@@ -67,13 +73,11 @@ blend_end_func()
 }
 
 static void 
-render_func(void* sym, float* mat, float x, float y, float angle, float scale, 
+render_func(void* spr, void* sym, float* mat, float x, float y, float angle, float scale, 
             struct ps_color* mul_col, struct ps_color* add_col, const void* ud, float time)
 {
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
-
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
 
 	RenderParams params;
 
@@ -105,15 +109,14 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 		params.mt = _mat * rp->mat;
 	}
 
-	DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
-	s2_sym->Update(params, time);
-
-	// todo bind
-	// 	if (p->bind_ps) {
-	// 		sm::mat4 _mt;
-	// 		_mt.translate(p->pos.x, p->pos.y);
-	// 		Draw(p->bind_ps, _mt, recorder);
-	// 	}
+	if (spr) {
+		Sprite* s2_spr = static_cast<Sprite*>(spr);
+		DrawNode::Draw(s2_spr, params);
+	} else if (sym) {
+		Symbol* s2_sym = static_cast<Symbol*>(sym);
+		DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+		s2_sym->Update(params, time);
+	}
 
 	// todo record
 	// 	AnimRecorder* curr_record = m_anim_recorder ? m_anim_recorder : recorder;
@@ -123,6 +126,19 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 	// 	}
 }
 
+static void
+update_func(void* spr, float x, float y)
+{
+	if (!spr) {
+		return;
+	}
+
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	RenderParams rp;
+	rp.mt = sm::mat4::Translated(x, y, 0);
+	s2_spr->Update(rp);
+}
+
 static void 
 add_func(p3d_particle* p, void* ud)
 {
@@ -130,6 +146,19 @@ add_func(p3d_particle* p, void* ud)
 //  	const sm::vec2& pos = ps->GetPosition();
 //  	p->init_pos.x = pos.x;
 //  	p->init_pos.y = pos.y;
+
+	//////////////////////////////////////////////////////////////////////////
+
+	if (!p->ud) {
+		Symbol* sym = static_cast<Symbol*>(p->cfg.sym->ud);
+		if (TrailSymbol* trail = dynamic_cast<TrailSymbol*>(sym)) {
+			Sprite* s2_spr = new TrailSprite(sym);
+			p->ud = s2_spr;
+		} else if (Particle3dSymbol* p3d = dynamic_cast<Particle3dSymbol*>(sym)) {
+			Sprite* s2_p3d = new Particle3dSprite(sym);
+			p->ud = s2_p3d;
+		}
+	}
 }
 
 static void 
@@ -139,6 +168,14 @@ remove_func(p3d_particle* p, void* ud)
 // 	if (ps) {
 // 		ps->RemoveFromInvertRecord(p);
 // 	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	if (p->ud) {
+		Sprite* spr = static_cast<Sprite*>(p->ud);
+		spr->RemoveReference();
+		p->ud = NULL;
+	}
 }
 
 static void
@@ -169,7 +206,7 @@ release_draw_params_func(struct p3d_sprite* spr) {
 void Particle3d::Init()
 {
 	p3d_init();
-	p3d_regist_cb(blend_begin_func, blend_end_func, render_func, add_func, remove_func);	
+	p3d_regist_cb(blend_begin_func, blend_end_func, render_func, update_func, add_func, remove_func);	
 	p3d_buffer_init(update_srt_func, buf_remove_func);
 	p3d_sprite_init(create_draw_params_func, release_draw_params_func);
 }

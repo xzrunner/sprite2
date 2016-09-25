@@ -8,6 +8,8 @@
 namespace s2
 {
 
+class Skeleton;
+
 class SkeletonSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
@@ -21,7 +23,7 @@ public:
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
 	
 private:
-
+	Skeleton* m_skeleton;
 
 }; // SkeletonSymbol
 

@@ -10,11 +10,16 @@
 namespace s2
 {
 
+class Skin;
+
 class Joint : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
 	Joint();
 	~Joint();
+
+	virtual void Update();
+	virtual void Draw() const;
 
 	bool Connect(Joint* joint);
 	bool Deconnect();
@@ -24,6 +29,8 @@ private:
 
 	Joint* m_parent;
 	std::vector<Joint*> m_children;
+
+	Skin* m_skin;
 
 }; // Joint
 

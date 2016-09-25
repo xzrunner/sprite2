@@ -4,11 +4,12 @@
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
-#include <string>
-#include <vector>
+#include <SM_Vector.h>
 
 namespace s2
 {
+
+class Sprite;
 
 class Skin : public cu::RefCountObj, private cu::Uncopyable
 {
@@ -16,8 +17,16 @@ public:
 	Skin();
 	~Skin();
 
+	void Update();
+	void Draw() const;
+
+	bool Contain(const sm::vec2& pos) const;
+
 private:
-	
+	Sprite* m_spr;
+
+	sm::vec2 m_pos;
+	float m_angle;
 
 }; // Skin
 

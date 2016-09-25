@@ -1,4 +1,5 @@
 #include "Joint.h"
+#include "Skin.h"
 
 #include <algorithm>
 
@@ -16,6 +17,16 @@ Joint::~Joint()
 		m_parent->RemoveReference();
 	}
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<Joint>());
+}
+
+void Joint::Update()
+{
+	m_skin->Update();
+}
+
+void Joint::Draw() const
+{
+	m_skin->Draw();
 }
 
 bool Joint::Connect(Joint* joint)

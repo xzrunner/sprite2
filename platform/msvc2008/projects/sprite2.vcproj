@@ -952,19 +952,35 @@
 				Name="skeleton"
 				>
 				<File
-					RelativePath="..\..\..\source\sprites\Bone.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\Bone.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprites\Joint.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\Joint.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\JointPose.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\JointPose.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Skeleton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Skeleton.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SkeletonPose.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SkeletonPose.h"
 					>
 				</File>
 				<File
@@ -989,14 +1005,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\Skin.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\Slot.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\Slot.h"
 					>
 				</File>
 			</Filter>

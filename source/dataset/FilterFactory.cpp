@@ -16,6 +16,8 @@
 #include "RFSwirl.h"
 #include "RFBurningMap.h"
 
+#include "RFColGrading.h"
+
 #include <stddef.h>
 #include <assert.h>
 #include <string.h>
@@ -44,6 +46,8 @@ FilterFactory::FilterFactory()
 	m_temps[FM_SHOCK_WAVE]		= new RFShockWave;
 	m_temps[FM_SWIRL]			= new RFSwirl;
 	m_temps[FM_BURNING_MAP]		= new RFBurningMap;	
+
+	m_temps[FM_COL_GRADING]		= new RFColGrading;
 }
 
 FilterFactory::~FilterFactory() 
@@ -98,6 +102,10 @@ RenderFilter* FilterFactory::Create(FilterMode mode)
 		break;
 	case FM_BURNING_MAP:
 		filter = new RFBurningMap;
+		break;
+
+	case FM_COL_GRADING:
+		filter = new RFColGrading;
 		break;
 
 	default:

@@ -206,6 +206,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\include\sprite2\RFColGrading.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\include\sprite2\RFEdgeDetection.h"
 							>
 						</File>

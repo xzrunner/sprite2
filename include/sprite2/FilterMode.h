@@ -22,6 +22,8 @@ enum FilterMode
 	FM_SWIRL,
 	FM_BURNING_MAP,
 
+	FM_COL_GRADING			= 40,
+
 }; // FilterMode
 
 }

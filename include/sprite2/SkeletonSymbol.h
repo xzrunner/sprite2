@@ -21,8 +21,11 @@ public:
 	 *    Symbol
 	 */
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
-	
-private:
+	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
+
+	void SetSkeleton(Skeleton* skeleton);
+
+protected:
 	Skeleton* m_skeleton;
 
 }; // SkeletonSymbol

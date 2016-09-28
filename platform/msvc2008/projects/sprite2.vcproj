@@ -964,6 +964,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\JointMath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\JointMath.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\JointPose.cpp"
 					>
 				</File>
@@ -1001,14 +1009,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\SkeletonSymbol.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\Skin.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\Skin.h"
 					>
 				</File>
 			</Filter>

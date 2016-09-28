@@ -1,13 +1,12 @@
 #ifndef _SPRITE2_JOINT_POSE_H_
 #define _SPRITE2_JOINT_POSE_H_
 
-#include <CU_Uncopyable.h>
 #include <SM_Vector.h>
 
 namespace s2
 {
 
-class JointPose : private cu::Uncopyable
+class JointPose
 {
 public:
 	sm::vec2 trans;
@@ -15,6 +14,7 @@ public:
 	float scale;
 
 	JointPose();
+	JointPose(sm::vec2 trans, float rot);
 
 }; // JointPose
 

@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_JOINT_H_
 #define _SPRITE2_JOINT_H_
 
+#include "JointPose.h"
+
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
@@ -11,18 +13,33 @@ namespace s2
 {
 
 class Skin;
+class Sprite;
+class RenderParams;
 
 class Joint : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
-	Joint();
+	Joint(Sprite* spr, const sm::vec2& offset);
 	~Joint();
 
-	virtual void Update();
-	virtual void Draw() const;
+	void Draw(const RenderParams& params) const;
 
-	bool Connect(Joint* joint);
-	bool Deconnect();
+	void Connect(Joint* child);
+
+	const Joint* GetParent() const { return m_parent; }
+
+private:
+	struct Skin : private cu::Uncopyable
+	{
+		Sprite* spr;
+		JointPose pose;
+
+		Skin(Sprite* spr, const sm::vec2& pos);
+		~Skin();
+
+		void Update(const Joint* joint);
+
+	}; // Skin
 
 private:
 	std::string m_name;
@@ -30,7 +47,9 @@ private:
 	Joint* m_parent;
 	std::vector<Joint*> m_children;
 
-	Skin* m_skin;
+	JointPose m_world_pose;
+
+	Skin m_skin;
 
 }; // Joint
 

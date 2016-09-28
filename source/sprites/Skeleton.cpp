@@ -1,28 +1,34 @@
 #include "Skeleton.h"
 #include "Joint.h"
+#include "RenderParams.h"
+
+#include <algorithm>
 
 namespace s2
 {
 
-Skeleton::Skeleton()
+Skeleton::Skeleton(const Joint* root, const std::vector<Joint*>& all_joints)
+	: m_root(root)
+	, m_all_joints(all_joints)
 {
-
+	if (m_root) {
+		m_root->AddReference();
+	}
+	for_each(m_all_joints.begin(), m_all_joints.end(), cu::AddRefFonctor<Joint>());
 }
 
 Skeleton::~Skeleton()
 {
-
+	if (m_root) {
+		m_root->RemoveReference();
+	}
+	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFonctor<Joint>());
 }
 
-void Skeleton::Update()
+void Skeleton::Draw(const RenderParams& params) const
 {
-
-}
-
-void Skeleton::Draw() const
-{
-	for (int i = 0, n = m_draw_order.size(); i < n; ++i) {
-		m_draw_order[i]->Draw();
+	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
+		m_all_joints[i]->Draw(params);
 	}
 }
 

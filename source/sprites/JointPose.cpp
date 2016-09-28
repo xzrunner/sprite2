@@ -9,4 +9,11 @@ JointPose::JointPose()
 {
 }
 
+JointPose::JointPose(sm::vec2 trans, float rot)
+	: trans(trans)
+	, rot(rot)
+	, scale(1) 
+{
+}
+
 }

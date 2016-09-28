@@ -10,20 +10,23 @@ namespace s2
 {
 
 class Joint;
+class RenderParams;
 
 class Skeleton : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
-	Skeleton();
+	Skeleton(const Joint* root, const std::vector<Joint*>& all_joints);
 	~Skeleton();
 
-	void Update();
-	void Draw() const;
+	void Draw(const RenderParams& params) const;
+
+private:
+	void Clear();
 
 protected:
-	Joint* m_root;
+	const Joint* m_root;
 
-	std::vector<Joint*> m_draw_order;
+	std::vector<Joint*> m_all_joints;
 
 }; // Skeleton
 

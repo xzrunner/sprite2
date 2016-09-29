@@ -157,6 +157,12 @@ void AnimCurr::Start()
 	ResetTime();
 	m_frame = 1;
 	LoadFromSym();
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
+		const Layer& layer = m_layers[i];
+		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
+			layer.frame.sprs[j]->OnMessage(MSG_START);
+		}
+	}
 }
 
 void AnimCurr::SetTime(float time)

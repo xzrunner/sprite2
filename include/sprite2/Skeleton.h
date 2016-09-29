@@ -4,6 +4,8 @@
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
+#include <SM_Rect.h>
+
 #include <vector>
 
 namespace s2
@@ -19,6 +21,9 @@ public:
 	~Skeleton();
 
 	void Draw(const RenderParams& params) const;
+	sm::rect GetBounding() const;
+
+	const Joint* QueryByPos(const sm::vec2& pos) const;
 
 private:
 	void Clear();

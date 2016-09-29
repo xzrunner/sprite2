@@ -6,6 +6,8 @@
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
+#include <SM_Rect.h>
+
 #include <string>
 #include <vector>
 
@@ -15,6 +17,7 @@ namespace s2
 class Skin;
 class Sprite;
 class RenderParams;
+class BoundingBox;
 
 class Joint : public cu::RefCountObj, private cu::Uncopyable
 {
@@ -28,6 +31,11 @@ public:
 
 	const Joint* GetParent() const { return m_parent; }
 
+	void SetWorldPos(const sm::vec2& pos) { m_world_pose.trans = pos; }
+	const sm::vec2& GetWorldPos() const { return m_world_pose.trans; }
+
+	const BoundingBox* GetBoundingBox() const;
+
 private:
 	struct Skin : private cu::Uncopyable
 	{
@@ -38,6 +46,7 @@ private:
 		~Skin();
 
 		void Update(const Joint* joint);
+		void Draw(const RenderParams& params) const;
 
 	}; // Skin
 

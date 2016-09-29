@@ -24,6 +24,7 @@ public:
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	void SetSkeleton(Skeleton* skeleton);
+	const Skeleton* GetSkeleton() const { return m_skeleton; }
 
 protected:
 	Skeleton* m_skeleton;

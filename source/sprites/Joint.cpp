@@ -3,6 +3,7 @@
 #include "JointMath.h"
 #include "S2_RVG.h"
 #include "RenderParams.h"
+#include "DrawNode.h"
 
 #include <SM_Calc.h>
 #include <shaderlab.h>
@@ -30,7 +31,7 @@ Joint::~Joint()
 
 void Joint::Draw(const RenderParams& params) const
 {
-//	m_skin->Draw();
+	m_skin.Draw(params);
 
 	RVG::SetColor(Color(51, 204, 51, 128));
 	RVG::Circle(params.mt * m_world_pose.trans, RADIUS, true);
@@ -40,7 +41,7 @@ void Joint::Draw(const RenderParams& params) const
 	if (m_parent)
 	{
 		sm::vec2 s = params.mt * m_world_pose.trans;
-		sm::vec2 e = params.mt * (m_skin.spr->GetCenter() * 2 - s);
+		sm::vec2 e = params.mt * m_skin.spr->GetCenter() * 2 - s;
 
 		const float w = 0.1f;
 		sm::vec2 mid = s + (e-s)*w;
@@ -87,11 +88,17 @@ void Joint::Connect(Joint* child)
 	cu::RefCountObjAssign(child->m_parent, (Joint*)this);
 }
 
+const BoundingBox* Joint::GetBoundingBox() const
+{
+	return m_skin.spr->GetBounding();
+}
+
 /************************************************************************/
 /* class Joint::Skin                                                    */
 /************************************************************************/
 
-Joint::Skin::Skin(Sprite* spr, const sm::vec2& pos)
+Joint::Skin::
+Skin(Sprite* spr, const sm::vec2& pos)
 	: spr(spr)
 	, pose(pos, 0)
 {
@@ -100,18 +107,26 @@ Joint::Skin::Skin(Sprite* spr, const sm::vec2& pos)
 	}
 }
 
-Joint::Skin::~Skin()
+Joint::Skin::
+~Skin()
 {
 	if (spr) {
 		spr->RemoveReference();
 	}
 }
 
-void Joint::Skin::Update(const Joint* joint)
+void Joint::Skin::
+Update(const Joint* joint)
 {
 	JointPose dst = JointMath::Local2World(joint->m_world_pose, pose);
 	spr->SetAngle(dst.rot);
 	spr->Translate(dst.trans - spr->GetCenter());
+}
+
+void Joint::Skin::
+Draw(const RenderParams& params) const
+{
+	DrawNode::Draw(spr, params);
 }
 
 }

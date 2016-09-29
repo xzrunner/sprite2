@@ -1,6 +1,7 @@
 #include "Skeleton.h"
 #include "Joint.h"
 #include "RenderParams.h"
+#include "BoundingBox.h"
 
 #include <algorithm>
 
@@ -30,6 +31,28 @@ void Skeleton::Draw(const RenderParams& params) const
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
 		m_all_joints[i]->Draw(params);
 	}
+}
+
+sm::rect Skeleton::GetBounding() const
+{
+	sm::rect b;
+	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
+		const BoundingBox* bb = m_all_joints[i]->GetBoundingBox();
+		bb->CombineTo(b);
+	}
+	return b;
+}
+
+const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
+{
+	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
+		Joint* joint = m_all_joints[i];
+		const BoundingBox* bb = m_all_joints[i]->GetBoundingBox();
+		if (bb->IsContain(pos)) {
+			return joint;
+		}
+	}
+	return NULL;
 }
 
 }

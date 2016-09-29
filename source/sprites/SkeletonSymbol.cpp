@@ -34,7 +34,10 @@ void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 sm::rect SkeletonSymbol::GetBounding(const Sprite* spr) const
 {
-	return sm::rect(sm::vec2(0, 0), 200, 200);
+	if (!m_skeleton) {
+		return sm::rect();
+	}
+	return m_skeleton->GetBounding();
 }
 
 void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)

@@ -10,6 +10,8 @@
 
 #include <algorithm>
 
+#include "BoundingBox.h"
+
 namespace s2
 {
 
@@ -91,6 +93,23 @@ void Joint::Connect(Joint* child)
 const BoundingBox* Joint::GetBoundingBox() const
 {
 	return m_skin.spr->GetBounding();
+}
+
+void Joint::Translate(const sm::vec2& trans)
+{
+	m_local_pose.trans += trans;
+	m_world_pose.trans += trans;
+	m_skin.Update(this);
+
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		m_children[i]->Translate(trans);
+	}
+}
+
+void Joint::Rotate(float rot)
+{
+	m_local_pose.rot += rot;
+	m_skin.Update(this);
 }
 
 /************************************************************************/

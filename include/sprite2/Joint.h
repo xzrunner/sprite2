@@ -34,7 +34,14 @@ public:
 	void SetWorldPos(const sm::vec2& pos) { m_world_pose.trans = pos; }
 	const sm::vec2& GetWorldPos() const { return m_world_pose.trans; }
 
+	void SetLocalPose(const JointPose& pose) { m_local_pose = pose; }
+
 	const BoundingBox* GetBoundingBox() const;
+
+	void Translate(const sm::vec2& trans);
+	void Rotate(float rot);
+
+	const Sprite* GetSkinSpr() const { return m_skin.spr; }
 
 private:
 	struct Skin : private cu::Uncopyable
@@ -57,6 +64,7 @@ private:
 	std::vector<Joint*> m_children;
 
 	JointPose m_world_pose;
+	JointPose m_local_pose;
 
 	Skin m_skin;
 

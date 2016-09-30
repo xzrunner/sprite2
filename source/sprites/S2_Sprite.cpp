@@ -291,7 +291,7 @@ sm::mat4 Sprite::GetTransMatrix() const
 sm::mat4 Sprite::GetTransInvMatrix() const
 {
 	sm::mat4 mat;
-	mat.RotateZ(-m_angle);
+	mat.RotateZ(-m_angle * SM_RAD_TO_DEG);
 	mat.Shear(-m_shear.x, -m_shear.y);
 	mat.Translate(-m_position.x/m_scale.x, -m_position.y/m_scale.y, 0);
 	mat.Scale(1/m_scale.x, 1/m_scale.y, 1);

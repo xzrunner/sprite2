@@ -58,11 +58,11 @@ void OBB::Build(const sm::rect& r, const sm::vec2& pos, float angle,
 				const sm::vec2& scale, const sm::vec2& shear, const sm::vec2& offset)
 {
 	m_rect = r;
-	if (scale != sm::vec2(1, 1)) {
-		m_rect.Scale(scale.x, scale.y);
-	}
 	if (shear != sm::vec2(0, 0)) {
 		m_rect.Shear(shear.x, shear.y);
+	}
+	if (scale != sm::vec2(1, 1)) {
+		m_rect.Scale(scale.x, scale.y);
 	}
 	m_position = pos;
 	if (offset != sm::vec2(0, 0)) {

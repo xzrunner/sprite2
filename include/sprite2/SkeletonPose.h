@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SKELETON_POSE_H_
 #define _SPRITE2_SKELETON_POSE_H_
 
+#include "JointCoords.h"
+
 #include <CU_Uncopyable.h>
 
 #include <vector>
@@ -9,13 +11,12 @@ namespace s2
 {
 
 class Skeleton;
-class JointPose;
 
 class SkeletonPose : private cu::Uncopyable
 {
 public:
 	Skeleton* skeleton;
-	std::vector<JointPose*> joints_pose;
+	std::vector<LocalPose> joints_pose;
 
 	SkeletonPose();
 

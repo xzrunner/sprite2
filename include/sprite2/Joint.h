@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_JOINT_H_
 #define _SPRITE2_JOINT_H_
 
-#include "JointPose.h"
+#include "JointCoords.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
@@ -31,10 +31,10 @@ public:
 
 	const Joint* GetParent() const { return m_parent; }
 
-	void SetWorldPos(const sm::vec2& pos) { m_world_pose.trans = pos; }
-	const sm::vec2& GetWorldPos() const { return m_world_pose.trans; }
+	const sm::vec2& GetWorldPos() const { return m_world.pos; }
 
-	void SetLocalPose(const JointPose& pose) { m_local_pose = pose; }
+	void SetWorldPose(const WorldPose& pose) { m_world = pose; }
+	void SetLocalPose(const LocalPose& pose) { m_local = pose; }
 
 	const BoundingBox* GetBoundingBox() const;
 
@@ -47,9 +47,9 @@ private:
 	struct Skin : private cu::Uncopyable
 	{
 		Sprite* spr;
-		JointPose pose;
+		sm::vec2 offset;
 
-		Skin(Sprite* spr, const sm::vec2& pos);
+		Skin(Sprite* spr, const sm::vec2& offset);
 		~Skin();
 
 		void Update(const Joint* joint);
@@ -63,8 +63,8 @@ private:
 	Joint* m_parent;
 	std::vector<Joint*> m_children;
 
-	JointPose m_world_pose;
-	JointPose m_local_pose;
+	WorldPose m_world;
+	LocalPose m_local;
 
 	Skin m_skin;
 

@@ -35,8 +35,8 @@ public:
 WorldPose local2world(const WorldPose& src, const LocalPose& local);
 LocalPose world2local(const WorldPose& src, const WorldPose& dst);
 
-WorldPose local2world(const WorldPose& src, const sm::vec2& offset);
-sm::vec2 world2local(const WorldPose& src, const sm::vec2& dst);
+// WorldPose local2world(const WorldPose& src, const sm::vec2& offset);
+// sm::vec2 world2local(const WorldPose& src, const sm::vec2& dst);
 
 }
 

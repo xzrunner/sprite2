@@ -25,6 +25,8 @@ public:
 
 	const Joint* QueryByPos(const sm::vec2& pos) const;
 
+	const std::vector<Joint*>& GetAllJoints() const { return m_all_joints; }
+
 private:
 	void Clear();
 

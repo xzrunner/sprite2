@@ -26,9 +26,9 @@ LocalPose::LocalPose(float trans, float rot)
 LocalPose LocalPose::operator - () const
 {
 	LocalPose inv;
-	inv.trans = -trans;
-	inv.rot = -rot;
-	inv.scale = 1.0f / scale;
+	inv.trans = trans;
+	inv.rot = rot > 0 ? rot - SM_PI : rot + SM_PI;
+	inv.scale = scale;
 	return inv;
 }
 
@@ -53,7 +53,7 @@ WorldPose::WorldPose(const sm::vec2& pos, float angle)
 /* trans                                                                */
 /************************************************************************/
 
-WorldPose local2world(const WorldPose& src, const LocalPose& local)
+WorldPose _local2world(const WorldPose& src, const LocalPose& local)
 {
 	WorldPose dst;
 	dst.angle = src.angle + local.rot;
@@ -61,7 +61,7 @@ WorldPose local2world(const WorldPose& src, const LocalPose& local)
 	return dst;
 }
 
-LocalPose world2local(const WorldPose& src, const WorldPose& dst)
+LocalPose _world2local(const WorldPose& src, const WorldPose& dst)
 {
 	LocalPose local;
 	local.rot = dst.angle - src.angle;
@@ -69,19 +69,43 @@ LocalPose world2local(const WorldPose& src, const WorldPose& dst)
 	return local;
 }
 
-WorldPose local2world(const WorldPose& src, const sm::vec2& offset)
+WorldPose local2world(const WorldPose& src, const LocalPose& local)
 {
-	WorldPose dst;
-	dst.angle = src.angle;
-	dst.pos = src.pos + sm::rotate_vector(offset, dst.angle);
+	WorldPose dst = _local2world(src, local);
+	
+	LocalPose l = _world2local(src, dst);
+	if (fabs(l.rot - local.rot) > 0.1 || fabs(l.trans - local.trans) > 0.1) {
+		int zz = 0;
+	}
+
 	return dst;
 }
 
-sm::vec2 world2local(const WorldPose& src, const sm::vec2& dst)
+LocalPose world2local(const WorldPose& src, const WorldPose& dst)
 {
-	sm::vec2 offset;
-	offset = sm::rotate_vector(dst - src.pos, -src.angle);
-	return offset;
+	LocalPose local = _world2local(src, dst);
+
+	WorldPose w = _local2world(src, local);
+	if (fabs(w.pos.x - dst.pos.x) > 0.1 || fabs(w.pos.y - dst.pos.y) > 0.1 || fabs(w.angle - dst.angle) > 0.1) {
+		int zz = 0;
+	}
+
+	return local;
 }
+
+// WorldPose local2world(const WorldPose& src, const sm::vec2& offset)
+// {
+// 	WorldPose dst;
+// 	dst.angle = src.angle;
+// 	dst.pos = src.pos + sm::rotate_vector(offset, dst.angle);
+// 	return dst;
+// }
+// 
+// sm::vec2 world2local(const WorldPose& src, const sm::vec2& dst)
+// {
+// 	sm::vec2 offset;
+// 	offset = sm::rotate_vector(dst - src.pos, -src.angle);
+// 	return offset;
+// }
 
 }

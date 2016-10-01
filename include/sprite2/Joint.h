@@ -1,6 +1,7 @@
 #ifndef _SPRITE2_JOINT_H_
 #define _SPRITE2_JOINT_H_
 
+#include "pre_defined.h"
 #include "JointCoords.h"
 
 #include <CU_RefCountObj.h>
@@ -22,42 +23,46 @@ class BoundingBox;
 class Joint : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
-	Joint(Sprite* spr, const sm::vec2& offset);
+	Joint(Sprite* spr, const LocalPose& joint_pose);
 	~Joint();
+
+	VIRTUAL_INHERITANCE void Translate(const sm::vec2& trans);
+	VIRTUAL_INHERITANCE void Rotate(float rot);
 
 	void Draw(const RenderParams& params) const;
 
-	void Connect(Joint* child);
+	bool ConnectChild(Joint* child);
+	void DeconnectParent();
 
 	const Joint* GetParent() const { return m_parent; }
+	const std::vector<Joint*>& GetChildren() const { return m_children; }
 
-	const sm::vec2& GetWorldPos() const { return m_world.pos; }
-
-	void SetWorldPose(const WorldPose& pose) { m_world = pose; }
+	const WorldPose& GetWorldPose() const { return m_world; }
+ 	void SetWorldPose(const WorldPose& pose) { m_world = pose; }
 	void SetLocalPose(const LocalPose& pose) { m_local = pose; }
 
-	const BoundingBox* GetBoundingBox() const;
-
-	void Translate(const sm::vec2& trans);
-	void Rotate(float rot);
-
 	const Sprite* GetSkinSpr() const { return m_skin.spr; }
+
+public:
+	static const float RADIUS;
+
+private:
+	void Update();
 
 private:
 	struct Skin : private cu::Uncopyable
 	{
 		Sprite* spr;
-		sm::vec2 offset;
+		LocalPose pose;
 
-		Skin(Sprite* spr, const sm::vec2& offset);
+		Skin(Sprite* spr, const LocalPose& skin_pose);
 		~Skin();
 
 		void Update(const Joint* joint);
-		void Draw(const RenderParams& params) const;
 
 	}; // Skin
 
-private:
+protected:
 	std::string m_name;
 
 	Joint* m_parent;

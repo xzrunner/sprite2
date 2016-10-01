@@ -2,6 +2,7 @@
 #include "Joint.h"
 #include "RenderParams.h"
 #include "BoundingBox.h"
+#include "S2_Sprite.h"
 
 #include <algorithm>
 
@@ -37,7 +38,7 @@ sm::rect Skeleton::GetBounding() const
 {
 	sm::rect b;
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
-		const BoundingBox* bb = m_all_joints[i]->GetBoundingBox();
+		const BoundingBox* bb = m_all_joints[i]->GetSkinSpr()->GetBounding();
 		bb->CombineTo(b);
 	}
 	return b;
@@ -47,7 +48,7 @@ const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
 {
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
 		Joint* joint = m_all_joints[i];
-		const BoundingBox* bb = m_all_joints[i]->GetBoundingBox();
+		const BoundingBox* bb = m_all_joints[i]->GetSkinSpr()->GetBounding();
 		if (bb->IsContain(pos)) {
 			return joint;
 		}

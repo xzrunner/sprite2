@@ -23,7 +23,7 @@ public:
 	SkeletonPose& GetPose() { return m_pose; }
 	void SetPose(const SkeletonPose& pose) { m_pose = pose; }
 
-private:
+protected:
 	SkeletonPose m_pose;
 
 	VI_DUMMY_FUNC

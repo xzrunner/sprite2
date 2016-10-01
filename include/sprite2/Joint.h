@@ -30,6 +30,7 @@ public:
 	VIRTUAL_INHERITANCE void Rotate(float rot);
 
 	void Draw(const RenderParams& params) const;
+	void Update();
 
 	bool ConnectChild(Joint* child);
 	void DeconnectParent();
@@ -48,9 +49,6 @@ public:
 
 public:
 	static const float RADIUS;
-
-private:
-	void Update();
 
 private:
 	struct Skin : private cu::Uncopyable

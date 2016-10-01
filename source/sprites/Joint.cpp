@@ -52,6 +52,18 @@ void Joint::Draw(const RenderParams& params) const
 	DrawNode::Draw(m_skin.spr, params);
 }
 
+void Joint::Update()
+{
+	if (m_parent) {
+		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
+	}
+	m_skin.Update(this);
+
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		m_children[i]->Update();
+	}
+}
+
 bool Joint::ConnectChild(Joint* child)
 {
 	for (int i = 0, n = child->m_children.size(); i < n; ++i) {
@@ -89,18 +101,6 @@ void Joint::DeconnectParent()
 
 	m_parent->RemoveReference();
 	m_parent = NULL;
-}
-
-void Joint::Update()
-{
-	if (m_parent) {
-		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
-	}
-	m_skin.Update(this);
-
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		m_children[i]->Update();
-	}
 }
 
 /************************************************************************/

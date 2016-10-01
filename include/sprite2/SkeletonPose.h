@@ -3,8 +3,6 @@
 
 #include "JointPose.h"
 
-#include <CU_Uncopyable.h>
-
 #include <vector>
 
 namespace s2
@@ -12,13 +10,17 @@ namespace s2
 
 class Skeleton;
 
-class SkeletonPose : private cu::Uncopyable
+class SkeletonPose
 {
 public:
-	Skeleton* skeleton;
-	std::vector<JointPose> joints_pose;
+	SkeletonPose() {}
+	SkeletonPose(const Skeleton* skeleton);
 
-	SkeletonPose();
+	void LoadFromSkeleton(const Skeleton* skeleton);
+	void StoreToSkeleton(const Skeleton* skeleton) const;
+
+private:
+	std::vector<JointPose> m_joints_pose;
 
 }; // SkeletonPose
 

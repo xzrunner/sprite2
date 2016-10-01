@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SKELETON_POSE_H_
 #define _SPRITE2_SKELETON_POSE_H_
 
-#include "JointCoords.h"
+#include "JointPose.h"
 
 #include <CU_Uncopyable.h>
 
@@ -16,7 +16,7 @@ class SkeletonPose : private cu::Uncopyable
 {
 public:
 	Skeleton* skeleton;
-	std::vector<LocalPose> joints_pose;
+	std::vector<JointPose> joints_pose;
 
 	SkeletonPose();
 

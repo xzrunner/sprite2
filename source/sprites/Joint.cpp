@@ -7,12 +7,12 @@ namespace s2
 
 const float Joint::RADIUS = 10;
 
-Joint::Joint(Sprite* spr, const LocalPose& joint_pose)
+Joint::Joint(Sprite* spr, const JointPose& joint_local)
 	: m_parent(NULL)
-	, m_skin(spr, -joint_pose)
+	, m_skin(spr, -joint_local)
 {
-	s2::WorldPose src(m_skin.spr->GetCenter(), m_skin.spr->GetAngle());
-	m_world = s2::local2world(src, joint_pose);
+	JointPose src(m_skin.spr->GetCenter(), m_skin.spr->GetAngle());
+	m_world_pose = local2world(src, joint_local);
 }
 
 Joint::~Joint()
@@ -25,9 +25,9 @@ Joint::~Joint()
 
 void Joint::Translate(const sm::vec2& trans)
 {
-	m_world.pos += trans;
+	m_world_pose.trans += trans;
 	if (m_parent) {
-		m_local = world2local(m_parent->m_world, m_world);
+		m_local_pose = world2local(m_parent->m_world_pose, m_world_pose);
 	}
 	m_skin.Update(this);
 
@@ -38,8 +38,8 @@ void Joint::Translate(const sm::vec2& trans)
 
 void Joint::Rotate(float rot)
 {
-	m_local.rot += rot;
-	m_world.angle += rot;
+	m_local_pose.rot += rot;
+	m_world_pose.rot += rot;
 	m_skin.Update(this);
 
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
@@ -93,7 +93,9 @@ void Joint::DeconnectParent()
 
 void Joint::Update()
 {
-	m_world = s2::local2world(m_parent->GetWorldPose(), m_local);
+	if (m_parent) {
+		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
+	}
 	m_skin.Update(this);
 
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
@@ -106,9 +108,9 @@ void Joint::Update()
 /************************************************************************/
 
 Joint::Skin::
-Skin(Sprite* spr, const LocalPose& skin_pose)
+Skin(Sprite* spr, const JointPose& skin_local)
 	: spr(spr)
-	, pose(skin_pose)
+	, skin_local(skin_local)
 {
 	if (this->spr) {
 		this->spr->AddReference();
@@ -126,9 +128,9 @@ Joint::Skin::
 void Joint::Skin::
 Update(const Joint* joint)
 {
-	WorldPose dst = local2world(joint->m_world, pose);
-	spr->SetAngle(dst.angle);
-	spr->Translate(dst.pos - spr->GetCenter());
+	JointPose dst = local2world(joint->m_world_pose, skin_local);
+	spr->SetAngle(dst.rot);
+	spr->Translate(dst.trans - spr->GetCenter());
 	spr->UpdateBounding();
 }
 

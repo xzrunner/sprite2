@@ -964,11 +964,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprites\JointCoords.cpp"
+					RelativePath="..\..\..\source\sprites\JointPose.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\JointCoords.h"
+					RelativePath="..\..\..\include\sprite2\JointPose.h"
 					>
 				</File>
 				<File

@@ -19,6 +19,8 @@ public:
 	void LoadFromSkeleton(const Skeleton* skeleton);
 	void StoreToSkeleton(const Skeleton* skeleton) const;
 
+	void Lerp(const SkeletonPose& begin, const SkeletonPose& end, float process);
+
 private:
 	std::vector<JointPose> m_joints_pose;
 

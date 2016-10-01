@@ -44,4 +44,13 @@ void SkeletonPose::StoreToSkeleton(const Skeleton* skeleton) const
 	}
 }
 
+void SkeletonPose::Lerp(const SkeletonPose& begin, const SkeletonPose& end, float process)
+{
+	assert(begin.m_joints_pose.size() == end.m_joints_pose.size()
+		&& begin.m_joints_pose.size() == m_joints_pose.size());
+	for (int i = 0, n = m_joints_pose.size(); i < n; ++i) {
+		m_joints_pose[i].Lerp(begin.m_joints_pose[i], end.m_joints_pose[i], process);
+	}
+}
+
 }

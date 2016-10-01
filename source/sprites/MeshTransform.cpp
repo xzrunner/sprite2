@@ -51,7 +51,7 @@ void MeshTransform::StoreToMesh(const Mesh* mesh) const
 	}
 }
 
-void MeshTransform::SetTween(const MeshTransform& s, const MeshTransform& e, float process)
+void MeshTransform::Lerp(const MeshTransform& s, const MeshTransform& e, float process)
 {
 	m_map.clear();
 	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>::const_iterator itr_s 

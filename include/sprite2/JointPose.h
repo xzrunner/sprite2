@@ -18,6 +18,8 @@ public:
 
 	JointPose operator - () const;
 
+	void Lerp(const JointPose& begin, const JointPose& end, float process);
+
 }; // JointPose
 
 JointPose local2world(const JointPose& src, const JointPose& local);

@@ -20,6 +20,7 @@ public:
 	virtual SkeletonSprite* Clone() const;
 
 	const SkeletonPose& GetPose() const { return m_pose; }
+	SkeletonPose& GetPose() { return m_pose; }
 	void SetPose(const SkeletonPose& pose) { m_pose = pose; }
 
 private:

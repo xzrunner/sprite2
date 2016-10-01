@@ -62,9 +62,9 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
-void MeshSprite::SetTween(MeshSprite* begin, MeshSprite* end, float process)
+void MeshSprite::Lerp(MeshSprite* begin, MeshSprite* end, float process)
 {
-	m_trans.SetTween(begin->GetMeshTrans(), end->GetMeshTrans(), process);
+	m_trans.Lerp(begin->GetMeshTrans(), end->GetMeshTrans(), process);
 }
 
 void MeshSprite::SetBaseSym(const Symbol* sym) 

@@ -16,7 +16,7 @@ public:
 	void LoadFromMesh(const Mesh* mesh);
 	void StoreToMesh(const Mesh* mesh) const;
 
-	void SetTween(const MeshTransform& s, const MeshTransform& e, float process);
+	void Lerp(const MeshTransform& s, const MeshTransform& e, float process);
 
 	const std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& GetMap() const { return m_map; }
 	std::map<sm::vec2, sm::vec2, sm::Vector2Cmp>& GetMap() { return m_map; }

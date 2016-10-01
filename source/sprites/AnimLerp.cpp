@@ -4,6 +4,7 @@
 #include "Scale9Sprite.h"
 #include "IconSprite.h"
 #include "MeshSprite.h"
+#include "SkeletonSprite.h"
 
 #include <SM_Vector.h>
 
@@ -100,7 +101,14 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process)
 		MeshSprite* mesh_e = dynamic_cast<MeshSprite*>(end);
 		MeshSprite* mesh_t = dynamic_cast<MeshSprite*>(tween);
 		assert(mesh_e && mesh_t);
-		mesh_t->SetTween(mesh_b, mesh_e, process);
+		mesh_t->Lerp(mesh_b, mesh_e, process);
+	}
+	else if (SkeletonSprite* sk_b = dynamic_cast<SkeletonSprite*>(begin))
+	{
+		SkeletonSprite* sk_e = dynamic_cast<SkeletonSprite*>(end);
+		SkeletonSprite* sk_t = dynamic_cast<SkeletonSprite*>(tween);
+		assert(sk_e && sk_t);
+		sk_t->GetPose().Lerp(sk_b->GetPose(), sk_e->GetPose(), process);
 	}
 }
 

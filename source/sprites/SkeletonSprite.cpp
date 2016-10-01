@@ -19,5 +19,4 @@ SkeletonSprite* SkeletonSprite::Clone() const
 	return new SkeletonSprite(*this);
 }
 
-
 }

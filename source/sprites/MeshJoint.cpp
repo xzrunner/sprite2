@@ -53,6 +53,15 @@ MeshJoint::~MeshJoint()
 // 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<MeshJoint>());
 }
 
+void MeshJoint::Rotate(float rot)
+{
+	m_local_pose.rot += rot;
+	m_world_pose.rot += rot;
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		m_children[i]->Update();
+	}
+}
+
 void MeshJoint::Draw(const RenderParams& params) const
 {
 	RVG::SetColor(Color(51, 204, 51, 128));
@@ -66,6 +75,16 @@ void MeshJoint::Draw(const RenderParams& params) const
 		RVG::Arrow(m_parent->GetWorldPose().trans, m_world_pose.trans, RADIUS * 2);
 	} else {
 		RVG::Cross(params.mt * m_world_pose.trans, 25, 25);
+	}
+}
+
+void MeshJoint::Update()
+{
+	if (m_parent) {
+		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
+	}
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		m_children[i]->Update();
 	}
 }
 

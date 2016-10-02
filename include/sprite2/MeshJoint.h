@@ -21,7 +21,10 @@ public:
 	MeshJoint(MeshJoint* parent, const JointPose& world);
 	~MeshJoint();
 
+	void Rotate(float rot);
+
 	void Draw(const RenderParams& params) const;
+	void Update();
 
 	void Deconnect();
 	

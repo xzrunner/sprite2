@@ -18,17 +18,19 @@ class MeshJoint : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
 	MeshJoint(MeshJoint* parent, const sm::vec2& pos);
+	MeshJoint(MeshJoint* parent, const JointPose& world);
 	~MeshJoint();
 
 	void Draw(const RenderParams& params) const;
 
 	void Deconnect();
 	
-	const sm::vec2& GetWorldPos() const { return m_world_pose.trans; }
+	const JointPose& GetWorldPose() const { return m_world_pose; }
 	void SetWorldPos(const sm::vec2& pos) { m_world_pose.trans = pos; }
 
 	const std::vector<MeshJoint*>& GetChildren() const { return m_children; }
-	
+	const MeshJoint* GetParent() const { return m_parent; } 
+
 public:
 	static const float RADIUS;
 

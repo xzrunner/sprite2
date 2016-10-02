@@ -45,7 +45,7 @@ void MeshSkeleton::SetRoot(const MeshJoint* joint)
 	cu::RefCountObjAssign(m_root, joint); 
 }
 
-const MeshJoint* MeshSkeleton::QueryByPos(const sm::vec2& pos) const
+MeshJoint* MeshSkeleton::QueryByPos(const sm::vec2& pos)
 {
 	if (!m_root) {
 		return NULL;
@@ -56,7 +56,7 @@ const MeshJoint* MeshSkeleton::QueryByPos(const sm::vec2& pos) const
 	while (!buf.empty()) 
 	{
 		MeshJoint* joint = buf.front(); buf.pop();
-		if (sm::dis_pos_to_pos(joint->GetWorldPos(), pos) < MeshJoint::RADIUS) {
+		if (sm::dis_pos_to_pos(joint->GetWorldPose().trans, pos) < MeshJoint::RADIUS) {
 			return joint;
 		}
 		const std::vector<MeshJoint*>& children = joint->GetChildren();

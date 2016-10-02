@@ -25,7 +25,7 @@ public:
 	const MeshJoint* GetRoot() const { return m_root; }
 	void SetRoot(const MeshJoint* joint);
 
-	const MeshJoint* QueryByPos(const sm::vec2& pos) const;
+	MeshJoint* QueryByPos(const sm::vec2& pos);
 
 protected:
 	MeshJoint* m_root;

@@ -34,6 +34,8 @@ public:
 	const std::vector<MeshJoint*>& GetChildren() const { return m_children; }
 	const MeshJoint* GetParent() const { return m_parent; } 
 
+	void BindNode(MeshNode* node, float weight);
+
 public:
 	static const float RADIUS;
 
@@ -42,9 +44,9 @@ private:
 	{
 		MeshNode* node;
 		float weight;
-		sm::vec2 local;
+		JointPose local;
 
-		Node(MeshNode* node, float weight, sm::vec2 local);
+		Node(MeshNode* node, float weight, JointPose local);
 		~Node();
 
 	}; // Node

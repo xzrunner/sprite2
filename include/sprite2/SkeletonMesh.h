@@ -12,6 +12,7 @@ namespace s2
 {
 
 class PolylineShape;
+class MeshNode;
 
 class SkeletonMesh : public VIRTUAL_INHERITANCE Mesh
 {
@@ -38,6 +39,9 @@ protected:
 
 private:
 	void Init(const SkeletonMesh& mesh);
+
+	void BindMeshNode();
+	void BindMeshNode(MeshNode* node);
 
 protected:
 	PolylineShape* m_shape;

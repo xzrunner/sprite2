@@ -42,6 +42,7 @@ MeshJoint::MeshJoint(MeshJoint* parent, const JointPose& world)
 		m_parent->AddReference();
 		m_parent->m_children.push_back(this);
 		this->AddReference();
+		m_local_pose = world2local(m_parent->m_world_pose, m_world_pose);		
 	}
 }
 
@@ -82,6 +83,10 @@ void MeshJoint::Update()
 {
 	if (m_parent) {
 		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
+		for (int i = 0, n = m_nodes.size(); i < n; ++i) {
+			Node& node = m_nodes[i];
+			node.node->xy = local2world(m_world_pose, node.local).trans;
+		}
 	}
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
 		m_children[i]->Update();
@@ -116,22 +121,31 @@ void MeshJoint::Deconnect()
 	}
 }
 
+void MeshJoint::BindNode(MeshNode* node, float weight)
+{
+	JointPose local = world2local(m_world_pose, JointPose(node->ori_xy, 0));
+	m_nodes.push_back(Node(node, weight, local));
+}
+
 /************************************************************************/
 /* class MeshJoint::Node                                                */
 /************************************************************************/
 
-MeshJoint::Node::Node(MeshNode* node, float weight, sm::vec2 local)
+MeshJoint::Node::Node(MeshNode* node, float weight, JointPose local)
 	: node(node)
 	, weight(weight)
 	, local(local)
 {
+// 	if (node) {
+// 		node->AddReference();
+// 	}
 }
 
 MeshJoint::Node::~Node()
 {
-	if (node) {
-		node->RemoveReference();
-	}	
+// 	if (node) {
+// 		node->RemoveReference();
+// 	}	
 }
 
 }

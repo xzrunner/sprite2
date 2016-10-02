@@ -742,30 +742,6 @@
 				<Filter
 					Name="mesh"
 					>
-					<File
-						RelativePath="..\..\..\source\sprites\NetworkMesh.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\NetworkMesh.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\NetworkShape.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\NetworkShape.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\StripMesh.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\StripMesh.h"
-						>
-					</File>
 					<Filter
 						Name="base"
 						>
@@ -791,6 +767,66 @@
 						</File>
 						<File
 							RelativePath="..\..\..\include\sprite2\MeshTriangle.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="network"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\NetworkMesh.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\NetworkMesh.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\NetworkShape.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\NetworkShape.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="strip"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\StripMesh.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\StripMesh.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="skeleton"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\MeshJoint.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\MeshJoint.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\MeshSkeleton.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\MeshSkeleton.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\SkeletonMesh.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\SkeletonMesh.h"
 							>
 						</File>
 					</Filter>

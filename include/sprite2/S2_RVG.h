@@ -49,6 +49,8 @@ public:
 	// compose
 	static void Cross(const sm::vec2& center, float edge);
 	static void Cross(const sm::vec2& center, float xedge, float yedge);
+	
+	static void Arrow(const sm::vec2& p0, const sm::vec2& p1, float len = 20);
 
 }; // RVG
 

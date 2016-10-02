@@ -3,6 +3,7 @@
 #include "Color.h"
 
 #include <rvg.h>
+#include <SM_Calc.h>
 #include <shaderlab.h>
 
 namespace s2
@@ -244,6 +245,19 @@ void RVG::Cross(const sm::vec2& center, float xedge, float yedge)
 	s.y -= yedge;
 	e.y += yedge;
 	Line(s, e);
+}
+
+void RVG::Arrow(const sm::vec2& p0, const sm::vec2& p1, float len)
+{
+	sm::vec2 seg = p0 - p1;
+	seg.Normalize();
+	seg *= len;
+
+	sm::vec2 left, right;
+	left = p1 + sm::rotate_vector(seg, - SM_PI / 6);
+	right = p1 + sm::rotate_vector(seg, SM_PI / 6);
+	Line(p1, left); 
+	Line(p1, right);
 }
 
 }

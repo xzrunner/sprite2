@@ -17,8 +17,9 @@ class NetworkMesh : public VIRTUAL_INHERITANCE Mesh
 {
 public:
 	NetworkMesh();
-	NetworkMesh(const NetworkMesh& nw);
+	NetworkMesh(const NetworkMesh& mesh);
 	NetworkMesh(const Symbol* base);
+	NetworkMesh& operator = (const NetworkMesh& mesh);
 	virtual ~NetworkMesh();
 
 	/**
@@ -28,18 +29,16 @@ public:
 	virtual NetworkMesh* Clone() const { return new NetworkMesh(*this); }
 
 	void SetShape(NetworkShape* shape);
-	const NetworkShape* GetShape() const { return m_nw; }
+	const NetworkShape* GetShape() const { return m_shape; }
 	
 protected:
 	void RefreshTriangles();
 
-	void GetTriangulation(std::vector<sm::vec2>& tris);
-	void LoadFromTriangulation(const std::vector<sm::vec2>& tris);
-
-	//void GetRegionBound(std::vector<sm::vec2>& bound) const;
+private:
+	void Init(const NetworkMesh& mesh);
 
 protected:
-	NetworkShape* m_nw;
+	NetworkShape* m_shape;
 
 	VI_DUMMY_FUNC
 

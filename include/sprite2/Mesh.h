@@ -21,6 +21,7 @@ public:
 	Mesh();
 	Mesh(const Mesh& mesh);
 	Mesh(const Symbol* base);
+	Mesh& operator = (const Mesh& mesh);
 	virtual ~Mesh();
 	
 	virtual void OffsetUV(float dx, float dy) {}
@@ -38,6 +39,7 @@ public:
 	float GetWidth() const { return m_width; }
 	float GetHeight() const { return m_height; }
 
+	void SetTriangles(const std::vector<sm::vec2>& tris);
 	const std::vector<MeshTriangle*>& GetTriangles() const { return m_tris; }
 
 	float GetNodeRegion() const { return m_node_radius; }
@@ -46,6 +48,8 @@ public:
 
 protected:
 	void ClearTriangles();
+
+	void CopyTriangles(const Mesh& src);
 
 protected:
 	const Symbol* m_base;

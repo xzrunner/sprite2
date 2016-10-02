@@ -12,7 +12,7 @@ class StripMesh : public VIRTUAL_INHERITANCE Mesh
 {
 public:
 	StripMesh();
-	StripMesh(const StripMesh& strip);
+	StripMesh(const StripMesh& mesh);
 	StripMesh(const Symbol* base);
 
 	/**

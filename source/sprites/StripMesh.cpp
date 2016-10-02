@@ -12,13 +12,13 @@ StripMesh::StripMesh()
 {
 }
 
-StripMesh::StripMesh(const StripMesh& strip)
-	: Mesh(strip)
-	, m_left_nodes(strip.m_left_nodes)
-	, m_right_nodes(strip.m_right_nodes)
+StripMesh::StripMesh(const StripMesh& mesh)
+	: Mesh(mesh)
+	, m_left_nodes(mesh.m_left_nodes)
+	, m_right_nodes(mesh.m_right_nodes)
 {
 	RefreshTriangles();
-	CopyTriangles(strip);
+	CopyTriangles(mesh);
 }
 
 StripMesh::StripMesh(const Symbol* base)

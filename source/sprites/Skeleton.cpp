@@ -4,6 +4,8 @@
 #include "BoundingBox.h"
 #include "S2_Sprite.h"
 
+#include <SM_Calc.h>
+
 #include <algorithm>
 
 namespace s2
@@ -37,20 +39,33 @@ void Skeleton::Draw(const RenderParams& params) const
 sm::rect Skeleton::GetBounding() const
 {
 	sm::rect b;
-	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
-		const BoundingBox* bb = m_all_joints[i]->GetSkinSpr()->GetBounding();
-		bb->CombineTo(b);
+	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
+	{
+		const Joint* joint = m_all_joints[i];
+		const s2::Sprite* spr = joint->GetSkinSpr();
+		if (spr) {
+			spr->GetBounding()->CombineTo(b);
+		} else {
+			b.Combine(joint->GetWorldPose().trans);
+		}
 	}
 	return b;
 }
 
 const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
 {
-	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
-		Joint* joint = m_all_joints[i];
-		const BoundingBox* bb = m_all_joints[i]->GetSkinSpr()->GetBounding();
-		if (bb->IsContain(pos)) {
-			return joint;
+	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
+	{
+		const Joint* joint = m_all_joints[i];
+		const s2::Sprite* spr = joint->GetSkinSpr();
+		if (spr) {
+			if (spr->GetBounding()->IsContain(pos)) {
+				return joint;
+			}
+		} else {
+			if (sm::dis_pos_to_pos(pos, joint->GetWorldPose().trans) < Joint::RADIUS * 2) {
+				return joint;
+			}
 		}
 	}
 	return NULL;

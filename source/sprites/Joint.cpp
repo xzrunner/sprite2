@@ -11,8 +11,10 @@ Joint::Joint(Sprite* spr, const JointPose& joint_local)
 	: m_parent(NULL)
 	, m_skin(spr, -joint_local)
 {
-	JointPose src(m_skin.spr->GetCenter(), m_skin.spr->GetAngle());
-	m_world_pose = local2world(src, joint_local);
+	if (Sprite* spr = m_skin.spr) {
+		JointPose src(spr->GetCenter(), spr->GetAngle());
+		m_world_pose = local2world(src, joint_local);
+	}
 }
 
 Joint::~Joint()
@@ -49,7 +51,9 @@ void Joint::Rotate(float rot)
 
 void Joint::Draw(const RenderParams& params) const
 {
-	DrawNode::Draw(m_skin.spr, params);
+	if (m_skin.spr) {
+		DrawNode::Draw(m_skin.spr, params);
+	}
 }
 
 void Joint::Update()
@@ -128,10 +132,12 @@ Joint::Skin::
 void Joint::Skin::
 Update(const Joint* joint)
 {
-	JointPose dst = local2world(joint->m_world_pose, skin_local);
-	spr->SetAngle(dst.rot);
-	spr->Translate(dst.trans - spr->GetCenter());
-	spr->UpdateBounding();
+	if (spr) {
+		JointPose dst = local2world(joint->m_world_pose, skin_local);
+		spr->SetAngle(dst.rot);
+		spr->Translate(dst.trans - spr->GetCenter());
+		spr->UpdateBounding();
+	}
 }
 
 }

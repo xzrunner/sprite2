@@ -22,7 +22,7 @@ Joint::~Joint()
 	if (m_parent) {
 		m_parent->RemoveReference();
 	}
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<Joint>());
+	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Joint>());
 }
 
 void Joint::Translate(const sm::vec2& trans)

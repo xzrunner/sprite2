@@ -18,7 +18,7 @@ ComplexSymbol::ComplexSymbol()
 
 ComplexSymbol::~ComplexSymbol()
 {
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<Sprite>());
+	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
@@ -120,7 +120,7 @@ bool ComplexSymbol::Clear()
 		return false;
 	}
 
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<Sprite>());
+	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 	m_children.clear();
 
 	// todo

@@ -51,7 +51,7 @@ MeshJoint::~MeshJoint()
 // 	if (m_parent) {
 // 		m_parent->RemoveReference();
 // 	}
-// 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFonctor<MeshJoint>());
+// 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<MeshJoint>());
 }
 
 void MeshJoint::Rotate(float rot)

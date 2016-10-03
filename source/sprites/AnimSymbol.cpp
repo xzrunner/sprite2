@@ -22,7 +22,7 @@ AnimSymbol::~AnimSymbol()
 		Layer* layer = m_layers[i];
 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
 			Frame* frame = layer->frames[j];
-			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFonctor<Sprite>());
+			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFunctor<Sprite>());
 			delete frame;
 		}
 		delete layer;
@@ -44,7 +44,7 @@ void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 bool AnimSymbol::Update(const RenderParams& params, float time)
 {
 	m_curr.SetTime(time);
-	m_curr.Update(params);
+	return m_curr.Update(params);
 }
 
 sm::rect AnimSymbol::GetBounding(const Sprite* spr) const
@@ -113,7 +113,7 @@ bool AnimSymbol::Clear()
  		Layer* layer = m_layers[i];
  		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
  			Frame* frame = layer->frames[j];
-			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFonctor<Sprite>());
+			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFunctor<Sprite>());
 			delete frame;
  		}
 		delete layer;

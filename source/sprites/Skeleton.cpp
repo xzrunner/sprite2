@@ -18,7 +18,7 @@ Skeleton::Skeleton(const Joint* root, const std::vector<Joint*>& all_joints)
 	if (m_root) {
 		m_root->AddReference();
 	}
-	for_each(m_all_joints.begin(), m_all_joints.end(), cu::AddRefFonctor<Joint>());
+	for_each(m_all_joints.begin(), m_all_joints.end(), cu::AddRefFunctor<Joint>());
 }
 
 Skeleton::~Skeleton()
@@ -26,7 +26,7 @@ Skeleton::~Skeleton()
 	if (m_root) {
 		m_root->RemoveReference();
 	}
-	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFonctor<Joint>());
+	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFunctor<Joint>());
 }
 
 void Skeleton::Draw(const RenderParams& params) const

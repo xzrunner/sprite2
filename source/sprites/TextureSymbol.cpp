@@ -52,7 +52,7 @@ void TextureSymbol::AddPolygon(PolygonShape* poly)
 
 void TextureSymbol::Clear()
 {
-	for_each(m_polygons.begin(), m_polygons.end(), cu::RemoveRefFonctor<PolygonShape>());
+	for_each(m_polygons.begin(), m_polygons.end(), cu::RemoveRefFunctor<PolygonShape>());
 	m_polygons.clear();
 }
 

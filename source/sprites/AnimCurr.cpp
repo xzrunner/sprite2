@@ -333,7 +333,7 @@ operator = (const Frame& f)
 
 AnimCurr::Frame::~Frame()
 {
-	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFonctor<Sprite>());
+	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 Sprite* AnimCurr::Frame::
@@ -357,15 +357,15 @@ Query(const Sprite* spr, int idx)
 void AnimCurr::Frame::
 Clear() 
 {
-	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFonctor<Sprite>());
+	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFunctor<Sprite>());
 	sprs.clear();
 }
 
 void AnimCurr::Frame::
 CopyFrom(const std::vector<Sprite*>& src)
 {
-	for_each(src.begin(), src.end(), cu::AddRefFonctor<Sprite>());
-	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFonctor<Sprite>());	
+	for_each(src.begin(), src.end(), cu::AddRefFunctor<Sprite>());
+	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFunctor<Sprite>());	
 	sprs = src;
 }
 

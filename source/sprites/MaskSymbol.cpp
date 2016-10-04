@@ -1,4 +1,5 @@
 #include "MaskSymbol.h"
+#include "SymType.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawMask.h"
@@ -22,6 +23,11 @@ MaskSymbol::~MaskSymbol()
 	if (m_mask) {
 		m_mask->RemoveReference();
 	}
+}
+
+int MaskSymbol::Type() const 
+{ 
+	return SYM_MASK; 
 }
 
 void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const

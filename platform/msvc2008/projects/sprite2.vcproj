@@ -373,6 +373,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\sprite2\SymType.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\sprites\TexcoordsMap.cpp"
 				>
 			</File>
@@ -381,7 +385,7 @@
 				>
 			</File>
 			<Filter
-				Name="image"
+				Name="01.image"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\ImageSprite.cpp"
@@ -405,7 +409,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="complex"
+				Name="06.complex"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\ComplexSprite.cpp"
@@ -432,12 +436,16 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\DummySymbol.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\sprite2\DummySymbol.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="anim"
+				Name="07.anim"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Animation.cpp"
@@ -481,7 +489,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="particle3d"
+				Name="08.particle3d"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Particle3d.cpp"
@@ -509,7 +517,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="scale9"
+				Name="02.scale9"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Scale9.cpp"
@@ -537,7 +545,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="particle2d"
+				Name="09.particle2d"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Particle2d.cpp"
@@ -565,7 +573,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="textbox"
+				Name="05.textbox"
 				>
 				<File
 					RelativePath="..\..\..\include\sprite2\Textbox.h"
@@ -589,7 +597,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="shape"
+				Name="10.shape"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\ShapeSprite.cpp"
@@ -721,7 +729,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="mesh"
+				Name="11.mesh"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\MeshSprite.cpp"
@@ -833,7 +841,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="texture"
+				Name="04.texture"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\TextureSprite.cpp"
@@ -853,7 +861,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="mask"
+				Name="12.mask"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\MaskSprite.cpp"
@@ -873,7 +881,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="trail"
+				Name="13.trail"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Trail.cpp"
@@ -921,7 +929,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="icon"
+				Name="03.icon"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\IconSprite.cpp"
@@ -989,7 +997,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="skeleton"
+				Name="14.skeleton"
 				>
 				<File
 					RelativePath="..\..\..\source\sprites\Joint.cpp"

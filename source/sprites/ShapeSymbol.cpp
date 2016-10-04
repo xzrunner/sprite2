@@ -1,4 +1,5 @@
 #include "ShapeSymbol.h"
+#include "SymType.h"
 #include "Shape.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
@@ -16,6 +17,11 @@ ShapeSymbol::~ShapeSymbol()
 	if (m_shape) {
 		m_shape->RemoveReference();
 	}
+}
+
+int ShapeSymbol::Type() const 
+{ 
+	return SYM_SHAPE; 
 }
 
 void ShapeSymbol::Draw(const RenderParams& params, const Sprite* spr) const

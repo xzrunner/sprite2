@@ -1,4 +1,5 @@
 #include "TextureSymbol.h"
+#include "SymType.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "PolygonShape.h"
@@ -15,6 +16,11 @@ TextureSymbol::TextureSymbol()
 TextureSymbol::~TextureSymbol()
 {
 	Clear();
+}
+
+int TextureSymbol::Type() const 
+{ 
+	return SYM_TEXTURE; 
 }
 
 void TextureSymbol::Draw(const RenderParams& params, const Sprite* spr) const

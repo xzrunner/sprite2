@@ -1,4 +1,5 @@
 #include "MeshSymbol.h"
+#include "SymType.h"
 #include "MeshSprite.h"
 #include "Mesh.h"
 #include "S2_Sprite.h"
@@ -22,6 +23,11 @@ MeshSymbol::~MeshSymbol()
 	if (m_mesh) {
 		m_mesh->RemoveReference();
 	}
+}
+
+int MeshSymbol::Type() const 
+{ 
+	return SYM_MESH; 
 }
 
 void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const

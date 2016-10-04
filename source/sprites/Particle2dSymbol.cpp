@@ -1,4 +1,5 @@
 #include "Particle2dSymbol.h"
+#include "SymType.h"
 #include "Particle2dSprite.h"
 #include "RenderParams.h"
 
@@ -16,6 +17,11 @@ Particle2dSymbol::Particle2dSymbol()
 
 Particle2dSymbol::~Particle2dSymbol()
 {
+}
+
+int Particle2dSymbol::Type() const 
+{ 
+	return SYM_PARTICLE2D; 
 }
 
 void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const

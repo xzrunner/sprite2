@@ -1,4 +1,5 @@
 #include "ImageSymbol.h"
+#include "SymType.h"
 #include "Texture.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
@@ -21,6 +22,11 @@ ImageSymbol::~ImageSymbol()
 	if (m_tex) {
 		m_tex->RemoveReference();
 	}
+}
+
+int ImageSymbol::Type() const 
+{ 
+	return SYM_IMAGE; 
 }
 
 void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const

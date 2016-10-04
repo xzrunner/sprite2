@@ -1,4 +1,5 @@
 #include "ComplexSymbol.h"
+#include "SymType.h"
 #include "ComplexSprite.h"
 #include "S2_Sprite.h"
 #include "BoundingBox.h"
@@ -19,6 +20,11 @@ ComplexSymbol::ComplexSymbol()
 ComplexSymbol::~ComplexSymbol()
 {
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
+}
+
+int ComplexSymbol::Type() const 
+{ 
+	return SYM_COMPLEX; 
 }
 
 void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const

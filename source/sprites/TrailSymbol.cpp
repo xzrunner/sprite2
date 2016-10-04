@@ -1,4 +1,5 @@
 #include "TrailSymbol.h"
+#include "SymType.h"
 #include "TrailSprite.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
@@ -20,6 +21,11 @@ TrailSymbol::~TrailSymbol()
 	if (m_et) {
 		t2d_emitter_release(m_et);
 	}
+}
+
+int TrailSymbol::Type() const 
+{ 
+	return SYM_TRAIL; 
 }
 
 void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const

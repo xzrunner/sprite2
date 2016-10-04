@@ -1,4 +1,5 @@
 #include "ProxySymbol.h"
+#include "SymType.h"
 #include "S2_Sprite.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
@@ -17,6 +18,11 @@ ProxySymbol::~ProxySymbol()
 	if (m_spr) {
 		m_spr->RemoveReference();
 	}
+}
+
+int ProxySymbol::Type() const 
+{ 
+	return SYM_PROXY; 
 }
 
 void ProxySymbol::Draw(const RenderParams& params, const Sprite* spr) const

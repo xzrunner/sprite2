@@ -1,4 +1,5 @@
 #include "IconSymbol.h"
+#include "SymType.h"
 #include "IconSprite.h"
 #include "Icon.h"
 #include "RenderParams.h"
@@ -18,6 +19,11 @@ IconSymbol::~IconSymbol()
 	if (m_icon) {
 		m_icon->RemoveReference();
 	}
+}
+
+int IconSymbol::Type() const 
+{ 
+	return SYM_ICON; 
 }
 
 void IconSymbol::Draw(const RenderParams& params, const Sprite* spr) const

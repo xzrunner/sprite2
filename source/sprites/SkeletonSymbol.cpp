@@ -1,4 +1,5 @@
 #include "SkeletonSymbol.h"
+#include "SymType.h"
 #include "SkeletonSprite.h"
 #include "SkeletonPose.h"
 #include "Skeleton.h"
@@ -18,6 +19,11 @@ SkeletonSymbol::~SkeletonSymbol()
 	if (m_skeleton) {
 		m_skeleton->RemoveReference();
 	}
+}
+
+int SkeletonSymbol::Type() const 
+{ 
+	return SYM_SKELETON; 
 }
 
 void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const

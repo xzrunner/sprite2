@@ -1,4 +1,5 @@
 #include "Scale9Symbol.h"
+#include "SymType.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "Scale9Sprite.h"
@@ -10,6 +11,11 @@ namespace s2
 
 Scale9Symbol::Scale9Symbol()
 {
+}
+
+int Scale9Symbol::Type() const 
+{ 
+	return SYM_SCALE9; 
 }
 
 void Scale9Symbol::Draw(const RenderParams& params, const Sprite* spr) const

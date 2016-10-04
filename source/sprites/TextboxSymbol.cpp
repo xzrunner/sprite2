@@ -1,4 +1,5 @@
 #include "TextboxSymbol.h"
+#include "SymType.h"
 #include "TextboxSprite.h"
 #include "RenderParams.h"
 #include "RenderFilter.h"
@@ -12,6 +13,11 @@ namespace s2
 TextboxSymbol::TextboxSymbol(Textbox tb)
 	: m_tb(tb)
 {
+}
+
+int TextboxSymbol::Type() const 
+{ 
+	return SYM_TEXTBOX; 
 }
 
 void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const

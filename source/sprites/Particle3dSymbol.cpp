@@ -1,4 +1,5 @@
 #include "Particle3dSymbol.h"
+#include "SymType.h"
 #include "Particle3dSprite.h"
 #include "Particle3d.h"
 #include "S2_Sprite.h"
@@ -50,6 +51,11 @@ Particle3dSymbol::~Particle3dSymbol()
 //
 //	return true;
 //}
+
+int Particle3dSymbol::Type() const 
+{ 
+	return SYM_PARTICLE3D; 
+}
 
 void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {

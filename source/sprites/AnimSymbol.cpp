@@ -1,4 +1,5 @@
 #include "AnimSymbol.h"
+#include "SymType.h"
 #include "AnimSprite.h"
 #include "S2_Sprite.h"
 #include "BoundingBox.h"
@@ -27,6 +28,11 @@ AnimSymbol::~AnimSymbol()
 		}
 		delete layer;
 	}
+}
+
+int AnimSymbol::Type() const 
+{ 
+	return SYM_ANIMATION; 
 }
 
 void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const

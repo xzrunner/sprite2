@@ -47,6 +47,8 @@ public:
 
 	const Sprite* GetSkinSpr() const { return m_skin.spr; }
 
+	void SetName(const std::string& name) { m_name = name; }
+
 public:
 	static const float RADIUS;
 

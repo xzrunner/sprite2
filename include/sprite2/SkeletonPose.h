@@ -24,6 +24,8 @@ public:
 	const std::vector<JointPose>& GetJointPose() const { return m_joints_pose; }
 	void SetJointPose(const std::vector<JointPose>& pose) { m_joints_pose = pose; }
 
+	void SetJointPose(int idx, const JointPose& pose);
+
 private:
 	std::vector<JointPose> m_joints_pose;
 

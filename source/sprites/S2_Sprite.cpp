@@ -113,20 +113,123 @@ Sprite::~Sprite()
 	delete m_shader.filter;
 }
 
-void Sprite::Translate(const sm::vec2& offset)
-{
-	m_position += offset;
-}
-
-void Sprite::Rotate(float delta)
-{
-	m_angle += delta;
-}
-
 void Sprite::SetSymbol(Symbol* sym)
 {
 	cu::RefCountObjAssign(m_sym, sym);
 	UpdateBounding();
+}
+
+void Sprite::SetCenter(const sm::vec2& pos)
+{
+	SetPosition(pos - GetCenter() + GetPosition());
+}
+
+void Sprite::SetPosition(const sm::vec2& pos)
+{
+	if (m_position == pos) {
+		return;
+	}
+
+	m_position = pos;
+
+// 	// immediately
+// 	m_bounding->SetTransform(m_position, m_offset, m_angle);
+
+	// lazy
+	m_bounding_dirty = true;
+}
+
+void Sprite::SetAngle(float angle)
+{
+	if (m_angle == angle) {
+		return;
+	}
+
+	m_angle = angle;
+
+// 	// immediately
+// 	m_bounding->SetTransform(m_position, m_offset, m_angle);
+
+	// lazy
+	m_bounding_dirty = true;
+}
+
+void Sprite::SetScale(const sm::vec2& scale)
+{
+	if (m_scale == scale) {
+		return;
+	}
+
+	const sm::vec2& old_scale = m_scale;
+	if (old_scale.x != 0 && old_scale.y != 0) 
+	{
+		sm::vec2 dscale;
+		dscale.x = scale.x / m_scale.x;
+		dscale.y = scale.y / m_scale.y;
+
+		if (!m_offset.IsValid()) {
+			m_offset = m_sym->GetBounding(this).Center();
+		}
+		sm::vec2 old_offset = m_offset;
+		sm::vec2 new_offset(m_offset.x * dscale.x, m_offset.y * dscale.y);
+		m_offset = new_offset;
+
+		m_position += old_offset - new_offset;
+	}
+
+	m_scale = scale;
+
+	// lazy
+	m_bounding_dirty = true;
+}
+
+void Sprite::SetShear(const sm::vec2& shear)
+{
+	if (m_shear == shear) {
+		return;
+	}
+
+	sm::mat4 mat_old, mat_new;
+	mat_old.Shear(m_shear.x, m_shear.y);
+	mat_new.Shear(shear.x, shear.y);
+
+	if (!m_offset.IsValid()) {
+		m_offset = m_sym->GetBounding(this).Center();
+	}
+	sm::vec2 offset = mat_new * m_offset - mat_old * m_offset;
+	m_offset += offset;
+	m_position -= offset;
+
+	m_shear = shear;
+
+	// immediately
+	m_bounding->SetTransform(m_position, m_offset, m_angle);
+
+	// 	// lazy
+	// 	m_bounding_dirty = true; 
+}
+
+void Sprite::SetOffset(const sm::vec2& offset)
+{
+	if (m_offset == offset) {
+		return;
+	}
+
+	if (!m_offset.IsValid()) {
+		m_offset = m_sym->GetBounding(this).Center();
+	}
+
+	// rotate + offset -> offset + rotate	
+	sm::vec2 old_center = GetCenter();
+	m_offset = offset;
+	sm::vec2 new_center = GetCenter();
+	m_position += old_center - new_center;
+
+	// immediately
+	m_bounding->SetTransform(m_position, m_offset, m_angle);
+
+	// 	// lazy
+	// 	m_bounding_dirty = true; 
 }
 
 const BoundingBox* Sprite::GetBounding() const 
@@ -170,113 +273,6 @@ const sm::vec2& Sprite::GetOffset() const
 		m_offset = m_sym->GetBounding(this).Center();
 	}
 	return m_offset; 
-}
-
-void Sprite::SetPosition(const sm::vec2& pos)
-{
-	if (m_position == pos) {
-		return;
-	}
-
-	m_position = pos;
-
-// 	// immediately
-// 	m_bounding->SetTransform(m_position, m_offset, m_angle);
-
-	// lazy
-	m_bounding_dirty = true;
-}
-
-void Sprite::SetAngle(float angle)
-{
-	if (m_angle == angle) {
-		return;
-	}
-
-	m_angle = angle;
-
-// 	// immediately
-// 	m_bounding->SetTransform(m_position, m_offset, m_angle);
-
-	// lazy
-	m_bounding_dirty = true;
-}
-
-void Sprite::SetScale(const sm::vec2& scale)
-{
-	if (m_scale == scale) {
-		return;
-	}
-
-	const sm::vec2& old_scale = m_scale;
-	if (old_scale.x != 0 && old_scale.y != 0) {
-		sm::vec2 dscale;
-		dscale.x = scale.x / m_scale.x;
-		dscale.y = scale.y / m_scale.y;
-
-		if (!m_offset.IsValid()) {
-			m_offset = m_sym->GetBounding(this).Center();
-		}
-		sm::vec2 old_offset = m_offset;
-		sm::vec2 new_offset(m_offset.x * dscale.x, m_offset.y * dscale.y);
-		m_offset = new_offset;
-
-		Translate(old_offset - new_offset);
-	}
-
-	m_scale = scale;
-
-	// lazy
-	m_bounding_dirty = true;
-}
-
-void Sprite::SetShear(const sm::vec2& shear)
-{
-	if (m_shear == shear) {
-		return;
-	}
-
-	sm::mat4 mat_old, mat_new;
-	mat_old.Shear(m_shear.x, m_shear.y);
-	mat_new.Shear(shear.x, shear.y);
-
-	if (!m_offset.IsValid()) {
-		m_offset = m_sym->GetBounding(this).Center();
-	}
-	sm::vec2 offset = mat_new * m_offset - mat_old * m_offset;
-	m_offset += offset;
-	Translate(-offset);	
-
-	m_shear = shear;
-
-	// immediately
-	m_bounding->SetTransform(m_position, m_offset, m_angle);
-	
-// 	// lazy
-// 	m_bounding_dirty = true; 
-}
-
-void Sprite::SetOffset(const sm::vec2& offset)
-{
-	if (m_offset == offset) {
-		return;
-	}
-
-	if (!m_offset.IsValid()) {
-		m_offset = m_sym->GetBounding(this).Center();
-	}
-
-	// rotate + offset -> offset + rotate	
-	sm::vec2 old_center = GetCenter();
-	m_offset = offset;
-	sm::vec2 new_center = GetCenter();
-	Translate(old_center - new_center);
-
-	// immediately
-	m_bounding->SetTransform(m_position, m_offset, m_angle);
-
-// 	// lazy
-// 	m_bounding_dirty = true; 
 }
 
 sm::mat4 Sprite::GetTransMatrix() const

@@ -31,14 +31,18 @@ public:
 	virtual ~Sprite();
 
 	virtual void OnMessage(Message msg) {}
-
-	virtual void Translate(const sm::vec2& offset);
-	virtual void Rotate(float delta);
 	
  	virtual bool Update(const RenderParams& params) { return false; }
 	virtual Sprite* FetchChild(const std::string& name) const { return NULL; }
 
 	virtual void SetSymbol(Symbol* sym);
+
+	virtual void SetCenter(const sm::vec2& pos);
+	virtual void SetPosition(const sm::vec2& pos);
+	virtual void SetAngle(float angle);
+	virtual void SetScale(const sm::vec2& scale);
+	virtual void SetShear(const sm::vec2& shear);
+	virtual void SetOffset(const sm::vec2& offset);
 
 	/**
 	 *  @interface
@@ -54,21 +58,19 @@ public:
 	const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name) { m_name = name; }
 
-	const BoundingBox* GetBounding() const;
+	const BoundingBox* GetBounding() const; 
 	void UpdateBounding() const;
 
-	sm::vec2 GetCenter() const;
+	void Translate(const sm::vec2& trans) { SetPosition(m_position + trans); }
+	void Rotate(float rot) { SetAngle(m_angle + rot); }
+	void Scale(const sm::vec2& scale) { SetScale(m_scale * scale); }
+
+	sm::vec2			GetCenter() const;
 	const sm::vec2&		GetPosition() const	{ return m_position; }
 	const float&		GetAngle() const	{ return m_angle; }
 	const sm::vec2&		GetScale() const	{ return m_scale; }
 	const sm::vec2&		GetShear() const	{ return m_shear; }
 	const sm::vec2&		GetOffset() const;
-
-	void SetPosition(const sm::vec2& pos);
-	void SetAngle(float angle);
-	void SetScale(const sm::vec2& scale);
-	void SetShear(const sm::vec2& shear);
-	void SetOffset(const sm::vec2& offset);
 
 	const RenderColor&	Color() const		{ return m_color; }
 	RenderColor&		Color()				{ return m_color; }

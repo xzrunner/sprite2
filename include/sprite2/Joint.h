@@ -28,6 +28,7 @@ public:
 
 	VIRTUAL_INHERITANCE void Translate(const sm::vec2& trans);
 	VIRTUAL_INHERITANCE void Rotate(float rot);
+	VIRTUAL_INHERITANCE void Scale(const sm::vec2& scale);
 
 	void Draw(const RenderParams& params) const;
 	void Update();

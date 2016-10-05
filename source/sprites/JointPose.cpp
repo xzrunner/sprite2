@@ -23,7 +23,7 @@ JointPose JointPose::operator - () const
 	JointPose inv;
 	inv.trans	= -trans;
 	inv.rot		= -rot;
-//	inv.scale	= sm::vec2(1, 1) / scale; // todo
+	inv.scale	= sm::vec2(1, 1) / scale;
 	return inv;
 }
 

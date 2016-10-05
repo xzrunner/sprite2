@@ -12,7 +12,7 @@ Joint::Joint(Sprite* spr, const JointPose& joint_local)
 	, m_skin(spr, -joint_local)
 {
 	if (Sprite* spr = m_skin.spr) {
-		JointPose src(spr->GetCenter(), spr->GetAngle());
+		JointPose src(spr->GetCenter(), spr->GetAngle(), spr->GetScale());
 		m_world_pose = local2world(src, joint_local);
 	}
 }

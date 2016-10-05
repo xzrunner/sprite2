@@ -16,7 +16,7 @@ const float MeshJoint::RADIUS = 3.5f;
 
 MeshJoint::MeshJoint(MeshJoint* parent, const sm::vec2& pos)
 	: m_parent(parent)
-	, m_world_pose(pos, 0)
+	, m_world_pose(pos, 0, sm::vec2(1, 1))
 {
 	if (m_parent) {
 		m_parent->AddReference();
@@ -123,7 +123,7 @@ void MeshJoint::Deconnect()
 
 void MeshJoint::BindNode(MeshNode* node, float weight)
 {
-	JointPose local = world2local(m_world_pose, JointPose(node->ori_xy, 0));
+	JointPose local = world2local(m_world_pose, JointPose(node->ori_xy, 0, sm::vec2(1, 1)));
 	m_nodes.push_back(Node(node, weight, local));
 }
 

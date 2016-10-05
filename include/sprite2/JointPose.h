@@ -14,8 +14,7 @@ public:
 	sm::vec2 scale;
 
 	JointPose();
-	JointPose(const sm::vec2& trans, float rot = 0, 
-		const sm::vec2& scale = sm::vec2(1, 1));
+	JointPose(const sm::vec2& trans, float rot, const sm::vec2& scale);
 
 	JointPose operator - () const;
 	JointPose operator + (const JointPose& pose) const;

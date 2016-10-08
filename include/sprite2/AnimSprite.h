@@ -36,10 +36,14 @@ public:
 
 	void SetFPS(int fps) { m_fps = fps; }
 
+	void SetStartRandom(bool random);
+
 	void SetTime(int frame);
-	void SetStartTime(int frame);
 
 	void SetActive(bool active);
+
+private:
+	void RandomStartTime();
 
 protected:
 	bool m_loop;
@@ -47,7 +51,7 @@ protected:
 
 	int m_fps;
 
-	int m_start_frame;
+	bool m_start_random;
 
 	AnimCurr m_curr;
 

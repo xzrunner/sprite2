@@ -48,6 +48,11 @@ Sprite* AnimSprite::FetchChild(const std::string& name) const
 	return m_curr.FetchChild(name);
 }
 
+void AnimSprite::SetTime(int frame)
+{
+	m_curr.SetFrame(frame, m_fps);	
+}
+
 void AnimSprite::SetStartTime(int frame)
 {
 	m_start_frame = frame;

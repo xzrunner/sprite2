@@ -174,6 +174,19 @@ void AnimCurr::SetTime(float time)
 	m_stop_during = -dt;
 }
 
+void AnimCurr::SetFrame(int frame, int fps)
+{
+	m_frame = frame;
+
+	m_curr_time = Animation::Instance()->GetTime();
+	m_start_time = m_curr_time - static_cast<float>(m_frame) / fps;
+
+	m_stop_time = 0;
+	m_stop_during = 0;
+
+	LoadFromSym();
+}
+
 void AnimCurr::SetActive(bool active) 
 {
 	if (m_active == active) {

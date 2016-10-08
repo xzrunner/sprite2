@@ -32,6 +32,7 @@ public:
 	void Start();
 
 	void SetTime(float time);
+	void SetFrame(int frame, int fps);
 
 	void SetActive(bool active);
 	bool IsActive() const { return m_active; }

@@ -8,6 +8,7 @@ AnimSprite::AnimSprite()
 	: m_loop(true)
 	, m_interval(0)
 	, m_fps(30)
+	, m_start_frame(0)
 {
 }
 
@@ -17,6 +18,7 @@ AnimSprite::AnimSprite(Symbol* sym)
 	, m_loop(true)
 	, m_interval(0)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
+	, m_start_frame(0)
 {
 	m_curr.Start();
 }
@@ -32,6 +34,7 @@ void AnimSprite::OnMessage(Message msg)
 
 	if (msg == MSG_START) {
 		m_curr.Start();
+		m_curr.SetTime((float)m_start_frame / m_fps);
 	}
 }
 
@@ -43,6 +46,12 @@ bool AnimSprite::Update(const RenderParams& params)
 Sprite* AnimSprite::FetchChild(const std::string& name) const
 {
 	return m_curr.FetchChild(name);
+}
+
+void AnimSprite::SetStartTime(int frame)
+{
+	m_start_frame = frame;
+	m_curr.SetTime((float)frame / m_fps);
 }
 
 void AnimSprite::SetActive(bool active)

@@ -71,8 +71,10 @@ void AnimSprite::SetActive(bool active)
 void AnimSprite::RandomStartTime()
 {
 	int start = VI_DOWNCASTING<const AnimSymbol*>(m_sym)->GetMaxFrameIdx();
-	start *= (rand() / static_cast<float>(RAND_MAX));
-	m_curr.SetTime(start / m_fps);		
+	float p = (rand() / static_cast<float>(RAND_MAX));
+	start *= p;
+//	m_curr.SetTime(start / m_fps);
+	m_curr.SetFrame(start, m_fps);
 }
 
 }

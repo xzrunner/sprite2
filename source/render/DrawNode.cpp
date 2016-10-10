@@ -102,13 +102,18 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params,
 	RenderParams t = params;
 	t.mt = mt;
 
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (t.shader.blend != BM_NULL) {
 		;
 	} else if (t.shader.filter && t.shader.filter->GetMode() != FM_NULL) {
-		;
+		if (t.set_shader) {
+			mgr->SetShader(sl::FILTER);
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+			shader->SetMode(sl::FILTER_MODE(t.shader.filter->GetMode()));
+		}
 	} else {
 		if (t.set_shader) {
-			sl::ShaderMgr::Instance()->SetShader(sl::SPRITE2);
+			mgr->SetShader(sl::SPRITE2);
 		}
 	}
 

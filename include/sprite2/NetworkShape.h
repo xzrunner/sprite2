@@ -22,9 +22,7 @@ public:
 	const std::vector<sm::vec2>& GetInnerVertices() const { 
 		return m_inner_vertices; 
 	}
-	void SetInnerVertices(const std::vector<sm::vec2>& inner) { 
-		m_inner_vertices = inner;
-	}
+	void SetInnerVertices(const std::vector<sm::vec2>& inner);
 
 protected:
 	std::vector<sm::vec2> m_inner_vertices;

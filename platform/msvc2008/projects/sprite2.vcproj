@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\include;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\include;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -1045,6 +1045,34 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\SkeletonSymbol.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="07.anim2"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\Anim2Sprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Anim2Sprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Anim2Symbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Anim2Symbol.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Animation2.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Animation2.h"
 					>
 				</File>
 			</Filter>

@@ -74,7 +74,7 @@ blend_end_func()
 
 static void 
 render_func(void* spr, void* sym, float* mat, float x, float y, float angle, float scale, 
-            struct ps_color* mul_col, struct ps_color* add_col, const void* ud, float time)
+            struct ps_color* mul_col, struct ps_color* add_col, int fast_blend, const void* ud, float time)
 {
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
@@ -93,6 +93,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	params.color.mul = params.color.mul * rp->ct.mul;
 	params.color.add = params.color.add + rp->ct.add;
+
+	params.shader.fast_blend = static_cast<s2::FastBlendMode>(fast_blend);
 
 	// todo color trans
 

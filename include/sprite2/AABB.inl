@@ -32,9 +32,11 @@ bool AABB::IsIntersect(const sm::rect& rect) const
 inline
 void AABB::CombineTo(sm::rect& r) const
 {
-	sm::rect me(m_rect);
-	me.Translate(m_position);
-	r.Combine(me);
+	if (m_rect.IsValid()) {
+		sm::rect me(m_rect);
+		me.Translate(m_position);
+		r.Combine(me);
+	}
 }
 
 inline

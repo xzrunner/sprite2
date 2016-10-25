@@ -47,10 +47,12 @@ bool OBB::IsIntersect(const sm::rect& rect) const
 inline
 void OBB::CombineTo(sm::rect& r) const
 {
-	r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymin), m_angle) + m_position);
-	r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymin), m_angle) + m_position);
-	r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymax), m_angle) + m_position);
-	r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymax), m_angle) + m_position);
+	if (m_rect.IsValid()) {
+		r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymin), m_angle) + m_position);
+		r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymin), m_angle) + m_position);
+		r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymax), m_angle) + m_position);
+		r.Combine(sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymax), m_angle) + m_position);
+	}
 }
 
 inline

@@ -209,7 +209,11 @@ const std::vector<Sprite*>& ComplexSymbol::GetSprs(int action) const
 	if (action < 0 || action >= m_actions.size()) {
 		return m_children;
 	} else {
-		return m_actions[action].sprs;
+		if (m_actions[action].sprs.empty()) {
+			return m_children;
+		} else {
+			return m_actions[action].sprs;
+		}
 	}
 }
 

@@ -41,7 +41,7 @@ void DrawBlend::DrawSprToTmp(const Sprite* spr, const sm::mat4& mt)
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 
 	dtexf_t0_bind();
-	dtexf_t0_clear(0, -2, 2, 0);
+	dtex_gl_clear_color2(0, -2, 2, 0);
 
 	mgr->SetShader(sl::BLEND);
 	BlendMode mode = spr->Shader().blend;

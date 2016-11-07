@@ -127,7 +127,7 @@ void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 								 const Symbol* base_sym)
 {
 	dtexf_t0_bind();
-	dtexf_t0_clear(0, -2, 2, 0);
+	dtex_gl_clear_color2(0, -2, 2, 0);
 
 	RenderParams _params = params;
 	_params.mt.Identity();

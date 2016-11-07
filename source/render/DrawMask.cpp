@@ -35,7 +35,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 void DrawMask::DrawBaseToFbo0(const Sprite* base, const RenderColor& rc)
 {
 	dtexf_t0_bind();
-	dtexf_t0_clear(0, -2, 2, 0);
+	dtex_gl_clear_color2(0, -2, 2, 0);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
@@ -54,7 +54,7 @@ void DrawMask::DrawBaseToFbo0(const Sprite* base, const RenderColor& rc)
 void DrawMask::DrawMaskToFbo1(const Sprite* mask)
 {
 	dtexf_t1_bind();
-	dtexf_t1_clear(0, -2, 2, 0);
+	dtex_gl_clear_color2(0, -2, 2, 0);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);

@@ -82,10 +82,10 @@ void DrawGaussianBlur::DrawInit(const Sprite* spr, const RenderParams& params, b
 {
 	if (is_target0) {
 		dtexf_t0_bind();
-		dtexf_t0_clear(0, -2, 2, 0);
+		dtex_gl_clear_color2(0, -2, 2, 0);
 	} else {
 		dtexf_t1_bind();
-		dtexf_t1_clear(0, -2, 2, 0);
+		dtex_gl_clear_color2(0, -2, 2, 0);
 	}
 
 	RenderParams _params = params;
@@ -116,12 +116,12 @@ void DrawGaussianBlur::DrawBetweenFBO(bool is_t0_to_t1, bool hori, const RenderC
 		from_tex_sz = dtexf_t0_get_texture_size();
 		from_tex_id = dtexf_t0_get_texture_id();
 		dtexf_t1_bind();
-		dtexf_t1_clear(0, -2, 2, 0);
+		dtex_gl_clear_color2(0, -2, 2, 0);
 	} else {
 		from_tex_sz = dtexf_t1_get_texture_size();
 		from_tex_id = dtexf_t1_get_texture_id();
 		dtexf_t0_bind();
-		dtexf_t0_clear(0, -2, 2, 0);
+		dtex_gl_clear_color2(0, -2, 2, 0);
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

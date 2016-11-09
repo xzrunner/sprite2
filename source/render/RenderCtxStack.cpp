@@ -1,6 +1,7 @@
 #include "RenderCtxStack.h"
 
 #include <shaderlab.h>
+#include <dtex_gl.h>
 
 namespace s2
 {
@@ -48,7 +49,7 @@ void RenderCtxStack::BindCtx(const RenderCtx& ctx)
 	sl::SubjectMVP2* mvp2 = sl::SubjectMVP2::Instance();
 	mvp2->NotifyModelview(ctx.mv_offset.x, ctx.mv_offset.y, ctx.mv_scale, ctx.mv_scale);
 	mvp2->NotifyProjection(ctx.proj_width, ctx.proj_height);
-	sl::ShaderMgr::Instance()->GetContext()->SetViewport(0, 0, ctx.proj_width, ctx.proj_height);
+	dtex_gl_set_viewport(0, 0, ctx.proj_width, ctx.proj_height);
 }
 
 }

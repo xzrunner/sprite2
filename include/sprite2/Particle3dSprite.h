@@ -45,6 +45,9 @@ public:
 	bool IsLocalModeDraw() const;
 	void SetLocalModeDraw(bool local);
 
+	float GetStartRadius() const { return m_start_radius; }
+	void SetStartRadius(float radius) { m_start_radius = radius; }
+
 	p3d_sprite* GetP3dSpr() const { return m_spr; }
 
 protected:
@@ -57,6 +60,8 @@ protected:
 	bool m_reuse;
 
 	mutable P3dRenderParams m_rp;
+
+	float m_start_radius;
 
 	VI_DUMMY_FUNC
 

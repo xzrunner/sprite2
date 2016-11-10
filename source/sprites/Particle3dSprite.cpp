@@ -13,6 +13,9 @@ namespace s2
 
 Particle3dSprite::Particle3dSprite() 
 	: m_spr(NULL)
+	, m_alone(false)
+	, m_reuse(false)
+	, m_start_radius(0)
 {
 }
 
@@ -22,6 +25,7 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	, m_alone(spr.m_alone)
 	, m_reuse(spr.m_reuse)
 	, m_rp(spr.m_rp)
+	, m_start_radius(spr.m_start_radius)
 {
 	CreateSpr();
 }
@@ -29,10 +33,11 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_spr = NULL;
-	m_alone = spr.m_alone;
-	m_reuse = spr.m_reuse;
-	m_rp = spr.m_rp;
+	m_spr            = NULL;
+	m_alone          = spr.m_alone;
+	m_reuse          = spr.m_reuse;
+	m_rp             = spr.m_rp;
+	m_start_radius   = spr.m_start_radius;
 
 	return *this;
 }
@@ -80,6 +85,9 @@ bool Particle3dSprite::Update(const RenderParams& params)
 	} else {
 		p3d_emitter* et = m_spr->et;
 
+		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
+		cfg->start_radius = m_start_radius;
+
 		float time = Particle3d::Instance()->GetTime();
 		assert(et->time <= time);
 		if (et->time == time) {
@@ -107,7 +115,7 @@ void Particle3dSprite::Draw(const RenderParams& params) const
 {
 	if (!m_alone && m_spr) {
 		m_rp.mat = params.mt;
-		m_rp.ct = params.color;
+		m_rp.ct  = params.color;
 		m_rp.p3d = m_spr;
 		p3d_emitter_draw(m_spr->et, &m_rp);
 	}
@@ -137,10 +145,11 @@ void Particle3dSprite::CreateSpr()
 
 	m_spr = p3d_sprite_create();
 	m_spr->local_mode_draw = sym->IsLocal();
-	m_spr->et = p3d_emitter_create(cfg);
-	m_spr->et->loop = sym->IsLoop();
+	m_spr->et              = p3d_emitter_create(cfg);
+	m_spr->et->loop        = sym->IsLoop();
 	p3d_emitter_start(m_spr->et);
-	m_spr->ptr_self = &m_spr;
+	m_spr->ptr_self        = &m_spr;
+	m_start_radius         = cfg->start_radius;
 
 	if (m_alone && m_spr) {
 		p3d_buffer_insert(m_spr);

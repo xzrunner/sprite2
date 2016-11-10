@@ -5,6 +5,7 @@
 #include "IconSprite.h"
 #include "MeshSprite.h"
 #include "SkeletonSprite.h"
+#include "Particle3dSprite.h"
 
 #include <SM_Vector.h>
 
@@ -109,6 +110,14 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process)
 		SkeletonSprite* sk_t = dynamic_cast<SkeletonSprite*>(tween);
 		assert(sk_e && sk_t);
 		sk_t->GetPose().Lerp(sk_b->GetPose(), sk_e->GetPose(), process);
+	}
+	else if (Particle3dSprite* p3d_b = dynamic_cast<Particle3dSprite*>(begin))
+	{
+		Particle3dSprite* p3d_e = dynamic_cast<Particle3dSprite*>(end);
+		Particle3dSprite* p3d_t = dynamic_cast<Particle3dSprite*>(tween);
+		assert(p3d_e && p3d_t);
+		float start_radius = (p3d_e->GetStartRadius() - p3d_b->GetStartRadius()) * process + p3d_b->GetStartRadius();
+		p3d_t->SetStartRadius(start_radius);
 	}
 }
 

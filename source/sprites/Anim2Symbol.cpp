@@ -4,6 +4,7 @@
 #include "S2_Sprite.h"
 
 #include <rigging/rg_skeleton.h>
+#include <rigging/rg_joint.h>
 
 namespace s2
 {
@@ -40,18 +41,35 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 {
-// 	if (!m_skeleton) {
-// 		return sm::rect();
-// 	}
-// 	if (spr) {
-// 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
-// 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
-// 	}
-//	return m_skeleton->GetBounding();
+	if (!m_skeleton) {
+		return sm::rect(200, 200);
+	}
 
-	//////////////////////////////////////////////////////////////////////////
+	sm::rect b;
+	for (int i = 0; i < m_skeleton->joint_count; ++i) 
+	{
+		const rg_joint* joint = m_skeleton->joints[i];
+		if (!joint->skin.ud) {
+			continue;
+		}
 
-	return sm::rect(200, 200);
+		rg_joint_pose world;
+		rg_local2world(&joint->world_pose, &joint->skin.local, &world);
+		
+		Symbol* sym = static_cast<Symbol*>(joint->skin.ud);
+		sm::rect sb = sym->GetBounding();
+
+		sm::mat4 t;
+		t.SetTransformation(world.trans[0], world.trans[1], world.rot, world.scale[0], world.scale[1], 0, 0, 0, 0);
+		sm::vec2 min(sb.xmin, sb.ymin),
+			     max(sb.xmax, sb.ymax);
+		min = t * min;
+		max = t * max;
+
+		b.Combine(min);
+		b.Combine(max);
+	}
+	return b;	
 }
 
 }

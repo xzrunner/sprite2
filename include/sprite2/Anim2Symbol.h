@@ -3,7 +3,7 @@
 
 #include "S2_Symbol.h"
 
-#include <rigging/rg_skeleton.h>
+struct rg_skeleton;
 
 namespace s2
 {

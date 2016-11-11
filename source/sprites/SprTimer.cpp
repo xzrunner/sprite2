@@ -1,5 +1,6 @@
 #include "SprTimer.h"
 #include "Animation.h"
+#include "Animation2.h"
 #include "Particle2d.h"
 #include "Particle3d.h"
 #include "Trail.h"
@@ -16,6 +17,7 @@ SprTimer::SprTimer()
 void SprTimer::Init()
 {
 	Animation::Instance();
+	Animation2::Instance();
 	Particle2d::Instance();
 	Particle3d::Instance();
 	Trail::Instance();

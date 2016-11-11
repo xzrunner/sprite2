@@ -3,6 +3,8 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 
+#include <rigging/rg_skeleton.h>
+
 namespace s2
 {
 
@@ -13,9 +15,7 @@ Anim2Symbol::Anim2Symbol()
 
 Anim2Symbol::~Anim2Symbol()
 {
-	if (m_skeleton) {
-		rg_skeleton_release(m_skeleton);
-	}
+	// todo release sk
 }
 	
 int Anim2Symbol::Type() const
@@ -51,7 +51,7 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 
 	//////////////////////////////////////////////////////////////////////////
 
-	return sm::rect();
+	return sm::rect(200, 200);
 }
 
 }

@@ -90,23 +90,29 @@ bool AnimCurr::Update(const RenderParams& params, bool loop,
 		m_curr_time = curr_time;
 	}
 
-	// update frame
-	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
+// 	// update frame
+// 	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
+// 	int max_frame = m_sym->GetMaxFrameIdx();
+// 	int loop_max_frame = max_frame + interval * fps;
+// 	if (loop) {
+// 		if (curr_frame <= max_frame) {
+// 			;
+// 		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
+// 			curr_frame = 1;
+// 		} else {
+// 			curr_frame = 1;
+// 			m_start_time = m_curr_time;
+// 		}
+// 	} else {
+// 		if (curr_frame > max_frame) {
+// 			curr_frame = max_frame;
+// 		}
+// 	}
+
 	int max_frame = m_sym->GetMaxFrameIdx();
-	int loop_max_frame = max_frame + interval * fps;
-	if (loop) {
-		if (curr_frame <= max_frame) {
-			;
-		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
-			curr_frame = 1;
-		} else {
-			curr_frame = 1;
-			m_start_time = m_curr_time;
-		}
-	} else {
-		if (curr_frame > max_frame) {
-			curr_frame = max_frame;
-		}
+	++m_frame;
+	if (m_frame > max_frame) {
+		m_frame = max_frame;
 	}
 
 	// update children
@@ -119,12 +125,12 @@ bool AnimCurr::Update(const RenderParams& params, bool loop,
 		}
 	}
 
-	// update curr frame
-	if (curr_frame != m_frame) {
-		m_frame = curr_frame;
+// 	// update curr frame
+// 	if (curr_frame != m_frame) {
+// 		m_frame = curr_frame;
 		dirty = true;
 		LoadFromSym();
-	}
+//	}
 
 	return dirty;
 }

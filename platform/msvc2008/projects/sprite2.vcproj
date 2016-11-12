@@ -1052,6 +1052,14 @@
 				Name="07.anim2"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\Anim2Curr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Anim2Curr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\Anim2Sprite.cpp"
 					>
 				</File>

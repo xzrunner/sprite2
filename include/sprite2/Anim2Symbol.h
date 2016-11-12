@@ -3,7 +3,7 @@
 
 #include "S2_Symbol.h"
 
-struct rg_skeleton;
+struct rg_animation;
 
 namespace s2
 {
@@ -22,11 +22,11 @@ public:
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
-	void SetSkeleton(rg_skeleton* skeleton) { m_skeleton = skeleton; }
-	const rg_skeleton* GetSkeleton() const { return m_skeleton; }
+	void SetAnim(rg_animation* anim) { m_anim = anim; }
+	const rg_animation* GetAnim() const { return m_anim; }
 
 protected:
-	rg_skeleton* m_skeleton;
+	rg_animation* m_anim;
 
 }; // Anim2Symbol
 

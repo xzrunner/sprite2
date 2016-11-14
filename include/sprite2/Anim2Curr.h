@@ -38,8 +38,6 @@ public:
 private:
 	void ResetTime();
 
-	void UpdateSkeletonPose();
-
 private:
 	Anim2Symbol* m_sym;
 

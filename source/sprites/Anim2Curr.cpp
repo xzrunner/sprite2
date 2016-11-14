@@ -2,9 +2,9 @@
 #include "Anim2Symbol.h"
 #include "Animation.h"
 
+#include <rigging/rg_skeleton.h>
 #include <rigging/rg_animation.h>
 #include <rigging/rg_skeleton_pose.h>
-#include <rigging/rg_joint.h>
 #include <rigging/rg_dopesheet.h>
 
 #include <CU_RefCountObj.h>
@@ -107,7 +107,9 @@ bool Anim2Curr::Update(bool loop, int fps)
 	// update curr frame
 	if (curr_frame != m_frame) {
 		m_frame = curr_frame;
-		UpdateSkeletonPose();
+		const rg_animation* anim = m_sym->GetAnim();
+		// todo: GetFramePtr(i) as dims_ptr
+		rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds, m_frame);
 		dirty = true;
 	}
 
@@ -130,32 +132,6 @@ bool Anim2Curr::Update(bool loop, int fps)
 void Anim2Curr::ResetTime()
 {
 	m_start_time = m_curr_time = Animation::Instance()->GetTime();
-}
-
-void Anim2Curr::UpdateSkeletonPose()
-{
-	const rg_animation* anim = m_sym->GetAnim();
-	for (int i = 0; i < anim->sk->joint_count; ++i) 
-	{
-		rg_joint_pose_identity(&m_sk_pose->poses[i].local);
-		rg_joint_pose_identity(&m_sk_pose->poses[i].world);
-
-		rg_joint* joint = anim->sk->joints[i];
-
-		rg_dopesheet* ds = anim->ds[i];
-		rg_dopesheet_state state;
-		rg_ds_query(ds, m_frame, GetFramePtr(i), &state);
-
-		m_sk_pose->poses[i].local.trans[0] = joint->local_pose.trans[0] + state.trans[0];
-		m_sk_pose->poses[i].local.trans[1] = joint->local_pose.trans[1] + state.trans[1];
-		m_sk_pose->poses[i].local.rot      = joint->local_pose.rot + state.rot;
-		m_sk_pose->poses[i].local.scale[0] = joint->local_pose.scale[0] * state.scale[0];
-		m_sk_pose->poses[i].local.scale[1] = joint->local_pose.scale[1] * state.scale[1];
-
-		m_sk_pose->poses[i].skin = state.skin;
-	}
-
-	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->sk->root);
 }
 
 }

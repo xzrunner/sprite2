@@ -141,9 +141,6 @@ void Anim2Curr::UpdateSkeletonPose()
 		rg_joint_pose_identity(&m_sk_pose->poses[i].world);
 
 		rg_joint* joint = anim->sk->joints[i];
-// 		if (!joint->skin.ud) {
-// 			continue;
-// 		}
 
 		rg_dopesheet* ds = anim->ds[i];
 		rg_dopesheet_state state;
@@ -154,6 +151,8 @@ void Anim2Curr::UpdateSkeletonPose()
 		m_sk_pose->poses[i].local.rot      = joint->local_pose.rot + state.rot;
 		m_sk_pose->poses[i].local.scale[0] = joint->local_pose.scale[0] * state.scale[0];
 		m_sk_pose->poses[i].local.scale[1] = joint->local_pose.scale[1] * state.scale[1];
+
+		m_sk_pose->poses[i].skin = state.skin;
 	}
 
 	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->sk->root);

@@ -15,9 +15,9 @@ Animation2::Animation2()
 }
 
 static void
-render_func(void* sym, float x, float y, float angle, float sx, float sy, void* ud) {
+render_func(void* sym, float x, float y, float angle, float sx, float sy, const void* ud) {
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
-	RenderParams* params = static_cast<RenderParams*>(ud);
+	const RenderParams* params = static_cast<const RenderParams*>(ud);
 	DrawNode::Draw(s2_sym, *params, sm::vec2(x, y), angle, sm::vec2(sx, sy), sm::vec2(0, 0));
 }
 

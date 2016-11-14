@@ -11,6 +11,8 @@
 #include <rigging/rg_dopesheet.h>
 #include <rigging/rg_skeleton_pose.h>
 
+#include <assert.h>
+
 namespace s2
 {
 
@@ -51,15 +53,26 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 	const rg_skeleton_pose* sk_pose = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr().GetSkPose();
 	for (int i = 0; i < m_anim->sk->joint_count; ++i) 
 	{
-		const rg_joint* joint = m_anim->sk->joints[i];
-		if (!joint->skin.ud) {
+		int skin_idx = 0xffff;
+		if (sk_pose->poses[i].skin != 0xffff) {
+			skin_idx = sk_pose->poses[i].skin;
+		} else {
+			const struct rg_joint* joint = m_anim->sk->joints[i];
+			if (joint->skin >= 0 && joint->skin < m_anim->sk->skin_count) {
+				skin_idx = joint->skin;
+			}
+		}
+		if (skin_idx == 0xffff) {
 			continue;
 		}
 
-		struct rg_joint_pose world;
-		rg_local2world(&sk_pose->poses[i].world, &joint->skin.local, &world);
+		const struct rg_skin* skin = &m_anim->sk->skins[skin_idx];
+		assert(skin->ud);
 
-		Symbol* s2_sym = static_cast<Symbol*>(joint->skin.ud);
+		struct rg_joint_pose world;
+		rg_local2world(&sk_pose->poses[i].world, &skin->local, &world);
+
+		Symbol* s2_sym = static_cast<Symbol*>(skin->ud);
 		DrawNode::Draw(s2_sym, p, sm::vec2(world.trans[0], world.trans[1]), 
 			world.rot, sm::vec2(world.scale[0], world.scale[1]), sm::vec2(0, 0));
 	}
@@ -76,15 +89,20 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 	sm::rect b;
 	for (int i = 0; i < m_anim->sk->joint_count; ++i) 
 	{
-		const rg_joint* joint = m_anim->sk->joints[i];
-		if (!joint->skin.ud) {
+		const struct rg_joint* joint = m_anim->sk->joints[i];
+		if (joint->skin == 0xffff) {
+			continue;
+		}
+		assert(joint->skin >= 0 && joint->skin < m_anim->sk->skin_count);
+		const struct rg_skin* skin = &m_anim->sk->skins[joint->skin];
+		if (!skin->ud) {
 			continue;
 		}
 
 		rg_joint_pose world;
-		rg_local2world(&joint->world_pose, &joint->skin.local, &world);
+		rg_local2world(&joint->world_pose, &skin->local, &world);
 		
-		Symbol* sym = static_cast<Symbol*>(joint->skin.ud);
+		Symbol* sym = static_cast<Symbol*>(skin->ud);
 		sm::rect sb = sym->GetBounding();
 
 		sm::mat4 t;

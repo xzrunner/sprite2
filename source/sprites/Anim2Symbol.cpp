@@ -8,6 +8,7 @@
 #include <rigging/rg_joint.h>
 #include <rigging/rg_animation.h>
 #include <rigging/rg_slot.h>
+#include <rigging/rg_skeleton.h>
 
 #include <assert.h>
 
@@ -42,8 +43,8 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
-	const rg_skeleton_pose* sk_pose = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr().GetSkPose();
-	rg_skeleton_draw(m_anim->sk, sk_pose, &p);
+	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
+	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &p);
 }
 
 sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
@@ -58,6 +59,9 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 		const struct rg_slot* slot = &m_anim->sk->slots[i];
 		const struct rg_joint* joint = m_anim->sk->joints[slot->joint];
 		assert(joint);
+		if (slot->skin == 0xffff) {
+			continue;
+		}
 		const struct rg_skin* skin = &m_anim->sk->skins[slot->skin];
 		assert(skin && skin->ud);
 

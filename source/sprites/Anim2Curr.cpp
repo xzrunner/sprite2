@@ -6,6 +6,7 @@
 #include <rigging/rg_animation.h>
 #include <rigging/rg_skeleton_pose.h>
 #include <rigging/rg_dopesheet.h>
+#include <rigging/rg_skeleton_skin.h>
 
 #include <CU_RefCountObj.h>
 
@@ -18,6 +19,7 @@ Anim2Curr::Anim2Curr()
 	: m_sym(NULL)
 	, m_frame(0)
 	, m_sk_pose(NULL)
+	, m_sk_skin(NULL)
 {
 	ResetTime();
 }
@@ -29,6 +31,7 @@ Anim2Curr::Anim2Curr(const Anim2Curr& curr)
 	, m_start_time(curr.m_start_time)
 	, m_curr_time(curr.m_curr_time)
 	, m_sk_pose(NULL)
+	, m_sk_skin(NULL)
 {
 	cu::RefCountObjAssign(m_sym, const_cast<Anim2Symbol*>(curr.m_sym));
 }
@@ -42,6 +45,7 @@ Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 	m_start_time = curr.m_start_time;
 	m_curr_time = curr.m_curr_time;
 	m_sk_pose = NULL;
+	m_sk_skin = NULL;
 	return *this;
 }
 
@@ -56,9 +60,13 @@ Anim2Curr::Anim2Curr(Anim2Symbol* sym)
 
 	m_frames_ptr.resize(sk->joint_count, 0);
 
-	int sz = SIZEOF_RG_SKELETON_POSE + sizeof(rg_pose_pair) * sk->joint_count;
-	m_sk_pose = (rg_skeleton_pose*)malloc(sz);
-	memset(m_sk_pose, 0, sz);
+	int pose_sz = SIZEOF_RG_SKELETON_POSE + sizeof(rg_pose_pair) * sk->joint_count;
+	m_sk_pose = (rg_skeleton_pose*)malloc(pose_sz);
+	memset(m_sk_pose, 0, pose_sz);
+
+	int skin_sz = SIZEOF_RG_SKELETON_SKIN + sizeof(uint16_t) * sk->skin_count;
+	m_sk_skin = (rg_skeleton_skin*)malloc(skin_sz);
+	memset(m_sk_skin, 0, skin_sz);
 }
 
 Anim2Curr::~Anim2Curr()
@@ -69,13 +77,18 @@ Anim2Curr::~Anim2Curr()
 	if (m_sk_pose) {
 		free(m_sk_pose);
 	}
+	if (m_sk_skin) {
+		free(m_sk_skin);
+	}
 }
 
 bool Anim2Curr::Update(bool loop, int fps)
 {
-//	// for debug
+ 	// for debug
+//	fps = 3;
 // 	const rg_animation* anim = m_sym->GetAnim();
-// 	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds, m_frame);
+// 	m_frame = 12;
+// 	UpdateRigging();
 // 	return true;
 
 	//////////////////////////////////////////////////////////////////////////
@@ -114,9 +127,7 @@ bool Anim2Curr::Update(bool loop, int fps)
 	// update curr frame
 	if (curr_frame != m_frame) {
 		m_frame = curr_frame;
-		const rg_animation* anim = m_sym->GetAnim();
-		// todo: GetFramePtr(i) as dims_ptr
-		rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds, m_frame);
+		UpdateRigging();
 		dirty = true;
 	}
 
@@ -139,6 +150,16 @@ bool Anim2Curr::Update(bool loop, int fps)
 void Anim2Curr::ResetTime()
 {
 	m_start_time = m_curr_time = Animation::Instance()->GetTime();
+}
+
+void Anim2Curr::UpdateRigging()
+{
+	const rg_animation* anim = m_sym->GetAnim();
+
+	// todo: GetFramePtr(i) as dims_ptr
+	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds.joints, m_frame);
+
+	rg_skeleton_skin_update(m_sk_skin, anim->sk, anim->ds.skins, m_frame);
 }
 
 }

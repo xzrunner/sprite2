@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 struct rg_skeleton_pose;
+struct rg_skeleton_skin;
 
 namespace s2
 {
@@ -34,9 +35,12 @@ public:
 	}
 
 	const rg_skeleton_pose* GetSkPose() const { return m_sk_pose; }
+	const rg_skeleton_skin* GetSkSkin() const { return m_sk_skin; }
 
 private:
 	void ResetTime();
+
+	void UpdateRigging();
 
 private:
 	Anim2Symbol* m_sym;
@@ -48,6 +52,7 @@ private:
 	float m_start_time, m_curr_time;
 
 	rg_skeleton_pose* m_sk_pose;
+	rg_skeleton_skin* m_sk_skin;
 
 }; // Anim2Curr
 

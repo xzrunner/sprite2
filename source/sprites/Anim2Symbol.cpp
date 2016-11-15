@@ -59,7 +59,7 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 		const struct rg_slot* slot = &m_anim->sk->slots[i];
 		const struct rg_joint* joint = m_anim->sk->joints[slot->joint];
 		assert(joint);
-		if (slot->skin == 0xffff) {
+		if (slot->skin == RG_SKIN_UNKNOWN || slot->skin == RG_SKIN_NULL) {
 			continue;
 		}
 		const struct rg_skin* skin = &m_anim->sk->skins[slot->skin];

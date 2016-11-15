@@ -95,9 +95,34 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params,
 					const sm::vec2& pos, float angle, 
 					const sm::vec2& scale, const sm::vec2& shear)
 {
-	sm::mat4 mt;
-	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
-	mt = mt * params.mt;
+ 	sm::mat4 mt;
+ 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
+ 	mt = mt * params.mt;
+
+ 	RenderParams t = params;
+ 	t.mt = mt;
+ 
+ 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+ 	if (t.shader.blend != BM_NULL) {
+ 		;
+ 	} else if (t.shader.filter && t.shader.filter->GetMode() != FM_NULL) {
+ 		if (t.set_shader) {
+ 			mgr->SetShader(sl::FILTER);
+ 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+ 			shader->SetMode(sl::FILTER_MODE(t.shader.filter->GetMode()));
+ 		}
+ 	} else {
+ 		if (t.set_shader) {
+ 			mgr->SetShader(sl::SPRITE2);
+ 		}
+ 	}
+ 
+ 	sym->Draw(t);
+}
+
+void DrawNode::Draw(const Symbol* sym, const RenderParams& params, const sm::mat4& _mt)
+{
+	sm::mat4 mt = _mt * params.mt;
 
 	RenderParams t = params;
 	t.mt = mt;

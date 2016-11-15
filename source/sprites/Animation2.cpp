@@ -15,10 +15,16 @@ Animation2::Animation2()
 }
 
 static void
-render_func(void* sym, float x, float y, float angle, float sx, float sy, const void* ud) {
+render_func(void* sym, float* mat, const void* ud) {
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
 	const RenderParams* params = static_cast<const RenderParams*>(ud);
-	DrawNode::Draw(s2_sym, *params, sm::vec2(x, y), angle, sm::vec2(sx, sy), sm::vec2(0, 0));
+	sm::mat4 m;
+
+	m.c[0][0] = mat[0]; m.c[0][1] = mat[1];
+	m.c[1][0] = mat[2]; m.c[1][1] = mat[3];
+	m.c[3][0] = mat[4]; m.c[3][1] = mat[5];
+
+	DrawNode::Draw(s2_sym, *params, m);
 }
 
 void Animation2::Init()

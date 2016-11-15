@@ -73,6 +73,13 @@ Anim2Curr::~Anim2Curr()
 
 bool Anim2Curr::Update(bool loop, int fps)
 {
+//	// for debug
+// 	const rg_animation* anim = m_sym->GetAnim();
+// 	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds, m_frame);
+// 	return true;
+
+	//////////////////////////////////////////////////////////////////////////
+
 	bool dirty = false;
 
 	// update time

@@ -64,7 +64,7 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 			continue;
 		}
 
-		rg_joint_pose world;
+		rg_pose_srt world;
 		rg_local2world(&joint->world_pose, &skin->local, &world);
 		
 		Symbol* sym = static_cast<Symbol*>(skin->ud);

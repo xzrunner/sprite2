@@ -25,6 +25,10 @@ public:
 					 const sm::vec2& scale = sm::vec2(1, 1),
 					 const sm::vec2& shear = sm::vec2(0, 0));	
 
+	static void Draw(const Symbol* sym, 
+		             const RenderParams& params,
+					 const sm::mat4& mt);
+
 private:
 	static void DrawSpr(const Sprite* spr, const RenderParams& params);
 

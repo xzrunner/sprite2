@@ -7,6 +7,7 @@
 
 #include <rigging/rg_joint.h>
 #include <rigging/rg_animation.h>
+#include <rigging/rg_slot.h>
 
 #include <assert.h>
 
@@ -52,28 +53,24 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 	}
 
 	sm::rect b;
-	for (int i = 0; i < m_anim->sk->joint_count; ++i) 
+	for (int i = 0; i < m_anim->sk->slot_count; ++i) 
 	{
-		const struct rg_joint* joint = m_anim->sk->joints[i];
-		if (joint->skin == 0xffff) {
-			continue;
-		}
-		assert(joint->skin >= 0 && joint->skin < m_anim->sk->skin_count);
-		const struct rg_skin* skin = &m_anim->sk->skins[joint->skin];
-		if (!skin->ud) {
-			continue;
-		}
+		const struct rg_slot* slot = &m_anim->sk->slots[i];
+		const struct rg_joint* joint = m_anim->sk->joints[slot->joint];
+		assert(joint);
+		const struct rg_skin* skin = &m_anim->sk->skins[slot->skin];
+		assert(skin && skin->ud);
 
 		rg_pose_srt world;
 		rg_local2world(&joint->world_pose, &skin->local, &world);
-		
+
 		Symbol* sym = static_cast<Symbol*>(skin->ud);
 		sm::rect sb = sym->GetBounding();
 
 		sm::mat4 t;
 		t.SetTransformation(world.trans[0], world.trans[1], world.rot, world.scale[0], world.scale[1], 0, 0, 0, 0);
 		sm::vec2 min(sb.xmin, sb.ymin),
-			     max(sb.xmax, sb.ymax);
+			max(sb.xmax, sb.ymax);
 		min = t * min;
 		max = t * max;
 

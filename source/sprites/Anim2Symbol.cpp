@@ -61,22 +61,26 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 		const struct rg_skin* skin = &m_anim->sk->skins[slot->skin];
 		assert(skin && skin->ud);
 
-		rg_pose_srt world;
-		rg_local2world(&joint->world_pose, &skin->local, &world);
+		rg_pose_mat world;
+		rg_local2worldmat(&joint->world_pose, &skin->local, &world);
 
 		Symbol* sym = static_cast<Symbol*>(skin->ud);
 		sm::rect sb = sym->GetBounding();
 
-		sm::mat4 t;
-		t.SetTransformation(world.trans[0], world.trans[1], world.rot, world.scale[0], world.scale[1], 0, 0, 0, 0);
+		sm::mat4 m;
+		m.c[0][0] = world.m[0]; m.c[0][1] = world.m[1];
+		m.c[1][0] = world.m[2]; m.c[1][1] = world.m[3];
+		m.c[3][0] = world.m[4]; m.c[3][1] = world.m[5];
+
 		sm::vec2 min(sb.xmin, sb.ymin),
-			max(sb.xmax, sb.ymax);
-		min = t * min;
-		max = t * max;
+			     max(sb.xmax, sb.ymax);
+		min = m * min;
+		max = m * max;
 
 		b.Combine(min);
 		b.Combine(max);
 	}
+
 	return b;	
 }
 

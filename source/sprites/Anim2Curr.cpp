@@ -5,7 +5,7 @@
 #include <rigging/rg_skeleton.h>
 #include <rigging/rg_animation.h>
 #include <rigging/rg_skeleton_pose.h>
-#include <rigging/rg_dopesheet.h>
+#include <rigging/rg_timeline.h>
 #include <rigging/rg_skeleton_skin.h>
 
 #include <CU_RefCountObj.h>
@@ -157,9 +157,9 @@ void Anim2Curr::UpdateRigging()
 	const rg_animation* anim = m_sym->GetAnim();
 
 	// todo: GetFramePtr(i) as dims_ptr
-	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->ds.joints, m_frame);
+	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->timeline.joints, m_frame);
 
-	rg_skeleton_skin_update(m_sk_skin, anim->sk, anim->ds.skins, m_frame);
+	rg_skeleton_skin_update(m_sk_skin, anim->sk, anim->timeline.skins, m_frame);
 }
 
 }

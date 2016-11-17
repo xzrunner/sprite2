@@ -838,6 +838,18 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="triangles"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\TrianglesMesh.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\TrianglesMesh.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

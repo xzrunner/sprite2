@@ -9,6 +9,8 @@
 
 #include <vector>
 
+struct rg_skeleton_pose;
+
 namespace s2
 {
 
@@ -33,6 +35,8 @@ public:
 	 *    should after other virtual
 	 */
 	virtual Mesh* Clone() const { return NULL; }
+
+	virtual void Update(const rg_skeleton_pose* sk_pose) {}
 
 	const Symbol* GetBaseSymbol() const { return m_base; }
 

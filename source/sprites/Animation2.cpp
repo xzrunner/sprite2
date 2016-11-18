@@ -1,8 +1,11 @@
 #include "Animation2.h"
 #include "DrawNode.h"
 #include "S2_Symbol.h"
+#include "SymType.h"
+#include "MeshSymbol.h"
 
 #include <rigging/rg_skeleton.h>
+#include <rigging/rg_skeleton_skin.h>
 
 namespace s2
 {
@@ -27,9 +30,19 @@ render_func(void* sym, float* mat, const void* ud) {
 	DrawNode::Draw(s2_sym, *params, m);
 }
 
+static void
+update_skin_func(void* sym, const rg_skeleton_pose* sk_pose) {
+	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	if (s2_sym->Type() == s2::SYM_MESH) {
+		MeshSymbol* mesh_sym = VI_DOWNCASTING<MeshSymbol*>(s2_sym);
+		mesh_sym->UpdateMesh(sk_pose);
+	}
+}
+
 void Animation2::Init()
 {
 	rg_skeleton_init(render_func);
+	rg_skeleton_skin_init(update_skin_func);
 }
 
 }

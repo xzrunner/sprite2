@@ -850,6 +850,18 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="skeleton2"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\Skeleton2Mesh.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\Skeleton2Mesh.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

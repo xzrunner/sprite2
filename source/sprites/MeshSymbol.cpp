@@ -78,6 +78,13 @@ sm::rect MeshSymbol::GetBounding(const Sprite* spr) const
 	}
 }
 
+void MeshSymbol::UpdateMesh(const rg_skeleton_pose* sk_pose)
+{
+	if (m_mesh) {
+		m_mesh->Update(sk_pose);
+	}
+}
+
 void MeshSymbol::SetMesh(Mesh* mesh)
 {
 	cu::RefCountObjAssign(m_mesh, mesh);

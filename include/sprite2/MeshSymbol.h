@@ -5,6 +5,8 @@
 
 #include <stdint.h>
 
+struct rg_skeleton_pose;
+
 namespace s2
 {
 
@@ -23,6 +25,8 @@ public:
 	virtual int Type() const;
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
+
+	virtual void UpdateMesh(const rg_skeleton_pose* sk_pose);
 
 	const Mesh* GetMesh() const { return m_mesh; }
 	Mesh* GetMesh() { return m_mesh; }

@@ -5,10 +5,7 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 
-#include <rigging/rg_joint.h>
-#include <rigging/rg_animation.h>
-#include <rigging/rg_slot.h>
-#include <rigging/rg_skeleton.h>
+#include <rigging.h>
 
 #include <assert.h>
 

@@ -2,12 +2,7 @@
 #include "Anim2Symbol.h"
 #include "Animation.h"
 
-#include <rigging/rg_skeleton.h>
-#include <rigging/rg_animation.h>
-#include <rigging/rg_skeleton_pose.h>
-#include <rigging/rg_timeline.h>
-#include <rigging/rg_skeleton_skin.h>
-
+#include <rigging.h>
 #include <CU_RefCountObj.h>
 
 #include <assert.h>

@@ -2,9 +2,7 @@
 #include "MeshNode.h"
 #include "MeshTriangle.h"
 
-#include <rigging/rg_skeleton_pose.h>
-#include <rigging/rg_pose_mat.h>
-#include <rigging/rg_joint.h>
+#include <rigging.h>
 
 #include <assert.h>
 

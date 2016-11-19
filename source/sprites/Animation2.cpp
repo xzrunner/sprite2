@@ -4,9 +4,7 @@
 #include "SymType.h"
 #include "MeshSymbol.h"
 
-#include <rigging/rg_skeleton.h>
-#include <rigging/rg_skeleton_skin.h>
-#include <rigging/rg_timeline.h>
+#include <rigging.h>
 
 namespace s2
 {

@@ -2,7 +2,7 @@
 #include "MeshNode.h"
 #include "MeshTriangle.h"
 
-#include <rigging/rg_timeline.h>
+#include <rigging.h>
 
 #include <assert.h>
 

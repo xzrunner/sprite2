@@ -85,6 +85,13 @@ void MeshSymbol::UpdateMesh(const rg_skeleton_pose* sk_pose)
 	}
 }
 
+void MeshSymbol::UpdateMesh(const rg_tl_deform_state* deform_state, const float* vertices)
+{
+	if (m_mesh) {
+		m_mesh->Update(deform_state, vertices);
+	}
+}
+
 void MeshSymbol::SetMesh(Mesh* mesh)
 {
 	cu::RefCountObjAssign(m_mesh, mesh);

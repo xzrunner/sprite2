@@ -10,6 +10,7 @@
 #include <vector>
 
 struct rg_skeleton_pose;
+struct rg_tl_deform_state;
 
 namespace s2
 {
@@ -37,6 +38,7 @@ public:
 	virtual Mesh* Clone() const { return NULL; }
 
 	virtual void Update(const rg_skeleton_pose* sk_pose) {}
+	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices) {}
 
 	const Symbol* GetBaseSymbol() const { return m_base; }
 

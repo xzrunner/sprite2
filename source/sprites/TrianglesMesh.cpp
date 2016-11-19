@@ -2,6 +2,8 @@
 #include "MeshNode.h"
 #include "MeshTriangle.h"
 
+#include <rigging/rg_timeline.h>
+
 #include <assert.h>
 
 namespace s2
@@ -29,6 +31,26 @@ TrianglesMesh& TrianglesMesh::operator = (const TrianglesMesh& mesh)
 	return *this;
 }
 
+void TrianglesMesh::Update(const rg_tl_deform_state* state, const float* vertices)
+{
+	for (int i = 0; i < state->count0; ++i) {
+		m_nodes[state->offset0 + i]->xy = m_nodes[state->offset0 + i]->ori_xy;
+	}
+	for (int i = 0; i < state->count1; ++i) {
+		m_nodes[state->offset1 + i]->xy = m_nodes[state->offset1 + i]->ori_xy;
+	}
+
+	int ptr = 0;
+	for (int i = 0; i < state->count0; ++i) {
+		m_nodes[state->offset0 + i]->xy.x += vertices[ptr++];
+		m_nodes[state->offset0 + i]->xy.y += vertices[ptr++];
+	}
+	for (int i = 0; i < state->count1; ++i) {
+		m_nodes[state->offset1 + i]->xy.x += vertices[ptr++];
+		m_nodes[state->offset1 + i]->xy.y += vertices[ptr++];
+	}
+}
+
 void TrianglesMesh::SetData(const std::vector<sm::vec2>& vertices, 
 							const std::vector<sm::vec2>& texcoords,
 							const std::vector<int>& triangles)
@@ -38,13 +60,12 @@ void TrianglesMesh::SetData(const std::vector<sm::vec2>& vertices,
 	m_triangles = triangles;
 
 	assert(vertices.size() == texcoords.size());
-	std::vector<MeshNode*> nodes;
-	nodes.reserve(vertices.size());
+	m_nodes.reserve(vertices.size());
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		MeshNode* node = new MeshNode;
 		node->xy = node->ori_xy = vertices[i];
 		node->uv = texcoords[i];
-		nodes.push_back(node);
+		m_nodes.push_back(node);
 	}
 
 	int ptr = 0;
@@ -52,7 +73,7 @@ void TrianglesMesh::SetData(const std::vector<sm::vec2>& vertices,
 	{
 		MeshTriangle* tri = new MeshTriangle;
 		for (int j = 0; j < 3; ++j) {
-			tri->nodes[j] = nodes[triangles[ptr++]];
+			tri->nodes[j] = m_nodes[triangles[ptr++]];
 		}
 		m_tris.push_back(tri);
 	}

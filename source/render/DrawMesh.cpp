@@ -10,6 +10,7 @@
 
 #include <shaderlab.h>
 #include <dtex_facade.h>
+#include <dtex_gl.h>
 
 #include <set>
 #include <vector>

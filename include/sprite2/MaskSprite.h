@@ -10,7 +10,7 @@ class MaskSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	MaskSprite();
-	MaskSprite(Symbol* sym);
+	MaskSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

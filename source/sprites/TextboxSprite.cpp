@@ -12,8 +12,8 @@ TextboxSprite::TextboxSprite()
 {
 }
 
-TextboxSprite::TextboxSprite(Symbol* sym) 
-	: Sprite(sym) 
+TextboxSprite::TextboxSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_time(0)
 {
 	TextboxSymbol* tb_sym = VI_DOWNCASTING<TextboxSymbol*>(sym);

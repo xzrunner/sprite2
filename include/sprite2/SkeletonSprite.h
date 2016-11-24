@@ -11,7 +11,7 @@ class SkeletonSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	SkeletonSprite();
-	SkeletonSprite(Symbol* sym);
+	SkeletonSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

@@ -21,6 +21,16 @@ Particle3dSymbol::Particle3dSymbol()
 	Particle3d::Instance();
 }
 
+Particle3dSymbol::Particle3dSymbol(uint32_t id)
+	: Symbol(id)
+	, m_et_cfg(NULL)
+	, m_et(NULL)
+	, m_loop(true)
+	, m_local(true)
+{
+	Particle3d::Instance();
+}
+
 Particle3dSymbol::~Particle3dSymbol()
 {
 	if (m_et) {

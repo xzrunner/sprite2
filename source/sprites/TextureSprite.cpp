@@ -9,8 +9,8 @@ TextureSprite::TextureSprite()
 {
 }
 
-TextureSprite::TextureSprite(Symbol* sym) 
-	: Sprite(sym) 
+TextureSprite::TextureSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 {
 }
 

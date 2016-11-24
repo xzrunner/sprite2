@@ -8,11 +8,10 @@ namespace s2
 
 Scale9Sprite::Scale9Sprite() 
 {
-
 }
 
-Scale9Sprite::Scale9Sprite(Symbol* sym) 
-	: Sprite(sym)
+Scale9Sprite::Scale9Sprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_s9(VI_DOWNCASTING<Scale9Symbol*>(sym)->GetScale9())
 {
 }

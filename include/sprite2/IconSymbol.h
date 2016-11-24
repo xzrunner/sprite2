@@ -14,6 +14,7 @@ class IconSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	IconSymbol();
+	IconSymbol(uint32_t id);
 	virtual ~IconSymbol();
 
 	/**

@@ -9,8 +9,8 @@ ShapeSprite::ShapeSprite()
 {
 }
 
-ShapeSprite::ShapeSprite(Symbol* sym) 
-	: Sprite(sym) 
+ShapeSprite::ShapeSprite(Symbol* sym, uint32_t id) 
+	: Sprite(sym, id) 
 {
 }
 

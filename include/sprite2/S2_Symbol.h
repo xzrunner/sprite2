@@ -7,6 +7,7 @@
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
+#include <stdint.h>
 #include <stddef.h>
 
 namespace s2
@@ -18,12 +19,19 @@ class Sprite;
 class Symbol : public VIRTUAL_INHERITANCE cu::RefCountObj, private cu::Uncopyable
 {
 public:
+	Symbol() : m_id(-1) {}
+	Symbol(uint32_t id) : m_id(id) {}
 	virtual ~Symbol() {}
 	virtual int Type() const = 0;
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const RenderParams& params, float time) { return false; }
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const = 0;
 	
+	int GetID() const { return m_id; }
+	
+private:
+	uint32_t m_id;
+
 }; // Symbol
 
 }

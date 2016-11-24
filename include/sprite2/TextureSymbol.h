@@ -16,6 +16,7 @@ class TextureSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	TextureSymbol();
+	TextureSymbol(uint32_t id);
 	virtual ~TextureSymbol();
 
 	/**

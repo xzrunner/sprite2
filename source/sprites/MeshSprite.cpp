@@ -36,8 +36,8 @@ MeshSprite& MeshSprite::operator = (const MeshSprite& mesh)
 	return *this;
 }
 
-MeshSprite::MeshSprite(Symbol* sym) 
-	: Sprite(sym) 
+MeshSprite::MeshSprite(Symbol* sym, uint32_t id) 
+	: Sprite(sym, id) 
 	, m_only_draw_bound(false)
 {
 	Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(sym)->GetMesh();

@@ -12,6 +12,12 @@ ShapeSymbol::ShapeSymbol()
 {
 }
 
+ShapeSymbol::ShapeSymbol(uint32_t id)
+	: Symbol(id)
+	, m_shape(NULL)
+{
+}
+
 ShapeSymbol::~ShapeSymbol()
 {
 	if (m_shape) {

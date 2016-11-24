@@ -15,7 +15,7 @@ public:
 	Particle2dSprite();
 	Particle2dSprite(const Particle2dSprite& spr);
 	Particle2dSprite& operator = (const Particle2dSprite& spr);
-	Particle2dSprite(Symbol* sym);
+	Particle2dSprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Particle2dSprite();
 
 	/**

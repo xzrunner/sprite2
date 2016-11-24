@@ -12,8 +12,8 @@ ComplexSprite::ComplexSprite()
 {
 }
 
-ComplexSprite::ComplexSprite(Symbol* sym) 
-	: Sprite(sym) 
+ComplexSprite::ComplexSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_action(-1)
 {
 }

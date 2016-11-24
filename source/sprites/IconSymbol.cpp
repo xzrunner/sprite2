@@ -14,6 +14,12 @@ IconSymbol::IconSymbol()
 {
 }
 
+IconSymbol::IconSymbol(uint32_t id)
+	: Symbol(id)
+	, m_icon(NULL)
+{
+}
+
 IconSymbol::~IconSymbol()
 {
 	if (m_icon) {

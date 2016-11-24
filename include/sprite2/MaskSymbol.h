@@ -10,6 +10,7 @@ class MaskSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	MaskSymbol();
+	MaskSymbol(uint32_t id);
 	virtual ~MaskSymbol();
 
 	/**

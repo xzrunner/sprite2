@@ -13,7 +13,7 @@ class AnimSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	AnimSprite();
-	AnimSprite(Symbol* sym);
+	AnimSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

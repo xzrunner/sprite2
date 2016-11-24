@@ -35,8 +35,8 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 	return *this;
 }
 
-TrailSprite::TrailSprite(Symbol* sym)
-	: Sprite(sym)
+TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_et(NULL)
 {
 	const t2d_emitter_cfg* cfg = VI_DOWNCASTING<TrailSymbol*>(sym)->GetEmitterCfg();

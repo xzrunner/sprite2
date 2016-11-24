@@ -10,7 +10,7 @@ class ImageSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	ImageSprite();
-	ImageSprite(Symbol* sym);
+	ImageSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

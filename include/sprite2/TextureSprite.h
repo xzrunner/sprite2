@@ -10,7 +10,7 @@ class TextureSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	TextureSprite();
-	TextureSprite(Symbol* sym);
+	TextureSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

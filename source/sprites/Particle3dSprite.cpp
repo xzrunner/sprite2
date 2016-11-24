@@ -42,8 +42,8 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	return *this;
 }
 
-Particle3dSprite::Particle3dSprite(Symbol* sym) 
-	: Sprite(sym) 
+Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id) 
+	: Sprite(sym, id)
 	, m_alone(false)
 	, m_reuse(false)
 {

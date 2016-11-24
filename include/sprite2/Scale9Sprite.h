@@ -13,7 +13,7 @@ class Scale9Sprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	Scale9Sprite();
-	Scale9Sprite(Symbol* sym);
+	Scale9Sprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

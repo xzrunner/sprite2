@@ -13,6 +13,11 @@ TextureSymbol::TextureSymbol()
 {
 }
 
+TextureSymbol::TextureSymbol(uint32_t id)
+	: Symbol(id)
+{
+}
+
 TextureSymbol::~TextureSymbol()
 {
 	Clear();

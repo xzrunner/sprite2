@@ -13,7 +13,7 @@ public:
 	MeshSprite();
 	MeshSprite(const MeshSprite& mesh);
 	MeshSprite& operator = (const MeshSprite& mesh);
-	MeshSprite(Symbol* sym);
+	MeshSprite(Symbol* sym, uint32_t id = -1);
 	virtual ~MeshSprite();
 
 	/**

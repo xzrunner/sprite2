@@ -17,6 +17,12 @@ Anim2Symbol::Anim2Symbol()
 {
 }
 
+Anim2Symbol::Anim2Symbol(uint32_t id)
+	: Symbol(id)
+	, m_anim(NULL)
+{
+}
+
 Anim2Symbol::~Anim2Symbol()
 {
 	// todo release sk

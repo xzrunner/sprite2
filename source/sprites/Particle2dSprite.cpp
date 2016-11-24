@@ -35,8 +35,8 @@ Particle2dSprite& Particle2dSprite::operator = (const Particle2dSprite& spr)
 	return *this;
 }
 
-Particle2dSprite::Particle2dSprite(Symbol* sym) 
-	: Sprite(sym) 
+Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id) 
+	: Sprite(sym, id)
 	, m_et(NULL)
 {
 	const p2d_emitter_cfg* cfg = VI_DOWNCASTING<Particle2dSymbol*>(sym)->GetEmitterCfg();

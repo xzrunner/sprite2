@@ -14,6 +14,7 @@ class Particle2dSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	Particle2dSymbol();
+	Particle2dSymbol(uint32_t id);
 	virtual ~Particle2dSymbol();
 
 	/**

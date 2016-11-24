@@ -8,8 +8,8 @@ SkeletonSprite::SkeletonSprite()
 {
 }
 
-SkeletonSprite::SkeletonSprite(Symbol* sym) 
-	: Sprite(sym)
+SkeletonSprite::SkeletonSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_pose(VI_DOWNCASTING<SkeletonSymbol*>(sym)->GetSkeleton())
 {
 }

@@ -12,8 +12,8 @@ ImageSprite::ImageSprite()
 {
 }
 
-ImageSprite::ImageSprite(Symbol* sym) 
-	: Sprite(sym) 
+ImageSprite::ImageSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 {
 }
 

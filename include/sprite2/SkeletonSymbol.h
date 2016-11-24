@@ -14,6 +14,7 @@ class SkeletonSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	SkeletonSymbol();
+	SkeletonSymbol(uint32_t id);
 	virtual ~SkeletonSymbol();
 	
 	/**

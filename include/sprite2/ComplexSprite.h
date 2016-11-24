@@ -10,7 +10,7 @@ class ComplexSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	ComplexSprite();
-	ComplexSprite(Symbol* sym);
+	ComplexSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

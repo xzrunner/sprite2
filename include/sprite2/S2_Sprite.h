@@ -27,7 +27,7 @@ public:
 	Sprite();
 	Sprite(const Sprite& spr);
 	Sprite& operator = (const Sprite& spr);
-	Sprite(Symbol* sym);
+	Sprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Sprite();
 
 	virtual void OnMessage(Message msg) {}
@@ -87,6 +87,8 @@ public:
 	sm::mat4 GetTransMatrix() const;
 	sm::mat4 GetTransInvMatrix() const;
 
+	int GetID() const { return m_id; }
+
 protected:
 	Symbol*					m_sym;
 
@@ -128,6 +130,9 @@ protected:
 // 	/************************************************************************/
 // 	int						m_flags;
 //	void*					m_ud;
+
+private:
+	uint32_t m_id;
 
 }; // Sprite
 

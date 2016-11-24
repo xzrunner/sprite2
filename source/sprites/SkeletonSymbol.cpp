@@ -14,6 +14,12 @@ SkeletonSymbol::SkeletonSymbol()
 {
 }
 
+SkeletonSymbol::SkeletonSymbol(uint32_t id)
+	: Symbol(id)
+	, m_skeleton(NULL)
+{
+}
+
 SkeletonSymbol::~SkeletonSymbol()
 {
 	if (m_skeleton) {

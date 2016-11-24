@@ -12,8 +12,8 @@ AnimSprite::AnimSprite()
 {
 }
 
-AnimSprite::AnimSprite(Symbol* sym) 
-	: Sprite(sym)
+AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_curr(VI_DOWNCASTING<AnimSymbol*>(sym))
 	, m_loop(true)
 	, m_interval(0)

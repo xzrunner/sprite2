@@ -13,6 +13,7 @@ class TrailSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	TrailSymbol();
+	TrailSymbol(uint32_t id);
 	virtual ~TrailSymbol();
 
 	/**

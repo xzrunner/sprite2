@@ -21,6 +21,7 @@ public:
 
 public:
 	ImageSymbol();
+	ImageSymbol(uint32_t id);
 	virtual ~ImageSymbol();
 
 	/**

@@ -19,6 +19,7 @@ class TextboxSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	TextboxSymbol() {}
+	TextboxSymbol(uint32_t id);
 	TextboxSymbol(Textbox tb);
 
 	/**

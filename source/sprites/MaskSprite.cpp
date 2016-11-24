@@ -8,8 +8,8 @@ MaskSprite::MaskSprite()
 {
 }
 
-MaskSprite::MaskSprite(Symbol* sym) 
-	: Sprite(sym) 
+MaskSprite::MaskSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 {
 }
 

@@ -12,6 +12,7 @@ class Anim2Symbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	Anim2Symbol();
+	Anim2Symbol(uint32_t id);
 	virtual ~Anim2Symbol();
 		
 	/**

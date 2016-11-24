@@ -15,6 +15,13 @@ MaskSymbol::MaskSymbol()
 {
 }
 
+MaskSymbol::MaskSymbol(uint32_t id)
+	: Symbol(id)
+	, m_base(NULL)
+	, m_mask(NULL)
+{
+}
+
 MaskSymbol::~MaskSymbol()
 {
 	if (m_base) {

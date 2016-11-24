@@ -15,7 +15,7 @@ public:
 	TrailSprite();
 	TrailSprite(const TrailSprite& spr);
 	TrailSprite& operator = (const TrailSprite& spr);
-	TrailSprite(Symbol* sym);
+	TrailSprite(Symbol* sym, uint32_t id = -1);
 	virtual ~TrailSprite();
 
 	/**

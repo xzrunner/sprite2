@@ -13,8 +13,14 @@ namespace s2
 {
 
 ComplexSymbol::ComplexSymbol()
+	: m_scissor(0, 0)
 {
-	m_scissor.xmin = m_scissor.ymin = m_scissor.xmax = m_scissor.ymax = 0;
+}
+
+ComplexSymbol::ComplexSymbol(uint32_t id)
+	: Symbol(id)
+	, m_scissor(0, 0)
+{
 }
 
 ComplexSymbol::~ComplexSymbol()

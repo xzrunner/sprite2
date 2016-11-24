@@ -17,6 +17,12 @@ ImageSymbol::ImageSymbol()
 {
 }
 
+ImageSymbol::ImageSymbol(uint32_t id)
+	: Symbol(id)
+	, m_tex(NULL)
+{
+}
+
 ImageSymbol::~ImageSymbol()
 {
 	if (m_tex) {

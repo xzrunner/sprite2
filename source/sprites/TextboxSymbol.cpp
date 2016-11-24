@@ -10,6 +10,11 @@
 namespace s2
 {
 
+TextboxSymbol::TextboxSymbol(uint32_t id)
+	: Symbol(id)
+{
+}
+
 TextboxSymbol::TextboxSymbol(Textbox tb)
 	: m_tb(tb)
 {

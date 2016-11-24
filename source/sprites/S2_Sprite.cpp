@@ -15,6 +15,7 @@ Sprite::Sprite()
 	, m_shear(0, 0)
 	, m_visible(true)
 	, m_editable(true)
+	, m_id(-1)
 {
 	m_offset.MakeInvalid();
 
@@ -37,6 +38,7 @@ Sprite::Sprite(const Sprite& spr)
 	, m_camera(spr.m_camera)
 	, m_visible(spr.m_visible)
 	, m_editable(spr.m_editable)
+	, m_id(spr.m_id)
 {
 	if (spr.m_sym) {
 		spr.m_sym->AddReference();
@@ -67,7 +69,7 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	m_offset		= spr.m_offset;
 
 	if (m_bounding) {
-		*m_bounding		= *spr.m_bounding;
+		*m_bounding	= *spr.m_bounding;
 	} else {
 		m_bounding	= spr.m_bounding->Clone();
 	}
@@ -80,10 +82,12 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	m_visible		= spr.m_visible;
 	m_editable		= spr.m_editable;
 
+	m_id            = spr.m_id;
+
 	return *this;
 }
 
-Sprite::Sprite(Symbol* sym)
+Sprite::Sprite(Symbol* sym, uint32_t id)
 	: m_sym(NULL)
 	, m_position(0, 0)
 	, m_angle(0)
@@ -91,6 +95,7 @@ Sprite::Sprite(Symbol* sym)
 	, m_shear(0, 0)
 	, m_visible(true)
 	, m_editable(true)
+	, m_id(id)
 {
 	cu::RefCountObjAssign(m_sym, sym);
 

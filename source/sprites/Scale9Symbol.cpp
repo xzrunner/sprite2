@@ -13,6 +13,11 @@ Scale9Symbol::Scale9Symbol()
 {
 }
 
+Scale9Symbol::Scale9Symbol(uint32_t id)
+	: Symbol(id)
+{
+}
+
 int Scale9Symbol::Type() const 
 { 
 	return SYM_SCALE9; 

@@ -15,6 +15,13 @@ Particle2dSymbol::Particle2dSymbol()
 	Particle2d::Instance();
 }
 
+Particle2dSymbol::Particle2dSymbol(uint32_t id)
+	: Symbol(id)
+	, m_et_cfg(NULL)
+{
+	Particle2d::Instance();
+}
+
 Particle2dSymbol::~Particle2dSymbol()
 {
 }

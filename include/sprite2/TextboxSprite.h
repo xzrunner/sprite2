@@ -13,7 +13,7 @@ class TextboxSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	TextboxSprite();
-	TextboxSprite(Symbol* sym);
+	TextboxSprite(Symbol* sym, uint32_t id = -1);
 
 	/**
 	 *  @interface

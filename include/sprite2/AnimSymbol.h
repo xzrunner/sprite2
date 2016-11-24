@@ -38,6 +38,7 @@ public:
 
 public:
 	AnimSymbol();
+	AnimSymbol(uint32_t id);
 	virtual ~AnimSymbol();
 
 	/**

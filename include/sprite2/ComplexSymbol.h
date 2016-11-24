@@ -12,6 +12,7 @@ class ComplexSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	ComplexSymbol();
+	ComplexSymbol(uint32_t id);
 	virtual ~ComplexSymbol();
 
 	/**

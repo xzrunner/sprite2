@@ -15,7 +15,7 @@ public:
 	Particle3dSprite();
 	Particle3dSprite(const Particle3dSprite& spr);
 	Particle3dSprite& operator = (const Particle3dSprite& spr);
-	Particle3dSprite(Symbol* sym);
+	Particle3dSprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Particle3dSprite();
 
 	/**

@@ -10,8 +10,8 @@ IconSprite::IconSprite()
 {
 }
 
-IconSprite::IconSprite(Symbol* sym) 
-	: Sprite(sym) 
+IconSprite::IconSprite(Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_process(1)
 {
 }

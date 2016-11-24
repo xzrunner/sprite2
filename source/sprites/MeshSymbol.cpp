@@ -18,6 +18,13 @@ MeshSymbol::MeshSymbol()
 {
 }
 
+MeshSymbol::MeshSymbol(uint32_t id)
+	: Symbol(id)
+	, m_mesh(NULL)
+	, m_pause(false)
+{
+}
+
 MeshSymbol::~MeshSymbol()
 {
 	if (m_mesh) {

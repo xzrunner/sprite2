@@ -16,6 +16,13 @@ TrailSymbol::TrailSymbol()
 {
 }
 
+TrailSymbol::TrailSymbol(uint32_t id)
+	: Symbol(id)
+	, m_et_cfg(NULL)
+	, m_et(NULL)
+{
+}
+
 TrailSymbol::~TrailSymbol()
 {
 	if (m_et) {

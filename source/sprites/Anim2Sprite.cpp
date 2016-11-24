@@ -8,8 +8,8 @@ Anim2Sprite::Anim2Sprite()
 {
 }
 
-Anim2Sprite::Anim2Sprite(Anim2Symbol* sym) 
-	: Sprite(sym)
+Anim2Sprite::Anim2Sprite(Anim2Symbol* sym, uint32_t id)
+	: Sprite(sym, id)
 	, m_curr(sym)
 {
 }

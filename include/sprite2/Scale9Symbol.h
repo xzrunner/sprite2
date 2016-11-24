@@ -11,6 +11,7 @@ class Scale9Symbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	Scale9Symbol();
+	Scale9Symbol(uint32_t id);
 
 	/**
 	 *  @interface

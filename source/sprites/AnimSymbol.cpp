@@ -17,6 +17,13 @@ AnimSymbol::AnimSymbol()
 {
 }
 
+AnimSymbol::AnimSymbol(uint32_t id)
+	: Symbol(id)
+	, m_fps(30)
+	, m_curr(this)
+{
+}
+
 AnimSymbol::~AnimSymbol()
 {
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {

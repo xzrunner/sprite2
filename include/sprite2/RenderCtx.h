@@ -20,7 +20,7 @@ public:
 
 public:
 	RenderCtx() 
-		: mv_scale(0), proj_width(0), proj_height(0) {}
+		: mv_scale(0), proj_width(0), proj_height(0), screen_width(0), screen_height(0) {}
 	RenderCtx(float proj_width, float proj_height, int screen_width, int screen_height)
 		: mv_offset(0, 0)
 		, mv_scale(1)

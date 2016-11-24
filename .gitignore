@@ -1,1 +1,2 @@
 platform/msvc2008/sprite2
+include/sprite2/s2_config.h

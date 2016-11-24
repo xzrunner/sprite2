@@ -26,6 +26,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
+	virtual bool Update(const RenderParams& params, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	virtual void UpdateMesh(const rg_skeleton_pose* sk_pose);

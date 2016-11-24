@@ -62,6 +62,16 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
+bool MeshSprite::Update(const RenderParams& params) 
+{ 
+	if (m_base) {
+		return const_cast<Symbol*>(m_base)->Update(params, 0);
+	} else {
+		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
+		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(params, 0);
+	}
+}
+
 void MeshSprite::Lerp(MeshSprite* begin, MeshSprite* end, float process)
 {
 	m_trans.Lerp(begin->GetMeshTrans(), end->GetMeshTrans(), process);

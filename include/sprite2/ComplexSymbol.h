@@ -21,6 +21,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
+	virtual bool Update(const RenderParams& params, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	const std::vector<Sprite*>& GetChildren() const { return m_children; }

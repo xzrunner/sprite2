@@ -26,7 +26,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual bool Update(const RenderParams& params) { return true; }
+	virtual bool Update(const RenderParams& params);
 
 	void Lerp(MeshSprite* begin, MeshSprite* end, float process);
 

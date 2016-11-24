@@ -70,6 +70,17 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 }
 
+bool ComplexSymbol::Update(const RenderParams& params, float time)
+{
+	bool ret = false;
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		if (m_children[i]->Update(params)) {
+			ret = true;
+		}
+	}
+	return ret;
+}
+
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 {
 	sm::vec2 scissor_sz = m_scissor.Size();

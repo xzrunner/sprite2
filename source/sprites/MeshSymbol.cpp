@@ -76,6 +76,15 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 }
 
+bool MeshSymbol::Update(const RenderParams& params, float time)
+{
+	if (m_mesh) {
+		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(params, time);
+	} else {
+		return false;
+	}
+}
+
 sm::rect MeshSymbol::GetBounding(const Sprite* spr) const
 {
 	if (m_mesh) {

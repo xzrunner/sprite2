@@ -29,7 +29,7 @@ void DrawGaussianBlur::DrawToFbo0(const Sprite* spr, const RenderParams& params,
 	DrawInit(spr, params, true);
 
 	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge));
+	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
 
 	DrawInit(spr, params, true);
 

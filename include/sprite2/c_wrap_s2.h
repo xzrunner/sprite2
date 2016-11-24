@@ -8,6 +8,9 @@ extern "C"
 
 void s2_on_size(int w, int h);
 
+void s2_render_ctx_push(float w, float h);
+void s2_render_ctx_pop();
+
 #endif // _sprite2_wrap_c_h_
 
 #ifdef __cplusplus

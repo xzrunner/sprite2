@@ -21,7 +21,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	RenderScissor::Instance()->Close();
 
 	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge));
+	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
 
 	DrawBaseToFbo0(base, params.color);
 	DrawMaskToFbo1(mask);

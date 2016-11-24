@@ -83,7 +83,7 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params,
 	RenderScissor::Instance()->Close();
 
 	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge));
+	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
 
 	DrawMeshToTmp(mesh, params, base_sym);
 

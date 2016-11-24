@@ -13,13 +13,15 @@ namespace s2
 class RenderCtxStack
 {
 public:
-	void Push(const RenderCtx& ctx);
-	void Pop();
+	void Push(const RenderCtx& ctx, bool set_vp = true);
+	void Pop(bool set_vp = true);
 
 	const RenderCtx* Top() const;
+
+	int Size() const { return m_stack.size(); }
 	
 private:
-	static void BindCtx(const RenderCtx& ctx);
+	static void BindCtx(const RenderCtx& ctx, bool set_vp);
 
 private:
 	std::vector<RenderCtx> m_stack;

@@ -25,7 +25,7 @@ void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 	RenderScissor::Instance()->Close();
 
 	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge));
+	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
 
 	DrawSprToTmp(spr, mt);
 

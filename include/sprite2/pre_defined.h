@@ -14,7 +14,6 @@ namespace s2
 			virtual void __DUMMY__() {}
 #pragma warning(disable:4250)
 #else
-#error
 	#define VIRTUAL_INHERITANCE
 	#define VI_DOWNCASTING static_cast
 	#define VI_DUMMY_FUNC

@@ -232,6 +232,7 @@ void AnimCurr::LoadFromSym()
 			{
 				for (int i = 0, n = curr_f->sprs.size(); i < n; ++i) {
 					Sprite* spr = VI_CLONE(Sprite, curr_f->sprs[i]);
+					spr->OnMessage(MSG_INIT);
 					layer.frame.sprs.push_back(spr);	
 				}
 			}
@@ -276,6 +277,7 @@ void AnimCurr::LoadFromSym()
 	 					} else {
 							dst = VI_CLONE(Sprite, src);
 						}
+						dst->OnMessage(MSG_INIT);
 //					}
 					new_frame.sprs.push_back(dst);
 				}

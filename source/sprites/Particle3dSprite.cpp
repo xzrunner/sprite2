@@ -69,10 +69,20 @@ Particle3dSprite* Particle3dSprite::Clone() const
 
 void Particle3dSprite::OnMessage(Message msg)
 {
-	if (msg == MSG_START) {
-		if (m_spr) {
-			p3d_emitter_start(m_spr->et);
+	if (!m_spr) {
+		return;
+	}
+
+	switch (msg)
+	{
+	case MSG_START:
+		p3d_emitter_start(m_spr->et);
+		break;
+	case MSG_INIT:
+		if (m_spr->et->time == 0) {
+			m_spr->et->time = Particle3d::Instance()->GetTime();
 		}
+		break;
 	}
 }
 

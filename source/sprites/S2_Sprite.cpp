@@ -19,25 +19,26 @@ Sprite::Sprite()
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
-	, m_bounding_dirty(true)
 	, m_render(SprDefault::Instance()->Render())
-	, m_visible(true)
-	, m_editable(true)
-	, m_id(-1)
+	, m_flags(0)
 {
+	SetBoundingDirty(true);
+	SetVisible(true);
+	SetEditable(true);
 }
 
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(NULL)
-	, m_bounding_dirty(true)
 	, m_render(SprDefault::Instance()->Render())
-	, m_visible(true)
-	, m_editable(true)
-	, m_id(0)
+	, m_flags(0)
 {
 	InitFromSpr(spr);
+
+	SetBoundingDirty(true);
+	SetVisible(true);
+	SetEditable(true);
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
@@ -50,13 +51,14 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
-	, m_bounding_dirty(true)
 	, m_render(SprDefault::Instance()->Render())
-	, m_visible(true)
-	, m_editable(true)
-	, m_id(id)
+	, m_flags(0)
 {
 	cu::RefCountObjAssign(m_sym, sym);
+
+	SetBoundingDirty(true);
+	SetVisible(true);
+	SetEditable(true);
 }
 
 Sprite::~Sprite()
@@ -102,7 +104,7 @@ void Sprite::SetPosition(const sm::vec2& pos)
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
 
 	// lazy
-	m_bounding_dirty = true;
+	SetBoundingDirty(true);
 }
 
 void Sprite::SetAngle(float angle)
@@ -120,7 +122,7 @@ void Sprite::SetAngle(float angle)
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
 
 	// lazy
-	m_bounding_dirty = true;
+	SetBoundingDirty(true);
 }
 
 void Sprite::SetScale(const sm::vec2& scale)
@@ -152,7 +154,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 	m_geo->m_scale = scale;
 
 	// lazy
-	m_bounding_dirty = true;
+	SetBoundingDirty(true);
 }
 
 void Sprite::SetShear(const sm::vec2& shear)
@@ -181,7 +183,7 @@ void Sprite::SetShear(const sm::vec2& shear)
 	m_bounding->SetTransform(m_geo->m_position, m_geo->m_offset, m_geo->m_angle);
 
 	// 	// lazy
-	// 	m_bounding_dirty = true; 
+	// 	SetBoundingDirty(true); 
 }
 
 void Sprite::SetOffset(const sm::vec2& offset)
@@ -207,12 +209,12 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	m_bounding->SetTransform(m_geo->m_position, m_geo->m_offset, m_geo->m_angle);
 
 	// 	// lazy
-	// 	m_bounding_dirty = true; 
+	// 	SetBoundingDirty(true); 
 }
 
 const BoundingBox* Sprite::GetBounding() const 
 { 
-	if (m_bounding_dirty) {
+	if (IsBoundingDirty()) {
 		UpdateBounding();
 	}
 	return m_bounding; 
@@ -233,7 +235,7 @@ void Sprite::UpdateBounding() const
 	m_bounding->Build(rect, m_geo->m_position, m_geo->m_angle, m_geo->m_scale, 
 		m_geo->m_shear, m_geo->m_offset);
 
-	m_bounding_dirty = false;
+	SetBoundingDirty(false);
 }
 
 void Sprite::Translate(const sm::vec2& trans) 
@@ -356,6 +358,34 @@ void Sprite::SetCamera(const RenderCamera& camera)
 	*m_render->m_camera = camera;
 }
 
+bool Sprite::IsVisible() const 
+{ 
+	return m_flags & FLAG_VISIBLE;
+}
+
+void Sprite::SetVisible(bool visible) const
+{ 
+	if (visible) {
+		m_flags |= FLAG_VISIBLE;
+	} else {
+		m_flags &= ~FLAG_VISIBLE;
+	}
+}
+
+bool Sprite::IsEditable() const 
+{ 
+	return m_flags & FLAG_EDITABLE; 
+}
+
+void Sprite::SetEditable(bool editable) const
+{ 
+	if (editable) {
+		m_flags |= FLAG_EDITABLE;
+	} else {
+		m_flags &= ~FLAG_EDITABLE;
+	}
+}
+
 sm::mat4 Sprite::GetTransMatrix() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
@@ -407,7 +437,6 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	} else {
 		m_bounding	 = spr.m_bounding->Clone();
 	}
-	m_bounding_dirty = spr.m_bounding_dirty;
 
 	if (spr.m_render != spr.m_render) 
 	{
@@ -430,8 +459,21 @@ void Sprite::InitFromSpr(const Sprite& spr)
 		}
 	}
 
-	m_visible = spr.m_visible;
-	m_editable = spr.m_editable;
+	m_flags = spr.m_flags;
+}
+
+bool Sprite::IsBoundingDirty() const
+{
+	return m_flags & FLAG_BOUNDING_DIRTY;
+}
+
+void Sprite::SetBoundingDirty(bool dirty) const
+{
+	if (dirty) {
+		m_flags |= FLAG_BOUNDING_DIRTY;
+	} else {
+		m_flags &= ~FLAG_BOUNDING_DIRTY;
+	}
 }
 
 }

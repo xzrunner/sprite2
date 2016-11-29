@@ -84,18 +84,24 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	bool IsVisible() const { return m_visible; }
-	void SetVisible(bool visible) { m_visible = visible; }
-	bool IsEditable() const { return m_editable; }
-	void SetEditable(bool editable) { m_editable = editable; }
+	bool IsVisible() const;
+	void SetVisible(bool visible) const;
+	bool IsEditable() const;
+	void SetEditable(bool editable) const;
 
 	sm::mat4 GetTransMatrix() const;
-	sm::mat4 GetTransInvMatrix() const;
-
-	int GetID() const { return m_id; }
+	sm::mat4 GetTransInvMatrix() const;	
 
 private:
 	void InitFromSpr(const Sprite& spr);
+
+	bool IsBoundingDirty() const;
+	void SetBoundingDirty(bool dirty) const;
+
+protected:
+	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000001;
+	static const uint32_t FLAG_VISIBLE        = 0x00000002;
+	static const uint32_t FLAG_EDITABLE       = 0x00000004;
 
 protected:
 	Symbol*					m_sym;
@@ -109,9 +115,7 @@ protected:
 	/* geometry                                                             */
 	/************************************************************************/
 	mutable SprGeo*         m_geo;
-
 	mutable BoundingBox*	m_bounding;
-	mutable bool			m_bounding_dirty;
 
 	/************************************************************************/
 	/* draw                                                                 */
@@ -119,19 +123,10 @@ protected:
 	SprRender*              m_render;
 
 	/************************************************************************/
-	/* edit                                                                 */
+	/* extend                                                               */
 	/************************************************************************/
-	bool					m_visible;
-	bool					m_editable;
-
-// 	/************************************************************************/
-// 	/* extend                                                               */
-// 	/************************************************************************/
-// 	int						m_flags;
+	mutable uint32_t		m_flags;
 //	void*					m_ud;
-
-private:
-	uint32_t m_id;
 
 }; // Sprite
 

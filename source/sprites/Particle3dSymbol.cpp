@@ -33,9 +33,16 @@ Particle3dSymbol::Particle3dSymbol(uint32_t id)
 
 Particle3dSymbol::~Particle3dSymbol()
 {
-	if (m_et) {
-		p3d_emitter_release(m_et);
+	if (!m_et) {
+		return;
 	}
+
+	for (int i = 0, n = m_et->cfg->sym_count; i < n; ++i) {
+		s2::Symbol* sym = static_cast<s2::Symbol*>(m_et->cfg->syms[i].ud);
+		sym->RemoveReference();
+	}
+
+	p3d_emitter_release(m_et);
 }
 
 //bool Particle3dSymbol::Update(const RenderParams& params)

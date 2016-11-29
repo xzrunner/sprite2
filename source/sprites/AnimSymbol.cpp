@@ -47,7 +47,7 @@ void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	if (spr) {
 		RenderParams p = params;
 		p.mt = spr->GetTransMatrix() * params.mt;
-		p.color = spr->Color() * params.color;
+		p.color = spr->GetColor() * params.color;
 		VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(p);
 	} else {
 		m_curr.Draw(params);

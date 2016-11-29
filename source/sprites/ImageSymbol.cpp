@@ -40,7 +40,7 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * params.mt;
-		p.color = spr->Color() * params.color;
+		p.color = spr->GetColor() * params.color;
 	}
 
 	sm::vec2 vertices[4];

@@ -17,6 +17,8 @@ public:
 		, m_rise_factor(0.2f)
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFHeatHaze(*this); }
+
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }
 

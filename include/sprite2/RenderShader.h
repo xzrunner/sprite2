@@ -15,11 +15,6 @@ class RenderFilter;
 class RenderShader
 {
 public:
-	RenderFilter*	filter;
-	BlendMode		blend;
-	FastBlendMode	fast_blend;
-
-public:
 	RenderShader();
 	RenderShader(const RenderShader& rs);
 	RenderShader& operator = (const RenderShader& rs);
@@ -27,7 +22,19 @@ public:
 
 	RenderShader operator * (const RenderShader& rs) const;
 
+	const RenderFilter* GetFilter() const { return m_filter; }
+	BlendMode GetBlend() const { return m_blend; }
+	FastBlendMode GetFastBlend() const { return m_fast_blend; }
+
 	void SetFilter(FilterMode mode);
+	void SetFilter(const RenderFilter* filter);
+	void SetBlend(BlendMode mode) { m_blend = mode; }
+	void SetFastBlend(FastBlendMode mode) { m_fast_blend = mode; }
+
+private:
+	RenderFilter* m_filter;
+	BlendMode     m_blend;
+	FastBlendMode m_fast_blend;
 
 }; // RenderShader
 

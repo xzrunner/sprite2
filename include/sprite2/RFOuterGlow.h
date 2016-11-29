@@ -14,6 +14,8 @@ public:
 		, m_iterations(9)
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFOuterGlow(*this); }
+
 	int GetIterations() const { return m_iterations; }
 	void SetIterations(int iterations) { m_iterations = iterations; }
 

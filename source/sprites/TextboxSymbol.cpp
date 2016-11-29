@@ -40,11 +40,11 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * p.mt;
-		p.color = spr->Color() * p.color;
+		p.color = spr->GetColor() * p.color;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (p.shader.filter && p.shader.filter->GetMode() == sl::FM_GRAY) {
+	if (p.shader.GetFilter() && p.shader.GetFilter()->GetMode() == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);

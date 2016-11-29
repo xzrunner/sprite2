@@ -42,7 +42,7 @@ void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 
 	RenderParams p = params;
-	p.color = spr->Color() * params.color;
+	p.color = spr->GetColor() * params.color;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));

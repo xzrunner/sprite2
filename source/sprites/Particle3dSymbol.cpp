@@ -90,7 +90,7 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 
 	RenderParams p = params;
-	p.color = spr->Color() * params.color;
+	p.color = spr->GetColor() * params.color;
 
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 	p3d_spr->SetOuterMatrix(p.mt);

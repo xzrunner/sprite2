@@ -6,59 +6,67 @@ namespace s2
 {
 
 RenderShader::RenderShader()
-	: filter(NULL)
-	, blend(BM_NULL)
-	, fast_blend(FBM_NULL)
+	: m_filter(NULL)
+	, m_blend(BM_NULL)
+	, m_fast_blend(FBM_NULL)
 {}
 
 RenderShader::RenderShader(const RenderShader& rs)
-	: filter(NULL)
-	, blend(rs.blend)
-	, fast_blend(rs.fast_blend)
+	: m_filter(NULL)
+	, m_blend(rs.m_blend)
+	, m_fast_blend(rs.m_fast_blend)
 {
-	if (rs.filter) {
-		filter = new RenderFilter(rs.filter->GetMode());
+	if (rs.m_filter) {
+		m_filter = rs.m_filter->Clone();
 	}
 }
 
 RenderShader& RenderShader::operator = (const RenderShader& rs)
 {
-	if (rs.filter) {
-		filter = new RenderFilter(rs.filter->GetMode());
-	} else {
-		filter = NULL;
+	if (m_filter != rs.m_filter)
+	{
+		if (m_filter) {
+			delete m_filter;
+			m_filter = NULL;
+		}
+		if (rs.m_filter) {
+			m_filter = rs.m_filter->Clone();
+		} else {
+			m_filter = NULL;
+		}
 	}
-	blend = rs.blend;
-	fast_blend = rs.fast_blend;
+	m_blend = rs.m_blend;
+	m_fast_blend = rs.m_fast_blend;
 	return *this;
 }
 
 RenderShader::~RenderShader()
 {
-	// todo 
-//	delete filter;
+	if (m_filter) {
+		delete m_filter;
+	}
 }
 
 RenderShader RenderShader::operator * (const RenderShader& rs) const
 {
 	RenderShader ret;
 
-	if (rs.blend != BM_NULL) {
-		ret.blend = rs.blend;
+	if (rs.m_blend != BM_NULL) {
+		ret.m_blend = rs.m_blend;
 	} else {
-		ret.blend = blend;
+		ret.m_blend = m_blend;
 	}
 
-	if (rs.fast_blend != FBM_NULL) {
-		ret.fast_blend = rs.fast_blend;
+	if (rs.m_fast_blend != FBM_NULL) {
+		ret.m_fast_blend = rs.m_fast_blend;
 	} else {
-		ret.fast_blend = fast_blend;
+		ret.m_fast_blend = m_fast_blend;
 	}
 
-	if (rs.filter && rs.filter->GetMode()!= FM_NULL) {
-		ret.filter = rs.filter;
-	} else {
-		ret.filter = filter;
+	if (rs.m_filter && rs.m_filter->GetMode()!= FM_NULL) {
+		ret.m_filter = rs.m_filter->Clone();
+	} else if (m_filter) {
+		ret.m_filter = m_filter->Clone();
 	}
 
 	return ret;
@@ -66,15 +74,26 @@ RenderShader RenderShader::operator * (const RenderShader& rs) const
 
 void RenderShader::SetFilter(FilterMode mode)
 {
-	if (filter && filter->GetMode() == mode) {
+	if (m_filter && m_filter->GetMode() == mode) {
 		return;
 	}
 
-	RenderFilter* _filter = FilterFactory::Instance()->Create(mode);
-	if (filter) {
-		delete filter;
+	if (m_filter) {
+		delete m_filter;
 	}
-	filter = _filter;
+	m_filter = FilterFactory::Instance()->Create(mode);
+}
+
+void RenderShader::SetFilter(const RenderFilter* filter)
+{
+	if (m_filter == filter) {
+		return;
+	}
+
+	if (m_filter) {
+		delete m_filter;
+	}
+	m_filter = filter->Clone();
 }
 
 }

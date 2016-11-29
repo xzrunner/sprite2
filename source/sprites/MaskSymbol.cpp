@@ -42,7 +42,7 @@ void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * params.mt;
-		p.color = spr->Color() * params.color;
+		p.color = spr->GetColor() * params.color;
 	}
 	if (m_base && m_mask) {
 		DrawMask::Draw(m_base, m_mask, p);

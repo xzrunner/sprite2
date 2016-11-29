@@ -12,14 +12,6 @@ public:
 	SprGeo();
 
 private:
-	static sm::vec2 DEFAULT_POSITION;
-	static float    DEFAULT_ANGLE;
-	static sm::vec2 DEFAULT_SCALE;
-	static sm::vec2 DEFAULT_SHEAR;
-
-	static SprGeo	DEFAULT_GEO;
-	
-private:
 	sm::vec2 m_position;
 	float    m_angle;
 	sm::vec2 m_scale;
@@ -28,6 +20,7 @@ private:
 	sm::vec2 m_offset;
 
 	friend class Sprite;
+	friend class SprDefault;
 
 }; // SprGeo
 

@@ -8,6 +8,7 @@
 #include "DrawGaussianBlur.h"
 #include "DrawOuterGlow.h"
 #include "RFOuterGlow.h"
+#include "SprDefault.h"
 
 #include <shaderlab.h>
 
@@ -27,11 +28,19 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params)
 		return;
 	}
 
-	RenderShader rs = spr->Shader() * params.shader;
-	RenderCamera rc = spr->Camera() * params.camera;
+	RenderShader rs;
+	RenderCamera rc;
+
+	if (params.disable_render) {
+		rs = *SprDefault::Instance()->Shader();
+		rc = *SprDefault::Instance()->Camera();
+	} else {
+		rs = spr->GetShader() * params.shader;
+		rc = spr->GetCamera() * params.camera;
+	}
 
 	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
-	switch (rs.fast_blend)
+	switch (rs.GetFastBlend())
 	{
 	case FBM_NULL:
 		ctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
@@ -47,33 +56,45 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params)
 		break;
 	}
 
+	BlendMode blend = BM_NULL;
+	if (!params.disable_blend) {
+		blend = rs.GetBlend();
+	}
+
+	FilterMode filter = FM_NULL;
+	if (!params.disable_filter && rs.GetFilter()) {
+		filter = rs.GetFilter()->GetMode();
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (rs.blend != BM_NULL) {
+	if (blend != BM_NULL) {
 // 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 // 		if (cam->Type() == "ortho") {
 			DrawBlend::Draw(spr, params.mt);
 //		}
-	} else if (rs.filter && rs.filter->GetMode() != FM_NULL) {
+	} else if (filter != FM_NULL) {
+		const RenderFilter* rf = rs.GetFilter();
+
 		RenderParams t = params;
-		t.shader.filter = rs.filter;
+		t.shader.SetFilter(rf);
 		t.camera = rc;
-		if (rs.filter->GetMode() == FM_GAUSSIAN_BLUR) {
- 			int itrs = static_cast<RFGaussianBlur*>(rs.filter)->GetIterations();
+		if (filter == FM_GAUSSIAN_BLUR) {
+ 			int itrs = static_cast<const RFGaussianBlur*>(rf)->GetIterations();
  			DrawGaussianBlur::Draw(spr, t, itrs);
-		} else if (rs.filter->GetMode() == FM_OUTER_GLOW) {
-			int itrs = static_cast<RFOuterGlow*>(rs.filter)->GetIterations();
+		} else if (filter == FM_OUTER_GLOW) {
+			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
 			DrawOuterGlow::Draw(spr, t, itrs);
 		} else {
 			if (params.set_shader) {
 				mgr->SetShader(sl::FILTER);
 			}
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
-			shader->SetMode(sl::FILTER_MODE(rs.filter->GetMode()));
-			switch (rs.filter->GetMode())
+			shader->SetMode(sl::FILTER_MODE(filter));
+			switch (filter)
 			{
 			case FM_EDGE_DETECTION:
 				{
-					RFEdgeDetection* ed = static_cast<RFEdgeDetection*>(rs.filter);
+					const RFEdgeDetection* ed = static_cast<const RFEdgeDetection*>(rf);
 					sl::EdgeDetectProg* prog = static_cast<sl::EdgeDetectProg*>(shader->GetProgram(sl::FM_EDGE_DETECTION));
 					prog->SetBlend(ed->GetBlend());
 				}
@@ -102,14 +123,24 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params,
  	RenderParams t = params;
  	t.mt = mt;
  
+	BlendMode blend = BM_NULL;
+	if (!params.disable_blend) {
+		blend = params.shader.GetBlend();
+	}
+
+	FilterMode filter = FM_NULL;
+	if (!params.disable_filter && params.shader.GetFilter()) {
+		filter = params.shader.GetFilter()->GetMode();
+	}
+
  	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
- 	if (t.shader.blend != BM_NULL) {
+ 	if (blend != BM_NULL) {
  		;
- 	} else if (t.shader.filter && t.shader.filter->GetMode() != FM_NULL) {
+ 	} else if (filter != FM_NULL) {
  		if (t.set_shader) {
  			mgr->SetShader(sl::FILTER);
  			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
- 			shader->SetMode(sl::FILTER_MODE(t.shader.filter->GetMode()));
+ 			shader->SetMode(sl::FILTER_MODE(filter));
  		}
  	} else {
  		if (t.set_shader) {
@@ -127,14 +158,24 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params, const sm::mat
 	RenderParams t = params;
 	t.mt = mt;
 
+	BlendMode blend = BM_NULL;
+	if (!params.disable_blend) {
+		blend = params.shader.GetBlend();
+	}
+
+	FilterMode filter = FM_NULL;
+	if (!params.disable_filter && params.shader.GetFilter()) {
+		filter = params.shader.GetFilter()->GetMode();
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (t.shader.blend != BM_NULL) {
+	if (blend != BM_NULL) {
 		;
-	} else if (t.shader.filter && t.shader.filter->GetMode() != FM_NULL) {
+	} else if (filter != FM_NULL) {
 		if (t.set_shader) {
 			mgr->SetShader(sl::FILTER);
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-			shader->SetMode(sl::FILTER_MODE(t.shader.filter->GetMode()));
+			shader->SetMode(sl::FILTER_MODE(filter));
 		}
 	} else {
 		if (t.set_shader) {

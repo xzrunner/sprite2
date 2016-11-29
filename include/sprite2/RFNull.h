@@ -13,6 +13,8 @@ public:
 		: RenderFilter(FM_NULL) 
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFNull(*this); }
+
 }; // RFNull
 
 }

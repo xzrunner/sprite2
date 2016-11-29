@@ -3,17 +3,23 @@
 
 #include "FilterMode.h"
 
-#include <CU_Uncopyable.h>
+#include <CU_Cloneable.h>
 
 namespace s2
 {
 
-class RenderFilter : public cu::Uncopyable
+class RenderFilter : public cu::Cloneable
 {
 public:
+	RenderFilter() : m_mode(FM_NULL) {}
+	RenderFilter(const RenderFilter& filter)
+		: m_mode(filter.m_mode)
+	{}
 	RenderFilter(FilterMode mode) 
 		: m_mode(mode) 
 	{}
+
+	virtual RenderFilter* Clone() const { return NULL; }
 
 	FilterMode GetMode() const { return m_mode; }
 

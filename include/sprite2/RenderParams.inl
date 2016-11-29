@@ -8,6 +8,9 @@ inline
 RenderParams::RenderParams()
 	: vertex_offset(0, 0)
 	, set_shader(true)
+	, disable_render(false)
+	, disable_blend(false)
+	, disable_filter(false)
 {
 }
 

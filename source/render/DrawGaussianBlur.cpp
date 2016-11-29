@@ -93,14 +93,12 @@ void DrawGaussianBlur::DrawInit(const Sprite* spr, const RenderParams& params, b
 	const sm::vec2& offset = spr->GetPosition();
 	_params.mt.Translate(-offset.x, -offset.y, 0);
 	_params.set_shader = false;
-	_params.shader.filter = FilterFactory::Instance()->GetTemp(FM_NULL);
+	_params.shader.SetFilter(FM_NULL);
+	_params.disable_filter = true;
 
-	RenderFilter* ori_filter = spr->Shader().filter;
-	const_cast<Sprite*>(spr)->Shader().filter = FilterFactory::Instance()->GetTemp(FM_NULL);
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	DrawNode::Draw(spr, _params);
-	const_cast<Sprite*>(spr)->Shader().filter = ori_filter;
 
 	if (is_target0) {
 		dtexf_t0_unbind();

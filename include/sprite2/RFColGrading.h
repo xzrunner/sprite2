@@ -13,6 +13,8 @@ public:
 		: RenderFilter(FM_COL_GRADING) 
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFColGrading(*this); }
+
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }
 

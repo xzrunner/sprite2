@@ -27,7 +27,12 @@ public:
 	RenderShader shader;
 
 	RenderCamera camera;
-	
+
+	bool disable_render;
+
+	bool disable_blend;
+	bool disable_filter;
+		
 public:
 	RenderParams();
 

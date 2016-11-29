@@ -14,6 +14,8 @@ public:
 		, m_blend(0.5f)
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFEdgeDetection(*this); }
+
 	float GetBlend() const { return m_blend; }
 	void SetBlend(float blend) { m_blend = blend; }
 

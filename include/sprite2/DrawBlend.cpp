@@ -18,7 +18,7 @@ namespace s2
 
 void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 {
-	assert(spr->Shader().blend != BM_NULL);
+	assert(spr->GetShader().GetBlend() != BM_NULL);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
@@ -45,16 +45,15 @@ void DrawBlend::DrawSprToTmp(const Sprite* spr, const sm::mat4& mt)
 	dtex_gl_clear_color2(0, -2, 2, 0);
 
 	mgr->SetShader(sl::BLEND);
-	BlendMode mode = spr->Shader().blend;
+	BlendMode mode = spr->GetShader().GetBlend();
 	shader->SetMode(mode);
 
-	const_cast<Sprite*>(spr)->Shader().blend = BM_NULL;
 	RenderParams params;
 	params.mt = mt;
 	params.set_shader = false;
+	params.disable_blend = true;
 	params.vertex_offset = - (mt * spr->GetPosition());
 	DrawNode::Draw(spr, params);
-	const_cast<Sprite*>(spr)->Shader().blend = mode;
 
 	shader->Commit();
 

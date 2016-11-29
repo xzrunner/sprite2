@@ -13,6 +13,8 @@ public:
 		: RenderFilter(FM_BLUR) 
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFBlur(); }
+
 }; // RFBlur
 
 }

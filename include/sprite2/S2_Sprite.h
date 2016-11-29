@@ -2,9 +2,6 @@
 #define _SPRITE2_SPRITE_H_
 
 #include "pre_defined.h"
-#include "RenderColor.h"
-#include "RenderShader.h"
-#include "RenderCamera.h"
 #include "S2_Message.h"
 
 #include <SM_Vector.h>
@@ -14,6 +11,8 @@
 
 #include <string>
 
+#include <stdint.h>
+
 namespace s2
 {
 
@@ -21,6 +20,10 @@ class RenderParams;
 class Symbol;
 class BoundingBox;
 class SprGeo;
+class SprRender;
+class RenderColor;
+class RenderShader;
+class RenderCamera;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -73,12 +76,13 @@ public:
 	const sm::vec2&		GetShear() const;
 	const sm::vec2&		GetOffset() const;
 
-	const RenderColor&	Color() const		{ return m_color; }
-	RenderColor&		Color()				{ return m_color; }
-	const RenderShader& Shader() const		{ return m_shader; }
-	RenderShader&		Shader()			{ return m_shader; }
-	const RenderCamera& Camera() const		{ return m_camera; }
-	RenderCamera&		Camera()			{ return m_camera; }
+	const RenderColor&	GetColor() const;
+	const RenderShader& GetShader() const;
+	const RenderCamera& GetCamera() const;
+
+	void SetColor(const RenderColor& color);
+	void SetShader(const RenderShader& shader);
+	void SetCamera(const RenderCamera& camera);
 
 	bool IsVisible() const { return m_visible; }
 	void SetVisible(bool visible) { m_visible = visible; }
@@ -89,6 +93,9 @@ public:
 	sm::mat4 GetTransInvMatrix() const;
 
 	int GetID() const { return m_id; }
+
+private:
+	void InitFromSpr(const Sprite& spr);
 
 protected:
 	Symbol*					m_sym;
@@ -106,14 +113,10 @@ protected:
 	mutable BoundingBox*	m_bounding;
 	mutable bool			m_bounding_dirty;
 
-	// todo mat
-
 	/************************************************************************/
 	/* draw                                                                 */
 	/************************************************************************/
-	RenderColor				m_color;
-	RenderShader			m_shader;
-	RenderCamera			m_camera;
+	SprRender*              m_render;
 
 	/************************************************************************/
 	/* edit                                                                 */

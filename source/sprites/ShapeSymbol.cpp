@@ -38,7 +38,7 @@ void ShapeSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	if (spr) {
 		sm::mat4 mt = spr->GetTransMatrix() * params.mt;
-		RenderColor color = spr->Color() * params.color;
+		RenderColor color = spr->GetColor() * params.color;
 		m_shape->Draw(mt, color);
 	}
 }

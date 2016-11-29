@@ -42,7 +42,7 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 	RenderParams p = params;
 	if (spr) {
 		p.mt = spr->GetTransMatrix() * params.mt;
-		p.color = spr->Color() * params.color;
+		p.color = spr->GetColor() * params.color;
 	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);

@@ -41,7 +41,7 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	RenderParams p = params;
 	p.mt = p2d_spr->GetTransMatrix() * params.mt;
-	p.color = spr->Color() * params.color;
+	p.color = spr->GetColor() * params.color;
 
 	p2d_spr->SetMatrix(p.mt);
 

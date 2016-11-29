@@ -13,6 +13,8 @@ public:
 		: RenderFilter(FM_SWIRL) 
 	{}
 
+	virtual RenderFilter* Clone() const { return new RFSwirl(*this); }
+
 }; // RFSwirl
 
 }

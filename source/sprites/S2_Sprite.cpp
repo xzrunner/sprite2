@@ -4,98 +4,59 @@
 #include "RenderFilter.h"
 #include "FilterFactory.h"
 #include "SprGeo.h"
+#include "SprRender.h"
+#include "SprDefault.h"
+#include "RenderColor.h"
+#include "RenderShader.h"
+#include "RenderCamera.h"
+
+#include <assert.h>
 
 namespace s2
 {
 
 Sprite::Sprite()
 	: m_sym(NULL)
-	, m_geo(&SprGeo::DEFAULT_GEO)
+	, m_geo(SprDefault::Instance()->Geo())
+	, m_bounding(new OBB())
+	, m_bounding_dirty(true)
+	, m_render(SprDefault::Instance()->Render())
 	, m_visible(true)
 	, m_editable(true)
 	, m_id(-1)
 {
-	m_bounding = new OBB();
-	m_bounding_dirty = true;
-
-	m_shader.filter = FilterFactory::Instance()->Create(FM_NULL);
 }
 
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(NULL)
-	, m_geo(&SprGeo::DEFAULT_GEO)
-	, m_name(spr.m_name)
-	, m_color(spr.m_color)
-	, m_shader(spr.m_shader)
-	, m_camera(spr.m_camera)
-	, m_visible(spr.m_visible)
-	, m_editable(spr.m_editable)
-	, m_id(spr.m_id)
+	, m_geo(SprDefault::Instance()->Geo())
+	, m_bounding(NULL)
+	, m_bounding_dirty(true)
+	, m_render(SprDefault::Instance()->Render())
+	, m_visible(true)
+	, m_editable(true)
+	, m_id(0)
 {
-	if (spr.m_sym) {
-		spr.m_sym->AddReference();
-		m_sym = spr.m_sym;
-	}
-
-	if (spr.m_geo != &SprGeo::DEFAULT_GEO) {
-		m_geo = new SprGeo;
-		*m_geo = *spr.m_geo;
-	}
-
-	m_bounding = spr.m_bounding->Clone();
-	m_bounding_dirty = spr.m_bounding_dirty;
-
-	FilterMode fm = FM_NULL;
-	if (spr.Shader().filter) {
-		fm = spr.Shader().filter->GetMode();
-	}
-	m_shader.filter = FilterFactory::Instance()->Create(fm);
+	InitFromSpr(spr);
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
 {
-	cu::RefCountObjAssign(m_sym, const_cast<Symbol*>(spr.m_sym));
-
-	m_name			= spr.m_name;
-
-	m_geo           = &SprGeo::DEFAULT_GEO;
-	if (spr.m_geo != &SprGeo::DEFAULT_GEO) {
-		m_geo = new SprGeo;
-		*m_geo = *spr.m_geo;
-	}
-
-	if (m_bounding) {
-		*m_bounding	= *spr.m_bounding;
-	} else {
-		m_bounding	= spr.m_bounding->Clone();
-	}
-	m_bounding_dirty= spr.m_bounding_dirty;
-
-	m_color			= spr.m_color;
-	m_shader		= spr.m_shader;
-	m_camera		= spr.m_camera;
-
-	m_visible		= spr.m_visible;
-	m_editable		= spr.m_editable;
-
-	m_id            = spr.m_id;
-
+	InitFromSpr(spr);
 	return *this;
 }
 
 Sprite::Sprite(Symbol* sym, uint32_t id)
 	: m_sym(NULL)
-	, m_geo(&SprGeo::DEFAULT_GEO)
+	, m_geo(SprDefault::Instance()->Geo())
+	, m_bounding(new OBB())
+	, m_bounding_dirty(true)
+	, m_render(SprDefault::Instance()->Render())
 	, m_visible(true)
 	, m_editable(true)
 	, m_id(id)
 {
 	cu::RefCountObjAssign(m_sym, sym);
-
-	m_bounding = new OBB();
-	m_bounding_dirty = true;
-
-	m_shader.filter = FilterFactory::Instance()->Create(FM_NULL);
 }
 
 Sprite::~Sprite()
@@ -104,13 +65,15 @@ Sprite::~Sprite()
 		m_sym->RemoveReference();
 	}
 
-	if (m_geo != &SprGeo::DEFAULT_GEO) {
-		delete m_geo; m_geo = NULL;
+	if (m_geo != SprDefault::Instance()->Geo()) {
+		delete m_geo;
 	}
 
 	delete m_bounding;
 
-	delete m_shader.filter;
+	if (m_render != SprDefault::Instance()->Render()) {
+		delete m_render;
+	}
 }
 
 void Sprite::SetSymbol(Symbol* sym)
@@ -129,7 +92,7 @@ void Sprite::SetPosition(const sm::vec2& pos)
 	if (m_geo->m_position == pos) {
 		return;
 	}
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
@@ -147,7 +110,7 @@ void Sprite::SetAngle(float angle)
 	if (m_geo->m_angle == angle) {
 		return;
 	}
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
@@ -165,7 +128,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 	if (m_geo->m_scale == scale) {
 		return;
 	}
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
@@ -197,7 +160,7 @@ void Sprite::SetShear(const sm::vec2& shear)
 	if (m_geo->m_shear == shear) {
 		return;
 	}
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
@@ -226,7 +189,7 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	if (m_geo->m_offset == offset) {
 		return;
 	}
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
@@ -263,16 +226,12 @@ void Sprite::UpdateBounding() const
 	}
 
 	sm::rect rect = m_sym->GetBounding(this);
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
-		m_bounding->Build(rect, SprGeo::DEFAULT_POSITION, SprGeo::DEFAULT_ANGLE, 
-			SprGeo::DEFAULT_SCALE, SprGeo::DEFAULT_SHEAR, sm::vec2(0, 0));
-	} else {
-		if (!m_geo->m_offset.IsValid()) {
-			m_geo->m_offset = rect.Center();
-		}
-		m_bounding->Build(rect, m_geo->m_position, m_geo->m_angle, m_geo->m_scale, 
-			m_geo->m_shear, m_geo->m_offset);
+	
+	if (m_geo != SprDefault::Instance()->Geo() && !m_geo->m_offset.IsValid()) {
+		m_geo->m_offset = rect.Center();
 	}
+	m_bounding->Build(rect, m_geo->m_position, m_geo->m_angle, m_geo->m_scale, 
+		m_geo->m_shear, m_geo->m_offset);
 
 	m_bounding_dirty = false;
 }
@@ -294,7 +253,7 @@ void Sprite::Scale(const sm::vec2& scale)
 
 sm::vec2 Sprite::GetCenter() const
 {
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::vec2(0, 0);
 	} else {
 		if (!m_geo->m_offset.IsValid()) {
@@ -326,9 +285,27 @@ const sm::vec2&	Sprite::GetShear() const
 	return m_geo->m_shear;
 }
 
+const RenderColor& Sprite::GetColor() const
+{
+	if (!m_render || (m_render && !m_render->m_color)) {
+		return *SprDefault::Instance()->Render()->m_color;
+	} else {
+		return *m_render->m_color;
+	}
+}
+
+const RenderShader& Sprite::GetShader() const
+{
+	if (!m_render || (m_render && !m_render->m_shader)) {
+		return *SprDefault::Instance()->Render()->m_shader;
+	} else {
+		return *m_render->m_shader;
+	}
+}
+
 const sm::vec2& Sprite::GetOffset() const
 { 
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 	if (!m_geo->m_offset.IsValid()) {
@@ -337,9 +314,51 @@ const sm::vec2& Sprite::GetOffset() const
 	return m_geo->m_offset;
 }
 
+const RenderCamera& Sprite::GetCamera() const
+{
+	if (!m_render || (m_render && !m_render->m_camera)) {
+		return *SprDefault::Instance()->Render()->m_camera;
+	} else {
+		return *m_render->m_camera;
+	}
+}
+
+void Sprite::SetColor(const RenderColor& color)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = new SprRender;
+	}
+	if (!m_render->m_color) {
+		m_render->m_color = new RenderColor;
+	}
+	*m_render->m_color = color;
+}
+
+void Sprite::SetShader(const RenderShader& shader)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = new SprRender;
+	}
+	if (!m_render->m_shader) {
+		m_render->m_shader = new RenderShader;
+	}
+	*m_render->m_shader = shader;
+}
+
+void Sprite::SetCamera(const RenderCamera& camera)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = new SprRender;
+	}
+	if (!m_render->m_camera) {
+		m_render->m_camera = new RenderCamera;
+	}
+	*m_render->m_camera = camera;
+}
+
 sm::mat4 Sprite::GetTransMatrix() const
 {
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::mat4();
 	} else {
 		sm::vec2 center = GetCenter();
@@ -352,7 +371,7 @@ sm::mat4 Sprite::GetTransMatrix() const
 
 sm::mat4 Sprite::GetTransInvMatrix() const
 {
-	if (m_geo == &SprGeo::DEFAULT_GEO) {
+	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::mat4();
 	} else {
 		sm::mat4 mat;
@@ -362,6 +381,57 @@ sm::mat4 Sprite::GetTransInvMatrix() const
 		mat.Scale(1/m_geo->m_scale.x, 1/m_geo->m_scale.y, 1);
 		return mat;
 	}
+}
+
+void Sprite::InitFromSpr(const Sprite& spr)
+{
+	cu::RefCountObjAssign(m_sym, const_cast<Symbol*>(spr.m_sym));
+
+	m_name = spr.m_name;
+
+	if (m_geo != spr.m_geo) 
+	{
+		if (m_geo) {
+			delete m_geo;
+		}
+		if (spr.m_geo == SprDefault::Instance()->Geo()) {
+			m_geo = SprDefault::Instance()->Geo();
+		} else {
+			m_geo = new SprGeo(*spr.m_geo);
+		}
+	}
+
+	assert(spr.m_bounding);
+	if (m_bounding) {
+		*m_bounding	 = *spr.m_bounding;
+	} else {
+		m_bounding	 = spr.m_bounding->Clone();
+	}
+	m_bounding_dirty = spr.m_bounding_dirty;
+
+	if (spr.m_render != spr.m_render) 
+	{
+		if (m_render) {
+			delete m_render;
+		}
+		if (spr.m_render == SprDefault::Instance()->Render()) {
+			m_render = SprDefault::Instance()->Render();
+		} else {
+			m_render = new SprRender;
+			if (spr.m_render->m_color) {
+				m_render->m_color = new RenderColor(*spr.m_render->m_color);
+			}
+			if (spr.m_render->m_shader) {
+				m_render->m_shader = new RenderShader(*spr.m_render->m_shader);
+			}
+			if (spr.m_render->m_camera) {
+				m_render->m_camera = new RenderCamera(*spr.m_render->m_camera);
+			}
+		}
+	}
+
+	m_visible = spr.m_visible;
+	m_editable = spr.m_editable;
 }
 
 }

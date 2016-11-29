@@ -349,31 +349,11 @@
 			Name="sprites"
 			>
 			<File
-				RelativePath="..\..\..\include\sprite2\S2_Message.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\sprites\S2_Sprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\sprite2\S2_Sprite.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\sprite2\S2_Symbol.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\sprites\SprTimer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\sprite2\SprTimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\sprite2\SymType.h"
 				>
 			</File>
 			<File
@@ -1105,6 +1085,50 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\Animation2.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="sprite"
+				>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_Message.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\S2_Sprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_Sprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SprGeo.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprGeo.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SprRender.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprRender.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="symbol"
+				>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_Symbol.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SymType.h"
 					>
 				</File>
 			</Filter>

@@ -20,6 +20,7 @@ namespace s2
 class RenderParams;
 class Symbol;
 class BoundingBox;
+class SprGeo;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -61,15 +62,15 @@ public:
 	const BoundingBox* GetBounding() const; 
 	void UpdateBounding() const;
 
-	void Translate(const sm::vec2& trans) { SetPosition(m_position + trans); }
-	void Rotate(float rot) { SetAngle(m_angle + rot); }
-	void Scale(const sm::vec2& scale) { SetScale(m_scale * scale); }
+	void Translate(const sm::vec2& trans);
+	void Rotate(float rot);
+	void Scale(const sm::vec2& scale);
 
 	sm::vec2			GetCenter() const;
-	const sm::vec2&		GetPosition() const	{ return m_position; }
-	const float&		GetAngle() const	{ return m_angle; }
-	const sm::vec2&		GetScale() const	{ return m_scale; }
-	const sm::vec2&		GetShear() const	{ return m_shear; }
+	const sm::vec2&		GetPosition() const;
+	const float&		GetAngle() const;
+	const sm::vec2&		GetScale() const;
+	const sm::vec2&		GetShear() const;
 	const sm::vec2&		GetOffset() const;
 
 	const RenderColor&	Color() const		{ return m_color; }
@@ -100,12 +101,7 @@ protected:
 	/************************************************************************/
 	/* geometry                                                             */
 	/************************************************************************/
-	sm::vec2				m_position;
-	float					m_angle;
-	sm::vec2				m_scale;
-	sm::vec2				m_shear;
-
-	mutable sm::vec2		m_offset;
+	mutable SprGeo*         m_geo;
 
 	mutable BoundingBox*	m_bounding;
 	mutable bool			m_bounding_dirty;

@@ -421,7 +421,7 @@ void Sprite::InitFromSpr(const Sprite& spr)
 
 	if (m_geo != spr.m_geo) 
 	{
-		if (m_geo) {
+		if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
 			delete m_geo;
 		}
 		if (spr.m_geo == SprDefault::Instance()->Geo()) {

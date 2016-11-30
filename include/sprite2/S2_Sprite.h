@@ -89,19 +89,28 @@ public:
 	bool IsEditable() const;
 	void SetEditable(bool editable) const;
 
+	bool IsDirty() const;
+
 	sm::mat4 GetTransMatrix() const;
 	sm::mat4 GetTransInvMatrix() const;	
 
+	static int GetCount() { return m_count; }
+
 private:
+	void InitFlags();
+
 	void InitFromSpr(const Sprite& spr);
 
 	bool IsBoundingDirty() const;
 	void SetBoundingDirty(bool dirty) const;
 
+	void SetDirty(bool dirty) const;
+
 protected:
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000001;
 	static const uint32_t FLAG_VISIBLE        = 0x00000002;
 	static const uint32_t FLAG_EDITABLE       = 0x00000004;
+	static const uint32_t FLAG_DIRTY          = 0x00000008;
 
 protected:
 	Symbol*					m_sym;
@@ -126,7 +135,9 @@ protected:
 	/* extend                                                               */
 	/************************************************************************/
 	mutable uint32_t		m_flags;
-//	void*					m_ud;
+
+private:
+	static int m_count;
 
 }; // Sprite
 

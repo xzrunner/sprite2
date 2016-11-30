@@ -15,6 +15,8 @@
 namespace s2
 {
 
+int Sprite::m_count = 0;
+
 Sprite::Sprite()
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
@@ -22,9 +24,9 @@ Sprite::Sprite()
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
-	SetBoundingDirty(true);
-	SetVisible(true);
-	SetEditable(true);
+	++m_count;
+
+	InitFlags();
 }
 
 Sprite::Sprite(const Sprite& spr)
@@ -34,15 +36,16 @@ Sprite::Sprite(const Sprite& spr)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
-	InitFromSpr(spr);
+	++m_count;
 
-	SetBoundingDirty(true);
-	SetVisible(true);
-	SetEditable(true);
+	InitFromSpr(spr);
+	InitFlags();
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
 {
+	++m_count;
+
 	InitFromSpr(spr);
 	return *this;
 }
@@ -54,15 +57,17 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	++m_count;
+
 	cu::RefCountObjAssign(m_sym, sym);
 
-	SetBoundingDirty(true);
-	SetVisible(true);
-	SetEditable(true);
+	InitFlags();
 }
 
 Sprite::~Sprite()
 {
+	--m_count;
+
 	if (m_sym) {
 		m_sym->RemoveReference();
 	}
@@ -82,6 +87,8 @@ void Sprite::SetSymbol(Symbol* sym)
 {
 	cu::RefCountObjAssign(m_sym, sym);
 	UpdateBounding();
+
+	SetDirty(true);
 }
 
 void Sprite::SetCenter(const sm::vec2& pos)
@@ -105,6 +112,8 @@ void Sprite::SetPosition(const sm::vec2& pos)
 
 	// lazy
 	SetBoundingDirty(true);
+
+	SetDirty(true);
 }
 
 void Sprite::SetAngle(float angle)
@@ -123,6 +132,8 @@ void Sprite::SetAngle(float angle)
 
 	// lazy
 	SetBoundingDirty(true);
+
+	SetDirty(true);
 }
 
 void Sprite::SetScale(const sm::vec2& scale)
@@ -155,6 +166,8 @@ void Sprite::SetScale(const sm::vec2& scale)
 
 	// lazy
 	SetBoundingDirty(true);
+
+	SetDirty(true);
 }
 
 void Sprite::SetShear(const sm::vec2& shear)
@@ -184,6 +197,8 @@ void Sprite::SetShear(const sm::vec2& shear)
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
+
+	SetDirty(true);
 }
 
 void Sprite::SetOffset(const sm::vec2& offset)
@@ -210,6 +225,8 @@ void Sprite::SetOffset(const sm::vec2& offset)
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
+
+	SetDirty(true);
 }
 
 const BoundingBox* Sprite::GetBounding() const 
@@ -334,6 +351,8 @@ void Sprite::SetColor(const RenderColor& color)
 		m_render->m_color = new RenderColor;
 	}
 	*m_render->m_color = color;
+
+	SetDirty(true);
 }
 
 void Sprite::SetShader(const RenderShader& shader)
@@ -345,6 +364,8 @@ void Sprite::SetShader(const RenderShader& shader)
 		m_render->m_shader = new RenderShader;
 	}
 	*m_render->m_shader = shader;
+
+	SetDirty(true);
 }
 
 void Sprite::SetCamera(const RenderCamera& camera)
@@ -356,6 +377,8 @@ void Sprite::SetCamera(const RenderCamera& camera)
 		m_render->m_camera = new RenderCamera;
 	}
 	*m_render->m_camera = camera;
+
+	SetDirty(true);
 }
 
 bool Sprite::IsVisible() const 
@@ -386,6 +409,11 @@ void Sprite::SetEditable(bool editable) const
 	}
 }
 
+bool Sprite::IsDirty() const
+{
+	return m_flags & FLAG_DIRTY; 
+}
+
 sm::mat4 Sprite::GetTransMatrix() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
@@ -411,6 +439,14 @@ sm::mat4 Sprite::GetTransInvMatrix() const
 		mat.Scale(1/m_geo->m_scale.x, 1/m_geo->m_scale.y, 1);
 		return mat;
 	}
+}
+
+void Sprite::InitFlags()
+{
+	SetBoundingDirty(true);
+	SetVisible(true);
+	SetEditable(true);
+	SetDirty(false);
 }
 
 void Sprite::InitFromSpr(const Sprite& spr)
@@ -473,6 +509,15 @@ void Sprite::SetBoundingDirty(bool dirty) const
 		m_flags |= FLAG_BOUNDING_DIRTY;
 	} else {
 		m_flags &= ~FLAG_BOUNDING_DIRTY;
+	}
+}
+
+void Sprite::SetDirty(bool dirty) const
+{
+	if (dirty) {
+		m_flags |= FLAG_DIRTY;
+	} else {
+		m_flags &= ~FLAG_DIRTY;
 	}
 }
 

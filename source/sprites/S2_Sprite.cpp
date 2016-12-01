@@ -474,9 +474,9 @@ void Sprite::InitFromSpr(const Sprite& spr)
 		m_bounding	 = spr.m_bounding->Clone();
 	}
 
-	if (spr.m_render != spr.m_render) 
+	if (m_render != spr.m_render) 
 	{
-		if (m_render) {
+		if (m_render && m_render != SprDefault::Instance()->Render()) {
 			delete m_render;
 		}
 		if (spr.m_render == SprDefault::Instance()->Render()) {

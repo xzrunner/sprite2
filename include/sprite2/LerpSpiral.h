@@ -15,7 +15,7 @@ public:
 	LerpSpiral();
 	LerpSpiral(const LerpSpiral& lerp);
 	LerpSpiral& operator = (const LerpSpiral& lerp);
-	LerpSpiral(float angle_begin, float angle_end);
+	LerpSpiral(float angle_begin, float angle_end, float scale = 1);
 
 	virtual ILerp* Clone() const { return new LerpSpiral(*this); }
 
@@ -23,10 +23,12 @@ public:
 
 	sm::vec2 Lerp(const sm::vec2& begin, const sm::vec2& end, float process) const;
 
-	void GetAngle(float& begin, float& end);
+	void GetAngle(float& begin, float& end) const;
+	float GetScale() const { return m_scale; }
 	
 private:
 	float m_angle_begin, m_angle_end;
+	float m_scale;
 	
 }; // LerpSpiral
 

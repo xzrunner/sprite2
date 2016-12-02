@@ -2,6 +2,7 @@
 #define _SPRITE2_ANIM_SYMBOL_H_
 
 #include "AnimCurr.h"
+#include "AnimLerp.h"
 #include "S2_Symbol.h"
 
 #include <vector>
@@ -17,7 +18,9 @@ public:
 	public:
 		int index;
 		std::vector<Sprite*> sprs;
+
 		bool tween;
+		std::vector<std::pair<AnimLerp::SprData, ILerp*> > lerps;
 
 	public:
 		Frame() : index(0), tween(false) {}

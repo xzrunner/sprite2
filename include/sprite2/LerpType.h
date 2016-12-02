@@ -1,0 +1,15 @@
+#ifndef _SPRITE2_LERP_TYPE_H_
+#define _SPRITE2_LERP_TYPE_H_
+
+namespace s2
+{
+
+enum LerpType
+{
+	LERP_UNKNOWN = 0,
+	LERP_SPIRAL,
+};
+
+}
+
+#endif // _SPRITE2_LERP_TYPE_H_

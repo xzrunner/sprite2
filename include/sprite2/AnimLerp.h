@@ -7,14 +7,22 @@ namespace s2
 {
 
 class Sprite;
+class ILerp;
 
 class AnimLerp
 {
 public:
-	static void Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-		std::vector<Sprite*>& tween, float process);
+	enum SprData
+	{
+		SPR_POS = 0,
+	};
 
-	static void Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process);	
+public:
+	static void Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
+		std::vector<Sprite*>& tween, float process, const std::vector<std::pair<SprData, ILerp*> >& lerps);
+
+	static void Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
+		const std::vector<std::pair<SprData, ILerp*> >& lerps);	
 
 	static bool IsMatched(const Sprite* s0, const Sprite* s1);
 

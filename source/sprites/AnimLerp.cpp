@@ -6,6 +6,7 @@
 #include "MeshSprite.h"
 #include "SkeletonSprite.h"
 #include "Particle3dSprite.h"
+#include "LerpSpiral.h"
 
 #include <SM_Vector.h>
 
@@ -15,7 +16,7 @@ namespace s2
 {
 
 void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-					std::vector<Sprite*>& tween, float process)
+					std::vector<Sprite*>& tween, float process, const std::vector<std::pair<SprData, ILerp*> >& lerps)
 {
 	for (int i = 0, n = begin.size(); i < n; ++i)
 	{
@@ -32,7 +33,7 @@ void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*
 		}
 		Sprite* tween_spr = VI_CLONE(Sprite, start_spr);
 		if (end_spr) {
-			Lerp(start_spr, end_spr, tween_spr, process);
+			Lerp(start_spr, end_spr, tween_spr, process, lerps);
 		}
 		tween.push_back(tween_spr);
 	}
@@ -49,7 +50,8 @@ Color color_interpolate(const Color& begin, const Color& end, float scale)
 	return ret;
 }
 
-void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process)
+void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
+					const std::vector<std::pair<SprData, ILerp*> >& lerps)
 {
 	sm::vec2 shear;
 	shear.x = (end->GetShear().x - begin->GetShear().x) * process + begin->GetShear().x;
@@ -120,6 +122,21 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process)
 		assert(p3d_e && p3d_t);
 		float start_radius = (p3d_e->GetStartRadius() - p3d_b->GetStartRadius()) * process + p3d_b->GetStartRadius();
 		p3d_t->SetStartRadius(start_radius);
+	}
+
+	for (int i = 0, n = lerps.size(); i < n; ++i) 
+	{
+		SprData data = lerps[i].first;
+		ILerp* lerp = lerps[i].second;
+		switch (lerp->Type())
+		{
+		case LERP_SPIRAL:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		}
 	}
 }
 

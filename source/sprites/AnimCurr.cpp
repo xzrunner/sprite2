@@ -240,7 +240,7 @@ void AnimCurr::LoadFromSym()
 			{
 				assert(m_frame >= curr_f->index && m_frame < next_f->index);
 				float process = (float) (m_frame - curr_f->index) / (next_f->index - curr_f->index);
-				AnimLerp::Lerp(curr_f->sprs, next_f->sprs, layer.frame.sprs, process);
+				AnimLerp::Lerp(curr_f->sprs, next_f->sprs, layer.frame.sprs, process, curr_f->lerps);
 			}
 			m_layers.push_back(layer);
 		}
@@ -307,7 +307,7 @@ void AnimCurr::LoadFromSym()
 						tween_spr = VI_CLONE(Sprite, start_spr);
 					}
 					if (end_spr) {
-						AnimLerp::Lerp(start_spr, end_spr, tween_spr, process);
+						AnimLerp::Lerp(start_spr, end_spr, tween_spr, process, curr_f->lerps);
 					}
 					new_frame.sprs.push_back(tween_spr);
 				}

@@ -34,6 +34,8 @@ public:
 	void SetTime(float time);
 	void SetFrame(int frame, int fps);
 
+	int GetFrame() const { return m_frame; }
+
 	void SetActive(bool active);
 	bool IsActive() const { return m_active; }
 

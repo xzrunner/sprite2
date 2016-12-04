@@ -38,7 +38,8 @@ public:
 
 	void SetStartRandom(bool random);
 
-	void SetTime(int frame);
+	void SetFrame(int frame);
+	int  GetFrame() const { return m_curr.GetFrame(); }
 
 	void SetActive(bool active);
 

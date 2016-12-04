@@ -58,7 +58,7 @@ void AnimSprite::SetStartRandom(bool random)
 	}
 }
 
-void AnimSprite::SetTime(int frame)
+void AnimSprite::SetFrame(int frame)
 {
 	m_curr.SetFrame(frame, m_fps);	
 }

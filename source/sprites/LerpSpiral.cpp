@@ -46,10 +46,13 @@ sm::vec2 LerpSpiral::Lerp(const sm::vec2& begin, const sm::vec2& end, float proc
 	ret.x = r * cos(angle);
 	ret.y = r * sin(angle);
 
-	float dir = sm::get_line_angle(begin, end);
-	ret = sm::rotate_vector(ret, -dir);
-	ret.y *= m_scale;
-	ret = sm::rotate_vector(ret, dir);
+	if (m_scale != 1) 
+	{
+		float dir = sm::get_line_angle(begin, end);
+		ret = sm::rotate_vector(ret, -dir);
+		ret.y *= m_scale;
+		ret = sm::rotate_vector(ret, dir);
+	}
 
 	ret += begin;
 

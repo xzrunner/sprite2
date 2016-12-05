@@ -6,6 +6,7 @@
 #include "MeshSprite.h"
 #include "SkeletonSprite.h"
 #include "Particle3dSprite.h"
+#include "LerpCircle.h"
 #include "LerpSpiral.h"
 
 #include <SM_Vector.h>
@@ -130,6 +131,12 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
 		ILerp* lerp = lerps[i].second;
 		switch (lerp->Type())
 		{
+		case LERP_CIRCLE:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpCircle*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
 		case LERP_SPIRAL:
 			if (data == SPR_POS) {
 				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);

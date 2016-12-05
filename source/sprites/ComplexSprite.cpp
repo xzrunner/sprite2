@@ -58,7 +58,12 @@ Sprite* ComplexSprite::FetchChild(const std::string& name) const
 
 Sprite* ComplexSprite::FetchChild(int idx) const
 {
-	return NULL;
+	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	if (idx >= 0 && idx < children.size()) {
+		return children[idx];
+	} else {
+		return NULL;
+	}
 }
 
 void ComplexSprite::SetAction(const std::string& name)

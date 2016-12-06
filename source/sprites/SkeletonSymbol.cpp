@@ -40,7 +40,8 @@ void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	RenderParams p = params;
 	if (spr) {
-		p.mt = spr->GetTransMatrix() * params.mt;
+		p.mt = spr->GetLocalMat() * params.mt;
+		spr->SetWorldMat(p.mt);
 		p.color = spr->GetColor() * params.color;
 
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);

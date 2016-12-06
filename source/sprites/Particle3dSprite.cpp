@@ -105,7 +105,7 @@ bool Particle3dSprite::Update(const RenderParams& params)
 		}
 
 		float mt[6];
-		sm::mat4 inner_mat = GetTransMatrix();
+		sm::mat4 inner_mat = GetLocalMat();
 		mt[0] = inner_mat.x[0];
 		mt[1] = inner_mat.x[1];
 		mt[2] = inner_mat.x[4];

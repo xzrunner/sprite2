@@ -96,81 +96,82 @@ void Sprite::SetCenter(const sm::vec2& pos)
 
 void Sprite::SetPosition(const sm::vec2& pos)
 {
-	if (m_geo->m_position == pos) {
+	if (m_geo->GetPosition() == pos) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
-	m_geo->m_position = pos;
+	m_geo->SetPosition(pos);
 
 // 	// immediately
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
-
 	// lazy
 	SetBoundingDirty(true);
 
 	SetDirty(true);
+	SetWorldDirty(true);
 }
 
 void Sprite::SetAngle(float angle)
 {
-	if (m_geo->m_angle == angle) {
+	if (m_geo->GetAngle() == angle) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
-	m_geo->m_angle = angle;
+	m_geo->SetAngle(angle);
 
 // 	// immediately
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
-
 	// lazy
 	SetBoundingDirty(true);
 
 	SetDirty(true);
+	SetWorldDirty(true);
 }
 
 void Sprite::SetScale(const sm::vec2& scale)
 {
-	if (m_geo->m_scale == scale) {
+	if (m_geo->GetScale() == scale) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
-	const sm::vec2& old_scale = m_geo->m_scale;
+	const sm::vec2& old_scale = m_geo->GetScale();
 	if (old_scale.x != 0 && old_scale.y != 0) 
 	{
 		sm::vec2 dscale;
-		dscale.x = scale.x / m_geo->m_scale.x;
-		dscale.y = scale.y / m_geo->m_scale.y;
+		dscale.x = scale.x / old_scale.x;
+		dscale.y = scale.y / old_scale.y;
 
-		if (!m_geo->m_offset.IsValid()) {
-			m_geo->m_offset = m_sym->GetBounding(this).Center();
+		if (!m_geo->GetOffset().IsValid()) {
+			m_geo->SetOffset(m_sym->GetBounding(this).Center());
 		}
-		sm::vec2 old_offset = m_geo->m_offset;
-		sm::vec2 new_offset(m_geo->m_offset.x * dscale.x, m_geo->m_offset.y * dscale.y);
-		m_geo->m_offset = new_offset;
+		sm::vec2 old_offset = m_geo->GetOffset();
+		sm::vec2 new_offset(old_offset.x * dscale.x, old_offset.y * dscale.y);
+		m_geo->SetOffset(new_offset);
 
-		m_geo->m_position += old_offset - new_offset;
+		m_geo->SetPosition(m_geo->GetPosition() + old_offset - new_offset);
 	}
 
-	m_geo->m_scale = scale;
+	m_geo->SetScale(scale);
 
 	// lazy
 	SetBoundingDirty(true);
 
 	SetDirty(true);
+	SetWorldDirty(true);
 }
 
 void Sprite::SetShear(const sm::vec2& shear)
 {
-	if (m_geo->m_shear == shear) {
+	if (m_geo->GetShear() == shear) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
@@ -178,53 +179,55 @@ void Sprite::SetShear(const sm::vec2& shear)
 	}
 
 	sm::mat4 mat_old, mat_new;
-	mat_old.Shear(m_geo->m_shear.x, m_geo->m_shear.y);
+	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
 
-	if (!m_geo->m_offset.IsValid()) {
-		m_geo->m_offset = m_sym->GetBounding(this).Center();
+	if (!m_geo->GetOffset().IsValid()) {
+		m_geo->SetOffset(m_sym->GetBounding(this).Center());
 	}
-	sm::vec2 offset = mat_new * m_geo->m_offset - mat_old * m_geo->m_offset;
-	m_geo->m_offset += offset;
-	m_geo->m_position -= offset;
+	sm::vec2 offset = mat_new * m_geo->GetOffset() - mat_old * m_geo->GetOffset();
+	m_geo->SetOffset(m_geo->GetOffset() + offset);
+	m_geo->SetPosition(m_geo->GetPosition() - offset);
 
-	m_geo->m_shear = shear;
+	m_geo->SetShear(shear);
 
 	// immediately
-	m_bounding->SetTransform(m_geo->m_position, m_geo->m_offset, m_geo->m_angle);
+	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
 
 	SetDirty(true);
+	SetWorldDirty(true);
 }
 
 void Sprite::SetOffset(const sm::vec2& offset)
 {
-	if (m_geo->m_offset == offset) {
+	if (m_geo->GetOffset() == offset) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
 
-	if (!m_geo->m_offset.IsValid()) {
-		m_geo->m_offset = m_sym->GetBounding(this).Center();
+	if (!m_geo->GetOffset().IsValid()) {
+		m_geo->SetOffset(m_sym->GetBounding(this).Center());
 	}
 
 	// rotate + offset -> offset + rotate	
 	sm::vec2 old_center = GetCenter();
-	m_geo->m_offset = offset;
+	m_geo->SetOffset(offset);
 	sm::vec2 new_center = GetCenter();
-	m_geo->m_position += old_center - new_center;
+	m_geo->SetPosition(m_geo->GetPosition() + old_center - new_center);
 
 	// immediately
-	m_bounding->SetTransform(m_geo->m_position, m_geo->m_offset, m_geo->m_angle);
+	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
 
 	SetDirty(true);
+	SetWorldDirty(true);
 }
 
 const BoundingBox* Sprite::GetBounding() const 
@@ -244,62 +247,62 @@ void Sprite::UpdateBounding() const
 
 	sm::rect rect = m_sym->GetBounding(this);
 	
-	if (m_geo != SprDefault::Instance()->Geo() && !m_geo->m_offset.IsValid()) {
-		m_geo->m_offset = rect.Center();
+	if (m_geo != SprDefault::Instance()->Geo() && !m_geo->GetOffset().IsValid()) {
+		m_geo->SetOffset(rect.Center());
 	}
-	m_bounding->Build(rect, m_geo->m_position, m_geo->m_angle, m_geo->m_scale, 
-		m_geo->m_shear, m_geo->m_offset);
+	m_bounding->Build(rect, m_geo->GetPosition(), m_geo->GetAngle(), m_geo->GetScale(), 
+		m_geo->GetShear(), m_geo->GetOffset());
 
 	SetBoundingDirty(false);
 }
 
 void Sprite::Translate(const sm::vec2& trans) 
 { 
-	SetPosition(m_geo->m_position + trans);
+	SetPosition(m_geo->GetPosition() + trans);
 }
 
 void Sprite::Rotate(float rot) 
 { 
-	SetAngle(m_geo->m_angle + rot); 
+	SetAngle(m_geo->GetAngle() + rot); 
 }
 
 void Sprite::Scale(const sm::vec2& scale) 
 { 
-	SetScale(m_geo->m_scale * scale); 
+	SetScale(m_geo->GetScale() * scale); 
 }
 
 sm::vec2 Sprite::GetCenter() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::vec2(0, 0);
-	} else {
-		if (!m_geo->m_offset.IsValid()) {
-			m_geo->m_offset = m_sym->GetBounding(this).Center();
-		}
-		sm::vec2 center_offset = sm::rotate_vector(-m_geo->m_offset, m_geo->m_angle) + m_geo->m_offset;
-		sm::vec2 center = m_geo->m_position + center_offset;
-		return center;
+	} 
+
+	if (!m_geo->GetOffset().IsValid()) {
+		m_geo->SetOffset(m_sym->GetBounding(this).Center());
 	}
+	sm::vec2 center_offset = sm::rotate_vector(-m_geo->GetOffset(), m_geo->GetAngle()) + m_geo->GetOffset();
+	sm::vec2 center = m_geo->GetPosition() + center_offset;
+	return center;
 }
 
 const sm::vec2& Sprite::GetPosition() const	
 { 
-	return m_geo->m_position;
+	return m_geo->GetPosition();
 }
 
-const float& Sprite::GetAngle() const
+float Sprite::GetAngle() const
 { 
-	return m_geo->m_angle;
+	return m_geo->GetAngle();
 }
 
 const sm::vec2&	Sprite::GetScale() const
 {
-	return m_geo->m_scale;
+	return m_geo->GetScale();
 }
 
 const sm::vec2&	Sprite::GetShear() const
 {
-	return m_geo->m_shear;
+	return m_geo->GetShear();
 }
 
 const RenderColor& Sprite::GetColor() const
@@ -325,10 +328,10 @@ const sm::vec2& Sprite::GetOffset() const
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
-	if (!m_geo->m_offset.IsValid()) {
-		m_geo->m_offset = m_sym->GetBounding(this).Center();
+	if (!m_geo->GetOffset().IsValid()) {
+		m_geo->SetOffset(m_sym->GetBounding(this).Center());
 	}
-	return m_geo->m_offset;
+	return m_geo->GetOffset();
 }
 
 const RenderCamera& Sprite::GetCamera() const
@@ -412,31 +415,40 @@ bool Sprite::IsDirty() const
 	return m_flags & FLAG_DIRTY; 
 }
 
-sm::mat4 Sprite::GetTransMatrix() const
+sm::mat4 Sprite::GetLocalMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::mat4();
-	} else {
-		sm::vec2 center = GetCenter();
-		sm::mat4 mt;
-		mt.SetTransformation(center.x, center.y, m_geo->m_angle, 
-			m_geo->m_scale.x, m_geo->m_scale.y, 0, 0, m_geo->m_shear.x, m_geo->m_shear.y);
-		return mt;
-	}
+	} 
+	
+	sm::vec2 center = GetCenter();
+	sm::mat4 mt;
+	mt.SetTransformation(center.x, center.y, m_geo->GetAngle(), m_geo->GetScale().x, 
+		m_geo->GetScale().y, 0, 0, m_geo->GetShear().x, m_geo->GetShear().y);
+	return mt;
 }
 
-sm::mat4 Sprite::GetTransInvMatrix() const
+sm::mat4 Sprite::GetLocalInvMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		return sm::mat4();
-	} else {
-		sm::mat4 mat;
-		mat.RotateZ(-m_geo->m_angle * SM_RAD_TO_DEG);
-		mat.Shear(-m_geo->m_shear.x, -m_geo->m_shear.y);
-		mat.Translate(-m_geo->m_position.x/m_geo->m_scale.x, -m_geo->m_position.y/m_geo->m_scale.y, 0);
-		mat.Scale(1/m_geo->m_scale.x, 1/m_geo->m_scale.y, 1);
-		return mat;
-	}
+	} 
+
+	sm::mat4 mat;
+	mat.RotateZ(-m_geo->GetAngle() * SM_RAD_TO_DEG);
+	mat.Shear(-m_geo->GetShear().x, -m_geo->GetShear().y);
+	mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y, 0);
+	mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y, 1);
+	return mat;
+}
+
+void Sprite::SetWorldMat(const sm::mat4& mat) const
+{
+	if (m_geo == SprDefault::Instance()->Geo()) {
+		return;
+	} 
+	
+	m_geo->SetWorldMat(mat);
 }
 
 void Sprite::InitFlags()
@@ -516,6 +528,15 @@ void Sprite::SetDirty(bool dirty) const
 		m_flags |= FLAG_DIRTY;
 	} else {
 		m_flags &= ~FLAG_DIRTY;
+	}
+}
+
+void Sprite::SetWorldDirty(bool dirty) const
+{
+	if (dirty) {
+		m_flags |= FLAG_WORLD_DIRTY;
+	} else {
+		m_flags &= ~FLAG_WORLD_DIRTY;
 	}
 }
 

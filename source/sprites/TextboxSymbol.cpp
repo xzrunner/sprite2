@@ -39,7 +39,8 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	RenderParams p = params;
 	if (spr) {
-		p.mt = spr->GetTransMatrix() * p.mt;
+		p.mt = spr->GetLocalMat() * p.mt;
+		spr->SetWorldMat(p.mt);
 		p.color = spr->GetColor() * p.color;
 	}
 

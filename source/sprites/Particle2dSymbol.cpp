@@ -40,7 +40,8 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
 
 	RenderParams p = params;
-	p.mt = p2d_spr->GetTransMatrix() * params.mt;
+	p.mt = p2d_spr->GetLocalMat() * params.mt;
+	p2d_spr->SetWorldMat(p.mt);
 	p.color = spr->GetColor() * params.color;
 
 	p2d_spr->SetMatrix(p.mt);

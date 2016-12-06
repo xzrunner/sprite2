@@ -13,7 +13,7 @@ SINGLETON_DEFINITION(SprDefault);
 SprDefault::SprDefault()
 {
 	m_geo = new SprGeo;
-	m_geo->m_offset.Set(0, 0);
+	m_geo->SetOffset(sm::vec2(0, 0));
 
 	m_color  = new RenderColor;
 	m_shader = new RenderShader;

@@ -32,7 +32,7 @@ void ComplexSprite::OnMessage(Message msg)
 bool ComplexSprite::Update(const RenderParams& params)
 {
 	RenderParams p = params;
-	p.mt = GetTransMatrix() * params.mt;
+	p.mt = GetLocalMat() * params.mt;
 
 	bool dirty = false;
 	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();

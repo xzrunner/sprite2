@@ -62,7 +62,7 @@ void DrawBlend::DrawSprToTmp(const Sprite* spr, const sm::mat4& mt)
 
 void DrawBlend::DrawTmpToScreen(const Sprite* spr, const sm::mat4& mt)
 {
-	sm::mat4 t = spr->GetTransMatrix() * mt;
+	sm::mat4 t = spr->GetLocalMat() * mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
 
 	sm::vec2 vertices[4];

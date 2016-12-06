@@ -41,7 +41,8 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	RenderParams p = params;
 	if (spr) {
-		p.mt = spr->GetTransMatrix() * params.mt;
+		p.mt = spr->GetLocalMat() * params.mt;
+		spr->SetWorldMat(p.mt);
 		p.color = spr->GetColor() * params.color;
 	}
 

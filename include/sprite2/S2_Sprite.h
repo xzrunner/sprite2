@@ -72,7 +72,7 @@ public:
 
 	sm::vec2			GetCenter() const;
 	const sm::vec2&		GetPosition() const;
-	const float&		GetAngle() const;
+	float		        GetAngle() const;
 	const sm::vec2&		GetScale() const;
 	const sm::vec2&		GetShear() const;
 	const sm::vec2&		GetOffset() const;
@@ -92,8 +92,10 @@ public:
 
 	bool IsDirty() const;
 
-	sm::mat4 GetTransMatrix() const;
-	sm::mat4 GetTransInvMatrix() const;	
+	sm::mat4 GetLocalMat() const;
+	sm::mat4 GetLocalInvMat() const;
+
+	void SetWorldMat(const sm::mat4& mat) const;
 
 	static int GetCount() { return m_count; }
 
@@ -107,11 +109,14 @@ private:
 
 	void SetDirty(bool dirty) const;
 
+	void SetWorldDirty(bool dirty) const;
+
 protected:
-	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000001;
-	static const uint32_t FLAG_VISIBLE        = 0x00000002;
-	static const uint32_t FLAG_EDITABLE       = 0x00000004;
-	static const uint32_t FLAG_DIRTY          = 0x00000008;
+	static const uint32_t FLAG_VISIBLE        = 0x00000001;
+	static const uint32_t FLAG_EDITABLE       = 0x00000002;
+	static const uint32_t FLAG_DIRTY          = 0x00000004;
+	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
+	static const uint32_t FLAG_WORLD_DIRTY    = 0x00000010;
 
 protected:
 	Symbol*					m_sym;

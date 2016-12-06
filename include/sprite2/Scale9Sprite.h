@@ -26,6 +26,9 @@ public:
 	void Resize(float width, float height);
 
 protected:
+	virtual bool TraverseChildren(SprVisitor& visitor) const;
+
+protected:
 	Scale9 m_s9;
 
 	VI_DUMMY_FUNC

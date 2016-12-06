@@ -68,6 +68,11 @@ void AnimSprite::SetActive(bool active)
 	m_curr.SetActive(active);
 }
 
+bool AnimSprite::TraverseChildren(SprVisitor& visitor) const
+{
+	return m_curr.Traverse(visitor);
+}
+
 void AnimSprite::RandomStartTime()
 {
 	int start = VI_DOWNCASTING<const AnimSymbol*>(m_sym)->GetMaxFrameIdx();

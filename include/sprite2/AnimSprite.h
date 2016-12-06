@@ -43,6 +43,9 @@ public:
 
 	void SetActive(bool active);
 
+protected:
+	virtual bool TraverseChildren(SprVisitor& visitor) const;
+
 private:
 	void RandomStartTime();
 

@@ -24,6 +24,7 @@ class SprRender;
 class RenderColor;
 class RenderShader;
 class RenderCamera;
+class SprVisitor;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -33,7 +34,7 @@ public:
 	Sprite& operator = (const Sprite& spr);
 	Sprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Sprite();
-
+	
 	virtual void OnMessage(Message msg) {}
 	
  	virtual bool Update(const RenderParams& params) { return false; }
@@ -50,6 +51,10 @@ public:
 	virtual void SetShear(const sm::vec2& shear);
 	virtual void SetOffset(const sm::vec2& offset);
 
+protected:
+	virtual bool TraverseChildren(SprVisitor& visitor) const { return true; }
+public:
+
 	/**
 	 *  @interface
 	 *    cu::Cloneable
@@ -57,6 +62,8 @@ public:
 	 *    should after other virtual
 	 */
 	virtual Sprite* Clone() const { return NULL; }
+
+	bool Traverse(SprVisitor& visitor) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }

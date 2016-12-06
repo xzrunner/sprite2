@@ -33,6 +33,9 @@ public:
 	int GetAction() const { return m_action; }
 	
 protected:
+	virtual bool TraverseChildren(SprVisitor& visitor) const;
+
+protected:
 	int m_action;
 
 	VI_DUMMY_FUNC

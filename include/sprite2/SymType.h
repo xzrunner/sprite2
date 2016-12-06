@@ -26,7 +26,6 @@ enum SymType
 	SYM_SKELETON,
 
 	SYM_DUMMY = 100,
-	SYM_PROXY,
 };
 
 }

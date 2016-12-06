@@ -55,6 +55,19 @@ AnimCurr::~AnimCurr()
 {
 }
 
+bool AnimCurr::Traverse(SprVisitor& visitor) const
+{
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
+		const Layer& layer = m_layers[i];
+		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
+			if (!layer.frame.sprs[j]->Traverse(visitor)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 void AnimCurr::OnMessage(Message msg)
 {
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {

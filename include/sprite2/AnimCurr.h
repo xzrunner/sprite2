@@ -11,6 +11,7 @@ namespace s2
 class Sprite;
 class AnimSymbol;
 class RenderParams;
+class SprVisitor;
 
 class AnimCurr
 {
@@ -20,6 +21,8 @@ public:
 	AnimCurr& operator = (const AnimCurr& curr);
 	AnimCurr(AnimSymbol* sym);
 	~AnimCurr();
+
+	bool Traverse(SprVisitor& visitor) const;
 
 	void OnMessage(Message msg);
 

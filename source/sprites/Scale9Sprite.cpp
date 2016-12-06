@@ -1,5 +1,6 @@
 #include "Scale9Sprite.h"
 #include "Scale9Symbol.h"
+#include "SprVisitor.h"
 
 #include <stddef.h>
 
@@ -24,6 +25,18 @@ Scale9Sprite* Scale9Sprite::Clone() const
 void Scale9Sprite::Resize(float width, float height)
 {
 	m_s9.SetSize(width, height);
+}
+
+bool Scale9Sprite::TraverseChildren(SprVisitor& visitor) const
+{
+	std::vector<Sprite*> grids;
+	m_s9.GetGrids(grids);
+	for (int i = 0, n = grids.size(); i < n; ++i) {
+		if (!grids[i]->Traverse(visitor)) {
+			return false;
+		}
+	}
+	return true;
 }
 
 }

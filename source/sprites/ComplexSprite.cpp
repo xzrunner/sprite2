@@ -1,6 +1,7 @@
 #include "ComplexSprite.h"
 #include "ComplexSymbol.h"
 #include "RenderParams.h"
+#include "SprVisitor.h"
 
 namespace s2
 {
@@ -74,6 +75,17 @@ void ComplexSprite::MountChild(const std::string& name, Sprite* child)
 void ComplexSprite::SetAction(const std::string& name)
 {
 	m_action = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionIdx(name);
+}
+
+bool ComplexSprite::TraverseChildren(SprVisitor& visitor) const
+{
+	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	for (int i = 0, n = children.size(); i < n; ++i) {
+		if (!children[i]->Traverse(visitor)) {
+			return false;
+		}
+	}
+	return true;
 }
 
 }

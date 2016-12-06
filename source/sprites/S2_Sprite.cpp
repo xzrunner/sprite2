@@ -9,6 +9,7 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
+#include "SprVisitor.h"
 
 #include <assert.h>
 
@@ -228,6 +229,16 @@ void Sprite::SetOffset(const sm::vec2& offset)
 
 	SetDirty(true);
 	SetWorldDirty(true);
+}
+
+bool Sprite::Traverse(SprVisitor& visitor) const
+{
+	VisitResult ret = visitor.Visit(this);
+	if (ret == VISIT_INTO) {
+		return TraverseChildren(visitor);
+	} else {
+		return ret == VISIT_CONTINUE;
+	}
 }
 
 const BoundingBox* Sprite::GetBounding() const 

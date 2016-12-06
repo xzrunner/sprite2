@@ -138,6 +138,31 @@ bool ComplexSymbol::Remove(Sprite* spr)
 	return false;
 }
 
+bool ComplexSymbol::Change(const std::string& name, Sprite* dst)
+{
+	for (int i = 0, n = m_children.size(); i < n; ++i)
+	{
+		Sprite* src = m_children[i];
+		if (src->GetName() != name) {
+			continue;
+		}
+		if (src == dst) {
+			return false;
+		}
+
+		if (src) {
+			src->RemoveReference();
+		}
+		m_children[i] = dst;
+		if (dst) {
+			dst->AddReference();
+		}
+
+		return true;
+	}
+	return false;
+}
+
 bool ComplexSymbol::Clear()
 {
 	if (m_children.empty()) {

@@ -66,6 +66,11 @@ Sprite* ComplexSprite::FetchChild(int idx) const
 	}
 }
 
+void ComplexSprite::MountChild(const std::string& name, Sprite* child)
+{
+	VI_DOWNCASTING<ComplexSymbol*>(m_sym)->Change(name, child);
+}
+
 void ComplexSprite::SetAction(const std::string& name)
 {
 	m_action = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionIdx(name);

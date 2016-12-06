@@ -44,8 +44,6 @@ Sprite::Sprite(const Sprite& spr)
 
 Sprite& Sprite::operator = (const Sprite& spr)
 {
-	++m_count;
-
 	InitFromSpr(spr);
 	return *this;
 }

@@ -19,7 +19,7 @@ AnimCurr::AnimCurr()
 }
 
 AnimCurr::AnimCurr(const AnimCurr& curr)
-	: m_sym(NULL)
+	: m_sym(curr.m_sym)
 	, m_frame(curr.m_frame)
 	, m_layers(curr.m_layers)
 	, m_start_time(curr.m_start_time)
@@ -28,13 +28,11 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_stop_during(0)
 	, m_active(curr.m_active)
 {
-	cu::RefCountObjAssign(m_sym, const_cast<AnimSymbol*>(curr.m_sym));
 }
 
 AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 {
-	m_sym = NULL;
-	cu::RefCountObjAssign(m_sym, const_cast<AnimSymbol*>(curr.m_sym));
+	m_sym = curr.m_sym;
 	m_frame = curr.m_frame;
 	m_layers = curr.m_layers;
 	m_start_time = curr.m_start_time;
@@ -46,19 +44,15 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 }
 
 AnimCurr::AnimCurr(AnimSymbol* sym)
-	: m_sym(NULL)
+	: m_sym(sym)
 	, m_frame(0)
 	, m_active(true)
 {
 	ResetTime();
-	cu::RefCountObjAssign(m_sym, sym);
 }
 
 AnimCurr::~AnimCurr()
 {
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 }
 
 void AnimCurr::OnMessage(Message msg)

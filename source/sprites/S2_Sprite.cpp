@@ -231,11 +231,16 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	SetWorldDirty(true);
 }
 
-bool Sprite::Traverse(SprVisitor& visitor) const
+bool Sprite::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
 {
-	VisitResult ret = visitor.Visit(this);
+	VisitResult ret = visitor.Visit(this, mat);
 	if (ret == VISIT_INTO) {
-		return TraverseChildren(visitor);
+		if (mat) {
+			sm::mat4 m = GetLocalMat() * (*mat);
+			return TraverseChildren(visitor, &m);
+		} else {
+			return TraverseChildren(visitor);
+		}
 	} else {
 		return ret == VISIT_CONTINUE;
 	}
@@ -453,14 +458,23 @@ sm::mat4 Sprite::GetLocalInvMat() const
 	return mat;
 }
 
-void Sprite::SetWorldMat(const sm::mat4& mat) const
-{
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		return;
-	} 
-	
-	m_geo->SetWorldMat(mat);
-}
+// void Sprite::SetWorldMat(const sm::mat4& mat) const
+// {
+// 	if (m_geo == SprDefault::Instance()->Geo()) {
+// 		return;
+// 	} 
+// 	
+// 	m_geo->SetWorldMat(mat);
+// }
+// 
+// sm::mat4 Sprite::GetWorldMat() const
+// {
+// 	if (m_geo == SprDefault::Instance()->Geo()) {
+// 		return sm::mat4();
+// 	} 
+// 
+// 	return m_geo->GetWorldMat();
+// }
 
 void Sprite::InitFlags()
 {

@@ -55,12 +55,12 @@ AnimCurr::~AnimCurr()
 {
 }
 
-bool AnimCurr::Traverse(SprVisitor& visitor) const
+bool AnimCurr::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
 {
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		const Layer& layer = m_layers[i];
 		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
-			if (!layer.frame.sprs[j]->Traverse(visitor)) {
+			if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
 				return false;
 			}
 		}

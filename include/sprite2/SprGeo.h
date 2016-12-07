@@ -25,8 +25,8 @@ public:
 	const sm::vec2& GetOffset() const { return m_local.offset; }
 	void SetOffset(const sm::vec2& offset) { m_local.offset = offset; }
 
-	void SetWorldMat(const sm::mat4& mat);
-	sm::mat4 GetWorldMat();
+// 	void SetWorldMat(const sm::mat4& mat);
+// 	sm::mat4 GetWorldMat();
 
 private:
 	struct SRT
@@ -41,16 +41,16 @@ private:
 		SRT();
 	};
 
-	struct Matrix
-	{
-		float m[6];
-
-		Matrix();
-	};
+// 	struct Matrix
+// 	{
+// 		float m[6];
+// 
+// 		Matrix();
+// 	};
 
 private:
 	SRT    m_local;
-	Matrix m_world;
+//	Matrix m_world;
 
 }; // SprGeo
 

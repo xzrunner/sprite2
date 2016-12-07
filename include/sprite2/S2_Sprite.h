@@ -52,7 +52,7 @@ public:
 	virtual void SetOffset(const sm::vec2& offset);
 
 protected:
-	virtual bool TraverseChildren(SprVisitor& visitor) const { return true; }
+	virtual bool TraverseChildren(SprVisitor& visitor, const sm::mat4* mat = NULL) const { return true; }
 public:
 
 	/**
@@ -63,7 +63,7 @@ public:
 	 */
 	virtual Sprite* Clone() const { return NULL; }
 
-	bool Traverse(SprVisitor& visitor) const;
+	bool Traverse(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }
@@ -103,7 +103,8 @@ public:
 	sm::mat4 GetLocalMat() const;
 	sm::mat4 GetLocalInvMat() const;
 
-	void SetWorldMat(const sm::mat4& mat) const;
+// 	void SetWorldMat(const sm::mat4& mat) const;
+// 	sm::mat4 GetWorldMat() const;
 
 	static int GetCount() { return m_count; }
 

@@ -27,12 +27,12 @@ void Scale9Sprite::Resize(float width, float height)
 	m_s9.SetSize(width, height);
 }
 
-bool Scale9Sprite::TraverseChildren(SprVisitor& visitor) const
+bool Scale9Sprite::TraverseChildren(SprVisitor& visitor, const sm::mat4* mat) const
 {
 	std::vector<Sprite*> grids;
 	m_s9.GetGrids(grids);
 	for (int i = 0, n = grids.size(); i < n; ++i) {
-		if (!grids[i]->Traverse(visitor)) {
+		if (!grids[i]->Traverse(visitor, mat)) {
 			return false;
 		}
 	}

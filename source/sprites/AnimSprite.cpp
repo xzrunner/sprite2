@@ -68,9 +68,9 @@ void AnimSprite::SetActive(bool active)
 	m_curr.SetActive(active);
 }
 
-bool AnimSprite::TraverseChildren(SprVisitor& visitor) const
+bool AnimSprite::TraverseChildren(SprVisitor& visitor, const sm::mat4* mat) const
 {
-	return m_curr.Traverse(visitor);
+	return m_curr.Traverse(visitor, mat);
 }
 
 void AnimSprite::RandomStartTime()

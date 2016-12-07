@@ -28,7 +28,6 @@ void Scale9Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 	if (spr) {
 		RenderParams p = params;
 		p.mt = spr->GetLocalMat() * params.mt;
-		spr->SetWorldMat(p.mt);
 		p.color = spr->GetColor() * params.color;
 		VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(p);
 	} else {

@@ -3,6 +3,8 @@
 
 #include "S2_Message.h"
 
+#include <SM_Matrix.h>
+
 #include <vector>
 
 namespace s2
@@ -22,7 +24,7 @@ public:
 	AnimCurr(AnimSymbol* sym);
 	~AnimCurr();
 
-	bool Traverse(SprVisitor& visitor) const;
+	bool Traverse(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
 
 	void OnMessage(Message msg);
 

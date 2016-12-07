@@ -33,7 +33,7 @@ public:
 	int GetAction() const { return m_action; }
 	
 protected:
-	virtual bool TraverseChildren(SprVisitor& visitor) const;
+	virtual bool TraverseChildren(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
 
 protected:
 	int m_action;

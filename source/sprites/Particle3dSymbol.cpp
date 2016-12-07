@@ -103,7 +103,6 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		rp->mat = p.mt;
 		rp->ct = p.color;
 		sm::mat4 mt = p3d_spr->GetLocalMat() * p.mt;
-		p3d_spr->SetWorldMat(p.mt);
 		p3d->mat[0] = mt.x[0];
 		p3d->mat[1] = mt.x[1];
 		p3d->mat[2] = mt.x[4];
@@ -120,7 +119,6 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	if (p3d_spr->IsLocalModeDraw()) {
 		p.mt = p3d_spr->GetLocalMat() * p.mt;
-		p3d_spr->SetWorldMat(p.mt);
 	}
 	p3d_spr->Draw(p);
 }

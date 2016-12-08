@@ -91,6 +91,11 @@ bool Particle3dSprite::Update(const RenderParams& params)
 	if (!m_spr) {
 		return true;
 	} else if (m_alone) {
+		p3d_emitter* et = m_spr->et;
+
+		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
+		cfg->start_radius = m_start_radius;
+
 		return false;
 	} else {
 		p3d_emitter* et = m_spr->et;
@@ -159,7 +164,7 @@ void Particle3dSprite::CreateSpr()
 	m_spr->et->loop        = sym->IsLoop();
 	p3d_emitter_start(m_spr->et);
 	m_spr->ptr_self        = &m_spr;
-	m_start_radius         = cfg->start_radius;
+//	m_start_radius         = cfg->start_radius;
 
 	if (m_alone && m_spr) {
 		p3d_buffer_insert(m_spr);

@@ -15,7 +15,7 @@ Particle3dSprite::Particle3dSprite()
 	: m_spr(NULL)
 	, m_alone(false)
 	, m_reuse(false)
-	, m_start_radius(0)
+	, m_start_radius(FLT_MAX)
 {
 }
 
@@ -46,6 +46,7 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_alone(false)
 	, m_reuse(false)
+	, m_start_radius(FLT_MAX)
 {
 	CreateSpr();
 }
@@ -164,7 +165,9 @@ void Particle3dSprite::CreateSpr()
 	m_spr->et->loop        = sym->IsLoop();
 	p3d_emitter_start(m_spr->et);
 	m_spr->ptr_self        = &m_spr;
-//	m_start_radius         = cfg->start_radius;
+	if (m_start_radius == FLT_MAX) {
+		m_start_radius = cfg->start_radius;
+	}
 
 	if (m_alone && m_spr) {
 		p3d_buffer_insert(m_spr);

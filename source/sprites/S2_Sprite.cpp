@@ -25,6 +25,7 @@ Sprite::Sprite()
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	m_id = m_count;
 	++m_count;
 
 	InitFlags();
@@ -37,6 +38,7 @@ Sprite::Sprite(const Sprite& spr)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	m_id = m_count;
 	++m_count;
 
 	InitFromSpr(spr);
@@ -56,6 +58,7 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	m_id = m_count;
 	++m_count;
 
 	cu::RefCountObjAssign(m_sym, sym);
@@ -475,6 +478,22 @@ sm::mat4 Sprite::GetLocalInvMat() const
 // 
 // 	return m_geo->GetWorldMat();
 // }
+
+void Sprite::AddActor(Actor* actor)
+{
+	m_actors.push_back(actor);
+}
+
+bool Sprite::RemoveActor(Actor* actor)
+{
+	for (int i = 0, n = m_actors.size(); i < n; ++i) {
+		if (m_actors[i] == actor) {
+			m_actors.erase(m_actors.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
 
 void Sprite::InitFlags()
 {

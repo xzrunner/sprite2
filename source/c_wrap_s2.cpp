@@ -1,6 +1,10 @@
-#include "c_wrap_s2.h"
-
 #include "RenderCtxStack.h"
+#include "S2_Actor.h"
+#include "ActorFactory.h"
+#include "S2_Sprite.h"
+#include "S2_Symbol.h"
+#include "SymType.h"
+#include "TextboxActor.h"
 
 namespace s2
 {
@@ -29,6 +33,33 @@ void s2_render_ctx_pop()
 {
 	RenderCtxStack* stack = RenderCtxStack::Instance();
 	stack->Pop(false);
+}
+
+extern "C"
+void* s2_get_actor(const void* parent_actor, void* child_spr) {
+	const Actor* parent = static_cast<const Actor*>(parent_actor);
+	Sprite* child = static_cast<Sprite*>(child_spr);
+	return ActorFactory::Instance()->Create(parent, child);
+}
+
+extern "C"
+void s2_actor_release(void* actor) {
+	static_cast<Actor*>(actor)->RemoveReference();
+}
+
+extern "C"
+void* s2_actor_get_spr(void* actor) {
+	return static_cast<Actor*>(actor)->GetSpr();
+}
+
+extern "C"
+void s2_actor_set_text(void* actor, const char* text) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+		return;
+	}
+	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
+	textbox->SetText(text);
 }
 
 }

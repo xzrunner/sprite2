@@ -10,6 +10,7 @@
 #include <CU_Cloneable.h>
 
 #include <string>
+#include <vector>
 
 #include <stdint.h>
 
@@ -25,6 +26,7 @@ class RenderColor;
 class RenderShader;
 class RenderCamera;
 class SprVisitor;
+class Actor;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -106,6 +108,11 @@ public:
 // 	void SetWorldMat(const sm::mat4& mat) const;
 // 	sm::mat4 GetWorldMat() const;
 
+	int GetID() const { return m_id; }
+
+	void AddActor(Actor* actor);
+	bool RemoveActor(Actor* actor);
+
 	static int GetCount() { return m_count; }
 
 private:
@@ -152,6 +159,10 @@ protected:
 	mutable uint32_t		m_flags;
 
 private:
+	int m_id;
+
+	std::vector<Actor*>     m_actors;
+
 	static int m_count;
 
 }; // Sprite

@@ -1,5 +1,7 @@
 #include "SprTreePath.h"
 
+#include <iostream>
+
 namespace s2
 {
 
@@ -21,6 +23,16 @@ bool SprTreePath::operator == (const SprTreePath& path) const
 	}
 
 	return true;
+}
+
+std::ostream & operator << (std::ostream& os, const SprTreePath& path)
+{
+	os << "[path: ";
+	for (int i = 0, n = path.m_ids.size(); i < n; ++i) {
+		os << path.m_ids[i] << ", ";
+	}
+	os << "]";
+	return os;
 }
 
 }

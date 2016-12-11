@@ -19,6 +19,9 @@ public:
 	int GetVal() const { return m_val; }
 
 private:
+	friend std::ostream & operator << (std::ostream& os, const SprTreePath& path);
+
+private:
 	std::vector<int> m_ids;
 
 	int m_val;

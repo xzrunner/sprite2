@@ -12,6 +12,7 @@ namespace s2
 {
 
 class Sprite;
+class SprTreePath;
 
 class RenderParams
 {
@@ -32,7 +33,9 @@ public:
 
 	bool disable_blend;
 	bool disable_filter;
-		
+	
+	SprTreePath* path;
+
 public:
 	RenderParams();
 

@@ -2,6 +2,7 @@
 #include "SymType.h"
 #include "Particle2dSprite.h"
 #include "RenderParams.h"
+#include "SprTreePath.h"
 
 #include <ps_2d.h>
 #include <shaderlab.h>
@@ -42,6 +43,9 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	RenderParams p = params;
 	p.mt = p2d_spr->GetLocalMat() * params.mt;
 	p.color = spr->GetColor() * params.color;
+	if (p.path) {
+		p.path->Push(spr->GetID());
+	}
 
 	p2d_spr->SetMatrix(p.mt);
 
@@ -51,6 +55,10 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	shader->SetColorMap(p.color.rmap.ToABGR(), p.color.gmap.ToABGR(), p.color.bmap.ToABGR());
 
 	p2d_spr->Draw(p);	
+
+	if (p.path) {
+		p.path->Pop();
+	}
 }
 
 sm::rect Particle2dSymbol::GetBounding(const Sprite* spr) const

@@ -27,6 +27,7 @@ class RenderShader;
 class RenderCamera;
 class SprVisitor;
 class Actor;
+class SprTreePath;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -112,6 +113,7 @@ public:
 
 	void AddActor(Actor* actor);
 	bool RemoveActor(Actor* actor);
+	const Actor* QueryActor(const SprTreePath& path) const;
 
 	static int GetCount() { return m_count; }
 

@@ -3,6 +3,7 @@
 #include "Particle3dSprite.h"
 #include "Particle3d.h"
 #include "S2_Sprite.h"
+#include "SprTreePath.h"
 
 #include <shaderlab.h>
 #include <ps_3d_sprite.h>
@@ -112,6 +113,10 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
+	if (p.path) {
+		p.path->Push(spr->GetID());
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	shader->SetColor(p.color.mul.ToABGR(), p.color.add.ToABGR());
@@ -121,6 +126,10 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		p.mt = p3d_spr->GetLocalMat() * p.mt;
 	}
 	p3d_spr->Draw(p);
+
+	if (p.path) {
+		p.path->Pop();
+	}
 }
 
 sm::rect Particle3dSymbol::GetBounding(const Sprite* spr) const

@@ -11,6 +11,7 @@ RenderParams::RenderParams()
 	, disable_render(false)
 	, disable_blend(false)
 	, disable_filter(false)
+	, path(NULL)
 {
 }
 

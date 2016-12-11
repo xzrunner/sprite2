@@ -10,6 +10,7 @@
 #include "RenderShader.h"
 #include "RenderCamera.h"
 #include "SprVisitor.h"
+#include "S2_Actor.h"
 
 #include <assert.h>
 
@@ -493,6 +494,16 @@ bool Sprite::RemoveActor(Actor* actor)
 		}
 	}
 	return false;
+}
+
+const Actor* Sprite::QueryActor(const SprTreePath& path) const
+{
+	for (int i = 0, n = m_actors.size(); i < n; ++i) {
+		if (m_actors[i]->GetTreePath() == path) {
+			return m_actors[i];
+		}
+	}
+	return NULL;
 }
 
 void Sprite::InitFlags()

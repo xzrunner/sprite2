@@ -1155,6 +1155,18 @@
 					RelativePath="..\..\..\include\sprite2\SprRender.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SprTreePath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprTreePath.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprTreePath.inl"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="symbol"

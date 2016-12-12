@@ -15,6 +15,7 @@ Anim2Curr::Anim2Curr()
 	, m_frame(0)
 	, m_sk_pose(NULL)
 	, m_sk_skin(NULL)
+	, m_active(true)
 {
 	ResetTime();
 }
@@ -27,6 +28,7 @@ Anim2Curr::Anim2Curr(const Anim2Curr& curr)
 	, m_curr_time(curr.m_curr_time)
 	, m_sk_pose(NULL)
 	, m_sk_skin(NULL)
+	, m_active(curr.m_active)
 {
 	cu::RefCountObjAssign(m_sym, const_cast<Anim2Symbol*>(curr.m_sym));
 }
@@ -41,12 +43,14 @@ Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 	m_curr_time = curr.m_curr_time;
 	m_sk_pose = NULL;
 	m_sk_skin = NULL;
+	m_active = curr.m_active;
 	return *this;
 }
 
 Anim2Curr::Anim2Curr(Anim2Symbol* sym)
 	: m_sym(NULL)
 	, m_frame(0)
+	, m_active(true)
 {
 	ResetTime();
 	cu::RefCountObjAssign(m_sym, sym);
@@ -90,6 +94,10 @@ bool Anim2Curr::Update(bool loop, int fps)
 
 	bool dirty = false;
 
+	if (!m_active) {
+		return dirty;
+	}
+
 	// update time
 	float curr_time = Animation::Instance()->GetTime() /*- m_stop_during*/;
 	assert(m_curr_time <= curr_time);
@@ -127,6 +135,13 @@ bool Anim2Curr::Update(bool loop, int fps)
 	}
 
 	return dirty;
+}
+
+void Anim2Curr::SetStaticCurrFrame(int frame)
+{
+	m_active = frame == -1;
+	m_frame = frame;
+	UpdateRigging();
 }
 
 //bool Anim2Curr::Update(bool loop, int fps)

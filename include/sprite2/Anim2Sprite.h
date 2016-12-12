@@ -27,7 +27,12 @@ public:
 
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 
+	int GetStaticTime() const { return m_static_time; }
+	void SetStaticTime(int static_time);
+
 protected:
+	int m_static_time;
+
 	Anim2Curr m_curr;
 
 	VI_DUMMY_FUNC

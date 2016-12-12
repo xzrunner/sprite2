@@ -25,6 +25,7 @@ public:
 	bool Update(bool loop = true, int fps = 30);
 
 	int GetCurrFrame() const { return m_frame; }
+	void SetStaticCurrFrame(int frame);
 
 	uint64_t* GetFramePtr(int idx) {
 		if (idx >= 0 && idx < m_frames_ptr.size()) {
@@ -53,6 +54,8 @@ private:
 
 	rg_skeleton_pose* m_sk_pose;
 	rg_skeleton_skin* m_sk_skin;
+
+	bool m_active;
 
 }; // Anim2Curr
 

@@ -266,6 +266,9 @@ void Sprite::UpdateBounding() const
 	}
 
 	sm::rect rect = m_sym->GetBounding(this);
+	if (!rect.IsValid()) {
+		return;
+	}
 	
 	if (m_geo != SprDefault::Instance()->Geo() && !m_geo->GetOffset().IsValid()) {
 		m_geo->SetOffset(rect.Center());

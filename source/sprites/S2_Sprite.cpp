@@ -11,6 +11,8 @@
 #include "RenderCamera.h"
 #include "SprVisitor.h"
 #include "S2_Actor.h"
+#include "ActorLUT.h"
+#include "ClearActorsVisitor.h"
 
 #include <assert.h>
 
@@ -84,6 +86,9 @@ Sprite::~Sprite()
 	if (m_render != SprDefault::Instance()->Render()) {
 		delete m_render;
 	}
+
+	ClearActorsVisitor visitor;
+	Traverse(visitor, NULL);
 }
 
 void Sprite::SetSymbol(Symbol* sym)
@@ -488,17 +493,6 @@ void Sprite::AddActor(Actor* actor)
 	m_actors.push_back(actor);
 }
 
-bool Sprite::RemoveActor(Actor* actor)
-{
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		if (m_actors[i] == actor) {
-			m_actors.erase(m_actors.begin() + i);
-			return true;
-		}
-	}
-	return false;
-}
-
 const Actor* Sprite::QueryActor(const SprTreePath& path) const
 {
 	for (int i = 0, n = m_actors.size(); i < n; ++i) {
@@ -507,6 +501,15 @@ const Actor* Sprite::QueryActor(const SprTreePath& path) const
 		}
 	}
 	return NULL;
+}
+
+void Sprite::ClearActors()
+{
+	for (int i = 0, n = m_actors.size(); i < n; ++i)
+	{
+		ActorLUT::Instance()->Delete(m_actors[i]);
+		delete m_actors[i];
+	}
 }
 
 void Sprite::InitFlags()

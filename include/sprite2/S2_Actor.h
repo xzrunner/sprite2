@@ -11,11 +11,11 @@ namespace s2
 
 class Sprite;
 
-class Actor : public cu::RefCountObj, private cu::Uncopyable
+class Actor : private cu::Uncopyable
 {
 public:
 	Actor(Sprite* spr, const SprTreePath& path);
-	virtual ~Actor();
+	virtual ~Actor() {}
 	
 	Sprite* GetSpr() { return m_spr; }
 	

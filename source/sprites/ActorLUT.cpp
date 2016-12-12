@@ -18,6 +18,7 @@ const int ActorLUT::HASH_SZ_TBL_SZ = sizeof(HASH_SZ_TBL) / sizeof(HASH_SZ_TBL[0]
 ActorLUT::ActorLUT()
 	: m_search_length(0)
 	, m_search_times(0)
+	, m_count(0)
 {
 	m_hash_sz_idx = 0;
 	m_hash = new std::vector<Actor*>[HASH_SZ_TBL[m_hash_sz_idx]];
@@ -32,6 +33,7 @@ void ActorLUT::Insert(Actor* actor)
 {
 	int idx = Hash(actor->GetTreePath());
 	m_hash[idx].push_back(actor);
+	++m_count;
 }
 
 bool ActorLUT::Delete(Actor* actor)
@@ -48,6 +50,7 @@ bool ActorLUT::Delete(Actor* actor)
 		++m_search_length;
 		if (list[i] == actor) {
 			list.erase(list.begin() + i);
+			--m_count;
 			return true;
 		}
 	}

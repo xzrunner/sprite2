@@ -19,6 +19,8 @@ public:
 
 	Actor* Query(const SprTreePath& path);
 
+	int Count() const { return m_count; }
+
 private:
 	static const size_t HASH_SZ_TBL[];
 	static const int HASH_SZ_TBL_SZ;
@@ -36,6 +38,8 @@ private:
 
 	int m_search_length;
 	int m_search_times;
+
+	int m_count;
 
 	SINGLETON_DECLARATION(ActorLUT);
 

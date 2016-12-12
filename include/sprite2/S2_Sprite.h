@@ -112,8 +112,8 @@ public:
 	int GetID() const { return m_id; }
 
 	void AddActor(Actor* actor);
-	bool RemoveActor(Actor* actor);
 	const Actor* QueryActor(const SprTreePath& path) const;
+	void ClearActors();
 
 	static int GetCount() { return m_count; }
 

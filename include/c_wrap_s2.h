@@ -11,9 +11,13 @@ void  s2_on_size(int w, int h);
 void  s2_render_ctx_push(float w, float h);
 void  s2_render_ctx_pop();
 
+void  s2_spr_retain(void* spr);
+void  s2_spr_release(void* spr);
+
 void* s2_get_actor(const void* parent_actor, void* child_spr);
 
-void  s2_actor_release(void* actor);
+int   s2_get_actor_count();
+
 void* s2_actor_get_spr(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);
 

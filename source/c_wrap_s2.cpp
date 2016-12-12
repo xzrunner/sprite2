@@ -5,6 +5,7 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "TextboxActor.h"
+#include "ActorLUT.h"
 
 namespace s2
 {
@@ -36,6 +37,19 @@ void s2_render_ctx_pop()
 }
 
 extern "C"
+void s2_spr_retain(void* spr) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	s2_spr->AddReference();
+}
+
+extern "C"
+void s2_spr_release(void* spr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	s2_spr->RemoveReference();
+}
+
+extern "C"
 void* s2_get_actor(const void* parent_actor, void* child_spr) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 	Sprite* child = static_cast<Sprite*>(child_spr);
@@ -43,8 +57,8 @@ void* s2_get_actor(const void* parent_actor, void* child_spr) {
 }
 
 extern "C"
-void s2_actor_release(void* actor) {
-	static_cast<Actor*>(actor)->RemoveReference();
+int s2_get_actor_count() {
+	return ActorLUT::Instance()->Count();
 }
 
 extern "C"
@@ -53,11 +67,12 @@ void* s2_actor_get_spr(void* actor) {
 }
 
 extern "C"
-void s2_actor_set_text(void* actor, const char* text) {
+void s2_actor_set_text(void* actor, const char* text) {	
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
 		return;
 	}
+
 	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
 	textbox->SetText(text);
 }

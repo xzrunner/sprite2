@@ -32,7 +32,6 @@ Actor* ActorFactory::Create(const Actor* parent, Sprite* child) const
 
 	Actor* actor = ActorLUT::Instance()->Query(path);
 	if (actor) {
-		actor->AddReference();
 		return actor;
 	}
 

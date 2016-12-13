@@ -91,6 +91,16 @@ Sprite::~Sprite()
 	Traverse(visitor, NULL);
 }
 
+void Sprite::AddReference() const
+{
+	cu::RefCountObj::AddReference();
+}
+
+void Sprite::RemoveReference() const
+{
+	cu::RefCountObj::RemoveReference();
+}
+
 void Sprite::SetSymbol(Symbol* sym)
 {
 	cu::RefCountObjAssign(m_sym, sym);

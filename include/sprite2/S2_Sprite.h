@@ -38,6 +38,13 @@ public:
 	Sprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Sprite();
 	
+	/**
+	 *  @interface
+	 *    cu::RefCountObj
+	 */
+	virtual void AddReference() const;
+	virtual void RemoveReference() const;
+
 	virtual void OnMessage(Message msg) {}
 	
  	virtual bool Update(const RenderParams& params) { return false; }

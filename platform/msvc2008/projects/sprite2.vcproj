@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\..\ejoy2d\src;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\dtex\src;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\shaderlab\src\shaderlab;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -1135,18 +1135,30 @@
 					RelativePath="..\..\..\include\sprite2\SprRender.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\SprTreePath.cpp"
+				<Filter
+					Name="visitor"
 					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprTreePath.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprTreePath.inl"
-					>
-				</File>
+					<File
+						RelativePath="..\..\..\source\sprites\ClearActorsVisitor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\ClearActorsVisitor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\PointQueryVisitor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\PointQueryVisitor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprVisitor.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="symbol"
@@ -1157,6 +1169,46 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\SymType.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="actor"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\ActorFactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ActorFactory.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\ActorLUT.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ActorLUT.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\S2_Actor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_Actor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\SprTreePath.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprTreePath.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SprTreePath.inl"
 					>
 				</File>
 			</Filter>

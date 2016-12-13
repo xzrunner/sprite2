@@ -252,16 +252,23 @@ void Sprite::SetOffset(const sm::vec2& offset)
 
 bool Sprite::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
 {
-	VisitResult ret = visitor.Visit(this, mat);
-	if (ret == VISIT_INTO) {
+	VisitResult v_ret = visitor.Visit(this, mat);
+	if (v_ret == VISIT_INTO) 
+	{
+		bool ret;
+		visitor.VisitChildrenBegin(this);
 		if (mat) {
 			sm::mat4 m = GetLocalMat() * (*mat);
-			return TraverseChildren(visitor, &m);
+			ret = TraverseChildren(visitor, &m);
 		} else {
-			return TraverseChildren(visitor);
+			ret = TraverseChildren(visitor);
 		}
-	} else {
-		return ret == VISIT_CONTINUE;
+		visitor.VisitChildrenEnd(this);
+		return ret;
+	} 
+	else 
+	{
+		return v_ret == VISIT_CONTINUE;
 	}
 }
 
@@ -526,7 +533,11 @@ void Sprite::InitFlags()
 {
 	SetBoundingDirty(true);
 	SetVisible(true);
+#ifdef S2_SPR_DEFAULT_EDITABLE
+	SetEditable(S2_SPR_DEFAULT_EDITABLE);
+#else
 	SetEditable(true);
+#endif // S2_SPR_DEFAULT_EDITABLE
 	SetDirty(false);
 }
 

@@ -31,9 +31,17 @@ bool Scale9Sprite::TraverseChildren(SprVisitor& visitor, const sm::mat4* mat) co
 {
 	std::vector<Sprite*> grids;
 	m_s9.GetGrids(grids);
-	for (int i = 0, n = grids.size(); i < n; ++i) {
-		if (!grids[i]->Traverse(visitor, mat)) {
-			return false;
+	if (visitor.GetOrder()) {
+		for (int i = 0, n = grids.size(); i < n; ++i) {
+			if (!grids[i]->Traverse(visitor, mat)) {
+				return false;
+			}
+		}
+	} else {
+		for (int i = grids.size() - 1; i >= 0; --i) {
+			if (!grids[i]->Traverse(visitor, mat)) {
+				return false;
+			}
 		}
 	}
 	return true;

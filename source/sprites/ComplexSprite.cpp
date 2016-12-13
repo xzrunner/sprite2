@@ -80,9 +80,17 @@ void ComplexSprite::SetAction(const std::string& name)
 bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const sm::mat4* mat) const
 {
 	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		if (!children[i]->Traverse(visitor, mat)) {
-			return false;
+	if (visitor.GetOrder()) {
+		for (int i = 0, n = children.size(); i < n; ++i) {
+			if (!children[i]->Traverse(visitor, mat)) {
+				return false;
+			}
+		}
+	} else {
+		for (int i = children.size() - 1; i >= 0; --i) {
+			if (!children[i]->Traverse(visitor, mat)) {
+				return false;
+			}
 		}
 	}
 	return true;

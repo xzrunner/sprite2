@@ -19,8 +19,19 @@ enum VisitResult
 class SprVisitor
 {
 public:
-	virtual VisitResult Visit(const Sprite* spr, const sm::mat4* mat) = 0;
+	SprVisitor(bool order = true);
 	virtual ~SprVisitor() {}
+
+	virtual VisitResult Visit(const Sprite* spr, const sm::mat4* mat) = 0;
+
+	virtual void VisitChildrenBegin(const Sprite* spr) {}
+	virtual void VisitChildrenEnd(const Sprite* spr) {}
+
+	bool GetOrder() const { return m_order; }
+
+private:
+	bool m_order;
+
 }; // SprVisitor
 
 }

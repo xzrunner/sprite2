@@ -14,8 +14,10 @@ namespace s2
 {
 
 PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
-	: m_pos(pos)
+	: SprVisitor(false)
+	, m_pos(pos)
 	, m_spr(NULL)
+	, m_layer_find(false)
 {
 }
 
@@ -28,8 +30,8 @@ PointQueryVisitor::~PointQueryVisitor()
 
 VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 {
-	if (m_spr) {
-		return VISIT_STOP;
+	if (!spr->IsVisible()) {
+		return VISIT_CONTINUE;
 	}
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
@@ -52,14 +54,34 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 		vertices[i] = m * vertices[i];
 	}
 	RVG::Polyline(vertices, true);
-	if (sm::is_point_in_convex(m_pos, vertices)) {	
-		spr->AddReference();
-		m_spr = spr;
+	if (sm::is_point_in_convex(m_pos, vertices)) 
+	{
+		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = m;
+		m_layer_find = true;
 		return VISIT_STOP;
-	} else {
+	}
+	else
+	{
 		return VISIT_CONTINUE;
 	}
+}
+
+void PointQueryVisitor::VisitChildrenBegin(const Sprite* spr)
+{
+	m_layer_find = false;
+	m_parents.push_back(spr);
+}
+
+void PointQueryVisitor::VisitChildrenEnd(const Sprite* spr)
+{
+	assert(!m_parents.empty() && m_parents.back() == spr);
+
+	if (m_layer_find && !m_spr->IsEditable()) {		
+		cu::RefCountObjAssign(m_spr, spr);
+	}
+
+	m_parents.pop_back();
 }
 
 }

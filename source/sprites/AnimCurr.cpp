@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#include "SprVisitor.h"
 
 #include <assert.h>
 
@@ -57,11 +58,22 @@ AnimCurr::~AnimCurr()
 
 bool AnimCurr::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
 {
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		const Layer& layer = m_layers[i];
-		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
-			if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
-				return false;
+	if (visitor.GetOrder()) {
+		for (int i = 0, n = m_layers.size(); i < n; ++i) {
+			const Layer& layer = m_layers[i];
+			for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
+				if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
+					return false;
+				}
+			}
+		}
+	} else {
+		for (int i = m_layers.size() - 1; i >= 0; --i) {
+			const Layer& layer = m_layers[i];
+			for (int j = layer.frame.sprs.size() - 1; j >= 0; --j) {
+				if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
+					return false;
+				}
 			}
 		}
 	}

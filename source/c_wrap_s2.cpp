@@ -73,6 +73,12 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	s2::PointQuery2Visitor visitor(parent->GetTreePath(), sm::vec2(x, y));
 	sm::mat4 _mat;
 	parent->GetSpr()->Traverse(visitor, &_mat);
+	mat[0] = _mat.x[0];
+	mat[1] = _mat.x[1];
+	mat[2] = _mat.x[4];
+	mat[3] = _mat.x[5];
+	mat[4] = _mat.x[12];
+	mat[5] = _mat.x[13];	
 	return visitor.GetSelectedActor();
 }
 

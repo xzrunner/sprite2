@@ -34,7 +34,7 @@ static void
 update_skin_func(void* sym, const rg_skeleton_pose* sk_pose) 
 {
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
-	if (s2_sym->Type() == s2::SYM_MESH) {
+	if (s2_sym->Type() == SYM_MESH) {
 		MeshSymbol* mesh_sym = VI_DOWNCASTING<MeshSymbol*>(s2_sym);
 		mesh_sym->UpdateMesh(sk_pose);
 	}
@@ -44,7 +44,7 @@ static void
 update_mesh_func(void* sym, const rg_tl_deform_state* deform_state, const float* vertices) 
 {
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
-	if (s2_sym->Type() == s2::SYM_MESH) {
+	if (s2_sym->Type() == SYM_MESH) {
 		MeshSymbol* mesh_sym = VI_DOWNCASTING<MeshSymbol*>(s2_sym);
 		mesh_sym->UpdateMesh(deform_state, vertices);
 	}

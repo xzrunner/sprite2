@@ -100,7 +100,7 @@ void SkeletonMesh::BindMeshNode()
 
 void SkeletonMesh::BindMeshNode(MeshNode* node)
 {
-	s2::MeshJoint* bind = NULL;
+	MeshJoint* bind = NULL;
 	float nearest = FLT_MAX;
 	const MeshJoint* root = m_skeleton.GetRoot();
 	std::queue<const MeshJoint*> buf;
@@ -108,9 +108,9 @@ void SkeletonMesh::BindMeshNode(MeshNode* node)
 	while (!buf.empty())
 	{
 		const MeshJoint* parent = buf.front(); buf.pop();
-		const std::vector<s2::MeshJoint*>& children = parent->GetChildren();
+		const std::vector<MeshJoint*>& children = parent->GetChildren();
 		for (int i = 0, n = children.size(); i < n; ++i) {
-			s2::MeshJoint* child = children[i];
+			MeshJoint* child = children[i];
 			float dis = sm::dis_pos_to_seg(node->ori_xy, parent->GetWorldPose().trans, child->GetWorldPose().trans);
 			if (dis < nearest) {
 				nearest = dis;

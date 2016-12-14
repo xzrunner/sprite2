@@ -78,7 +78,7 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
 	sm::vec2 base_t = (base_e - base_s) * process + base_s;
 	tween->SetPosition(base_t -  offset);
 
-	s2::RenderColor rc = tween->GetColor();
+	RenderColor rc = tween->GetColor();
 	rc.add = color_interpolate(begin->GetColor().add, end->GetColor().add, process);
 	rc.mul = color_interpolate(begin->GetColor().mul, end->GetColor().mul, process);
 	tween->SetColor(rc);

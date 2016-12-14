@@ -42,7 +42,7 @@ sm::rect Skeleton::GetBounding() const
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
 	{
 		const Joint* joint = m_all_joints[i];
-		const s2::Sprite* spr = joint->GetSkinSpr();
+		const Sprite* spr = joint->GetSkinSpr();
 		if (spr) {
 			spr->GetBounding()->CombineTo(b);
 		} else {
@@ -57,7 +57,7 @@ const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
 	{
 		const Joint* joint = m_all_joints[i];
-		const s2::Sprite* spr = joint->GetSkinSpr();
+		const Sprite* spr = joint->GetSkinSpr();
 		if (spr) {
 			if (spr->GetBounding()->IsContain(pos)) {
 				return joint;

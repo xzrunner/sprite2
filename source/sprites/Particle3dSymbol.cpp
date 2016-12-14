@@ -39,7 +39,7 @@ Particle3dSymbol::~Particle3dSymbol()
 	}
 
 	for (int i = 0, n = m_et->cfg->sym_count; i < n; ++i) {
-		s2::Symbol* sym = static_cast<s2::Symbol*>(m_et->cfg->syms[i].ud);
+		Symbol* sym = static_cast<Symbol*>(m_et->cfg->syms[i].ud);
 		sym->RemoveReference();
 	}
 

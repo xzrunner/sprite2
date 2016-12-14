@@ -73,6 +73,9 @@ Sprite::~Sprite()
 {
 	--m_count;
 
+	ClearActorsVisitor visitor;
+	Traverse(visitor, NULL);
+
 	if (m_sym) {
 		m_sym->RemoveReference();
 	}
@@ -86,9 +89,6 @@ Sprite::~Sprite()
 	if (m_render != SprDefault::Instance()->Render()) {
 		delete m_render;
 	}
-
-	ClearActorsVisitor visitor;
-	Traverse(visitor, NULL);
 }
 
 void Sprite::AddReference() const

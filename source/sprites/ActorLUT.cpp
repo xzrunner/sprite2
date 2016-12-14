@@ -95,6 +95,8 @@ void ActorLUT::Rehash()
 
 	delete[] m_hash;
 	m_hash = new_hash;
+
+	m_search_length = m_search_times = 0;
 }
 
 int ActorLUT::Hash(const SprTreePath& path) const

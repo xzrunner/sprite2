@@ -6,6 +6,9 @@
 #include "SymType.h"
 #include "TextboxActor.h"
 #include "ActorLUT.h"
+#include "PointQuery2Visitor.h"
+
+#include <iostream>
 
 namespace s2
 {
@@ -50,10 +53,39 @@ void s2_spr_release(void* spr)
 }
 
 extern "C"
+int s2_spr_get_id(void* spr) {
+	return static_cast<Sprite*>(spr)->GetID();
+}
+
+extern "C"
+int s2_spr_get_ref_count(void* spr) {
+	return static_cast<Sprite*>(spr)->GetRefCount();
+}
+
+extern "C"
+const char* s2_spr_get_name(void* spr) {
+	return static_cast<Sprite*>(spr)->GetName().c_str();	
+}
+
+extern "C"
+void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
+	const s2::Actor* parent = static_cast<const s2::Actor*>(parent_actor);
+	s2::PointQuery2Visitor visitor(parent->GetTreePath(), sm::vec2(x, y));
+	sm::mat4 _mat;
+	parent->GetSpr()->Traverse(visitor, &_mat);
+	return visitor.GetSelectedActor();
+}
+
+extern "C"
 void* s2_get_actor(const void* parent_actor, void* child_spr) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 	Sprite* child = static_cast<Sprite*>(child_spr);
-	return ActorFactory::Instance()->Create(parent, child);
+	if (parent) {
+		return ActorFactory::Instance()->Create(parent->GetTreePath(), child);
+	} else {
+		s2::SprTreePath path;
+		return ActorFactory::Instance()->Create(path, child);
+	}
 }
 
 extern "C"
@@ -63,7 +95,7 @@ int s2_get_actor_count() {
 
 extern "C"
 void* s2_actor_get_spr(void* actor) {
-	return static_cast<Actor*>(actor)->GetSpr();
+	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
 }
 
 extern "C"
@@ -75,6 +107,12 @@ void s2_actor_set_text(void* actor, const char* text) {
 
 	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
 	textbox->SetText(text);
+}
+
+extern "C"
+void s2_actor_print_path(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	std::cout << s2_actor->GetTreePath() << '\n';
 }
 
 }

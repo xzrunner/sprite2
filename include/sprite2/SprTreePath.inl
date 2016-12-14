@@ -5,6 +5,12 @@ namespace s2
 {
 
 inline
+bool SprTreePath::Empty() const
+{
+	return m_ids.empty();
+}
+
+inline
 void SprTreePath::Push(int id) 
 { 
 	m_ids.push_back(id);
@@ -20,6 +26,12 @@ void SprTreePath::Pop()
 
 	m_val -= m_ids.back();
 	m_ids.pop_back();
+}
+
+inline
+int SprTreePath::Top() const 
+{
+	return m_ids.empty() ? -1 : m_ids.back();
 }
 
 }

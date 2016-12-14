@@ -505,7 +505,7 @@ sm::mat4 Sprite::GetLocalInvMat() const
 // 	return m_geo->GetWorldMat();
 // }
 
-void Sprite::AddActor(Actor* actor)
+void Sprite::AddActor(Actor* actor) const
 {
 	m_actors.push_back(actor);
 }
@@ -520,7 +520,7 @@ const Actor* Sprite::QueryActor(const SprTreePath& path) const
 	return NULL;
 }
 
-void Sprite::ClearActors()
+void Sprite::ClearActors() const
 {
 	for (int i = 0, n = m_actors.size(); i < n; ++i)
 	{

@@ -11,7 +11,7 @@ namespace s2
 class DummyActor : public Actor
 {
 public:
-	DummyActor(Sprite* spr, const SprTreePath& path)
+	DummyActor(const Sprite* spr, const SprTreePath& path)
 		: Actor(spr, path) {}
 
 }; // DummyActor

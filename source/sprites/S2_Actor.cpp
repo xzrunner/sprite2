@@ -4,7 +4,7 @@
 namespace s2
 {
 
-Actor::Actor(Sprite* spr, const SprTreePath& path)
+Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	: m_spr(spr)
 	, m_path(path)
 {

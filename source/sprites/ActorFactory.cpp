@@ -20,14 +20,11 @@ ActorFactory::ActorFactory()
 {
 }
 
-Actor* ActorFactory::Create(const Actor* parent, Sprite* child) const
+Actor* ActorFactory::Create(const SprTreePath& parent, const Sprite* child) const
 {
 	assert(child);
 
-	SprTreePath path;
-	if (parent) {
-		path = parent->GetTreePath();
-	}
+	SprTreePath path = parent;
 	path.Push(child->GetID());
 
 	Actor* actor = ActorLUT::Instance()->Query(path);

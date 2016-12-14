@@ -118,9 +118,9 @@ public:
 
 	int GetID() const { return m_id; }
 
-	void AddActor(Actor* actor);
+	void AddActor(Actor* actor) const;
 	const Actor* QueryActor(const SprTreePath& path) const;
-	void ClearActors();
+	void ClearActors() const;
 
 	static int GetCount() { return m_count; }
 
@@ -170,7 +170,7 @@ protected:
 private:
 	int m_id;
 
-	std::vector<Actor*>     m_actors;
+	mutable std::vector<Actor*> m_actors;
 
 	static int m_count;
 

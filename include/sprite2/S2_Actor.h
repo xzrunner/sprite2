@@ -14,15 +14,15 @@ class Sprite;
 class Actor : private cu::Uncopyable
 {
 public:
-	Actor(Sprite* spr, const SprTreePath& path);
+	Actor(const Sprite* spr, const SprTreePath& path);
 	virtual ~Actor() {}
 	
-	Sprite* GetSpr() { return m_spr; }
+	const Sprite* GetSpr() const { return m_spr; }
 	
 	const SprTreePath& GetTreePath() const { return m_path; }
 	
 private:
-	Sprite* m_spr;
+	const Sprite* m_spr;
 
 	SprTreePath m_path;
 

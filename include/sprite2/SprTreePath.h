@@ -13,8 +13,11 @@ public:
 
 	bool operator == (const SprTreePath& path) const;
 
+	bool Empty() const;
+
 	void Push(int id);
 	void Pop();
+	int Top() const;
 
 	int GetVal() const { return m_val; }
 

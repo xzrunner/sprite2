@@ -11,8 +11,6 @@
 
 #include <assert.h>
 
-#include <iostream>
-
 namespace s2
 {
 
@@ -63,9 +61,6 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const sm::mat4* mat)
 		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = m;
 		m_layer_find = true;
-
-		printf("++ query %d %s\n", m_spr->GetID(), m_spr->GetName());		
-
 		return VISIT_STOP;
 	}
 	else
@@ -86,7 +81,6 @@ void PointQuery2Visitor::VisitChildrenEnd(const Sprite* spr)
 
 	if (m_layer_find && !m_spr->IsEditable()) {
 		cu::RefCountObjAssign(m_spr, spr);
-		printf("++ query %d %s\n", m_spr->GetID(), m_spr->GetName());
 	}
 
 	m_parent.Pop();
@@ -94,7 +88,9 @@ void PointQuery2Visitor::VisitChildrenEnd(const Sprite* spr)
 
 Actor* PointQuery2Visitor::GetSelectedActor() const
 {
-	std::cout << m_parent << m_spr->GetID() << "\n";
+	if (!m_spr) {
+		return NULL;
+	}
 	return ActorFactory::Instance()->Create(m_parent, m_spr);
 }
 

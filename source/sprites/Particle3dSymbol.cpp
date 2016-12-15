@@ -90,7 +90,8 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p = params;
+	p.color = spr->GetColor() * params.color;
 
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 	p3d_spr->SetOuterMatrix(p.mt);
@@ -111,6 +112,8 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		p3d->mat[5] = mt.x[13];	
 		return;
 	}
+
+	p.path.Push(spr->GetID());
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));

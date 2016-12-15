@@ -1188,6 +1188,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\ActorGeo.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ActorGeo.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\ActorLUT.cpp"
 					>
 				</File>

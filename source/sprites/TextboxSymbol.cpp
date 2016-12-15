@@ -3,8 +3,8 @@
 #include "TextboxSprite.h"
 #include "RenderParams.h"
 #include "RenderFilter.h"
-#include "SprTreePath.h"
 #include "TextboxActor.h"
+#include "DrawNode.h"
 
 #include <gtxt_label.h>
 #include <shaderlab.h>
@@ -33,16 +33,13 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	const std::string* text = NULL;
-	if (p.path) {
-		p.path->Push(spr->GetID());
-		const Actor* actor = spr->QueryActor(*p.path);
-		if (actor) {
-			const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);
-			text = &tb_actor->GetText();
-		}
+	const Actor* actor = spr->QueryActor(p.path);
+	if (actor) {
+		const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);
+		text = &tb_actor->GetText();
 	}
 	
  	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
@@ -53,11 +50,6 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
  	if (!text) {
  		return;
  	}
-
-	if (spr) {
-		p.mt = spr->GetLocalMat() * p.mt;
-		p.color = spr->GetColor() * p.color;
-	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (p.shader.GetFilter() && p.shader.GetFilter()->GetMode() == sl::FM_GRAY) {
@@ -94,10 +86,6 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	DrawText(s, p.mt, p.color.mul, p.color.add, *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
-
-	if (p.path) {
-		p.path->Pop();
-	}
 }
 
 sm::rect TextboxSymbol::GetBounding(const Sprite* spr) const

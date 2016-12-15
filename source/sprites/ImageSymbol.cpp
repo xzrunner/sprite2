@@ -3,7 +3,7 @@
 #include "Texture.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <SM_Matrix.h>
 #include <shaderlab.h>
@@ -38,14 +38,7 @@ int ImageSymbol::Type() const
 
 void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
@@ -69,10 +62,6 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		} else {
 			DrawPseudo3D(p, vertices, texcoords, texid);
 		}
-	}
-
-	if (spr && p.path) {
-		p.path->Pop();
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "Shape.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
+#include "DrawNode.h"
 
 namespace s2
 {
@@ -37,9 +38,8 @@ void ShapeSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 
 	if (spr) {
-		sm::mat4 mt = spr->GetLocalMat() * params.mt;
-		RenderColor color = spr->GetColor() * params.color;
-		m_shape->Draw(mt, color);
+		RenderParams p = DrawNode::Prepare(params, spr);
+		m_shape->Draw(p.mt, p.color);
 	}
 }
 

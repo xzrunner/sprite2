@@ -5,7 +5,6 @@
 #include "DrawMask.h"
 #include "DrawNode.h"
 #include "BoundingBox.h"
-#include "SprTreePath.h"
 
 namespace s2
 {
@@ -40,14 +39,7 @@ int MaskSymbol::Type() const
 
 void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 	if (m_base && m_mask) {
 		DrawMask::Draw(m_base, m_mask, p);
 	} else {
@@ -56,10 +48,6 @@ void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		} else if (m_mask) {
 			DrawNode::Draw(m_mask, p);
 		}
-	}
-
-	if (spr && p.path) {
-		p.path->Pop();
 	}
 }
 

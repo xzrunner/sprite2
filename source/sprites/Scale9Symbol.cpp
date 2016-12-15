@@ -3,7 +3,7 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "Scale9Sprite.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <assert.h>
 
@@ -27,16 +27,8 @@ int Scale9Symbol::Type() const
 void Scale9Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
 	if (spr) {
-		RenderParams p = params;
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
+		RenderParams p = DrawNode::Prepare(params, spr);
 		VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(p);
-		if (p.path) {
-			p.path->Pop();
-		}
 	} else {
 		m_s9.Draw(params);
 	}

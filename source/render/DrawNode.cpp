@@ -1,6 +1,7 @@
 #include "DrawNode.h"
-#include "S2_Sprite.h"
 #include "S2_Symbol.h"
+#include "S2_Sprite.h"
+#include "S2_Actor.h"
 #include "RenderFilter.h"
 #include "DrawBlend.h"
 #include "RFGaussianBlur.h"
@@ -20,6 +21,27 @@ static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
 	AFTER_SPR = after_spr;
+}
+
+RenderParams DrawNode::Prepare(const RenderParams& parent, const Sprite* spr)
+{
+	if (!spr) {
+		return parent;
+	}
+
+	RenderParams ret = parent;
+
+	ret.path.Push(spr->GetID());
+
+	ret.mt = spr->GetLocalMat() * parent.mt;
+	ret.color = spr->GetColor() * parent.color;
+
+	const Actor* actor = spr->QueryActor(ret.path);
+	if (actor) {
+		ret.mt = actor->GetLocalMat() * ret.mt;
+	}
+
+	return ret;
 }
 
 void DrawNode::Draw(const Sprite* spr, const RenderParams& params)

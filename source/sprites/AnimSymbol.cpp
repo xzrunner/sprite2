@@ -5,7 +5,7 @@
 #include "BoundingBox.h"
 #include "RenderParams.h"
 #include "AnimLerp.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <assert.h>
 
@@ -46,16 +46,8 @@ int AnimSymbol::Type() const
 void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {	
 	if (spr) {
-		RenderParams p = params;
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
+		RenderParams p = DrawNode::Prepare(params, spr);
 		VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(p);
-		if (p.path) {
-			p.path->Pop();
-		}
 	} else {
 		m_curr.Draw(params);
 	}

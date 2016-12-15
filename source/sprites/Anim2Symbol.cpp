@@ -4,7 +4,6 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
-#include "SprTreePath.h"
 
 #include <rigging.h>
 
@@ -40,22 +39,11 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &p);
-
-	if (spr && p.path) {
-		p.path->Pop();
-	}
 }
 
 sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const

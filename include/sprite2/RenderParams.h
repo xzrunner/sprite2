@@ -5,6 +5,7 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
+#include "SprTreePath.h"
 
 #include <SM_Matrix.h>
 
@@ -34,7 +35,7 @@ public:
 	bool disable_blend;
 	bool disable_filter;
 	
-	SprTreePath* path;
+	SprTreePath path;
 
 public:
 	RenderParams();

@@ -3,7 +3,7 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "PolygonShape.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <shaderlab.h>
 
@@ -31,14 +31,7 @@ int TextureSymbol::Type() const
 
 void TextureSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -47,10 +40,6 @@ void TextureSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
 		m_polygons[i]->Draw(p.mt, p.color);
-	}
-
-	if (spr && p.path) {
-		p.path->Pop();
 	}
 }
 

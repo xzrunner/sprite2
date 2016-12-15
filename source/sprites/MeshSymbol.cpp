@@ -6,7 +6,7 @@
 #include "RenderParams.h"
 #include "MeshTransform.h"
 #include "DrawMesh.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <shaderlab.h>
 
@@ -44,14 +44,7 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
@@ -77,10 +70,6 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		if (spd.x != 0 || spd.y != 0) {
 			m_mesh->OffsetUV(spd.x, spd.y);
 		}
-	}
-
-	if (spr && p.path) {
-		p.path->Pop();
 	}
 }
 

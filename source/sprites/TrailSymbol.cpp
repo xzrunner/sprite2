@@ -3,7 +3,7 @@
 #include "TrailSprite.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <mt_2d.h>
 #include <shaderlab.h>
@@ -42,11 +42,7 @@ void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
-	p.color = spr->GetColor() * params.color;
-	if (p.path) {
-		p.path->Push(spr->GetID());
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -55,10 +51,6 @@ void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
 	t2d_spr->Draw(p);
-
-	if (p.path) {
-		p.path->Pop();
-	}
 }
 
 sm::rect TrailSymbol::GetBounding(const Sprite* spr) const

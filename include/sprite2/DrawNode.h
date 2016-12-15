@@ -16,6 +16,8 @@ class DrawNode
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
 
+	static RenderParams Prepare(const RenderParams& parent, const Sprite* spr);
+
 	static void Draw(const Sprite* spr, const RenderParams& params = RenderParams());
 
 	static void Draw(const Symbol* sym, 

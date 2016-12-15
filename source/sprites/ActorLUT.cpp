@@ -1,6 +1,5 @@
 #include "ActorLUT.h"
 #include "S2_Actor.h"
-#include "SprTreePath.h"
 
 #include <logger.h>
 

@@ -2,7 +2,7 @@
 #include "SymType.h"
 #include "Particle2dSprite.h"
 #include "RenderParams.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <ps_2d.h>
 #include <shaderlab.h>
@@ -38,15 +38,9 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
+	RenderParams p = DrawNode::Prepare(params, spr);
+
 	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
-
-	RenderParams p = params;
-	p.mt = p2d_spr->GetLocalMat() * params.mt;
-	p.color = spr->GetColor() * params.color;
-	if (p.path) {
-		p.path->Push(spr->GetID());
-	}
-
 	p2d_spr->SetMatrix(p.mt);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -54,11 +48,7 @@ void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	shader->SetColor(p.color.mul.ToABGR(), p.color.add.ToABGR());
 	shader->SetColorMap(p.color.rmap.ToABGR(), p.color.gmap.ToABGR(), p.color.bmap.ToABGR());
 
-	p2d_spr->Draw(p);	
-
-	if (p.path) {
-		p.path->Pop();
-	}
+	p2d_spr->Draw(p);
 }
 
 sm::rect Particle2dSymbol::GetBounding(const Sprite* spr) const

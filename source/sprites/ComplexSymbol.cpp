@@ -6,7 +6,6 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
-#include "SprTreePath.h"
 
 #include <map>
 
@@ -36,18 +35,10 @@ int ComplexSymbol::Type() const
 
 void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
+	RenderParams p = DrawNode::Prepare(params, spr);
+
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
-
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
-
 	if (scissor) {
 		sm::vec2 min = p.mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
 			     max = p.mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
@@ -71,10 +62,6 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	if (scissor) {
 		RenderScissor::Instance()->Pop();
-	}
-
-	if (spr && p.path) {
-		p.path->Pop();
 	}
 }
 

@@ -1,6 +1,5 @@
 #include "ActorFactory.h"
 #include "ActorLUT.h"
-#include "SprTreePath.h"
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"

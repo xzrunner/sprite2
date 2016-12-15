@@ -71,8 +71,6 @@ void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float
 {
 	RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
-	SprTreePath path;
-	params.path = &path;
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	DrawNode::Draw(s2_spr, params);
 }
@@ -561,6 +559,24 @@ extern "C"
 void s2_actor_print_path(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	std::cout << s2_actor->GetTreePath() << '\n';
+}
+
+extern "C"
+void s2_actor_set_pos(void* actor, float x, float y) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->SetPosition(sm::vec2(x, y));
+}
+
+extern "C"
+void s2_actor_set_angle(void* actor, float angle) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->SetAngle(angle);
+}
+
+extern "C"
+void s2_actor_set_scale(void* actor, float sx, float sy) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->SetScale(sm::vec2(sx, sy));
 }
 
 }

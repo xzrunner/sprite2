@@ -96,6 +96,10 @@ void* s2_actor_get_spr(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);
 void  s2_actor_print_path(void* actor);
 
+void  s2_actor_set_pos(void* actor, float x, float y);
+void  s2_actor_set_angle(void* actor, float angle);
+void  s2_actor_set_scale(void* actor, float sx, float sy);
+
 #endif // _sprite2_wrap_c_h_
 
 #ifdef __cplusplus

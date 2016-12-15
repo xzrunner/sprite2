@@ -5,7 +5,7 @@
 #include "Skeleton.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 namespace s2
 {
@@ -39,21 +39,12 @@ void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
+	RenderParams p = DrawNode::Prepare(params, spr);
 	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
 	}
 	m_skeleton->Draw(p);
-	if (spr && p.path) {
-		p.path->Pop();
-	}
 }
 
 sm::rect SkeletonSymbol::GetBounding(const Sprite* spr) const

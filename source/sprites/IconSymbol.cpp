@@ -3,7 +3,7 @@
 #include "IconSprite.h"
 #include "Icon.h"
 #include "RenderParams.h"
-#include "SprTreePath.h"
+#include "DrawNode.h"
 
 #include <shaderlab.h>
 
@@ -39,14 +39,7 @@ void IconSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = params;
-	if (spr) {
-		p.mt = spr->GetLocalMat() * params.mt;
-		p.color = spr->GetColor() * params.color;
-		if (p.path) {
-			p.path->Push(spr->GetID());
-		}
-	}
+	RenderParams p = DrawNode::Prepare(params, spr);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -58,10 +51,6 @@ void IconSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
 	}
 	m_icon->Draw(p, process);
-
-	if (spr && p.path) {
-		p.path->Pop();
-	}
 }
 
 sm::rect IconSymbol::GetBounding(const Sprite* spr) const

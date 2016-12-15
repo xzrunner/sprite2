@@ -31,7 +31,7 @@ sm::vec2 LerpCircle::Lerp(const sm::vec2& begin, const sm::vec2& end, float proc
 	sm::vec2 c = (begin + end) * 0.5f;
 	float angle = SM_PI * process;
 
-	sm::vec2 ret = sm::rotate_vector(begin - c, angle);
+	sm::vec2 ret = sm::rotate_vector(begin - c, angle) + c;
 
 	if (m_scale != 1) 
 	{

@@ -19,12 +19,12 @@ public:
 	static void DrawTexture(const Mesh* mesh, const RenderParams& params, 
 		const Symbol* base_sym = NULL);
 
-	static void DrawOnlyMesh(const Mesh* mesh, const RenderParams& params, int texid);
+	static void DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid);
 
 private:
 	static void DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 		const Symbol* base_sym = NULL);
-	static void DrawTmpToScreen(const Mesh* mesh, const RenderParams& params);
+	static void DrawTmpToScreen(const Mesh* mesh, const sm::mat4& mt);
 
 }; // DrawMesh
 

@@ -91,16 +91,14 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params,
 
 	RenderScissor::Instance()->Open();
 
-	DrawTmpToScreen(mesh, params);
+	DrawTmpToScreen(mesh, params.mt);
 }
 
-void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const RenderParams& params, int texid)
+void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
-	shader->SetColorMap(params.color.rmap.ToABGR(), params.color.gmap.ToABGR(), params.color.bmap.ToABGR());
 
 	int dst_edge = dtexf_t0_get_texture_size();
 	float ori_w = mesh->GetWidth(),
@@ -113,7 +111,7 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const RenderParams& params, int te
 		sm::vec2 vertices[4], texcoords[4];
 		for (int i = 0; i < 3; ++i)
 		{
-			vertices[i] = params.mt * tri->nodes[i]->xy;
+			vertices[i] = mt * tri->nodes[i]->xy;
 			texcoords[i].x = (tri->nodes[i]->uv.x * ori_w - ori_w * 0.5f + dst_edge * 0.5f) / dst_edge;
 			texcoords[i].y = (tri->nodes[i]->uv.y * ori_h - ori_h * 0.5f + dst_edge * 0.5f) / dst_edge;
 		}
@@ -143,9 +141,9 @@ void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 	dtexf_t0_unbind();
 }
 
-void DrawMesh::DrawTmpToScreen(const Mesh* mesh, const RenderParams& params)
+void DrawMesh::DrawTmpToScreen(const Mesh* mesh, const sm::mat4& mt)
 {
-	DrawOnlyMesh(mesh, params, dtexf_t0_get_texture_id());
+	DrawOnlyMesh(mesh, mt, dtexf_t0_get_texture_id());
 }
 
 }

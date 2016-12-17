@@ -50,7 +50,7 @@ public:
  	virtual bool Update(const RenderParams& params) { return false; }
 	virtual Sprite* FetchChild(const std::string& name) const { return NULL; }
 	virtual Sprite* FetchChild(int idx) const { return NULL; }
-	virtual void MountChild(const std::string& name, Sprite* child) {}
+	virtual void MountChild(const SprTreePath& path, const std::string& name, Sprite* child) {}
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -121,6 +121,7 @@ public:
 	void AddActor(Actor* actor) const;
 	const Actor* QueryActor(const SprTreePath& path) const;
 	void ClearActors() const;
+	void FixActorPath(const SprTreePath& path);
 
 	static int GetCount() { return m_count; }
 

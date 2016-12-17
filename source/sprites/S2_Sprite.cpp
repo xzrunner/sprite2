@@ -529,6 +529,22 @@ void Sprite::ClearActors() const
 	}
 }
 
+void Sprite::FixActorPath(const SprTreePath& path)
+{
+	if (m_actors.empty()) {
+		return;
+	}
+	SprTreePath this_path(path);
+	this_path.Push(m_id);
+	for (int i = 0, n = m_actors.size(); i < n; ++i) 
+	{
+		Actor* actor = m_actors[i];
+		ActorLUT::Instance()->Delete(actor);
+		actor->SetTreePath(this_path);
+		ActorLUT::Instance()->Insert(actor);		
+	}
+}
+
 void Sprite::InitFlags()
 {
 	SetBoundingDirty(true);

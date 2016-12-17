@@ -28,7 +28,6 @@ void  s2_spr_update(void* spr);
 
 void* s2_spr_fetch_child(const void* spr, const char* name);
 void* s2_spr_fetch_child_by_index(const void* spr, int idx);
-void  s2_spr_mount_child(void* parent, const char* name, void* child);
 
 void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);
@@ -92,6 +91,8 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();
 
+void  s2_actor_mount_child(void* parent, const char* name, void* child);
+
 void* s2_actor_get_spr(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);
 void  s2_actor_print_path(void* actor);
@@ -99,6 +100,8 @@ void  s2_actor_print_path(void* actor);
 void  s2_actor_set_pos(void* actor, float x, float y);
 void  s2_actor_set_angle(void* actor, float angle);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
+
+void* s2_actor_get_parent(void* actor);
 
 #endif // _sprite2_wrap_c_h_
 

@@ -14,7 +14,7 @@ inline
 void SprTreePath::Push(int id) 
 { 
 	m_ids.push_back(id);
-	m_val += id;
+	m_val += id * m_ids.size();
 }
 
 inline
@@ -24,7 +24,7 @@ void SprTreePath::Pop()
 		return;
 	}
 
-	m_val -= m_ids.back();
+	m_val -= m_ids.back() * m_ids.size();
 	m_ids.pop_back();
 }
 

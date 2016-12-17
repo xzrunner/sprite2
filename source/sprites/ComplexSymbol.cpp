@@ -6,8 +6,11 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
+#include "FixActorPathVisitor.h"
 
 #include <map>
+
+#include <assert.h>
 
 namespace s2
 {
@@ -132,29 +135,37 @@ bool ComplexSymbol::Remove(Sprite* spr)
 	return false;
 }
 
-bool ComplexSymbol::Change(const std::string& name, Sprite* dst)
+bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Sprite* dst)
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i)
-	{
-		Sprite* src = m_children[i];
-		if (src->GetName() != name) {
-			continue;
+	int idx = -1;
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		if (m_children[i]->GetName() == name) {
+			idx = i;
+			break;
 		}
-		if (src == dst) {
-			return false;
-		}
+	}
 
-		if (src) {
-			src->RemoveReference();
-		}
-		m_children[i] = dst;
-		if (dst) {
-			dst->AddReference();
-		}
+	if (idx == -1 || m_children[idx] == dst) {
+		return false;
+	}
 
+	if (!dst) {
+		m_children[idx]->RemoveReference();
+		m_children.erase(m_children.begin() + idx);
 		return true;
 	}
-	return false;
+
+	assert(m_children[idx]);
+
+	m_children[idx]->RemoveReference();
+	m_children[idx] = dst;
+	dst->SetName(name);
+	dst->AddReference();
+
+	FixActorPathVisitor visitor(path);
+	dst->Traverse(visitor, NULL);
+
+	return true;
 }
 
 bool ComplexSymbol::Clear()

@@ -8,6 +8,8 @@
 namespace s2
 {
 
+class SprTreePath;
+
 class ComplexSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
@@ -37,7 +39,7 @@ public:
 	// todo up action
 	bool Add(Sprite* spr, int idx = -1);
 	bool Remove(Sprite* spr);
-	bool Change(const std::string& name, Sprite* dst);
+	bool Change(const SprTreePath& path, const std::string& name, Sprite* dst);
 	bool Clear();
 	bool ResetOrder(const Sprite* spr, bool up);
 	bool ResetOrderMost(const Sprite* spr, bool up);

@@ -23,6 +23,7 @@ public:
 	const Sprite* GetSpr() const { return m_spr; }
 	
 	const SprTreePath& GetTreePath() const { return m_path; }
+	void SetTreePath(const SprTreePath& path) { m_path = path; }
 
 	void SetPosition(const sm::vec2& pos);
 	void SetAngle(float angle);

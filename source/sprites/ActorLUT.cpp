@@ -78,7 +78,7 @@ Actor* ActorLUT::Query(const SprTreePath& path)
 void ActorLUT::Rehash()
 {
 	if (m_hash_sz_idx + 1 >= HASH_SZ_TBL_SZ) {
-		LOGW("ActorLUT::Rehash error hash sz idx %d\n", m_hash_sz_idx);
+		LOGW("ActorLUT::Rehash error hash sz idx %d, %f\n", m_hash_sz_idx, (float)m_search_length / m_search_times);
 		return;
 	}
 

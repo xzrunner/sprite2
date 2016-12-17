@@ -101,11 +101,6 @@ void* s2_spr_fetch_child_by_index(const void* spr, int idx) {
 }
 
 extern "C"
-void s2_spr_mount_child(void* parent, const char* name, void* child) {
-	static_cast<Sprite*>(parent)->MountChild(name, static_cast<Sprite*>(child));
-}
-
-extern "C"
 void s2_spr_set_pos(void* spr, float x, float y) {
 	static_cast<Sprite*>(spr)->SetPosition(sm::vec2(x, y));
 }
@@ -540,6 +535,13 @@ int s2_get_actor_count() {
 }
 
 extern "C"
+void s2_actor_mount_child(void* parent, const char* name, void* child) {
+	Actor* actor = static_cast<Actor*>(parent);
+	Sprite* spr = const_cast<Sprite*>(actor->GetSpr());
+	spr->MountChild(actor->GetTreePath(), name, static_cast<Sprite*>(child));
+}
+
+extern "C"
 void* s2_actor_get_spr(void* actor) {
 	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
 }
@@ -577,6 +579,18 @@ extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetScale(sm::vec2(sx, sy));
+}
+
+extern "C"
+void* s2_actor_get_parent(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetTreePath().Empty()) {
+		return NULL;
+	}
+
+	SprTreePath path = s2_actor->GetTreePath();
+	path.Pop();
+	return ActorLUT::Instance()->Query(path);
 }
 
 }

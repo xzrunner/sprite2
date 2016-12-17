@@ -26,7 +26,7 @@ public:
 	virtual bool Update(const RenderParams& params);
 	virtual Sprite* FetchChild(const std::string& name) const;
 	virtual Sprite* FetchChild(int idx) const;
-	virtual void MountChild(const std::string& name, Sprite* child);
+	virtual void MountChild(const SprTreePath& path, const std::string& name, Sprite* child);
 
 	void SetAction(const std::string& name);
 	void SetAction(int idx) { m_action = idx; }

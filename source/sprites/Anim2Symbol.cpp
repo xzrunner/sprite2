@@ -35,7 +35,7 @@ int Anim2Symbol::Type() const
 
 void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	if (!m_anim) {
+	if (!m_anim || !spr) {
 		return;
 	}
 

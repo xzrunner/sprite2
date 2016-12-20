@@ -1147,6 +1147,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\source\sprites\FixActorPathVisitor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\FixActorPathVisitor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\source\sprites\PointQueryVisitor.cpp"
 						>
 					</File>

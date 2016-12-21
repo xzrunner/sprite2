@@ -6,6 +6,8 @@ extern "C"
 #ifndef _sprite2_wrap_c_h_
 #define _sprite2_wrap_c_h_
 
+#include <stdbool.h>
+
 void  s2_on_size(int w, int h);
 
 void  s2_render_ctx_push(float w, float h);

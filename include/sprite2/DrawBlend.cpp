@@ -5,11 +5,15 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
+#include "RenderTarget.h"
 
-#include <shaderlab.h>
-#include <dtex_facade.h>
-#include <dtex_gl.h>
 #include <SM_Rect.h>
+#include <unirender/RenderTarget.h>
+#include <unirender/Texture.h>
+#include <unirender/RenderContext.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/BlendShader.h>
+#include <shaderlab/Sprite2Shader.h>
 
 #include <assert.h>
 
@@ -20,12 +24,14 @@ void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 {
 	assert(spr->GetShader().GetBlend() != BM_NULL);
 
-	sl::ShaderMgr::Instance()->GetShader()->Commit();
+	sl::ShaderMgr::Instance()->Flush();
 
 	RenderScissor::Instance()->Close();
 
-	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
+	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
+	int w = rt0->GetTexture()->Width(),
+		h = rt0->GetTexture()->Height();
+	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
 
 	DrawSprToTmp(spr, mt);
 
@@ -41,8 +47,8 @@ void DrawBlend::DrawSprToTmp(const Sprite* spr, const sm::mat4& mt)
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 
-	dtexf_t0_bind();
-	dtex_gl_clear_color2(0, -2, 2, 0);
+	RenderTarget::Instance()->GetRT0()->Bind();
+	mgr->GetContext()->Clear(0);
 
 	mgr->SetShader(sl::BLEND);
 	BlendMode mode = spr->GetShader().GetBlend();
@@ -57,7 +63,7 @@ void DrawBlend::DrawSprToTmp(const Sprite* spr, const sm::mat4& mt)
 
 	shader->Commit();
 
-	dtexf_t0_unbind();
+	RenderTarget::Instance()->GetRT0()->Unbind();
 }
 
 void DrawBlend::DrawTmpToScreen(const Sprite* spr, const sm::mat4& mt)
@@ -77,11 +83,13 @@ void DrawBlend::DrawTmpToScreen(const Sprite* spr, const sm::mat4& mt)
 	sm::vec2 vertex_offset = - (mt * spr->GetPosition());
 
 	sm::vec2 texcoords[4];
-	int edge = dtexf_t0_get_texture_size();
+	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
+	int w = rt0->GetTexture()->Width(),
+		h = rt0->GetTexture()->Height();
 	for (int i = 0; i < 4; ++i) {
 		texcoords[i] = vertices[i] + vertex_offset;
-		texcoords[i].x = texcoords[i].x / edge + 0.5f;
-		texcoords[i].y = texcoords[i].y / edge + 0.5f;
+		texcoords[i].x = texcoords[i].x / w + 0.5f;
+		texcoords[i].y = texcoords[i].y / h + 0.5f;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -89,7 +97,7 @@ void DrawBlend::DrawTmpToScreen(const Sprite* spr, const sm::mat4& mt)
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
-	shader->Draw(&vertices[0].x, &texcoords[0].x, dtexf_t0_get_texture_id());
+	shader->Draw(&vertices[0].x, &texcoords[0].x, RenderTarget::Instance()->GetRT0()->GetTexture()->ID());
 }
 
 }

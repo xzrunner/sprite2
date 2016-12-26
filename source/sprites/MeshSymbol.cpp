@@ -8,7 +8,8 @@
 #include "DrawMesh.h"
 #include "DrawNode.h"
 
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
 
 namespace s2
 {

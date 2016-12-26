@@ -12,7 +12,8 @@
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
 #include <ps_3d_buffer.h>
-#include <shaderlab.h>
+#include <unirender/RenderContext.h>
+#include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>
 
@@ -46,20 +47,20 @@ void Particle3d::BufferClear()
 static void
 blend_begin_func(int blend)
 {
-	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
+	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 	switch (blend)
 	{
 	case FBM_NULL:
-		ctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-		ctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
+		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case FBM_ADD:
-		ctx->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
-		ctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
+		rc->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
+		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case FBM_SUBTRACT:
-		ctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-		ctx->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
+		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		rc->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
 	}
 }
@@ -67,9 +68,9 @@ blend_begin_func(int blend)
 static void
 blend_end_func()
 {
-	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
-	ctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-	ctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
+	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+	rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+	rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 }
 
 static void 

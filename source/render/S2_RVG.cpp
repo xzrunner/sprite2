@@ -4,7 +4,9 @@
 
 #include <rvg.h>
 #include <SM_Calc.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Shape2Shader.h>
+#include <shaderlab/Shape3Shader.h>
 
 namespace s2
 {

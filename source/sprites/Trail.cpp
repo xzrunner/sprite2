@@ -3,8 +3,10 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 
-#include <shaderlab.h>
 #include <mt_2d.h>
+#include <unirender/RenderContext.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Shape2Shader.h>
 
 #include <vector>
 
@@ -73,9 +75,9 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 	mgr->SetShader(sl::SHAPE2);
 	sl::Shape2Shader* shader = static_cast<sl::Shape2Shader*>(mgr->GetShader());
 
-	sl::RenderContext* ctx = sl::ShaderMgr::Instance()->GetContext();
-	ctx->SetBlend(5, 6);		// BLEND_SRC_COLOR, BLEND_ONE_MINUS_SRC_ALPHA
-	ctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
+	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+	rc->SetBlend(5, 6);		// BLEND_SRC_COLOR, BLEND_ONE_MINUS_SRC_ALPHA
+	rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 
 	//	shader->Commit();
 

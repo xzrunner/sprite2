@@ -5,8 +5,9 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 
-#include <shaderlab.h>
 #include <ps_3d_sprite.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
 
 #include <assert.h>
 

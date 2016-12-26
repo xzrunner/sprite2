@@ -7,10 +7,13 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
+#include "RenderTarget.h"
 
-#include <shaderlab.h>
-#include <dtex_facade.h>
-#include <dtex_gl.h>
+#include <unirender/RenderContext.h>
+#include <unirender/RenderTarget.h>
+#include <unirender/Texture.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
 
 #include <set>
 #include <vector>
@@ -78,12 +81,14 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const sm::mat4* mt)
 void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params,
 							   const Symbol* base_sym)
 {
-	sl::ShaderMgr::Instance()->GetShader()->Commit();
+	sl::ShaderMgr::Instance()->GetContext()->Clear(0);
 
 	RenderScissor::Instance()->Close();
 
-	int edge = dtexf_t0_get_texture_size();
-	RenderCtxStack::Instance()->Push(RenderCtx(edge, edge, edge, edge));
+	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
+	int w = rt0->GetTexture()->Width(),
+		h = rt0->GetTexture()->Height();
+	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
 
 	DrawMeshToTmp(mesh, params, base_sym);
 
@@ -102,7 +107,9 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 
-	int dst_edge = dtexf_t0_get_texture_size();
+	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
+	int w = rt0->GetTexture()->Width(),
+		h = rt0->GetTexture()->Height();
 	float ori_w = mesh->GetWidth(),
 		  ori_h = mesh->GetHeight();
 
@@ -114,8 +121,8 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 		for (int i = 0; i < 3; ++i)
 		{
 			vertices[i] = mt * tri->nodes[i]->xy;
-			texcoords[i].x = (tri->nodes[i]->uv.x * ori_w - ori_w * 0.5f + dst_edge * 0.5f) / dst_edge;
-			texcoords[i].y = (tri->nodes[i]->uv.y * ori_h - ori_h * 0.5f + dst_edge * 0.5f) / dst_edge;
+			texcoords[i].x = (tri->nodes[i]->uv.x * ori_w - ori_w * 0.5f + w * 0.5f) / w;
+			texcoords[i].y = (tri->nodes[i]->uv.y * ori_h - ori_h * 0.5f + h * 0.5f) / h;
 		}
 		vertices[3] = vertices[2];
 		texcoords[3] = texcoords[2];
@@ -127,8 +134,10 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 								 const Symbol* base_sym)
 {
-	dtexf_t0_bind();
-	dtex_gl_clear_color2(0, -2, 2, 0);
+	RenderTarget::Instance()->GetRT0()->Bind();
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	mgr->GetContext()->Clear(0);
 
 	RenderParams _params = params;
 	_params.mt.Identity();
@@ -138,14 +147,14 @@ void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 		DrawNode::Draw(mesh->GetBaseSymbol(), _params);
 	}
 
-	sl::ShaderMgr::Instance()->GetShader()->Commit();
+	mgr->GetContext()->Clear(0);
 
-	dtexf_t0_unbind();
+	RenderTarget::Instance()->GetRT0()->Unbind();
 }
 
 void DrawMesh::DrawTmpToScreen(const Mesh* mesh, const sm::mat4& mt)
 {
-	DrawOnlyMesh(mesh, mt, dtexf_t0_get_texture_id());
+	DrawOnlyMesh(mesh, mt, RenderTarget::Instance()->GetRT0()->GetTexture()->ID());
 }
 
 }

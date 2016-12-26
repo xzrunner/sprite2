@@ -1,7 +1,8 @@
 #include "RenderScissor.h"
 #include "RenderScreen.h"
 
-#include <shaderlab.h>
+#include <unirender/RenderContext.h>
+#include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>
 
@@ -20,10 +21,10 @@ RenderScissor::~RenderScissor()
 
 void RenderScissor::Push(float x, float y, float w, float h)
 {
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	sl_mgr->GetShader()->Commit();
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	mgr->Flush();
 	if (m_stack.empty()) {
-		sl_mgr->GetContext()->EnableScissor(true);
+		mgr->GetContext()->EnableScissor(true);
 	}
 
 	Rect r;
@@ -40,11 +41,11 @@ void RenderScissor::Pop()
 {
 	assert(!m_stack.empty());
 
-	sl::ShaderMgr* sl_mgr = sl::ShaderMgr::Instance();
-	sl_mgr->GetShader()->Commit();
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	mgr->Flush();
 	m_stack.pop_back();
 	if (m_stack.empty()) {
-		sl_mgr->GetContext()->EnableScissor(false);
+		mgr->GetContext()->EnableScissor(false);
 		return;
 	}
 

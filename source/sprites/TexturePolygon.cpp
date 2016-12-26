@@ -6,7 +6,8 @@
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
 
 #include <assert.h>
 

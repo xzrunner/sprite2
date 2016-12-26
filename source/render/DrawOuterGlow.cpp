@@ -7,7 +7,7 @@
 #include "SprDefault.h"
 #include "SprRender.h"
 
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
 
 namespace s2
 {

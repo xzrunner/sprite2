@@ -6,7 +6,11 @@
 #include "DrawNode.h"
 
 #include <SM_Matrix.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/BlendShader.h>
+#include <shaderlab/FilterShader.h>
+#include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/Sprite3Shader.h>
 
 #include <assert.h>
 

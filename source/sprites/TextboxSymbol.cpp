@@ -7,7 +7,9 @@
 #include "DrawNode.h"
 
 #include <gtxt_label.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/FilterMode.h>
+#include <shaderlab/FilterShader.h>
 
 namespace s2
 {

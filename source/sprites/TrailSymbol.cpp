@@ -6,7 +6,8 @@
 #include "DrawNode.h"
 
 #include <mt_2d.h>
-#include <shaderlab.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
 
 namespace s2
 {

@@ -24,7 +24,7 @@ void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 {
 	assert(spr->GetShader().GetBlend() != BM_NULL);
 
-	sl::ShaderMgr::Instance()->Flush();
+	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Close();
 

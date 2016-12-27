@@ -22,7 +22,7 @@ RenderScissor::~RenderScissor()
 void RenderScissor::Push(float x, float y, float w, float h)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->Flush();
+	mgr->FlushShader();
 	if (m_stack.empty()) {
 		mgr->GetContext()->EnableScissor(true);
 	}
@@ -42,7 +42,7 @@ void RenderScissor::Pop()
 	assert(!m_stack.empty());
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->Flush();
+	mgr->FlushShader();
 	m_stack.pop_back();
 	if (m_stack.empty()) {
 		mgr->GetContext()->EnableScissor(false);

@@ -46,9 +46,9 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
-	vertices[1] = sm::vec2(m_size.xmin, m_size.ymax);
+	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
 	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
-	vertices[3] = sm::vec2(m_size.xmax, m_size.ymin);
+	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = p.mt * vertices[i];
 	}

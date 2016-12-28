@@ -81,7 +81,7 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const sm::mat4* mt)
 void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params,
 							   const Symbol* base_sym)
 {
-	sl::ShaderMgr::Instance()->GetContext()->Clear(0);
+	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Close();
 
@@ -147,7 +147,7 @@ void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 		DrawNode::Draw(mesh->GetBaseSymbol(), _params);
 	}
 
-	mgr->GetContext()->Clear(0);
+	mgr->FlushShader();
 
 	RenderTarget::Instance()->GetRT0()->Unbind();
 }

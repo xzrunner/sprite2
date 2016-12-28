@@ -21,7 +21,7 @@ namespace s2
 void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& params)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->GetContext()->Clear(0);
+	mgr->FlushShader();
 
 	RenderScissor::Instance()->Close();
 

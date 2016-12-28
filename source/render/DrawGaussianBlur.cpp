@@ -29,7 +29,7 @@ void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& params, int i
 void DrawGaussianBlur::DrawToFbo0(const Sprite* spr, const RenderParams& params, int iterations)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->GetContext()->Clear(0);
+	mgr->FlushShader();
 
 	RenderScissor::Instance()->Close();
 

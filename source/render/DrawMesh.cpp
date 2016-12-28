@@ -8,6 +8,10 @@
 #include "DrawNode.h"
 #include "RenderScissor.h"
 #include "RenderTarget.h"
+#include "S2_Symbol.h"
+#include "SymType.h"
+#include "ImageSymbol.h"
+#include "Texture.h"
 
 #include <unirender/RenderContext.h>
 #include <unirender/RenderTarget.h>
@@ -17,6 +21,8 @@
 
 #include <set>
 #include <vector>
+
+#include <assert.h>
 
 namespace s2
 {
@@ -78,25 +84,14 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const sm::mat4* mt)
 	RVG::Circles(nodes, mesh->GetNodeRegion(), true);
 }
 
-void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params,
-							   const Symbol* base_sym)
+void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const Symbol* base_sym)
 {
-	sl::ShaderMgr::Instance()->FlushShader();
-
-	RenderScissor::Instance()->Close();
-
-	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
-	int w = rt0->GetTexture()->Width(),
-		h = rt0->GetTexture()->Height();
-	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
-
-	DrawMeshToTmp(mesh, params, base_sym);
-
-	RenderCtxStack::Instance()->Pop();
-
-	RenderScissor::Instance()->Open();
-
-	DrawTmpToScreen(mesh, params.mt);
+	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
+	if (sym->Type() == SYM_IMAGE) {
+		DrawPass1(mesh, params, sym);
+	} else {
+		DrawPass2(mesh, params, sym);
+	}
 }
 
 void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
@@ -131,8 +126,86 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 	}
 }
 
-void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
-								 const Symbol* base_sym)
+void DrawMesh::DrawPass1(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+{
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	if (mgr->GetShaderType() != sl::SPRITE2) {
+		return;
+	}
+
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
+	shader->SetColorMap(params.color.rmap.ToABGR(),params.color.gmap.ToABGR(), params.color.bmap.ToABGR());
+
+	assert(sym->Type() == SYM_IMAGE);
+	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
+	float src_texcoords[8];
+	int texid;
+	img_sym->QueryTexcoords(src_texcoords, texid);
+	
+	float x = src_texcoords[0], y = src_texcoords[1];
+	float w = src_texcoords[4] - src_texcoords[0],
+		  h = src_texcoords[5] - src_texcoords[1];
+	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
+	if (h < 0)
+	{
+		for (int i = 0, n = tris.size(); i < n; ++i)
+		{
+			MeshTriangle* tri = tris[i];
+			sm::vec2 vertices[4], texcoords[4];
+			for (int i = 0; i < 3; ++i)
+			{
+				vertices[i] = params.mt * tri->nodes[i]->xy;
+				texcoords[i].x = x + w * tri->nodes[i]->uv.y;
+				texcoords[i].y = y + h * tri->nodes[i]->uv.x;
+			}
+			vertices[3] = vertices[2];
+			texcoords[3] = texcoords[2];
+
+			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		}
+	}
+	else
+	{
+		for (int i = 0, n = tris.size(); i < n; ++i)
+		{
+			MeshTriangle* tri = tris[i];
+			sm::vec2 vertices[4], texcoords[4];
+			for (int i = 0; i < 3; ++i)
+			{
+				vertices[i] = params.mt * tri->nodes[i]->xy;
+				texcoords[i].x = x + w * tri->nodes[i]->uv.x;
+				texcoords[i].y = y + h * tri->nodes[i]->uv.y;
+			}
+			vertices[3] = vertices[2];
+			texcoords[3] = texcoords[2];
+
+			shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		}
+	}
+}
+
+void DrawMesh::DrawPass2(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+{
+	sl::ShaderMgr::Instance()->FlushShader();
+
+	RenderScissor::Instance()->Close();
+
+	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
+	int w = rt0->GetTexture()->Width(),
+		h = rt0->GetTexture()->Height();
+	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
+
+	DrawMeshToTmp(params, sym);
+
+	RenderCtxStack::Instance()->Pop();
+
+	RenderScissor::Instance()->Open();
+
+	DrawTmpToScreen(mesh, params.mt);
+}
+
+void DrawMesh::DrawMeshToTmp(const RenderParams& params, const Symbol* sym)
 {
 	RenderTarget::Instance()->GetRT0()->Bind();
 
@@ -141,11 +214,7 @@ void DrawMesh::DrawMeshToTmp(const Mesh* mesh, const RenderParams& params,
 
 	RenderParams _params = params;
 	_params.mt.Identity();
-	if (base_sym) {
-		DrawNode::Draw(base_sym, _params);
-	} else {
-		DrawNode::Draw(mesh->GetBaseSymbol(), _params);
-	}
+	DrawNode::Draw(sym, _params);
 
 	mgr->FlushShader();
 

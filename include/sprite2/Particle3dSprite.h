@@ -56,12 +56,14 @@ protected:
 protected:
 	p3d_sprite* m_spr;
 
+	bool m_loop;
+	bool m_local;
 	bool m_alone;
 	bool m_reuse;
 
-	mutable P3dRenderParams m_rp;
-
 	float m_start_radius;
+
+	mutable P3dRenderParams m_rp;
 
 	VI_DUMMY_FUNC
 

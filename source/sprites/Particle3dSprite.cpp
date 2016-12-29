@@ -13,6 +13,8 @@ namespace s2
 
 Particle3dSprite::Particle3dSprite() 
 	: m_spr(NULL)
+	, m_loop(true)
+	, m_local(true)
 	, m_alone(false)
 	, m_reuse(false)
 	, m_start_radius(FLT_MAX)
@@ -22,10 +24,12 @@ Particle3dSprite::Particle3dSprite()
 Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	: Sprite(spr)
 	, m_spr(NULL)
+	, m_loop(spr.m_loop)
+	, m_local(spr.m_local)
 	, m_alone(spr.m_alone)
 	, m_reuse(spr.m_reuse)
-	, m_rp(spr.m_rp)
 	, m_start_radius(spr.m_start_radius)
+	, m_rp(spr.m_rp)
 {
 	CreateSpr();
 }
@@ -34,10 +38,12 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 {
 	Sprite::operator = (spr);
 	m_spr            = NULL;
+	m_loop           = spr.m_loop;
+	m_local          = spr.m_local;
 	m_alone          = spr.m_alone;
 	m_reuse          = spr.m_reuse;
-	m_rp             = spr.m_rp;
 	m_start_radius   = spr.m_start_radius;
+	m_rp             = spr.m_rp;
 
 	return *this;
 }
@@ -48,6 +54,10 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	, m_reuse(false)
 	, m_start_radius(FLT_MAX)
 {
+	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
+	m_loop  = p3d_sym->IsLoop();
+	m_local = p3d_sym->IsLocal();
+
 	CreateSpr();
 }
 
@@ -160,9 +170,9 @@ void Particle3dSprite::CreateSpr()
 	}
 
 	m_spr = p3d_sprite_create();
-	m_spr->local_mode_draw = sym->IsLocal();
+	m_spr->local_mode_draw = m_local;
 	m_spr->et              = p3d_emitter_create(cfg);
-	m_spr->et->loop        = sym->IsLoop();
+	m_spr->et->loop        = m_loop;
 	p3d_emitter_start(m_spr->et);
 	m_spr->ptr_self        = &m_spr;
 	if (m_start_radius == FLT_MAX) {
@@ -227,6 +237,7 @@ void Particle3dSprite::SetLoop(bool loop)
 // 		p3d_buffer_insert(m_spr);
 // 	}
 
+	m_loop = loop;
 	if (m_spr && m_spr->et) {
 		m_spr->et->loop = loop;
 	}
@@ -243,6 +254,7 @@ bool Particle3dSprite::IsLocalModeDraw() const
 
 void Particle3dSprite::SetLocalModeDraw(bool local)
 {
+	m_local = local;
 	if (m_spr) {
 		m_spr->local_mode_draw = local;
 	}

@@ -81,8 +81,15 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 
 	//	shader->Commit();
 
+	std::vector<sm::vec2> vertices;
+	vertices.resize(count);
+	int ptr = 0;
+	for (int i = 0; i < count; ++i) {
+		vertices[i] = rp->mat * sm::vec2(positions[ptr++], positions[ptr++]);
+	}
+
 	shader->SetType(0x0005);	// todo from rvg_render.c
-	shader->Draw(positions, &t_colors[0], count);
+	shader->Draw(&vertices[0].x, &t_colors[0], count);
 }
 
 void Trail::Init()

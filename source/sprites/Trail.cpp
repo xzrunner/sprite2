@@ -38,6 +38,8 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 
 	RenderParams params;
 
+	params.mt = rp->mat;
+
 	memcpy(&params.color.mul.r, mul_col, sizeof(uint8_t) * 4);
 	memcpy(&params.color.add.r, add_col, sizeof(uint8_t) * 4);
 	params.color.mul = params.color.mul * rp->ct.mul;

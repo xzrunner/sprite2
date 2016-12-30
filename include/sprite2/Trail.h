@@ -12,7 +12,7 @@ namespace s2
 class TrailRenderParams
 {
 public:
-	sm::mat4 mat;
+	sm::mat4    mat;
 	RenderColor ct;
 }; // TrailRenderParams
 

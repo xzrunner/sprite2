@@ -2,7 +2,6 @@
 #define _SPRITE2_TRAIL_SPRITE_H_
 
 #include "S2_Sprite.h"
-#include "Trail.h"
 
 struct t2d_emitter;
 
@@ -33,11 +32,17 @@ public:
 
 	void Draw(const RenderParams& params) const;
 
+	bool IsLocal() const { return m_local; }
+	void SetLocal(bool local) { m_local = local; }
+
+	void SetInP3d() { m_in_p3d = true; }
+	
 protected:
 	t2d_emitter* m_et;
 
-	mutable TrailRenderParams m_rp;
-
+	bool m_local;
+	bool m_in_p3d;
+	
 	VI_DUMMY_FUNC
 
 }; // TrailSprite

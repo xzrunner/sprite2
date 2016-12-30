@@ -1,6 +1,7 @@
 #include "TrailSprite.h"
 #include "TrailSymbol.h"
 #include "RenderParams.h"
+#include "Trail.h"
 
 #include <mt_2d.h>
 
@@ -11,12 +12,16 @@ namespace s2
 
 TrailSprite::TrailSprite()
 	: m_et(NULL)
+	, m_local(true)
+	, m_in_p3d(false)
 {
 }
 
 TrailSprite::TrailSprite(const TrailSprite& spr)
 	: Sprite(spr)
 	, m_et(NULL)
+	, m_local(spr.m_local)
+	, m_in_p3d(spr.m_in_p3d)
 {
 	if (spr.m_et) {
 		m_et = t2d_emitter_create(spr.m_et->cfg);
@@ -32,12 +37,16 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 		m_et = t2d_emitter_create(spr.m_et->cfg);
 		t2d_emitter_start(m_et);
 	}
+	m_local = spr.m_local;
+	m_in_p3d = spr.m_in_p3d;
 	return *this;
 }
 
 TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(NULL)
+	, m_local(true)
+	, m_in_p3d(false)
 {
 	const t2d_emitter_cfg* cfg = VI_DOWNCASTING<TrailSymbol*>(sym)->GetEmitterCfg();
 	if (cfg) {
@@ -76,7 +85,12 @@ bool TrailSprite::Update(const RenderParams& params)
 	}
 
 	float dt = time - m_et->time;
-	sm::vec2 pos = params.mt * GetPosition();
+	sm::vec2 pos;
+	if (m_local && !m_in_p3d) {
+		pos = GetPosition();
+	} else {
+		pos = params.mt * GetPosition();
+	}
 	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
 	m_et->time = time;
 
@@ -85,11 +99,16 @@ bool TrailSprite::Update(const RenderParams& params)
 
 void TrailSprite::Draw(const RenderParams& params) const
 {
-	if (m_et) {
-		m_rp.mat = params.mt;
-		m_rp.ct = params.color;
-		t2d_emitter_draw(m_et, &m_rp);
+	if (!m_et) {
+		return;
 	}
+
+	TrailRenderParams trp;
+	trp.ct = params.color;
+	if (m_local || m_in_p3d) {
+		trp.mat = params.mt;
+	}
+	t2d_emitter_draw(m_et, &trp);
 }
 
 }

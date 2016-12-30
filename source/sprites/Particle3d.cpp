@@ -3,6 +3,7 @@
 #include "S2_Symbol.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#include "SymType.h"
 
 #include "TrailSymbol.h"
 #include "TrailSprite.h"
@@ -154,12 +155,21 @@ add_func(p3d_particle* p, void* ud)
 
 	if (!p->ud) {
 		Symbol* sym = static_cast<Symbol*>(p->cfg.sym->ud);
-		if (TrailSymbol* trail = dynamic_cast<TrailSymbol*>(sym)) {
-			Sprite* s2_spr = new TrailSprite(sym);
-			p->ud = s2_spr;
-		} else if (Particle3dSymbol* p3d = dynamic_cast<Particle3dSymbol*>(sym)) {
-			Sprite* s2_p3d = new Particle3dSprite(sym);
-			p->ud = s2_p3d;
+		switch (sym->Type())
+		{
+		case SYM_TRAIL:
+			{
+				TrailSprite* s2_spr = new TrailSprite(sym);
+				s2_spr->SetInP3d();
+				p->ud = static_cast<Sprite*>(s2_spr);
+			}
+			break;
+		case SYM_PARTICLE3D:
+			{
+				Sprite* s2_p3d = new Particle3dSprite(sym);
+				p->ud = s2_p3d;
+			}
+			break;
 		}
 	}
 }

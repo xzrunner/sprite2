@@ -14,8 +14,6 @@
 #include "Texture.h"
 
 #include <unirender/RenderContext.h>
-#include <unirender/RenderTarget.h>
-#include <unirender/Texture.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
@@ -88,9 +86,9 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const S
 {
 	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) {
-		DrawPass1(mesh, params, sym);
+		DrawOnePass(mesh, params, sym);
 	} else {
-		DrawPass2(mesh, params, sym);
+		DrawTwoPass(mesh, params, sym);
 	}
 }
 
@@ -102,12 +100,10 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 
-	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
-	int w = rt0->GetTexture()->Width(),
-		h = rt0->GetTexture()->Height();
+	int w = RenderTarget::Instance()->WIDTH,
+		h = RenderTarget::Instance()->HEIGHT;
 	float ori_w = mesh->GetWidth(),
 		  ori_h = mesh->GetHeight();
-
 	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
 	for (int i = 0, n = tris.size(); i < n; ++i)
 	{
@@ -126,7 +122,7 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 	}
 }
 
-void DrawMesh::DrawPass1(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() != sl::SPRITE2) {
@@ -185,29 +181,32 @@ void DrawMesh::DrawPass1(const Mesh* mesh, const RenderParams& params, const Sym
 	}
 }
 
-void DrawMesh::DrawPass2(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
 {
+	RenderTarget* RT = RenderTarget::Instance();
+	int rt = RT->Fetch();
+	if (rt == -1) {
+		return;
+	}
+	
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
-	int w = rt0->GetTexture()->Width(),
-		h = rt0->GetTexture()->Height();
-	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
-
-	DrawMeshToTmp(params, sym);
+	DrawMesh2RT(rt, params, sym);
 
 	RenderCtxStack::Instance()->Pop();
-
 	RenderScissor::Instance()->Open();
 
-	DrawTmpToScreen(mesh, params.mt);
+	DrawRT2Screen(rt, mesh, params.mt);
+
+	RT->Return(rt);
 }
 
-void DrawMesh::DrawMeshToTmp(const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawMesh2RT(int rt, const RenderParams& params, const Symbol* sym)
 {
-	RenderTarget::Instance()->GetRT0()->Bind();
+	RenderTarget::Instance()->Bind(rt);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -218,12 +217,12 @@ void DrawMesh::DrawMeshToTmp(const RenderParams& params, const Symbol* sym)
 
 	mgr->FlushShader();
 
-	RenderTarget::Instance()->GetRT0()->Unbind();
+	RenderTarget::Instance()->Unbind(rt);
 }
 
-void DrawMesh::DrawTmpToScreen(const Mesh* mesh, const sm::mat4& mt)
+void DrawMesh::DrawRT2Screen(int rt, const Mesh* mesh, const sm::mat4& mt)
 {
-	DrawOnlyMesh(mesh, mt, RenderTarget::Instance()->GetRT0()->GetTexture()->ID());
+	DrawOnlyMesh(mesh, mt, RenderTarget::Instance()->GetTexID(rt));
 }
 
 }

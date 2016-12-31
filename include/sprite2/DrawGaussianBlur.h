@@ -15,14 +15,13 @@ class DrawGaussianBlur
 public:
 	static void Draw(const Sprite* spr, const RenderParams& params, int iterations);
 
-	static void DrawToFbo0(const Sprite* spr, const RenderParams& params, int iterations);
-
-	static void DrawToScreen(bool is_target0, const sm::vec2& offset);
+	static void DrawBlurToRT(int rt, const Sprite* spr, const RenderParams& params, int iterations);
+	static void DrawFromRT(int rt, const sm::vec2& offset);
 
 private:
-	static void DrawInit(const Sprite* spr, const RenderParams& params, bool is_target0);
+	static void DrawInit(int rt, const Sprite* spr, const RenderParams& params);
 
-	static void DrawBetweenFBO(bool is_t0_to_t1, bool hori, const RenderColor& col, float tex_size);
+	static void DrawBetweenRT(int src_rt, int dst_rt, bool hori, const RenderColor& col, float tex_size);
 
 }; // DrawGaussianBlur
 

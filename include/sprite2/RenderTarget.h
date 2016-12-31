@@ -11,11 +11,30 @@ namespace s2
 class RenderTarget
 {
 public:
-	ur::RenderTarget* GetRT0() { return m_rt0; }
-	ur::RenderTarget* GetRT1() { return m_rt1; }
+	int  Fetch();
+	void Return(int idx);
+
+	void Bind(int idx);
+	void Unbind(int idx);
+
+	int  GetTexID(int idx);
+	
+public:
+	static const int WIDTH  = 1024;
+	static const int HEIGHT = 1024;
 
 private:
-	ur::RenderTarget *m_rt0, *m_rt1;
+	struct Item
+	{
+		ur::RenderTarget* rt;
+		bool available;
+	};
+	
+private:
+	static const int MAX_COUNT = 4;
+
+private:
+	Item m_items[MAX_COUNT];
 
 	SINGLETON_DECLARATION(RenderTarget);
 

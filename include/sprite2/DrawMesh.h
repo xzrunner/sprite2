@@ -22,11 +22,11 @@ public:
 	static void DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid);
 
 private:
-	static void DrawPass1(const Mesh* mesh, const RenderParams& params, const Symbol* sym);
+	static void DrawOnePass(const Mesh* mesh, const RenderParams& params, const Symbol* sym);
 
-	static void DrawPass2(const Mesh* mesh, const RenderParams& params, const Symbol* sym);
-	static void DrawMeshToTmp(const RenderParams& params, const Symbol* sym);
-	static void DrawTmpToScreen(const Mesh* mesh, const sm::mat4& mt);
+	static void DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym);
+	static void DrawMesh2RT(int rt, const RenderParams& params, const Symbol* sym);
+	static void DrawRT2Screen(int rt, const Mesh* mesh, const sm::mat4& mt);
 
 }; // DrawMesh
 

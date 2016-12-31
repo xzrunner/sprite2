@@ -16,9 +16,10 @@ public:
 	static void Draw(const Sprite* base, const Sprite* mask, const RenderParams& params);
 
 private:
-	static void DrawBaseToFbo0(const Sprite* base, const RenderColor& rc);
-	static void DrawMaskToFbo1(const Sprite* mask);
-	static void DrawMashFromFbo(const Sprite* mask, const sm::mat4& mt);
+	static void DrawBaseToRT(int rt, const Sprite* base, const RenderColor& rc);
+	static void DrawMaskToRT(int rt, const Sprite* mask);
+
+	static void DrawMaskFromRT(int rt_base, int rt_mask, const Sprite* mask, const sm::mat4& mt);
 
 }; // DrawMask
 

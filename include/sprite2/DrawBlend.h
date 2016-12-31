@@ -14,8 +14,8 @@ public:
 	static void Draw(const Sprite* spr, const sm::mat4& mt);
 
 private:
-	static void DrawSprToTmp(const Sprite* spr, const sm::mat4& mt);
-	static void DrawTmpToScreen(const Sprite* spr, const sm::mat4& mt);
+	static void DrawSpr2RT(int rt, const Sprite* spr, const sm::mat4& mt);
+	static void DrawRT2Screen(int rt, const Sprite* spr, const sm::mat4& mt);
 
 }; // DrawBlend
 

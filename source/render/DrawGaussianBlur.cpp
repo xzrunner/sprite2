@@ -8,8 +8,6 @@
 #include "RenderScissor.h"
 #include "RenderTarget.h"
 
-#include <unirender/RenderTarget.h>
-#include <unirender/Texture.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -22,40 +20,43 @@ namespace s2
 
 void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& params, int iterations)
 {
-	DrawToFbo0(spr, params, iterations);
-	DrawToScreen(true, spr->GetPosition());
+	RenderTarget* RT = RenderTarget::Instance();
+	int rt = RT->Fetch();
+
+	DrawBlurToRT(rt, spr, params, iterations);
+	DrawFromRT(rt, spr->GetPosition());
+
+	RT->Return(rt);
 }
 
-void DrawGaussianBlur::DrawToFbo0(const Sprite* spr, const RenderParams& params, int iterations)
-{
+void DrawGaussianBlur::DrawBlurToRT(int rt, const Sprite* spr, const RenderParams& params, int iterations)
+{	
+	RenderTarget* RT = RenderTarget::Instance();
+	int tmp_rt = RT->Fetch();
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
 
 	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawInit(spr, params, true);
-
-	const ur::RenderTarget* rt0 = RenderTarget::Instance()->GetRT0();
-	int w = rt0->GetTexture()->Width(),
-		h = rt0->GetTexture()->Height();
-	RenderCtxStack::Instance()->Push(RenderCtx(w, h, w, h));
-
-	DrawInit(spr, params, true);
+	DrawInit(rt, spr, params);
 
 	mgr->SetShader(sl::FILTER);
 
 	sm::vec2 sz = spr->GetBounding()->GetSize().Size();
 	for (int i = 0; i < iterations; ++i) {
-		DrawBetweenFBO(true, true, params.color, sz.x);
-		DrawBetweenFBO(false, false, params.color, sz.y);
+		DrawBetweenRT(rt, tmp_rt, true, params.color, sz.x);
+		DrawBetweenRT(tmp_rt, rt, false, params.color, sz.y);
 	}
 
 	RenderCtxStack::Instance()->Pop();
-
 	RenderScissor::Instance()->Open();
+
+	RT->Return(tmp_rt);
 }
 
-void DrawGaussianBlur::DrawToScreen(bool is_target0, const sm::vec2& offset)
+void DrawGaussianBlur::DrawFromRT(int rt, const sm::vec2& offset)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
@@ -76,24 +77,16 @@ void DrawGaussianBlur::DrawToScreen(bool is_target0, const sm::vec2& offset)
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
-	int tex_id;
-	if (is_target0) {
-		tex_id = RenderTarget::Instance()->GetRT0()->GetTexture()->ID();
-	} else {
-		tex_id = RenderTarget::Instance()->GetRT1()->GetTexture()->ID();
-	}
-	shader->Draw(&vertices[0].x, &texcoords[0].x, tex_id);
+	shader->Draw(&vertices[0].x, &texcoords[0].x, RenderTarget::Instance()->GetTexID(rt));
 
 	shader->Commit();
 }
 
-void DrawGaussianBlur::DrawInit(const Sprite* spr, const RenderParams& params, bool is_target0)
+void DrawGaussianBlur::DrawInit(int rt, const Sprite* spr, const RenderParams& params)
 {
-	if (is_target0) {
-		RenderTarget::Instance()->GetRT0()->Bind();
-	} else {
-		RenderTarget::Instance()->GetRT1()->Bind();
-	}
+	RenderTarget* RT = RenderTarget::Instance();
+	RT->Bind(rt);
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
@@ -107,26 +100,14 @@ void DrawGaussianBlur::DrawInit(const Sprite* spr, const RenderParams& params, b
 	mgr->SetShader(sl::SPRITE2);
 	DrawNode::Draw(spr, _params);
 
-	if (is_target0) {
-		RenderTarget::Instance()->GetRT0()->Unbind();
-	} else {
-		RenderTarget::Instance()->GetRT1()->Unbind();
-	}
+	RT->Unbind(rt);
 }
 
-void DrawGaussianBlur::DrawBetweenFBO(bool is_t0_to_t1, bool hori, const RenderColor& col, float tex_size)
+void DrawGaussianBlur::DrawBetweenRT(int src_rt, int dst_rt, bool hori, const RenderColor& col, float tex_size)
 {
-	ur::RenderTarget* rt = NULL;
-	if (is_t0_to_t1) {
-		rt = RenderTarget::Instance()->GetRT0();
-	} else {
-		rt = RenderTarget::Instance()->GetRT1();
-	}
-	
-	int src_tex_w = rt->GetTexture()->Width(),
-		src_tex_h = rt->GetTexture()->Height();
-	int src_tex_id = rt->GetTexture()->ID();
-	rt->Bind();
+	RenderTarget* RT = RenderTarget::Instance();
+
+	RT->Bind(dst_rt);
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -135,13 +116,11 @@ void DrawGaussianBlur::DrawBetweenFBO(bool is_t0_to_t1, bool hori, const RenderC
 	if (hori) {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_HORI);
 		sl::GaussianBlurHoriProg* prog = static_cast<sl::GaussianBlurHoriProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_HORI));
-		prog->SetTexWidth(src_tex_w);
-//		prog->SetTexWidth(tex_size);
+		prog->SetTexWidth(RT->WIDTH);
 	} else {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_VERT);
 		sl::GaussianBlurVertProg* prog = static_cast<sl::GaussianBlurVertProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_VERT));
-		prog->SetTexHeight(src_tex_w);
-//		prog->SetTexHeight(tex_size);		
+		prog->SetTexHeight(RT->HEIGHT);
 	}
 	shader->SetColor(col.mul.ToABGR(), col.add.ToABGR());
 
@@ -155,15 +134,12 @@ void DrawGaussianBlur::DrawBetweenFBO(bool is_t0_to_t1, bool hori, const RenderC
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
-	shader->Draw(&vertices[0].x, &texcoords[0].x, src_tex_id);
+	shader->Draw(&vertices[0].x, &texcoords[0].x, RT->GetTexID(src_rt));
 
 	shader->Commit();
 
-	if (is_t0_to_t1) {
-		RenderTarget::Instance()->GetRT1()->Unbind();
-	} else {
-		RenderTarget::Instance()->GetRT0()->Unbind();
-	}
+	RT->Unbind(dst_rt);
+
 }
 
 }

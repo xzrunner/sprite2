@@ -38,7 +38,7 @@ void DrawGaussianBlur::DrawBlurToRT(int rt, const Sprite* spr, const RenderParam
 	mgr->FlushShader();
 
 	RenderScissor::Instance()->Close();
-	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawInit(rt, spr, params);
 

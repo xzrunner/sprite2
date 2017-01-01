@@ -33,7 +33,7 @@ void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Close();
-	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawSpr2RT(rt, spr, mt);
 

@@ -192,7 +192,7 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const S
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Close();
-	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawMesh2RT(rt, params, sym);
 

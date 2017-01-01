@@ -1249,7 +1249,11 @@
 			Name="render"
 			>
 			<File
-				RelativePath="..\..\..\include\sprite2\RenderCtx.h"
+				RelativePath="..\..\..\source\render\RenderContext.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\RenderContext.h"
 				>
 			</File>
 			<File

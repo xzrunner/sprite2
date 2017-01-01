@@ -24,7 +24,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	mgr->FlushShader();
 
 	RenderScissor::Instance()->Close();
-	RenderCtxStack::Instance()->Push(RenderCtx(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	int rt_base = RT->Fetch();
 	if (rt_base == -1) {

@@ -9,33 +9,36 @@ namespace s2
 
 void RenderScreen::Scissor(float x, float y, float w, float h)
 {
-	const RenderCtx* ctx = RenderCtxStack::Instance()->Top();
+	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
 	if (!ctx) {
 		sl::ShaderMgr::Instance()->GetContext()->SetScissor(0, 0, 0, 0);
 		return;
 	}
 
-	x *= ctx->mv_scale;
-	y *= ctx->mv_scale;
-	w *= ctx->mv_scale;
-	h *= ctx->mv_scale;
+	float mv_scale = ctx->GetMVScale();
+	x *= mv_scale;
+	y *= mv_scale;
+	w *= mv_scale;
+	h *= mv_scale;
 
-	x += ctx->proj_width * 0.5f;
-	y += ctx->proj_height * 0.5f;
+	float proj_w = ctx->GetProjWidth(),
+		  proj_h = ctx->GetProjHeight();
+	x += proj_w * 0.5f;
+	y += proj_h * 0.5f;
 
-	x += ctx->mv_offset.x * ctx->mv_scale;
-	y += ctx->mv_offset.y * ctx->mv_scale;
+	x += ctx->GetMVOffset().x * mv_scale;
+	y += ctx->GetMVOffset().y * mv_scale;
 
 	if (x < 0) {
 		w += x;
 		x = 0;
-	} else if (x > ctx->proj_width) {
+	} else if (x > proj_w) {
 		w = h = 0;
 	}
 	if (y < 0) {
 		h += y;
 		y = 0;
-	} else if (y > ctx->proj_height) {
+	} else if (y > proj_h) {
 		w = h = 0;
 	}
 

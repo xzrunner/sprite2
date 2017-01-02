@@ -1,6 +1,8 @@
 #include "RenderContext.h"
 
+#include <unirender/RenderContext.h>
 #include <shaderlab/SubjectMVP2.h>
+#include <shaderlab/ShaderMgr.h>
 
 namespace s2
 {
@@ -46,10 +48,32 @@ void RenderContext::SetProjection(int width, int height)
 	UpdateProjection();
 }
 
+void RenderContext::SetScreen(int width, int height)
+{
+	if (m_screen_width == width && m_screen_height == height) {
+		return;
+	}
+
+	m_screen_width  = width;
+	m_screen_height = height;
+
+	UpdateViewport();
+}
+
 void RenderContext::UpdateMVP() const
 {
 	UpdateModelView();
 	UpdateProjection();
+}
+
+void RenderContext::UpdateViewport() const
+{
+	if (m_screen_width == 0 && m_screen_height == 0) {
+		return;
+	}
+
+	sl::ShaderMgr::Instance()->GetContext()->SetViewport(
+		0, 0, m_screen_width, m_screen_height);
 }
 
 void RenderContext::UpdateModelView() const

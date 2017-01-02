@@ -17,13 +17,15 @@ RenderCtxStack::~RenderCtxStack()
 {
 }
 
-void RenderCtxStack::Push(const RenderContext& ctx, bool set_vp)
+int RenderCtxStack::Push(const RenderContext& ctx)
 {
-	BindCtx(ctx, set_vp);
+	int idx = m_stack.size();
+	BindCtx(ctx);
 	m_stack.push_back(ctx);
+	return idx;
 }
 
-void RenderCtxStack::Pop(bool set_vp)
+void RenderCtxStack::Pop()
 {
 	if (m_stack.empty()) {
 		return;
@@ -32,7 +34,7 @@ void RenderCtxStack::Pop(bool set_vp)
 	m_stack.pop_back();
 
 	if (!m_stack.empty()) {
-		BindCtx(m_stack.back(), set_vp);		
+		BindCtx(m_stack.back());		
 	}
 }
 
@@ -45,13 +47,19 @@ const RenderContext* RenderCtxStack::Top() const
 	}
 }
 
-void RenderCtxStack::BindCtx(const RenderContext& ctx, bool set_vp)
+bool RenderCtxStack::Bind(int idx)
+{
+	if (idx < 0 || idx > m_stack.size()) {
+		return false;
+	}
+	BindCtx(m_stack[idx]);
+	return true;
+}
+
+void RenderCtxStack::BindCtx(const RenderContext& ctx)
 {
 	ctx.UpdateMVP();
-	if (set_vp) {
-		sl::ShaderMgr::Instance()->GetContext()->SetViewport(
-			0, 0, ctx.GetScreenWidth(), ctx.GetScreenHeight());
-	}
+	ctx.UpdateViewport();
 }
 
 }

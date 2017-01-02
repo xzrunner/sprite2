@@ -14,8 +14,10 @@ public:
 
 	void SetModelView(const sm::vec2& offset, float scale);
 	void SetProjection(int width, int height);
+	void SetScreen(int width, int height);
 
 	void UpdateMVP() const;
+	void UpdateViewport() const;
 
 	const sm::vec2& GetMVOffset() const { return m_mv_offset; }
 	float GetMVScale() const { return m_mv_scale; }

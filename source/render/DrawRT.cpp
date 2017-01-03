@@ -18,21 +18,31 @@ namespace s2
 DrawRT::DrawRT()
 {
 	m_rt = RenderTargetMgr::Instance()->Fetch();
-	m_rt_reuse = true;
+	m_rt_type = SRC_MGR;
 }
 
 DrawRT::DrawRT(int width, int height)
 {
 	m_rt = new RenderTarget(width, height);
-	m_rt_reuse = false;
+	m_rt_type = SRC_NEW;
+}
+
+DrawRT::DrawRT(RenderTarget* rt)
+{
+	m_rt = rt;
+	m_rt_type = SRC_OUT;
 }
 
 DrawRT::~DrawRT()
 {
-	if (m_rt_reuse) {
-		RenderTargetMgr::Instance()->Return(m_rt);
-	} else {
+	switch (m_rt_type)
+	{
+	case SRC_NEW:
 		delete m_rt;
+		break;
+	case SRC_MGR:
+		RenderTargetMgr::Instance()->Return(m_rt);
+		break;
 	}
 }
 

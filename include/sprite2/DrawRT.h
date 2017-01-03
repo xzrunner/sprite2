@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_DRAW_RT_H_
 #define _SPRITE2_DRAW_RT_H_
 
+#include <CU_Uncopyable.h>
+
 #include <stdint.h>
 
 #include <string>
@@ -13,11 +15,12 @@ class Symbol;
 class Shape;
 class RenderTarget;
 
-class DrawRT
+class DrawRT : private cu::Uncopyable
 {
 public:
 	DrawRT();
 	DrawRT(int width, int height);
+	DrawRT(RenderTarget* rt);
 	~DrawRT();
 
 	void Draw(const Sprite* spr, bool clear = false, int width = -1, int height = -1, float dx = 0, float dy = 0, float scale = 1);
@@ -28,7 +31,15 @@ public:
 	void StoreToFile(const std::string& filepath, int width = -1, int height = -1, int channels = 4);
 
 private:
-	bool m_rt_reuse;
+	enum SourceRT
+	{
+		SRC_MGR = 0,
+		SRC_NEW,
+		SRC_OUT,
+	};
+
+private:
+	SourceRT m_rt_type;
 	RenderTarget* m_rt;
 
 }; // DrawRT

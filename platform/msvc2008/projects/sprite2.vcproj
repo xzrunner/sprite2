@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -1289,6 +1289,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\render\RenderTargetMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\RenderTargetMgr.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\render\S2_CameraMgr.cpp"
 				>
 			</File>
@@ -1345,6 +1353,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\DrawOuterGlow.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\render\DrawRT.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\DrawRT.h"
 					>
 				</File>
 			</Filter>

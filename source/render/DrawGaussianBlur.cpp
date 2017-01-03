@@ -6,6 +6,7 @@
 #include "FilterFactory.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
+#include "RenderTargetMgr.h"
 #include "RenderTarget.h"
 
 #include <unirender/RenderContext.h>
@@ -20,8 +21,8 @@ namespace s2
 
 void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& params, int iterations)
 {
-	RenderTarget* RT = RenderTarget::Instance();
-	int rt = RT->Fetch();
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* rt = RT->Fetch();
 
 	DrawBlurToRT(rt, spr, params, iterations);
 	DrawFromRT(rt, spr->GetPosition());
@@ -29,10 +30,10 @@ void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& params, int i
 	RT->Return(rt);
 }
 
-void DrawGaussianBlur::DrawBlurToRT(int rt, const Sprite* spr, const RenderParams& params, int iterations)
+void DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& params, int iterations)
 {	
-	RenderTarget* RT = RenderTarget::Instance();
-	int tmp_rt = RT->Fetch();
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* tmp_rt = RT->Fetch();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
@@ -56,7 +57,7 @@ void DrawGaussianBlur::DrawBlurToRT(int rt, const Sprite* spr, const RenderParam
 	RT->Return(tmp_rt);
 }
 
-void DrawGaussianBlur::DrawFromRT(int rt, const sm::vec2& offset)
+void DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offset)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
@@ -77,15 +78,14 @@ void DrawGaussianBlur::DrawFromRT(int rt, const sm::vec2& offset)
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
-	shader->Draw(&vertices[0].x, &texcoords[0].x, RenderTarget::Instance()->GetTexID(rt));
+	shader->Draw(&vertices[0].x, &texcoords[0].x, rt->GetTexID());
 
 	shader->Commit();
 }
 
-void DrawGaussianBlur::DrawInit(int rt, const Sprite* spr, const RenderParams& params)
+void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& params)
 {
-	RenderTarget* RT = RenderTarget::Instance();
-	RT->Bind(rt);
+	rt->Bind();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -100,14 +100,14 @@ void DrawGaussianBlur::DrawInit(int rt, const Sprite* spr, const RenderParams& p
 	mgr->SetShader(sl::SPRITE2);
 	DrawNode::Draw(spr, _params);
 
-	RT->Unbind(rt);
+	rt->Unbind();
 }
 
-void DrawGaussianBlur::DrawBetweenRT(int src_rt, int dst_rt, bool hori, const RenderColor& col, float tex_size)
+void DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const RenderColor& col, float tex_size)
 {
-	RenderTarget* RT = RenderTarget::Instance();
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
-	RT->Bind(dst_rt);
+	dst->Bind();
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -134,12 +134,11 @@ void DrawGaussianBlur::DrawBetweenRT(int src_rt, int dst_rt, bool hori, const Re
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
-	shader->Draw(&vertices[0].x, &texcoords[0].x, RT->GetTexID(src_rt));
+	shader->Draw(&vertices[0].x, &texcoords[0].x, src->GetTexID());
 
 	shader->Commit();
 
-	RT->Unbind(dst_rt);
-
+	dst->Unbind();
 }
 
 }

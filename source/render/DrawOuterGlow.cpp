@@ -6,7 +6,7 @@
 #include "DrawNode.h"
 #include "SprDefault.h"
 #include "SprRender.h"
-#include "RenderTarget.h"
+#include "RenderTargetMgr.h"
 
 #include <shaderlab/ShaderMgr.h>
 
@@ -15,8 +15,8 @@ namespace s2
 
 void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& params, int iterations)
 {
-	RenderTarget* RT = RenderTarget::Instance();
-	int rt = RT->Fetch();
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* rt = RT->Fetch();
 	DrawGaussianBlur::DrawBlurToRT(rt, spr, params, iterations);
 	DrawGaussianBlur::DrawFromRT(rt, spr->GetPosition());
 	RT->Return(rt);

@@ -7,6 +7,7 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
+#include "RenderTargetMgr.h"
 #include "RenderTarget.h"
 #include "S2_Symbol.h"
 #include "SymType.h"
@@ -100,8 +101,8 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 
-	int w = RenderTarget::Instance()->WIDTH,
-		h = RenderTarget::Instance()->HEIGHT;
+	int w = RenderTargetMgr::Instance()->WIDTH,
+		h = RenderTargetMgr::Instance()->HEIGHT;
 	float ori_w = mesh->GetWidth(),
 		  ori_h = mesh->GetHeight();
 	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
@@ -183,9 +184,9 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 
 void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
 {
-	RenderTarget* RT = RenderTarget::Instance();
-	int rt = RT->Fetch();
-	if (rt == -1) {
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* rt = RT->Fetch();
+	if (!rt) {
 		return;
 	}
 	
@@ -204,9 +205,9 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const S
 	RT->Return(rt);
 }
 
-void DrawMesh::DrawMesh2RT(int rt, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& params, const Symbol* sym)
 {
-	RenderTarget::Instance()->Bind(rt);
+	rt->Bind();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -217,12 +218,12 @@ void DrawMesh::DrawMesh2RT(int rt, const RenderParams& params, const Symbol* sym
 
 	mgr->FlushShader();
 
-	RenderTarget::Instance()->Unbind(rt);
+	rt->Unbind();
 }
 
-void DrawMesh::DrawRT2Screen(int rt, const Mesh* mesh, const sm::mat4& mt)
+void DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const sm::mat4& mt)
 {
-	DrawOnlyMesh(mesh, mt, RenderTarget::Instance()->GetTexID(rt));
+	DrawOnlyMesh(mesh, mt, rt->GetTexID());
 }
 
 }

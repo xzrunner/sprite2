@@ -9,6 +9,7 @@ namespace s2
 class Sprite;
 class RenderParams;
 class RenderColor;
+class RenderTarget;
 
 class DrawMask
 {
@@ -16,10 +17,10 @@ public:
 	static void Draw(const Sprite* base, const Sprite* mask, const RenderParams& params);
 
 private:
-	static void DrawBaseToRT(int rt, const Sprite* base, const RenderColor& rc);
-	static void DrawMaskToRT(int rt, const Sprite* mask);
+	static void DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc);
+	static void DrawMaskToRT(RenderTarget* rt, const Sprite* mask);
 
-	static void DrawMaskFromRT(int rt_base, int rt_mask, const Sprite* mask, const sm::mat4& mt);
+	static void DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const sm::mat4& mt);
 
 }; // DrawMask
 

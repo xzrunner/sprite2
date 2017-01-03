@@ -8,58 +8,40 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(RenderTarget);
-
-RenderTarget::RenderTarget()
+RenderTarget::RenderTarget(int width, int height)
 {
 	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-	for (int i = 0; i < MAX_COUNT; ++i) {
-		m_items[i].rt = new ur::RenderTarget(rc, WIDTH, HEIGHT);
-		m_items[i].available = true;
-	}
+	m_impl = new ur::RenderTarget(rc, width, height);
 }
 
-int RenderTarget::Fetch()
+RenderTarget::~RenderTarget()
 {
-	for (int i = 0; i < MAX_COUNT; ++i) {
-		if (m_items[i].available) {
-			m_items[i].available = false;
-			return i;
-		}
-	}
-	return -1;
+	delete m_impl;
 }
 
-void RenderTarget::Return(int idx)
+void RenderTarget::Bind()
 {
-	if (idx < 0 || idx >= MAX_COUNT) {
-		return;
-	}
-	m_items[idx].available = true;
+	m_impl->Bind();
 }
 
-void RenderTarget::Bind(int idx)
+void RenderTarget::Unbind()
 {
-	if (idx < 0 || idx >= MAX_COUNT) {
-		return;
-	}
-	m_items[idx].rt->Bind();	
+	m_impl->Unbind();
 }
 
-void RenderTarget::Unbind(int idx)
+int RenderTarget::Width() const
 {
-	if (idx < 0 || idx >= MAX_COUNT) {
-		return;
-	}
-	m_items[idx].rt->Unbind();
+	return m_impl->GetTexture()->Width();
 }
 
-int RenderTarget::GetTexID(int idx)
+int RenderTarget::Height() const
 {
-	if (idx < 0 || idx >= MAX_COUNT) {
-		return -1;
-	}
-	return m_items[idx].rt->GetTexture()->ID();
+	return m_impl->GetTexture()->Height();
+}
+
+int RenderTarget::GetTexID() const
+{
+	return m_impl->GetTexture()->ID();
 }
 
 }

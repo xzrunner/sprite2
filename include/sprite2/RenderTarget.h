@@ -1,8 +1,6 @@
 #ifndef _SPRITE2_RENDER_TARGET_H_
 #define _SPRITE2_RENDER_TARGET_H_
 
-#include <CU_Singleton.h>
-
 namespace ur { class RenderTarget; }
 
 namespace s2
@@ -11,32 +9,19 @@ namespace s2
 class RenderTarget
 {
 public:
-	int  Fetch();
-	void Return(int idx);
+	RenderTarget(int width, int height);
+	~RenderTarget();
 
-	void Bind(int idx);
-	void Unbind(int idx);
+	void Bind();
+	void Unbind();
 
-	int  GetTexID(int idx);
-	
-public:
-	static const int WIDTH  = 1024;
-	static const int HEIGHT = 1024;
+	int Width() const;
+	int Height() const;
 
-private:
-	struct Item
-	{
-		ur::RenderTarget* rt;
-		bool available;
-	};
-	
-private:
-	static const int MAX_COUNT = 4;
+	int GetTexID() const;
 
 private:
-	Item m_items[MAX_COUNT];
-
-	SINGLETON_DECLARATION(RenderTarget);
+	ur::RenderTarget* m_impl;	
 
 }; // RenderTarget
 

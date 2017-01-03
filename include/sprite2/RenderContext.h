@@ -17,6 +17,8 @@ public:
 	void SetScreen(int width, int height);
 
 	void UpdateMVP() const;
+	void UpdateModelView() const;
+	void UpdateProjection() const;
 	void UpdateViewport() const;
 
 	const sm::vec2& GetMVOffset() const { return m_mv_offset; }
@@ -27,10 +29,6 @@ public:
 
 	int  GetScreenWidth() const { return m_screen_width; }
 	int  GetScreenHeight() const { return m_screen_height; }
-
-private:
-	void UpdateModelView() const;
-	void UpdateProjection() const;
 
 private:
 	sm::vec2 m_mv_offset;

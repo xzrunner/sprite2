@@ -66,16 +66,6 @@ void RenderContext::UpdateMVP() const
 	UpdateProjection();
 }
 
-void RenderContext::UpdateViewport() const
-{
-	if (m_screen_width == 0 && m_screen_height == 0) {
-		return;
-	}
-
-	sl::ShaderMgr::Instance()->GetContext()->SetViewport(
-		0, 0, m_screen_width, m_screen_height);
-}
-
 void RenderContext::UpdateModelView() const
 {
 	sl::SubjectMVP2::Instance()->NotifyModelview(m_mv_offset.x, m_mv_offset.y, m_mv_scale, m_mv_scale);
@@ -84,6 +74,16 @@ void RenderContext::UpdateModelView() const
 void RenderContext::UpdateProjection() const
 {
 	sl::SubjectMVP2::Instance()->NotifyProjection(m_proj_width, m_proj_height);
+}
+
+void RenderContext::UpdateViewport() const
+{
+	if (m_screen_width == 0 && m_screen_height == 0) {
+		return;
+	}
+
+	sl::ShaderMgr::Instance()->GetContext()->SetViewport(
+		0, 0, m_screen_width, m_screen_height);
 }
 
 }

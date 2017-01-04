@@ -30,7 +30,7 @@ public:
 
 	virtual void QueryTexcoords(float* texcoords, int& texid) const = 0;
 
-	void InitTex(Texture* tex, const sm::ui16_rect& quad, const sm::vec2& offset);
+	void InitTex(Texture* tex, const sm::i16_rect& quad, const sm::vec2& offset);
 
 	const Texture* GetTexture() const { return m_tex; }
 
@@ -49,7 +49,7 @@ private:
 protected:
 	Texture* m_tex;
 
-	sm::ui16_rect m_quad;
+	sm::i16_rect m_quad;
 	bool          m_rotate;
 	sm::vec2	  m_offset;
 

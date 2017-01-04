@@ -81,7 +81,7 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	return m_tex->GetOriSize();
 }
 
-void ImageSymbol::InitTex(Texture* tex, const sm::ui16_rect& quad, const sm::vec2& offset)
+void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& quad, const sm::vec2& offset)
 {
 	tex->AddReference();
 	m_tex = tex;

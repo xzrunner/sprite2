@@ -8,10 +8,7 @@ extern "C"
 
 #include <stdbool.h>
 
-void  s2_on_size(int w, int h);
-
-void  s2_render_ctx_push(float w, float h);
-void  s2_render_ctx_pop();
+void s2_on_size(int w, int h);
 
 /************************************************************************/
 /* symbol                                                               */

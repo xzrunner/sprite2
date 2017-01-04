@@ -19,12 +19,14 @@ namespace s2
 
 ImageSymbol::ImageSymbol()
 	: m_tex(NULL)
+	, m_rotate(false)
 {
 }
 
 ImageSymbol::ImageSymbol(uint32_t id)
 	: Symbol(id)
 	, m_tex(NULL)
+	, m_rotate(false)
 {
 }
 
@@ -79,7 +81,7 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	return m_tex->GetOriSize();
 }
 
-void ImageSymbol::InitTex(Texture* tex, const Quad& quad, const sm::vec2& offset)
+void ImageSymbol::InitTex(Texture* tex, const sm::ui16_rect& quad, const sm::vec2& offset)
 {
 	tex->AddReference();
 	m_tex = tex;

@@ -13,13 +13,6 @@ class Texture;
 class ImageSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
-	struct Quad
-	{
-		uint16_t xmin, ymin;
-		uint16_t xmax, ymax;
-	}; // Quad
-
-public:
 	ImageSymbol();
 	ImageSymbol(uint32_t id);
 	virtual ~ImageSymbol();
@@ -37,7 +30,7 @@ public:
 
 	virtual void QueryTexcoords(float* texcoords, int& texid) const = 0;
 
-	void InitTex(Texture* tex, const Quad& quad, const sm::vec2& offset);
+	void InitTex(Texture* tex, const sm::ui16_rect& quad, const sm::vec2& offset);
 
 	const Texture* GetTexture() const { return m_tex; }
 
@@ -54,12 +47,13 @@ private:
 	void DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const;
 
 protected:
-	Texture*	m_tex;
+	Texture* m_tex;
 
-	Quad		m_quad;
-	sm::vec2	m_offset;
+	sm::ui16_rect m_quad;
+	bool          m_rotate;
+	sm::vec2	  m_offset;
 
-	sm::rect	m_size;
+	sm::rect m_size;
 
 }; // ImageSymbol
 

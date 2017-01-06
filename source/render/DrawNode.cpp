@@ -10,11 +10,14 @@
 #include "DrawOuterGlow.h"
 #include "RFOuterGlow.h"
 #include "SprDefault.h"
+#include "RenderCtxStack.h"
 
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/EdgeDetectProg.h>
+
+#include <shaderlab/Sprite2Shader.h>
 
 namespace s2
 {
@@ -52,6 +55,9 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params)
 	if (!spr->IsVisible()) {
 		return;
 	}
+	if (IsOutsideScreen(spr, params)) {
+		return;
+	}
 
 	RenderShader rs;
 	RenderCamera rc;
@@ -68,15 +74,15 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params)
 	switch (rs.GetFastBlend())
 	{
 	case FBM_NULL:
-		rctx->SetBlend(2, 6);			// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		rctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case FBM_ADD:
-		rctx->SetBlend(2, 2);			// BLEND_GL_ONE, BLEND_GL_ONE
+		rctx->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
 		rctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case FBM_SUBTRACT:
-		rctx->SetBlend(2, 6);			// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		rctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rctx->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
 	}
@@ -217,6 +223,24 @@ void DrawNode::DrawSpr(const Sprite* spr, const RenderParams& params)
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, params);
 	}
+}
+
+bool DrawNode::IsOutsideScreen(const Sprite* spr, const RenderParams& params)
+{
+	const RenderContext* rc = RenderCtxStack::Instance()->Top();
+	if (!rc) {
+		return false;
+	}
+
+	float hw = rc->GetScreenWidth() * 0.5f,
+		  hh = rc->GetScreenHeight() * 0.5f;
+
+	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+	sm::mat4 mat = spr->GetLocalMat() * params.mt;
+	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
+	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
+
+	return r_max.x < -hw || r_min.x > hw || r_max.y < -hh || r_min.y > hh;
 }
 
 }

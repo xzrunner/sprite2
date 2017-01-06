@@ -34,6 +34,8 @@ public:
 private:
 	static void DrawSpr(const Sprite* spr, const RenderParams& params);
 
+	static bool IsOutsideScreen(const Sprite* spr, const RenderParams& params);
+
 }; // DrawNode
 
 }

@@ -57,7 +57,9 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	float texcoords[8];
 	int texid;
-	QueryTexcoords(texcoords, texid);
+	if (!QueryTexcoords(texcoords, texid)) {
+		return;
+	}
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {

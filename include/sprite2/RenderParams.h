@@ -8,6 +8,7 @@
 #include "SprTreePath.h"
 
 #include <SM_Matrix.h>
+#include <SM_Rect.h>
 
 namespace s2
 {
@@ -20,7 +21,7 @@ class RenderParams
 public:
 	sm::vec2 vertex_offset;		// for blend
 
-	bool set_shader;
+	sm::rect view_region;
 
 	sm::mat4 mt;
 
@@ -29,6 +30,8 @@ public:
 	RenderShader shader;
 
 	RenderCamera camera;
+
+	bool set_shader;
 
 	bool disable_render;
 

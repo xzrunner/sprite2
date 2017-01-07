@@ -31,10 +31,10 @@ public:
 		             const RenderParams& params,
 					 const sm::mat4& mt);
 
+	static bool IsOutsideView(const Sprite* spr, const RenderParams& params);
+
 private:
 	static void DrawSpr(const Sprite* spr, const RenderParams& params);
-
-	static bool IsOutsideScreen(const Sprite* spr, const RenderParams& params);
 
 }; // DrawNode
 

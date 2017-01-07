@@ -10,6 +10,7 @@
 #include <SM_Rect.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
+#include <gimg_typedef.h>
 #include <gimg_export.h>
 
 namespace s2
@@ -185,7 +186,7 @@ void DrawRT::StoreToFile(const std::string& filepath, int width, int height, int
 	}
 
 	GIMG_PIXEL_FORMAT fmt = channels == 3 ? GPF_RGB : GPF_RGBA;
-	gimg_export(filepath.c_str(), pixels, m_rt->Width(), m_rt->Height(), fmt);
+	gimg_export(filepath.c_str(), pixels, m_rt->Width(), m_rt->Height(), fmt, true);
 
 	delete[] pixels;
 }

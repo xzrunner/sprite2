@@ -3,6 +3,7 @@
 #include "RenderShader.h"
 #include "RenderFilter.h"
 #include "RenderShader.h"
+#include "RenderParams.h"
 
 #include <stddef.h>
 
@@ -25,14 +26,15 @@ ImageSprite* ImageSprite::Clone() const
 
 bool ImageSprite::Update(const RenderParams& params)
 {
-	FilterMode filter = FM_NULL;
-	if (const RenderFilter* rf = GetShader().GetFilter()) {
-		filter = rf->GetMode();
+	RenderShader rs = GetShader() * params.shader;
+	if (rs.GetFilter()) {
+		FilterMode mode = rs.GetFilter()->GetMode();
+		return mode == FM_HEAT_HAZE 
+			|| mode == FM_SHOCK_WAVE 
+			|| mode == FM_SWIRL
+			|| mode == FM_BURNING_MAP;
 	}
-	return filter == FM_HEAT_HAZE 
-		|| filter == FM_SHOCK_WAVE 
-		|| filter == FM_SWIRL
-		|| filter == FM_BURNING_MAP;
+	return false;
 }
 
 }

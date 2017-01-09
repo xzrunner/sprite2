@@ -34,6 +34,7 @@ bool ComplexSprite::Update(const RenderParams& params)
 {
 	RenderParams p = params;
 	p.mt = GetLocalMat() * params.mt;
+	p.shader = GetShader() * params.shader;
 
 	bool dirty = false;
 	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();

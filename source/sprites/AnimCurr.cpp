@@ -297,6 +297,7 @@ void AnimCurr::LoadFromSym()
 	 						*dst = *src;
 	 					} else {
 							dst = VI_CLONE(Sprite, src);
+							dst->OnMessage(MSG_START);
 						}
 						dst->OnMessage(MSG_INIT);
 //					}

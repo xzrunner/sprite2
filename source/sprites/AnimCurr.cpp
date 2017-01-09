@@ -119,11 +119,9 @@ bool AnimCurr::Update(const RenderParams& params, bool loop,
 		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
 			curr_frame = 1;
 			m_frame = 0;
-			m_layers.clear();
 		} else {
 			curr_frame = 1;
 			m_frame = 0;
-			m_layers.clear();
 			m_start_time = m_curr_time;
 		}
 	} else {

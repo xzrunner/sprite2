@@ -80,13 +80,16 @@ sm::rect ImageSymbol::GetBounding(const Sprite* spr) const
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const
 {
-	return m_tex->GetOriSize();
+	if (m_tex) {
+		return m_tex->GetOriSize();
+	} else {
+		return  m_size.Size();
+	}
 }
 
 void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& quad, const sm::vec2& offset)
 {
-	tex->AddReference();
-	m_tex = tex;
+	cu::RefCountObjAssign(m_tex, tex);
 	m_quad = quad;
 	m_offset = offset;
 
@@ -99,6 +102,10 @@ void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& quad, const sm::vec2
 
 void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const
 {
+	if (!m_tex) {
+		return;
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());

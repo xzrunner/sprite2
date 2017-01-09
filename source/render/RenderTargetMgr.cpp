@@ -38,4 +38,13 @@ void RenderTargetMgr::Return(RenderTarget* rt)
 	assert(0);
 }
 
+int RenderTargetMgr::GetTexID(int idx) const
+{
+	if (idx < 0 || idx >= MAX_COUNT) {
+		return  -1;
+	} else {
+		return m_items[idx].rt->GetTexID();
+	}
+}
+
 }

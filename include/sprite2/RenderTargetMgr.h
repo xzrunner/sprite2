@@ -14,6 +14,8 @@ public:
 	RenderTarget* Fetch();
 	void Return(RenderTarget* rt);
 
+	int GetTexID(int idx) const;
+
 public:
 	static const int WIDTH  = 1024;
 	static const int HEIGHT = 1024;

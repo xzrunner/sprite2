@@ -785,6 +785,10 @@
 							RelativePath="..\..\..\include\sprite2\MeshTriangle.h"
 							>
 						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\MeshType.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="network"

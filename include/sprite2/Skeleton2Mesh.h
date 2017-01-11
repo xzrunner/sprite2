@@ -24,6 +24,8 @@ public:
 	 */
 	virtual Skeleton2Mesh* Clone() const { return new Skeleton2Mesh(*this); }
 
+	virtual MeshType Type() const { return MESH_SKELETON2; }
+
 	virtual void Update(const rg_skeleton_pose* sk_pose);
 
 public:
@@ -42,6 +44,10 @@ public:
 
 	void SetData(const std::vector<SkinnedVertex>& vertices, const std::vector<sm::vec2>& texcoords,
 		const std::vector<int>& triangles);
+
+	const std::vector<SkinnedVertex>& GetVertices() const { return m_vertices; }
+	const std::vector<sm::vec2>& GetTexcoords() const { return m_texcoords; }
+	const std::vector<int>& GetTriangles() const { return m_triangles; }
 
 private:
 	std::vector<SkinnedVertex> m_vertices;

@@ -21,6 +21,8 @@ public:
 	 */
 	virtual StripMesh* Clone() const { return new StripMesh(*this); }
 
+	virtual MeshType Type() const { return MESH_STRIP; }
+
 protected:
 	void InitBound();
 

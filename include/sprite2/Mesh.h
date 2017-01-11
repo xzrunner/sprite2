@@ -2,6 +2,7 @@
 #define _SPRITE2_MESH_H_
 
 #include "pre_defined.h"
+#include "MeshType.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
@@ -36,6 +37,8 @@ public:
 	 *    should after other virtual
 	 */
 	virtual Mesh* Clone() const { return NULL; }
+
+	virtual MeshType Type() const = 0;
 
 	virtual void Update(const rg_skeleton_pose* sk_pose) {}
 	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices) {}

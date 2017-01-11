@@ -28,11 +28,17 @@ public:
 	 */
 	virtual TrianglesMesh* Clone() const { return new TrianglesMesh(*this); }
 
+	virtual MeshType Type() const { return MESH_TRIANGLE; }
+
 	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices);
 
 	void SetData(const std::vector<sm::vec2>& vertices, const std::vector<sm::vec2>& texcoords,
 		const std::vector<int>& triangles);
-	
+
+	const std::vector<sm::vec2>& GetVertices() const { return m_vertices; }
+	const std::vector<sm::vec2>& GetTexcoords() const { return m_texcoords; }
+	const std::vector<int>& GetTriangles() const { return m_triangles; }
+
 private:
 	std::vector<sm::vec2> m_vertices;
 	std::vector<sm::vec2> m_texcoords;

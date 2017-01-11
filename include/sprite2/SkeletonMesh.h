@@ -29,6 +29,8 @@ public:
 	 */
 	virtual SkeletonMesh* Clone() const { return new SkeletonMesh(*this); }	
 	
+	virtual MeshType Type() const { return MESH_SKELETON; }
+
 	void SetShape(PolylineShape* shape);
 	const PolylineShape* GetShape() const { return m_shape; }
 

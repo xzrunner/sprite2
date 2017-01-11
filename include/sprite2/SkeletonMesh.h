@@ -22,14 +22,14 @@ public:
 	SkeletonMesh(const Symbol* base);
 	SkeletonMesh& operator = (const SkeletonMesh& mesh);
 	virtual ~SkeletonMesh();
+	
+	virtual MeshType Type() const { return MESH_SKELETON; }
 
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
 	virtual SkeletonMesh* Clone() const { return new SkeletonMesh(*this); }	
-	
-	virtual MeshType Type() const { return MESH_SKELETON; }
 
 	void SetShape(PolylineShape* shape);
 	const PolylineShape* GetShape() const { return m_shape; }

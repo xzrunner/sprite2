@@ -22,13 +22,13 @@ public:
 	NetworkMesh& operator = (const NetworkMesh& mesh);
 	virtual ~NetworkMesh();
 
+	virtual MeshType Type() const { return MESH_NETWORK; }
+
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
 	virtual NetworkMesh* Clone() const { return new NetworkMesh(*this); }
-
-	virtual MeshType Type() const { return MESH_NETWORK; }
 
 	void SetShape(NetworkShape* shape);
 	const NetworkShape* GetShape() const { return m_shape; }

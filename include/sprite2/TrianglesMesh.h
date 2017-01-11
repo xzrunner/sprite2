@@ -22,15 +22,15 @@ public:
 	TrianglesMesh(const Symbol* base);
 	TrianglesMesh& operator = (const TrianglesMesh& mesh);
 
+	virtual MeshType Type() const { return MESH_TRIANGLES; }
+
+	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices);
+
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
 	virtual TrianglesMesh* Clone() const { return new TrianglesMesh(*this); }
-
-	virtual MeshType Type() const { return MESH_TRIANGLE; }
-
-	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices);
 
 	void SetData(const std::vector<sm::vec2>& vertices, const std::vector<sm::vec2>& texcoords,
 		const std::vector<int>& triangles);

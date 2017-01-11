@@ -30,6 +30,11 @@ public:
 	
 	virtual void OffsetUV(float dx, float dy) {}
 
+	virtual MeshType Type() const = 0;
+
+	virtual void Update(const rg_skeleton_pose* sk_pose) {}
+	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices) {}
+
 	/**
 	 *  @interface
 	 *    cu::Cloneable
@@ -37,11 +42,6 @@ public:
 	 *    should after other virtual
 	 */
 	virtual Mesh* Clone() const { return NULL; }
-
-	virtual MeshType Type() const = 0;
-
-	virtual void Update(const rg_skeleton_pose* sk_pose) {}
-	virtual void Update(const rg_tl_deform_state* deform_state, const float* vertices) {}
 
 	const Symbol* GetBaseSymbol() const { return m_base; }
 

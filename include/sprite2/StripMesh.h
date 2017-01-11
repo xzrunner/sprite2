@@ -15,13 +15,13 @@ public:
 	StripMesh(const StripMesh& mesh);
 	StripMesh(const Symbol* base);
 
+	virtual MeshType Type() const { return MESH_STRIP; }
+
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
 	virtual StripMesh* Clone() const { return new StripMesh(*this); }
-
-	virtual MeshType Type() const { return MESH_STRIP; }
 
 protected:
 	void InitBound();

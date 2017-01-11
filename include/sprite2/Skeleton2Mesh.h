@@ -18,15 +18,15 @@ public:
 	Skeleton2Mesh(const Symbol* base);
 	Skeleton2Mesh& operator = (const Skeleton2Mesh& mesh);
 
+	virtual MeshType Type() const { return MESH_SKELETON2; }
+
+	virtual void Update(const rg_skeleton_pose* sk_pose);
+
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
 	virtual Skeleton2Mesh* Clone() const { return new Skeleton2Mesh(*this); }
-
-	virtual MeshType Type() const { return MESH_SKELETON2; }
-
-	virtual void Update(const rg_skeleton_pose* sk_pose);
 
 public:
 	class SkinnedVertex

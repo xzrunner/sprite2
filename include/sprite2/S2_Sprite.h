@@ -137,6 +137,8 @@ private:
 
 	void SetWorldDirty(bool dirty) const;
 
+	void CheckInitOffset() const;
+
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;

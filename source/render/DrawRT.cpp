@@ -103,9 +103,9 @@ void DrawRT::Draw(const Symbol* sym, bool whitebg, float scale)
 	int w = static_cast<int>(sz.x * scale),
 		h = static_cast<int>(sz.y * scale);
 
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(w, h, w, h));
+	RenderCtxStack::Instance()->Push(RenderContext(w, h, w, h));
 
-	s2::RenderParams params;
+	RenderParams params;
 	sm::vec2 center = rect.Center();
 	float dx = -center.x;
 	float dy = center.y;
@@ -115,7 +115,7 @@ void DrawRT::Draw(const Symbol* sym, bool whitebg, float scale)
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	mgr->FlushShader();
 
-	s2::RenderCtxStack::Instance()->Pop();
+	RenderCtxStack::Instance()->Pop();
 
 	m_rt->Unbind();
 }
@@ -137,11 +137,11 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 		rc->Clear(0);
 	}
 
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(width, height, width, height));
+	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
 
 	shape->Draw(sm::mat4::Scaled(1, -1, 1));
 
-	s2::RenderCtxStack::Instance()->Pop();
+	RenderCtxStack::Instance()->Pop();
 
 	m_rt->Unbind();
 }

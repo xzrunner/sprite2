@@ -13,6 +13,7 @@
 #include "S2_Actor.h"
 #include "ActorLUT.h"
 #include "ClearActorsVisitor.h"
+#include "SymType.h"
 
 #include <assert.h>
 
@@ -170,9 +171,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 		dscale.x = scale.x / old_scale.x;
 		dscale.y = scale.y / old_scale.y;
 
-		if (!m_geo->GetOffset().IsValid()) {
-			m_geo->SetOffset(m_sym->GetBounding(this).Center());
-		}
+		CheckInitOffset();
 		sm::vec2 old_offset = m_geo->GetOffset();
 		sm::vec2 new_offset(old_offset.x * dscale.x, old_offset.y * dscale.y);
 		m_geo->SetOffset(new_offset);
@@ -202,9 +201,7 @@ void Sprite::SetShear(const sm::vec2& shear)
 	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
 
-	if (!m_geo->GetOffset().IsValid()) {
-		m_geo->SetOffset(m_sym->GetBounding(this).Center());
-	}
+	CheckInitOffset();
 	sm::vec2 offset = mat_new * m_geo->GetOffset() - mat_old * m_geo->GetOffset();
 	m_geo->SetOffset(m_geo->GetOffset() + offset);
 	m_geo->SetPosition(m_geo->GetPosition() - offset);
@@ -230,9 +227,7 @@ void Sprite::SetOffset(const sm::vec2& offset)
 		m_geo = new SprGeo;
 	}
 
-	if (!m_geo->GetOffset().IsValid()) {
-		m_geo->SetOffset(m_sym->GetBounding(this).Center());
-	}
+	CheckInitOffset();
 
 	// rotate + offset -> offset + rotate	
 	sm::vec2 old_center = GetCenter();
@@ -291,10 +286,8 @@ void Sprite::UpdateBounding() const
 	if (!rect.IsValid()) {
 		return;
 	}
-	
-	if (m_geo != SprDefault::Instance()->Geo() && !m_geo->GetOffset().IsValid()) {
-		m_geo->SetOffset(rect.Center());
-	}
+
+	CheckInitOffset();
 	m_bounding->Build(rect, m_geo->GetPosition(), m_geo->GetAngle(), m_geo->GetScale(), 
 		m_geo->GetShear(), m_geo->GetOffset());
 
@@ -322,9 +315,7 @@ sm::vec2 Sprite::GetCenter() const
 		return sm::vec2(0, 0);
 	} 
 
-	if (!m_geo->GetOffset().IsValid()) {
-		m_geo->SetOffset(m_sym->GetBounding(this).Center());
-	}
+	CheckInitOffset();
 	sm::vec2 center_offset = sm::rotate_vector(-m_geo->GetOffset(), m_geo->GetAngle()) + m_geo->GetOffset();
 	sm::vec2 center = m_geo->GetPosition() + center_offset;
 	return center;
@@ -373,9 +364,7 @@ const sm::vec2& Sprite::GetOffset() const
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = new SprGeo;
 	}
-	if (!m_geo->GetOffset().IsValid()) {
-		m_geo->SetOffset(m_sym->GetBounding(this).Center());
-	}
+	CheckInitOffset();
 	return m_geo->GetOffset();
 }
 
@@ -635,6 +624,18 @@ void Sprite::SetWorldDirty(bool dirty) const
 		m_flags |= FLAG_WORLD_DIRTY;
 	} else {
 		m_flags &= ~FLAG_WORLD_DIRTY;
+	}
+}
+
+void Sprite::CheckInitOffset() const
+{
+	if (m_geo->GetOffset().IsValid()) {
+		return;
+	}
+	if (m_sym->Type() == SYM_IMAGE) {
+		m_geo->SetOffset(m_sym->GetBounding(this).Center());
+	} else {
+		m_geo->SetOffset(sm::vec2(0, 0));
 	}
 }
 

@@ -13,6 +13,7 @@
 #include "BoundingBox.h"
 #include "S2_RVG.h"
 #include "PointQueryVisitor.h"
+#include "SprTimer.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -26,6 +27,12 @@
 
 namespace s2
 {
+
+extern "C"
+void s2_init()
+{
+	SprTimer::Instance()->Init();
+}
 
 extern "C"
 void s2_on_size(int w, int h) 

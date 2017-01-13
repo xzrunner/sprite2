@@ -8,6 +8,8 @@ extern "C"
 
 #include <stdbool.h>
 
+void s2_init();
+
 void s2_on_size(int w, int h);
 
 /************************************************************************/

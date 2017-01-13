@@ -9,9 +9,9 @@ Anim2Sprite::Anim2Sprite()
 {
 }
 
-Anim2Sprite::Anim2Sprite(Anim2Symbol* sym, uint32_t id)
+Anim2Sprite::Anim2Sprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_curr(sym)
+	, m_curr(static_cast<Anim2Symbol*>(sym))
 	, m_static_time(-1)
 {
 }

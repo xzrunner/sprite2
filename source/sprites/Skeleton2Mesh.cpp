@@ -16,7 +16,7 @@ Skeleton2Mesh::Skeleton2Mesh()
 Skeleton2Mesh::Skeleton2Mesh(const Skeleton2Mesh& mesh)
 	: Mesh(mesh)
 {
-	SetData(mesh.m_vertices, mesh.m_texcoords, mesh.m_triangles);
+	SetData(mesh.m_items, mesh.m_vertices, mesh.m_texcoords, mesh.m_triangles);
 }
 
 Skeleton2Mesh::Skeleton2Mesh(const Symbol* base)
@@ -27,7 +27,7 @@ Skeleton2Mesh::Skeleton2Mesh(const Symbol* base)
 Skeleton2Mesh& Skeleton2Mesh::operator = (const Skeleton2Mesh& mesh)
 {
 	Mesh::operator = (mesh);
-	SetData(mesh.m_vertices, mesh.m_texcoords, mesh.m_triangles);
+	SetData(mesh.m_items, mesh.m_vertices, mesh.m_texcoords, mesh.m_triangles);
 	return *this;
 }
 
@@ -40,12 +40,11 @@ void Skeleton2Mesh::Update(const rg_skeleton_pose* sk_pose)
 		sm::vec2 v;
 		for (int j = 0, m = m_vertices[i].items.size(); j < m; ++j)
 		{
-			const SkinnedVertex::Item& item = m_vertices[i].items[j];
+			const Item& item = m_items[m_vertices[i].items[j]];
 			const float* mat = sk_pose->poses[item.joint].world.m;
-			v.x += (item.vx * mat[0] + item.vy * mat[2] + mat[4]) * item.weight;
-			v.y += (item.vx * mat[1] + item.vy * mat[3] + mat[5]) * item.weight;
-// 			v.x += (item.vx) * item.weight;
-// 			v.y += (item.vy) * item.weight;
+			sm::vec2 vertex = item.vertex + item.offset;
+			v.x += (vertex.x * mat[0] + vertex.y * mat[2] + mat[4]) * item.weight;
+			v.y += (vertex.x * mat[1] + vertex.y * mat[3] + mat[5]) * item.weight;
 		}
 		vertices.push_back(v);
 	}
@@ -58,21 +57,42 @@ void Skeleton2Mesh::Update(const rg_skeleton_pose* sk_pose)
 	}
 }
 
-void Skeleton2Mesh::SetData(const std::vector<SkinnedVertex>& vertices, 
-							const std::vector<sm::vec2>& texcoords,
+void Skeleton2Mesh::Update(const rg_tl_deform_state* state, const float* vertices)
+{
+	for (int i = 0; i < state->count0; ++i) {
+		m_items[state->offset0 + i].offset.Set(0, 0);
+	}
+	for (int i = 0; i < state->count1; ++i) {
+		m_items[state->offset1 + i].offset.Set(0, 0);
+	}
+
+	int ptr = 0;
+	for (int i = 0; i < state->count0; ++i) {
+		sm::vec2 offset(vertices[ptr++], vertices[ptr++]);
+		m_items[state->offset0 + i].offset += offset;
+	}
+	for (int i = 0; i < state->count1; ++i) {
+		sm::vec2 offset(vertices[ptr++], vertices[ptr++]);
+		m_items[state->offset1 + i].offset += offset;
+	}
+}
+
+void Skeleton2Mesh::SetData(const std::vector<Item>& items, 
+							const std::vector<Vertex>& vertices, 
+							const std::vector<sm::vec2>& texcoords, 
 							const std::vector<int>& triangles)
 {
+	m_items = items;
 	m_vertices = vertices;
 	m_texcoords = texcoords;
 	m_triangles = triangles;
 
 	assert(vertices.size() == texcoords.size());
-	std::vector<MeshNode*> nodes;
-	nodes.reserve(vertices.size());
+	m_nodes.reserve(vertices.size());
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		MeshNode* node = new MeshNode;
 		node->uv = texcoords[i];
-		nodes.push_back(node);
+		m_nodes.push_back(node);
 	}
 
 	int ptr = 0;
@@ -80,7 +100,7 @@ void Skeleton2Mesh::SetData(const std::vector<SkinnedVertex>& vertices,
 	{
 		MeshTriangle* tri = new MeshTriangle;
 		for (int j = 0; j < 3; ++j) {
-			tri->nodes[j] = nodes[triangles[ptr++]];
+			tri->nodes[j] = m_nodes[triangles[ptr++]];
 		}
 		m_tris.push_back(tri);
 	}

@@ -24,6 +24,7 @@ enum SymType
 	SYM_MASK,
 	SYM_TRAIL,
 	SYM_SKELETON,
+	SYM_MODEL,
 
 	SYM_DUMMY = 100,
 };

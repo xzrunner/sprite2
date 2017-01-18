@@ -14,6 +14,7 @@ class Sprite;
 class AnimSymbol;
 class RenderParams;
 class SprVisitor;
+class SprVisitorParams;
 
 class AnimCurr
 {
@@ -24,7 +25,7 @@ public:
 	AnimCurr(AnimSymbol* sym);
 	~AnimCurr();
 
-	bool Traverse(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
+	bool Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 	void OnMessage(Message msg);
 

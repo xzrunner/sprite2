@@ -28,6 +28,7 @@ class RenderCamera;
 class SprVisitor;
 class Actor;
 class SprTreePath;
+class SprVisitorParams;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -62,7 +63,7 @@ public:
 	virtual void SetOffset(const sm::vec2& offset);
 
 protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const sm::mat4* mat = NULL) const { return true; }
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return true; }
 public:
 
 	/**
@@ -73,7 +74,7 @@ public:
 	 */
 	virtual Sprite* Clone() const { return NULL; }
 
-	bool Traverse(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
+	bool Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }

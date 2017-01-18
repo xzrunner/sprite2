@@ -3,6 +3,8 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "BoundingBox.h"
+#include "S2_Actor.h"
+#include "SprVisitorParams.h"
 
 #include "S2_RVG.h"
 
@@ -28,7 +30,7 @@ PointQueryVisitor::~PointQueryVisitor()
 	}
 }
 
-VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
+VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (!spr->IsVisible()) {
 		return VISIT_CONTINUE;
@@ -42,8 +44,6 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 		return VISIT_INTO;
 	}
 
-	assert(mat);
-	sm::mat4 m = spr->GetLocalMat() * (*mat);
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
 	std::vector<sm::vec2> vertices(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
@@ -51,13 +51,13 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
 	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = m * vertices[i];
+		vertices[i] = params.mt * vertices[i];
 	}
 	RVG::Polyline(vertices, true);
 	if (sm::is_point_in_convex(m_pos, vertices)) 
 	{
 		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = m;
+		m_mat = params.mt;
 		m_layer_find = true;
 		return VISIT_STOP;
 	}
@@ -67,18 +67,19 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 	}
 }
 
-void PointQueryVisitor::VisitChildrenBegin(const Sprite* spr)
+void PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_layer_find = false;
 	m_parents.push_back(spr);
 }
 
-void PointQueryVisitor::VisitChildrenEnd(const Sprite* spr)
+void PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	assert(!m_parents.empty() && m_parents.back() == spr);
 
 	if (m_layer_find && !m_spr->IsEditable()) {		
 		cu::RefCountObjAssign(m_spr, spr);
+		m_mat = params.mt;
 	}
 
 	m_parents.pop_back();

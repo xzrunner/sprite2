@@ -7,6 +7,7 @@
 #include "DrawNode.h"
 #include "RenderScissor.h"
 #include "FixActorPathVisitor.h"
+#include "SprVisitorParams.h"
 
 #include <map>
 
@@ -163,7 +164,7 @@ bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Spr
 	dst->AddReference();
 
 	FixActorPathVisitor visitor(path);
-	dst->Traverse(visitor, NULL);
+	dst->Traverse(visitor, SprVisitorParams());
 
 	return true;
 }

@@ -56,13 +56,13 @@ AnimCurr::~AnimCurr()
 {
 }
 
-bool AnimCurr::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
+bool AnimCurr::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = m_layers.size(); i < n; ++i) {
 			const Layer& layer = m_layers[i];
 			for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
-				if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
+				if (!layer.frame.sprs[j]->Traverse(visitor, params)) {
 					return false;
 				}
 			}
@@ -71,7 +71,7 @@ bool AnimCurr::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
 		for (int i = m_layers.size() - 1; i >= 0; --i) {
 			const Layer& layer = m_layers[i];
 			for (int j = layer.frame.sprs.size() - 1; j >= 0; --j) {
-				if (!layer.frame.sprs[j]->Traverse(visitor, mat)) {
+				if (!layer.frame.sprs[j]->Traverse(visitor, params)) {
 					return false;
 				}
 			}

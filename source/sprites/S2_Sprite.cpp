@@ -14,6 +14,7 @@
 #include "ActorLUT.h"
 #include "ClearActorsVisitor.h"
 #include "SymType.h"
+#include "SprVisitorParams.h"
 
 #include <assert.h>
 
@@ -75,7 +76,7 @@ Sprite::~Sprite()
 	--m_count;
 
 	ClearActorsVisitor visitor;
-	Traverse(visitor, NULL);
+	Traverse(visitor, SprVisitorParams());
 
 	if (m_sym) {
 		m_sym->RemoveReference();
@@ -245,20 +246,24 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	SetWorldDirty(true);
 }
 
-bool Sprite::Traverse(SprVisitor& visitor, const sm::mat4* mat) const
+bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
-	VisitResult v_ret = visitor.Visit(this, mat);
+	SprVisitorParams p;
+
+	p.mt = GetLocalMat() * params.mt;
+	p.path = params.path;
+	p.path.Push(m_id);
+	const Actor* actor = QueryActor(p.path);
+	if (actor) {
+		p.mt = actor->GetLocalMat() * p.mt;
+	}
+
+	VisitResult v_ret = visitor.Visit(this, p);
 	if (v_ret == VISIT_INTO) 
 	{
-		bool ret;
-		visitor.VisitChildrenBegin(this);
-		if (mat) {
-			sm::mat4 m = GetLocalMat() * (*mat);
-			ret = TraverseChildren(visitor, &m);
-		} else {
-			ret = TraverseChildren(visitor);
-		}
-		visitor.VisitChildrenEnd(this);
+		visitor.VisitChildrenBegin(this, p);
+		bool ret = TraverseChildren(visitor, p);
+		visitor.VisitChildrenEnd(this, p);
 		return ret;
 	} 
 	else 

@@ -7,6 +7,7 @@ namespace s2
 {
 
 class Sprite;
+class SprVisitorParams;
 
 enum VisitResult
 {
@@ -22,10 +23,10 @@ public:
 	SprVisitor(bool order = true);
 	virtual ~SprVisitor() {}
 
-	virtual VisitResult Visit(const Sprite* spr, const sm::mat4* mat) = 0;
+	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params) = 0;
 
-	virtual void VisitChildrenBegin(const Sprite* spr) {}
-	virtual void VisitChildrenEnd(const Sprite* spr) {}
+	virtual void VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params) {}
+	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params) {}
 
 	bool GetOrder() const { return m_order; }
 

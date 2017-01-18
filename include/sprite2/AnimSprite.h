@@ -44,7 +44,7 @@ public:
 	void SetActive(bool active);
 
 protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 private:
 	void RandomStartTime();

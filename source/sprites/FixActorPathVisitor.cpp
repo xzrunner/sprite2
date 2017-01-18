@@ -13,7 +13,7 @@ FixActorPathVisitor::FixActorPathVisitor(const SprTreePath& path)
 {
 }
 
-VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
+VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	const_cast<Sprite*>(spr)->FixActorPath(m_path);
 
@@ -28,12 +28,12 @@ VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const sm::mat4* mat)
 	return VISIT_CONTINUE;
 }
 
-void FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr)
+void FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_path.Push(spr->GetID());
 }
 
-void FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr)
+void FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	assert(!m_path.Empty() && m_path.Top() == spr->GetID());
 	m_path.Pop();

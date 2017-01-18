@@ -1,11 +1,11 @@
 #include "PointQuery2Visitor.h"
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
+#include "S2_Actor.h"
 #include "SymType.h"
 #include "BoundingBox.h"
 #include "ActorFactory.h"
-
-#include "S2_RVG.h"
+#include "SprVisitorParams.h"
 
 #include <SM_Calc.h>
 
@@ -30,7 +30,7 @@ PointQuery2Visitor::~PointQuery2Visitor()
 	}
 }
 
-VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const sm::mat4* mat)
+VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (!spr->IsVisible()) {
 		return VISIT_CONTINUE;
@@ -44,8 +44,6 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const sm::mat4* mat)
 		return VISIT_INTO;
 	}
 
-	assert(mat);
-	sm::mat4 m = spr->GetLocalMat() * (*mat);
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
 	std::vector<sm::vec2> vertices(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
@@ -53,13 +51,13 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const sm::mat4* mat)
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
 	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = m * vertices[i];
+		vertices[i] = params.mt * vertices[i];
 	}
-	RVG::Polyline(vertices, true);
+
 	if (sm::is_point_in_convex(m_pos, vertices)) 
 	{
 		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = m;
+		m_mat = params.mt;
 		m_layer_find = true;
 		return VISIT_STOP;
 	}
@@ -69,18 +67,19 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const sm::mat4* mat)
 	}
 }
 
-void PointQuery2Visitor::VisitChildrenBegin(const Sprite* spr)
+void PointQuery2Visitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_parent.Push(spr->GetID());
 	m_layer_find = false;
 }
 
-void PointQuery2Visitor::VisitChildrenEnd(const Sprite* spr)
+void PointQuery2Visitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	assert(!m_parent.Empty() && m_parent.Top() == spr->GetID());
 
 	if (m_layer_find && !m_spr->IsEditable()) {
 		cu::RefCountObjAssign(m_spr, spr);
+		m_mat = params.mt;
 	}
 
 	m_parent.Pop();

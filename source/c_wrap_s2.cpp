@@ -14,6 +14,7 @@
 #include "S2_RVG.h"
 #include "PointQueryVisitor.h"
 #include "SprTimer.h"
+#include "SprVisitorParams.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -62,6 +63,15 @@ void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float
 {
 	RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
+	float hw = ctx->GetScreenWidth() * 0.5f,
+		  hh = ctx->GetScreenHeight() * 0.5f;
+	params.view_region.xmin = -hw;
+	params.view_region.ymin = -hh;
+	params.view_region.xmax =  hw;
+	params.view_region.ymax =  hh;
+
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	DrawNode::Draw(s2_spr, params);
 }
@@ -382,20 +392,20 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 
 	PointQueryVisitor visitor(sm::vec2(x, y));
-	sm::mat4 _mat;
-	s2_spr->Traverse(visitor, &_mat);
+
+	s2_spr->Traverse(visitor, SprVisitorParams());
 	const Sprite* ret = visitor.GetSelectedSpr();
 	if (!ret) {
 		return NULL;
 	}
 
-	_mat = visitor.GetSelectedMat();
-	mat[0] = _mat.x[0];
-	mat[1] = _mat.x[1];
-	mat[2] = _mat.x[4];
-	mat[3] = _mat.x[5];
-	mat[4] = _mat.x[12];
-	mat[5] = _mat.x[13];
+	const sm::mat4& selected_mat = visitor.GetSelectedMat();
+	mat[0] = selected_mat.x[0];
+	mat[1] = selected_mat.x[1];
+	mat[2] = selected_mat.x[4];
+	mat[3] = selected_mat.x[5];
+	mat[4] = selected_mat.x[12];
+	mat[5] = selected_mat.x[13];
 
 	return const_cast<Sprite*>(ret);
 }
@@ -496,15 +506,20 @@ bool s2_spr_set_scissor(void* spr, float x, float y, float w, float h)
 extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
-	PointQuery2Visitor visitor(parent->GetTreePath(), sm::vec2(x, y));
-	sm::mat4 _mat;
-	parent->GetSpr()->Traverse(visitor, &_mat);
-	mat[0] = _mat.x[0];
-	mat[1] = _mat.x[1];
-	mat[2] = _mat.x[4];
-	mat[3] = _mat.x[5];
-	mat[4] = _mat.x[12];
-	mat[5] = _mat.x[13];	
+
+	SprTreePath path = parent->GetTreePath();
+	PointQuery2Visitor visitor(path, sm::vec2(x, y));
+
+	parent->GetSpr()->Traverse(visitor, SprVisitorParams());
+
+	const sm::mat4& selected_mat = visitor.GetSelectedMat();
+	mat[0] = selected_mat.x[0];
+	mat[1] = selected_mat.x[1];
+	mat[2] = selected_mat.x[4];
+	mat[3] = selected_mat.x[5];
+	mat[4] = selected_mat.x[12];
+	mat[5] = selected_mat.x[13];	
+
 	return visitor.GetSelectedActor();
 }
 

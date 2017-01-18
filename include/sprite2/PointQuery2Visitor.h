@@ -19,10 +19,10 @@ public:
 	PointQuery2Visitor(const SprTreePath& parent, const sm::vec2& pos);
 	virtual ~PointQuery2Visitor();
 
-	virtual VisitResult Visit(const Sprite* spr, const sm::mat4* mat);
+	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
 
-	virtual void VisitChildrenBegin(const Sprite* spr);
-	virtual void VisitChildrenEnd(const Sprite* spr);
+	virtual void VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params);
+	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 	Actor* GetSelectedActor() const;
 	const sm::mat4& GetSelectedMat() const { return m_mat; }

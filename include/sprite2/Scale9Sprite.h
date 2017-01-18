@@ -26,7 +26,7 @@ public:
 	void Resize(float width, float height);
 
 protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const sm::mat4* mat = NULL) const;
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 protected:
 	Scale9 m_s9;

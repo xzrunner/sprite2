@@ -70,19 +70,14 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 void PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_layer_find = false;
-	m_parents.push_back(spr);
 }
 
 void PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
-	assert(!m_parents.empty() && m_parents.back() == spr);
-
 	if (m_layer_find && !m_spr->IsEditable()) {		
 		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = params.mt;
 	}
-
-	m_parents.pop_back();
 }
 
 }

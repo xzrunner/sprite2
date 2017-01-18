@@ -3,6 +3,7 @@
 
 #include "SprVisitor.h"
 #include "SprTreePath.h"
+#include "SprVisitorParams.h"
 
 #include <SM_Vector.h>
 
@@ -16,7 +17,7 @@ class Actor;
 class PointQuery2Visitor : public SprVisitor
 {
 public:
-	PointQuery2Visitor(const SprTreePath& parent, const sm::vec2& pos);
+	PointQuery2Visitor(const sm::vec2& pos);
 	virtual ~PointQuery2Visitor();
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
@@ -25,14 +26,13 @@ public:
 	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 	Actor* GetSelectedActor() const;
-	const sm::mat4& GetSelectedMat() const { return m_mat; }
+	const sm::mat4& GetSelectedMat() const { return m_selected_params.mt; }
 	
 private:
-	SprTreePath m_parent;
 	sm::vec2 m_pos;
 
-	const Sprite* m_spr;
-	sm::mat4 m_mat;
+	const Sprite*    m_selected_spr;
+	SprVisitorParams m_selected_params;
 
 	bool m_layer_find;
 

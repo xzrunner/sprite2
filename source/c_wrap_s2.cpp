@@ -507,9 +507,7 @@ extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 
-	SprTreePath path = parent->GetTreePath();
-	PointQuery2Visitor visitor(path, sm::vec2(x, y));
-
+	PointQuery2Visitor visitor(sm::vec2(x, y));
 	parent->GetSpr()->Traverse(visitor, SprVisitorParams());
 
 	const sm::mat4& selected_mat = visitor.GetSelectedMat();

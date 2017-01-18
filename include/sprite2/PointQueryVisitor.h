@@ -5,8 +5,6 @@
 
 #include <SM_Vector.h>
 
-#include <vector>
-
 namespace s2
 {
 
@@ -31,7 +29,6 @@ private:
 	sm::mat4 m_mat;
 
 	bool m_layer_find;
-	std::vector<const Sprite*> m_parents;
 
 }; // PointQueryVisitor
 

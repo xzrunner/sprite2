@@ -4,8 +4,8 @@
 #include "S2_Actor.h"
 #include "SymType.h"
 #include "BoundingBox.h"
-#include "ActorFactory.h"
 #include "SprVisitorParams.h"
+#include "ActorLUT.h"
 
 #include <SM_Calc.h>
 
@@ -14,19 +14,18 @@
 namespace s2
 {
 
-PointQuery2Visitor::PointQuery2Visitor(const SprTreePath& parent, const sm::vec2& pos)
+PointQuery2Visitor::PointQuery2Visitor(const sm::vec2& pos)
 	: SprVisitor(false)
-	, m_parent(parent)
 	, m_pos(pos)
-	, m_spr(NULL)
+	, m_selected_spr(NULL)
 	, m_layer_find(false)
 {
 }
 
 PointQuery2Visitor::~PointQuery2Visitor()
 {
-	if (m_spr) {
-		m_spr->RemoveReference();
+	if (m_selected_spr) {
+		m_selected_spr->RemoveReference();
 	}
 }
 
@@ -56,8 +55,8 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams&
 
 	if (sm::is_point_in_convex(m_pos, vertices)) 
 	{
-		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = params.mt;
+		cu::RefCountObjAssign(m_selected_spr, spr);
+		m_selected_params = params;
 		m_layer_find = true;
 		return VISIT_STOP;
 	}
@@ -69,28 +68,23 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams&
 
 void PointQuery2Visitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
-	m_parent.Push(spr->GetID());
 	m_layer_find = false;
 }
 
 void PointQuery2Visitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
-	assert(!m_parent.Empty() && m_parent.Top() == spr->GetID());
-
-	if (m_layer_find && !m_spr->IsEditable()) {
-		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = params.mt;
+	if (m_layer_find && !m_selected_spr->IsEditable()) {
+		cu::RefCountObjAssign(m_selected_spr, spr);
+		m_selected_params = params;
 	}
-
-	m_parent.Pop();
 }
 
 Actor* PointQuery2Visitor::GetSelectedActor() const
 {
-	if (!m_spr) {
+	if (!m_selected_spr) {
 		return NULL;
 	}
-	return ActorFactory::Instance()->Create(m_parent, m_spr);
+	return ActorLUT::Instance()->Query(m_selected_params.path);
 }
 
 }

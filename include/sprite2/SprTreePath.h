@@ -6,10 +6,15 @@
 namespace s2
 {
 
+struct STPBuffer;
+
 class SprTreePath
 {
 public:
 	SprTreePath();
+	SprTreePath(const SprTreePath& path);
+	SprTreePath& operator = (const SprTreePath& path);
+	~SprTreePath();
 
 	bool operator == (const SprTreePath& path) const;
 
@@ -20,14 +25,14 @@ public:
 	int Top() const;
 
 	int GetVal() const { return m_val; }
-
+ 
 private:
 	friend std::ostream & operator << (std::ostream& os, const SprTreePath& path);
 
 private:
-	std::vector<int> m_ids;
-
 	int m_val;
+
+	STPBuffer* m_buf;
 
 }; // SprTreePath
 

@@ -1223,18 +1223,38 @@
 					RelativePath="..\..\..\include\sprite2\S2_Actor.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\SprTreePath.cpp"
+				<Filter
+					Name="treepath"
 					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprTreePath.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprTreePath.inl"
-					>
-				</File>
+					<File
+						RelativePath="..\..\..\source\sprites\SprTreePath.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprTreePath.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprTreePath.inl"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\STPBuffer.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\STPBuffer.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\STPBufPool.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\STPBufPool.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="15.model"

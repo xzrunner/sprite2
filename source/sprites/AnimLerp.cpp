@@ -8,6 +8,8 @@
 #include "Particle3dSprite.h"
 #include "LerpCircle.h"
 #include "LerpSpiral.h"
+#include "S2_Symbol.h"
+#include "SymType.h"
 
 #include <SM_Vector.h>
 
@@ -51,7 +53,7 @@ Color color_interpolate(const Color& begin, const Color& end, float scale)
 	return ret;
 }
 
-void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
+void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float process,
 					const std::vector<std::pair<SprData, ILerp*> >& lerps)
 {
 	sm::vec2 shear;
@@ -83,46 +85,51 @@ void AnimLerp::Lerp(Sprite* begin, Sprite* end, Sprite* tween, float process,
 	rc.mul = color_interpolate(begin->GetColor().mul, end->GetColor().mul, process);
 	tween->SetColor(rc);
 
-	if (Scale9Sprite* s9_b = dynamic_cast<Scale9Sprite*>(begin))
+	assert(begin->GetSymbol()->Type() == end->GetSymbol()->Type());
+	switch (begin->GetSymbol()->Type())
 	{
-		Scale9Sprite* s9_e = dynamic_cast<Scale9Sprite*>(end);
-		Scale9Sprite* s9_t = dynamic_cast<Scale9Sprite*>(tween);
-		assert(s9_e && s9_t);
-		sm::vec2 s_sz = s9_b->GetScale9().GetSize(),
-			     e_sz = s9_e->GetScale9().GetSize();
-		float t_w = (e_sz.x - s_sz.x) * process + s_sz.x,
-			  t_h = (e_sz.y - s_sz.y) * process + s_sz.y;
-		s9_t->Resize(t_w, t_h);
-	}
-	else if (IconSprite* icon_b = dynamic_cast<IconSprite*>(begin))
-	{
-		IconSprite* icon_e = dynamic_cast<IconSprite*>(end);
-		IconSprite* icon_t = dynamic_cast<IconSprite*>(tween);
-		assert(icon_e && icon_t);
-		float proc = (icon_e->GetProcess() - icon_b->GetProcess()) * process + icon_b->GetProcess();
-		icon_t->SetProcess(proc);
-	}
-	else if (MeshSprite* mesh_b = dynamic_cast<MeshSprite*>(begin))
-	{
-		MeshSprite* mesh_e = dynamic_cast<MeshSprite*>(end);
-		MeshSprite* mesh_t = dynamic_cast<MeshSprite*>(tween);
-		assert(mesh_e && mesh_t);
-		mesh_t->Lerp(mesh_b, mesh_e, process);
-	}
-	else if (SkeletonSprite* sk_b = dynamic_cast<SkeletonSprite*>(begin))
-	{
-		SkeletonSprite* sk_e = dynamic_cast<SkeletonSprite*>(end);
-		SkeletonSprite* sk_t = dynamic_cast<SkeletonSprite*>(tween);
-		assert(sk_e && sk_t);
-		sk_t->GetPose().Lerp(sk_b->GetPose(), sk_e->GetPose(), process);
-	}
-	else if (Particle3dSprite* p3d_b = dynamic_cast<Particle3dSprite*>(begin))
-	{
-		Particle3dSprite* p3d_e = dynamic_cast<Particle3dSprite*>(end);
-		Particle3dSprite* p3d_t = dynamic_cast<Particle3dSprite*>(tween);
-		assert(p3d_e && p3d_t);
-		float start_radius = (p3d_e->GetStartRadius() - p3d_b->GetStartRadius()) * process + p3d_b->GetStartRadius();
-		p3d_t->SetStartRadius(start_radius);
+	case SYM_SCALE9:
+		{
+			sm::vec2 b_sz = VI_DOWNCASTING<const Scale9Sprite*>(begin)->GetScale9().GetSize(),
+					 e_sz = VI_DOWNCASTING<const Scale9Sprite*>(end)->GetScale9().GetSize();
+			float t_w = (e_sz.x - b_sz.x) * process + b_sz.x,
+				  t_h = (e_sz.y - b_sz.y) * process + b_sz.y;
+			VI_DOWNCASTING<Scale9Sprite*>(tween)->Resize(t_w, t_h);
+		}
+		break;
+	case SYM_ICON:
+		{
+			float b_proc = VI_DOWNCASTING<const IconSprite*>(begin)->GetProcess(),
+				  e_proc = VI_DOWNCASTING<const IconSprite*>(end)->GetProcess();
+			float proc = (e_proc - b_proc) * process + b_proc;
+			VI_DOWNCASTING<IconSprite*>(tween)->SetProcess(proc);
+		}
+		break;
+	case SYM_MESH:
+		{
+			const MeshSprite* mesh_b = VI_DOWNCASTING<const MeshSprite*>(begin);
+			const MeshSprite* mesh_e = VI_DOWNCASTING<const MeshSprite*>(end);
+			MeshSprite* mesh_t = VI_DOWNCASTING<MeshSprite*>(tween);
+			mesh_t->Lerp(mesh_b, mesh_e, process);
+		}
+		break;
+	case SYM_SKELETON:
+		{
+			const SkeletonSprite* sk_b = VI_DOWNCASTING<const SkeletonSprite*>(begin);
+			const SkeletonSprite* sk_e = VI_DOWNCASTING<const SkeletonSprite*>(end);
+			SkeletonSprite* sk_t = VI_DOWNCASTING<SkeletonSprite*>(tween);
+			sk_t->GetPose().Lerp(sk_b->GetPose(), sk_e->GetPose(), process);
+		}
+		break;
+	case SYM_PARTICLE3D:
+		{
+			const Particle3dSprite* p3d_b = VI_DOWNCASTING<const Particle3dSprite*>(begin);
+			const Particle3dSprite* p3d_e = VI_DOWNCASTING<const Particle3dSprite*>(end);
+			Particle3dSprite* p3d_t = VI_DOWNCASTING<Particle3dSprite*>(tween);
+			float start_radius = (p3d_e->GetStartRadius() - p3d_b->GetStartRadius()) * process + p3d_b->GetStartRadius();
+			p3d_t->SetStartRadius(start_radius);
+		}
+		break;
 	}
 
 	for (int i = 0, n = lerps.size(); i < n; ++i) 

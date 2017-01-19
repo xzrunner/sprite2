@@ -14,15 +14,15 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-	, m_curr(this)
 {
+	m_curr.SetAnimCopy(&m_copy);
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-	, m_curr(this)
 {
+	m_curr.SetAnimCopy(&m_copy);
 }
 
 AnimSymbol::~AnimSymbol()
@@ -111,6 +111,11 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, process, curr_f->lerps);
 		}
 	}
+}
+
+void AnimSymbol::LoadCopy()
+{
+	m_copy.LoadFromSym(*this);
 }
 
 void AnimSymbol::AddLayer(Layer* layer)

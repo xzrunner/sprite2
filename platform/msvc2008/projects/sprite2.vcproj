@@ -436,14 +436,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprites\AnimCurr.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\AnimCurr.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprites\AnimSprite.cpp"
 					>
 				</File>
@@ -492,6 +484,34 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\sprite2\LerpType.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="curr"
+					>
+					<File
+						RelativePath="..\..\..\source\sprites\AnimCopy.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\AnimCopy.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\AnimCurr.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\AnimCurr.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\AnimCurr2.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\AnimCurr2.h"
 						>
 					</File>
 				</Filter>

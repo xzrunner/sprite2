@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ANIM_SPRITE_H_
 #define _SPRITE2_ANIM_SPRITE_H_
 
-#include "AnimCurr.h"
+#include "AnimCurr2.h"
 #include "S2_Sprite.h"
 
 #include <vector>
@@ -29,7 +29,7 @@ public:
 	virtual bool Update(const RenderParams& params);
 	virtual Sprite* FetchChild(const std::string& name) const;
 
-	const AnimCurr& GetAnimCurr() const { return m_curr; }
+	const AnimCurr2& GetAnimCurr() const { return m_curr; }
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -57,7 +57,7 @@ protected:
 
 	bool m_start_random;
 
-	AnimCurr m_curr;
+	AnimCurr2 m_curr;
 
 	VI_DUMMY_FUNC
 

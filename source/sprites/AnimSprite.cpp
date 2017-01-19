@@ -14,12 +14,12 @@ AnimSprite::AnimSprite()
 
 AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_curr(VI_DOWNCASTING<AnimSymbol*>(sym))
 	, m_loop(true)
 	, m_interval(0)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 	, m_start_random(false)
 {
+	m_curr.SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(sym)->GetCopy());
 	m_curr.Start();
 }
 

@@ -72,7 +72,7 @@ bool MeshSprite::Update(const RenderParams& params)
 	}
 }
 
-void MeshSprite::Lerp(MeshSprite* begin, MeshSprite* end, float process)
+void MeshSprite::Lerp(const MeshSprite* begin, const MeshSprite* end, float process)
 {
 	m_trans.Lerp(begin->GetMeshTrans(), end->GetMeshTrans(), process);
 }

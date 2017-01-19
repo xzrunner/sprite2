@@ -28,7 +28,7 @@ public:
 	 */
 	virtual bool Update(const RenderParams& params);
 
-	void Lerp(MeshSprite* begin, MeshSprite* end, float process);
+	void Lerp(const MeshSprite* begin, const MeshSprite* end, float process);
 
 	const sm::vec2& GetSpeed() const { return m_speed; }
 	void SetSpeed(const sm::vec2& spd) { m_speed = spd; }

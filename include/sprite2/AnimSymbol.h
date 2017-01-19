@@ -1,8 +1,9 @@
 #ifndef _SPRITE2_ANIM_SYMBOL_H_
 #define _SPRITE2_ANIM_SYMBOL_H_
 
-#include "AnimCurr.h"
+#include "AnimCurr2.h"
 #include "AnimLerp.h"
+#include "AnimCopy.h"
 #include "S2_Symbol.h"
 
 #include <vector>
@@ -61,6 +62,9 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
+	const AnimCopy& GetCopy() const { return m_copy; }
+	void LoadCopy();
+
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/
@@ -75,7 +79,8 @@ protected:
 
 	int m_fps;
 
-	AnimCurr m_curr;
+	AnimCopy  m_copy;
+	AnimCurr2 m_curr;
 
 }; // AnimSymbol
 

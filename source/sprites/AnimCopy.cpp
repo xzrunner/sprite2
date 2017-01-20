@@ -104,11 +104,11 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 				node.curr = slot;
 
 				Node* ptr = &node;
-				int idx = inode;
+				int idx = iframe;
 				while (ptr->next != -1 && idx < nnode - 1) 
 				{
-					node.curr = slot;
 					ptr = &layer.frames[++idx].nodes[ptr->next];
+					ptr->curr = slot;
 				}
 			}
 		}

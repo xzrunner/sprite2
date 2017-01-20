@@ -19,7 +19,7 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 	, m_start_random(false)
 {
-	m_curr.SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(sym)->GetCopy());
+	m_curr.SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(m_sym)->GetCopy());
 	m_curr.Start();
 }
 

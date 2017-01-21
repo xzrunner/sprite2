@@ -1,7 +1,9 @@
 #ifndef _SPRITE2_SPR_TREE_PATH_H_
 #define _SPRITE2_SPR_TREE_PATH_H_
 
-#include <vector>
+#include <iostream>
+
+#define SPR_TREE_PATH_STATIC
 
 namespace s2
 {
@@ -32,7 +34,13 @@ private:
 private:
 	int m_val;
 
+#ifdef SPR_TREE_PATH_STATIC
+	static const int MAX_PATH = 16;
+	int m_ids[MAX_PATH];
+	int m_num;
+#else
 	STPBuffer* m_buf;
+#endif // SPR_TREE_PATH_STATIC
 
 }; // SprTreePath
 

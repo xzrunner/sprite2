@@ -1,6 +1,7 @@
 #include "RenderCamera.h"
 
 #include <sm_const.h>
+#include <sm_math.h>
 
 #include <string.h>
 #include <vector>
@@ -49,7 +50,7 @@ void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4])
 		return;
 	}
 
-	float zs = sin(cam_angle * SM_DEG_TO_RAD);
+	float zs = sm_sin(cam_angle * SM_DEG_TO_RAD);
 
 	float ymin = FLT_MAX, ymax = -FLT_MAX;
 	for (int i = 0; i < 4; ++i) {

@@ -1,7 +1,9 @@
 #ifndef _SPRITE2_DRAW_MASK_H_
 #define _SPRITE2_DRAW_MASK_H_
 
-#include <SM_Matrix.h>
+#include "pre_defined.h"
+
+#include S2_MAT_HEADER
 
 namespace s2
 {
@@ -20,7 +22,7 @@ private:
 	static void DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc);
 	static void DrawMaskToRT(RenderTarget* rt, const Sprite* mask);
 
-	static void DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const sm::mat4& mt);
+	static void DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt);
 
 }; // DrawMask
 

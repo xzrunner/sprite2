@@ -15,7 +15,7 @@ void Polygon::Clear()
 	m_holes.clear();
 }
 
-void Polygon::DebugDraw(const sm::mat4& mt) const
+void Polygon::DebugDraw(const S2_MAT& mt) const
 {
 	std::vector<sm::vec2> buf;
 	for (size_t i = 0, n = m_tris.size(); i < n; ++i)

@@ -30,7 +30,7 @@ static Color RED	(204, 51, 102, 128);
 static Color GREEN	(102, 204, 51, 128);
 static Color BLUE	(102, 51, 204, 128);
 
-void DrawMesh::DrawInfoUV(const Mesh* mesh, const sm::mat4* mt)
+void DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
 {
 	std::set<sm::vec2, sm::Vector2Cmp> unique;
 	std::vector<sm::vec2> tmp(3);
@@ -58,7 +58,7 @@ void DrawMesh::DrawInfoUV(const Mesh* mesh, const sm::mat4* mt)
 	RVG::Circles(nodes, mesh->GetNodeRegion(), true);
 }
 
-void DrawMesh::DrawInfoXY(const Mesh* mesh, const sm::mat4* mt)
+void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 {
 	std::set<sm::vec2, sm::Vector2Cmp> unique;
 	std::vector<sm::vec2> tmp(3);
@@ -93,7 +93,7 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const S
 	}
 }
 
-void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const sm::mat4& mt, int texid)
+void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
@@ -221,7 +221,7 @@ void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& params, const S
 	rt->Unbind();
 }
 
-void DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const sm::mat4& mt)
+void DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt)
 {
 	DrawOnlyMesh(mesh, mt, rt->GetTexID());
 }

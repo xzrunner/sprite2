@@ -13,7 +13,7 @@ ColorPolygon::ColorPolygon(const Color& color)
 {
 }
 
-void ColorPolygon::Draw(const sm::mat4& mt, const RenderColor& color) const
+void ColorPolygon::Draw(const S2_MAT& mt, const RenderColor& color) const
 {
 	std::vector<sm::vec2> tris;
 	sm::trans_vertices(mt, m_tris, tris);

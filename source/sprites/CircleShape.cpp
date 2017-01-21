@@ -67,7 +67,7 @@ bool CircleShape::IsIntersect(const sm::rect& rect) const
 	return false;
 }
 
-void CircleShape::Draw(const sm::mat4& mt, const RenderColor& color) const
+void CircleShape::Draw(const S2_MAT& mt, const RenderColor& color) const
 {
 	sm::vec2 c = mt * m_center;
 	float r = sm::mat_trans_len(m_radius, mt);

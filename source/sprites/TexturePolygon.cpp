@@ -49,7 +49,7 @@ TexturePolygon::~TexturePolygon()
 	}
 }
 
-void TexturePolygon::Draw(const sm::mat4& mt, const RenderColor& color) const
+void TexturePolygon::Draw(const S2_MAT& mt, const RenderColor& color) const
 {
 	if (m_tris.empty()) {
 		return;

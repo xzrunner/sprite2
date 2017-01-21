@@ -27,6 +27,13 @@ namespace s2
 		src->Clone();
 #endif // S2_VIRTUAL_INHERITANCE
 
+#ifdef S2_MATRIX_FIX
+	#define S2_MAT sm::MatrixFix
+	#define S2_MAT_HEADER <SM_MatrixFix.h>
+#else
+	#define S2_MAT sm::mat4
+	#define S2_MAT_HEADER <SM_Matrix.h>
+#endif // S2_MATRIX_FIX
 }
 
 #endif // _SPRITE2_PRE_DEFINED_H_

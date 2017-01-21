@@ -92,7 +92,7 @@ void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask)
 	rt->Unbind();
 }
 
-void DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const sm::mat4& mt)
+void DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 

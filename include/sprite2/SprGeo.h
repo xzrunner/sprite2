@@ -1,8 +1,10 @@
 #ifndef _SPRITE2_SPR_GEO_H_
 #define _SPRITE2_SPR_GEO_H_
 
+#include "pre_defined.h"
+
 #include <SM_Vector.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 namespace s2
 {

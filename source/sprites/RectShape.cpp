@@ -31,7 +31,7 @@ bool RectShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_rect(rect, m_bounding);
 }
 
-void RectShape::Draw(const sm::mat4& mt, const RenderColor& color) const
+void RectShape::Draw(const S2_MAT& mt, const RenderColor& color) const
 {
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),
 		     max(m_bounding.xmax, m_bounding.ymax);

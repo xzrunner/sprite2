@@ -80,12 +80,21 @@ bool Particle2dSprite::Update(const RenderParams& params)
 	}
 
 	float mt[6];
+#ifdef S2_MATRIX_FIX
+	mt[0] = m_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mt[1] = m_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mt[2] = m_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mt[3] = m_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mt[4] = m_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mt[5] = m_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
 	mt[0] = m_mat.x[0];
 	mt[1] = m_mat.x[1];
 	mt[2] = m_mat.x[4];
 	mt[3] = m_mat.x[5];
 	mt[4] = m_mat.x[12];
-	mt[5] = m_mat.x[13];	
+	mt[5] = m_mat.x[13];
+#endif // S2_MATRIX_FIX
 
 	float dt = time - m_et->time;
 	p2d_emitter_update(m_et, dt, mt);

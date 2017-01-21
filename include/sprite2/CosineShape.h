@@ -23,7 +23,7 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
-	virtual void Draw(const sm::mat4& mt, 
+	virtual void Draw(const S2_MAT& mt, 
 		const RenderColor& color = RenderColor()) const;
 
 private:

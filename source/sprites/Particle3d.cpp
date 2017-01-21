@@ -103,6 +103,15 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	if (rp->p3d && rp->p3d->local_mode_draw) {
 		params.mt = rp->mat;
 	} else {
+#ifdef S2_MATRIX_FIX
+		sm::MatrixFix _mat;
+		_mat.x[0] = mat[0] * sm::MatrixFix::SCALE;
+		_mat.x[1] = mat[1] * sm::MatrixFix::SCALE;
+		_mat.x[2] = mat[2] * sm::MatrixFix::SCALE;
+		_mat.x[3] = mat[3] * sm::MatrixFix::SCALE;
+		_mat.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
+		_mat.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
+#else
 		sm::mat4 _mat;
 		_mat.x[0] = mat[0];
 		_mat.x[1] = mat[1];
@@ -110,6 +119,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[5] = mat[3];
 		_mat.x[12]= mat[4];
 		_mat.x[13]= mat[5];
+#endif // S2_MATRIX_FIX
 		params.mt = _mat * rp->mat;
 	}
 
@@ -139,7 +149,11 @@ update_func(void* spr, float x, float y)
 
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	RenderParams rp;
+#ifdef S2_MATRIX_FIX
+	rp.mt.Translate(x, y);
+#else
 	rp.mt = sm::mat4::Translated(x, y, 0);
+#endif // S2_MATRIX_FIX
 	s2_spr->Update(rp);
 }
 
@@ -194,8 +208,13 @@ remove_func(p3d_particle* p, void* ud)
 static void
 update_srt_func(void* params, float x, float y, float scale) {
 	P3dRenderParams* rp = static_cast<P3dRenderParams*>(params);
+#ifdef S2_MATRIX_FIX
+	rp->mat.Translate(x, y);
+	rp->mat.Scale(scale, scale);
+#else
 	rp->mat.Translate(x, y, 0);
 	rp->mat.Scale(scale, scale, 1);
+#endif // S2_MATRIX_FIX
 }
 
 static void

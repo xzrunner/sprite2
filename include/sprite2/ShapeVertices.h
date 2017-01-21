@@ -1,8 +1,10 @@
 #ifndef _SPRITE2_SHAPE_VERTICES_H_
 #define _SPRITE2_SHAPE_VERTICES_H_
 
+#include "pre_defined.h"
+
 #include <SM_Vector.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 #include <vector>
 
@@ -15,7 +17,7 @@ class ShapeVertices
 {
 public:
 	static void Draw(const std::vector<sm::vec2>& vertices, bool closed,
-		const sm::mat4& mt, const RenderColor& color);
+		const S2_MAT& mt, const RenderColor& color);
 
 }; // ShapeVertices
 

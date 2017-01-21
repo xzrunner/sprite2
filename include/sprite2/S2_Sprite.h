@@ -5,7 +5,7 @@
 #include "S2_Message.h"
 
 #include <SM_Vector.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
 
@@ -111,8 +111,8 @@ public:
 
 	bool IsDirty() const;
 
-	sm::mat4 GetLocalMat() const;
-	sm::mat4 GetLocalInvMat() const;
+	S2_MAT GetLocalMat() const;
+	S2_MAT GetLocalInvMat() const;
 
 // 	void SetWorldMat(const sm::mat4& mat) const;
 // 	sm::mat4 GetWorldMat() const;

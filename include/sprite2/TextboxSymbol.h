@@ -3,8 +3,9 @@
 
 #include "S2_Symbol.h"
 #include "Textbox.h"
+#include "pre_defined.h"
 
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 #include <string>
 
@@ -34,7 +35,7 @@ public:
 	Textbox& GetTextbox() { return m_tb; }
 
 protected:
-	virtual void DrawText(const gtxt_label_style& style, const sm::mat4& mt, const Color& mul, 
+	virtual void DrawText(const gtxt_label_style& style, const S2_MAT& mt, const Color& mul, 
 		const Color& add, const std::string& text, int time, bool richtext) const = 0;
 
 protected:

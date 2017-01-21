@@ -6,7 +6,7 @@ namespace s2
 {
 
 void ShapeVertices::Draw(const std::vector<sm::vec2>& vertices, bool closed,
-						 const sm::mat4& mt, const RenderColor& color)
+						 const S2_MAT& mt, const RenderColor& color)
 {
 	if (vertices.empty()) {
 		return;

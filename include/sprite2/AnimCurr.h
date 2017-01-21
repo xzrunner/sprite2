@@ -1,9 +1,10 @@
 #ifndef _SPRITE2_ANIM_CURR_H_
 #define _SPRITE2_ANIM_CURR_H_
 
+#include "pre_defined.h"
 #include "S2_Message.h"
 
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 #include <vector>
 

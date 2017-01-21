@@ -1,13 +1,13 @@
 #ifndef _SPRITE2_RENDER_PARAMS_H_
 #define _SPRITE2_RENDER_PARAMS_H_
 
-//#include "Matrix.h"
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
 #include "SprTreePath.h"
+#include "pre_defined.h"
 
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 #include <SM_Rect.h>
 
 namespace s2
@@ -23,7 +23,7 @@ public:
 
 	sm::rect view_region;
 
-	sm::mat4 mt;
+	S2_MAT mt;
 
 	RenderColor	color;
 	

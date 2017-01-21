@@ -31,7 +31,7 @@ CosineShape* CosineShape::Clone() const
 	return new CosineShape(*this);
 }
 
-void CosineShape::Draw(const sm::mat4& mt, const RenderColor& color) const
+void CosineShape::Draw(const S2_MAT& mt, const RenderColor& color) const
 {
 	ShapeVertices::Draw(m_mid_points, m_closed, mt, color);
 }

@@ -33,7 +33,7 @@ public:
 
 	void Draw(const RenderParams& params) const;
 
-	void SetMatrix(const sm::mat4& mat) const { m_mat = mat; }
+	void SetMatrix(const S2_MAT& mat) const { m_mat = mat; }
 
 	bool GetLoop() const;
 	void SetLoop(bool loop);
@@ -44,7 +44,7 @@ public:
 protected:
 	p2d_emitter* m_et;
 
-	mutable sm::mat4 m_mat;
+	mutable S2_MAT m_mat;
 
 	VI_DUMMY_FUNC
 

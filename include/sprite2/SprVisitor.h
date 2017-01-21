@@ -1,7 +1,9 @@
 #ifndef _SPRITE2_SPR_VISITOR_H_
 #define _SPRITE2_SPR_VISITOR_H_
 
-#include <SM_Matrix.h>
+#include "pre_defined.h"
+
+#include S2_MAT_HEADER
 
 namespace s2
 {

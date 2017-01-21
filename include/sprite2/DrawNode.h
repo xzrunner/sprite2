@@ -1,6 +1,7 @@
 #ifndef _SPRITE2_DRAW_NODE_H_
 #define _SPRITE2_DRAW_NODE_H_
 
+#include "pre_defined.h"
 #include "RenderParams.h"
 
 #include <SM_Vector.h>
@@ -28,8 +29,8 @@ public:
 					 const sm::vec2& shear = sm::vec2(0, 0));	
 
 	static void Draw(const Symbol* sym, 
-		             const RenderParams& params,
-					 const sm::mat4& mt);
+		const RenderParams& params,
+		const S2_MAT& mt);
 
 	static bool IsOutsideView(const Sprite* spr, const RenderParams& params);
 

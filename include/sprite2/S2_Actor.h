@@ -1,12 +1,13 @@
 #ifndef _SPRITE2_ACTOR_H_
 #define _SPRITE2_ACTOR_H_
 
+#include "pre_defined.h"
 #include "SprTreePath.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 #include <SM_Vector.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 namespace s2
 {
@@ -29,7 +30,7 @@ public:
 	void SetAngle(float angle);
 	void SetScale(const sm::vec2& scale);
 	
-	sm::mat4 GetLocalMat() const;
+	S2_MAT GetLocalMat() const;
 
 private:
 	const Sprite* m_spr;

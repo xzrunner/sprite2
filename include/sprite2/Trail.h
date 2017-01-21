@@ -1,10 +1,11 @@
 #ifndef _SPRITE2_TRAIL_H_
 #define _SPRITE2_TRAIL_H_
 
+#include "pre_defined.h"
 #include "RenderColor.h"
 
 #include <CU_Singleton.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 namespace s2
 {
@@ -12,7 +13,7 @@ namespace s2
 class TrailRenderParams
 {
 public:
-	sm::mat4    mat;
+	S2_MAT      mat;
 	RenderColor ct;
 }; // TrailRenderParams
 

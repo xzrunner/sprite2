@@ -356,15 +356,24 @@ void s2_spr_get_aabb(const void* spr, float aabb[4]) {
 
 extern "C"
 void s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]) {
-	sm::mat4 outer;
+	S2_MAT outer;
+#ifdef S2_MATRIX_FIX
+	outer.x[0] = mat[0] * sm::MatrixFix::SCALE;
+	outer.x[1] = mat[1] * sm::MatrixFix::SCALE;
+	outer.x[2] = mat[2] * sm::MatrixFix::SCALE;
+	outer.x[3] = mat[3] * sm::MatrixFix::SCALE;
+	outer.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
+	outer.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
+#else
 	outer.x[0] = mat[0];
 	outer.x[1] = mat[1];
 	outer.x[4] = mat[2];
 	outer.x[5] = mat[3];
 	outer.x[12]= mat[4];
 	outer.x[13]= mat[5];
+#endif // S2_MATRIX_FIX
 
-	sm::mat4 m;
+	S2_MAT m;
 	m.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
 	m = outer * m;
 
@@ -399,13 +408,22 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 		return NULL;
 	}
 
-	const sm::mat4& selected_mat = visitor.GetSelectedMat();
+	const S2_MAT& selected_mat = visitor.GetSelectedMat();
+#ifdef S2_MATRIX_FIX
+	mat[0] = selected_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mat[1] = selected_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mat[2] = selected_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mat[3] = selected_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mat[4] = selected_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mat[5] = selected_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
 	mat[0] = selected_mat.x[0];
 	mat[1] = selected_mat.x[1];
 	mat[2] = selected_mat.x[4];
 	mat[3] = selected_mat.x[5];
 	mat[4] = selected_mat.x[12];
 	mat[5] = selected_mat.x[13];
+#endif // S2_MATRIX_FIX
 
 	return const_cast<Sprite*>(ret);
 }
@@ -510,13 +528,22 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	PointQuery2Visitor visitor(sm::vec2(x, y));
 	parent->GetSpr()->Traverse(visitor, SprVisitorParams());
 
-	const sm::mat4& selected_mat = visitor.GetSelectedMat();
+	const S2_MAT& selected_mat = visitor.GetSelectedMat();
+#ifdef S2_MATRIX_FIX
+	mat[0] = selected_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mat[1] = selected_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mat[2] = selected_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mat[3] = selected_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mat[4] = selected_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mat[5] = selected_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
 	mat[0] = selected_mat.x[0];
 	mat[1] = selected_mat.x[1];
 	mat[2] = selected_mat.x[4];
 	mat[3] = selected_mat.x[5];
 	mat[4] = selected_mat.x[12];
-	mat[5] = selected_mat.x[13];	
+	mat[5] = selected_mat.x[13];
+#endif // S2_MATRIX_FIX
 
 	return visitor.GetSelectedActor();
 }

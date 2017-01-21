@@ -1,7 +1,9 @@
 #ifndef _SPRITE2_DRAW_OUTER_GLOW_H_
 #define _SPRITE2_DRAW_OUTER_GLOW_H_
 
-#include <SM_Matrix.h>
+#include "pre_defined.h"
+
+#include S2_MAT_HEADER
 
 namespace s2
 {

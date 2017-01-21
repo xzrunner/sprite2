@@ -6,7 +6,7 @@
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
 
@@ -23,7 +23,7 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
-	virtual void Draw(const sm::mat4& mt, 
+	virtual void Draw(const S2_MAT& mt, 
 		const RenderColor& color = RenderColor()) const = 0;
 
 	/**

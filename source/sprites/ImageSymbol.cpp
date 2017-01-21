@@ -5,7 +5,7 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/FilterShader.h>

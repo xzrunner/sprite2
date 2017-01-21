@@ -3,7 +3,7 @@
 
 #include "SprTreePath.h"
 
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 namespace s2
 {
@@ -11,7 +11,7 @@ namespace s2
 class SprVisitorParams
 {
 public:
-	sm::mat4 mt;
+	S2_MAT mt;
 
 	SprTreePath path;
 

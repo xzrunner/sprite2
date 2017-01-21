@@ -121,14 +121,23 @@ bool Particle3dSprite::Update(const RenderParams& params)
 		}
 
 		float mt[6];
-		sm::mat4 inner_mat = GetLocalMat();
+		S2_MAT inner_mat = GetLocalMat();
+#ifdef S2_MATRIX_FIX
+		mt[0] = inner_mat.x[0] * sm::MatrixFix::SCALE_INV;
+		mt[1] = inner_mat.x[1] * sm::MatrixFix::SCALE_INV;
+		mt[2] = inner_mat.x[2] * sm::MatrixFix::SCALE_INV;
+		mt[3] = inner_mat.x[3] * sm::MatrixFix::SCALE_INV;
+		mt[4] = inner_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+		mt[5] = inner_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
 		mt[0] = inner_mat.x[0];
 		mt[1] = inner_mat.x[1];
 		mt[2] = inner_mat.x[4];
 		mt[3] = inner_mat.x[5];
 		mt[4] = inner_mat.x[12];
-		mt[5] = inner_mat.x[13];	
-
+		mt[5] = inner_mat.x[13];
+#endif // S2_MATRIX_FIX
+		
 		float dt = time - et->time;
 		p3d_emitter_update(et, dt, mt);
 		et->time = time;
@@ -147,17 +156,26 @@ void Particle3dSprite::Draw(const RenderParams& params) const
 	}
 }
 
-void Particle3dSprite::SetOuterMatrix(const sm::mat4& mat) const
+void Particle3dSprite::SetOuterMatrix(const S2_MAT& mat) const
 { 
 	if (m_spr && m_alone) 
 	{
 		float* mt = m_spr->mat;
+#ifdef S2_MATRIX_FIX
+		mt[0] = mat.x[0] * sm::MatrixFix::SCALE_INV;
+		mt[1] = mat.x[1] * sm::MatrixFix::SCALE_INV;
+		mt[2] = mat.x[2] * sm::MatrixFix::SCALE_INV;
+		mt[3] = mat.x[3] * sm::MatrixFix::SCALE_INV;
+		mt[4] = mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+		mt[5] = mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
+#else
 		mt[0] = mat.x[0];
 		mt[1] = mat.x[1];
 		mt[2] = mat.x[4];
 		mt[3] = mat.x[5];
 		mt[4] = mat.x[12];
 		mt[5] = mat.x[13];	
+#endif // S2_MATRIX_FIX
 	}
 }
 

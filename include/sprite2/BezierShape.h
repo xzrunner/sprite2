@@ -25,7 +25,7 @@ public:
 	 *    Shape
 	 */
 	virtual bool IsContain(const sm::vec2& pos) const;
-	virtual void Draw(const sm::mat4& mt, 
+	virtual void Draw(const S2_MAT& mt, 
 		const RenderColor& color = RenderColor()) const;
 
 // 	const sm::vec2* GetCtrlNodes() const { return m_control_nodes; }

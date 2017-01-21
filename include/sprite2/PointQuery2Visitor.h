@@ -26,7 +26,7 @@ public:
 	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 	Actor* GetSelectedActor() const;
-	const sm::mat4& GetSelectedMat() const { return m_selected_params.mt; }
+	const S2_MAT& GetSelectedMat() const { return m_selected_params.mt; }
 	
 private:
 	sm::vec2 m_pos;

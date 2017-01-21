@@ -104,13 +104,22 @@ void Particle3dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		P3dRenderParams* rp = static_cast<P3dRenderParams*>(p3d->draw_params);
 		rp->mat = p.mt;
 		rp->ct = p.color;
-		sm::mat4 mt = p3d_spr->GetLocalMat() * p.mt;
+		S2_MAT mt = p3d_spr->GetLocalMat() * p.mt;
+#ifdef S2_MATRIX_FIX
+		p3d->mat[0] = mt.x[0] * sm::MatrixFix::SCALE;
+		p3d->mat[1] = mt.x[1] * sm::MatrixFix::SCALE;
+		p3d->mat[2] = mt.x[2] * sm::MatrixFix::SCALE;
+		p3d->mat[3] = mt.x[3] * sm::MatrixFix::SCALE;
+		p3d->mat[4] = mt.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+		p3d->mat[5] = mt.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
+#else
 		p3d->mat[0] = mt.x[0];
 		p3d->mat[1] = mt.x[1];
 		p3d->mat[2] = mt.x[4];
 		p3d->mat[3] = mt.x[5];
 		p3d->mat[4] = mt.x[12];
-		p3d->mat[5] = mt.x[13];	
+		p3d->mat[5] = mt.x[13];
+#endif // S2_MATRIX_FIX
 		return;
 	}
 

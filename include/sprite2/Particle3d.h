@@ -4,7 +4,7 @@
 #include "RenderParams.h"
 
 #include <CU_Singleton.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 
 struct p3d_sprite;
 
@@ -14,7 +14,7 @@ namespace s2
 class P3dRenderParams
 {
 public:
-	sm::mat4 mat;
+	S2_MAT mat;
 	RenderColor ct;
 	p3d_sprite* p3d;
 

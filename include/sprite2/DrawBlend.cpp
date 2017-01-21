@@ -21,7 +21,7 @@
 namespace s2
 {
 
-void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
+void DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -48,7 +48,7 @@ void DrawBlend::Draw(const Sprite* spr, const sm::mat4& mt)
 	RT->Return(rt);
 }
 
-void DrawBlend::DrawSpr2RT(const Sprite* spr, const sm::mat4& mt)
+void DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
@@ -69,11 +69,11 @@ void DrawBlend::DrawSpr2RT(const Sprite* spr, const sm::mat4& mt)
 	shader->Commit();
 }
 
-void DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const sm::mat4& mt)
+void DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
-	sm::mat4 t = spr->GetLocalMat() * mt;
+	S2_MAT t = spr->GetLocalMat() * mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
 
 	sm::vec2 vertices[4];

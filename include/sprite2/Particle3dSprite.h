@@ -33,7 +33,7 @@ public:
 
 	void Draw(const RenderParams& params) const;
 
-	void SetOuterMatrix(const sm::mat4& mat) const;
+	void SetOuterMatrix(const S2_MAT& mat) const;
 
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);

@@ -5,11 +5,17 @@
 namespace s2
 {
 
+static int COUNT = 0;
+
 Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	: m_spr(spr)
 	, m_path(path)
 	, m_geo(NULL)
 {
+	++COUNT;
+
+	printf("++ actor %d\n", COUNT);
+
 	if (m_spr) {
 		m_spr->AddActor(this);
 	}
@@ -17,6 +23,7 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 
 Actor::~Actor()
 {
+	--COUNT;
 	if (m_geo) {
 		delete m_geo;
 	}
@@ -58,13 +65,13 @@ void Actor::SetScale(const sm::vec2& scale)
 	}
 }
 
-sm::mat4 Actor::GetLocalMat() const
+S2_MAT Actor::GetLocalMat() const
 {
 	if (!m_geo) {
-		return sm::mat4();
+		return S2_MAT();
 	}
 
-	sm::mat4 mt;
+	S2_MAT mt;
 	mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
 		m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
 	return mt;

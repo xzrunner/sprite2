@@ -146,9 +146,9 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params,
 					const sm::vec2& pos, float angle, 
 					const sm::vec2& scale, const sm::vec2& shear)
 {
- 	sm::mat4 mt;
- 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
- 	mt = mt * params.mt;
+	S2_MAT mt;
+	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
+	mt = mt * params.mt;
 
  	RenderParams t = params;
  	t.mt = mt;
@@ -181,9 +181,9 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& params,
  	sym->Draw(t);
 }
 
-void DrawNode::Draw(const Symbol* sym, const RenderParams& params, const sm::mat4& _mt)
+void DrawNode::Draw(const Symbol* sym, const RenderParams& params, const S2_MAT& _mt)
 {
-	sm::mat4 mt = _mt * params.mt;
+	S2_MAT mt = _mt * params.mt;
 
 	RenderParams t = params;
 	t.mt = mt;
@@ -231,7 +231,7 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& params)
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	sm::mat4 mat = spr->GetLocalMat() * params.mt;
+	S2_MAT mat = spr->GetLocalMat() * params.mt;
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	return !is_rect_intersect_rect(params.view_region, sm::rect(r_min, r_max));

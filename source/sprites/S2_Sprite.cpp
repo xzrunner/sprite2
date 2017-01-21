@@ -198,9 +198,12 @@ void Sprite::SetShear(const sm::vec2& shear)
 		m_geo = new SprGeo;
 	}
 
-	sm::mat4 mat_old, mat_new;
+	S2_MAT mat_old, mat_new;
+#ifdef S2_MATRIX_FIX
+#else
 	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
+#endif // S2_MATRIX_FIX
 
 	CheckInitOffset();
 	sm::vec2 offset = mat_new * m_geo->GetOffset() - mat_old * m_geo->GetOffset();
@@ -454,30 +457,36 @@ bool Sprite::IsDirty() const
 	return m_flags & FLAG_DIRTY; 
 }
 
-sm::mat4 Sprite::GetLocalMat() const
+S2_MAT Sprite::GetLocalMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		return sm::mat4();
+		return S2_MAT();
 	} 
-	
+
 	sm::vec2 center = GetCenter();
-	sm::mat4 mt;
+	S2_MAT mt;
 	mt.SetTransformation(center.x, center.y, m_geo->GetAngle(), m_geo->GetScale().x, 
 		m_geo->GetScale().y, 0, 0, m_geo->GetShear().x, m_geo->GetShear().y);
 	return mt;
 }
 
-sm::mat4 Sprite::GetLocalInvMat() const
+S2_MAT Sprite::GetLocalInvMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		return sm::mat4();
+		return S2_MAT();
 	} 
 
-	sm::mat4 mat;
+	S2_MAT mat;
+#ifdef S2_MATRIX_FIX
+	mat.Rotate(-m_geo->GetAngle());
+	mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y);
+	mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y);
+#else
 	mat.RotateZ(-m_geo->GetAngle() * SM_RAD_TO_DEG);
 	mat.Shear(-m_geo->GetShear().x, -m_geo->GetShear().y);
 	mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y, 0);
 	mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y, 1);
+#endif // S2_MATRIX_FIX
 	return mat;
 }
 

@@ -20,13 +20,13 @@ public:
 	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 	const Sprite* GetSelectedSpr() const { return m_spr; }
-	const sm::mat4& GetSelectedMat() const { return m_mat; }
+	const S2_MAT& GetSelectedMat() const { return m_mat; }
 	
 private:
 	sm::vec2 m_pos;
 
 	const Sprite* m_spr;
-	sm::mat4 m_mat;
+	S2_MAT m_mat;
 
 	bool m_layer_find;
 

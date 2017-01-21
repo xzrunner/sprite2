@@ -1,8 +1,10 @@
 #ifndef _SPRITE2_POLYGON_H_
 #define _SPRITE2_POLYGON_H_
 
+#include "pre_defined.h"
+
 #include <SM_Vector.h>
-#include <SM_Matrix.h>
+#include S2_MAT_HEADER
 #include <CU_RefCountObj.h>
 
 #include <vector>
@@ -17,7 +19,7 @@ class Polygon : public cu::RefCountObj
 public:
 	virtual ~Polygon() {}
 
-	virtual void Draw(const sm::mat4& mt, const RenderColor& color) const = 0;
+	virtual void Draw(const S2_MAT& mt, const RenderColor& color) const = 0;
 	virtual void Build() = 0;
 
 	const std::vector<sm::vec2>& GetTriangles() const { return m_tris; }
@@ -28,7 +30,7 @@ public:
 
 	void Clear();
 
-	void DebugDraw(const sm::mat4& mt) const;
+	void DebugDraw(const S2_MAT& mt) const;
 
 protected:
 	std::vector<sm::vec2> m_tris;

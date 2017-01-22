@@ -6,7 +6,7 @@ namespace s2
 {
 
 void ShapeVertices::Draw(const std::vector<sm::vec2>& vertices, bool closed,
-						 const S2_MAT& mt, const RenderColor& color)
+						 const S2_MAT& mt, const RenderColor* color)
 {
 	if (vertices.empty()) {
 		return;
@@ -16,7 +16,11 @@ void ShapeVertices::Draw(const std::vector<sm::vec2>& vertices, bool closed,
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		trans[i] = mt * vertices[i];
 	}
-	RVG::SetColor(color.mul);
+	if (color) {
+		RVG::SetColor(color->GetMul());
+	} else {
+		RVG::SetColor(0xffffffff);
+	}
 	RVG::Polyline(trans, closed);
 }
 

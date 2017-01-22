@@ -108,7 +108,7 @@ void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, floa
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
-	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
+	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
 
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] += params.vertex_offset;
@@ -142,12 +142,12 @@ void ImageSymbol::DrawOrtho(const RenderParams& params, sm::vec2* vertices, floa
 // 	shader->SetColor(trans.color);
 	if (mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
-		shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
+		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
 		shader->Draw(&vertices[0].x, texcoords, texid);
 	} else if (mgr->GetShaderType() == sl::SPRITE2) {
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-		shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
-		shader->SetColorMap(params.color.rmap.ToABGR(),params.color.gmap.ToABGR(), params.color.bmap.ToABGR());
+		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+		shader->SetColorMap(params.color.GetMapR().ToABGR(),params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
 		shader->Draw(&vertices[0].x, texcoords, texid);
 	}
 }
@@ -178,8 +178,8 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, f
 
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
-	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
-	shader->SetColorMap(params.color.rmap.ToABGR(), params.color.gmap.ToABGR(), params.color.bmap.ToABGR());
+	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+	shader->SetColorMap(params.color.GetMapR().ToABGR(), params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, texid);
 }
 

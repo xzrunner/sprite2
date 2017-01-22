@@ -19,7 +19,7 @@ public:
 
 	SprRender* Render() { return m_render; }
 
-	RenderColor* Color() { return m_color; }
+	RenderColor*  Color() { return m_color; }
 	RenderShader* Shader() { return m_shader; }
 	RenderCamera* Camera() { return m_camera; }
 

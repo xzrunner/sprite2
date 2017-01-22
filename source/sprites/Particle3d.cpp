@@ -81,20 +81,14 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
 
+	Color mul, add;
+	memcpy(&mul, mul_col, sizeof(mul));
+	memcpy(&add, add_col, sizeof(add));
+
 	RenderParams params;
 
-	params.color.mul.r = mul_col->r;
-	params.color.mul.g = mul_col->g;
-	params.color.mul.b = mul_col->b;
-	params.color.mul.a = mul_col->a;
-
-	params.color.add.r = add_col->r;
-	params.color.add.g = add_col->g;
-	params.color.add.b = add_col->b;
-	params.color.add.a = add_col->a;
-
-	params.color.mul = params.color.mul * rp->ct.mul;
-	params.color.add = params.color.add + rp->ct.add;
+	params.color.SetMul(mul * rp->ct.GetMul());
+	params.color.SetAdd(add + rp->ct.GetAdd());
 
 	params.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 

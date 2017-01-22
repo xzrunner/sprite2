@@ -13,21 +13,21 @@ namespace s2
 static const float HEIGHT_VAL = 1.414f;
 
 RenderCamera::RenderCamera()
-	: mode(CM_ORTHO)
-	, base_y(0)
-{}
+{
+	Init();
+}
 
 RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 {
 	RenderCamera ret;
-	if (rc.mode != CM_ORTHO) {
-		ret.mode = rc.mode;
+	if (rc.m_state.mode != CM_ORTHO) {
+		ret.m_state.mode = rc.m_state.mode;
 	} else {
-		ret.mode = mode;
+		ret.m_state.mode = m_state.mode;
 	}
-	if (ret.mode == CM_PERSPECTIVE_AUTO_HEIGHT) {
-		if (rc.base_y == FLT_MAX) {
-			ret.base_y = rc.base_y;
+	if (ret.m_state.mode == CM_PERSPECTIVE_AUTO_HEIGHT) {
+		if (rc.m_state.base_y == FLT_MAX) {
+			ret.m_state.base_y = rc.m_state.base_y;
 			// todo pass spr
 // 			std::vector<sm::vec2> bound;
 // 			spr->GetBounding()->GetBoundPos(bound);
@@ -37,7 +37,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 // 				}
 // 			}
 		} else {
-			ret.base_y = rc.base_y;
+			ret.m_state.base_y = rc.m_state.base_y;
 		}
 	}
 	return ret;
@@ -45,7 +45,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 
 void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4]) const
 {
-	if (mode == CM_ORTHO || mode == CM_PERSPECTIVE_NO_HEIGHT) {
+	if (m_state.mode == CM_ORTHO || m_state.mode == CM_PERSPECTIVE_NO_HEIGHT) {
 		memset(z, 0, sizeof(float) * 4);
 		return;
 	}
@@ -60,11 +60,11 @@ void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4])
 	}
 
 	//	float zoff = 0;
-	if (base_y != FLT_MAX) {
+	if (m_state.base_y != FLT_MAX) {
 		// 		assert(ymin >= base_y);
 		// 		zoff = (ymin - base_y) * HEIGHT_VAL;
 
-		ymin -= (ymin - base_y);
+		ymin -= (ymin - m_state.base_y);
 	}
 
 	float height = (ymax - ymin) * HEIGHT_VAL;
@@ -73,6 +73,12 @@ void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4])
 		float y = vertices[i].y;
 		z[i] = -(y - ymin) / (ymax - ymin) * height * zs;
 	}
+}
+
+void RenderCamera::Init()
+{
+	m_state.mode = CM_ORTHO;
+	m_state.base_y = 0;
 }
 
 }

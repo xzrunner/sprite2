@@ -126,7 +126,7 @@ void DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool 
 		sl::GaussianBlurVertProg* prog = static_cast<sl::GaussianBlurVertProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_VERT));
 		prog->SetTexHeight(RT->HEIGHT);
 	}
-	shader->SetColor(col.mul.ToABGR(), col.add.ToABGR());
+	shader->SetColor(col.GetMul().ToABGR(), col.GetAdd().ToABGR());
 
 	sm::vec2 vertices[4], texcoords[4];
 	vertices[0].Set(-512, -512);

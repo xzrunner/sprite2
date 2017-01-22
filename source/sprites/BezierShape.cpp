@@ -57,7 +57,7 @@ bool BezierShape::IsContain(const sm::vec2& pos) const
 	return ret;
 }
 
-void BezierShape::Draw(const S2_MAT& mt, const RenderColor& color) const
+void BezierShape::Draw(const S2_MAT& mt, const RenderColor* color) const
 {
 	PolylineShape::Draw(mt, color);
 	for (int i = 0; i < CTRL_NODE_COUNT; ++i) {

@@ -81,8 +81,8 @@ void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float
 	tween->SetPosition(base_t -  offset);
 
 	RenderColor rc = tween->GetColor();
-	rc.add = color_interpolate(begin->GetColor().add, end->GetColor().add, process);
-	rc.mul = color_interpolate(begin->GetColor().mul, end->GetColor().mul, process);
+	rc.SetAdd(color_interpolate(begin->GetColor().GetAdd(), end->GetColor().GetAdd(), process));
+	rc.SetMul(color_interpolate(begin->GetColor().GetMul(), end->GetColor().GetMul(), process));
 	tween->SetColor(rc);
 
 	assert(begin->GetSymbol()->Type() == end->GetSymbol()->Type());

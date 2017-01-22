@@ -250,60 +250,60 @@ int s2_spr_get_component_count(void* spr) {
 extern "C"
 uint32_t s2_spr_get_col_mul(void* spr) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	return s2_spr->GetColor().mul.ToRGBA();
+	return s2_spr->GetColor().GetMul().ToRGBA();
 }
 
 extern "C"
 uint32_t s2_spr_get_col_add(void* spr) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	return s2_spr->GetColor().add.ToRGBA();
+	return s2_spr->GetColor().GetAdd().ToRGBA();
 }
 
 extern "C"
 void s2_spr_get_col_map(void* spr, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	*rmap = s2_spr->GetColor().rmap.ToRGBA();
-	*gmap = s2_spr->GetColor().gmap.ToRGBA();
-	*bmap = s2_spr->GetColor().bmap.ToRGBA();
+	*rmap = s2_spr->GetColor().GetMapR().ToRGBA();
+	*gmap = s2_spr->GetColor().GetMapG().ToRGBA();
+	*bmap = s2_spr->GetColor().GetMapB().ToRGBA();
 }
 
 extern "C"
 void s2_spr_set_col_mul(void* spr, uint32_t rgba) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().mul.ToRGBA() == rgba) {
+	if (s2_spr->GetColor().GetMul().ToRGBA() == rgba) {
 		return;
 	}
 
 	RenderColor col = s2_spr->GetColor();
-	col.mul.FromRGBA(rgba);
+	col.SetMul(Color(rgba));
 	s2_spr->SetColor(col);
 }
 
 extern "C"
 void s2_spr_set_col_add(void* spr, uint32_t rgba) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().add.ToRGBA() == rgba) {
+	if (s2_spr->GetColor().GetAdd().ToRGBA() == rgba) {
 		return;
 	}
 
 	RenderColor col = s2_spr->GetColor();
-	col.add.FromRGBA(rgba);
+	col.SetAdd(Color(rgba));
 	s2_spr->SetColor(col);
 }
 
 extern "C"
 void s2_spr_set_col_map(void* spr, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().rmap.ToRGBA() == rmap &&
-		s2_spr->GetColor().gmap.ToRGBA() == gmap &&
-		s2_spr->GetColor().bmap.ToRGBA() == bmap) {
+	if (s2_spr->GetColor().GetMapR().ToRGBA() == rmap &&
+		s2_spr->GetColor().GetMapG().ToRGBA() == gmap &&
+		s2_spr->GetColor().GetMapB().ToRGBA() == bmap) {
 			return;
 	}
 
 	RenderColor col = s2_spr->GetColor();
-	col.rmap.FromRGBA(rmap);
-	col.gmap.FromRGBA(gmap);
-	col.bmap.FromRGBA(bmap);
+	col.SetMapR(Color(rmap));
+	col.SetMapG(Color(gmap));
+	col.SetMapB(Color(bmap));
 	s2_spr->SetColor(col);
 }
 

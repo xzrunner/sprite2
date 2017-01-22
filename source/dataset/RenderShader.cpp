@@ -6,67 +6,65 @@ namespace s2
 {
 
 RenderShader::RenderShader()
-	: m_filter(NULL)
-	, m_blend(BM_NULL)
-	, m_fast_blend(FBM_NULL)
-{}
+{
+	Init();
+}
 
 RenderShader::RenderShader(const RenderShader& rs)
-	: m_filter(NULL)
-	, m_blend(rs.m_blend)
-	, m_fast_blend(rs.m_fast_blend)
 {
-	if (rs.m_filter) {
-		m_filter = rs.m_filter->Clone();
+	m_state.filter = NULL;
+	m_state.blend = rs.m_state.blend;
+	m_state.fast_blend = rs.m_state.fast_blend;
+
+	if (rs.m_state.filter) {
+		m_state.filter = rs.m_state.filter->Clone();
 	}
 }
 
 RenderShader& RenderShader::operator = (const RenderShader& rs)
 {
-	if (m_filter != rs.m_filter)
+	if (m_state.filter != rs.m_state.filter)
 	{
-		if (m_filter) {
-			delete m_filter;
-			m_filter = NULL;
+		if (m_state.filter) {
+			delete m_state.filter;
+			m_state.filter = NULL;
 		}
-		if (rs.m_filter) {
-			m_filter = rs.m_filter->Clone();
+		if (rs.m_state.filter) {
+			m_state.filter = rs.m_state.filter->Clone();
 		} else {
-			m_filter = NULL;
+			m_state.filter = NULL;
 		}
 	}
-	m_blend = rs.m_blend;
-	m_fast_blend = rs.m_fast_blend;
+	m_state.blend = rs.m_state.blend;
+	m_state.fast_blend = rs.m_state.fast_blend;
 	return *this;
 }
 
 RenderShader::~RenderShader()
 {
-	if (m_filter) {
-		delete m_filter;
-	}
+	Term();
 }
 
 RenderShader RenderShader::operator * (const RenderShader& rs) const
 {
 	RenderShader ret;
 
-	if (rs.m_blend != BM_NULL) {
-		ret.m_blend = rs.m_blend;
+	if (rs.m_state.blend != BM_NULL) {
+		ret.m_state.blend = rs.m_state.blend;
 	} else {
-		ret.m_blend = m_blend;
+		ret.m_state.blend = m_state.blend;
 	}
 
-	if (rs.m_fast_blend != FBM_NULL) {
-		ret.m_fast_blend = rs.m_fast_blend;
+	if (rs.m_state.fast_blend != FBM_NULL) {
+		ret.m_state.fast_blend = rs.m_state.fast_blend;
 	} else {
-		ret.m_fast_blend = m_fast_blend;
+		ret.m_state.fast_blend = m_state.fast_blend;
 	}
 
-	if (rs.m_filter && rs.m_filter->GetMode()!= FM_NULL) {
-		ret.m_filter = rs.m_filter->Clone();
-	} else if (m_filter) {
-		ret.m_filter = m_filter->Clone();
+	if (rs.m_state.filter && rs.m_state.filter->GetMode()!= FM_NULL) {
+		ret.m_state.filter = rs.m_state.filter->Clone();
+	} else if (m_state.filter) {
+		ret.m_state.filter = m_state.filter->Clone();
 	}
 
 	return ret;
@@ -74,26 +72,41 @@ RenderShader RenderShader::operator * (const RenderShader& rs) const
 
 void RenderShader::SetFilter(FilterMode mode)
 {
-	if (m_filter && m_filter->GetMode() == mode) {
+	if (m_state.filter && m_state.filter->GetMode() == mode) {
 		return;
 	}
 
-	if (m_filter) {
-		delete m_filter;
+	if (m_state.filter) {
+		delete m_state.filter;
 	}
-	m_filter = FilterFactory::Instance()->Create(mode);
+	m_state.filter = FilterFactory::Instance()->Create(mode);
 }
 
 void RenderShader::SetFilter(const RenderFilter* filter)
 {
-	if (m_filter == filter) {
+	if (m_state.filter == filter) {
 		return;
 	}
 
-	if (m_filter) {
-		delete m_filter;
+	if (m_state.filter) {
+		delete m_state.filter;
 	}
-	m_filter = filter->Clone();
+	m_state.filter = filter->Clone();
+}
+
+void RenderShader::Init()
+{
+	m_state.filter = NULL;
+	m_state.blend = BM_NULL;
+	m_state.fast_blend = FBM_NULL;
+}
+
+void RenderShader::Term()
+{
+	if (m_state.filter) {
+		delete m_state.filter;
+		m_state.filter = NULL;
+	}
 }
 
 }

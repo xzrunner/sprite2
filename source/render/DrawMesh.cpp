@@ -131,8 +131,8 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	}
 
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->SetColor(params.color.mul.ToABGR(), params.color.add.ToABGR());
-	shader->SetColorMap(params.color.rmap.ToABGR(),params.color.gmap.ToABGR(), params.color.bmap.ToABGR());
+	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+	shader->SetColorMap(params.color.GetMapR().ToABGR(),params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
 
 	assert(sym->Type() == SYM_IMAGE);
 	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);

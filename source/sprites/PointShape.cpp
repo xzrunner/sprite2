@@ -40,11 +40,15 @@ bool PointShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_rect(rect, m_bounding);
 }
 
-void PointShape::Draw(const S2_MAT& mt, const RenderColor& color) const
+void PointShape::Draw(const S2_MAT& mt, const RenderColor* color) const
 {
 	sm::vec2 center = mt * m_pos;
 	float r = sm::mat_trans_len(SHAPE_NODE_RADIUS, mt);
-	RVG::SetColor(color.mul);
+	if (color) {
+		RVG::SetColor(color->GetMul());
+	} else {
+		RVG::SetColor(0xffffffff);
+	}
 	RVG::Circle(center, r, true);
 }
 

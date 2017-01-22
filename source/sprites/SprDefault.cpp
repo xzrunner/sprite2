@@ -12,15 +12,13 @@ SINGLETON_DEFINITION(SprDefault);
 
 SprDefault::SprDefault()
 {
-	m_geo    = new SprGeo;
-	m_color  = new RenderColor;
-	m_shader = new RenderShader;
-	m_camera = new RenderCamera;
+	m_geo    = new SprGeo();
 
-	m_render = new SprRender;
-	m_render->m_color  = m_color;
-	m_render->m_shader = m_shader;
-	m_render->m_camera = m_camera;
+	m_color  = new RenderColor();
+	m_shader = new RenderShader();
+	m_camera = new RenderCamera();
+
+	m_render = new SprRender(m_color, m_shader, m_camera);
 }
 
 }

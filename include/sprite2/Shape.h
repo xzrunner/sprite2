@@ -23,8 +23,7 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
-	virtual void Draw(const S2_MAT& mt, 
-		const RenderColor& color = RenderColor()) const = 0;
+	virtual void Draw(const S2_MAT& mt, const RenderColor* color = NULL) const = 0;
 
 	/**
 	 *  @interface

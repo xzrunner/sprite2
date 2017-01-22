@@ -82,14 +82,14 @@ Sprite::~Sprite()
 		m_sym->RemoveReference();
 	}
 
-	if (m_geo != SprDefault::Instance()->Geo()) {
-		delete m_geo;
+	if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
+		SprGeoPool::Instance()->Push(m_geo);
 	}
 
 	delete m_bounding;
 
 	if (m_render != SprDefault::Instance()->Render()) {
-		delete m_render;
+		SprRenderPool::Instance()->Push(m_render);
 	}
 }
 
@@ -122,7 +122,7 @@ void Sprite::SetPosition(const sm::vec2& pos)
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
 	m_geo->SetPosition(pos);
@@ -142,7 +142,7 @@ void Sprite::SetAngle(float angle)
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
 	m_geo->SetAngle(angle);
@@ -162,7 +162,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
 	const sm::vec2& old_scale = m_geo->GetScale();
@@ -195,7 +195,7 @@ void Sprite::SetShear(const sm::vec2& shear)
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
 	S2_MAT mat_old, mat_new;
@@ -228,7 +228,7 @@ void Sprite::SetOffset(const sm::vec2& offset)
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
 	CheckInitOffset();
@@ -349,78 +349,66 @@ const sm::vec2&	Sprite::GetShear() const
 	return m_geo->GetShear();
 }
 
-const RenderColor& Sprite::GetColor() const
-{
-	if (!m_render || (m_render && !m_render->m_color)) {
-		return *SprDefault::Instance()->Render()->m_color;
-	} else {
-		return *m_render->m_color;
-	}
-}
-
-const RenderShader& Sprite::GetShader() const
-{
-	if (!m_render || (m_render && !m_render->m_shader)) {
-		return *SprDefault::Instance()->Render()->m_shader;
-	} else {
-		return *m_render->m_shader;
-	}
-}
-
 const sm::vec2& Sprite::GetOffset() const
 { 
 	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = new SprGeo;
+		m_geo = SprGeoPool::Instance()->Pop();
 	}
 	CheckInitOffset();
 	return m_geo->GetOffset();
 }
 
+const RenderColor& Sprite::GetColor() const
+{
+	if (!m_render || (m_render && !m_render->GetColor())) {
+		return *SprDefault::Instance()->Render()->GetColor();
+	} else {
+		return *m_render->GetColor();
+	}
+}
+
+const RenderShader& Sprite::GetShader() const
+{
+	if (!m_render || (m_render && !m_render->GetShader())) {
+		return *SprDefault::Instance()->Render()->GetShader();
+	} else {
+		return *m_render->GetShader();
+	}
+}
+
 const RenderCamera& Sprite::GetCamera() const
 {
-	if (!m_render || (m_render && !m_render->m_camera)) {
-		return *SprDefault::Instance()->Render()->m_camera;
+	if (!m_render || (m_render && !m_render->GetCamera())) {
+		return *SprDefault::Instance()->Render()->GetCamera();
 	} else {
-		return *m_render->m_camera;
+		return *m_render->GetCamera();
 	}
 }
 
 void Sprite::SetColor(const RenderColor& color)
 {
 	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = new SprRender;
+		m_render = SprRenderPool::Instance()->Pop();
 	}
-	if (!m_render->m_color) {
-		m_render->m_color = new RenderColor;
-	}
-	*m_render->m_color = color;
-
+	m_render->SetColor(color);
 	SetDirty(true);
 }
 
 void Sprite::SetShader(const RenderShader& shader)
 {
 	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = new SprRender;
+		m_render = SprRenderPool::Instance()->Pop();
 	}
-	if (!m_render->m_shader) {
-		m_render->m_shader = new RenderShader;
-	}
-	*m_render->m_shader = shader;
-
+	m_render->SetShader(shader);
 	SetDirty(true);
 }
 
 void Sprite::SetCamera(const RenderCamera& camera)
 {
 	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = new SprRender;
+		m_render = SprRenderPool::Instance()->Pop();
 	}
-	if (!m_render->m_camera) {
-		m_render->m_camera = new RenderCamera;
-	}
-	*m_render->m_camera = camera;
-
+	m_render->SetCamera(camera);
 	SetDirty(true);
 }
 
@@ -568,14 +556,16 @@ void Sprite::InitFromSpr(const Sprite& spr)
 
 	if (m_geo != spr.m_geo) 
 	{
-		if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
-			delete m_geo;
-		}
-		if (spr.m_geo == SprDefault::Instance()->Geo()) {
-			m_geo = SprDefault::Instance()->Geo();
-		} else {
-			m_geo = new SprGeo(*spr.m_geo);
-		}
+ 		if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
+ 			SprGeoPool::Instance()->Push(m_geo);
+			m_geo = NULL;
+ 		}
+ 		if (spr.m_geo == SprDefault::Instance()->Geo()) {
+ 			m_geo = SprDefault::Instance()->Geo();
+ 		} else {
+ 			m_geo = SprGeoPool::Instance()->Pop();
+ 			*m_geo = *spr.m_geo;
+ 		}
 	}
 
 	assert(spr.m_bounding);
@@ -588,20 +578,30 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	if (m_render != spr.m_render) 
 	{
 		if (m_render && m_render != SprDefault::Instance()->Render()) {
-			delete m_render;
+			SprRenderPool::Instance()->Push(m_render);
+			m_render = NULL;
 		}
-		if (spr.m_render == SprDefault::Instance()->Render()) {
+		if (spr.m_render == SprDefault::Instance()->Render()) 
+		{
 			m_render = SprDefault::Instance()->Render();
-		} else {
-			m_render = new SprRender;
-			if (spr.m_render->m_color) {
-				m_render->m_color = new RenderColor(*spr.m_render->m_color);
+		} 
+		else 
+		{
+			m_render = SprRenderPool::Instance()->Pop();
+
+			const RenderColor* src_color = spr.m_render->GetColor();
+			if (src_color && src_color != SprDefault::Instance()->Color()) {
+				m_render->SetColor(*src_color);
 			}
-			if (spr.m_render->m_shader) {
-				m_render->m_shader = new RenderShader(*spr.m_render->m_shader);
+
+			const RenderShader* src_shader = spr.m_render->GetShader();
+			if (src_shader && src_shader != SprDefault::Instance()->Shader()) {
+				m_render->SetShader(*src_shader);
 			}
-			if (spr.m_render->m_camera) {
-				m_render->m_camera = new RenderCamera(*spr.m_render->m_camera);
+
+			const RenderCamera* src_camera = spr.m_render->GetCamera();
+			if (src_camera && src_camera != SprDefault::Instance()->Camera()) {
+				m_render->SetCamera(*src_camera);
 			}
 		}
 	}

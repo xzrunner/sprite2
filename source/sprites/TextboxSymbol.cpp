@@ -85,7 +85,7 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	s.overflow				= tb.overflow;
 
-	DrawText(s, p.mt, p.color.mul, p.color.add, *text, tb_spr->GetTime(), tb.richtext);
+	DrawText(s, p.mt, p.color.GetMul(), p.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
 }

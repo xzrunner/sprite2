@@ -26,7 +26,17 @@ namespace s2
 // 	ret.x[13]= m_world.m[5];
 // 	return ret;
 // }
-// 	
+// 
+
+void SprGeo::Init()
+{
+	m_state.local.Init();
+}
+
+void SprGeo::Term()
+{
+}
+
 /************************************************************************/
 /* class SprGeo::SRT                                                    */
 /************************************************************************/
@@ -37,6 +47,15 @@ SprGeo::SRT::SRT()
 	, scale(1, 1)
 	, shear(0, 0)
 {
+	offset.MakeInvalid();
+}
+
+void SprGeo::SRT::Init()
+{
+	position.Set(0, 0);
+	angle = 0;
+	scale.Set(1, 1);
+	shear.Set(0, 0);
 	offset.MakeInvalid();
 }
 

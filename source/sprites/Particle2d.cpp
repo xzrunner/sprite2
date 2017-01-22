@@ -50,10 +50,14 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
 
+	Color mul, add;
+	memcpy(&mul, mul_col, sizeof(*mul_col));
+	memcpy(&add, add_col, sizeof(*add_col));
+
 	RenderParams params;
 	params.mt = mt;
-	memcpy(&params.color.mul, mul_col, sizeof(*mul_col));
-	memcpy(&params.color.add, add_col, sizeof(*add_col));
+	params.color.SetMul(mul);
+	params.color.SetAdd(add);
 
 	DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 }

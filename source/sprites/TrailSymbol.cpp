@@ -48,8 +48,8 @@ void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(p.color.mul.ToABGR(), p.color.add.ToABGR());
-	shader->SetColorMap(p.color.rmap.ToABGR(), p.color.gmap.ToABGR(), p.color.bmap.ToABGR());
+	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
+	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
 
 	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
 	t2d_spr->Draw(p);

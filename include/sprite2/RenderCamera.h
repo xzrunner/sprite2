@@ -18,6 +18,9 @@ public:
 
 	void CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4]) const;
 
+	CameraMode GetMode() const { return m_state.mode; }
+	void SetMode(CameraMode mode) { m_state.mode = mode; }
+
 	/**
 	 *  @interface
 	 *    ObjectPool

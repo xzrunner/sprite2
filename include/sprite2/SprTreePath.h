@@ -35,8 +35,8 @@ private:
 	int m_val;
 
 #ifdef SPR_TREE_PATH_STATIC
-	static const int MAX_PATH = 16;
-	int m_ids[MAX_PATH];
+	static const int MAX_PATH_NUM = 16;
+	int m_ids[MAX_PATH_NUM];
 	int m_num;
 #else
 	STPBuffer* m_buf;

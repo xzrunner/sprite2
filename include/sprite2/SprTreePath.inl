@@ -44,7 +44,7 @@ bool SprTreePath::Empty() const
 inline
 void SprTreePath::Push(int id)
 {
-	assert(m_num < MAX_PATH);
+	assert(m_num < MAX_PATH_NUM);
 	m_ids[m_num++] = id;
 	m_val += id * m_num;
 }

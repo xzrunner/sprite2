@@ -30,6 +30,15 @@ Color::Color(int r, int g, int b, int a)
 {}
 
 inline
+Color::Color(float r, float g, float b, float a)
+	: r(uint8_t(r * 255))
+	, g(uint8_t(g * 255))
+	, b(uint8_t(b * 255))
+	, a(uint8_t(a * 255))
+{
+}
+
+inline
 bool Color::operator != (const Color& col) const
 {
 	return !(this->operator == (col));

@@ -24,8 +24,6 @@ ObjectPool<T>::ObjectPool()
 	m_freelist = NULL;
 }
 
-static int COUNT = 0;
-
 template <typename T>
 T* ObjectPool<T>::Pop()
 {
@@ -35,7 +33,6 @@ T* ObjectPool<T>::Pop()
 		ret->Init();
 		return ret;
 	} else {
-		++COUNT;
 		return new T();
 	}
 }

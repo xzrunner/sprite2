@@ -65,6 +65,8 @@ protected:
 
 	sm::rect m_scissor;
 
+	mutable sm::rect m_size;
+
 }; // ComplexSymbol
 
 }

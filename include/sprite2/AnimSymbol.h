@@ -82,6 +82,8 @@ protected:
 	AnimCopy  m_copy;
 	AnimCurr2 m_curr;
 
+	mutable sm::rect m_size;
+
 }; // AnimSymbol
 
 }

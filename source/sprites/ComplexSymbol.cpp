@@ -82,21 +82,26 @@ bool ComplexSymbol::Update(const RenderParams& params, float time)
 
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 {
-	sm::vec2 scissor_sz = m_scissor.Size();
-	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
-		return m_scissor;
+	if (m_size.IsValid()) {
+		return m_size;
 	}
 
-	sm::rect b;
+	sm::vec2 scissor_sz = m_scissor.Size();
+	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
+		m_size = m_scissor;
+		return m_size;
+	}
+
+	m_size.MakeEmpty();
 	int action = -1;
 	if (spr) {
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
 	}
 	const std::vector<Sprite*>& sprs = GetSprs(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		sprs[i]->GetBounding()->CombineTo(b);
+		sprs[i]->GetBounding()->CombineTo(m_size);
 	}
-	return b;
+	return m_size;
 }
 
 int ComplexSymbol::GetActionIdx(const std::string& name) const
@@ -121,6 +126,7 @@ bool ComplexSymbol::Add(Sprite* spr, int idx)
 	} else {
 		m_children.insert(m_children.begin() + idx, spr);
 	}
+	m_size.MakeEmpty();
 	return true;
 }
 
@@ -130,6 +136,7 @@ bool ComplexSymbol::Remove(Sprite* spr)
 		if (spr == m_children[i]) {
 			spr->RemoveReference();
 			m_children.erase(m_children.begin() + i);
+			m_size.MakeEmpty();
 			return true;
 		}
 	}
@@ -153,6 +160,7 @@ bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Spr
 	if (!dst) {
 		m_children[idx]->RemoveReference();
 		m_children.erase(m_children.begin() + idx);
+		m_size.MakeEmpty();
 		return true;
 	}
 
@@ -165,6 +173,8 @@ bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Spr
 
 	FixActorPathVisitor visitor(path);
 	dst->Traverse(visitor, SprVisitorParams());
+
+	m_size.MakeEmpty();
 
 	return true;
 }
@@ -180,6 +190,8 @@ bool ComplexSymbol::Clear()
 
 	// todo
 // 	m_actions.clear();
+
+	m_size.MakeEmpty();
 
 	return true;
 }

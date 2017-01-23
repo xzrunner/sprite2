@@ -8,6 +8,7 @@
 #include "RenderScissor.h"
 #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
+#include "SymVisitor.h"
 
 #include <map>
 
@@ -35,6 +36,13 @@ ComplexSymbol::~ComplexSymbol()
 int ComplexSymbol::Type() const 
 { 
 	return SYM_COMPLEX; 
+}
+
+void ComplexSymbol::Traverse(const SymVisitor& visitor)
+{
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		visitor.Visit(m_children[i]);
+	}
 }
 
 void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
@@ -101,6 +109,7 @@ sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
 		sprs[i]->GetBounding()->CombineTo(m_size);
 	}
+
 	return m_size;
 }
 

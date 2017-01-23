@@ -201,9 +201,11 @@ void AnimCurr2::SetAnimCopy(const AnimCopy* copy)
 	ResetLayerCursor();
 
 	m_slots.resize(m_copy->m_slots.size());
-	for (int i = 0, n = m_copy->m_slots.size(); i < n; ++i) {
-		Sprite* spr = const_cast<Sprite*>(m_copy->m_slots[i]);
-		m_slots[i] = VI_CLONE(Sprite, spr);
+	for (int i = 0, n = m_copy->m_slots.size(); i < n; ++i) 
+	{
+		Sprite* src = const_cast<Sprite*>(m_copy->m_slots[i]);
+		Sprite* dst = VI_CLONE(Sprite, src);
+		m_slots[i] = dst;
 	}
 }
 

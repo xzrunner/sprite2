@@ -13,23 +13,28 @@ namespace s2
 class SprGeo
 {
 public:
-	const sm::vec2& GetPosition() const { return m_state.local.position; }
-	void SetPosition(const sm::vec2& pos) { m_state.local.position = pos; }
+	SprGeo();
+	SprGeo(const SprGeo& geo);
+	SprGeo& operator = (const SprGeo& geo);
+	~SprGeo();
 
-	float GetAngle() const { return m_state.local.angle; }
-	void SetAngle(float angle) { m_state.local.angle = angle; }
+	const sm::vec2& GetPosition() const;
+	void SetPosition(const sm::vec2& pos);
 
-	const sm::vec2& GetScale() const { return m_state.local.scale; }
-	void SetScale(const sm::vec2& scale) { m_state.local.scale = scale; }	
+	float GetAngle() const;
+	void SetAngle(float angle);
 
-	const sm::vec2& GetShear() const { return m_state.local.shear; }
-	void SetShear(const sm::vec2& shear) { m_state.local.shear = shear; }	
+	const sm::vec2& GetScale() const;
+	void SetScale(const sm::vec2& scale);
 
-	const sm::vec2& GetOffset() const { return m_state.local.offset; }
-	void SetOffset(const sm::vec2& offset) { m_state.local.offset = offset; }
+	const sm::vec2& GetShear() const;
+	void SetShear(const sm::vec2& shear);
 
-// 	void SetWorldMat(const sm::mat4& mat);
-// 	sm::mat4 GetWorldMat();
+	const sm::vec2& GetOffset() const;
+	void SetOffset(const sm::vec2& offset);
+
+	void SetMatrix(const S2_MAT& mat);
+	const S2_MAT& GetMatrix() const;
 
 	/**
 	 *  @interface
@@ -39,11 +44,6 @@ public:
 	void Term();
  	SprGeo* GetNext() const { return m_state.next; }
  	void SetNext(SprGeo* next) { m_state.next = next; }
-
-private:
-	SprGeo() {}
- 	SprGeo(const SprGeo& geo) { m_state.next = NULL; }
- 	~SprGeo() {}
 
 private:
 	struct SRT
@@ -60,33 +60,25 @@ private:
 		void Init();
 	};
 
-// 	struct Matrix
-// 	{
-// 		float m[6];
-// 
-// 		Matrix();
-// 	};
-
 private:
 	union 
 	{
-		struct
-		{
-			SRT    local;
-		//	Matrix world;
+		struct {
+			SRT    srt;
 		};
-
+		struct {
+			S2_MAT mat;
+		};
 		SprGeo* next;
 
 	} m_state;
-
-	friend class ObjectPool<SprGeo>;
-	friend class SprDefault;
 
 }; // SprGeo
 
 typedef ObjectPool<SprGeo> SprGeoPool;
 
 }
+
+#include "SprGeo.inl"
 
 #endif // _SPRITE2_SPR_GEO_H_

@@ -23,6 +23,11 @@ namespace s2
 
 int Sprite::m_count = 0;
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+static const sm::vec2 POS0_PROXY = sm::vec2(0, 0);
+static const sm::vec2 POS1_PROXY = sm::vec2(1, 1);
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
 Sprite::Sprite()
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
@@ -30,6 +35,8 @@ Sprite::Sprite()
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	sm::vec2 scale = m_geo->GetScale();
+
 	m_id = m_count;
 	++m_count;
 
@@ -41,13 +48,12 @@ Sprite::Sprite(const Sprite& spr)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(NULL)
 	, m_render(SprDefault::Instance()->Render())
-	, m_flags(0)
+	, m_flags(spr.m_flags)
 {
 	m_id = m_count;
 	++m_count;
 
 	InitFromSpr(spr);
-	InitFlags();
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
@@ -63,6 +69,8 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
 {
+	sm::vec2 scale = m_geo->GetScale();
+
 	m_id = m_count;
 	++m_count;
 
@@ -125,6 +133,9 @@ void Sprite::SetPosition(const sm::vec2& pos)
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
 	m_geo->SetPosition(pos);
 
 // 	// immediately
@@ -133,7 +144,7 @@ void Sprite::SetPosition(const sm::vec2& pos)
 	SetBoundingDirty(true);
 
 	SetDirty(true);
-	SetWorldDirty(true);
+	SetGeoDirty(true);
 }
 
 void Sprite::SetAngle(float angle)
@@ -145,6 +156,9 @@ void Sprite::SetAngle(float angle)
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
 	m_geo->SetAngle(angle);
 
 // 	// immediately
@@ -153,7 +167,7 @@ void Sprite::SetAngle(float angle)
 	SetBoundingDirty(true);
 
 	SetDirty(true);
-	SetWorldDirty(true);
+	SetGeoDirty(true);
 }
 
 void Sprite::SetScale(const sm::vec2& scale)
@@ -164,6 +178,10 @@ void Sprite::SetScale(const sm::vec2& scale)
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 	const sm::vec2& old_scale = m_geo->GetScale();
 	if (old_scale.x != 0 && old_scale.y != 0) 
@@ -186,7 +204,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 	SetBoundingDirty(true);
 
 	SetDirty(true);
-	SetWorldDirty(true);
+	SetGeoDirty(true);
 }
 
 void Sprite::SetShear(const sm::vec2& shear)
@@ -198,8 +216,13 @@ void Sprite::SetShear(const sm::vec2& shear)
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
 	S2_MAT mat_old, mat_new;
 #ifdef S2_MATRIX_FIX
+	// todo
 #else
 	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
@@ -219,7 +242,7 @@ void Sprite::SetShear(const sm::vec2& shear)
 	// 	SetBoundingDirty(true); 
 
 	SetDirty(true);
-	SetWorldDirty(true);
+	SetGeoDirty(true);
 }
 
 void Sprite::SetOffset(const sm::vec2& offset)
@@ -230,6 +253,10 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 	CheckInitOffset();
 
@@ -246,7 +273,7 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	// 	SetBoundingDirty(true); 
 
 	SetDirty(true);
-	SetWorldDirty(true);
+	SetGeoDirty(true);
 }
 
 bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
@@ -295,6 +322,10 @@ void Sprite::UpdateBounding() const
 		return;
 	}
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
 	CheckInitOffset();
 	m_bounding->Build(rect, m_geo->GetPosition(), m_geo->GetAngle(), m_geo->GetScale(), 
 		m_geo->GetShear(), m_geo->GetOffset());
@@ -323,6 +354,10 @@ sm::vec2 Sprite::GetCenter() const
 		return sm::vec2(0, 0);
 	} 
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
 	CheckInitOffset();
 	sm::vec2 center_offset = sm::rotate_vector(-m_geo->GetOffset(), m_geo->GetAngle()) + m_geo->GetOffset();
 	sm::vec2 center = m_geo->GetPosition() + center_offset;
@@ -330,27 +365,49 @@ sm::vec2 Sprite::GetCenter() const
 }
 
 const sm::vec2& Sprite::GetPosition() const	
-{ 
+{
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetPosition();
+#else
 	return m_geo->GetPosition();
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 float Sprite::GetAngle() const
-{ 
+{
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	return IsGeoMatrix() ? 0 : m_geo->GetAngle();
+#else
 	return m_geo->GetAngle();
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 const sm::vec2&	Sprite::GetScale() const
 {
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	return IsGeoMatrix() ? POS1_PROXY : m_geo->GetScale();
+#else
 	return m_geo->GetScale();
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 const sm::vec2&	Sprite::GetShear() const
 {
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetShear();
+#else
 	return m_geo->GetShear();
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 const sm::vec2& Sprite::GetOffset() const
 { 
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	if (IsGeoMatrix()) {
+		return POS0_PROXY;
+	}
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
@@ -412,50 +469,29 @@ void Sprite::SetCamera(const RenderCamera& camera)
 	SetDirty(true);
 }
 
-bool Sprite::IsVisible() const 
-{ 
-	return m_flags & FLAG_VISIBLE;
-}
-
-void Sprite::SetVisible(bool visible) const
-{ 
-	if (visible) {
-		m_flags |= FLAG_VISIBLE;
-	} else {
-		m_flags &= ~FLAG_VISIBLE;
-	}
-}
-
-bool Sprite::IsEditable() const 
-{ 
-	return m_flags & FLAG_EDITABLE; 
-}
-
-void Sprite::SetEditable(bool editable) const
-{ 
-	if (editable) {
-		m_flags |= FLAG_EDITABLE;
-	} else {
-		m_flags &= ~FLAG_EDITABLE;
-	}
-}
-
-bool Sprite::IsDirty() const
-{
-	return m_flags & FLAG_DIRTY; 
-}
-
 S2_MAT Sprite::GetLocalMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		return S2_MAT();
-	} 
+	}
 
-	sm::vec2 center = GetCenter();
-	S2_MAT mt;
-	mt.SetTransformation(center.x, center.y, m_geo->GetAngle(), m_geo->GetScale().x, 
-		m_geo->GetScale().y, 0, 0, m_geo->GetShear().x, m_geo->GetShear().y);
-	return mt;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	if (IsGeoMatrix()) {
+		// todo
+		assert(!IsGeoDirty());
+		SetGeoDirty(false);
+		return m_geo->GetMatrix();
+	} else {
+#endif // S2_SPR_CACHE_LOCAL_MAT
+		S2_MAT mat;
+		sm::vec2 center = GetCenter();
+		mat.SetTransformation(center.x, center.y, m_geo->GetAngle(), m_geo->GetScale().x, 
+			m_geo->GetScale().y, 0, 0, m_geo->GetShear().x, m_geo->GetShear().y);
+		SetGeoDirty(false);
+		return mat;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	}
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 S2_MAT Sprite::GetLocalInvMat() const
@@ -464,37 +500,46 @@ S2_MAT Sprite::GetLocalInvMat() const
 		return S2_MAT();
 	} 
 
-	S2_MAT mat;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	if (IsGeoMatrix()) {
+		return m_geo->GetMatrix().Inverted();
+	} else {
+#endif // S2_SPR_CACHE_LOCAL_MAT
+		S2_MAT mat;
 #ifdef S2_MATRIX_FIX
-	mat.Rotate(-m_geo->GetAngle());
-	mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y);
-	mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y);
+		mat.Rotate(-m_geo->GetAngle());
+		mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y);
+		mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y);
 #else
-	mat.RotateZ(-m_geo->GetAngle() * SM_RAD_TO_DEG);
-	mat.Shear(-m_geo->GetShear().x, -m_geo->GetShear().y);
-	mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y, 0);
-	mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y, 1);
+		mat.RotateZ(-m_geo->GetAngle() * SM_RAD_TO_DEG);
+		mat.Shear(-m_geo->GetShear().x, -m_geo->GetShear().y);
+		mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y, 0);
+		mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y, 1);
 #endif // S2_MATRIX_FIX
-	return mat;
+		return mat;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	}
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
-// void Sprite::SetWorldMat(const sm::mat4& mat) const
-// {
-// 	if (m_geo == SprDefault::Instance()->Geo()) {
-// 		return;
-// 	} 
-// 	
-// 	m_geo->SetWorldMat(mat);
-// }
-// 
-// sm::mat4 Sprite::GetWorldMat() const
-// {
-// 	if (m_geo == SprDefault::Instance()->Geo()) {
-// 		return sm::mat4();
-// 	} 
-// 
-// 	return m_geo->GetWorldMat();
-// }
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+void Sprite::CacheLocalMat()
+{
+	if (m_geo == SprDefault::Instance()->Geo()) {
+		return;
+	}
+	if (IsGeoMatrix()) {
+		return;
+	}
+
+	UpdateBounding();
+
+	S2_MAT mat = GetLocalMat();
+	m_geo->SetMatrix(mat);
+
+	SetGeoMatrix(true);
+}
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 void Sprite::AddActor(Actor* actor) const
 {
@@ -538,7 +583,6 @@ void Sprite::FixActorPath(const SprTreePath& path)
 
 void Sprite::InitFlags()
 {
-	SetBoundingDirty(true);
 	SetVisible(true);
 #ifdef S2_SPR_DEFAULT_EDITABLE
 	SetEditable(S2_SPR_DEFAULT_EDITABLE);
@@ -546,6 +590,10 @@ void Sprite::InitFlags()
 	SetEditable(true);
 #endif // S2_SPR_DEFAULT_EDITABLE
 	SetDirty(false);
+	SetBoundingDirty(true);
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	SetGeoMatrix(false);
+#endif // S2_SPR_CACHE_LOCAL_MAT
 }
 
 void Sprite::InitFromSpr(const Sprite& spr)
@@ -609,40 +657,11 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	m_flags = spr.m_flags;
 }
 
-bool Sprite::IsBoundingDirty() const
-{
-	return m_flags & FLAG_BOUNDING_DIRTY;
-}
-
-void Sprite::SetBoundingDirty(bool dirty) const
-{
-	if (dirty) {
-		m_flags |= FLAG_BOUNDING_DIRTY;
-	} else {
-		m_flags &= ~FLAG_BOUNDING_DIRTY;
-	}
-}
-
-void Sprite::SetDirty(bool dirty) const
-{
-	if (dirty) {
-		m_flags |= FLAG_DIRTY;
-	} else {
-		m_flags &= ~FLAG_DIRTY;
-	}
-}
-
-void Sprite::SetWorldDirty(bool dirty) const
-{
-	if (dirty) {
-		m_flags |= FLAG_WORLD_DIRTY;
-	} else {
-		m_flags &= ~FLAG_WORLD_DIRTY;
-	}
-}
-
 void Sprite::CheckInitOffset() const
 {
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	assert(!IsGeoMatrix());
+#endif // S2_SPR_CACHE_LOCAL_MAT
 	if (m_geo->GetOffset().IsValid()) {
 		return;
 	}

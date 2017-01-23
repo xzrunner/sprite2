@@ -104,18 +104,11 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	bool IsVisible() const;
-	void SetVisible(bool visible) const;
-	bool IsEditable() const;
-	void SetEditable(bool editable) const;
-
-	bool IsDirty() const;
-
 	S2_MAT GetLocalMat() const;
 	S2_MAT GetLocalInvMat() const;
-
-// 	void SetWorldMat(const sm::mat4& mat) const;
-// 	sm::mat4 GetWorldMat() const;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	void CacheLocalMat();
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 	int GetID() const { return m_id; }
 
@@ -131,13 +124,6 @@ private:
 
 	void InitFromSpr(const Sprite& spr);
 
-	bool IsBoundingDirty() const;
-	void SetBoundingDirty(bool dirty) const;
-
-	void SetDirty(bool dirty) const;
-
-	void SetWorldDirty(bool dirty) const;
-
 	void CheckInitOffset() const;
 
 protected:
@@ -145,7 +131,32 @@ protected:
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
 	static const uint32_t FLAG_DIRTY          = 0x00000004;
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
-	static const uint32_t FLAG_WORLD_DIRTY    = 0x00000010;
+	static const uint32_t FLAG_GEO_DIRTY      = 0x00000010;
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
+#endif // S2_SPR_CACHE_LOCAL_MAT
+
+public:
+#define FLAG_METHOD(name, bit) \
+	bool Is##name##() const { \
+		return m_flags & bit; \
+	} \
+	void Set##name##(bool flag) const { \
+		if (flag) { \
+			m_flags |= bit; \
+		} else { \
+			m_flags &= ~bit; \
+		} \
+	}
+
+	FLAG_METHOD(Visible, FLAG_VISIBLE)
+	FLAG_METHOD(Editable, FLAG_EDITABLE)
+	FLAG_METHOD(Dirty, FLAG_DIRTY)
+	FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
+	FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+	FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 protected:
 	Symbol*					m_sym;

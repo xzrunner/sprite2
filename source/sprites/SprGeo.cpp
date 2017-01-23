@@ -43,8 +43,9 @@ SprGeo::SRT::SRT()
 	, angle(0)
 	, scale(1, 1)
 	, shear(0, 0)
+	, offset(0, 0)
+	, center(0, 0)
 {
-	offset.MakeInvalid();
 }
 
 void SprGeo::SRT::Init()
@@ -53,7 +54,8 @@ void SprGeo::SRT::Init()
 	angle = 0;
 	scale.Set(1, 1);
 	shear.Set(0, 0);
-	offset.MakeInvalid();
+	offset.Set(0, 0);
+	center.Set(0, 0);
 }
 
 }

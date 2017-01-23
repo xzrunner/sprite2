@@ -65,6 +65,20 @@ void SprGeo::SetOffset(const sm::vec2& offset)
 }
 
 inline
+const sm::vec2& SprGeo::GetCenter() const
+{
+	return m_state.srt.center;
+}
+
+inline
+void SprGeo::SetCenter(const sm::vec2& center)
+{
+	m_state.srt.center = center;
+}
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT
+
+inline
 void SprGeo::SetMatrix(const S2_MAT& mat)
 {
 	m_state.mat = mat;
@@ -75,6 +89,8 @@ const S2_MAT& SprGeo::GetMatrix() const
 {
 	return m_state.mat;
 }
+
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 }
 

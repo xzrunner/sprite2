@@ -124,7 +124,7 @@ private:
 
 	void InitFromSpr(const Sprite& spr);
 
-	void CheckInitOffset() const;
+	void UpdateCenter();
 
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;

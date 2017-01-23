@@ -4,6 +4,8 @@
 #include "RenderFilter.h"
 #include "RenderShader.h"
 #include "RenderParams.h"
+#include "S2_Symbol.h"
+#include "SprGeo.h"
 
 #include <stddef.h>
 
@@ -17,6 +19,7 @@ ImageSprite::ImageSprite()
 ImageSprite::ImageSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 {
+	m_geo->SetOffset(m_sym->GetBounding(this).Center());
 }
 
 ImageSprite* ImageSprite::Clone() const

@@ -33,8 +33,13 @@ public:
 	const sm::vec2& GetOffset() const;
 	void SetOffset(const sm::vec2& offset);
 
+	const sm::vec2& GetCenter() const;
+	void SetCenter(const sm::vec2& center);	
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT
 	void SetMatrix(const S2_MAT& mat);
 	const S2_MAT& GetMatrix() const;
+#endif // S2_SPR_CACHE_LOCAL_MAT
 
 	/**
 	 *  @interface
@@ -55,6 +60,8 @@ private:
 
 		sm::vec2 offset;
 
+		sm::vec2 center;
+
 		SRT();
 
 		void Init();
@@ -66,9 +73,11 @@ private:
 		struct {
 			SRT    srt;
 		};
+#ifdef S2_SPR_CACHE_LOCAL_MAT
 		struct {
 			S2_MAT mat;
 		};
+#endif // S2_SPR_CACHE_LOCAL_MAT
 		SprGeo* next;
 
 	} m_state;

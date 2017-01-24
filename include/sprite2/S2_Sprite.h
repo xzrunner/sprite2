@@ -139,7 +139,7 @@ protected:
 public:
 #define FLAG_METHOD(name, bit) \
 	bool Is##name##() const { \
-		return m_flags & bit; \
+		return (m_flags & bit) != 0; \
 	} \
 	void Set##name##(bool flag) const { \
 		if (flag) { \

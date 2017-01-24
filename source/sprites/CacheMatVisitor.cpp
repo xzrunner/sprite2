@@ -6,9 +6,9 @@ namespace s2
 
 void CacheMatVisitor::Visit(Sprite* spr) const
 {
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	spr->CacheLocalMat();
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 }

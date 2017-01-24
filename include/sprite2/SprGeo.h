@@ -36,10 +36,15 @@ public:
 	const sm::vec2& GetCenter() const;
 	void SetCenter(const sm::vec2& center);	
 
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void SetMatrix(const S2_MAT& mat);
 	const S2_MAT& GetMatrix() const;
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	void SetMatrix(const S2_MAT& mat);
+	S2_MAT GetMatrix() const;
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 	/**
 	 *  @interface
@@ -63,21 +68,33 @@ private:
 		sm::vec2 center;
 
 		SRT();
-
 		void Init();
 	};
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	struct MAT
+	{
+		float m[6];
+
+		MAT();
+		void Init();
+	};
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 private:
 	union 
 	{
 		struct {
 			SRT    srt;
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+			MAT    mat;
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 		};
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 		struct {
 			S2_MAT mat;
 		};
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 		SprGeo* next;
 
 	} m_state;

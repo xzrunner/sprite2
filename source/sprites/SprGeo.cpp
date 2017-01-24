@@ -28,6 +28,9 @@ SprGeo::~SprGeo()
 void SprGeo::Init()
 {
 	m_state.srt.Init();
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	m_state.mat.Init();
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 }
 
 void SprGeo::Term()
@@ -57,5 +60,24 @@ void SprGeo::SRT::Init()
 	offset.Set(0, 0);
 	center.Set(0, 0);
 }
+
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+
+/************************************************************************/
+/* class SprGeo::MAT                                                    */
+/************************************************************************/
+
+SprGeo::MAT::MAT()
+{
+	Init();
+}
+
+void SprGeo::MAT::Init()
+{
+	m[0] = m[3] = 1;
+	m[1] = m[2] = m[4] = m[5] = 0;
+}
+
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 }

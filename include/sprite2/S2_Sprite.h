@@ -106,9 +106,9 @@ public:
 
 	S2_MAT GetLocalMat() const;
 	S2_MAT GetLocalInvMat() const;
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void CacheLocalMat();
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 	int GetID() const { return m_id; }
 
@@ -132,9 +132,9 @@ protected:
 	static const uint32_t FLAG_DIRTY          = 0x00000004;
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
 	static const uint32_t FLAG_GEO_DIRTY      = 0x00000010;
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 public:
 #define FLAG_METHOD(name, bit) \
@@ -154,9 +154,9 @@ public:
 	FLAG_METHOD(Dirty, FLAG_DIRTY)
 	FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
 	FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
-#ifdef S2_SPR_CACHE_LOCAL_MAT
+#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
-#endif // S2_SPR_CACHE_LOCAL_MAT
+#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 protected:
 	Symbol*					m_sym;

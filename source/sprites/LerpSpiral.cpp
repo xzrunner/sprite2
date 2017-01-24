@@ -43,8 +43,8 @@ sm::vec2 LerpSpiral::Lerp(const sm::vec2& begin, const sm::vec2& end, float proc
 
 	sm::vec2 ret;
 
-	ret.x = r * sm_cos(angle);
-	ret.y = r * sm_sin(angle);
+	ret.x = r * sm::cos(angle);
+	ret.y = r * sm::sin(angle);
 
 	if (m_scale != 1) 
 	{

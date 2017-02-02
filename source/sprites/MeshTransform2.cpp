@@ -23,7 +23,7 @@ void MeshTransform2::LoadFromMesh(const Mesh* mesh)
 }
 
 void MeshTransform2::StoreToMesh(const Mesh* mesh) const
-{
+{	
 	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
 
 	// clear
@@ -45,6 +45,8 @@ void MeshTransform2::StoreToMesh(const Mesh* mesh) const
 
 void MeshTransform2::Lerp(const MeshTransform2& begin, const MeshTransform2& end, float process)
 {
+	Clear();
+
 	int b_ptr = 0, e_ptr = 0;
 	int bn = begin.m_trans.size(), en = end.m_trans.size();
 	while (b_ptr < bn && e_ptr < en)
@@ -59,16 +61,20 @@ void MeshTransform2::Lerp(const MeshTransform2& begin, const MeshTransform2& end
 			m_trans.push_back(std::make_pair(b_idx, pos));
 			++b_idx;
 			++e_idx;
+			++b_ptr;
+			++e_ptr;
 		} 
 		else if (b_idx < e_idx) 
 		{
 			m_trans.push_back(std::make_pair(b_idx, b_pos * (1 - process)));
 			++b_idx;
+			++b_ptr;
 		} 
 		else 
 		{
 			m_trans.push_back(std::make_pair(e_idx, e_pos * process));
 			++e_idx;
+			++e_ptr;
 		}
 	}
 

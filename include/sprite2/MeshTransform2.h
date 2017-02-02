@@ -23,10 +23,10 @@ public:
 	}
 	void Clear() { m_trans.clear(); }
 
+	const std::vector<std::pair<int, sm::vec2> >& GetTrans() const { return m_trans; }
+
 private:
 	std::vector<std::pair<int, sm::vec2> > m_trans;
-
-	
 
 }; // MeshTransform2
 

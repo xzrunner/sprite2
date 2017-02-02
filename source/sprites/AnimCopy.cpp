@@ -102,14 +102,6 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 				spr->AddReference();
 				m_slots.push_back(spr);
 				node.curr = slot;
-
-				Node* ptr = &node;
-				int idx = iframe;
-				while (ptr->next != -1 && idx < nnode - 1) 
-				{
-					ptr = &layer.frames[++idx].nodes[ptr->next];
-					ptr->curr = slot;
-				}
 			}
 		}
 	}

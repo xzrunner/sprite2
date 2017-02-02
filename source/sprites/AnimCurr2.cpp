@@ -256,6 +256,9 @@ void AnimCurr2::LoadCurrSprites()
 		while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
 			++cursor;
 		}
+		if (cursor == frame_num - 1) {
+			cursor = -1;
+		}
 		m_layer_cursor[i] = cursor;
 	}
 
@@ -267,6 +270,9 @@ void AnimCurr2::LoadCurrSprites()
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		int cursor = m_layer_cursor[i];
+		if (cursor < 0) {
+			continue;
+		}
 		const AnimCopy::Frame& frame = m_copy->m_layers[i].frames[cursor];
 		for (int j = 0, m = frame.nodes.size(); j < m; ++j)
 		{

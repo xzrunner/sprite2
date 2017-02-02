@@ -4,7 +4,7 @@
 #include "Mesh.h"
 #include "S2_Sprite.h"
 #include "RenderParams.h"
-#include "MeshTransform.h"
+#include "MeshTransform2.h"
 #include "DrawMesh.h"
 #include "DrawNode.h"
 
@@ -55,7 +55,7 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	const MeshSprite* mesh_spr = VI_DOWNCASTING<const MeshSprite*>(spr);
 	if (mesh_spr) {
-		const MeshTransform& mtrans = mesh_spr->GetMeshTrans();
+		const MeshTransform2& mtrans = mesh_spr->GetMeshTrans();
 		mtrans.StoreToMesh(m_mesh);
 	}
 

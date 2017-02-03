@@ -179,6 +179,8 @@ void AnimCurr2::SetTime(float time)
 
 void AnimCurr2::SetFrame(int frame, int fps)
 {
+	frame = frame % m_copy->m_max_frame_idx + 1;
+
 	if (frame < m_frame) {
 		ResetLayerCursor();
 	}

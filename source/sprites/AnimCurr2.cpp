@@ -126,8 +126,13 @@ bool AnimCurr2::Update(const RenderParams& params, bool loop, float interval, in
 	}
 
 	// update children
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
-		if (m_slots[m_curr[i]]->Update(params)) {
+// 	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+// 		if (m_slots[m_curr[i]]->Update(params)) {
+// 			dirty = true;
+// 		}
+// 	}
+	for (int i = 0, n = m_slots.size(); i < n; ++i) {
+		if (m_slots[i]->Update(params)) {
 			dirty = true;
 		}
 	}

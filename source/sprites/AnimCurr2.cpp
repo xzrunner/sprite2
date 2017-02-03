@@ -15,6 +15,10 @@ namespace s2
 AnimCurr2::AnimCurr2()
 	: m_copy(NULL)
 	, m_frame(0)
+	, m_start_time(0)
+	, m_curr_time(0)
+	, m_stop_time(0)
+	, m_stop_during(0)
 	, m_active(true)
 {
 	ResetLayerCursor();
@@ -246,18 +250,33 @@ void AnimCurr2::ResetLayerCursor()
 
 void AnimCurr2::LoadCurrSprites()
 {
+	if (m_copy->m_max_node_num < 0) {
+		return;
+	}
+
 	// update cursor
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
-		int cursor = m_layer_cursor[i];
 		const AnimCopy::Layer& layer = m_copy->m_layers[i];
+		if (layer.frames.empty()) {
+			continue;
+		}
+
+		int cursor = m_layer_cursor[i];
+		if (cursor == INT_MAX) {
+			continue;
+		}
+
 		int frame_num = layer.frames.size();
 		assert(cursor < frame_num);
 		while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
 			++cursor;
 		}
-		if (cursor == frame_num - 1) {
+		if (cursor == 0 && m_frame < layer.frames[cursor].time) {
 			cursor = -1;
+		}
+		if (cursor == frame_num - 1 && m_frame > layer.frames[cursor].time) {
+			cursor = INT_MAX;
 		}
 		m_layer_cursor[i] = cursor;
 	}
@@ -270,7 +289,7 @@ void AnimCurr2::LoadCurrSprites()
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		int cursor = m_layer_cursor[i];
-		if (cursor < 0) {
+		if (cursor == -1 || cursor == INT_MAX) {
 			continue;
 		}
 		const AnimCopy::Frame& frame = m_copy->m_layers[i].frames[cursor];

@@ -12,7 +12,7 @@ class RenderTarget : public cu::RefCountObj
 {
 public:
 	RenderTarget(int width, int height);
-	~RenderTarget();
+	virtual ~RenderTarget();
 
 	void Bind();
 	void Unbind();

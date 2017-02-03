@@ -192,6 +192,12 @@ void AnimCurr2::SetFrame(int frame, int fps)
 	m_stop_during = 0;
 
 	LoadCurrSprites();
+
+	// update children
+	RenderParams params;
+	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+		m_slots[m_curr[i]]->Update(params);
+	}
 }
 
 void AnimCurr2::SetAnimCopy(const AnimCopy* copy)

@@ -40,7 +40,6 @@ protected:
 	virtual bool IsOrthoCam() const = 0;
 	virtual void GetScreenSize(int& w, int& h) const = 0;
 	virtual float GetP3dCamAngle() const = 0;
-	virtual int GetScreenCacheTexid() const = 0;
 
 private:
 	void DrawBlend(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const;

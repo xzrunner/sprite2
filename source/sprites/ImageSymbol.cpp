@@ -4,6 +4,7 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#include "Blackboard.h"
 
 #include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
@@ -132,7 +133,13 @@ void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, floa
 		tex_coords_base[i].x /= w;
 		tex_coords_base[i].y /= h;
 	}
-	shader->Draw(&vertices[0].x, texcoords, &tex_coords_base[0].x, texid, GetScreenCacheTexid());
+
+	int screen_cache_texid = Blackboard::Instance()->GetScreenCacheTexID();
+	if (screen_cache_texid < 0) {
+		return;
+	}
+
+	shader->Draw(&vertices[0].x, texcoords, &tex_coords_base[0].x, texid, screen_cache_texid);
 }
 
 void ImageSymbol::DrawOrtho(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const

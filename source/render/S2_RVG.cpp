@@ -1,5 +1,5 @@
 #include "S2_RVG.h"
-#include "S2_CameraMgr.h"
+#include "CameraMgr.h"
 #include "Color.h"
 
 #include <rvg.h>

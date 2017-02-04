@@ -5,6 +5,10 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "Blackboard.h"
+#include "OrthoCamera.h"
+#include "Pseudo3DCamera.h"
+#include "RenderContext.h"
+#include "RenderCtxStack.h"
 
 #include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
@@ -66,10 +70,11 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	if (mgr->GetShaderType() == sl::BLEND) {
 		DrawBlend(p, vertices, texcoords, texid);
 	} else {
-		if (IsOrthoCam()) {
-			DrawOrtho(p, vertices, texcoords, texid);
-		} else {
+		const Camera* cam = Blackboard::Instance()->GetCamera();
+		if (cam && cam->Type() == CAM_PSEUDO3D) {
 			DrawPseudo3D(p, vertices, texcoords, texid);
+		} else {
+			DrawOrtho(p, vertices, texcoords, texid);
 		}
 	}
 }
@@ -116,22 +121,35 @@ void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, floa
 	}
 
 	sm::vec2 vertices_scr[4];
-	sm::vec2 sz = m_tex->GetSize();
-	float img_hw = sz.x * 0.5f,
-		  img_hh = sz.y * 0.5f;
-	vertices_scr[0] = params.mt * sm::vec2(-img_hw, -img_hh);
-	vertices_scr[1] = params.mt * sm::vec2(-img_hw,  img_hh);
-	vertices_scr[2] = params.mt * sm::vec2( img_hw,  img_hh);
-	vertices_scr[3] = params.mt * sm::vec2( img_hw, -img_hh);
+	vertices_scr[0] = params.mt * sm::vec2(m_size.xmin, m_size.ymin);
+	vertices_scr[1] = params.mt * sm::vec2(m_size.xmax, m_size.ymin);
+	vertices_scr[2] = params.mt * sm::vec2(m_size.xmax, m_size.ymax);
+	vertices_scr[3] = params.mt * sm::vec2(m_size.xmin, m_size.ymax);
 
+	const Camera* cam = Blackboard::Instance()->GetCamera();
+	const OrthoCamera* ocam = NULL;
+	if (cam) {
+		assert(cam->Type() == CAM_ORTHO2D);
+		ocam = static_cast<const OrthoCamera*>(cam);
+	}
+	
 	sm::vec2 tex_coords_base[4];
-	int w, h;
-	GetScreenSize(w, h);
-	for (int i = 0; i < 4; ++i) {
-		Proj2Screen(vertices_scr[i].x, vertices_scr[i].y, w, h, tex_coords_base[i].x, tex_coords_base[i].y);
-		tex_coords_base[i].y = h - 1 - tex_coords_base[i].y;
-		tex_coords_base[i].x /= w;
-		tex_coords_base[i].y /= h;
+	const sm::ivec2& screen_sz = Blackboard::Instance()->GetScreenSize();
+	if (cam) {
+		for (int i = 0; i < 4; ++i)  {
+			tex_coords_base[i] = ocam->TransPosProjectToScreen(vertices_scr[i], screen_sz.x, screen_sz.y);
+		}
+	} else {
+		for (int i = 0; i < 4; ++i)  {
+			tex_coords_base[i].x = screen_sz.x * 0.5f + vertices_scr[i].x;
+			tex_coords_base[i].y = screen_sz.y * 0.5f - vertices_scr[i].y;
+		}
+	}
+	for (int i = 0; i < 4; ++i) 
+	{
+		tex_coords_base[i].y = screen_sz.y - 1 - tex_coords_base[i].y;
+		tex_coords_base[i].x /= screen_sz.x;
+		tex_coords_base[i].y /= screen_sz.y;
 	}
 
 	int screen_cache_texid = Blackboard::Instance()->GetScreenCacheTexID();
@@ -161,11 +179,12 @@ void ImageSymbol::DrawOrtho(const RenderParams& params, sm::vec2* vertices, floa
 
 void ImageSymbol::DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const
 {
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	const Camera* cam = Blackboard::Instance()->GetCamera();
+	assert(cam && cam->Type() == CAM_PSEUDO3D);
+	const Pseudo3DCamera* pcam = static_cast<const Pseudo3DCamera*>(cam);
 
-	float angle = GetP3dCamAngle();
 	float z[4];
-	params.camera.CalculateZ(angle, vertices, z);
+	params.camera.CalculateZ(pcam->GetAngle(), vertices, z);
 
 	std::vector<sm::vec3> _vertices;
 	_vertices.push_back(sm::vec3(vertices[0].x, vertices[0].y, z[0]));
@@ -183,6 +202,7 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, f
 	_texcoords.push_back(sm::vec2(texcoords[4], texcoords[5]));
 	_texcoords.push_back(sm::vec2(texcoords[6], texcoords[7]));
 
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
 	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());

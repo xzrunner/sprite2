@@ -35,12 +35,6 @@ public:
 
 	const Texture* GetTexture() const { return m_tex; }
 
-protected:
-	virtual void Proj2Screen(float px, float py, int w, int h, float& sx, float& sy) const = 0;
-	virtual bool IsOrthoCam() const = 0;
-	virtual void GetScreenSize(int& w, int& h) const = 0;
-	virtual float GetP3dCamAngle() const = 0;
-
 private:
 	void DrawBlend(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const;
 	void DrawOrtho(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const;

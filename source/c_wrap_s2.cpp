@@ -21,6 +21,7 @@
 #include "AnimSymbol.h"
 #include "AnimSprite.h"
 #include "TextboxSprite.h"
+#include "Scale9Sprite.h"
 
 #include <gtxt_label.h>
 
@@ -515,6 +516,18 @@ bool s2_spr_set_scissor(void* spr, float x, float y, float w, float h)
 	scissor.ymax = y + h;
 
 	return true;
+}
+
+extern "C"
+void s2_spr_scale9_resize(void* spr, int w, int h)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_SCALE9) {
+		return;
+	}
+
+	Scale9Sprite* s9_spr = static_cast<Scale9Sprite*>(s2_spr);
+	s9_spr->Resize(w, h);
 }
 
 /************************************************************************/

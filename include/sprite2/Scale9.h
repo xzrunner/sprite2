@@ -49,7 +49,8 @@ public:
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }
 
-	void Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9]);
+	void Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9], 
+		int sz_left, int sz_right, int sz_top, int sz_down);
 
 	void GetGrids(std::vector<Sprite*>& grids) const;
 	const Sprite* GetGrid(SCALE9_IDX idx) const { return m_grids[idx]; }
@@ -59,8 +60,8 @@ public:
 	static SCALE9_TYPE CheckType(Sprite* grids[9]);
 
 private:
-	static void ResizeSprite(Sprite* spr, const sm::vec2& center, 
-		float width, float height);
+	void ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, 
+		float dst_w, float dst_h);
 
 private:
 	SCALE9_TYPE m_type;
@@ -71,6 +72,8 @@ private:
 	// 3 4 5
 	// 0 1 2
 	Sprite* m_grids[9];
+
+	int m_sz_left, m_sz_right, m_sz_top, m_sz_down;
 
 }; // Scale9
 

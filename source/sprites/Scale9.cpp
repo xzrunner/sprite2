@@ -19,6 +19,7 @@ Scale9::Scale9()
 	, m_height(0)
 {
 	memset(m_grids, 0, sizeof(m_grids));
+	m_sz_left = m_sz_right = m_sz_top = m_sz_down = 0;
 }
 
 Scale9::Scale9(const Scale9& s9)
@@ -39,6 +40,10 @@ Scale9& Scale9::operator = (const Scale9& s9)
 			m_grids[i] = NULL;
 		}
 	}
+	m_sz_left  = s9.m_sz_left;
+	m_sz_right = s9.m_sz_right;
+	m_sz_top   = s9.m_sz_top;
+	m_sz_down  = s9.m_sz_down;
 	return *this;
 }
 
@@ -80,17 +85,17 @@ void Scale9::SetSize(float width, float height)
 				  h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
 				  h1 = height - h0 - h2;
 
-			ResizeSprite(m_grids[S9_DOWN_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
-			ResizeSprite(m_grids[S9_DOWN_CENTER], sm::vec2(0.0f, -h0*0.5f-h1*0.5f), w1, h0);
-			ResizeSprite(m_grids[S9_DOWN_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, -h0*0.5f-h1*0.5f), w2, h0);
+			ResizeSprite(S9_DOWN_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
+			ResizeSprite(S9_DOWN_CENTER, sm::vec2(0.0f, -h0*0.5f-h1*0.5f), w1, h0);
+			ResizeSprite(S9_DOWN_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, -h0*0.5f-h1*0.5f), w2, h0);
 
-			ResizeSprite(m_grids[S9_MID_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
-			ResizeSprite(m_grids[S9_MID_CENTER], sm::vec2(0.0f, 0.0f), w1, h1);
-			ResizeSprite(m_grids[S9_MID_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
+			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
+			ResizeSprite(S9_MID_CENTER, sm::vec2(0.0f, 0.0f), w1, h1);
+			ResizeSprite(S9_MID_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
 
-			ResizeSprite(m_grids[S9_TOP_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
-			ResizeSprite(m_grids[S9_TOP_CENTER], sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
-			ResizeSprite(m_grids[S9_TOP_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);		
+			ResizeSprite(S9_TOP_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
+			ResizeSprite(S9_TOP_CENTER, sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
+			ResizeSprite(S9_TOP_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);		
 		}
 		break;
 	case S9_9GRID_HOLLOW:
@@ -102,16 +107,16 @@ void Scale9::SetSize(float width, float height)
 				  h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
 				  h1 = height - h0 - h2;
 
-			ResizeSprite(m_grids[S9_DOWN_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
-			ResizeSprite(m_grids[S9_DOWN_CENTER], sm::vec2(0.0f, -h0*0.5f-h1*0.5f), w1, h0);
-			ResizeSprite(m_grids[S9_DOWN_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, -h0*0.5f-h1*0.5f), w2, h0);
+			ResizeSprite(S9_DOWN_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
+			ResizeSprite(S9_DOWN_CENTER, sm::vec2(0.0f, -h0*0.5f-h1*0.5f), w1, h0);
+			ResizeSprite(S9_DOWN_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, -h0*0.5f-h1*0.5f), w2, h0);
 
-			ResizeSprite(m_grids[S9_MID_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
-			ResizeSprite(m_grids[S9_MID_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
+			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
+			ResizeSprite(S9_MID_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
 
-			ResizeSprite(m_grids[S9_TOP_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
-			ResizeSprite(m_grids[S9_TOP_CENTER], sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
-			ResizeSprite(m_grids[S9_TOP_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);
+			ResizeSprite(S9_TOP_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
+			ResizeSprite(S9_TOP_CENTER, sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
+			ResizeSprite(S9_TOP_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);
 		}
 		break;
 	case S9_6GRID_UPPER:
@@ -122,13 +127,13 @@ void Scale9::SetSize(float width, float height)
 			float h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
 				  h1 = height - h2;
 
-			ResizeSprite(m_grids[S9_MID_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
-			ResizeSprite(m_grids[S9_MID_CENTER], sm::vec2(0.0f, 0.0f), w1, h1);
-			ResizeSprite(m_grids[S9_MID_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
+			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
+			ResizeSprite(S9_MID_CENTER, sm::vec2(0.0f, 0.0f), w1, h1);
+			ResizeSprite(S9_MID_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, h1);
 
-			ResizeSprite(m_grids[S9_TOP_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
-			ResizeSprite(m_grids[S9_TOP_CENTER], sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
-			ResizeSprite(m_grids[S9_TOP_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);
+			ResizeSprite(S9_TOP_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, h1*0.5f+h2*0.5f), w0, h2);
+			ResizeSprite(S9_TOP_CENTER, sm::vec2(0.0f, h1*0.5f+h2*0.5f), w1, h2);
+			ResizeSprite(S9_TOP_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, h1*0.5f+h2*0.5f), w2, h2);
 		}
 		break;
 	case S9_3GRID_HORI:
@@ -137,9 +142,9 @@ void Scale9::SetSize(float width, float height)
 				  w2 = m_grids[S9_MID_RIGHT]->GetSymbol()->GetBounding().Size().x,
 				  w1 = width - w0 - w2; 
 
-			ResizeSprite(m_grids[S9_MID_LEFT], sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, height);
-			ResizeSprite(m_grids[S9_MID_CENTER], sm::vec2(0.0f, 0.0f), w1, height);
-			ResizeSprite(m_grids[S9_MID_RIGHT], sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, height);
+			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, height);
+			ResizeSprite(S9_MID_CENTER, sm::vec2(0.0f, 0.0f), w1, height);
+			ResizeSprite(S9_MID_RIGHT, sm::vec2(w1*0.5f+w2*0.5f, 0.0f), w2, height);
 		}
 		break;
 	case S9_3GRID_VERT:
@@ -148,15 +153,16 @@ void Scale9::SetSize(float width, float height)
 				  h2 = m_grids[S9_TOP_CENTER]->GetSymbol()->GetBounding().Size().y,
 				  h1 = height - h0 - h2;
 
-			ResizeSprite(m_grids[S9_DOWN_CENTER], sm::vec2(0.0f, -h0*0.5f-h1*0.5f), width, h0);
-			ResizeSprite(m_grids[S9_MID_CENTER], sm::vec2(0.0f, 0.0f), width, h1);
-			ResizeSprite(m_grids[S9_TOP_CENTER], sm::vec2(0.0f, h1*0.5f+h2*0.5f), width, h2);
+			ResizeSprite(S9_DOWN_CENTER, sm::vec2(0.0f, -h0*0.5f-h1*0.5f), width, h0);
+			ResizeSprite(S9_MID_CENTER, sm::vec2(0.0f, 0.0f), width, h1);
+			ResizeSprite(S9_TOP_CENTER, sm::vec2(0.0f, h1*0.5f+h2*0.5f), width, h2);
 		}
 		break;
 	}
 }
 
-void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9])
+void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9], 
+				   int sz_left, int sz_right, int sz_top, int sz_down)
 {
 	m_type = type;
 	m_width = m_height = 0;
@@ -173,6 +179,10 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9])
 			m_grids[i] = NULL;
 		}
 	}
+	m_sz_left  = sz_left;
+	m_sz_right = sz_right;
+	m_sz_top   = sz_top;
+	m_sz_down  = sz_down;
 	SetSize(w, h);
 }
 
@@ -235,11 +245,13 @@ SCALE9_TYPE Scale9::CheckType(Sprite* grids[9])
 	return type;
 }
 
-void Scale9::ResizeSprite(Sprite* spr, const sm::vec2& center, 
-						  float width, float height)
+void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, 
+						  float dst_w, float dst_h)
 {
-	if (width < 0) { width = 1; }
-	if (height < 0) { height = 1; }
+	if (dst_w < 0) { dst_w = 1; }
+	if (dst_h < 0) { dst_h = 1; }
+
+	Sprite* spr = m_grids[idx];
 
 	Symbol* sym = spr->GetSymbol();
 	ImageSymbol* img_sym = VI_DOWNCASTING<ImageSymbol*>(sym);
@@ -247,18 +259,94 @@ void Scale9::ResizeSprite(Sprite* spr, const sm::vec2& center,
 		return;
 	}
 
+	spr->SetPosition(center);
+
+	int src_w, src_h;
 	sm::vec2 sz = img_sym->GetNoTrimedSize();
 	assert(sz.x != 0 && sz.y != 0);
+	src_w = sz.x;
+	src_h = sz.y;
 
-	spr->SetPosition(center);
+	const float times = spr->GetAngle() / SM_PI;
+	bool rotate = times - (int)(times + 0.01f) < 0.3f;
+	if (m_sz_left != 0 && m_sz_right != 0 && m_sz_top != 0 && m_sz_down != 0)
+	{
+		if (!rotate)
+		{
+			switch (idx)
+			{
+			case S9_DOWN_LEFT:
+				src_h = m_sz_left;
+				src_w = m_sz_down;
+				break;
+			case S9_DOWN_CENTER:
+				src_w = m_sz_down;
+				break;
+			case S9_DOWN_RIGHT:
+				src_h = m_sz_right;
+				src_w = m_sz_down;
+				break;
+			case S9_MID_LEFT:
+				src_h = m_sz_left;
+				break;
+			case S9_MID_RIGHT:
+				src_h = m_sz_right;
+				break;
+			case S9_TOP_LEFT:
+				src_h = m_sz_left;
+				src_w = m_sz_top;
+				break;
+			case S9_TOP_CENTER:
+				src_w = m_sz_top;			
+				break;
+			case S9_TOP_RIGHT:
+				src_h = m_sz_right;
+				src_w = m_sz_top;
+				break;
+			}
+		}
+		else
+		{
+			switch (idx)
+			{
+			case S9_DOWN_LEFT:
+				src_w = m_sz_left;
+				src_h = m_sz_down;
+				break;
+			case S9_DOWN_CENTER:
+				src_h = m_sz_down;
+				break;
+			case S9_DOWN_RIGHT:
+				src_w = m_sz_right;
+				src_h = m_sz_down;
+				break;
+			case S9_MID_LEFT:
+				src_w = m_sz_left;
+				break;
+			case S9_MID_RIGHT:
+				src_w = m_sz_right;
+				break;
+			case S9_TOP_LEFT:
+				src_w = m_sz_left;
+				src_h = m_sz_top;
+				break;
+			case S9_TOP_CENTER:
+				src_h = m_sz_top;			
+				break;
+			case S9_TOP_RIGHT:
+				src_w = m_sz_right;
+				src_h = m_sz_top;
+				break;
+			}
+		}
+	}
 
 	const sm::vec2& old_scale = spr->GetScale();
 	sm::vec2 new_scale;
-	const float times = spr->GetAngle() / SM_PI;
-	if (times - (int)(times + 0.01f) < 0.3f) {
-		new_scale.Set(width / sz.x, height / sz.y);
+	if (rotate) {
+		new_scale.Set(dst_w / src_w, dst_h / src_h);
 	} else {
-		new_scale.Set(height / sz.x, width / sz.y);
+		new_scale.Set(dst_h / src_w, dst_w / src_h);
 	}
 	if (old_scale.x < 0) {
 		new_scale.x = -new_scale.x;

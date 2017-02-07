@@ -12,8 +12,8 @@ namespace s2
 class RenderScissor
 {
 public:
-	void Push(float x, float y, float w, float h);
-	void Pop();
+	void Push(float x, float y, float w, float h, bool use_render_screen = true);
+	void Pop(bool use_render_screen = true);
 
 	bool Empty() const { return m_stack.empty(); }
 

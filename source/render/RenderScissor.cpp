@@ -20,7 +20,7 @@ RenderScissor::~RenderScissor()
 {
 }
 
-void RenderScissor::Push(float x, float y, float w, float h)
+void RenderScissor::Push(float x, float y, float w, float h, bool use_render_screen)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
@@ -35,10 +35,14 @@ void RenderScissor::Push(float x, float y, float w, float h)
 	r.h = h;
 	m_stack.push_back(r);
 
-	RenderScreen::Scissor(x, y, w, h);
+	if (use_render_screen) {
+		RenderScreen::Scissor(x, y, w, h);
+	} else {
+		sl::ShaderMgr::Instance()->GetContext()->SetScissor(x, y, w, h);
+	}
 }
 
-void RenderScissor::Pop()
+void RenderScissor::Pop(bool use_render_screen)
 {
 	assert(!m_stack.empty());
 
@@ -51,7 +55,11 @@ void RenderScissor::Pop()
 	}
 
 	const Rect& r = m_stack.back();
-	RenderScreen::Scissor(r.x, r.y, r.w, r.h);
+	if (use_render_screen) {
+		RenderScreen::Scissor(r.x, r.y, r.w, r.h);
+	} else {
+		sl::ShaderMgr::Instance()->GetContext()->SetScissor(r.x, r.y, r.w, r.h);
+	}
 }
 
 void RenderScissor::Close()

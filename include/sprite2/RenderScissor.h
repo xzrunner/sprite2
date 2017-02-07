@@ -2,6 +2,7 @@
 #define _SPRITE2_RENDER_SCISSOR_H_
 
 #include <CU_Singleton.h>
+#include <SM_Rect.h>
 
 #include <vector>
 
@@ -14,8 +15,12 @@ public:
 	void Push(float x, float y, float w, float h);
 	void Pop();
 
+	bool Empty() const { return m_stack.empty(); }
+
 	void Close();
 	void Open();
+
+	bool IsOutside(const sm::rect& r) const;
 
 public:
 	struct Rect

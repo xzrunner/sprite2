@@ -19,7 +19,7 @@ public:
 
 	static RenderParams Prepare(const RenderParams& parent, const Sprite* spr);
 
-	static void Draw(const Sprite* spr, const RenderParams& params = RenderParams());
+	static void Draw(const Sprite* spr, const RenderParams& params = RenderParams(), bool scissor = true);
 
 	static void Draw(const Symbol* sym, 
 		             const RenderParams& params = RenderParams(),

@@ -3,6 +3,7 @@
 
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
+#include <SM_Test.h>
 
 #include <assert.h>
 
@@ -71,6 +72,17 @@ void RenderScissor::Open()
 	sl::ShaderMgr::Instance()->GetContext()->EnableScissor(true);
 	const Rect& r = m_stack.back();
 	RenderScreen::Scissor(r.x, r.y, r.w, r.h);
+}
+
+bool RenderScissor::IsOutside(const sm::rect& r) const
+{
+	for (int i = 0, n = m_stack.size(); i < n; ++i) {
+		const Rect& rr = m_stack[i];
+		if (!sm::is_rect_intersect_rect(sm::rect(rr.x, rr.y, rr.x + rr.w, rr.y + rr.h), r)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 }

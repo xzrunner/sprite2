@@ -10,6 +10,8 @@
 #include "SprVisitorParams.h"
 #include "SymVisitor.h"
 
+#include <SM_Test.h>
+
 #include <map>
 
 #include <assert.h>
@@ -51,7 +53,8 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
-	if (scissor) {
+	if (scissor) 
+	{
 		sm::vec2 min = p.mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
 			     max = p.mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
 		if (min.x > max.x) {
@@ -69,7 +72,10 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 	const std::vector<Sprite*>& sprs = GetSprs(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		DrawNode::Draw(sprs[i], p);
+		if (IsChildOutside(sprs[i], params)) {
+			continue;
+		}
+		DrawNode::Draw(sprs[i], p, false);
 	}
 
 	if (scissor) {
@@ -285,6 +291,28 @@ const std::vector<Sprite*>& ComplexSymbol::GetSprs(int action) const
 			return m_actions[action].sprs;
 		}
 	}
+}
+
+bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& params) const
+{
+	RenderScissor* rs = RenderScissor::Instance();
+	if (rs->Empty() && !params.view_region.IsValid()) {
+		return false;
+	}
+
+	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+	S2_MAT mat = spr->GetLocalMat() * params.mt;
+	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
+	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
+	sm::rect sr(r_min, r_max);
+
+	if (!rs->Empty() && rs->IsOutside(sr)) {
+		return true;
+	}
+	if (params.view_region.IsValid() && !sm::is_rect_intersect_rect(params.view_region, sr)) {
+		return true;
+	}
+	return false;
 }
 
 }

@@ -46,9 +46,6 @@ public:
 	bool ResetOrderMost(const Sprite* spr, bool up);
 	bool Sort(std::vector<Sprite*>& sprs);
 
-protected:
-	const std::vector<Sprite*>& GetSprs(int action) const;
-
 public:
 	struct Action
 	{
@@ -58,6 +55,11 @@ public:
 
 	const std::vector<Action>& GetActions() const { return m_actions; }
 	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
+
+protected:
+	const std::vector<Sprite*>& GetSprs(int action) const;
+
+	bool IsChildOutside(const Sprite* spr, const RenderParams& params) const;
 
 protected:
 	std::vector<Sprite*> m_children;

@@ -49,12 +49,12 @@ RenderParams DrawNode::Prepare(const RenderParams& parent, const Sprite* spr)
 	return ret;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& params)
+void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 {
 	if (!spr->IsVisible()) {
 		return;
 	}
-	if (IsOutsideView(spr, params)) {
+	if (scissor && IsOutsideView(spr, params)) {
 		return;
 	}
 

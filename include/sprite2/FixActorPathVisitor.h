@@ -10,7 +10,7 @@ namespace s2
 class FixActorPathVisitor : public SprVisitor
 {
 public:	
-	FixActorPathVisitor(const SprTreePath& path);
+	FixActorPathVisitor(const SprTreePath& parent_path);
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
 
@@ -18,7 +18,7 @@ public:
 	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 private:
-	SprTreePath m_path;
+	SprTreePath m_parent_path;
 
 }; // FixActorPathVisitor
 

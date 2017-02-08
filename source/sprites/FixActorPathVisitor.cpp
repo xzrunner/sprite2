@@ -8,14 +8,14 @@
 namespace s2
 {
 
-FixActorPathVisitor::FixActorPathVisitor(const SprTreePath& path)
-	: m_path(path)
+FixActorPathVisitor::FixActorPathVisitor(const SprTreePath& parent_path)
+	: m_parent_path(parent_path)
 {
 }
 
 VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	const_cast<Sprite*>(spr)->FixActorPath(m_path);
+	const_cast<Sprite*>(spr)->FixActorPath(m_parent_path);
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
@@ -30,13 +30,13 @@ VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams
 
 void FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
-	m_path.Push(spr->GetID());
+	m_parent_path.Push(spr->GetID());
 }
 
 void FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
-	assert(!m_path.Empty() && m_path.Top() == spr->GetID());
-	m_path.Pop();
+	assert(!m_parent_path.Empty() && m_parent_path.Top() == spr->GetID());
+	m_parent_path.Pop();
 }
 
 }

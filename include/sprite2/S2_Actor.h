@@ -32,12 +32,17 @@ public:
 	
 	S2_MAT GetLocalMat() const;
 
+	void SetProxy(Sprite* proxy);
+	const Sprite* GetProxy() const { return m_proxy; }
+
 private:
 	const Sprite* m_spr;
 
 	SprTreePath m_path;
 
 	ActorGeo* m_geo;
+
+	Sprite* m_proxy;
 
 }; // Actor
 

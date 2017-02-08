@@ -579,10 +579,8 @@ int s2_get_actor_count() {
 }
 
 extern "C"
-void s2_actor_mount_child(void* parent, const char* name, void* child) {
-	Actor* actor = static_cast<Actor*>(parent);
-	Sprite* spr = const_cast<Sprite*>(actor->GetSpr());
-	spr->MountChild(actor->GetTreePath(), name, static_cast<Sprite*>(child));
+void s2_actor_set_proxy(void* actor, void* spr) {
+	static_cast<Actor*>(actor)->SetProxy(static_cast<Sprite*>(spr));
 }
 
 extern "C"

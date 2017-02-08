@@ -1,6 +1,8 @@
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
 #include "ActorGeo.h"
+#include "FixActorPathVisitor.h"
+#include "SprVisitorParams.h"
 
 namespace s2
 {
@@ -11,6 +13,7 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	: m_spr(spr)
 	, m_path(path)
 	, m_geo(NULL)
+	, m_proxy(NULL)
 {
 	++COUNT;
 
@@ -26,6 +29,9 @@ Actor::~Actor()
 	--COUNT;
 	if (m_geo) {
 		delete m_geo;
+	}
+	if (m_proxy) {
+		m_proxy->RemoveReference();
 	}
 }
 
@@ -75,6 +81,21 @@ S2_MAT Actor::GetLocalMat() const
 	mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
 		m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
 	return mt;
+}
+
+void Actor::SetProxy(Sprite* proxy)
+{
+	cu::RefCountObjAssign(m_proxy, proxy);
+	if (!proxy) {
+		return;
+	}
+
+	m_spr->SetHasProxy(true);
+
+	SprTreePath parent_path = m_path;
+	parent_path.Pop();
+	FixActorPathVisitor visitor(parent_path);
+	m_proxy->Traverse(visitor, SprVisitorParams());
 }
 
 }

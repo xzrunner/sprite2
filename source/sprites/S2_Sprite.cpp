@@ -575,12 +575,12 @@ void Sprite::ClearActors() const
 	}
 }
 
-void Sprite::FixActorPath(const SprTreePath& path)
+void Sprite::FixActorPath(const SprTreePath& parent_path)
 {
 	if (m_actors.empty()) {
 		return;
 	}
-	SprTreePath this_path(path);
+	SprTreePath this_path(parent_path);
 	this_path.Push(m_id);
 	for (int i = 0, n = m_actors.size(); i < n; ++i) 
 	{

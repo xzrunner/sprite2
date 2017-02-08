@@ -9,6 +9,7 @@
 #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
 #include "SymVisitor.h"
+#include "S2_Actor.h"
 
 #include <SM_Test.h>
 
@@ -71,11 +72,27 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
 	}
 	const std::vector<Sprite*>& sprs = GetSprs(action);
-	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		if (IsChildOutside(sprs[i], p)) {
+	for (int i = 0, n = sprs.size(); i < n; ++i) 
+	{
+		const Sprite* spr = sprs[i];
+
+		if (spr->IsHasProxy()) 
+		{
+			SprTreePath path = p.path;
+			path.Push(spr->GetID());
+			const Actor* actor = spr->QueryActor(path);
+			if (actor) {
+				const Sprite* proxy = actor->GetProxy();
+				if (proxy) {
+					spr = proxy;
+				}
+			}
+		}
+
+		if (IsChildOutside(spr, p)) {
 			continue;
 		}
-		DrawNode::Draw(sprs[i], p, false);
+		DrawNode::Draw(spr, p, false);
 	}
 
 	if (scissor) {

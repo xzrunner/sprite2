@@ -94,7 +94,7 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();
 
-void  s2_actor_mount_child(void* parent, const char* name, void* child);
+void  s2_actor_set_proxy(void* actor, void* spr);
 
 void* s2_actor_get_spr(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);

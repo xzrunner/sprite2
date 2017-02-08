@@ -51,7 +51,6 @@ public:
  	virtual bool Update(const RenderParams& params) { return false; }
 	virtual Sprite* FetchChild(const std::string& name) const { return NULL; }
 	virtual Sprite* FetchChild(int idx) const { return NULL; }
-	virtual void MountChild(const SprTreePath& path, const std::string& name, Sprite* child) {}
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -115,7 +114,7 @@ public:
 	void AddActor(Actor* actor) const;
 	const Actor* QueryActor(const SprTreePath& path) const;
 	void ClearActors() const;
-	void FixActorPath(const SprTreePath& path);
+	void FixActorPath(const SprTreePath& parent_path);
 
 	static int GetCount() { return m_count; }
 
@@ -135,6 +134,7 @@ protected:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
+	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 
 public:
 #define FLAG_METHOD(name, bit) \
@@ -157,6 +157,7 @@ public:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
+	FLAG_METHOD(HasProxy, FLAG_HAS_PROXY)
 
 protected:
 	Symbol*					m_sym;

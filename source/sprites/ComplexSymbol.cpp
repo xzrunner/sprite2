@@ -72,7 +72,7 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 	const std::vector<Sprite*>& sprs = GetSprs(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		if (IsChildOutside(sprs[i], params)) {
+		if (IsChildOutside(sprs[i], p)) {
 			continue;
 		}
 		DrawNode::Draw(sprs[i], p, false);
@@ -96,9 +96,9 @@ bool ComplexSymbol::Update(const RenderParams& params, float time)
 
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 {
-	if (m_size.IsValid()) {
-		return m_size;
-	}
+ 	if (m_size.IsValid()) {
+ 		return m_size;
+ 	}
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {

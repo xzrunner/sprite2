@@ -75,20 +75,12 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
 		const Sprite* spr = sprs[i];
-
-		if (spr->IsHasProxy()) 
-		{
-			SprTreePath path = p.path;
-			path.Push(spr->GetID());
-			const Actor* actor = spr->QueryActor(path);
-			if (actor) {
-				const Sprite* proxy = actor->GetProxy();
-				if (proxy) {
-					spr = proxy;
-				}
+		if (spr->IsHasProxy()) {
+			const Sprite* proxy = spr->GetProxy(p.path);
+			if (proxy) {
+				spr = proxy;
 			}
 		}
-
 		if (IsChildOutside(spr, p)) {
 			continue;
 		}

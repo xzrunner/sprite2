@@ -115,6 +115,7 @@ public:
 	const Actor* QueryActor(const SprTreePath& path) const;
 	void ClearActors() const;
 	void FixActorPath(const SprTreePath& parent_path);
+	const Sprite* GetProxy(const SprTreePath& parent_path) const;
 
 	static int GetCount() { return m_count; }
 

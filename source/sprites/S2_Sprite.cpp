@@ -591,6 +591,26 @@ void Sprite::FixActorPath(const SprTreePath& parent_path)
 	}
 }
 
+const Sprite* Sprite::GetProxy(const SprTreePath& parent_path) const
+{
+	if (!IsHasProxy()) {
+		return NULL;
+	}
+
+	SprTreePath path = parent_path;
+	path.Push(GetID());
+	const Actor* actor = QueryActor(path);
+	if (actor) {
+		const Sprite* spr = actor->GetProxy();
+		if (spr) {
+			int zz = 0;
+		}
+		return actor->GetProxy();
+	} else {
+		return NULL;
+	}
+}
+
 void Sprite::InitFlags()
 {
 	SetVisible(true);

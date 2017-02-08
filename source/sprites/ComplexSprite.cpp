@@ -36,12 +36,21 @@ bool ComplexSprite::Update(const RenderParams& params)
 	RenderParams p = params;
 	p.mt = GetLocalMat() * params.mt;
 	p.shader = GetShader() * params.shader;
+	p.path.Push(GetID());
 
 	bool dirty = false;
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		if (children[i]->Update(p)) {
+	for (int i = 0, n = children.size(); i < n; ++i) 
+	{
+		const Sprite* spr = children[i];
+		if (spr->IsHasProxy()) {
+			const Sprite* proxy = spr->GetProxy(p.path);
+			if (proxy) {
+				spr = proxy;
+			}
+		}
+		if (const_cast<Sprite*>(spr)->Update(p)) {
 			dirty = true;
 		}
 	}

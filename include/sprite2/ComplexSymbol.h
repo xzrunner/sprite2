@@ -26,9 +26,10 @@ public:
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
 	virtual bool Update(const RenderParams& params, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
-
-	const std::vector<Sprite*>& GetChildren() const { return m_children; }
 	
+	const std::vector<Sprite*>& GetActionChildren(int action) const;
+	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }
+
 	const sm::rect& GetScissor() const { return m_scissor; }
 	void SetScissor(const sm::rect& scissor) { m_scissor = scissor; }
 
@@ -57,8 +58,6 @@ public:
 	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
 
 protected:
-	const std::vector<Sprite*>& GetSprs(int action) const;
-
 	bool IsChildOutside(const Sprite* spr, const RenderParams& params) const;
 
 protected:

@@ -71,7 +71,7 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	if (spr) {
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
 	}
-	const std::vector<Sprite*>& sprs = GetSprs(action);
+	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
 		const Sprite* spr = sprs[i];
@@ -128,12 +128,25 @@ sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 	if (spr) {
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
 	}
-	const std::vector<Sprite*>& sprs = GetSprs(action);
+	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
 		sprs[i]->GetBounding()->CombineTo(m_size);
 	}
 
 	return m_size;
+}
+
+const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
+{
+	if (action < 0 || action >= m_actions.size()) {
+		return m_children;
+	} else {
+		if (m_actions[action].sprs.empty()) {
+			return m_children;
+		} else {
+			return m_actions[action].sprs;
+		}
+	}
 }
 
 int ComplexSymbol::GetActionIdx(const std::string& name) const
@@ -295,19 +308,6 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 	}
 	sprs = list_dst;
 	return true;
-}
-
-const std::vector<Sprite*>& ComplexSymbol::GetSprs(int action) const
-{
-	if (action < 0 || action >= m_actions.size()) {
-		return m_children;
-	} else {
-		if (m_actions[action].sprs.empty()) {
-			return m_children;
-		} else {
-			return m_actions[action].sprs;
-		}
-	}
 }
 
 bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& params) const

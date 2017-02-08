@@ -24,7 +24,8 @@ ComplexSprite* ComplexSprite::Clone() const
 
 void ComplexSprite::OnMessage(Message msg)
 {
-	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		children[i]->OnMessage(msg);
 	}
@@ -37,7 +38,8 @@ bool ComplexSprite::Update(const RenderParams& params)
 	p.shader = GetShader() * params.shader;
 
 	bool dirty = false;
-	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		if (children[i]->Update(p)) {
 			dirty = true;
@@ -48,7 +50,8 @@ bool ComplexSprite::Update(const RenderParams& params)
 
 Sprite* ComplexSprite::FetchChild(const std::string& name) const
 {
-	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
 		if (child->GetName() == name) {
@@ -60,7 +63,8 @@ Sprite* ComplexSprite::FetchChild(const std::string& name) const
 
 Sprite* ComplexSprite::FetchChild(int idx) const
 {
-	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	if (idx >= 0 && idx < children.size()) {
 		return children[idx];
 	} else {
@@ -75,7 +79,8 @@ void ComplexSprite::SetAction(const std::string& name)
 
 bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
-	const std::vector<Sprite*>& children = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetChildren();
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) {
 			if (!children[i]->Traverse(visitor, params)) {

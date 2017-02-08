@@ -242,7 +242,7 @@ int s2_spr_get_component_count(void* spr) {
 	if (s2_spr->GetSymbol()->Type() == SYM_COMPLEX) {
 		ComplexSprite* complex = VI_DOWNCASTING<ComplexSprite*>(s2_spr);
 		const ComplexSymbol* sym = VI_DOWNCASTING<const ComplexSymbol*>(complex->GetSymbol());
-		return sym->GetChildren().size();
+		return sym->GetActionChildren(complex->GetAction()).size();
 	} else {
 		return -1;
 	}

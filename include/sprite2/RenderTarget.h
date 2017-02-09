@@ -22,6 +22,8 @@ public:
 
 	int GetTexID() const;
 
+	void Resize(int width, int height);
+
 private:
 	ur::RenderTarget* m_impl;	
 

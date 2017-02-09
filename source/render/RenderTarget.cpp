@@ -31,17 +31,22 @@ void RenderTarget::Unbind()
 
 int RenderTarget::Width() const
 {
-	return m_impl->GetTexture()->Width();
+	return m_impl->Width();
 }
 
 int RenderTarget::Height() const
 {
-	return m_impl->GetTexture()->Height();
+	return m_impl->Height();
 }
 
 int RenderTarget::GetTexID() const
 {
-	return m_impl->GetTexture()->ID();
+	return m_impl->TexID();
+}
+
+void RenderTarget::Resize(int width, int height)
+{
+	m_impl->Resize(width, height);
 }
 
 }

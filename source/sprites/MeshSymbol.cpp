@@ -47,11 +47,11 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	RenderParams p = DrawNode::Prepare(params, spr);
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
-	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
+// 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+// 	mgr->SetShader(sl::SPRITE2);
+// 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+// 	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
+// 	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
 
 	const MeshSprite* mesh_spr = VI_DOWNCASTING<const MeshSprite*>(spr);
 	if (mesh_spr) {

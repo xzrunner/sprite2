@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -760,6 +760,14 @@
 				Name="11.mesh"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Mesh.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\MeshSprite.cpp"
 					>
 				</File>
@@ -775,134 +783,6 @@
 					RelativePath="..\..\..\include\sprite2\MeshSymbol.h"
 					>
 				</File>
-				<Filter
-					Name="mesh"
-					>
-					<Filter
-						Name="base"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\Mesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\Mesh.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshNode.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\MeshTransform.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshTransform.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\MeshTransform2.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshTransform2.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshTriangle.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshType.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="network"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\NetworkMesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\NetworkMesh.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\NetworkShape.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\NetworkShape.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="strip"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\StripMesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\StripMesh.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="skeleton"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\MeshJoint.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshJoint.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\MeshSkeleton.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\MeshSkeleton.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\SkeletonMesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\SkeletonMesh.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="triangles"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\TrianglesMesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\TrianglesMesh.h"
-							>
-						</File>
-					</Filter>
-					<Filter
-						Name="skeleton2"
-						>
-						<File
-							RelativePath="..\..\..\source\sprites\Skeleton2Mesh.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\Skeleton2Mesh.h"
-							>
-						</File>
-					</Filter>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="04.texture"

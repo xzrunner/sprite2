@@ -33,14 +33,14 @@ public:
 	virtual void UpdateMesh(const rg_skeleton_pose* sk_pose);
 	virtual void UpdateMesh(const rg_tl_deform_state* deform_state, const float* vertices);
 
-	const Mesh* GetMesh() const { return m_mesh; }
-	Mesh* GetMesh() { return m_mesh; }
-	void SetMesh(Mesh* mesh);
+// 	const Mesh* GetMesh() const { return m_mesh; }
+// 	Mesh* GetMesh() { return m_mesh; }
+// 	void SetMesh(Mesh* mesh);
 
 	void SetPause(bool pause) { m_pause = pause; }
 
-protected:
-	Mesh* m_mesh;
+// protected:
+// 	Mesh* m_mesh;
 
 private:
 	bool m_pause;

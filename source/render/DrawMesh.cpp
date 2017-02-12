@@ -1,5 +1,4 @@
 #include "DrawMesh.h"
-#include "MeshTriangle.h"
 #include "Mesh.h"
 #include "S2_RVG.h"
 #include "Color.h"
@@ -33,55 +32,75 @@ static Color BLUE	(102, 51, 204, 128);
 
 void DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
 {
-	std::set<sm::vec2, sm::Vector2Cmp> unique;
-	std::vector<sm::vec2> tmp(3);
-	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
+	std::vector<sm::vec2> vertices, texcoords;
+	std::vector<int> triangles;
+	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	if (triangles.empty()) {
+		return;
+	}
+	
 	float w = mesh->GetWidth(),
 		  h = mesh->GetHeight();
-	for (int i = 0, n = tris.size(); i < n; ++i)
-	{
-		MeshTriangle* tri = tris[i];
-		for (int i = 0; i < 3; ++i)
-		{
-			tmp[i].x = (tri->nodes[i]->uv.x - 0.5f) * w;
-			tmp[i].y = (tri->nodes[i]->uv.y - 0.5f) * h;
+
+	// lines
+	RVG::SetColor(RED);
+	std::vector<sm::vec2> lines(3);
+	for (int i = 0, n = triangles.size(); i < n; ) {
+		for (int j = 0; j < 3; ++j, ++i) {
+			lines[j].x = (texcoords[triangles[i]].x - 0.5f) * w;
+			lines[j].y = (texcoords[triangles[i]].y - 0.5f) * h;
 			if (mt) {
-				tmp[i] = *mt * tmp[i];
+				lines[j] = *mt * lines[j];
 			}
-			unique.insert(tmp[i]);
 		}
-		RVG::SetColor(RED);
-		RVG::Polyline(tmp, true);
+		RVG::Polyline(lines, true);
 	}
-	std::vector<sm::vec2> nodes;
-	copy(unique.begin(), unique.end(), back_inserter(nodes));
+
+	// points
 	RVG::SetColor(BLUE);
-	RVG::Circles(nodes, mesh->GetNodeRegion(), true);
+	for (int i = 0, n = texcoords.size(); i < n; ++i) {
+		sm::vec2 p;
+		p.x = (texcoords[i].x - 0.5f) * w;
+		p.y = (texcoords[i].y - 0.5f) * h;
+		if (mt) {
+			p = *mt * p;
+		}
+		RVG::Circle(p, mesh->GetNodeRadius(), true);
+	}
 }
 
 void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 {
-	std::set<sm::vec2, sm::Vector2Cmp> unique;
-	std::vector<sm::vec2> tmp(3);
-	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
-	for (int i = 0, n = tris.size(); i < n; ++i)
-	{
-		MeshTriangle* tri = tris[i];
-		for (int i = 0; i < 3; ++i)
-		{
-			tmp[i] = tri->nodes[i]->xy;
-			if (mt) {
-				tmp[i] = *mt * tmp[i];
-			}
-			unique.insert(tmp[i]);
-		}
-		RVG::SetColor(RED);
-		RVG::Polyline(tmp, true);
+	std::vector<sm::vec2> vertices, texcoords;
+	std::vector<int> triangles;
+	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	if (triangles.empty()) {
+		return;
 	}
-	std::vector<sm::vec2> nodes;
-	copy(unique.begin(), unique.end(), back_inserter(nodes));
+
+	// lines
+	RVG::SetColor(RED);
+	std::vector<sm::vec2> lines(3);
+	for (int i = 0, n = triangles.size(); i < n; ) {
+		for (int j = 0; j < 3; ++j, ++i) {
+			lines[j] = vertices[triangles[i]];
+			if (mt) {
+				lines[i] = *mt * lines[i];
+			}
+			RVG::Polyline(lines, true);
+		}
+		RVG::Polyline(lines, true);
+	}
+
+	// points
 	RVG::SetColor(BLUE);
-	RVG::Circles(nodes, mesh->GetNodeRegion(), true);
+	for (int i = 0, n = vertices.size(); i < n; ++i) {
+		sm::vec2 p = vertices[i];
+		if (mt) {
+			p = *mt * p;
+		}
+		RVG::Circle(p, mesh->GetNodeRadius(), true);
+	}
 }
 
 void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const Symbol* base_sym)
@@ -96,6 +115,13 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const S
 
 void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
 {
+	std::vector<sm::vec2> vertices, texcoords;
+	std::vector<int> triangles;
+	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	if (triangles.empty()) {
+		return;
+	}
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
@@ -106,132 +132,113 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
 		h = RenderTargetMgr::Instance()->HEIGHT;
 	float ori_w = mesh->GetWidth(),
 		  ori_h = mesh->GetHeight();
-	const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
-	for (int i = 0, n = tris.size(); i < n; ++i)
+	for (int i = 0, n = triangles.size(); i < n; )
 	{
-		MeshTriangle* tri = tris[i];
-		sm::vec2 vertices[4], texcoords[4];
-		for (int i = 0; i < 3; ++i)
+		sm::vec2 _vertices[4], _texcoords[4];
+		for (int j = 0; j < 3; ++j, ++i)
 		{
-			vertices[i] = mt * tri->nodes[i]->xy;
-			texcoords[i].x = (tri->nodes[i]->uv.x * ori_w - ori_w * 0.5f + w * 0.5f) / w;
-			texcoords[i].y = (tri->nodes[i]->uv.y * ori_h - ori_h * 0.5f + h * 0.5f) / h;
+			vertices[i] = mt * vertices[i];
+			_texcoords[i].x = (texcoords[i].x * ori_w - ori_w * 0.5f + w * 0.5f) / w;
+			_texcoords[i].y = (texcoords[i].y * ori_h - ori_h * 0.5f + h * 0.5f) / h;
 		}
-		vertices[3] = vertices[2];
-		texcoords[3] = texcoords[2];
+		_vertices[3] = _vertices[2];
+		_texcoords[3] = _texcoords[2];
 
-		shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		shader->Draw(&_vertices[0].x, &_texcoords[0].x, texid);
 	}
+}
+
+static void draw_sprite2(const float* positions, const float* texcoords, int texid)
+{
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	assert(mgr->GetShaderType() == sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+	shader->Draw(positions, texcoords, texid);
+}
+
+static void draw_filter(const float* positions, const float* texcoords, int texid)
+{
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	assert(mgr->GetShaderType() == sl::FILTER);
+	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+	shader->Draw(positions, texcoords, texid);
 }
 
 void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (mgr->GetShaderType() == sl::SPRITE2)
+	sl::ShaderType type = mgr->GetShaderType();
+	if (type != sl::SPRITE2 && type != sl::FILTER) {
+		return;
+	}
+
+	std::vector<sm::vec2> vertices, texcoords;
+	std::vector<int> triangles;
+	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	if (triangles.empty()) {
+		return;
+	}
+
+	assert(sym->Type() == SYM_IMAGE);
+	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
+	float src_texcoords[8];
+	int texid;
+	img_sym->QueryTexcoords(src_texcoords, texid);
+
+	float x = src_texcoords[0], y = src_texcoords[1];
+	float w = src_texcoords[4] - src_texcoords[0],
+		  h = src_texcoords[5] - src_texcoords[1];	
+
+	void (*draw)(const float* positions, const float* texcoords, int texid) = NULL;
+
+	if (type == sl::SPRITE2)
 	{
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
 		shader->SetColorMap(params.color.GetMapR().ToABGR(),params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
-
-		assert(sym->Type() == SYM_IMAGE);
-		const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
-		float src_texcoords[8];
-		int texid;
-		img_sym->QueryTexcoords(src_texcoords, texid);
-
-		float x = src_texcoords[0], y = src_texcoords[1];
-		float w = src_texcoords[4] - src_texcoords[0],
-			h = src_texcoords[5] - src_texcoords[1];
-		const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
-		if (h < 0)
-		{
-			for (int i = 0, n = tris.size(); i < n; ++i)
-			{
-				MeshTriangle* tri = tris[i];
-				sm::vec2 vertices[4], texcoords[4];
-				for (int i = 0; i < 3; ++i)
-				{
-					vertices[i] = params.mt * tri->nodes[i]->xy;
-					texcoords[i].x = x + w * tri->nodes[i]->uv.y;
-					texcoords[i].y = y + h * tri->nodes[i]->uv.x;
-				}
-				vertices[3] = vertices[2];
-				texcoords[3] = texcoords[2];
-
-				shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
-			}
-		}
-		else
-		{
-			for (int i = 0, n = tris.size(); i < n; ++i)
-			{
-				MeshTriangle* tri = tris[i];
-				sm::vec2 vertices[4], texcoords[4];
-				for (int i = 0; i < 3; ++i)
-				{
-					vertices[i] = params.mt * tri->nodes[i]->xy;
-					texcoords[i].x = x + w * tri->nodes[i]->uv.x;
-					texcoords[i].y = y + h * tri->nodes[i]->uv.y;
-				}
-				vertices[3] = vertices[2];
-				texcoords[3] = texcoords[2];
-
-				shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
-			}
-		}		
+		draw = draw_sprite2;
 	}
-	else if (mgr->GetShaderType() == sl::FILTER)
+	else if (type == sl::FILTER)
 	{
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+		draw = draw_filter;
+	}
 
-		assert(sym->Type() == SYM_IMAGE);
-		const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
-		float src_texcoords[8];
-		int texid;
-		img_sym->QueryTexcoords(src_texcoords, texid);
-
-		float x = src_texcoords[0], y = src_texcoords[1];
-		float w = src_texcoords[4] - src_texcoords[0],
-			  h = src_texcoords[5] - src_texcoords[1];
-		const std::vector<MeshTriangle*>& tris = mesh->GetTriangles();
-		if (h < 0)
+	if (h < 0)
+	{
+		for (int i = 0, n = triangles.size(); i < n; )
 		{
-			for (int i = 0, n = tris.size(); i < n; ++i)
+			sm::vec2 _vertices[4], _texcoords[4];
+			for (int j = 0; j < 3; ++j, ++i)
 			{
-				MeshTriangle* tri = tris[i];
-				sm::vec2 vertices[4], texcoords[4];
-				for (int i = 0; i < 3; ++i)
-				{
-					vertices[i] = params.mt * tri->nodes[i]->xy;
-					texcoords[i].x = x + w * tri->nodes[i]->uv.y;
-					texcoords[i].y = y + h * tri->nodes[i]->uv.x;
-				}
-				vertices[3] = vertices[2];
-				texcoords[3] = texcoords[2];
-
-				shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+				_vertices[i] = params.mt * vertices[i];
+				_texcoords[i].x = x + w * texcoords[i].y;
+				_texcoords[i].y = y + h * texcoords[i].x;
 			}
-		}
-		else
-		{
-			for (int i = 0, n = tris.size(); i < n; ++i)
-			{
-				MeshTriangle* tri = tris[i];
-				sm::vec2 vertices[4], texcoords[4];
-				for (int i = 0; i < 3; ++i)
-				{
-					vertices[i] = params.mt * tri->nodes[i]->xy;
-					texcoords[i].x = x + w * tri->nodes[i]->uv.x;
-					texcoords[i].y = y + h * tri->nodes[i]->uv.y;
-				}
-				vertices[3] = vertices[2];
-				texcoords[3] = texcoords[2];
+			_vertices[3] = _vertices[2];
+			_texcoords[3] = _texcoords[2];
 
-				shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
-			}
+			draw(&_vertices[0].x, &_texcoords[0].x, texid);
 		}
 	}
+	else
+	{
+		for (int i = 0, n = triangles.size(); i < n; )
+		{
+			sm::vec2 _vertices[4], _texcoords[4];
+			for (int j = 0; j < 3; ++j, ++i)
+			{
+				_vertices[i] = params.mt * vertices[i];
+				_texcoords[i].x = x + w * texcoords[i].x;
+				_texcoords[i].y = y + h * texcoords[i].y;
+			}
+			_vertices[3] = _vertices[2];
+			_texcoords[3] = _texcoords[2];
+
+			draw(&_vertices[0].x, &_texcoords[0].x, texid);
+		}
+	}		
 }
 
 void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)

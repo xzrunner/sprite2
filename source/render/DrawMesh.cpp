@@ -85,9 +85,8 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 		for (int j = 0; j < 3; ++j, ++i) {
 			lines[j] = vertices[triangles[i]];
 			if (mt) {
-				lines[i] = *mt * lines[i];
+				lines[j] = *mt * lines[j];
 			}
-			RVG::Polyline(lines, true);
 		}
 		RVG::Polyline(lines, true);
 	}
@@ -212,9 +211,10 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 			sm::vec2 _vertices[4], _texcoords[4];
 			for (int j = 0; j < 3; ++j, ++i)
 			{
-				_vertices[i] = params.mt * vertices[i];
-				_texcoords[i].x = x + w * texcoords[i].y;
-				_texcoords[i].y = y + h * texcoords[i].x;
+				int idx = triangles[i];
+				_vertices[j] = params.mt * vertices[idx];
+				_texcoords[j].x = x + w * texcoords[idx].y;
+				_texcoords[j].y = y + h * texcoords[idx].x;
 			}
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];
@@ -229,9 +229,10 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 			sm::vec2 _vertices[4], _texcoords[4];
 			for (int j = 0; j < 3; ++j, ++i)
 			{
-				_vertices[i] = params.mt * vertices[i];
-				_texcoords[i].x = x + w * texcoords[i].x;
-				_texcoords[i].y = y + h * texcoords[i].y;
+				int idx = triangles[i];
+				_vertices[j] = params.mt * vertices[idx];
+				_texcoords[j].x = x + w * texcoords[idx].x;
+				_texcoords[j].y = y + h * texcoords[idx].y;
 			}
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];

@@ -3,6 +3,8 @@
 
 #include "S2_Sprite.h"
 
+#include <polymesh/MeshTransform.h>
+
 namespace s2
 {
 
@@ -32,11 +34,11 @@ public:
 	const sm::vec2& GetSpeed() const { return m_speed; }
 	void SetSpeed(const sm::vec2& spd) { m_speed = spd; }
 
-// 	const MeshTransform2& GetMeshTrans() const { return m_trans; }
-// 	MeshTransform2& GetMeshTrans() { return m_trans; }
+	const pm::MeshTransform& GetMeshTrans() const { return m_trans; }
+	pm::MeshTransform& GetMeshTrans() { return m_trans; }
 
-// 	const Symbol* GetBaseSym() const { return m_base; }
-// 	void SetBaseSym(const Symbol* sym);
+	const Symbol* GetBaseSym() const { return m_base; }
+	void SetBaseSym(const Symbol* sym);
 
 	bool OnlyDrawBound() const { return m_only_draw_bound; }
 	void SetOnlyDrawBound(bool only_draw_bound) { m_only_draw_bound = only_draw_bound; }
@@ -44,9 +46,9 @@ public:
 protected:
 	sm::vec2 m_speed;
 
-//	MeshTransform2 m_trans;
+	pm::MeshTransform m_trans;
 
-// 	const Symbol* m_base;
+ 	const Symbol* m_base;
 
 	bool m_only_draw_bound;
 

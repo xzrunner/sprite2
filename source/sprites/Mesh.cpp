@@ -2,7 +2,9 @@
 #include "S2_Symbol.h"
 
 #include <polymesh/Mesh.h>
-#include <polymesh/MeshData.h>
+#include <polymesh/TrianglesMesh.h>
+#include <polymesh/Skin2Mesh.h>
+#include <rigging.h>
 
 namespace s2
 {
@@ -43,7 +45,85 @@ void Mesh::DumpToTriangles(std::vector<sm::vec2>& vertices,
 						   std::vector<int>& triangles) const
 {
 	if (m_mesh) {
-		m_mesh->GetMeshData()->Dump(vertices, texcoords, triangles);
+		m_mesh->Dump(vertices, texcoords, triangles);
+	}
+}
+
+void Mesh::LoadFromTransform(const pm::MeshTransform& transform)
+{
+	if (m_mesh) {
+		m_mesh->LoadFromTransform(transform);
+	}
+}
+
+void Mesh::StoreToTransforom(pm::MeshTransform& transform) const
+{
+	if (m_mesh) {
+		m_mesh->StoreToTransform(transform);
+	}
+}
+
+sm::rect Mesh::GetRegion() const
+{
+	if (!m_mesh) {
+		return sm::rect(100, 100);
+	}
+
+	sm::rect ret;
+	std::vector<sm::vec2> vertices, texcoords;
+	std::vector<int> triangles;
+	m_mesh->Dump(vertices, texcoords, triangles);
+	for (int i = 0, n = vertices.size(); i < n; ++i) {
+		ret.Combine(vertices[i]);
+	}
+	return ret;
+}
+
+static const float* 
+query_joint_world_mt(int joint_id, const void* ud)
+{
+	const rg_skeleton_pose* sk_pose = static_cast<const rg_skeleton_pose*>(ud);
+	return sk_pose->poses[joint_id].world.m;
+}
+
+void Mesh::Update(const rg_skeleton_pose* sk_pose)
+{
+	if (!m_mesh) {
+		return;
+	}
+
+	switch (m_mesh->Type())
+	{
+	case pm::MESH_SKIN2:
+		static_cast<pm::Skin2Mesh*>(m_mesh)->Update(query_joint_world_mt, sk_pose);
+		break;
+	}
+}
+
+void Mesh::Update(const rg_tl_deform_state* deform_state, const float* vertices)
+{
+	if (!m_mesh) {
+		return;
+	}
+
+	switch (m_mesh->Type())
+	{
+	case pm::MESH_TRIANGLES:
+		static_cast<pm::TrianglesMesh*>(m_mesh)->Update(
+			deform_state->offset0, deform_state->count0, deform_state->offset1, deform_state->count1, vertices);
+		break;
+	case pm::MESH_SKIN2:
+		static_cast<pm::Skin2Mesh*>(m_mesh)->Update(
+			deform_state->offset0, deform_state->count0, deform_state->offset1, deform_state->count1, vertices);
+		break;
+	}
+}
+
+void Mesh::SetMesh(pm::Mesh* mesh)
+{
+	if (m_mesh != mesh) {
+		delete m_mesh;
+		m_mesh = mesh;
 	}
 }
 

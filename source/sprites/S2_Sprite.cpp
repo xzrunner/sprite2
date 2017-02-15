@@ -199,6 +199,8 @@ void Sprite::SetScale(const sm::vec2& scale)
 		m_geo->SetOffset(new_offset);
 
 		m_geo->SetPosition(m_geo->GetPosition() + old_offset - new_offset);
+
+		UpdateCenter();
 	}
 
 	m_geo->SetScale(scale);

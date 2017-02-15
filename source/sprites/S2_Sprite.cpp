@@ -602,9 +602,6 @@ const Sprite* Sprite::GetProxy(const SprTreePath& parent_path) const
 	const Actor* actor = QueryActor(path);
 	if (actor) {
 		const Sprite* spr = actor->GetProxy();
-		if (spr) {
-			int zz = 0;
-		}
 		return actor->GetProxy();
 	} else {
 		return NULL;

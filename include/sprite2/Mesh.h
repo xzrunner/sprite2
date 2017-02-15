@@ -45,6 +45,7 @@ public:
 
 	void SetMesh(pm::Mesh* mesh);
 	pm::Mesh* GetMesh() { return m_mesh; }
+	const pm::Mesh* GetMesh() const { return m_mesh; }
 
 protected:
 	pm::Mesh* m_mesh;

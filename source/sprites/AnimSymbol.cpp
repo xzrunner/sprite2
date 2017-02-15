@@ -15,25 +15,25 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-#ifdef S2_ANIM_CURR_OLD
+#ifdef S2_ANIM_CURR_V0
 	, m_curr(this)
-#endif // S2_ANIM_CURR_OLD
+#endif // S2_ANIM_CURR_V0
 {
-#ifndef S2_ANIM_CURR_OLD
+#ifndef S2_ANIM_CURR_V0
 	m_curr.SetAnimCopy(&m_copy);
-#endif // S2_ANIM_CURR_OLD
+#endif // S2_ANIM_CURR_V0
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-#ifdef S2_ANIM_CURR_OLD
+#ifdef S2_ANIM_CURR_V0
 	, m_curr(this)
-#endif // S2_ANIM_CURR_OLD
+#endif // S2_ANIM_CURR_V0
 {
-#ifndef S2_ANIM_CURR_OLD
+#ifndef S2_ANIM_CURR_V0
 	m_curr.SetAnimCopy(&m_copy);
-#endif // S2_ANIM_CURR_OLD
+#endif // S2_ANIM_CURR_V0
 }
 
 AnimSymbol::~AnimSymbol()
@@ -140,12 +140,12 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 	}
 }
 
-#ifndef S2_ANIM_CURR_OLD
+#ifndef S2_ANIM_CURR_V0
 void AnimSymbol::LoadCopy()
 {
 	m_copy.LoadFromSym(*this);
 }
-#endif // S2_ANIM_CURR_OLD
+#endif // S2_ANIM_CURR_V0
 
 void AnimSymbol::AddLayer(Layer* layer)
 {

@@ -490,30 +490,58 @@
 				<Filter
 					Name="curr"
 					>
-					<File
-						RelativePath="..\..\..\source\sprites\AnimCopy.cpp"
+					<Filter
+						Name="v0"
 						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\AnimCopy.h"
+						<File
+							RelativePath="..\..\..\source\sprites\AnimCurr.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\AnimCurr.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="v1"
 						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\AnimCurr.cpp"
+						<File
+							RelativePath="..\..\..\source\sprites\AnimCopy.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\AnimCopy.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\AnimCurr2.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\AnimCurr2.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="v2"
 						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\AnimCurr.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\AnimCurr2.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\AnimCurr2.h"
-						>
-					</File>
+						<File
+							RelativePath="..\..\..\source\sprites\AnimCopy2.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\AnimCopy2.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\AnimCurr3.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\AnimCurr3.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

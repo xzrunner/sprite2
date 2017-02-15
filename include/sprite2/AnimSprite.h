@@ -4,11 +4,13 @@
 #include "s2_config.h"
 
 #include "S2_Sprite.h"
-#ifdef S2_ANIM_CURR_OLD
+#ifdef S2_ANIM_CURR_V0
 #include "AnimCurr.h"
-#else
+#elif defined S2_ANIM_CURR_V1
 #include "AnimCurr2.h"
-#endif // S2_ANIM_CURR_OLD
+#else
+#include "AnimCurr3.h"
+#endif // S2_ANIM_CURR_V0
 
 #include <vector>
 
@@ -35,11 +37,13 @@ public:
 	virtual bool Update(const RenderParams& params);
 	virtual Sprite* FetchChild(const std::string& name) const;
 
-#ifdef S2_ANIM_CURR_OLD
+#ifdef S2_ANIM_CURR_V0
 	const AnimCurr& GetAnimCurr() const { return m_curr; }
-#else
+#elif defined S2_ANIM_CURR_V1
 	const AnimCurr2& GetAnimCurr() const { return m_curr; }
-#endif // S2_ANIM_CURR_OLD
+#else
+	const AnimCurr3& GetAnimCurr() const { return m_curr; }
+#endif // S2_ANIM_CURR_V0
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -67,11 +71,13 @@ protected:
 
 	bool m_start_random;
 
-#ifdef S2_ANIM_CURR_OLD
+#ifdef S2_ANIM_CURR_V0
 	AnimCurr m_curr;
-#else
+#elif defined S2_ANIM_CURR_V1
 	AnimCurr2 m_curr;
-#endif // S2_ANIM_CURR_OLD
+#else
+	AnimCurr3 m_curr;
+#endif // S2_ANIM_CURR_V0
 
 	VI_DUMMY_FUNC
 

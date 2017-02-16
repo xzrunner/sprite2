@@ -24,6 +24,8 @@ public:
 	static void Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float process,
 		const std::vector<std::pair<SprData, ILerp*> >& lerps);	
 
+	static void LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, float process);	
+
 	static bool IsMatched(const Sprite* s0, const Sprite* s1);
 
 }; // AnimLerp

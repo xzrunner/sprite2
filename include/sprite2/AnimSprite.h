@@ -8,9 +8,9 @@
 #include "AnimCurr.h"
 #elif defined S2_ANIM_CURR_V1
 #include "AnimCurr2.h"
-#else
+#elif defined S2_ANIM_CURR_V2
 #include "AnimCurr3.h"
-#endif // S2_ANIM_CURR_V0
+#endif
 
 #include <vector>
 
@@ -41,9 +41,9 @@ public:
 	const AnimCurr& GetAnimCurr() const { return m_curr; }
 #elif defined S2_ANIM_CURR_V1
 	const AnimCurr2& GetAnimCurr() const { return m_curr; }
-#else
+#elif defined S2_ANIM_CURR_V2
 	const AnimCurr3& GetAnimCurr() const { return m_curr; }
-#endif // S2_ANIM_CURR_V0
+#endif
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -75,9 +75,9 @@ protected:
 	AnimCurr m_curr;
 #elif defined S2_ANIM_CURR_V1
 	AnimCurr2 m_curr;
-#else
+#elif defined S2_ANIM_CURR_V2
 	AnimCurr3 m_curr;
-#endif // S2_ANIM_CURR_V0
+#endif
 
 	VI_DUMMY_FUNC
 

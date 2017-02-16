@@ -70,37 +70,61 @@ void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float
 	tween->SetPosition(sm::vec2(0, 0));
 	tween->SetAngle(0);
 
-	sm::vec2 center_s = begin->GetCenter(), center_e = end->GetCenter();
-
 	float angle = (end->GetAngle() - begin->GetAngle()) * process + begin->GetAngle();
 	tween->SetAngle(angle);
 
 	sm::vec2 base_s = begin->GetPosition() + begin->GetOffset(),
 		     base_e = end->GetPosition() + end->GetOffset();
 	sm::vec2 base_t = (base_e - base_s) * process + base_s;
-	tween->SetPosition(base_t -  offset);
+	tween->SetPosition(base_t - offset);
 
 	RenderColor rc = tween->GetColor();
 	rc.SetAdd(color_interpolate(begin->GetColor().GetAdd(), end->GetColor().GetAdd(), process));
 	rc.SetMul(color_interpolate(begin->GetColor().GetMul(), end->GetColor().GetMul(), process));
 	tween->SetColor(rc);
 
+	LerpSpecial(begin, end, tween, process);
+	
+	for (int i = 0, n = lerps.size(); i < n; ++i) 
+	{
+		SprData data = lerps[i].first;
+		ILerp* lerp = lerps[i].second;
+		switch (lerp->Type())
+		{
+		case LERP_CIRCLE:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpCircle*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		case LERP_SPIRAL:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		}
+	}
+}
+
+void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, float process)
+{
 	assert(begin->GetSymbol()->Type() == end->GetSymbol()->Type());
 	switch (begin->GetSymbol()->Type())
 	{
 	case SYM_SCALE9:
 		{
 			sm::vec2 b_sz = VI_DOWNCASTING<const Scale9Sprite*>(begin)->GetScale9().GetSize(),
-					 e_sz = VI_DOWNCASTING<const Scale9Sprite*>(end)->GetScale9().GetSize();
+				e_sz = VI_DOWNCASTING<const Scale9Sprite*>(end)->GetScale9().GetSize();
 			float t_w = (e_sz.x - b_sz.x) * process + b_sz.x,
-				  t_h = (e_sz.y - b_sz.y) * process + b_sz.y;
+				t_h = (e_sz.y - b_sz.y) * process + b_sz.y;
 			VI_DOWNCASTING<Scale9Sprite*>(tween)->Resize(t_w, t_h);
 		}
 		break;
 	case SYM_ICON:
 		{
 			float b_proc = VI_DOWNCASTING<const IconSprite*>(begin)->GetProcess(),
-				  e_proc = VI_DOWNCASTING<const IconSprite*>(end)->GetProcess();
+				e_proc = VI_DOWNCASTING<const IconSprite*>(end)->GetProcess();
 			float proc = (e_proc - b_proc) * process + b_proc;
 			VI_DOWNCASTING<IconSprite*>(tween)->SetProcess(proc);
 		}
@@ -130,27 +154,6 @@ void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float
 			p3d_t->SetStartRadius(start_radius);
 		}
 		break;
-	}
-
-	for (int i = 0, n = lerps.size(); i < n; ++i) 
-	{
-		SprData data = lerps[i].first;
-		ILerp* lerp = lerps[i].second;
-		switch (lerp->Type())
-		{
-		case LERP_CIRCLE:
-			if (data == SPR_POS) {
-				sm::vec2 base_t = static_cast<LerpCircle*>(lerp)->Lerp(base_s, base_e, process);
-				tween->SetPosition(base_t - offset);
-			}
-			break;
-		case LERP_SPIRAL:
-			if (data == SPR_POS) {
-				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);
-				tween->SetPosition(base_t - offset);
-			}
-			break;
-		}
 	}
 }
 

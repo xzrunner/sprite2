@@ -2,6 +2,7 @@
 #define _SPRITE2_ANIM_CURR3_H_
 
 #include "S2_Message.h"
+#include "AnimCopy2.h"
 
 #include <CU_Uncopyable.h>
 
@@ -56,6 +57,8 @@ private:
 
 	void LoadCurrSprites();
 
+	static void LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int time);
+	
 private:
 	const AnimCopy2* m_copy;
 

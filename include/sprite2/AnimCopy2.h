@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_ANIM_COPY2_H_
 #define _SPRITE2_ANIM_COPY2_H_
 
+#include "Color.h"
+
 #include <SM_Vector.h>
 
 #include <vector>
@@ -22,25 +24,43 @@ public:
 	void LoadFromSym(const AnimSymbol& sym);
 	
 private:
-	struct LerpData
+	void SetCountNum(const AnimSymbol& sym);
+	void FillingLayers(const AnimSymbol& sym);
+	void ConnectActors(const AnimSymbol& sym);
+	void LoadLerpData(const AnimSymbol& sym);
+	void CreateSprSlots(const AnimSymbol& sym);
+
+	static void CalcDeltaColor(const Color& begin, const Color& end, int time, float* ret);
+
+private:
+	struct Lerp
 	{
 		sm::vec2 pos, dpos;
+		float    angle, dangle;
+		sm::vec2 scale, dscale;
+		sm::vec2 shear, dshear;
+		sm::vec2 offset, doffset;
+
+		Color col_mul, col_add;
+		float dcol_mul[4], dcol_add[4];
 	};
 
-	struct Node
+	struct Actor
 	{
-		int16_t curr;
 		int16_t next, prev;
+		int16_t slot;
+		int16_t lerp;
 
-		int16_t lerp_data;
+		const Sprite* spr;
 
-		Node() : curr(-1), next(-1), prev(-1), lerp_data(-1) {}
+		Actor();
+		~Actor();
 	};
 
 	struct Frame
 	{
 		int time;
-		std::vector<Node> nodes;
+		std::vector<Actor> actors;
 	};
 
 	struct Layer
@@ -53,10 +73,12 @@ private:
 
 	std::vector<const Sprite*> m_slots;
 
-	std::vector<LerpData> m_lerp_data;
+	std::vector<Lerp> m_lerps;
+
+	std::vector<const Sprite*> m_sprites;	
 
 	int m_max_frame_idx;
-	int m_max_node_num;
+	int m_max_actor_num;
 
 	friend class AnimCurr3;
 

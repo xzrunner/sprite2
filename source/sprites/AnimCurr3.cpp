@@ -131,11 +131,6 @@ bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, in
 			dirty = true;
 		}
 	}
-// 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-// 		if (m_slots[i]->Update(params)) {
-// 			dirty = true;
-// 		}
-// 	}
 
 	// update curr frame
 	if (curr_frame != m_frame) {
@@ -263,7 +258,7 @@ void AnimCurr3::ResetLayerCursor()
 
 void AnimCurr3::LoadCurrSprites()
 {
-	if (m_copy->m_max_node_num < 0) {
+	if (m_copy->m_max_actor_num < 0) {
 		return;
 	}
 
@@ -298,7 +293,7 @@ void AnimCurr3::LoadCurrSprites()
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
 
 	m_curr.clear();
-	m_curr.reserve(m_copy->m_max_node_num);
+	m_curr.reserve(m_copy->m_max_actor_num);
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		int cursor = m_layer_cursor[i];
@@ -306,37 +301,68 @@ void AnimCurr3::LoadCurrSprites()
 			continue;
 		}
 		const AnimCopy2::Frame& frame = m_copy->m_layers[i].frames[cursor];
-		for (int j = 0, m = frame.nodes.size(); j < m; ++j)
+		for (int j = 0, m = frame.actors.size(); j < m; ++j)
 		{
-			const AnimCopy2::Node& node = frame.nodes[j];
-			m_curr.push_back(node.curr);
-			if (node.next != -1) 
+			const AnimCopy2::Actor& actor = frame.actors[j];
+			m_curr.push_back(actor.slot);
+			if (actor.next != -1) 
 			{
-				assert(node.lerp_data != -1);
+				assert(actor.lerp != -1);
 				const AnimCopy2::Frame& next_frame = m_copy->m_layers[i].frames[cursor + 1];
-				assert(node.curr == next_frame.nodes[node.next].curr);
-				Sprite* tween = m_slots[node.curr];
+				assert(actor.slot == next_frame.actors[actor.next].slot);
+				Sprite* tween = m_slots[actor.slot];
 				int time = m_frame - frame.time;
-				const AnimCopy2::LerpData& data = m_copy->m_lerp_data[node.lerp_data];
-				tween->SetPosition(data.pos + data.dpos * time);
+				const AnimCopy2::Lerp& lerp = m_copy->m_lerps[actor.lerp];
+				LoadSprLerpData(tween, lerp, time);
+
+				float process = (float) (m_frame - frame.time) / (next_frame.time - frame.time);
+				const Sprite* begin = actor.spr;
+				const Sprite* end = next_frame.actors[actor.next].spr;
+				AnimLerp::LerpSpecial(begin, end, tween, process);
 			}
-			else if (node.prev != -1)
+			else if (actor.prev != -1)
 			{
-				assert(node.lerp_data == -1);
+				assert(actor.lerp == -1);
 				const AnimCopy2::Frame& pre_frame = m_copy->m_layers[i].frames[cursor - 1];
-				const AnimCopy2::Node& pre_node = pre_frame.nodes[node.prev];
-				assert(node.curr == pre_node.curr);
-				Sprite* tween = m_slots[pre_node.curr];
+				const AnimCopy2::Actor& pre_actor = pre_frame.actors[actor.prev];
+				assert(actor.slot == pre_actor.slot);
+				Sprite* tween = m_slots[pre_actor.slot];
 				int time = m_frame - pre_frame.time;
-				const AnimCopy2::LerpData& data = m_copy->m_lerp_data[pre_node.lerp_data];
-				tween->SetPosition(data.pos + data.dpos * time);
+				const AnimCopy2::Lerp& lerp = m_copy->m_lerps[pre_actor.lerp];
+				LoadSprLerpData(tween, lerp, time);
+
+				AnimLerp::LerpSpecial(pre_actor.spr, actor.spr, tween, 1);
 			}
 			else
 			{
-				*m_slots[node.curr] = *m_copy->m_slots[node.curr];
+				*m_slots[actor.slot] = *m_copy->m_slots[actor.slot];
 			}
 		}
 	}
+}
+
+void AnimCurr3::LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int time)
+{
+	spr->SetShear(lerp.shear + lerp.dshear * time);
+	spr->SetScale(lerp.scale + lerp.dscale * time);
+	spr->SetOffset(lerp.offset + lerp.doffset * time);
+	spr->SetAngle(lerp.angle + lerp.dangle * time);
+	spr->SetPosition(lerp.pos + lerp.dpos * time);
+
+	Color mul(lerp.col_mul), add(lerp.col_add);
+	mul.r += lerp.dcol_mul[0] * time;
+	mul.g += lerp.dcol_mul[1] * time;
+	mul.b += lerp.dcol_mul[2] * time;
+	mul.a += lerp.dcol_mul[3] * time;
+	add.r += lerp.dcol_add[0] * time;
+	add.g += lerp.dcol_add[1] * time;
+	add.b += lerp.dcol_add[2] * time;
+	add.a += lerp.dcol_add[3] * time;
+
+	RenderColor col = spr->GetColor();
+	col.SetMul(mul);
+	col.SetAdd(add);
+	spr->SetColor(col);
 }
 
 }

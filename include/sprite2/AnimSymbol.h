@@ -10,10 +10,10 @@
 #elif defined S2_ANIM_CURR_V1
 #include "AnimCurr2.h"
 #include "AnimCopy.h"
-#else
+#elif defined S2_ANIM_CURR_V2
 #include "AnimCurr3.h"
 #include "AnimCopy2.h"
-#endif // S2_ANIM_CURR_V0
+#endif
 
 #include <vector>
 
@@ -99,10 +99,10 @@ protected:
 #elif defined S2_ANIM_CURR_V1
 	AnimCopy  m_copy;
 	AnimCurr2 m_curr;
-#else
+#elif defined S2_ANIM_CURR_V2
 	AnimCopy2 m_copy;
 	AnimCurr3 m_curr;
-#endif // S2_ANIM_CURR_V0
+#endif
 
 	mutable sm::rect m_size;
 

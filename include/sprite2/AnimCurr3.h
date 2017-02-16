@@ -66,7 +66,8 @@ private:
 
 	std::vector<Sprite*> m_slots;
 
-	std::vector<int> m_curr;
+	int* m_curr;
+	int  m_curr_num;
 
 	int m_frame;
 

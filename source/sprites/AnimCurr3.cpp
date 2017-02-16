@@ -14,6 +14,7 @@ namespace s2
 
 AnimCurr3::AnimCurr3()
 	: m_copy(NULL)
+	, m_curr(NULL)
 	, m_frame(0)
 	, m_start_time(0)
 	, m_curr_time(0)
@@ -28,7 +29,7 @@ AnimCurr3::AnimCurr3(const AnimCurr3& curr)
 	: m_copy(curr.m_copy)
 	, m_layer_cursor(curr.m_layer_cursor)
 	, m_slots(curr.m_slots)
-	, m_curr(curr.m_curr)
+	, m_curr_num(curr.m_curr_num)
 	, m_frame(curr.m_frame)
 	, m_start_time(curr.m_start_time)
 	, m_curr_time(curr.m_curr_time)
@@ -36,6 +37,9 @@ AnimCurr3::AnimCurr3(const AnimCurr3& curr)
 	, m_stop_during(curr.m_stop_during)
 	, m_active(curr.m_active)
 {
+	m_curr = new int[curr.m_copy->m_max_actor_num];
+	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
+
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());	
 }
 
@@ -44,7 +48,10 @@ AnimCurr3& AnimCurr3::operator = (const AnimCurr3& curr)
 	m_copy = curr.m_copy;
 	m_layer_cursor = curr.m_layer_cursor;
 	m_slots = curr.m_slots;
-	m_curr = curr.m_curr;
+	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());
+	m_curr_num = curr.m_curr_num;
+	m_curr = new int[curr.m_copy->m_max_actor_num];
+	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
 	m_frame = curr.m_frame;
 	m_start_time = curr.m_start_time;
 	m_curr_time = curr.m_curr_time;
@@ -56,19 +63,24 @@ AnimCurr3& AnimCurr3::operator = (const AnimCurr3& curr)
 
 AnimCurr3::~AnimCurr3()
 {
+	delete m_curr;
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 bool AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
+	if (m_curr_num == 0) {
+		return false;
+	}
+
 	if (visitor.GetOrder()) {
-		for (int i = 0, n = m_curr.size(); i < n; ++i) {
+		for (int i = 0; i < m_curr_num; ++i) {
 			if (!m_slots[m_curr[i]]->Traverse(visitor, params)) {
 				return false;
 			}
 		}
 	} else {
-		for (int i = m_curr.size() - 1; i >= 0; --i) {
+		for (int i = m_curr_num - 1; i >= 0; --i) {
 			if (!m_slots[m_curr[i]]->Traverse(visitor, params)) {
 				return false;
 			}
@@ -79,7 +91,7 @@ bool AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) co
 
 void AnimCurr3::OnMessage(Message msg)
 {
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+	for (int i = 0; i < m_curr_num; ++i) {
 		m_slots[m_curr[i]]->OnMessage(msg);
 	}
 }
@@ -126,7 +138,7 @@ bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, in
 	}
 
 	// update children
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+	for (int i = 0; i < m_curr_num; ++i) {
 		if (m_slots[m_curr[i]]->Update(params)) {
 			dirty = true;
 		}
@@ -144,14 +156,14 @@ bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, in
 
 void AnimCurr3::Draw(const RenderParams& params) const
 {
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+	for (int i = 0; i < m_curr_num; ++i) {
 		DrawNode::Draw(m_slots[m_curr[i]], params);
 	}
 }
 
 Sprite* AnimCurr3::FetchChild(const std::string& name) const
 {
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+	for (int i = 0; i < m_curr_num; ++i) {
 		if (m_slots[m_curr[i]]->GetName() == name) {
 			return m_slots[m_curr[i]];
 		}
@@ -197,7 +209,7 @@ void AnimCurr3::SetFrame(int frame, int fps)
 
 	// update children
 	RenderParams params;
-	for (int i = 0, n = m_curr.size(); i < n; ++i) {
+	for (int i = 0; i < m_curr_num; ++i) {
 		m_slots[m_curr[i]]->Update(params);
 	}
 }
@@ -209,6 +221,10 @@ void AnimCurr3::SetAnimCopy(const AnimCopy2* copy)
 	}
 
 	m_copy = copy;
+
+	delete[] m_curr;
+	m_curr = new int[copy->m_max_actor_num];
+	m_curr_num = 0;
 
 	ResetLayerCursor();
 
@@ -240,7 +256,7 @@ void AnimCurr3::Clear()
 {
 	ResetTime();
 	m_frame = 1;
-	m_curr.clear();
+	m_curr_num = 0;
 }
 
 void AnimCurr3::ResetTime()
@@ -292,8 +308,7 @@ void AnimCurr3::LoadCurrSprites()
 	// load sprites
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
 
-	m_curr.clear();
-	m_curr.reserve(m_copy->m_max_actor_num);
+	m_curr_num = 0;
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		int cursor = m_layer_cursor[i];
@@ -304,7 +319,7 @@ void AnimCurr3::LoadCurrSprites()
 		for (int j = 0, m = frame.actors.size(); j < m; ++j)
 		{
 			const AnimCopy2::Actor& actor = frame.actors[j];
-			m_curr.push_back(actor.slot);
+			m_curr[m_curr_num++] = actor.slot;
 			if (actor.next != -1) 
 			{
 				assert(actor.lerp != -1);
@@ -335,7 +350,8 @@ void AnimCurr3::LoadCurrSprites()
 			}
 			else
 			{
-				*m_slots[actor.slot] = *m_copy->m_slots[actor.slot];
+				const SprSRT& srt = m_copy->m_slots[actor.slot]->GetLocalSRT();
+				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 		}
 	}
@@ -343,11 +359,14 @@ void AnimCurr3::LoadCurrSprites()
 
 void AnimCurr3::LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int time)
 {
-	spr->SetShear(lerp.shear + lerp.dshear * time);
-	spr->SetScale(lerp.scale + lerp.dscale * time);
-	spr->SetOffset(lerp.offset + lerp.doffset * time);
-	spr->SetAngle(lerp.angle + lerp.dangle * time);
-	spr->SetPosition(lerp.pos + lerp.dpos * time);
+	SprSRT srt = lerp.srt;
+	srt.position += lerp.dsrt.position * time;
+	srt.angle    += lerp.dsrt.angle * time;
+	srt.scale    += lerp.dsrt.scale * time;
+	srt.shear    += lerp.dsrt.shear * time;
+	srt.offset   += lerp.dsrt.offset * time;
+	srt.center   += lerp.dsrt.center * time;	
+	spr->SetLocalSRT(srt);
 
 	Color mul(lerp.col_mul), add(lerp.col_add);
 	mul.r += lerp.dcol_mul[0] * time;

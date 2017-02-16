@@ -327,7 +327,7 @@ void AnimCurr3::LoadCurrSprites()
 				const AnimCopy2::Actor& pre_actor = pre_frame.actors[actor.prev];
 				assert(actor.slot == pre_actor.slot);
 				Sprite* tween = m_slots[pre_actor.slot];
-				int time = m_frame - pre_frame.time;
+				int time = frame.time - pre_frame.time;
 				const AnimCopy2::Lerp& lerp = m_copy->m_lerps[pre_actor.lerp];
 				LoadSprLerpData(tween, lerp, time);
 

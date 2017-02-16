@@ -29,6 +29,7 @@ class SprVisitor;
 class Actor;
 class SprTreePath;
 class SprVisitorParams;
+class SprSRT;
 
 class Sprite : public cu::RefCountObj, public cu::Cloneable
 {
@@ -102,6 +103,9 @@ public:
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
+
+	const SprSRT& GetLocalSRT() const;
+	void SetLocalSRT(const SprSRT& srt);
 
 	S2_MAT GetLocalMat() const;
 	S2_MAT GetLocalInvMat() const;

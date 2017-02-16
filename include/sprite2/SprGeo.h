@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "ObjectPool.h"
+#include "SprSRT.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -36,6 +37,9 @@ public:
 	const sm::vec2& GetCenter() const;
 	void SetCenter(const sm::vec2& center);	
 
+	const SprSRT& GetSRT() const;
+	void SetSRT(const SprSRT& srt);
+
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void SetMatrix(const S2_MAT& mat);
 	const S2_MAT& GetMatrix() const;
@@ -56,21 +60,6 @@ public:
  	void SetNext(SprGeo* next) { m_state.next = next; }
 
 private:
-	struct SRT
-	{
-		sm::vec2 position;
-		float    angle;
-		sm::vec2 scale;
-		sm::vec2 shear;
-
-		sm::vec2 offset;
-
-		sm::vec2 center;
-
-		SRT();
-		void Init();
-	};
-
 #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
 	struct MAT
 	{
@@ -85,7 +74,7 @@ private:
 	union 
 	{
 		struct {
-			SRT    srt;
+			SprSRT srt;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
 			MAT    mat;
 #endif // S2_SPR_CACHE_LOCAL_MAT_COPY

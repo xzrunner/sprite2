@@ -76,6 +76,18 @@ void SprGeo::SetCenter(const sm::vec2& center)
 	m_state.srt.center = center;
 }
 
+inline
+const SprSRT& SprGeo::GetSRT() const
+{
+	return m_state.srt;	
+}
+
+inline
+void SprGeo::SetSRT(const SprSRT& srt)
+{
+	m_state.srt = srt;
+}
+
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 inline

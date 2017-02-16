@@ -37,30 +37,6 @@ void SprGeo::Term()
 {
 }
 
-/************************************************************************/
-/* class SprGeo::SRT                                                    */
-/************************************************************************/
-
-SprGeo::SRT::SRT()
-	: position(0, 0)
-	, angle(0)
-	, scale(1, 1)
-	, shear(0, 0)
-	, offset(0, 0)
-	, center(0, 0)
-{
-}
-
-void SprGeo::SRT::Init()
-{
-	position.Set(0, 0);
-	angle = 0;
-	scale.Set(1, 1);
-	shear.Set(0, 0);
-	offset.Set(0, 0);
-	center.Set(0, 0);
-}
-
 #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
 
 /************************************************************************/

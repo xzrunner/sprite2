@@ -464,6 +464,22 @@ void Sprite::SetCamera(const RenderCamera& camera)
 	SetDirty(true);
 }
 
+const SprSRT& Sprite::GetLocalSRT() const
+{
+	return m_geo->GetSRT();
+}
+
+void Sprite::SetLocalSRT(const SprSRT& srt)
+{
+	m_geo->SetSRT(srt);
+
+	// lazy
+	SetBoundingDirty(true);
+
+	SetDirty(true);
+	SetGeoDirty(true);
+}
+
 S2_MAT Sprite::GetLocalMat() const
 {
 	if (m_geo == SprDefault::Instance()->Geo()) {

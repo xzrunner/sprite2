@@ -2,6 +2,7 @@
 #define _SPRITE2_ANIM_COPY2_H_
 
 #include "Color.h"
+#include "SprSRT.h"
 
 #include <SM_Vector.h>
 
@@ -35,11 +36,7 @@ private:
 private:
 	struct Lerp
 	{
-		sm::vec2 pos, dpos;
-		float    angle, dangle;
-		sm::vec2 scale, dscale;
-		sm::vec2 shear, dshear;
-		sm::vec2 offset, doffset;
+		SprSRT srt, dsrt;
 
 		Color col_mul, col_add;
 		float dcol_mul[4], dcol_add[4];

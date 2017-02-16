@@ -137,20 +137,15 @@ void AnimCopy2::LoadLerpData(const AnimSymbol& sym)
 				const Sprite* end = layers[ilayer]->frames[iframe+1]->sprs[actor.next];
 				int dt = layer.frames[iframe + 1].time - layer.frames[iframe].time;
 
-				dst.shear = begin->GetShear();
-				dst.dshear = (end->GetShear() - begin->GetShear()) / dt;
-
-				dst.scale = begin->GetScale();
-				dst.dscale = (end->GetScale() - begin->GetScale()) / dt;
-
-				dst.offset = begin->GetOffset();
-				dst.doffset = (end->GetOffset() - begin->GetOffset()) / dt;
-
-				dst.angle = begin->GetAngle();
-				dst.dangle = (end->GetAngle() - begin->GetAngle()) / dt;
-				
-				dst.pos = begin->GetPosition();
-				dst.dpos = (end->GetPosition() - dst.pos) / dt;
+				const SprSRT& bsrt = begin->GetLocalSRT();
+				const SprSRT& esrt = end->GetLocalSRT();
+				dst.srt = bsrt;
+				dst.dsrt.position = (esrt.position - bsrt.position) / dt;
+				dst.dsrt.angle    = (esrt.angle - bsrt.angle) / dt;
+				dst.dsrt.scale    = (esrt.scale - bsrt.scale) / dt;
+				dst.dsrt.shear    = (esrt.shear - bsrt.shear) / dt;
+				dst.dsrt.offset   = (esrt.offset - bsrt.offset) / dt;
+				dst.dsrt.center   = (esrt.center - bsrt.center) / dt;
 
 				const RenderColor& rcb = begin->GetColor();
 				const RenderColor& rce = end->GetColor();

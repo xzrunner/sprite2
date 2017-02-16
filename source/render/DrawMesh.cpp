@@ -136,9 +136,10 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
 		sm::vec2 _vertices[4], _texcoords[4];
 		for (int j = 0; j < 3; ++j, ++i)
 		{
-			vertices[i] = mt * vertices[i];
-			_texcoords[i].x = (texcoords[i].x * ori_w - ori_w * 0.5f + w * 0.5f) / w;
-			_texcoords[i].y = (texcoords[i].y * ori_h - ori_h * 0.5f + h * 0.5f) / h;
+			int idx = triangles[i];
+			vertices[idx] = mt * vertices[idx];
+			_texcoords[j].x = (texcoords[j].x * ori_w - ori_w * 0.5f + w * 0.5f) / w;
+			_texcoords[j].y = (texcoords[j].y * ori_h - ori_h * 0.5f + h * 0.5f) / h;
 		}
 		_vertices[3] = _vertices[2];
 		_texcoords[3] = _texcoords[2];

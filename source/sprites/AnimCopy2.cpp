@@ -150,7 +150,7 @@ void AnimCopy2::LoadLerpData(const AnimSymbol& sym)
 				const RenderColor& rcb = begin->GetColor();
 				const RenderColor& rce = end->GetColor();
 				dst.col_mul = rcb.GetMul();
-				dst.col_add = rce.GetAdd();
+				dst.col_add = rcb.GetAdd();
 				CalcDeltaColor(rcb.GetMul(), rce.GetMul(), dt, dst.dcol_mul);
 				CalcDeltaColor(rcb.GetAdd(), rce.GetAdd(), dt, dst.dcol_add);
 

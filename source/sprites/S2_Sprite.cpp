@@ -265,6 +265,7 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	// rotate + offset -> offset + rotate	
 	sm::vec2 old_center = GetCenter();
 	m_geo->SetOffset(offset);
+	UpdateCenter();
 	sm::vec2 new_center = GetCenter();
 	m_geo->SetPosition(m_geo->GetPosition() + old_center - new_center);
 

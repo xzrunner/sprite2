@@ -205,7 +205,29 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 		draw = draw_filter;
 	}
 
-	if (h < 0)
+	// 3 2    1 0
+	// 0 1 or 2 3 
+	if ((w > 0 && h > 0) || (w < 0 && h < 0)) 
+	{
+		for (int i = 0, n = triangles.size(); i < n; )
+		{
+			sm::vec2 _vertices[4], _texcoords[4];
+			for (int j = 0; j < 3; ++j, ++i)
+			{
+				int idx = triangles[i];
+				_vertices[j] = params.mt * vertices[idx];
+				_texcoords[j].x = x + w * texcoords[idx].x;
+				_texcoords[j].y = y + h * texcoords[idx].y;
+			}
+			_vertices[3] = _vertices[2];
+			_texcoords[3] = _texcoords[2];
+
+			draw(&_vertices[0].x, &_texcoords[0].x, texid);
+		}
+	}
+	// 0 3
+	// 1 2
+	else if (w > 0 && h < 0)
 	{
 		for (int i = 0, n = triangles.size(); i < n; )
 		{
@@ -225,22 +247,8 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	}
 	else
 	{
-		for (int i = 0, n = triangles.size(); i < n; )
-		{
-			sm::vec2 _vertices[4], _texcoords[4];
-			for (int j = 0; j < 3; ++j, ++i)
-			{
-				int idx = triangles[i];
-				_vertices[j] = params.mt * vertices[idx];
-				_texcoords[j].x = x + w * texcoords[idx].x;
-				_texcoords[j].y = y + h * texcoords[idx].y;
-			}
-			_vertices[3] = _vertices[2];
-			_texcoords[3] = _texcoords[2];
-
-			draw(&_vertices[0].x, &_texcoords[0].x, texid);
-		}
-	}		
+		assert(0);
+	}
 }
 
 void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)

@@ -89,21 +89,20 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	if (m_tex) {
 		return m_tex->GetOriSize();
 	} else {
-		return  m_size.Size();
+		return m_size.Size();
 	}
 }
 
-void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& quad, const sm::vec2& offset)
+void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
 {
 	cu::RefCountObjAssign(m_tex, tex);
-	m_quad = quad;
-	m_offset = offset;
+	m_region = region;
 
-	sm::vec2 sz = m_tex->GetSize();
-	m_size.xmin = m_quad.xmin - sz.x * 0.5f + m_offset.x;
-	m_size.ymin = m_quad.ymin - sz.y * 0.5f + m_offset.y;
-	m_size.xmax = m_quad.xmax - sz.x * 0.5f + m_offset.x;
-	m_size.ymax = m_quad.ymax - sz.y * 0.5f + m_offset.y;
+	sm::vec2 sz = m_tex->GetOriSize();
+	m_size.xmin = region.xmin - sz.x * 0.5f;
+	m_size.ymin = region.ymin - sz.y * 0.5f;
+	m_size.xmax = region.xmax - sz.x * 0.5f;
+	m_size.ymax = region.ymax - sz.y * 0.5f;
 }
 
 void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const

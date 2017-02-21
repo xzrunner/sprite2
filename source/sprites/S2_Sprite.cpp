@@ -197,6 +197,7 @@ void Sprite::SetScale(const sm::vec2& scale)
 		sm::vec2 old_offset = m_geo->GetOffset();
 		sm::vec2 new_offset(old_offset.x * dscale.x, old_offset.y * dscale.y);
 		m_geo->SetOffset(new_offset);
+		UpdateCenter();
 
 		m_geo->SetPosition(m_geo->GetPosition() + old_offset - new_offset);
 
@@ -214,12 +215,16 @@ void Sprite::SetScale(const sm::vec2& scale)
 
 void Sprite::SetShear(const sm::vec2& shear)
 {
+	sm::vec2 off = m_geo->GetOffset();
+
 	if (m_geo->GetShear() == shear) {
 		return;
 	}
 	if (m_geo == SprDefault::Instance()->Geo()) {
 		m_geo = SprGeoPool::Instance()->Pop();
 	}
+
+	off = m_geo->GetOffset();
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
@@ -229,12 +234,15 @@ void Sprite::SetShear(const sm::vec2& shear)
 #ifdef S2_MATRIX_FIX
 	// todo
 #else
+	off = m_geo->GetOffset();
 	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
 #endif // S2_MATRIX_FIX
+	off = m_geo->GetOffset();
 
 	sm::vec2 offset = mat_new * m_geo->GetOffset() - mat_old * m_geo->GetOffset();
 	m_geo->SetOffset(m_geo->GetOffset() + offset);
+	UpdateCenter();
 	m_geo->SetPosition(m_geo->GetPosition() - offset);
 
 	m_geo->SetShear(shear);

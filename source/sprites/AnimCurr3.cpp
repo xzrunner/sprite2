@@ -177,7 +177,6 @@ void AnimCurr3::Start()
 	ResetLayerCursor();
 	m_frame = 1;
 	LoadCurrSprites();
-	OnMessage(MSG_START);
 }
 
 void AnimCurr3::SetTime(float time)
@@ -352,6 +351,10 @@ void AnimCurr3::LoadCurrSprites()
 			{
 				const SprSRT& srt = m_copy->m_slots[actor.slot]->GetLocalSRT();
 				m_slots[actor.slot]->SetLocalSRT(srt);
+			}
+
+			if (actor.prev == -1) {
+				m_slots[actor.slot]->OnMessage(MSG_START);
 			}
 		}
 	}

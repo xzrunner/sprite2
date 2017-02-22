@@ -637,17 +637,15 @@ const Sprite* Sprite::GetProxy(const SprTreePath& parent_path) const
 
 void Sprite::InitFlags()
 {
+	m_flags = 0;
+
 	SetVisible(true);
 #ifdef S2_SPR_DEFAULT_EDITABLE
 	SetEditable(S2_SPR_DEFAULT_EDITABLE);
 #else
 	SetEditable(true);
 #endif // S2_SPR_DEFAULT_EDITABLE
-	SetDirty(false);
 	SetBoundingDirty(true);
-#ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	SetGeoMatrix(false);
-#endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 void Sprite::InitFromSpr(const Sprite& spr)

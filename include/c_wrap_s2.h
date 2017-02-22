@@ -53,6 +53,9 @@ int   s2_spr_get_sym_type(void* spr);
 bool  s2_spr_get_editable(void* spr);
 void  s2_spr_set_editable(void* spr, bool editable);
 
+bool  s2_spr_get_force_up_frame(void* spr);
+void  s2_spr_set_force_up_frame(void* spr, bool force);
+
 void  s2_spr_set_frame(void* spr, int frame);
 void  s2_spr_set_action(void* spr, const char* action);
 

@@ -141,6 +141,7 @@ protected:
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
+	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
 
 #define FLAG_METHOD(name, bit) \
 	bool Is##name##() const { \
@@ -164,6 +165,7 @@ public:
 	FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	FLAG_METHOD(HasProxy, FLAG_HAS_PROXY)
+	FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
 
 protected:
 	Symbol*					m_sym;

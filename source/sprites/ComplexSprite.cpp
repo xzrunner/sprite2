@@ -64,7 +64,7 @@ bool ComplexSprite::SetFrame(int frame)
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* spr = children[i];
-		if (!spr->GetName().empty()) {
+		if (!spr->IsForceUpFrame() && !spr->GetName().empty()) {
 			continue;
 		}
 		if (spr->SetFrame(frame)) {

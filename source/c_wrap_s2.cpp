@@ -195,6 +195,16 @@ void s2_spr_set_editable(void* spr, bool editable) {
 }
 
 extern "C"
+bool s2_spr_get_force_up_frame(void* spr) {
+	return static_cast<Sprite*>(spr)->IsForceUpFrame();
+}
+
+extern "C"
+void s2_spr_set_force_up_frame(void* spr, bool force) {
+	static_cast<Sprite*>(spr)->SetForceUpFrame(force);
+}
+
+extern "C"
 void s2_spr_set_frame(void* spr, int frame) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	s2_spr->SetFrame(frame);

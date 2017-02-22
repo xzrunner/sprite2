@@ -6,7 +6,10 @@ extern "C"
 #ifndef _sprite2_wrap_c_h_
 #define _sprite2_wrap_c_h_
 
+#include <stdint.h>
+#ifndef __cplusplus
 #include <stdbool.h>
+#endif // __cplusplus
 
 void s2_init();
 
@@ -105,6 +108,21 @@ void  s2_actor_set_angle(void* actor, float angle);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
 
 void* s2_actor_get_parent(void* actor);
+
+/************************************************************************/
+/* others                                                               */
+/************************************************************************/
+
+struct rect_tex {
+	float xmin, ymin;
+	float xmax, ymax;
+};
+
+void* s2_rt_fetch();
+void  s2_rt_return(void* rt);
+void  s2_rt_draw_from(void* rt, const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id);
+void  s2_rt_draw_to(void* rt, const struct rect_tex* dst, const struct rect_tex* src);
+int   s2_rt_get_texid(void* rt);
 
 #endif // _sprite2_wrap_c_h_
 

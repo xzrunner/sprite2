@@ -1,3 +1,5 @@
+#include "c_wrap_s2.h"
+
 #include "RenderCtxStack.h"
 #include "S2_Actor.h"
 #include "ActorFactory.h"
@@ -15,6 +17,10 @@
 #include "PointQueryVisitor.h"
 #include "SprTimer.h"
 #include "SprVisitorParams.h"
+#include "RenderTargetMgr.h"
+#include "RenderTarget.h"
+#include "RenderScissor.h"
+#include "Blackboard.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -24,6 +30,9 @@
 #include "Scale9Sprite.h"
 
 #include <gtxt_label.h>
+#include <shaderlab/ShaderMgr.h>
+#include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/FilterShader.h>
 
 #include <iostream>
 
@@ -633,6 +642,106 @@ void* s2_actor_get_parent(void* actor) {
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
 	return ActorLUT::Instance()->Query(path);
+}
+
+/************************************************************************/
+/* others                                                               */
+/************************************************************************/
+
+extern "C"
+void* s2_rt_fetch()
+{
+	return RenderTargetMgr::Instance()->Fetch();
+}
+
+extern "C"
+void s2_rt_return(void* rt)
+{
+	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	RenderTargetMgr::Instance()->Return(s2_rt);
+}
+
+static void _draw(const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id)
+{
+	float vertices[8], texcoords[8];
+
+	float v_xmin = dst->xmin * 2 - 1,
+		  v_ymin = dst->ymin * 2 - 1,
+		  v_xmax = dst->xmax * 2 - 1,
+		  v_ymax = dst->ymax * 2 - 1;
+	vertices[0] = v_xmin; vertices[1] = v_ymin;
+	vertices[2] = v_xmax; vertices[3] = v_ymin;
+	vertices[4] = v_xmax; vertices[5] = v_ymax;
+	vertices[6] = v_xmin; vertices[7] = v_ymax;
+
+	float t_xmin = src->xmin,
+		  t_ymin = src->ymin,
+		  t_xmax = src->xmax,
+		  t_ymax = src->ymax;
+	texcoords[0] = t_xmin; texcoords[1] = t_ymin;
+	texcoords[2] = t_xmax; texcoords[3] = t_ymin;
+	texcoords[4] = t_xmax; texcoords[5] = t_ymax;
+	texcoords[6] = t_xmin; texcoords[7] = t_ymax;	
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	switch (mgr->GetShaderType())
+	{
+	case sl::SPRITE2:
+		{
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+			shader->SetColor(0xffffffff, 0);
+			shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
+			shader->Draw(vertices, texcoords, src_tex_id);
+		}
+		break;
+	case sl::FILTER:
+		{
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+			shader->SetColor(0xffffffff, 0);
+			shader->Draw(vertices, texcoords, src_tex_id);
+		}
+		break;
+	}
+}
+
+extern "C"
+void s2_rt_draw_from(void* rt, const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id)
+{
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+
+	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderContext(2, 2, RT->WIDTH, RT->HEIGHT));
+
+	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	s2_rt->Bind();
+
+	_draw(dst, src, src_tex_id);
+
+	s2_rt->Unbind();
+
+	RenderCtxStack::Instance()->Pop();
+	RenderScissor::Instance()->Open();
+}
+
+extern "C"
+void s2_rt_draw_to(void* rt, const struct rect_tex* dst, const struct rect_tex* src)
+{
+	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
+
+	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	int src_tex_id = s2_rt->GetTexID();
+	_draw(dst, src, src_tex_id);
+
+	RenderCtxStack::Instance()->Pop();
+	RenderScissor::Instance()->Open();
+}
+
+extern "C"
+int s2_rt_get_texid(void* rt)
+{
+	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	return s2_rt->GetTexID();
 }
 
 }

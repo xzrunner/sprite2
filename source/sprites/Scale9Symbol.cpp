@@ -39,8 +39,10 @@ void Scale9Symbol::Traverse(const SymVisitor& visitor)
 void Scale9Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
 	if (spr) {
-		RenderParams p = DrawNode::Prepare(params, spr);
-		VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(p);
+		RenderParams p;
+		if (DrawNode::Prepare(params, spr, p)) {
+			VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(p);
+		}
 	} else {
 		m_s9.Draw(params);
 	}

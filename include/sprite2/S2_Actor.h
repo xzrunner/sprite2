@@ -36,13 +36,33 @@ public:
 	const Sprite* GetProxy() const { return m_proxy; }
 
 private:
-	const Sprite* m_spr;
+	void InitFlags();
 
-	SprTreePath m_path;
+private:
+	static const uint32_t FLAG_VISIBLE = 0x00000001;
 
-	ActorGeo* m_geo;
+#define FLAG_METHOD(name, bit) \
+	bool Is##name##() const { \
+		return (m_flags & bit) != 0; \
+	} \
+	void Set##name##(bool flag) const { \
+		if (flag) { \
+			m_flags |= bit; \
+		} else { \
+			m_flags &= ~bit; \
+		} \
+	}
 
-	Sprite* m_proxy;
+public:
+	FLAG_METHOD(Visible, FLAG_VISIBLE)
+	
+private:
+	const Sprite*    m_spr;
+	SprTreePath      m_path;
+
+	ActorGeo*        m_geo;
+	Sprite*          m_proxy;
+	mutable uint32_t m_flags;
 
 }; // Actor
 

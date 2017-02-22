@@ -40,7 +40,10 @@ void IconSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));

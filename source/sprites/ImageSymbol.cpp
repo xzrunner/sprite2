@@ -49,7 +49,10 @@ int ImageSymbol::Type() const
 
 void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);

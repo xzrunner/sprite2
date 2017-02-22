@@ -50,7 +50,10 @@ void MaskSymbol::Traverse(const SymVisitor& visitor)
 
 void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 	if (m_base && m_mask) {
 		DrawMask::Draw(m_base, m_mask, p);
 	} else {

@@ -17,7 +17,7 @@ class DrawNode
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
 
-	static RenderParams Prepare(const RenderParams& parent, const Sprite* spr);
+	static bool Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child);
 
 	static void Draw(const Sprite* spr, const RenderParams& params = RenderParams(), bool scissor = true);
 

@@ -34,6 +34,11 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams&
 	if (!spr->IsVisible()) {
 		return VISIT_CONTINUE;
 	}
+	
+	Actor* actor = ActorLUT::Instance()->Query(params.path);
+	if (actor && !actor->IsVisible()) {
+		return VISIT_CONTINUE;
+	}
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {

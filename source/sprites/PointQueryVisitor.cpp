@@ -5,6 +5,7 @@
 #include "BoundingBox.h"
 #include "S2_Actor.h"
 #include "SprVisitorParams.h"
+#include "ActorLUT.h"
 
 #include "S2_RVG.h"
 
@@ -33,6 +34,11 @@ PointQueryVisitor::~PointQueryVisitor()
 VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (!spr->IsVisible()) {
+		return VISIT_CONTINUE;
+	}
+
+	Actor* actor = ActorLUT::Instance()->Query(params.path);
+	if (actor && !actor->IsVisible()) {
 		return VISIT_CONTINUE;
 	}
 

@@ -50,8 +50,6 @@ const char* s2_spr_get_name(void* spr);
 int   s2_spr_get_sym_id(void* spr);
 int   s2_spr_get_sym_type(void* spr);
 
-bool  s2_spr_get_visible(void* spr);
-void  s2_spr_set_visible(void* spr, bool visible);
 bool  s2_spr_get_editable(void* spr);
 void  s2_spr_set_editable(void* spr, bool editable);
 
@@ -108,6 +106,9 @@ void  s2_actor_set_angle(void* actor, float angle);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
 
 void* s2_actor_get_parent(void* actor);
+
+bool  s2_actor_get_visible(void* actor);
+void  s2_actor_set_visible(void* actor, bool visible);
 
 /************************************************************************/
 /* others                                                               */

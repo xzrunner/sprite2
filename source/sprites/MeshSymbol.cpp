@@ -44,7 +44,10 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 // 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 // 	mgr->SetShader(sl::SPRITE2);

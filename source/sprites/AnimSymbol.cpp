@@ -70,8 +70,10 @@ void AnimSymbol::Traverse(const SymVisitor& visitor)
 void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {	
 	if (spr) {
-		RenderParams p = DrawNode::Prepare(params, spr);
-		VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(p);
+		RenderParams p;
+		if (DrawNode::Prepare(params, spr, p)) {
+			VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(p);
+		}
 	} else {
 		m_curr.Draw(params);
 	}

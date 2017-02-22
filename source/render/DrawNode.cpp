@@ -28,32 +28,35 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 	AFTER_SPR = after_spr;
 }
 
-RenderParams DrawNode::Prepare(const RenderParams& parent, const Sprite* spr)
+bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child)
 {
 	if (!spr) {
-		return parent;
+		child = parent;
+		return true;
+	}
+	if (!spr->IsVisible()) {
+		return false;
 	}
 
-	RenderParams ret = parent;
+	child = parent;
+	child.path.Push(spr->GetID());
+	const Actor* actor = spr->QueryActor(child.path);
+	if (actor && !actor->IsVisible()) {
+		return false;
+	}
 
-	ret.path.Push(spr->GetID());
+	child.mt = spr->GetLocalMat() * parent.mt;
+	child.color = spr->GetColor() * parent.color;
 
-	ret.mt = spr->GetLocalMat() * parent.mt;
-	ret.color = spr->GetColor() * parent.color;
-
-	const Actor* actor = spr->QueryActor(ret.path);
 	if (actor) {
-		ret.mt = actor->GetLocalMat() * ret.mt;
+		child.mt = actor->GetLocalMat() * child.mt;
 	}
 
-	return ret;
+	return true;
 }
 
 void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 {
-	if (!spr->IsVisible()) {
-		return;
-	}
 	if (scissor && IsOutsideView(spr, params)) {
 		return;
 	}

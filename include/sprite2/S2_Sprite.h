@@ -141,7 +141,6 @@ protected:
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 
-public:
 #define FLAG_METHOD(name, bit) \
 	bool Is##name##() const { \
 		return (m_flags & bit) != 0; \
@@ -154,6 +153,7 @@ public:
 		} \
 	}
 
+public:
 	FLAG_METHOD(Visible, FLAG_VISIBLE)
 	FLAG_METHOD(Editable, FLAG_EDITABLE)
 	FLAG_METHOD(Dirty, FLAG_DIRTY)

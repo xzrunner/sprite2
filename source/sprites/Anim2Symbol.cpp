@@ -39,7 +39,10 @@ void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();

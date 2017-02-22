@@ -50,7 +50,10 @@ void ComplexSymbol::Traverse(const SymVisitor& visitor)
 
 void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 {
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;

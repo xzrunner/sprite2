@@ -39,7 +39,11 @@ void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
+
 	if (spr) {
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);

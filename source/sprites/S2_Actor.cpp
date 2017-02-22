@@ -22,6 +22,8 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	if (m_spr) {
 		m_spr->AddActor(this);
 	}
+
+	InitFlags();
 }
 
 Actor::~Actor()
@@ -96,6 +98,11 @@ void Actor::SetProxy(Sprite* proxy)
 	parent_path.Pop();
 	FixActorPathVisitor visitor(parent_path);
 	m_proxy->Traverse(visitor, SprVisitorParams());
+}
+
+void Actor::InitFlags()
+{
+	SetVisible(true);
 }
 
 }

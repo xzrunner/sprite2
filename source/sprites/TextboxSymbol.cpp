@@ -35,7 +35,10 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams p = DrawNode::Prepare(params, spr);
+	RenderParams p;
+	if (!DrawNode::Prepare(params, spr, p)) {
+		return;
+	}
 
 	const std::string* text = NULL;
 	const Actor* actor = spr->QueryActor(p.path);

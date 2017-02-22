@@ -38,8 +38,10 @@ void ShapeSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 
 	if (spr) {
-		RenderParams p = DrawNode::Prepare(params, spr);
-		m_shape->Draw(p.mt, &p.color);
+		RenderParams p;
+		if (DrawNode::Prepare(params, spr, p)) {
+			m_shape->Draw(p.mt, &p.color);
+		}
 	}
 }
 

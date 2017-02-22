@@ -185,16 +185,6 @@ int s2_spr_get_sym_type(void* spr) {
 }
 
 extern "C"
-bool s2_spr_get_visible(void* spr) {
-	return static_cast<Sprite*>(spr)->IsVisible();
-}
-
-extern "C"
-void s2_spr_set_visible(void* spr, bool visible) {
-	static_cast<Sprite*>(spr)->SetVisible(visible);
-}
-
-extern "C"
 bool s2_spr_get_editable(void* spr) {
 	return static_cast<Sprite*>(spr)->IsEditable();	
 }
@@ -642,6 +632,18 @@ void* s2_actor_get_parent(void* actor) {
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
 	return ActorLUT::Instance()->Query(path);
+}
+
+extern "C"
+bool s2_actor_get_visible(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	return s2_actor->IsVisible();
+}
+
+extern "C"
+void s2_actor_set_visible(void* actor, bool visible) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->SetVisible(visible);
 }
 
 /************************************************************************/

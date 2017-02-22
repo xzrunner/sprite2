@@ -146,6 +146,12 @@ bool Particle3dSprite::Update(const RenderParams& params)
 	}
 }
 
+bool Particle3dSprite::SetFrame(int frame)
+{
+	Update(RenderParams());
+	return true;
+}
+
 void Particle3dSprite::Draw(const RenderParams& params) const
 {
 	if (!m_alone && m_spr) {

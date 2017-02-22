@@ -97,6 +97,12 @@ bool TrailSprite::Update(const RenderParams& params)
 	return true;
 }
 
+bool TrailSprite::SetFrame(int frame)
+{
+	Update(RenderParams());
+	return true;
+}
+
 void TrailSprite::Draw(const RenderParams& params) const
 {
 	if (!m_et) {

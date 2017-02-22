@@ -22,7 +22,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual bool Update(const RenderParams& params);	
+	virtual bool Update(const RenderParams& params);
 
 	VI_DUMMY_FUNC
 

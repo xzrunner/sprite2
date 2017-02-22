@@ -197,10 +197,7 @@ void s2_spr_set_editable(void* spr, bool editable) {
 extern "C"
 void s2_spr_set_frame(void* spr, int frame) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
-		AnimSprite* anim = VI_DOWNCASTING<AnimSprite*>(s2_spr);
-		anim->SetFrame(frame);
-	}
+	s2_spr->SetFrame(frame);
 }
 
 extern "C"

@@ -26,6 +26,12 @@ bool Anim2Sprite::Update(const RenderParams& params)
 	return m_curr.Update();
 }
 
+bool Anim2Sprite::SetFrame(int frame)
+{
+	m_curr.Update();
+	return true;
+}
+
 void Anim2Sprite::SetStaticTime(int static_time)
 {
 	if (m_static_time == static_time) {

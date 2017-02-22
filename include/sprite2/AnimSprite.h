@@ -35,6 +35,7 @@ public:
 	 */
 	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& params);
+	virtual bool SetFrame(int frame);
 	virtual Sprite* FetchChild(const std::string& name) const;
 
 #ifdef S2_ANIM_CURR_V0
@@ -52,7 +53,6 @@ public:
 
 	void SetStartRandom(bool random);
 
-	void SetFrame(int frame);
 	int  GetFrame() const { return m_curr.GetFrame(); }
 
 	void SetActive(bool active);

@@ -50,6 +50,12 @@ bool AnimSprite::Update(const RenderParams& params)
 	return m_curr.Update(params, m_loop, m_interval, m_fps);
 }
 
+bool AnimSprite::SetFrame(int frame)
+{
+	m_curr.SetFrame(frame, m_fps);
+	return true;
+}
+
 Sprite* AnimSprite::FetchChild(const std::string& name) const
 {
 	return m_curr.FetchChild(name);
@@ -61,11 +67,6 @@ void AnimSprite::SetStartRandom(bool random)
 	if (m_start_random) {
 		RandomStartTime();
 	}
-}
-
-void AnimSprite::SetFrame(int frame)
-{
-	m_curr.SetFrame(frame, m_fps);	
 }
 
 void AnimSprite::SetActive(bool active)

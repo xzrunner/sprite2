@@ -46,6 +46,12 @@ bool MaskSprite::Update(const RenderParams& params)
 	return dirty;
 }
 
+bool MaskSprite::SetFrame(int frame)
+{
+	// todo
+	return false;
+}
+
 Sprite* MaskSprite::FetchChild(const std::string& name) const
 {
 	if (name == "base") {

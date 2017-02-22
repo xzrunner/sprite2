@@ -30,6 +30,7 @@ public:
 	 */
 	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& params);
+	virtual bool SetFrame(int frame);
 
 	void Draw(const RenderParams& params) const;
 

@@ -24,6 +24,7 @@ public:
 	 *    Sprite
 	 */
 	virtual bool Update(const RenderParams& params);
+	virtual bool SetFrame(int frame);
 
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 

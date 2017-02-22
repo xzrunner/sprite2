@@ -103,6 +103,12 @@ bool Particle2dSprite::Update(const RenderParams& params)
 	return true;
 }
 
+bool Particle2dSprite::SetFrame(int frame)
+{
+	Update(RenderParams());
+	return true;
+}
+
 void Particle2dSprite::Draw(const RenderParams& params) const
 {
 	if (!m_et) {

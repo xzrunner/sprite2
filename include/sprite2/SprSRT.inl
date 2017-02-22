@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SPR_SRT_INL_
 #define _SPRITE2_SPR_SRT_INL_
 
+#include <SM_Calc.h>
+
 namespace s2
 {
 
@@ -24,6 +26,12 @@ void SprSRT::Init()
 	shear.Set(0, 0);
 	offset.Set(0, 0);
 	center.Set(0, 0);
+}
+
+inline
+void SprSRT::UpdateCenter()
+{
+	center = position + sm::rotate_vector(-offset, angle) + offset;
 }
 
 }

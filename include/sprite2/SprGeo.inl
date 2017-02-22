@@ -71,9 +71,9 @@ const sm::vec2& SprGeo::GetCenter() const
 }
 
 inline
-void SprGeo::SetCenter(const sm::vec2& center)
+void SprGeo::UpdateCenter()
 {
-	m_state.srt.center = center;
+	m_state.srt.UpdateCenter();
 }
 
 inline

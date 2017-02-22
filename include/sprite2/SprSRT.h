@@ -23,6 +23,8 @@ public:
 
 	void Init();
 
+	void UpdateCenter();
+
 }; // SprSRT
 
 }

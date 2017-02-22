@@ -721,9 +721,7 @@ void Sprite::UpdateCenter()
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	sm::vec2 center_offset = sm::rotate_vector(-m_geo->GetOffset(), m_geo->GetAngle()) + m_geo->GetOffset();
-	sm::vec2 center = m_geo->GetPosition() + center_offset;
-	m_geo->SetCenter(center);
+	m_geo->UpdateCenter();
 }
 
 }

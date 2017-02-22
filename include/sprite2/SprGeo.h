@@ -35,7 +35,7 @@ public:
 	void SetOffset(const sm::vec2& offset);
 
 	const sm::vec2& GetCenter() const;
-	void SetCenter(const sm::vec2& center);	
+	void UpdateCenter();	
 
 	const SprSRT& GetSRT() const;
 	void SetSRT(const SprSRT& srt);

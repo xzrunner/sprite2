@@ -368,7 +368,7 @@ void AnimCurr3::LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int ti
 	srt.scale    += lerp.dsrt.scale * time;
 	srt.shear    += lerp.dsrt.shear * time;
 	srt.offset   += lerp.dsrt.offset * time;
-	srt.center   += lerp.dsrt.center * time;	
+	srt.UpdateCenter();
 	spr->SetLocalSRT(srt);
 
 	Color mul(lerp.col_mul), add(lerp.col_add);

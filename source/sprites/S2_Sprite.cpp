@@ -480,6 +480,9 @@ const SprSRT& Sprite::GetLocalSRT() const
 
 void Sprite::SetLocalSRT(const SprSRT& srt)
 {
+	if (m_geo == SprDefault::Instance()->Geo()) {
+		m_geo = SprGeoPool::Instance()->Pop();
+	}
 	m_geo->SetSRT(srt);
 
 	// lazy

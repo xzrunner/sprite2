@@ -11,6 +11,8 @@ class RenderColor
 {
 public:
 	RenderColor();
+	RenderColor(const RenderColor& col);
+	RenderColor& operator = (const RenderColor& col);
 
 	RenderColor operator * (const RenderColor& rc) const;
 

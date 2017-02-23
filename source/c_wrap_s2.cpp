@@ -255,66 +255,6 @@ int s2_spr_get_component_count(void* spr) {
 }
 
 extern "C"
-uint32_t s2_spr_get_col_mul(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	return s2_spr->GetColor().GetMul().ToRGBA();
-}
-
-extern "C"
-uint32_t s2_spr_get_col_add(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	return s2_spr->GetColor().GetAdd().ToRGBA();
-}
-
-extern "C"
-void s2_spr_get_col_map(void* spr, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	*rmap = s2_spr->GetColor().GetMapR().ToRGBA();
-	*gmap = s2_spr->GetColor().GetMapG().ToRGBA();
-	*bmap = s2_spr->GetColor().GetMapB().ToRGBA();
-}
-
-extern "C"
-void s2_spr_set_col_mul(void* spr, uint32_t rgba) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().GetMul().ToRGBA() == rgba) {
-		return;
-	}
-
-	RenderColor col = s2_spr->GetColor();
-	col.SetMul(Color(rgba));
-	s2_spr->SetColor(col);
-}
-
-extern "C"
-void s2_spr_set_col_add(void* spr, uint32_t rgba) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().GetAdd().ToRGBA() == rgba) {
-		return;
-	}
-
-	RenderColor col = s2_spr->GetColor();
-	col.SetAdd(Color(rgba));
-	s2_spr->SetColor(col);
-}
-
-extern "C"
-void s2_spr_set_col_map(void* spr, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetColor().GetMapR().ToRGBA() == rmap &&
-		s2_spr->GetColor().GetMapG().ToRGBA() == gmap &&
-		s2_spr->GetColor().GetMapB().ToRGBA() == bmap) {
-			return;
-	}
-
-	RenderColor col = s2_spr->GetColor();
-	col.SetMapR(Color(rmap));
-	col.SetMapG(Color(gmap));
-	col.SetMapB(Color(bmap));
-	s2_spr->SetColor(col);
-}
-
-extern "C"
 void s2_spr_set_filter(void* spr, int mode) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	const RenderFilter* filter = s2_spr->GetShader().GetFilter();
@@ -651,6 +591,66 @@ extern "C"
 void s2_actor_set_visible(void* actor, bool visible) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetVisible(visible);
+}
+
+extern "C"
+uint32_t s2_actor_get_col_mul(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	return s2_actor->GetColor().GetMul().ToRGBA();
+}
+
+extern "C"
+void s2_actor_set_col_mul(void* actor, uint32_t rgba) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetColor().GetMul().ToRGBA() == rgba) {
+		return;
+	}
+
+	RenderColor col = s2_actor->GetColor();
+	col.SetMul(Color(rgba));
+	s2_actor->SetColor(col);
+}
+
+extern "C"
+uint32_t s2_actor_get_col_add(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	return s2_actor->GetColor().GetAdd().ToRGBA();
+}
+
+extern "C"
+void s2_actor_set_col_add(void* actor, uint32_t rgba) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetColor().GetAdd().ToRGBA() == rgba) {
+		return;
+	}
+
+	RenderColor col = s2_actor->GetColor();
+	col.SetAdd(Color(rgba));
+	s2_actor->SetColor(col);
+}
+
+extern "C"
+void s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	*rmap = s2_actor->GetColor().GetMapR().ToRGBA();
+	*gmap = s2_actor->GetColor().GetMapG().ToRGBA();
+	*bmap = s2_actor->GetColor().GetMapB().ToRGBA();
+}
+
+extern "C"
+void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetColor().GetMapR().ToRGBA() == rmap &&
+		s2_actor->GetColor().GetMapG().ToRGBA() == gmap &&
+		s2_actor->GetColor().GetMapB().ToRGBA() == bmap) {
+		return;
+	}
+
+	RenderColor col = s2_actor->GetColor();
+	col.SetMapR(Color(rmap));
+	col.SetMapG(Color(gmap));
+	col.SetMapB(Color(bmap));
+	s2_actor->SetColor(col);
 }
 
 /************************************************************************/

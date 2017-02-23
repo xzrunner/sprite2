@@ -47,9 +47,9 @@ bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderPara
 
 	child.mt = spr->GetLocalMat() * parent.mt;
 	child.color = spr->GetColor() * parent.color;
-
 	if (actor) {
 		child.mt = actor->GetLocalMat() * child.mt;
+		child.color = actor->GetColor() * child.color;
 	}
 
 	return true;

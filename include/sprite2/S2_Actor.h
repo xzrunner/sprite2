@@ -14,10 +14,12 @@ namespace s2
 
 class Sprite;
 class ActorGeo;
+class RenderColor;
 
 class Actor : private cu::Uncopyable
 {
 public:
+	Actor();
 	Actor(const Sprite* spr, const SprTreePath& path);
 	virtual ~Actor();
 	
@@ -31,6 +33,9 @@ public:
 	void SetScale(const sm::vec2& scale);
 	
 	S2_MAT GetLocalMat() const;
+
+	void SetColor(const RenderColor& col);
+	const RenderColor& GetColor() const { return *m_color; }
 
 	void SetProxy(Sprite* proxy);
 	const Sprite* GetProxy() const { return m_proxy; }
@@ -61,6 +66,7 @@ private:
 	SprTreePath      m_path;
 
 	ActorGeo*        m_geo;
+	RenderColor*     m_color;
 	Sprite*          m_proxy;
 	mutable uint32_t m_flags;
 

@@ -3,16 +3,27 @@
 #include "ActorGeo.h"
 #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
+#include "RenderColor.h"
+#include "SprDefault.h"
 
 namespace s2
 {
 
 static int COUNT = 0;
 
+Actor::Actor()
+	: m_spr(NULL)
+	, m_geo(NULL)
+	, m_color(SprDefault::Instance()->Color())
+	, m_proxy(NULL)
+{
+}
+
 Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	: m_spr(spr)
 	, m_path(path)
 	, m_geo(NULL)
+	, m_color(SprDefault::Instance()->Color())
 	, m_proxy(NULL)
 {
 	++COUNT;
@@ -31,6 +42,9 @@ Actor::~Actor()
 	--COUNT;
 	if (m_geo) {
 		delete m_geo;
+	}
+	if (m_color != SprDefault::Instance()->Color()) {
+		RenderColorPool::Instance()->Push(m_color);
 	}
 	if (m_proxy) {
 		m_proxy->RemoveReference();
@@ -83,6 +97,14 @@ S2_MAT Actor::GetLocalMat() const
 	mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
 		m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
 	return mt;
+}
+
+void Actor::SetColor(const RenderColor& col)
+{
+	if (m_color == SprDefault::Instance()->Color()) {
+		m_color = RenderColorPool::Instance()->Pop();
+	}
+ 	*m_color = col;
 }
 
 void Actor::SetProxy(Sprite* proxy)

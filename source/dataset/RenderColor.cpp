@@ -8,6 +8,21 @@ RenderColor::RenderColor()
 	Init();
 }
 
+RenderColor::RenderColor(const RenderColor& col)
+{
+	*this = col;
+}
+
+RenderColor& RenderColor::operator = (const RenderColor& col)
+{
+	m_state.mul = col.m_state.mul;
+	m_state.add = col.m_state.add;
+	m_state.rmap = col.m_state.rmap;
+	m_state.gmap = col.m_state.gmap;
+	m_state.bmap = col.m_state.bmap;
+	return *this;
+}
+
 RenderColor RenderColor::operator * (const RenderColor& rc) const
 {
 	RenderColor ret;

@@ -277,6 +277,9 @@ void AnimCurr3::LoadCurrSprites()
 		return;
 	}
 
+	bool cursor_update = m_frame == 1;
+
+
 	// update cursor
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
@@ -294,6 +297,7 @@ void AnimCurr3::LoadCurrSprites()
 		assert(cursor < frame_num);
 		while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
 			++cursor;
+			cursor_update = true;
 		}
 		if (cursor == 0 && m_frame < layer.frames[cursor].time) {
 			cursor = -1;
@@ -353,7 +357,8 @@ void AnimCurr3::LoadCurrSprites()
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 
-			if (actor.prev == -1) {
+			if (cursor_update && actor.prev == -1) {
+				Sprite* spr = m_slots[actor.slot];
 				m_slots[actor.slot]->OnMessage(MSG_START);
 			}
 		}

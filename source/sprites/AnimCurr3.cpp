@@ -70,7 +70,7 @@ AnimCurr3::~AnimCurr3()
 bool AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	if (m_curr_num == 0) {
-		return false;
+		return true;
 	}
 
 	if (visitor.GetOrder()) {

@@ -69,10 +69,13 @@ TrailSprite* TrailSprite::Clone() const
 
 void TrailSprite::OnMessage(Message msg)
 {
-	if (msg == MSG_START) {
+	switch (msg)
+	{
+	case MSG_START: case MSG_TRIGGER:
 		if (m_et) {
 			t2d_emitter_start(m_et);
 		}
+		break;
 	}
 }
 

@@ -60,10 +60,13 @@ Particle2dSprite* Particle2dSprite::Clone() const
 
 void Particle2dSprite::OnMessage(Message msg)
 {
-	if (msg == MSG_START) {
+	switch (msg)
+	{
+	case MSG_START: case MSG_TRIGGER:
 		if (m_et) {
 			p2d_emitter_start(m_et);
 		}
+		break;
 	}
 }
 

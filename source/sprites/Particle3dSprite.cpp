@@ -86,7 +86,7 @@ void Particle3dSprite::OnMessage(Message msg)
 
 	switch (msg)
 	{
-	case MSG_START:
+	case MSG_START: case MSG_TRIGGER:
 		p3d_emitter_start(m_spr->et);
 		break;
 	case MSG_INIT:

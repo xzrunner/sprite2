@@ -37,11 +37,14 @@ void AnimSprite::OnMessage(Message msg)
 {
 	m_curr.OnMessage(msg);
 
-	if (msg == MSG_START) {
+	switch (msg)
+	{
+	case MSG_START:
 		m_curr.Start();
 		if (m_start_random) {
 			RandomStartTime();
 		}
+		break;
 	}
 }
 

@@ -7,6 +7,7 @@ namespace s2
 enum Message
 {
 	MSG_START = 0,
+	MSG_TRIGGER,
 	MSG_INIT,
 };
 

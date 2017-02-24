@@ -370,7 +370,7 @@ void AnimCurr3::LoadCurrSprites()
 
 			if (cursor_update && actor.prev == -1) {
 				Sprite* spr = m_slots[actor.slot];
-				m_slots[actor.slot]->OnMessage(MSG_START);
+				m_slots[actor.slot]->OnMessage(MSG_TRIGGER);
 			}
 		}
 	}

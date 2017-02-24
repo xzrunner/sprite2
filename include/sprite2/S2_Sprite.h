@@ -122,8 +122,6 @@ public:
 	void FixActorPath(const SprTreePath& parent_path);
 	const Sprite* GetProxy(const SprTreePath& parent_path) const;
 
-	static int GetCount() { return m_count; }
-
 private:
 	void InitFlags();
 
@@ -195,8 +193,6 @@ private:
 	int m_id;
 
 	mutable std::vector<Actor*> m_actors;
-
-	static int m_count;
 
 }; // Sprite
 

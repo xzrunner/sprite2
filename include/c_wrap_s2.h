@@ -25,8 +25,6 @@ void s2_on_size(int w, int h);
 /* sprite                                                               */
 /************************************************************************/
 
-int   s2_get_spr_count();
-
 void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy);
 void  s2_spr_update(void* spr);
 

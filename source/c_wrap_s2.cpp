@@ -64,11 +64,6 @@ void s2_on_size(int w, int h)
 /************************************************************************/
 
 extern "C"
-int s2_get_spr_count() {
-	return s2::Sprite::GetCount();
-}
-
-extern "C"
 void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy)
 {
 	RenderParams params;

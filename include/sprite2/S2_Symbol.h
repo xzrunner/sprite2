@@ -20,9 +20,9 @@ class SymVisitor;
 class Symbol : public VIRTUAL_INHERITANCE cu::RefCountObj, private cu::Uncopyable
 {
 public:
-	Symbol() : m_id(-1) {}
-	Symbol(uint32_t id) : m_id(id) {}
-	virtual ~Symbol() {}
+	Symbol();
+	Symbol(uint32_t id);
+	virtual ~Symbol();
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymVisitor& visitor) = 0;
 	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const = 0;

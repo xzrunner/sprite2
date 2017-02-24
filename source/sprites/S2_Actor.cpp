@@ -9,7 +9,9 @@
 namespace s2
 {
 
+#ifdef S2_RES_LOG
 static int COUNT = 0;
+#endif // S2_RES_LOG
 
 Actor::Actor()
 	: m_spr(NULL)
@@ -26,9 +28,10 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	, m_color(SprDefault::Instance()->Color())
 	, m_proxy(NULL)
 {
+#ifdef S2_RES_LOG
 	++COUNT;
-
-	printf("++ actor %d\n", COUNT);
+	std::cout << "++ actor " << COUNT << "\n";
+#endif // S2_RES_LOG
 
 	if (m_spr) {
 		m_spr->AddActor(this);
@@ -39,7 +42,11 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 
 Actor::~Actor()
 {
+#ifdef S2_RES_LOG
 	--COUNT;
+	std::cout << "-- actor " << COUNT << "\n";
+#endif // S2_RES_LOG
+
 	if (m_geo) {
 		delete m_geo;
 	}

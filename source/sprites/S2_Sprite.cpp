@@ -21,7 +21,11 @@
 namespace s2
 {
 
-int Sprite::m_count = 0;
+static int NEXT_ID = 0;
+
+#ifdef S2_RES_LOG
+static int COUNT = 0;
+#endif // S2_RES_LOG
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 static const sm::vec2 POS0_PROXY = sm::vec2(0, 0);
@@ -34,11 +38,12 @@ Sprite::Sprite()
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
+	, m_id(NEXT_ID++)
 {
-	sm::vec2 scale = m_geo->GetScale();
-
-	m_id = m_count;
-	++m_count;
+#ifdef S2_RES_LOG
+	++COUNT;
+	std::cout << "++ sprite " << COUNT << "\n";
+#endif // S2_RES_LOG
 
 	InitFlags();
 }
@@ -49,9 +54,12 @@ Sprite::Sprite(const Sprite& spr)
 	, m_bounding(NULL)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(spr.m_flags)
+	, m_id(NEXT_ID++)
 {
-	m_id = m_count;
-	++m_count;
+#ifdef S2_RES_LOG
+	++COUNT;
+	std::cout << "++ sprite " << COUNT << "\n";
+#endif // S2_RES_LOG
 
 	InitFromSpr(spr);
 }
@@ -68,11 +76,12 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
+	, m_id(NEXT_ID++)
 {
-	sm::vec2 scale = m_geo->GetScale();
-
-	m_id = m_count;
-	++m_count;
+#ifdef S2_RES_LOG
+	++COUNT;
+	std::cout << "++ sprite " << COUNT << "\n";
+#endif // S2_RES_LOG
 
 	cu::RefCountObjAssign(m_sym, sym);
 
@@ -81,7 +90,10 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 
 Sprite::~Sprite()
 {
-	--m_count;
+#ifdef S2_RES_LOG
+	--COUNT;
+	std::cout << "-- sprite " << COUNT << "\n";
+#endif // S2_RES_LOG
 
 	ClearActorsVisitor visitor;
 	Traverse(visitor, SprVisitorParams());

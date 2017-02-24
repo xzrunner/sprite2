@@ -163,11 +163,22 @@ void AnimCurr3::Draw(const RenderParams& params) const
 
 Sprite* AnimCurr3::FetchChild(const std::string& name) const
 {
-	for (int i = 0; i < m_curr_num; ++i) {
-		if (m_slots[m_curr[i]]->GetName() == name) {
-			return m_slots[m_curr[i]];
+// 	for (int i = 0; i < m_curr_num; ++i) {
+// 		if (m_slots[m_curr[i]]->GetName() == name) {
+// 			return m_slots[m_curr[i]];
+// 		}
+// 	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	for (int i = 0, n = m_slots.size(); i < n; ++i) {
+		if (m_slots[i]->GetName() == name) {
+			return m_slots[i];
 		}
 	}
+
+	//////////////////////////////////////////////////////////////////////////
+
 	return NULL;
 }
 
@@ -359,7 +370,7 @@ void AnimCurr3::LoadCurrSprites()
 
 			if (cursor_update && actor.prev == -1) {
 				Sprite* spr = m_slots[actor.slot];
-				m_slots[actor.slot]->OnMessage(MSG_TRIGGER);
+				m_slots[actor.slot]->OnMessage(MSG_START);
 			}
 		}
 	}

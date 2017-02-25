@@ -664,7 +664,7 @@ void s2_rt_return(void* rt)
 	RenderTargetMgr::Instance()->Return(s2_rt);
 }
 
-static void _draw(const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id)
+static void _draw(const struct region* dst, const struct region* src, int src_tex_id)
 {
 	float vertices[8], texcoords[8];
 
@@ -708,7 +708,7 @@ static void _draw(const struct rect_tex* dst, const struct rect_tex* src, int sr
 }
 
 extern "C"
-void s2_rt_draw_from(void* rt, const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id)
+void s2_rt_draw_from(void* rt, const struct region* dst, const struct region* src, int src_tex_id)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -727,7 +727,7 @@ void s2_rt_draw_from(void* rt, const struct rect_tex* dst, const struct rect_tex
 }
 
 extern "C"
-void s2_rt_draw_to(void* rt, const struct rect_tex* dst, const struct rect_tex* src)
+void s2_rt_draw_to(void* rt, const struct region* dst, const struct region* src)
 {
 	RenderScissor::Instance()->Close();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
@@ -769,6 +769,7 @@ void s2_cam_bind(const void* cam)
 {
 	const Camera* c = static_cast<const Camera*>(cam);
 	c->Bind();
+	Blackboard::Instance()->SetCamera(c);
 }
 
 extern "C"

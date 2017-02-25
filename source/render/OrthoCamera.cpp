@@ -29,6 +29,11 @@ void OrthoCamera::Reset()
 	UpdateRender();
 }
 
+void OrthoCamera::Bind() const
+{
+	UpdateRender();
+}
+
 sm::vec2 OrthoCamera::TransPosScreenToProject(int x, int y, int width, int height) const
 {
 	sm::vec2 proj;
@@ -61,6 +66,18 @@ void OrthoCamera::Scale(float scale, int x, int y, int width, int height)
 	m_position.x = (x - (width >> 1)) * m_scale + m_position.x - (x - (width >> 1)) * new_scale;
 	m_position.y = (y - (height >> 1)) * m_scale + m_position.y - (y - (height >> 1)) * new_scale;
 	m_scale = new_scale;
+
+	UpdateRender();
+}
+
+void OrthoCamera::Set(const sm::vec2& pos, float scale)
+{
+	if (m_position == pos && m_scale == scale) {
+		return;
+	}
+
+	m_position = pos;
+	m_scale = scale;
 
 	UpdateRender();
 }

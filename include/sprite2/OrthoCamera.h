@@ -17,6 +17,7 @@ public:
 	virtual CameraType Type() const { return CAM_ORTHO2D; }
 	virtual void OnSize(int width, int height);
 	virtual void Reset();
+	virtual void Bind() const;
 
 	sm::vec2 TransPosScreenToProject(int x, int y, int width, int height) const;
 	sm::vec2 TransPosProjectToScreen(const sm::vec2& proj, int width, int height) const;
@@ -25,10 +26,8 @@ public:
 	void Scale(float scale, int x, int y, int width, int height);
 
 	float GetScale() const { return m_scale; }
-	void  SetScale(float s) { m_scale = s; }
-
 	const sm::vec2& GetPosition() const { return m_position; }
-	void SetPosition(const sm::vec2& pos) { m_position = pos; } 
+	void Set(const sm::vec2& pos, float scale);
 
 private:
 	void UpdateRender() const;

@@ -25,6 +25,7 @@ public:
 	virtual CameraType Type() const { return CAM_PSEUDO3D; }
 	virtual void OnSize(int width, int height);
 	virtual void Reset();
+	virtual void Bind() const;
 
 	sm::vec2 TransPosScreenToProject(int x, int y, int width, int height) const;
 	sm::vec2 TransPosProjectToScreen(const sm::vec3& proj, int width, int height) const;

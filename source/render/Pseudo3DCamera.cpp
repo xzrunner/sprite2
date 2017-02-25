@@ -56,6 +56,11 @@ void Pseudo3DCamera::OnSize(int width, int height)
 	UpdateRender();
 }
 
+void Pseudo3DCamera::Bind() const
+{
+	UpdateRender();
+}
+
 void Pseudo3DCamera::Reset()
 {
 	sm_vec3 pos;

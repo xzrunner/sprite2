@@ -25,7 +25,8 @@ void s2_on_size(int w, int h);
 /* sprite                                                               */
 /************************************************************************/
 
-void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy);
+void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
+				  float xmin, float ymin, float xmax, float ymax);
 void  s2_spr_update(void* spr);
 
 void* s2_spr_fetch_child(const void* spr, const char* name);
@@ -112,7 +113,7 @@ void     s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint3
 void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 
 /************************************************************************/
-/* others                                                               */
+/* rt                                                                   */
 /************************************************************************/
 
 struct rect_tex {
@@ -125,6 +126,15 @@ void  s2_rt_return(void* rt);
 void  s2_rt_draw_from(void* rt, const struct rect_tex* dst, const struct rect_tex* src, int src_tex_id);
 void  s2_rt_draw_to(void* rt, const struct rect_tex* dst, const struct rect_tex* src);
 int   s2_rt_get_texid(void* rt);
+
+/************************************************************************/
+/* camera                                                               */
+/************************************************************************/
+
+void* s2_cam_create();
+void  s2_cam_release(void* cam);
+void  s2_cam_bind(const void* cam);
+void  s2_cam_set(void* cam, float x, float y, float scale);
 
 #endif // _sprite2_wrap_c_h_
 

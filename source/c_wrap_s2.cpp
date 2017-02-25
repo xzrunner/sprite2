@@ -28,6 +28,7 @@
 #include "AnimSprite.h"
 #include "TextboxSprite.h"
 #include "Scale9Sprite.h"
+#include "OrthoCamera.h"
 
 #include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
@@ -64,18 +65,16 @@ void s2_on_size(int w, int h)
 /************************************************************************/
 
 extern "C"
-void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy)
+void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
+				 float xmin, float ymin, float xmax, float ymax)
 {
 	RenderParams params;
 	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
 
-	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
-	float hw = ctx->GetScreenWidth() * 0.5f,
-		  hh = ctx->GetScreenHeight() * 0.5f;
-	params.view_region.xmin = -hw;
-	params.view_region.ymin = -hh;
-	params.view_region.xmax =  hw;
-	params.view_region.ymax =  hh;
+	params.view_region.xmin = xmin;
+	params.view_region.ymin = ymin;
+	params.view_region.xmax = xmax;
+	params.view_region.ymax = ymax;
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	DrawNode::Draw(s2_spr, params);
@@ -746,6 +745,37 @@ int s2_rt_get_texid(void* rt)
 {
 	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
 	return s2_rt->GetTexID();
+}
+
+/************************************************************************/
+/* camera                                                               */
+/************************************************************************/
+
+extern "C"
+void* s2_cam_create()
+{
+	return new OrthoCamera();
+}
+
+extern "C"
+void s2_cam_release(void* cam)
+{
+	Camera* c = static_cast<Camera*>(cam);
+	delete c;
+}
+
+extern "C"
+void s2_cam_bind(const void* cam)
+{
+	const Camera* c = static_cast<const Camera*>(cam);
+	c->Bind();
+}
+
+extern "C"
+void s2_cam_set(void* cam, float x, float y, float scale)
+{
+	OrthoCamera* o_cam = static_cast<OrthoCamera*>(cam);
+	o_cam->Set(sm::vec2(x, y), scale);
 }
 
 }

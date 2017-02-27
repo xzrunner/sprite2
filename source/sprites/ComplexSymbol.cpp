@@ -48,10 +48,10 @@ void ComplexSymbol::Traverse(const SymVisitor& visitor)
 	}
 }
 
-void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -59,8 +59,8 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
 	if (scissor) 
 	{
-		sm::vec2 min = p.mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
-			     max = p.mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
+		sm::vec2 min = rp_child.mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
+			     max = rp_child.mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
 		if (min.x > max.x) {
 			std::swap(min.x, max.x);
 		}
@@ -79,15 +79,15 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	{
 		const Sprite* spr = sprs[i];
 		if (spr->IsHasProxy()) {
-			const Sprite* proxy = spr->GetProxy(p.path);
+			const Sprite* proxy = spr->GetProxy(rp_child.path);
 			if (proxy) {
 				spr = proxy;
 			}
 		}
-		if (IsChildOutside(spr, p)) {
+		if (IsChildOutside(spr, rp_child)) {
 			continue;
 		}
-		DrawNode::Draw(spr, p, false);
+		DrawNode::Draw(spr, rp_child, false);
 	}
 
 	if (scissor) {
@@ -95,11 +95,11 @@ void ComplexSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	}
 }
 
-bool ComplexSymbol::Update(const RenderParams& params, float time)
+bool ComplexSymbol::Update(const RenderParams& rp, float time)
 {
 	bool ret = false;
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (m_children[i]->Update(params)) {
+		if (m_children[i]->Update(rp)) {
 			ret = true;
 		}
 	}
@@ -305,15 +305,15 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 	return true;
 }
 
-bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& params) const
+bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) const
 {
 	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->Empty() && !params.view_region.IsValid()) {
+	if (rs->Empty() && !rp.view_region.IsValid()) {
 		return false;
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	S2_MAT mat = spr->GetLocalMat() * params.mt;
+	S2_MAT mat = spr->GetLocalMat() * rp.mt;
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	sm::rect sr(r_min, r_max);
@@ -321,7 +321,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& params
 	if (!rs->Empty() && rs->IsOutside(sr)) {
 		return true;
 	}
-	if (params.view_region.IsValid() && !sm::is_rect_intersect_rect(params.view_region, sr)) {
+	if (rp.view_region.IsValid() && !sm::is_rect_intersect_rect(rp.view_region, sr)) {
 		return true;
 	}
 	return false;

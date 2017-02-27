@@ -29,17 +29,17 @@ void MaskSprite::OnMessage(Message msg)
 	}
 }
 
-bool MaskSprite::Update(const RenderParams& params)
+bool MaskSprite::Update(const RenderParams& rp)
 {
 	bool dirty = false;
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		if (const_cast<Sprite*>(base)->Update(params)) {
+		if (const_cast<Sprite*>(base)->Update(rp)) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		if (const_cast<Sprite*>(mask)->Update(params)) {
+		if (const_cast<Sprite*>(mask)->Update(rp)) {
 			dirty = true;
 		}
 	}

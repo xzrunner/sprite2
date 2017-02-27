@@ -56,11 +56,11 @@ Scale9::~Scale9()
 	}
 }
 
-void Scale9::Draw(const RenderParams& params) const
+void Scale9::Draw(const RenderParams& rp) const
 {
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
-			DrawNode::Draw(m_grids[i], params);
+			DrawNode::Draw(m_grids[i], rp);
 		}
 	}
 }

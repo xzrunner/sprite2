@@ -23,7 +23,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymVisitor& visitor) {}
-	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
+	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	const p2d_emitter_cfg* GetEmitterCfg() const { return m_et_cfg; }

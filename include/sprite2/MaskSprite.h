@@ -23,7 +23,7 @@ public:
 	 *    Sprite
 	 */
 	virtual void OnMessage(Message msg);
-	virtual bool Update(const RenderParams& params);
+	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
 	virtual Sprite* FetchChild(const std::string& name) const;
 

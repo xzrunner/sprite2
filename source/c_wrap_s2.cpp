@@ -68,16 +68,16 @@ extern "C"
 void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
 				 float xmin, float ymin, float xmax, float ymax)
 {
-	RenderParams params;
-	params.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+	RenderParams rp;
+	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
 
-	params.view_region.xmin = xmin;
-	params.view_region.ymin = ymin;
-	params.view_region.xmax = xmax;
-	params.view_region.ymax = ymax;
+	rp.view_region.xmin = xmin;
+	rp.view_region.ymin = ymin;
+	rp.view_region.xmax = xmax;
+	rp.view_region.ymax = ymax;
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	DrawNode::Draw(s2_spr, params);
+	DrawNode::Draw(s2_spr, rp);
 }
 
 extern "C"

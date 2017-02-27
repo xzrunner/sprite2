@@ -16,13 +16,13 @@ class RenderTarget;
 class DrawGaussianBlur
 {
 public:
-	static void Draw(const Sprite* spr, const RenderParams& params, int iterations);
+	static void Draw(const Sprite* spr, const RenderParams& rp, int iterations);
 
-	static void DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& params, int iterations);
+	static void DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations);
 	static void DrawFromRT(RenderTarget* rt, const sm::vec2& offset);
 
 private:
-	static void DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& params);
+	static void DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& rp);
 
 	static void DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const RenderColor& col, float tex_size);
 

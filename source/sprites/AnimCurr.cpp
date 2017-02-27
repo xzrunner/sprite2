@@ -90,7 +90,7 @@ void AnimCurr::OnMessage(Message msg)
 	}
 }
 
-bool AnimCurr::Update(const RenderParams& params, bool loop,
+bool AnimCurr::Update(const RenderParams& rp, bool loop,
 					  float interval, int fps)
 {
 	bool dirty = false;
@@ -134,7 +134,7 @@ bool AnimCurr::Update(const RenderParams& params, bool loop,
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		Frame& frame = m_layers[i].frame;
 		for (int j = 0, m = frame.sprs.size(); j < m; ++j) {
-			if (frame.sprs[j]->Update(params)) {
+			if (frame.sprs[j]->Update(rp)) {
 				dirty = true;
 			}
 		}
@@ -150,12 +150,12 @@ bool AnimCurr::Update(const RenderParams& params, bool loop,
 	return dirty;
 }
 
-void AnimCurr::Draw(const RenderParams& params) const
+void AnimCurr::Draw(const RenderParams& rp) const
 {
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		const Layer& layer = m_layers[i];
 		for (int j = 0, m = layer.frame.sprs.size(); j < m; ++j) {
-			DrawNode::Draw(layer.frame.sprs[j], params);
+			DrawNode::Draw(layer.frame.sprs[j], rp);
 		}
 	}
 }

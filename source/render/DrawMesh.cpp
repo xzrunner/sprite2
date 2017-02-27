@@ -102,13 +102,13 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 	}
 }
 
-void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& params, const Symbol* base_sym)
+void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbol* base_sym)
 {
 	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) {
-		DrawOnePass(mesh, params, sym);
+		DrawOnePass(mesh, rp, sym);
 	} else {
-		DrawTwoPass(mesh, params, sym);
+		DrawTwoPass(mesh, rp, sym);
 	}
 }
 
@@ -164,7 +164,7 @@ static void draw_filter(const float* positions, const float* texcoords, int texi
 	shader->Draw(positions, texcoords, texid);
 }
 
-void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
@@ -183,7 +183,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
 	float src_texcoords[8];
 	int texid;
-	img_sym->QueryTexcoords(params, src_texcoords, texid);
+	img_sym->QueryTexcoords(rp, src_texcoords, texid);
 
 	float x = src_texcoords[0], y = src_texcoords[1];
 	float w = src_texcoords[4] - src_texcoords[0],
@@ -194,14 +194,14 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	if (type == sl::SPRITE2)
 	{
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
-		shader->SetColorMap(params.color.GetMapR().ToABGR(),params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
+		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
+		shader->SetColorMap(rp.color.GetMapR().ToABGR(),rp.color.GetMapG().ToABGR(), rp.color.GetMapB().ToABGR());
 		draw = draw_sprite2;
 	}
 	else if (type == sl::FILTER)
 	{
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
 		draw = draw_filter;
 	}
 
@@ -215,7 +215,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 			for (int j = 0; j < 3; ++j, ++i)
 			{
 				int idx = triangles[i];
-				_vertices[j] = params.mt * vertices[idx];
+				_vertices[j] = rp.mt * vertices[idx];
 				_texcoords[j].x = x + w * texcoords[idx].x;
 				_texcoords[j].y = y + h * texcoords[idx].y;
 			}
@@ -235,7 +235,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 			for (int j = 0; j < 3; ++j, ++i)
 			{
 				int idx = triangles[i];
-				_vertices[j] = params.mt * vertices[idx];
+				_vertices[j] = rp.mt * vertices[idx];
 				_texcoords[j].x = x + w * texcoords[idx].y;
 				_texcoords[j].y = y + h * texcoords[idx].x;
 			}
@@ -251,7 +251,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	}
 }
 
-void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -264,26 +264,26 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& params, const S
 	RenderScissor::Instance()->Close();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawMesh2RT(rt, params, sym);
+	DrawMesh2RT(rt, rp, sym);
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Open();
 
-	DrawRT2Screen(rt, mesh, params.mt);
+	DrawRT2Screen(rt, mesh, rp.mt);
 
 	RT->Return(rt);
 }
 
-void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& params, const Symbol* sym)
+void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym)
 {
 	rt->Bind();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams _params = params;
-	_params.mt.Identity();
-	DrawNode::Draw(sym, _params);
+	RenderParams rp_child = rp;
+	rp_child.mt.Identity();
+	DrawNode::Draw(sym, rp_child);
 
 	mgr->FlushShader();
 

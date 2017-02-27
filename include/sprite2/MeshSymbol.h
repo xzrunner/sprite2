@@ -26,8 +26,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymVisitor& visitor) {}
-	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
-	virtual bool Update(const RenderParams& params, float time);
+	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual bool Update(const RenderParams& rp, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
 
 	void UpdateMesh(const rg_skeleton_pose* sk_pose);

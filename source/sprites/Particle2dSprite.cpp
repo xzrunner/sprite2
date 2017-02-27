@@ -70,7 +70,7 @@ void Particle2dSprite::OnMessage(Message msg)
 	}
 }
 
-bool Particle2dSprite::Update(const RenderParams& params)
+bool Particle2dSprite::Update(const RenderParams& rp)
 {
 	if (!m_et) {
 		return false;
@@ -112,13 +112,13 @@ bool Particle2dSprite::SetFrame(int frame)
 	return true;
 }
 
-void Particle2dSprite::Draw(const RenderParams& params) const
+void Particle2dSprite::Draw(const RenderParams& rp) const
 {
 	if (!m_et) {
 		return;
 	}
 	if (m_et->local_mode_draw) {
-		p2d_emitter_draw(m_et, &params.mt);
+		p2d_emitter_draw(m_et, &rp.mt);
 	} else {
 		p2d_emitter_draw(m_et, NULL);
 	}

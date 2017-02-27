@@ -38,14 +38,14 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_mesh) {
 		return;
 	}
 
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -62,9 +62,9 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
  	}
 
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
- 		DrawMesh::DrawInfoXY(m_mesh, &p.mt);
+ 		DrawMesh::DrawInfoXY(m_mesh, &rp_child.mt);
  	} else {
- 		DrawMesh::DrawTexture(m_mesh, p, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+ 		DrawMesh::DrawTexture(m_mesh, rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
  	}
  
 //  	if (!m_pause && mesh_spr)
@@ -76,10 +76,10 @@ void MeshSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 //  	}
 }
 
-bool MeshSymbol::Update(const RenderParams& params, float time)
+bool MeshSymbol::Update(const RenderParams& rp, float time)
 {
  	if (m_mesh) {
- 		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(params, time);
+ 		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(rp, time);
  	} else {
 		return false;
 	}

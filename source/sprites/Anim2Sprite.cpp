@@ -21,7 +21,7 @@ Anim2Sprite* Anim2Sprite::Clone() const
 	return new Anim2Sprite(*this);
 }
 
-bool Anim2Sprite::Update(const RenderParams& params)
+bool Anim2Sprite::Update(const RenderParams& rp)
 {
 	return m_curr.Update();
 }

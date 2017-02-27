@@ -30,7 +30,7 @@ public:
 	VIRTUAL_INHERITANCE void Rotate(float rot);
 	VIRTUAL_INHERITANCE void Scale(const sm::vec2& scale);
 
-	void Draw(const RenderParams& params) const;
+	void Draw(const RenderParams& rp) const;
 	void Update();
 
 	bool ConnectChild(Joint* child);

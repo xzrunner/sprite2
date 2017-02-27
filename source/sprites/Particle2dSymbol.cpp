@@ -33,26 +33,26 @@ int Particle2dSymbol::Type() const
 	return SYM_PARTICLE2D; 
 }
 
-void Particle2dSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
 		return;
 	}
 
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
 	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
-	p2d_spr->SetMatrix(p.mt);
+	p2d_spr->SetMatrix(rp_child.mt);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
-	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
+	shader->SetColor(rp_child.color.GetMul().ToABGR(), rp_child.color.GetAdd().ToABGR());
+	shader->SetColorMap(rp_child.color.GetMapR().ToABGR(), rp_child.color.GetMapG().ToABGR(), rp_child.color.GetMapB().ToABGR());
 
-	p2d_spr->Draw(p);
+	p2d_spr->Draw(rp_child);
 }
 
 sm::rect Particle2dSymbol::GetBounding(const Sprite* spr) const

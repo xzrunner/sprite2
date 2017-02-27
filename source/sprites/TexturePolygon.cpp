@@ -49,7 +49,7 @@ TexturePolygon::~TexturePolygon()
 	}
 }
 
-void TexturePolygon::Draw(const RenderParams& params) const
+void TexturePolygon::Draw(const RenderParams& rp) const
 {
 	if (m_tris.empty()) {
 		return;
@@ -64,7 +64,7 @@ void TexturePolygon::Draw(const RenderParams& params) const
 	{
 		sm::vec2 vertices[4], texcoords[4];
 		for (int j = 0; j < 3; ++j) {
-			vertices[j] = params.mt * m_tris[i+j];
+			vertices[j] = rp.mt * m_tris[i+j];
 			texcoords[j] = m_texcoords[i+j];
 		}
 		vertices[3] = vertices[2];
@@ -72,7 +72,7 @@ void TexturePolygon::Draw(const RenderParams& params) const
 
 		float _texcoords[8];
 		int texid;
-		m_img->QueryTexcoords(params, _texcoords, texid);
+		m_img->QueryTexcoords(rp, _texcoords, texid);
 
 		TexcoordsMap::Trans(_texcoords, texcoords);
 

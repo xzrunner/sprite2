@@ -54,12 +54,12 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 	memcpy(&mul, mul_col, sizeof(*mul_col));
 	memcpy(&add, add_col, sizeof(*add_col));
 
-	RenderParams params;
-	params.mt = mt;
-	params.color.SetMul(mul);
-	params.color.SetAdd(add);
+	RenderParams rp;
+	rp.mt = mt;
+	rp.color.SetMul(mul);
+	rp.color.SetAdd(add);
 
-	DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+	DrawNode::Draw(s2_sym, rp, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 }
 
 void Particle2d::Init()

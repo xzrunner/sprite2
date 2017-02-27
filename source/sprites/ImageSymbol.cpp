@@ -47,10 +47,10 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -60,24 +60,24 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
 	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = p.mt * vertices[i];
+		vertices[i] = rp_child.mt * vertices[i];
 	}
 
 	float texcoords[8];
 	int texid;
-	if (!QueryTexcoords(params, texcoords, texid)) {
+	if (!QueryTexcoords(rp, texcoords, texid)) {
 		return;
 	}
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
-		DrawBlend(p, vertices, texcoords, texid);
+		DrawBlend(rp_child, vertices, texcoords, texid);
 	} else {
 		const Camera* cam = Blackboard::Instance()->GetCamera();
 		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			DrawPseudo3D(p, vertices, texcoords, texid);
+			DrawPseudo3D(rp_child, vertices, texcoords, texid);
 		} else {
-			DrawOrtho(p, vertices, texcoords, texid);
+			DrawOrtho(rp_child, vertices, texcoords, texid);
 		}
 	}
 }
@@ -108,7 +108,7 @@ void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
 	m_size.ymax = region.ymax - sz.y * 0.5f;
 }
 
-void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const
+void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const
 {
 	if (!m_tex) {
 		return;
@@ -116,17 +116,17 @@ void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, floa
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
-	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+	shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
 
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] += params.vertex_offset;
+		vertices[i] += rp.vertex_offset;
 	}
 
 	sm::vec2 vertices_scr[4];
-	vertices_scr[0] = params.mt * sm::vec2(m_size.xmin, m_size.ymin);
-	vertices_scr[1] = params.mt * sm::vec2(m_size.xmax, m_size.ymin);
-	vertices_scr[2] = params.mt * sm::vec2(m_size.xmax, m_size.ymax);
-	vertices_scr[3] = params.mt * sm::vec2(m_size.xmin, m_size.ymax);
+	vertices_scr[0] = rp.mt * sm::vec2(m_size.xmin, m_size.ymin);
+	vertices_scr[1] = rp.mt * sm::vec2(m_size.xmax, m_size.ymin);
+	vertices_scr[2] = rp.mt * sm::vec2(m_size.xmax, m_size.ymax);
+	vertices_scr[3] = rp.mt * sm::vec2(m_size.xmin, m_size.ymax);
 
 	const Camera* cam = Blackboard::Instance()->GetCamera();
 	const OrthoCamera* ocam = NULL;
@@ -162,31 +162,31 @@ void ImageSymbol::DrawBlend(const RenderParams& params, sm::vec2* vertices, floa
 	shader->Draw(&vertices[0].x, texcoords, &tex_coords_base[0].x, texid, screen_cache_texid);
 }
 
-void ImageSymbol::DrawOrtho(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const
+void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 // 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 // 	shader->SetColor(trans.color);
 	if (mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
-		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
+		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
 		shader->Draw(&vertices[0].x, texcoords, texid);
 	} else if (mgr->GetShaderType() == sl::SPRITE2) {
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-		shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
-		shader->SetColorMap(params.color.GetMapR().ToABGR(),params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
+		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
+		shader->SetColorMap(rp.color.GetMapR().ToABGR(),rp.color.GetMapG().ToABGR(), rp.color.GetMapB().ToABGR());
 		shader->Draw(&vertices[0].x, texcoords, texid);
 	}
 }
 
-void ImageSymbol::DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, float* texcoords, int texid) const
+void ImageSymbol::DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const
 {
 	const Camera* cam = Blackboard::Instance()->GetCamera();
 	assert(cam && cam->Type() == CAM_PSEUDO3D);
 	const Pseudo3DCamera* pcam = static_cast<const Pseudo3DCamera*>(cam);
 
 	float z[4];
-	params.camera.CalculateZ(pcam->GetAngle(), vertices, z);
+	rp.camera.CalculateZ(pcam->GetAngle(), vertices, z);
 
 	std::vector<sm::vec3> _vertices;
 	_vertices.push_back(sm::vec3(vertices[0].x, vertices[0].y, z[0]));
@@ -207,8 +207,8 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& params, sm::vec2* vertices, f
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
-	shader->SetColor(params.color.GetMul().ToABGR(), params.color.GetAdd().ToABGR());
-	shader->SetColorMap(params.color.GetMapR().ToABGR(), params.color.GetMapG().ToABGR(), params.color.GetMapB().ToABGR());
+	shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
+	shader->SetColorMap(rp.color.GetMapR().ToABGR(), rp.color.GetMapG().ToABGR(), rp.color.GetMapB().ToABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, texid);
 }
 

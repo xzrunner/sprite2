@@ -65,21 +65,21 @@ bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderPara
 	return true;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
+void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 {
-	if (scissor && IsOutsideView(spr, params)) {
+	if (scissor && IsOutsideView(spr, rp)) {
 		return;
 	}
 
 	RenderShader rs;
 	RenderCamera rc;
 
-	if (params.disable_render) {
+	if (rp.disable_render) {
 		rs = *SprDefault::Instance()->Shader();
 		rc = *SprDefault::Instance()->Camera();
 	} else {
-		rs = spr->GetShader() * params.shader;
-		rc = spr->GetCamera() * params.camera;
+		rs = spr->GetShader() * rp.shader;
+		rc = spr->GetCamera() * rp.camera;
 	}
 
 	ur::RenderContext* rctx = sl::ShaderMgr::Instance()->GetContext();
@@ -100,12 +100,12 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 	}
 
 	BlendMode blend = BM_NULL;
-	if (!params.disable_blend) {
+	if (!rp.disable_blend) {
 		blend = rs.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!params.disable_filter && rs.GetFilter()) {
+	if (!rp.disable_filter && rs.GetFilter()) {
 		filter = rs.GetFilter()->GetMode();
 	}
 
@@ -113,12 +113,12 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 	if (blend != BM_NULL) {
 // 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 // 		if (cam->Type() == "ortho") {
-			DrawBlend::Draw(spr, params.mt);
+			DrawBlend::Draw(spr, rp.mt);
 //		}
 	} else if (filter != FM_NULL) {
 		const RenderFilter* rf = rs.GetFilter();
 
-		RenderParams t = params;
+		RenderParams t = rp;
 		t.shader.SetFilter(rf);
 		t.camera = rc;
 		if (filter == FM_GAUSSIAN_BLUR) {
@@ -128,7 +128,7 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
 			DrawOuterGlow::Draw(spr, t, itrs);
 		} else {
-			if (params.set_shader) {
+			if (rp.set_shader) {
 				mgr->SetShader(sl::FILTER);
 			}
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
@@ -146,108 +146,108 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& params, bool scissor)
 			DrawSpr(spr, t);
 		}
 	} else {
-		if (params.set_shader) {
+		if (rp.set_shader) {
 			mgr->SetShader(sl::SPRITE2);
 		}
-		RenderParams t = params;
+		RenderParams t = rp;
 		t.camera = rc;
 		DrawSpr(spr, t);
 	}
 }
 
-void DrawNode::Draw(const Symbol* sym, const RenderParams& params, 
+void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, 
 					const sm::vec2& pos, float angle, 
 					const sm::vec2& scale, const sm::vec2& shear)
 {
 	S2_MAT mt;
 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
-	mt = mt * params.mt;
+	mt = mt * rp.mt;
 
- 	RenderParams t = params;
- 	t.mt = mt;
+ 	RenderParams rp_child = rp;
+ 	rp_child.mt = mt;
  
 	BlendMode blend = BM_NULL;
-	if (!params.disable_blend) {
-		blend = params.shader.GetBlend();
+	if (!rp.disable_blend) {
+		blend = rp.shader.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!params.disable_filter && params.shader.GetFilter()) {
-		filter = params.shader.GetFilter()->GetMode();
+	if (!rp.disable_filter && rp.shader.GetFilter()) {
+		filter = rp.shader.GetFilter()->GetMode();
 	}
 
  	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
  	if (blend != BM_NULL) {
  		;
  	} else if (filter != FM_NULL) {
- 		if (t.set_shader) {
+ 		if (rp_child.set_shader) {
  			mgr->SetShader(sl::FILTER);
  			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
  			shader->SetMode(sl::FILTER_MODE(filter));
  		}
  	} else {
- 		if (t.set_shader) {
+ 		if (rp_child.set_shader) {
  			mgr->SetShader(sl::SPRITE2);
  		}
  	}
  
- 	sym->Draw(t);
+ 	sym->Draw(rp_child);
 }
 
-void DrawNode::Draw(const Symbol* sym, const RenderParams& params, const S2_MAT& _mt)
+void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt)
 {
-	S2_MAT mt = _mt * params.mt;
+	S2_MAT mt = _mt * rp.mt;
 
-	RenderParams t = params;
-	t.mt = mt;
+	RenderParams rp_child = rp;
+	rp_child.mt = mt;
 
 	BlendMode blend = BM_NULL;
-	if (!params.disable_blend) {
-		blend = params.shader.GetBlend();
+	if (!rp.disable_blend) {
+		blend = rp.shader.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!params.disable_filter && params.shader.GetFilter()) {
-		filter = params.shader.GetFilter()->GetMode();
+	if (!rp.disable_filter && rp.shader.GetFilter()) {
+		filter = rp.shader.GetFilter()->GetMode();
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (blend != BM_NULL) {
 		;
 	} else if (filter != FM_NULL) {
-		if (t.set_shader) {
+		if (rp_child.set_shader) {
 			mgr->SetShader(sl::FILTER);
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 			shader->SetMode(sl::FILTER_MODE(filter));
 		}
 	} else {
-		if (t.set_shader) {
+		if (rp_child.set_shader) {
 			mgr->SetShader(sl::SPRITE2);
 		}
 	}
 
-	sym->Draw(t);
+	sym->Draw(rp_child);
 }
 
-void DrawNode::DrawSpr(const Sprite* spr, const RenderParams& params)
+void DrawNode::DrawSpr(const Sprite* spr, const RenderParams& rp)
 {
-	spr->GetSymbol()->Draw(params, spr);
+	spr->GetSymbol()->Draw(rp, spr);
 	if (AFTER_SPR) {
-		AFTER_SPR(spr, params);
+		AFTER_SPR(spr, rp);
 	}
 }
 
-bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& params)
+bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 {	
-	if (!params.view_region.IsValid()) {
+	if (!rp.view_region.IsValid()) {
 		return false;
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	S2_MAT mat = spr->GetLocalMat() * params.mt;
+	S2_MAT mat = spr->GetLocalMat() * rp.mt;
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
-	return !is_rect_intersect_rect(params.view_region, sm::rect(r_min, r_max));
+	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));
 }
 
 }

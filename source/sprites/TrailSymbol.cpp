@@ -37,22 +37,22 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-void TrailSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
 		return;
 	}
 
-	RenderParams p = params;
-	p.color = spr->GetColor() * params.color;
+	RenderParams rp_child = rp;
+	rp_child.color = spr->GetColor() * rp.color;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
-	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
+	shader->SetColor(rp_child.color.GetMul().ToABGR(), rp_child.color.GetAdd().ToABGR());
+	shader->SetColorMap(rp_child.color.GetMapR().ToABGR(), rp_child.color.GetMapG().ToABGR(), rp_child.color.GetMapB().ToABGR());
 
 	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
-	t2d_spr->Draw(p);
+	t2d_spr->Draw(rp_child);
 }
 
 sm::rect TrailSymbol::GetBounding(const Sprite* spr) const

@@ -96,7 +96,7 @@ void AnimCurr3::OnMessage(Message msg)
 	}
 }
 
-bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, int fps)
+bool AnimCurr3::Update(const RenderParams& rp, bool loop, float interval, int fps)
 {
 	bool dirty = false;
 
@@ -139,7 +139,7 @@ bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, in
 
 	// update children
 	for (int i = 0; i < m_curr_num; ++i) {
-		if (m_slots[m_curr[i]]->Update(params)) {
+		if (m_slots[m_curr[i]]->Update(rp)) {
 			dirty = true;
 		}
 	}
@@ -154,10 +154,10 @@ bool AnimCurr3::Update(const RenderParams& params, bool loop, float interval, in
 	return dirty;
 }
 
-void AnimCurr3::Draw(const RenderParams& params) const
+void AnimCurr3::Draw(const RenderParams& rp) const
 {
 	for (int i = 0; i < m_curr_num; ++i) {
-		DrawNode::Draw(m_slots[m_curr[i]], params);
+		DrawNode::Draw(m_slots[m_curr[i]], rp);
 	}
 }
 
@@ -218,9 +218,9 @@ void AnimCurr3::SetFrame(int frame, int fps)
 	LoadCurrSprites();
 
 	// update children
-	RenderParams params;
+	RenderParams rp;
 	for (int i = 0; i < m_curr_num; ++i) {
-		m_slots[m_curr[i]]->Update(params);
+		m_slots[m_curr[i]]->Update(rp);
 	}
 }
 

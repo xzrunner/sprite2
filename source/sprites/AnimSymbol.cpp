@@ -67,22 +67,22 @@ void AnimSymbol::Traverse(const SymVisitor& visitor)
 	}
 }
 
-void AnimSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
 	if (spr) {
-		RenderParams p;
-		if (DrawNode::Prepare(params, spr, p)) {
-			VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(p);
+		RenderParams rp_child;
+		if (DrawNode::Prepare(rp, spr, rp_child)) {
+			VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(rp_child);
 		}
 	} else {
-		m_curr.Draw(params);
+		m_curr.Draw(rp);
 	}
 }
 
-bool AnimSymbol::Update(const RenderParams& params, float time)
+bool AnimSymbol::Update(const RenderParams& rp, float time)
 {
 	m_curr.SetTime(time);
-	return m_curr.Update(params);
+	return m_curr.Update(rp);
 }
 
 sm::rect AnimSymbol::GetBounding(const Sprite* spr) const

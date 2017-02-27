@@ -20,7 +20,7 @@ class Polygon : public cu::RefCountObj
 public:
 	virtual ~Polygon() {}
 
-	virtual void Draw(const RenderParams& params) const = 0;
+	virtual void Draw(const RenderParams& rp) const = 0;
 	virtual void Build() = 0;
 
 	const std::vector<sm::vec2>& GetTriangles() const { return m_tris; }

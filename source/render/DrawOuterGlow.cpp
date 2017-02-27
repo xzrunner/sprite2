@@ -13,21 +13,21 @@
 namespace s2
 {
 
-void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& params, int iterations)
+void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
-	DrawGaussianBlur::DrawBlurToRT(rt, spr, params, iterations);
+	DrawGaussianBlur::DrawBlurToRT(rt, spr, rp, iterations);
 	DrawGaussianBlur::DrawFromRT(rt, spr->GetPosition());
 	RT->Return(rt);
 
-	RenderParams _params = params;
-	_params.set_shader = false;
-	_params.disable_render = true;
+	RenderParams rp_child = rp;
+	rp_child.set_shader = false;
+	rp_child.disable_render = true;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
-	DrawNode::Draw(spr, _params);
+	DrawNode::Draw(spr, rp_child);
 }
 
 }

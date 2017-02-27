@@ -33,14 +33,14 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_skeleton) {
 		return;
 	}
 
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -48,7 +48,7 @@ void SkeletonSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
 	}
-	m_skeleton->Draw(p);
+	m_skeleton->Draw(rp_child);
 }
 
 sm::rect SkeletonSymbol::GetBounding(const Sprite* spr) const

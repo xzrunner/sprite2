@@ -33,20 +33,20 @@ int Anim2Symbol::Type() const
 	return SYM_ANIM2;
 }
 
-void Anim2Symbol::Draw(const RenderParams& params, const Sprite* spr) const
+void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_anim || !spr) {
 		return;
 	}
 
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
-	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &p);
+	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp_child);
 }
 
 sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const

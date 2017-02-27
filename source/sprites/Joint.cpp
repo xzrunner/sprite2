@@ -60,10 +60,10 @@ void Joint::Scale(const sm::vec2& scale)
 	}
 }
 
-void Joint::Draw(const RenderParams& params) const
+void Joint::Draw(const RenderParams& rp) const
 {
 	if (m_skin.spr) {
-		DrawNode::Draw(m_skin.spr, params);
+		DrawNode::Draw(m_skin.spr, rp);
 	}
 }
 

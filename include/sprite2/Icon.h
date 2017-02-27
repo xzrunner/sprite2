@@ -21,7 +21,7 @@ public:
 	Icon& operator = (const Icon& icon);
 	virtual ~Icon() {}
 
-	virtual void Draw(const RenderParams& params, float process) const;
+	virtual void Draw(const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

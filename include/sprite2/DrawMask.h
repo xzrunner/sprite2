@@ -16,7 +16,7 @@ class RenderTarget;
 class DrawMask
 {
 public:
-	static void Draw(const Sprite* base, const Sprite* mask, const RenderParams& params);
+	static void Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 
 private:
 	static void DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc);

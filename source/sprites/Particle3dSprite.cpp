@@ -97,7 +97,7 @@ void Particle3dSprite::OnMessage(Message msg)
 	}
 }
 
-bool Particle3dSprite::Update(const RenderParams& params)
+bool Particle3dSprite::Update(const RenderParams& rp)
 {
 	if (!m_spr) {
 		return true;
@@ -152,11 +152,11 @@ bool Particle3dSprite::SetFrame(int frame)
 	return true;
 }
 
-void Particle3dSprite::Draw(const RenderParams& params) const
+void Particle3dSprite::Draw(const RenderParams& rp) const
 {
 	if (!m_alone && m_spr) {
-		m_rp.mat = params.mt;
-		m_rp.ct  = params.color;
+		m_rp.mat = rp.mt;
+		m_rp.ct  = rp.color;
 		m_rp.p3d = m_spr;
 		p3d_emitter_draw(m_spr->et, &m_rp);
 	}

@@ -28,10 +28,10 @@ public:
 	 *    Sprite
 	 */
 	virtual void OnMessage(Message msg);
-	virtual bool Update(const RenderParams& params);
+	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
 
-	void Draw(const RenderParams& params) const;
+	void Draw(const RenderParams& rp) const;
 
 	bool IsLocal() const { return m_local; }
 	void SetLocal(bool local) { m_local = local; }

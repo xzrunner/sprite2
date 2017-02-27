@@ -20,7 +20,7 @@ public:
 	Skeleton(const Joint* root, const std::vector<Joint*>& all_joints);
 	~Skeleton();
 
-	void Draw(const RenderParams& params) const;
+	void Draw(const RenderParams& rp) const;
 	sm::rect GetBounding() const;
 
 	const Joint* QueryByPos(const sm::vec2& pos) const;

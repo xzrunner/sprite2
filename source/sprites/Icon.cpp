@@ -31,7 +31,7 @@ Icon& Icon::operator = (const Icon& icon)
 	return *this;
 }
 
-void Icon::Draw(const RenderParams& params, float process) const
+void Icon::Draw(const RenderParams& rp, float process) const
 {
 	if (!m_img) {
 		return;
@@ -42,7 +42,7 @@ void Icon::Draw(const RenderParams& params, float process) const
 	// texid
 	float _texcoords[8];
 	int texid;
-	m_img->QueryTexcoords(params, _texcoords, texid);
+	m_img->QueryTexcoords(rp, _texcoords, texid);
 
 	// texcoords
 	sm::vec2 texcoords[4];
@@ -52,7 +52,7 @@ void Icon::Draw(const RenderParams& params, float process) const
 	sm::vec2 vertices[4];
 	GenVertices(process, texcoords, vertices);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = params.mt * vertices[i];
+		vertices[i] = rp.mt * vertices[i];
 	}
 
 	TexcoordsMap::Trans(_texcoords, texcoords);

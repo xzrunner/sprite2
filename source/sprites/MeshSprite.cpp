@@ -61,13 +61,13 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
-bool MeshSprite::Update(const RenderParams& params) 
+bool MeshSprite::Update(const RenderParams& rp) 
 { 
 	if (m_base) {
-		return const_cast<Symbol*>(m_base)->Update(params, 0);
+		return const_cast<Symbol*>(m_base)->Update(rp, 0);
 	} else {
 		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(params, 0);
+		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(rp, 0);
 	}
 }
 

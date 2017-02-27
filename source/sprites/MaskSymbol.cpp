@@ -48,19 +48,19 @@ void MaskSymbol::Traverse(const SymVisitor& visitor)
 	}
 }
 
-void MaskSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 	if (m_base && m_mask) {
-		DrawMask::Draw(m_base, m_mask, p);
+		DrawMask::Draw(m_base, m_mask, rp_child);
 	} else {
 		if (m_base) {
-			DrawNode::Draw(m_base, p);
+			DrawNode::Draw(m_base, rp_child);
 		} else if (m_mask) {
-			DrawNode::Draw(m_mask, p);
+			DrawNode::Draw(m_mask, rp_child);
 		}
 	}
 }

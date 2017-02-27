@@ -19,18 +19,18 @@
 namespace s2
 {
 
-void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& params, int iterations)
+void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 
-	DrawBlurToRT(rt, spr, params, iterations);
+	DrawBlurToRT(rt, spr, rp, iterations);
 	DrawFromRT(rt, spr->GetPosition());
 
 	RT->Return(rt);
 }
 
-void DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& params, int iterations)
+void DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations)
 {	
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* tmp_rt = RT->Fetch();
@@ -41,14 +41,14 @@ void DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const R
 	RenderScissor::Instance()->Close();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawInit(rt, spr, params);
+	DrawInit(rt, spr, rp);
 
 	mgr->SetShader(sl::FILTER);
 
 	sm::vec2 sz = spr->GetBounding()->GetSize().Size();
 	for (int i = 0; i < iterations; ++i) {
-		DrawBetweenRT(rt, tmp_rt, true, params.color, sz.x);
-		DrawBetweenRT(tmp_rt, rt, false, params.color, sz.y);
+		DrawBetweenRT(rt, tmp_rt, true, rp.color, sz.x);
+		DrawBetweenRT(tmp_rt, rt, false, rp.color, sz.y);
 	}
 
 	RenderCtxStack::Instance()->Pop();
@@ -83,26 +83,26 @@ void DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offset)
 	shader->Commit();
 }
 
-void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& params)
+void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
 {
 	rt->Bind();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams _params = params;
+	RenderParams rp_child = rp;
 	const sm::vec2& offset = spr->GetPosition();
 #ifdef S2_MATRIX_FIX
-	_params.mt.Translate(-offset.x, -offset.y);
+	rp_child.mt.Translate(-offset.x, -offset.y);
 #else
-	_params.mt.Translate(-offset.x, -offset.y, 0);
+	rp_child.mt.Translate(-offset.x, -offset.y, 0);
 #endif // S2_MATRIX_FIX
-	_params.set_shader = false;
-	_params.shader.SetFilter(FM_NULL);
-	_params.disable_filter = true;
+	rp_child.set_shader = false;
+	rp_child.shader.SetFilter(FM_NULL);
+	rp_child.disable_filter = true;
 
 	mgr->SetShader(sl::SPRITE2);
-	DrawNode::Draw(spr, _params);
+	DrawNode::Draw(spr, rp_child);
 
 	rt->Unbind();
 }

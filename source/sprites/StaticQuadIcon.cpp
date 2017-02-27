@@ -30,7 +30,7 @@ StaticQuadIcon& StaticQuadIcon::operator = (const StaticQuadIcon& icon)
 	return *this;
 }
 
-void StaticQuadIcon::Draw(const RenderParams& params, float process) const
+void StaticQuadIcon::Draw(const RenderParams& rp, float process) const
 {
 	if (!m_img) {
 		return;
@@ -38,7 +38,7 @@ void StaticQuadIcon::Draw(const RenderParams& params, float process) const
 
 	sm::vec2 vertices[4];
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = params.mt * m_screen[i];
+		vertices[i] = rp.mt * m_screen[i];
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

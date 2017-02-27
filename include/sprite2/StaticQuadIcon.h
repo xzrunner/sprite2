@@ -13,7 +13,7 @@ public:
 	StaticQuadIcon(const StaticQuadIcon& icon);
 	StaticQuadIcon& operator = (const StaticQuadIcon& icon);
 
-	virtual void Draw(const RenderParams& params, float process) const;
+	virtual void Draw(const RenderParams& rp, float process) const;
 
 	virtual sm::rect GetRegion(float process) const;
 

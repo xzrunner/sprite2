@@ -29,19 +29,19 @@ int TextboxSymbol::Type() const
 	return SYM_TEXTBOX; 
 }
 
-void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
 		return;
 	}
 
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
 	const std::string* text = NULL;
-	const Actor* actor = spr->QueryActor(p.path);
+	const Actor* actor = spr->QueryActor(rp_child.path);
 	if (actor) {
 		const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);
 		text = &tb_actor->GetText();
@@ -57,7 +57,7 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
  	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (p.shader.GetFilter() && p.shader.GetFilter()->GetMode() == sl::FM_GRAY) {
+	if (rp_child.shader.GetFilter() && rp_child.shader.GetFilter()->GetMode() == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);
@@ -88,7 +88,7 @@ void TextboxSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	s.overflow				= tb.overflow;
 
-	DrawText(s, p.mt, p.color.GetMul(), p.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
+	DrawText(s, rp_child.mt, rp_child.color.GetMul(), rp_child.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
 }

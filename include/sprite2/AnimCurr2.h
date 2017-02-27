@@ -29,9 +29,9 @@ public:
 
 	void OnMessage(Message msg);
 
-	bool Update(const RenderParams& params, bool loop = true, 
+	bool Update(const RenderParams& rp, bool loop = true, 
 		float interval = 0, int fps = 30);
-	void Draw(const RenderParams& params) const;
+	void Draw(const RenderParams& rp) const;
 
 	Sprite* FetchChild(const std::string& name) const;
 

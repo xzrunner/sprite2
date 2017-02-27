@@ -36,15 +36,15 @@ void Scale9Symbol::Traverse(const SymVisitor& visitor)
 	}
 }
 
-void Scale9Symbol::Draw(const RenderParams& params, const Sprite* spr) const
+void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (spr) {
-		RenderParams p;
-		if (DrawNode::Prepare(params, spr, p)) {
-			VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(p);
+		RenderParams rm_child;
+		if (DrawNode::Prepare(rp, spr, rm_child)) {
+			VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(rm_child);
 		}
 	} else {
-		m_s9.Draw(params);
+		m_s9.Draw(rp);
 	}
 }
 

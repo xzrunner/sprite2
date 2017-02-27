@@ -48,9 +48,9 @@ void AnimSprite::OnMessage(Message msg)
 	}
 }
 
-bool AnimSprite::Update(const RenderParams& params)
+bool AnimSprite::Update(const RenderParams& rp)
 {
-	return m_curr.Update(params, m_loop, m_interval, m_fps);
+	return m_curr.Update(rp, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::SetFrame(int frame)

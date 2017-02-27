@@ -30,20 +30,20 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-void TextureSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams p;
-	if (!DrawNode::Prepare(params, spr, p)) {
+	RenderParams rp_child;
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(p.color.GetMul().ToABGR(), p.color.GetAdd().ToABGR());
-	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
+	shader->SetColor(rp_child.color.GetMul().ToABGR(), rp_child.color.GetAdd().ToABGR());
+	shader->SetColorMap(rp_child.color.GetMapR().ToABGR(), rp_child.color.GetMapG().ToABGR(), rp_child.color.GetMapB().ToABGR());
 
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
-		m_polygons[i]->Draw(p);
+		m_polygons[i]->Draw(rp_child);
 	}
 }
 

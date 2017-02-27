@@ -79,7 +79,7 @@ void TrailSprite::OnMessage(Message msg)
 	}
 }
 
-bool TrailSprite::Update(const RenderParams& params)
+bool TrailSprite::Update(const RenderParams& rp)
 {
 	float time = Trail::Instance()->GetTime();
 	assert(m_et->time <= time);
@@ -92,7 +92,7 @@ bool TrailSprite::Update(const RenderParams& params)
 	if (m_local && !m_in_p3d) {
 		pos = GetPosition();
 	} else {
-		pos = params.mt * GetPosition();
+		pos = rp.mt * GetPosition();
 	}
 	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
 	m_et->time = time;
@@ -106,16 +106,16 @@ bool TrailSprite::SetFrame(int frame)
 	return true;
 }
 
-void TrailSprite::Draw(const RenderParams& params) const
+void TrailSprite::Draw(const RenderParams& rp) const
 {
 	if (!m_et) {
 		return;
 	}
 
 	TrailRenderParams trp;
-	trp.ct = params.color;
+	trp.ct = rp.color;
 	if (m_local || m_in_p3d) {
-		trp.mat = params.mt;
+		trp.mat = rp.mt;
 	}
 	t2d_emitter_draw(m_et, &trp);
 }

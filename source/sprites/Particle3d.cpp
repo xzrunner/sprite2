@@ -85,17 +85,17 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	memcpy(&mul, mul_col, sizeof(mul));
 	memcpy(&add, add_col, sizeof(add));
 
-	RenderParams params;
+	RenderParams rp_child;
 
-	params.color.SetMul(mul * rp->ct.GetMul());
-	params.color.SetAdd(add + rp->ct.GetAdd());
+	rp_child.color.SetMul(mul * rp->ct.GetMul());
+	rp_child.color.SetAdd(add + rp->ct.GetAdd());
 
-	params.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
+	rp_child.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 
 	// todo color trans
 
 	if (rp->p3d && rp->p3d->local_mode_draw) {
-		params.mt = rp->mat;
+		rp_child.mt = rp->mat;
 	} else {
 #ifdef S2_MATRIX_FIX
 		sm::MatrixFix _mat;
@@ -114,16 +114,16 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[12]= mat[4];
 		_mat.x[13]= mat[5];
 #endif // S2_MATRIX_FIX
-		params.mt = _mat * rp->mat;
+		rp_child.mt = _mat * rp->mat;
 	}
 
 	if (spr) {
 		Sprite* s2_spr = static_cast<Sprite*>(spr);
-		DrawNode::Draw(s2_spr, params);
+		DrawNode::Draw(s2_spr, rp_child);
 	} else if (sym) {
 		Symbol* s2_sym = static_cast<Symbol*>(sym);
-		DrawNode::Draw(s2_sym, params, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
-		s2_sym->Update(params, time);
+		DrawNode::Draw(s2_sym, rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+		s2_sym->Update(rp_child, time);
 	}
 
 	// todo record

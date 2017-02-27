@@ -29,10 +29,10 @@ Skeleton::~Skeleton()
 	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFunctor<Joint>());
 }
 
-void Skeleton::Draw(const RenderParams& params) const
+void Skeleton::Draw(const RenderParams& rp) const
 {
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
-		m_all_joints[i]->Draw(params);
+		m_all_joints[i]->Draw(rp);
 	}
 }
 

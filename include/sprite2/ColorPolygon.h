@@ -16,7 +16,7 @@ public:
 	ColorPolygon() {}
 	ColorPolygon(const Color& color);
 	
-	virtual void Draw(const RenderParams& params) const;
+	virtual void Draw(const RenderParams& rp) const;
 	virtual void Build();
 
 	const Color& GetColor() const { return m_color; }

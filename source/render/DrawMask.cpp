@@ -17,7 +17,7 @@
 namespace s2
 {
 
-void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& params)
+void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -33,7 +33,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 		RenderScissor::Instance()->Open();
 		return;
 	}
-	DrawBaseToRT(rt_base, base, params.color);
+	DrawBaseToRT(rt_base, base, rp.color);
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -47,7 +47,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Open();
 
-	DrawMaskFromRT(rt_base, rt_mask, mask, params.mt);
+	DrawMaskFromRT(rt_base, rt_mask, mask, rp.mt);
 
 	RT->Return(rt_base);
 	RT->Return(rt_mask);
@@ -63,10 +63,10 @@ void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderCo
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
 
-	RenderParams params;
-	params.set_shader = false;
-	params.color = rc;
-	DrawNode::Draw(base, params);
+	RenderParams rp;
+	rp.set_shader = false;
+	rp.color = rc;
+	DrawNode::Draw(base, rp);
 
 	shader->Commit();
 
@@ -83,9 +83,9 @@ void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask)
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
 
-	RenderParams params;
-	params.set_shader = false;
-	DrawNode::Draw(mask, params);
+	RenderParams rp;
+	rp.set_shader = false;
+	DrawNode::Draw(mask, rp);
 
 	shader->Commit();
 

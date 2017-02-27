@@ -31,16 +31,16 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-void ShapeSymbol::Draw(const RenderParams& params, const Sprite* spr) const
+void ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_shape) {
 		return;
 	}
 
 	if (spr) {
-		RenderParams p;
-		if (DrawNode::Prepare(params, spr, p)) {
-			m_shape->Draw(p);
+		RenderParams rp_child;
+		if (DrawNode::Prepare(rp, spr, rp_child)) {
+			m_shape->Draw(rp_child);
 		}
 	}
 }

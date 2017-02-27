@@ -31,12 +31,12 @@ void ComplexSprite::OnMessage(Message msg)
 	}
 }
 
-bool ComplexSprite::Update(const RenderParams& params)
+bool ComplexSprite::Update(const RenderParams& rp)
 {
-	RenderParams p = params;
-	p.mt = GetLocalMat() * params.mt;
-	p.shader = GetShader() * params.shader;
-	p.path.Push(GetID());
+	RenderParams rp_child = rp;
+	rp_child.mt = GetLocalMat() * rp.mt;
+	rp_child.shader = GetShader() * rp.shader;
+	rp_child.path.Push(GetID());
 
 	bool dirty = false;
 	const std::vector<Sprite*>& children 
@@ -45,12 +45,12 @@ bool ComplexSprite::Update(const RenderParams& params)
 	{
 		const Sprite* spr = children[i];
 		if (spr->IsHasProxy()) {
-			const Sprite* proxy = spr->GetProxy(p.path);
+			const Sprite* proxy = spr->GetProxy(rp_child.path);
 			if (proxy) {
 				spr = proxy;
 			}
 		}
-		if (const_cast<Sprite*>(spr)->Update(p)) {
+		if (const_cast<Sprite*>(spr)->Update(rp_child)) {
 			dirty = true;
 		}
 	}

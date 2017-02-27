@@ -29,10 +29,10 @@ public:
 	 *    Sprite
 	 */
 	virtual void OnMessage(Message msg);
-	virtual bool Update(const RenderParams& params);
+	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
 
-	void Draw(const RenderParams& params) const;
+	void Draw(const RenderParams& rp) const;
 
 	void SetOuterMatrix(const S2_MAT& mat) const;
 

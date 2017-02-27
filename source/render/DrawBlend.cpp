@@ -59,12 +59,12 @@ void DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
 	BlendMode mode = spr->GetShader().GetBlend();
 	shader->SetMode(mode);
 
-	RenderParams params;
-	params.mt = mt;
-	params.set_shader = false;
-	params.disable_blend = true;
-	params.vertex_offset = - (mt * spr->GetPosition());
-	DrawNode::Draw(spr, params);
+	RenderParams rp;
+	rp.mt = mt;
+	rp.set_shader = false;
+	rp.disable_blend = true;
+	rp.vertex_offset = - (mt * spr->GetPosition());
+	DrawNode::Draw(spr, rp);
 
 	shader->Commit();
 }

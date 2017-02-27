@@ -64,7 +64,7 @@ void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderCo
 	sl::Shader* shader = mgr->GetShader();
 
 	RenderParams rp;
-	rp.set_shader = false;
+	rp.SetChangeShader(false);
 	rp.color = rc;
 	DrawNode::Draw(base, rp);
 
@@ -84,7 +84,7 @@ void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask)
 	sl::Shader* shader = mgr->GetShader();
 
 	RenderParams rp;
-	rp.set_shader = false;
+	rp.SetChangeShader(false);
 	DrawNode::Draw(mask, rp);
 
 	shader->Commit();

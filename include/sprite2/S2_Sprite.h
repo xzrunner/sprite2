@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "S2_Message.h"
+#include "s2_macro.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -140,18 +141,6 @@ protected:
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
-
-#define FLAG_METHOD(name, bit) \
-	bool Is##name##() const { \
-		return (m_flags & bit) != 0; \
-	} \
-	void Set##name##(bool flag) const { \
-		if (flag) { \
-			m_flags |= bit; \
-		} else { \
-			m_flags &= ~bit; \
-		} \
-	}
 
 public:
 	FLAG_METHOD(Visible, FLAG_VISIBLE)

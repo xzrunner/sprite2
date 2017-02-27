@@ -7,12 +7,12 @@ namespace s2
 inline
 RenderParams::RenderParams()
 	: vertex_offset(0, 0)
-	, set_shader(true)
-	, disable_render(false)
-	, disable_blend(false)
-	, disable_filter(false)
-	, use_dtex(true)
 {
+	SetChangeShader(true);
+	SetDisableRenderDraw(false);
+	SetDisableBlend(false);
+	SetDisableFilter(false);
+	SetUseDTex(true);
 }
 
 }

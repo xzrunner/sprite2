@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "SprTreePath.h"
+#include "s2_macro.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
@@ -45,18 +46,6 @@ private:
 
 private:
 	static const uint32_t FLAG_VISIBLE = 0x00000001;
-
-#define FLAG_METHOD(name, bit) \
-	bool Is##name##() const { \
-		return (m_flags & bit) != 0; \
-	} \
-	void Set##name##(bool flag) const { \
-		if (flag) { \
-			m_flags |= bit; \
-		} else { \
-			m_flags &= ~bit; \
-		} \
-	}
 
 public:
 	FLAG_METHOD(Visible, FLAG_VISIBLE)

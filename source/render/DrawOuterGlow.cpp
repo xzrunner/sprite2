@@ -22,8 +22,8 @@ void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iteratio
 	RT->Return(rt);
 
 	RenderParams rp_child = rp;
-	rp_child.set_shader = false;
-	rp_child.disable_render = true;
+	rp_child.SetChangeShader(false);
+	rp_child.SetDisableRenderDraw(true);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);

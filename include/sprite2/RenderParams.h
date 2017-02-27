@@ -6,6 +6,7 @@
 #include "RenderCamera.h"
 #include "SprTreePath.h"
 #include "pre_defined.h"
+#include "s2_macro.h"
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
@@ -30,20 +31,28 @@ public:
 	RenderShader shader;
 
 	RenderCamera camera;
-
-	bool set_shader;
-
-	bool disable_render;
-
-	bool disable_blend;
-	bool disable_filter; 
-
-	bool use_dtex;
 	
 	SprTreePath path;
 
 public:
 	RenderParams();
+
+private:
+	static const uint32_t FLAG_CHANGE_SHADER       = 0x00000001;
+	static const uint32_t FLAG_DISABLE_RENDER_DRAW = 0x00000002;
+	static const uint32_t FLAG_DISABLE_BLEND       = 0x00000004;
+	static const uint32_t FLAG_DISABLE_FILTER      = 0x00000008;
+	static const uint32_t FLAG_USE_DTEX            = 0x00000010;
+
+public:
+	FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
+	FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
+	FLAG_METHOD(DisableBlend, FLAG_DISABLE_BLEND)
+	FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
+	FLAG_METHOD(UseDTex, FLAG_USE_DTEX)
+
+private:
+	mutable uint32_t m_flags;
 
 }; // RenderStyle
 

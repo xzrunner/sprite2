@@ -97,9 +97,9 @@ void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const Rende
 #else
 	rp_child.mt.Translate(-offset.x, -offset.y, 0);
 #endif // S2_MATRIX_FIX
-	rp_child.set_shader = false;
+	rp_child.SetChangeShader(false);
 	rp_child.shader.SetFilter(FM_NULL);
-	rp_child.disable_filter = true;
+	rp_child.SetDisableFilter(true);
 
 	mgr->SetShader(sl::SPRITE2);
 	DrawNode::Draw(spr, rp_child);

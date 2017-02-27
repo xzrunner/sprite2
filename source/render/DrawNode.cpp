@@ -74,7 +74,7 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 	RenderShader rs;
 	RenderCamera rc;
 
-	if (rp.disable_render) {
+	if (rp.IsDisableRenderDraw()) {
 		rs = *SprDefault::Instance()->Shader();
 		rc = *SprDefault::Instance()->Camera();
 	} else {
@@ -100,12 +100,12 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 	}
 
 	BlendMode blend = BM_NULL;
-	if (!rp.disable_blend) {
+	if (!rp.IsDisableBlend()) {
 		blend = rs.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!rp.disable_filter && rs.GetFilter()) {
+	if (!rp.IsDisableFilter() && rs.GetFilter()) {
 		filter = rs.GetFilter()->GetMode();
 	}
 
@@ -128,7 +128,7 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
 			DrawOuterGlow::Draw(spr, t, itrs);
 		} else {
-			if (rp.set_shader) {
+			if (rp.IsChangeShader()) {
 				mgr->SetShader(sl::FILTER);
 			}
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
@@ -146,7 +146,7 @@ void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 			DrawSpr(spr, t);
 		}
 	} else {
-		if (rp.set_shader) {
+		if (rp.IsChangeShader()) {
 			mgr->SetShader(sl::SPRITE2);
 		}
 		RenderParams t = rp;
@@ -167,12 +167,12 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
  	rp_child.mt = mt;
  
 	BlendMode blend = BM_NULL;
-	if (!rp.disable_blend) {
+	if (!rp.IsDisableBlend()) {
 		blend = rp.shader.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!rp.disable_filter && rp.shader.GetFilter()) {
+	if (!rp.IsDisableFilter() && rp.shader.GetFilter()) {
 		filter = rp.shader.GetFilter()->GetMode();
 	}
 
@@ -180,13 +180,13 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
  	if (blend != BM_NULL) {
  		;
  	} else if (filter != FM_NULL) {
- 		if (rp_child.set_shader) {
+ 		if (rp_child.IsChangeShader()) {
  			mgr->SetShader(sl::FILTER);
  			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
  			shader->SetMode(sl::FILTER_MODE(filter));
  		}
  	} else {
- 		if (rp_child.set_shader) {
+ 		if (rp_child.IsChangeShader()) {
  			mgr->SetShader(sl::SPRITE2);
  		}
  	}
@@ -202,12 +202,12 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 	rp_child.mt = mt;
 
 	BlendMode blend = BM_NULL;
-	if (!rp.disable_blend) {
+	if (!rp.IsDisableBlend()) {
 		blend = rp.shader.GetBlend();
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!rp.disable_filter && rp.shader.GetFilter()) {
+	if (!rp.IsDisableFilter() && rp.shader.GetFilter()) {
 		filter = rp.shader.GetFilter()->GetMode();
 	}
 
@@ -215,13 +215,13 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 	if (blend != BM_NULL) {
 		;
 	} else if (filter != FM_NULL) {
-		if (rp_child.set_shader) {
+		if (rp_child.IsChangeShader()) {
 			mgr->SetShader(sl::FILTER);
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 			shader->SetMode(sl::FILTER_MODE(filter));
 		}
 	} else {
-		if (rp_child.set_shader) {
+		if (rp_child.IsChangeShader()) {
 			mgr->SetShader(sl::SPRITE2);
 		}
 	}

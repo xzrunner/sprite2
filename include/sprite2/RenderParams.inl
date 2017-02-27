@@ -12,7 +12,7 @@ RenderParams::RenderParams()
 	SetDisableRenderDraw(false);
 	SetDisableBlend(false);
 	SetDisableFilter(false);
-	SetUseDTex(true);
+	SetDisableDTexC2(false);
 }
 
 }

@@ -42,14 +42,14 @@ private:
 	static const uint32_t FLAG_DISABLE_RENDER_DRAW = 0x00000002;
 	static const uint32_t FLAG_DISABLE_BLEND       = 0x00000004;
 	static const uint32_t FLAG_DISABLE_FILTER      = 0x00000008;
-	static const uint32_t FLAG_USE_DTEX            = 0x00000010;
+	static const uint32_t FLAG_DISABLE_DTEX_C2     = 0x00000010;
 
 public:
 	FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
 	FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
 	FLAG_METHOD(DisableBlend, FLAG_DISABLE_BLEND)
 	FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
-	FLAG_METHOD(UseDTex, FLAG_USE_DTEX)
+	FLAG_METHOD(DisableDTexC2, FLAG_DISABLE_DTEX_C2)
 
 private:
 	mutable uint32_t m_flags;

@@ -36,7 +36,9 @@ public:
 	bool disable_render;
 
 	bool disable_blend;
-	bool disable_filter;
+	bool disable_filter; 
+
+	bool use_dtex;
 	
 	SprTreePath path;
 

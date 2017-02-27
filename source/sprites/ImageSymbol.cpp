@@ -65,7 +65,7 @@ void ImageSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 
 	float texcoords[8];
 	int texid;
-	if (!QueryTexcoords(texcoords, texid)) {
+	if (!QueryTexcoords(params, texcoords, texid)) {
 		return;
 	}
 	

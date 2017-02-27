@@ -101,9 +101,9 @@ bool PolylineShape::IsIntersect(const sm::rect& rect) const
 	return false;
 }
 
-void PolylineShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void PolylineShape::Draw(const RenderParams& rp) const
 {
-	ShapeVertices::Draw(m_vertices, m_closed, mt, color);
+	ShapeVertices::Draw(m_vertices, m_closed, rp);
 }
 
 void PolylineShape::SetVertices(const std::vector<sm::vec2>& vertices)

@@ -23,7 +23,7 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
-	virtual void Draw(const S2_MAT& mt, const RenderColor* color = NULL) const;
+	virtual void Draw(const RenderParams& rp) const;
 
 private:
 	void UpdatePolyline();

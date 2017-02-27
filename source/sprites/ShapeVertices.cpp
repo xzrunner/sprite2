@@ -1,12 +1,12 @@
 #include "ShapeVertices.h"
-#include "RenderColor.h"
 #include "S2_RVG.h"
+#include "RenderParams.h"
 
 namespace s2
 {
 
 void ShapeVertices::Draw(const std::vector<sm::vec2>& vertices, bool closed,
-						 const S2_MAT& mt, const RenderColor* color)
+						 const RenderParams& rp)
 {
 	if (vertices.empty()) {
 		return;
@@ -14,13 +14,9 @@ void ShapeVertices::Draw(const std::vector<sm::vec2>& vertices, bool closed,
 
 	std::vector<sm::vec2> trans(vertices);
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
-		trans[i] = mt * vertices[i];
+		trans[i] = rp.mt * vertices[i];
 	}
-	if (color) {
-		RVG::SetColor(color->GetMul());
-	} else {
-		RVG::SetColor(0xffffffff);
-	}
+	RVG::SetColor(rp.color.GetMul());
 	RVG::Polyline(trans, closed);
 }
 

@@ -1,6 +1,7 @@
 #include "ColorPolygon.h"
 #include "S2_RVG.h"
 #include "RenderColor.h"
+#include "RenderParams.h"
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>
@@ -13,11 +14,11 @@ ColorPolygon::ColorPolygon(const Color& color)
 {
 }
 
-void ColorPolygon::Draw(const S2_MAT& mt, const RenderColor& color) const
+void ColorPolygon::Draw(const RenderParams& params) const
 {
 	std::vector<sm::vec2> tris;
-	sm::trans_vertices(mt, m_tris, tris);
-	RVG::SetColor(m_color * color.GetMul());
+	sm::trans_vertices(params.mt, m_tris, tris);
+	RVG::SetColor(m_color * params.color.GetMul());
 	RVG::Triangles(tris);
 }
 

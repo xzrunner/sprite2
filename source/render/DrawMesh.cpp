@@ -183,7 +183,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& params, const S
 	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
 	float src_texcoords[8];
 	int texid;
-	img_sym->QueryTexcoords(src_texcoords, texid);
+	img_sym->QueryTexcoords(params, src_texcoords, texid);
 
 	float x = src_texcoords[0], y = src_texcoords[1];
 	float w = src_texcoords[4] - src_texcoords[0],

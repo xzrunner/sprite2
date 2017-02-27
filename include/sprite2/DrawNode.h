@@ -16,6 +16,7 @@ class DrawNode
 {
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
+	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& parent, const Sprite* spr, RenderParams& child));
 
 	static bool Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child);
 
@@ -29,8 +30,8 @@ public:
 					 const sm::vec2& shear = sm::vec2(0, 0));	
 
 	static void Draw(const Symbol* sym, 
-		const RenderParams& params,
-		const S2_MAT& mt);
+		             const RenderParams& params,
+					 const S2_MAT& mt);
 
 	static bool IsOutsideView(const Sprite* spr, const RenderParams& params);
 

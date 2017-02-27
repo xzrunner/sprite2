@@ -31,9 +31,9 @@ CosineShape* CosineShape::Clone() const
 	return new CosineShape(*this);
 }
 
-void CosineShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void CosineShape::Draw(const RenderParams& rp) const
 {
-	ShapeVertices::Draw(m_mid_points, m_closed, mt, color);
+	ShapeVertices::Draw(m_mid_points, m_closed, rp);
 }
 
 void CosineShape::UpdatePolyline()

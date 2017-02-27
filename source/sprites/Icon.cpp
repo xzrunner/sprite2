@@ -42,7 +42,7 @@ void Icon::Draw(const RenderParams& params, float process) const
 	// texid
 	float _texcoords[8];
 	int texid;
-	m_img->QueryTexcoords(_texcoords, texid);
+	m_img->QueryTexcoords(params, _texcoords, texid);
 
 	// texcoords
 	sm::vec2 texcoords[4];

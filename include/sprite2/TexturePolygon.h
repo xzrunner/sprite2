@@ -20,7 +20,7 @@ public:
 	TexturePolygon(const ImageSymbol* img);
 	virtual ~TexturePolygon();
 
-	virtual void Draw(const S2_MAT& mt, const RenderColor& color) const;
+	virtual void Draw(const RenderParams& params) const;
 	virtual void Build();
 
 	const std::vector<sm::vec2>& GetTexcoords() const { return m_texcoords; }

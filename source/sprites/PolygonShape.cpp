@@ -54,12 +54,12 @@ bool PolygonShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_polygon(rect, m_vertices);
 }
 
-void PolygonShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void PolygonShape::Draw(const RenderParams& rp) const
 {
 	if (m_poly) {
-		m_poly->Draw(mt, *color);
+		m_poly->Draw(rp);
 	} else {
-		PolylineShape::Draw(mt, color);
+		PolylineShape::Draw(rp);
 	}
 }
 

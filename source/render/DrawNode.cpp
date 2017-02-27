@@ -22,10 +22,16 @@ namespace s2
 {
 
 static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
+static void (*PREPARE_REDNER_PARAMS)(const RenderParams& parent, const Sprite* spr, RenderParams& child);
 
 void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
 	AFTER_SPR = after_spr;
+}
+
+void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& parent, const Sprite* spr, RenderParams& child))
+{
+	PREPARE_REDNER_PARAMS = prepare_render_params;
 }
 
 bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child)
@@ -50,6 +56,10 @@ bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderPara
 	if (actor) {
 		child.mt = actor->GetLocalMat() * child.mt;
 		child.color = actor->GetColor() * child.color;
+	}
+
+	if (PREPARE_REDNER_PARAMS) {
+		PREPARE_REDNER_PARAMS(parent, spr, child);
 	}
 
 	return true;

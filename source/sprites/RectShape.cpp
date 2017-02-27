@@ -1,5 +1,6 @@
 #include "RectShape.h"
 #include "S2_RVG.h"
+#include "RenderParams.h"
 
 #include <SM_Test.h>
 
@@ -31,13 +32,9 @@ bool RectShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_rect(rect, m_bounding);
 }
 
-void RectShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void RectShape::Draw(const RenderParams& rp) const
 {
-	if (color) {
-		RVG::SetColor(color->GetMul());
-	} else {
-		RVG::SetColor(0xffffffff);
-	}
+	RVG::SetColor(rp.color.GetMul());
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),
 		     max(m_bounding.xmax, m_bounding.ymax);
 	RVG::Rect(min, max, false);

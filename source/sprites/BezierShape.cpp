@@ -1,6 +1,7 @@
 #include "BezierShape.h"
 #include "ShapeConfig.h"
 #include "S2_RVG.h"
+#include "RenderParams.h"
 
 #include <SM_Calc.h>
 
@@ -57,11 +58,11 @@ bool BezierShape::IsContain(const sm::vec2& pos) const
 	return ret;
 }
 
-void BezierShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void BezierShape::Draw(const RenderParams& rp) const
 {
-	PolylineShape::Draw(mt, color);
+	PolylineShape::Draw(rp);
 	for (int i = 0; i < CTRL_NODE_COUNT; ++i) {
-		sm::vec2 pos = mt * m_control_nodes[i];
+		sm::vec2 pos = rp.mt * m_control_nodes[i];
 		RVG::Rect(pos, SHAPE_NODE_RADIUS, SHAPE_NODE_RADIUS, false);
 	}
 }

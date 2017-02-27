@@ -29,7 +29,7 @@ public:
 	 */
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
-	virtual void Draw(const S2_MAT& mt, const RenderColor* color) const;
+	virtual void Draw(const RenderParams& rp) const;
 
 	void SetPolygon(Polygon* poly);
 	const Polygon* GetPolygon() const { return m_poly; }

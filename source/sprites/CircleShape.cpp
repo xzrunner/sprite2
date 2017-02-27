@@ -1,6 +1,7 @@
 #include "CircleShape.h"
 #include "ShapeConfig.h"
 #include "S2_RVG.h"
+#include "RenderParams.h"
 
 #include <SM_Calc.h>
 #include <SM_Test.h>
@@ -67,15 +68,11 @@ bool CircleShape::IsIntersect(const sm::rect& rect) const
 	return false;
 }
 
-void CircleShape::Draw(const S2_MAT& mt, const RenderColor* color) const
+void CircleShape::Draw(const RenderParams& rp) const
 {
-	sm::vec2 c = mt * m_center;
-	float r = sm::mat_trans_len(m_radius, mt);
-	if (color) {
-		RVG::SetColor(color->GetMul());
-	} else {
-		RVG::SetColor(0xffffffff);
-	}
+	sm::vec2 c = rp.mt * m_center;
+	float r = sm::mat_trans_len(m_radius, rp.mt);
+	RVG::SetColor(rp.color.GetMul());
 	RVG::Circle(c, r, false, 32);
 }
 

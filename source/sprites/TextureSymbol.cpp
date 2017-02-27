@@ -43,7 +43,7 @@ void TextureSymbol::Draw(const RenderParams& params, const Sprite* spr) const
 	shader->SetColorMap(p.color.GetMapR().ToABGR(), p.color.GetMapG().ToABGR(), p.color.GetMapB().ToABGR());
 
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
-		m_polygons[i]->Draw(p.mt, &p.color);
+		m_polygons[i]->Draw(p);
 	}
 }
 

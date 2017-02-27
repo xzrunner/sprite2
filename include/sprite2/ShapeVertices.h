@@ -11,13 +11,13 @@
 namespace s2
 {
 
-class RenderColor;
+class RenderParams;
 
 class ShapeVertices
 {
 public:
 	static void Draw(const std::vector<sm::vec2>& vertices, bool closed,
-		const S2_MAT& mt, const RenderColor* color);
+		const RenderParams& rp);
 
 }; // ShapeVertices
 

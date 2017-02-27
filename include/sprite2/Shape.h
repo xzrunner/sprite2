@@ -2,7 +2,6 @@
 #define _SPRITE2_SHAPE_H_
 
 #include "pre_defined.h"
-#include "RenderColor.h"
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
@@ -12,6 +11,8 @@
 
 namespace s2
 {
+
+class RenderParams;
 
 class Shape : public cu::RefCountObj, public cu::Cloneable
 {
@@ -23,7 +24,7 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
-	virtual void Draw(const S2_MAT& mt, const RenderColor* color = NULL) const = 0;
+	virtual void Draw(const RenderParams& rp) const = 0;
 
 	/**
 	 *  @interface

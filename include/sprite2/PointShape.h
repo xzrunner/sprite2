@@ -25,7 +25,7 @@ public:
 	 */
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
-	virtual void Draw(const S2_MAT& mt, const RenderColor* color) const;
+	virtual void Draw(const RenderParams& rp) const;
 
 	const sm::vec2& GetPos() const;
 	void SetPos(const sm::vec2& pos);

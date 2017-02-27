@@ -39,10 +39,10 @@ void Icon::Draw(const RenderParams& rp, float process) const
 
 //	process = 0.5;
 
-	// texid
+	// tex_id
 	float _texcoords[8];
-	int texid;
-	m_img->QueryTexcoords(rp, _texcoords, texid);
+	int tex_id;
+	m_img->QueryTexcoords(rp, _texcoords, tex_id);
 
 	// texcoords
 	sm::vec2 texcoords[4];
@@ -61,7 +61,7 @@ void Icon::Draw(const RenderParams& rp, float process) const
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+	shader->Draw(&vertices[0].x, &texcoords[0].x, tex_id);
 }
 
 sm::rect Icon::GetRegion(float process) const

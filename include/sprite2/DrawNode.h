@@ -11,12 +11,15 @@ namespace s2
 
 class Sprite;
 class Symbol;
+class RenderTarget;
 
 class DrawNode
 {
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
-	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& parent, const Sprite* spr, RenderParams& child));
+	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& parent, const Sprite* spr, RenderParams& child),
+		                   void (*c2_insert_spr)(const s2::Sprite*, int tex_id, int tex_w, int tex_h),
+						   const float* c2_query_spr(const s2::Sprite* spr, int* tex_id));
 
 	static bool Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child);
 
@@ -36,7 +39,12 @@ public:
 	static bool IsOutsideView(const Sprite* spr, const RenderParams& rp);
 
 private:
-	static void DrawSpr(const Sprite* spr, const RenderParams& rp);
+	static void DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt);
+	static void DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
+
+	static void DrawSprImpl(const Sprite* spr, const RenderParams& rp);
+
+	static void DrawSprImplFinal(const Sprite* spr, const RenderParams& rp);
 
 }; // DrawNode
 

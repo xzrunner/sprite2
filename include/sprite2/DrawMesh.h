@@ -22,7 +22,7 @@ public:
 	static void DrawTexture(const Mesh* mesh, const RenderParams& rp, 
 		const Symbol* base_sym = NULL);
 
-	static void DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid);
+	static void DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id);
 
 private:
 	static void DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym);

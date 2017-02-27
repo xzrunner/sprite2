@@ -13,7 +13,7 @@ class Blackboard
 {
 public:
 	int  GetScreenCacheTexID() const { return m_screen_cache_texid; }
-	void SetScreenCacheTexID(int texid) { m_screen_cache_texid = texid; }
+	void SetScreenCacheTexID(int tex_id) { m_screen_cache_texid = tex_id; }
 
 	const Camera* GetCamera() const { return m_cam; }
 	void SetCamera(const Camera* cam) { m_cam = cam; }

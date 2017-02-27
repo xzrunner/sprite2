@@ -29,7 +29,7 @@ public:
 	// todo: only for scale9 layout
 	virtual sm::vec2 GetNoTrimedSize() const;
 
-	virtual bool QueryTexcoords(const RenderParams& rp, float* texcoords, int& texid) const = 0;
+	virtual bool QueryTexcoords(const RenderParams& rp, float* texcoords, int& tex_id) const = 0;
 
 	void InitTex(Texture* tex, const sm::i16_rect& region);
 
@@ -38,9 +38,9 @@ public:
 	const sm::i16_rect& GetRegion() const { return m_region; }
 
 private:
-	void DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const;
-	void DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const;
-	void DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int texid) const;
+	void DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
+	void DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
+	void DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
 
 protected:
 	Texture* m_tex;

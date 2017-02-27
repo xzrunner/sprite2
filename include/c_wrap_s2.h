@@ -81,6 +81,10 @@ bool  s2_spr_set_scissor(void* spr, float x, float y, float w, float h);
 
 void  s2_spr_scale9_resize(void* spr, int w, int h);
 
+void  s2_spr_set_dtex_enable(void* spr, bool enable);
+void  s2_spr_set_dtex_force_cached(void* spr, bool cache);
+void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
+
 /************************************************************************/
 /* actor                                                                */
 /************************************************************************/

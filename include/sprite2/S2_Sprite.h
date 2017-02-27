@@ -144,6 +144,10 @@ protected:
 	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
 
+	static const uint32_t FLAG_DTEX_DISABLE            = 0x00000100;
+	static const uint32_t FLAG_DTEX_FORCE_CACHED       = 0x00000200;
+	static const uint32_t FLAG_DTEX_FORCE_CACHED_DIRTY = 0x00000400;
+
 	static const uint32_t FLAG_MAX            = 0x00008000;
 
 public:
@@ -158,6 +162,10 @@ public:
 	FLAG_METHOD(HasProxy, FLAG_HAS_PROXY)
 	FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
 
+	FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)
+	FLAG_METHOD(DTexForceCached, FLAG_DTEX_FORCE_CACHED)
+	FLAG_METHOD(DTexForceCachedDirty, FLAG_DTEX_FORCE_CACHED_DIRTY)
+	
 	bool GetUserFlag(uint32_t key) const;
 	void SetUserFlag(uint32_t key, bool val) const;
 

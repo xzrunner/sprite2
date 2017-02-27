@@ -38,11 +38,11 @@ public:
 	RenderParams();
 
 private:
-	static const uint32_t FLAG_CHANGE_SHADER       = 0x00000001;
-	static const uint32_t FLAG_DISABLE_RENDER_DRAW = 0x00000002;
-	static const uint32_t FLAG_DISABLE_BLEND       = 0x00000004;
-	static const uint32_t FLAG_DISABLE_FILTER      = 0x00000008;
-	static const uint32_t FLAG_DISABLE_DTEX_C2     = 0x00000010;
+	static const uint32_t FLAG_CHANGE_SHADER        = 0x00000001;
+	static const uint32_t FLAG_DISABLE_RENDER_DRAW  = 0x00000002;
+	static const uint32_t FLAG_DISABLE_BLEND        = 0x00000004;
+	static const uint32_t FLAG_DISABLE_FILTER       = 0x00000008;
+	static const uint32_t FLAG_DISABLE_DTEX_C2      = 0x00000010;
 
 public:
 	FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)

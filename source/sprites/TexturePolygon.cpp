@@ -71,12 +71,12 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 		texcoords[3] = texcoords[2];
 
 		float _texcoords[8];
-		int texid;
-		m_img->QueryTexcoords(rp, _texcoords, texid);
+		int tex_id;
+		m_img->QueryTexcoords(rp, _texcoords, tex_id);
 
 		TexcoordsMap::Trans(_texcoords, texcoords);
 
-		shader->Draw(&vertices[0].x, &texcoords[0].x, texid);
+		shader->Draw(&vertices[0].x, &texcoords[0].x, tex_id);
 	}
 
 	//sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

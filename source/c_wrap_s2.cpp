@@ -470,6 +470,28 @@ void s2_spr_scale9_resize(void* spr, int w, int h)
 	s9_spr->Resize(w, h);
 }
 
+extern "C"
+void s2_spr_set_dtex_enable(void* spr, bool enable)
+{
+	static_cast<s2::Sprite*>(spr)->SetDTexDisable(!enable);
+}
+
+extern "C"
+void s2_spr_set_dtex_force_cached(void* spr, bool cache)
+{
+	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	s2_spr->SetDTexForceCached(cache);
+	if (cache) {
+		s2_spr->SetDTexForceCachedDirty(true);
+	}
+}
+
+extern "C"
+void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
+{
+	static_cast<s2::Sprite*>(spr)->SetDTexForceCachedDirty(dirty);
+}
+
 /************************************************************************/
 /* actor                                                                */
 /************************************************************************/

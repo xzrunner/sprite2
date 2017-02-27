@@ -112,7 +112,7 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbo
 	}
 }
 
-void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
+void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
@@ -144,24 +144,24 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int texid)
 		_vertices[3] = _vertices[2];
 		_texcoords[3] = _texcoords[2];
 
-		shader->Draw(&_vertices[0].x, &_texcoords[0].x, texid);
+		shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
 	}
 }
 
-static void draw_sprite2(const float* positions, const float* texcoords, int texid)
+static void draw_sprite2(const float* positions, const float* texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	assert(mgr->GetShaderType() == sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->Draw(positions, texcoords, texid);
+	shader->Draw(positions, texcoords, tex_id);
 }
 
-static void draw_filter(const float* positions, const float* texcoords, int texid)
+static void draw_filter(const float* positions, const float* texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	assert(mgr->GetShaderType() == sl::FILTER);
 	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-	shader->Draw(positions, texcoords, texid);
+	shader->Draw(positions, texcoords, tex_id);
 }
 
 void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
@@ -182,14 +182,14 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	assert(sym->Type() == SYM_IMAGE);
 	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
 	float src_texcoords[8];
-	int texid;
-	img_sym->QueryTexcoords(rp, src_texcoords, texid);
+	int tex_id;
+	img_sym->QueryTexcoords(rp, src_texcoords, tex_id);
 
 	float x = src_texcoords[0], y = src_texcoords[1];
 	float w = src_texcoords[4] - src_texcoords[0],
 		  h = src_texcoords[5] - src_texcoords[1];	
 
-	void (*draw)(const float* positions, const float* texcoords, int texid) = NULL;
+	void (*draw)(const float* positions, const float* texcoords, int tex_id) = NULL;
 
 	if (type == sl::SPRITE2)
 	{
@@ -222,7 +222,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];
 
-			draw(&_vertices[0].x, &_texcoords[0].x, texid);
+			draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
 		}
 	}
 	// 0 3
@@ -242,7 +242,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];
 
-			draw(&_vertices[0].x, &_texcoords[0].x, texid);
+			draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
 		}
 	}
 	else

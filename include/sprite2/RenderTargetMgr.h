@@ -3,6 +3,8 @@
 
 #include <CU_Singleton.h>
 
+#include <vector>
+
 namespace s2
 {
 
@@ -25,13 +27,12 @@ private:
 	{
 		RenderTarget* rt;
 		bool available;
+
+		Item() : rt(NULL), available(true) {}
 	};
 	
 private:
-	static const int MAX_COUNT = 4;
-
-private:
-	Item m_items[MAX_COUNT];
+	std::vector<Item> m_items;
 
 	SINGLETON_DECLARATION(RenderTargetMgr);
 

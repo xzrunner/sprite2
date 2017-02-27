@@ -10,37 +10,44 @@ SINGLETON_DEFINITION(RenderTargetMgr);
 
 RenderTargetMgr::RenderTargetMgr()
 {
-	for (int i = 0; i < MAX_COUNT; ++i) {
-		m_items[i].rt = new RenderTarget(WIDTH, HEIGHT);
-		m_items[i].available = true;
-	}
 }
 
 RenderTarget* RenderTargetMgr::Fetch()
 {
-	for (int i = 0; i < MAX_COUNT; ++i) {
-		if (m_items[i].available) {
-			m_items[i].available = false;
-			return m_items[i].rt;
+	for (int i = 0, n = m_items.size(); i < n; ++i) 
+	{
+		if (!m_items[i].available) {
+			continue;
 		}
+		m_items[i].available = false;
+		assert(m_items[i].rt);
+		return m_items[i].rt;
 	}
-	return NULL;
+
+	Item item;
+	item.rt = new RenderTarget(WIDTH, HEIGHT);
+	item.available = false;
+	m_items.push_back(item);
+	return item.rt;
 }
 
 void RenderTargetMgr::Return(RenderTarget* rt)
 {
-	for (int i = 0; i < MAX_COUNT; ++i) {
+	if (!rt) {
+		return;
+	}
+
+	for (int i = 0, n = m_items.size(); i < n; ++i) {
 		if (m_items[i].rt == rt) {
 			m_items[i].available = true;
 			return;
 		}
 	}
-	assert(0);
 }
 
 int RenderTargetMgr::GetTexID(int idx) const
 {
-	if (idx < 0 || idx >= MAX_COUNT) {
+	if (idx < 0 || idx >= m_items.size()) {
 		return  -1;
 	} else {
 		return m_items[idx].rt->GetTexID();

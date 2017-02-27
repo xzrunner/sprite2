@@ -64,6 +64,8 @@ public:
 	virtual void SetShear(const sm::vec2& shear);
 	virtual void SetOffset(const sm::vec2& offset);
 
+	static void InitHook(void (*init_flags)(Sprite* spr));
+
 protected:
 	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return true; }
 public:
@@ -142,6 +144,8 @@ protected:
 	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
 
+	static const uint32_t FLAG_MAX            = 0x00008000;
+
 public:
 	FLAG_METHOD(Visible, FLAG_VISIBLE)
 	FLAG_METHOD(Editable, FLAG_EDITABLE)
@@ -153,6 +157,9 @@ public:
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	FLAG_METHOD(HasProxy, FLAG_HAS_PROXY)
 	FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
+
+	bool GetUserFlag(uint32_t key) const;
+	void SetUserFlag(uint32_t key, bool val) const;
 
 protected:
 	Symbol*					m_sym;

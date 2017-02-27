@@ -32,6 +32,8 @@ static const sm::vec2 POS0_PROXY = sm::vec2(0, 0);
 static const sm::vec2 POS1_PROXY = sm::vec2(1, 1);
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
+static void (*INIT_FLAGS)(Sprite* spr);
+
 Sprite::Sprite()
 	: m_sym(NULL)
 	, m_geo(SprDefault::Instance()->Geo())
@@ -299,6 +301,11 @@ void Sprite::SetOffset(const sm::vec2& offset)
 
 	SetDirty(true);
 	SetGeoDirty(true);
+}
+
+void Sprite::InitHook(void (*init_flags)(Sprite* spr))
+{
+	INIT_FLAGS = init_flags;
 }
 
 bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
@@ -661,6 +668,10 @@ void Sprite::InitFlags()
 	SetEditable(true);
 #endif // S2_SPR_DEFAULT_EDITABLE
 	SetBoundingDirty(true);
+
+	if (INIT_FLAGS) {
+		INIT_FLAGS(this);
+	}
 }
 
 void Sprite::InitFromSpr(const Sprite& spr)
@@ -735,6 +746,28 @@ void Sprite::UpdateCenter()
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 	m_geo->UpdateCenter();
+}
+
+bool Sprite::GetUserFlag(uint32_t key) const
+{
+	if (key < FLAG_MAX) {
+		return false;
+	}
+
+	return (m_flags & key) != 0;
+}
+
+void Sprite::SetUserFlag(uint32_t key, bool val) const
+{
+	if (key < FLAG_MAX) {
+		return;
+	}
+
+	if (val) {
+		m_flags |= key;
+	} else {
+		m_flags &= ~key;
+	}
 }
 
 }

@@ -120,15 +120,15 @@ void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_
 /* rt                                                                   */
 /************************************************************************/
 
-struct region {
+struct s2_region {
 	float xmin, ymin;
 	float xmax, ymax;
 };
 
 void* s2_rt_fetch();
 void  s2_rt_return(void* rt);
-void  s2_rt_draw_from(void* rt, const struct region* dst, const struct region* src, int src_tex_id);
-void  s2_rt_draw_to(void* rt, const struct region* dst, const struct region* src);
+void  s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id);
+void  s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src);
 int   s2_rt_get_texid(void* rt);
 
 /************************************************************************/

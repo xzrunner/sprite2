@@ -686,7 +686,7 @@ void s2_rt_return(void* rt)
 	RenderTargetMgr::Instance()->Return(s2_rt);
 }
 
-static void _draw(const struct region* dst, const struct region* src, int src_tex_id)
+static void _draw(const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
 	float vertices[8], texcoords[8];
 
@@ -730,7 +730,7 @@ static void _draw(const struct region* dst, const struct region* src, int src_te
 }
 
 extern "C"
-void s2_rt_draw_from(void* rt, const struct region* dst, const struct region* src, int src_tex_id)
+void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -749,7 +749,7 @@ void s2_rt_draw_from(void* rt, const struct region* dst, const struct region* sr
 }
 
 extern "C"
-void s2_rt_draw_to(void* rt, const struct region* dst, const struct region* src)
+void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
 	RenderScissor::Instance()->Close();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));

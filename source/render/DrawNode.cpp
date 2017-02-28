@@ -207,7 +207,16 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+
 	S2_MAT mat = spr->GetLocalMat() * rp.mt;
+
+	SprTreePath path = rp.path;
+	path.Push(spr->GetID());
+	const Actor* actor = spr->QueryActor(path);
+	if (actor) {
+		mat = actor->GetLocalMat() * mat;
+	}
+
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));

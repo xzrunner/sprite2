@@ -140,6 +140,20 @@ void  s2_cam_release(void* cam);
 void  s2_cam_bind(const void* cam);
 void  s2_cam_set(void* cam, float x, float y, float scale);
 
+/************************************************************************/
+/* other                                                                */
+/************************************************************************/
+
+enum S2_PIXEL_TYPE
+{
+	RGBA = 0,
+	ARGB,
+	ABGR,
+	BGRA
+};
+
+uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type);
+
 #endif // _sprite2_wrap_c_h_
 
 #ifdef __cplusplus

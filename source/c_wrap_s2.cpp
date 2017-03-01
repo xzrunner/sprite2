@@ -17,10 +17,11 @@
 #include "PointQueryVisitor.h"
 #include "SprTimer.h"
 #include "SprVisitorParams.h"
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
+#include "S2_RenderTargetMgr.h"
+#include "S2_RenderTarget.h"
 #include "RenderScissor.h"
 #include "Blackboard.h"
+#include "s2_trans_color.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -473,13 +474,13 @@ void s2_spr_scale9_resize(void* spr, int w, int h)
 extern "C"
 void s2_spr_set_dtex_enable(void* spr, bool enable)
 {
-	static_cast<s2::Sprite*>(spr)->SetDTexDisable(!enable);
+	static_cast<Sprite*>(spr)->SetDTexDisable(!enable);
 }
 
 extern "C"
 void s2_spr_set_dtex_force_cached(void* spr, bool cache)
 {
-	s2::Sprite* s2_spr = static_cast<s2::Sprite*>(spr);
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	s2_spr->SetDTexForceCached(cache);
 	if (cache) {
 		s2_spr->SetDTexForceCachedDirty(true);
@@ -489,7 +490,7 @@ void s2_spr_set_dtex_force_cached(void* spr, bool cache)
 extern "C"
 void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 {
-	static_cast<s2::Sprite*>(spr)->SetDTexForceCachedDirty(dirty);
+	static_cast<Sprite*>(spr)->SetDTexForceCachedDirty(dirty);
 }
 
 /************************************************************************/
@@ -799,6 +800,16 @@ void s2_cam_set(void* cam, float x, float y, float scale)
 {
 	OrthoCamera* o_cam = static_cast<OrthoCamera*>(cam);
 	o_cam->Set(sm::vec2(x, y), scale);
+}
+
+/************************************************************************/
+/* other                                                                */
+/************************************************************************/
+
+extern "C"
+uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
+{
+	return trans_color(src, PIXEL_TYPE(src_type), PIXEL_TYPE(dst_type));
 }
 
 }

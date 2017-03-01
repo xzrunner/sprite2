@@ -1,13 +1,13 @@
 #include "ImageSymbol.h"
 #include "SymType.h"
-#include "Texture.h"
+#include "S2_Texture.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "Blackboard.h"
 #include "OrthoCamera.h"
 #include "Pseudo3DCamera.h"
-#include "RenderContext.h"
+#include "S2_RenderContext.h"
 #include "RenderCtxStack.h"
 
 #include S2_MAT_HEADER

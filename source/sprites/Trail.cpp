@@ -5,7 +5,7 @@
 
 #include <mt_2d.h>
 #include <sm_const.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shape2Shader.h>
 

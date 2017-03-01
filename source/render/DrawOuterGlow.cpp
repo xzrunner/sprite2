@@ -6,7 +6,7 @@
 #include "DrawNode.h"
 #include "SprDefault.h"
 #include "SprRender.h"
-#include "RenderTargetMgr.h"
+#include "S2_RenderTargetMgr.h"
 
 #include <shaderlab/ShaderMgr.h>
 

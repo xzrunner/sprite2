@@ -1,6 +1,6 @@
-#include "RenderContext.h"
+#include "S2_RenderContext.h"
 
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/SubjectMVP2.h>
 #include <shaderlab/ShaderMgr.h>
 

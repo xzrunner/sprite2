@@ -3,7 +3,7 @@
 #include "S2_Symbol.h"
 #include "DrawNode.h"
 #include "ImageSymbol.h"
-#include "Texture.h"
+#include "S2_Texture.h"
 
 #include <SM_Calc.h>
 

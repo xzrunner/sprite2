@@ -13,7 +13,7 @@
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
 #include <ps_3d_buffer.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>

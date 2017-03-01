@@ -1,5 +1,5 @@
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
+#include "S2_RenderTargetMgr.h"
+#include "S2_RenderTarget.h"
 
 #include <assert.h>
 

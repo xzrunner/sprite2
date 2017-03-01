@@ -1,5 +1,5 @@
 #include "StaticRectIcon.h"
-#include "Texture.h"
+#include "S2_Texture.h"
 #include "ImageSymbol.h"
 
 namespace s2

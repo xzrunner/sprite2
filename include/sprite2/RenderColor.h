@@ -24,9 +24,9 @@ public:
 
 	void SetMul(const Color& mul) { m_state.colors[IDX_MUL] = mul.ToABGR(); }
 	void SetAdd(const Color& add) { m_state.colors[IDX_ADD] = add.ToABGR(); }
-	void SetMapR(const Color& rmap) { m_state.colors[IDX_RMAP] = rmap.ToABGR(); }
-	void SetMapG(const Color& gmap) { m_state.colors[IDX_GMAP] = gmap.ToABGR(); }
-	void SetMapB(const Color& bmap) { m_state.colors[IDX_BMAP] = bmap.ToABGR(); }
+	void SetRMap(const Color& rmap) { m_state.colors[IDX_RMAP] = rmap.ToABGR(); }
+	void SetGMap(const Color& gmap) { m_state.colors[IDX_GMAP] = gmap.ToABGR(); }
+	void SetBMap(const Color& bmap) { m_state.colors[IDX_BMAP] = bmap.ToABGR(); }
 
 	uint32_t GetMulABGR() const { return m_state.colors[IDX_MUL]; }
 	uint32_t GetAddABGR() const { return m_state.colors[IDX_ADD]; }
@@ -56,12 +56,14 @@ private:
 		IDX_ADD,
 		IDX_RMAP,
 		IDX_GMAP,
-		IDX_BMAP
+		IDX_BMAP,
+
+		COLOR_MAX
 	};
 
 	union 
 	{
-		uint32_t colors[5]; // in ABGR
+		uint32_t colors[COLOR_MAX]; // in ABGR
 		RenderColor* next;
 	} m_state;
 

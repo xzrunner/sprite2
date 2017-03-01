@@ -11,12 +11,12 @@
 #include "RFOuterGlow.h"
 #include "SprDefault.h"
 #include "RenderCtxStack.h"
-#include "RenderTargetMgr.h"
+#include "S2_RenderTargetMgr.h"
 #include "RenderScissor.h"
-#include "RenderTarget.h"
+#include "S2_RenderTarget.h"
 
 #include <SM_Calc.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/EdgeDetectProg.h>

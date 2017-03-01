@@ -5,11 +5,11 @@
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
 #include "RenderScissor.h"
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
+#include "S2_RenderTargetMgr.h"
+#include "S2_RenderTarget.h"
 
 #include <SM_Rect.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shader.h>
 #include <shaderlab/MaskShader.h>

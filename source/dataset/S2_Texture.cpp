@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "S2_Texture.h"
 
 namespace s2
 {

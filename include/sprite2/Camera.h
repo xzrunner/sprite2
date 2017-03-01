@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_CAMERA_H_
 #define _SPRITE2_CAMERA_H_
 
+#include "CameraType.h"
+
 namespace s2
 {
-
-enum CameraType;
 
 class Camera
 {

@@ -110,9 +110,9 @@ bool  s2_actor_get_visible(void* actor);
 void  s2_actor_set_visible(void* actor, bool visible);
 
 uint32_t s2_actor_get_col_mul(void* actor);
-void     s2_actor_set_col_mul(void* actor, uint32_t rgba);
+void     s2_actor_set_col_mul(void* actor, uint32_t abgr);
 uint32_t s2_actor_get_col_add(void* actor);
-void     s2_actor_set_col_add(void* actor, uint32_t rgba);
+void     s2_actor_set_col_add(void* actor, uint32_t abgr);
 void     s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap);
 void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 

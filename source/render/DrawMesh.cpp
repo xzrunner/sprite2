@@ -194,14 +194,14 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	if (type == sl::SPRITE2)
 	{
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
-		shader->SetColorMap(rp.color.GetMapR().ToABGR(),rp.color.GetMapG().ToABGR(), rp.color.GetMapB().ToABGR());
+		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+		shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 		draw = draw_sprite2;
 	}
 	else if (type == sl::FILTER)
 	{
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
+		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 		draw = draw_filter;
 	}
 

@@ -13,15 +13,6 @@ Color::Color()
 {}
 
 inline
-Color::Color(uint32_t rgba) 
-{
-	r = (rgba >> 24) & 0xff;
-	g = (rgba >> 16) & 0xff;
-	b = (rgba >>  8) & 0xff;
-	a = rgba         & 0xff;
-}
-
-inline
 Color::Color(int r, int g, int b, int a)
 	: r(r)
 	, g(g)

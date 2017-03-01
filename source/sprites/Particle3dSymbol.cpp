@@ -81,8 +81,8 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (!spr) {
 		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-		shader->SetColor(rp.color.GetMul().ToABGR(), rp.color.GetAdd().ToABGR());
-		shader->SetColorMap(rp.color.GetMapR().ToABGR(), rp.color.GetMapG().ToABGR(), rp.color.GetMapB().ToABGR());
+		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+		shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 		P3dRenderParams p3d_rp;
 		p3d_rp.mat = rp.mt;
 		p3d_rp.ct = rp.color;
@@ -127,8 +127,8 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMul().ToABGR(), rp_child.color.GetAdd().ToABGR());
-	shader->SetColorMap(rp_child.color.GetMapR().ToABGR(), rp_child.color.GetMapG().ToABGR(), rp_child.color.GetMapB().ToABGR());
+	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
+	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
 
 	if (p3d_spr->IsLocalModeDraw()) {
 		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;

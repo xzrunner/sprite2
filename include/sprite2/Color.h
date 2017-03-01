@@ -16,7 +16,6 @@ public:
 
 public:
 	Color();
-	Color(uint32_t rgba);
 	explicit Color(int r, int g, int b, int a = 255);
 	explicit Color(float r, float g, float b, float a = 1.0f);
 
@@ -32,7 +31,6 @@ public:
 	uint32_t ToABGR() const;
 	void FromABGR(uint32_t abgr);
 
-	// todo: rm
 	uint32_t ToRGBA() const;
 	void FromRGBA(uint32_t rgba);
 	

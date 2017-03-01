@@ -16,17 +16,29 @@ public:
 
 	RenderColor operator * (const RenderColor& rc) const;
 
-	const Color& GetMul() const { return m_state.mul; }
-	const Color& GetAdd() const { return m_state.add; }
-	const Color& GetMapR() const { return m_state.rmap; }
-	const Color& GetMapG() const { return m_state.gmap; }
-	const Color& GetMapB() const { return m_state.bmap; }
+	Color GetMul() const { Color ret; ret.FromABGR(m_state.colors[IDX_MUL]); return ret; }
+	Color GetAdd() const { Color ret; ret.FromABGR(m_state.colors[IDX_ADD]); return ret; }
+	Color GetRMap() const { Color ret; ret.FromABGR(m_state.colors[IDX_RMAP]); return ret; }
+	Color GetGMap() const { Color ret; ret.FromABGR(m_state.colors[IDX_GMAP]); return ret; }
+	Color GetBMap() const { Color ret; ret.FromABGR(m_state.colors[IDX_BMAP]); return ret; }
 
-	void SetMul(const Color& mul) { m_state.mul = mul; }
-	void SetAdd(const Color& add) { m_state.add = add; }
-	void SetMapR(const Color& rmap) { m_state.rmap = rmap; }
-	void SetMapG(const Color& gmap) { m_state.gmap = gmap; }
-	void SetMapB(const Color& bmap) { m_state.bmap = bmap; }
+	void SetMul(const Color& mul) { m_state.colors[IDX_MUL] = mul.ToABGR(); }
+	void SetAdd(const Color& add) { m_state.colors[IDX_ADD] = add.ToABGR(); }
+	void SetMapR(const Color& rmap) { m_state.colors[IDX_RMAP] = rmap.ToABGR(); }
+	void SetMapG(const Color& gmap) { m_state.colors[IDX_GMAP] = gmap.ToABGR(); }
+	void SetMapB(const Color& bmap) { m_state.colors[IDX_BMAP] = bmap.ToABGR(); }
+
+	uint32_t GetMulABGR() const { return m_state.colors[IDX_MUL]; }
+	uint32_t GetAddABGR() const { return m_state.colors[IDX_ADD]; }
+	uint32_t GetRMapABGR() const { return m_state.colors[IDX_RMAP]; }
+	uint32_t GetGMapABGR() const { return m_state.colors[IDX_GMAP]; }
+	uint32_t GetBMapABGR() const { return m_state.colors[IDX_BMAP]; }
+
+	void SetMulABGR(uint32_t mul) { m_state.colors[IDX_MUL] = mul; }
+	void SetAddABGR(uint32_t add) { m_state.colors[IDX_ADD] = add; }
+	void SetRMapABGR(uint32_t rmap) { m_state.colors[IDX_RMAP] = rmap; }
+	void SetGMapABGR(uint32_t gmap) { m_state.colors[IDX_GMAP] = gmap; }
+	void SetBMapABGR(uint32_t bmap) { m_state.colors[IDX_BMAP] = bmap; }
 
 	/**
 	 *  @interface
@@ -38,16 +50,19 @@ public:
 	void SetNext(RenderColor* next) { m_state.next = next; }
 
 private:
+	enum COLOR_IDX
+	{
+		IDX_MUL = 0,
+		IDX_ADD,
+		IDX_RMAP,
+		IDX_GMAP,
+		IDX_BMAP
+	};
+
 	union 
 	{
-		struct 
-		{
-			Color mul, add;
-			Color rmap, gmap, bmap;
-		};
-
+		uint32_t colors[5]; // in ABGR
 		RenderColor* next;
-
 	} m_state;
 
 }; // RenderColor

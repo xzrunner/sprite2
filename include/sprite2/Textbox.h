@@ -54,11 +54,11 @@ public:
 
 		, font_type(0)
 		, font_size(16)
-		, font_color(0xffffffff)
+		, font_color(255, 255, 255, 255)
 
 		, has_edge(false)
 		, edge_size(1)
-		, edge_color(0)
+		, edge_color(0, 0, 0, 0)
 
 		, align_hori(HA_LEFT)
 		, align_vert(VA_TOP)

@@ -612,61 +612,61 @@ void s2_actor_set_visible(void* actor, bool visible) {
 extern "C"
 uint32_t s2_actor_get_col_mul(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->GetColor().GetMul().ToRGBA();
+	return s2_actor->GetColor().GetMulABGR();
 }
 
 extern "C"
-void s2_actor_set_col_mul(void* actor, uint32_t rgba) {
+void s2_actor_set_col_mul(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetColor().GetMul().ToRGBA() == rgba) {
+	if (s2_actor->GetColor().GetMulABGR() == abgr) {
 		return;
 	}
 
-	RenderColor col = s2_actor->GetColor();
-	col.SetMul(Color(rgba));
-	s2_actor->SetColor(col);
+	RenderColor rc = s2_actor->GetColor();
+	rc.SetMulABGR(abgr);
+	s2_actor->SetColor(rc);
 }
 
 extern "C"
 uint32_t s2_actor_get_col_add(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->GetColor().GetAdd().ToRGBA();
+	return s2_actor->GetColor().GetAddABGR();
 }
 
 extern "C"
-void s2_actor_set_col_add(void* actor, uint32_t rgba) {
+void s2_actor_set_col_add(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetColor().GetAdd().ToRGBA() == rgba) {
+	if (s2_actor->GetColor().GetAddABGR() == abgr) {
 		return;
 	}
 
-	RenderColor col = s2_actor->GetColor();
-	col.SetAdd(Color(rgba));
-	s2_actor->SetColor(col);
+	RenderColor rc = s2_actor->GetColor();
+	rc.SetAddABGR(abgr);
+	s2_actor->SetColor(rc);
 }
 
 extern "C"
 void s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	*rmap = s2_actor->GetColor().GetMapR().ToRGBA();
-	*gmap = s2_actor->GetColor().GetMapG().ToRGBA();
-	*bmap = s2_actor->GetColor().GetMapB().ToRGBA();
+	*rmap = s2_actor->GetColor().GetRMapABGR();
+	*gmap = s2_actor->GetColor().GetGMapABGR();
+	*bmap = s2_actor->GetColor().GetBMapABGR();
 }
 
 extern "C"
 void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetColor().GetMapR().ToRGBA() == rmap &&
-		s2_actor->GetColor().GetMapG().ToRGBA() == gmap &&
-		s2_actor->GetColor().GetMapB().ToRGBA() == bmap) {
+	if (s2_actor->GetColor().GetRMapABGR() == rmap &&
+		s2_actor->GetColor().GetGMapABGR() == gmap &&
+		s2_actor->GetColor().GetBMapABGR() == bmap) {
 		return;
 	}
 
-	RenderColor col = s2_actor->GetColor();
-	col.SetMapR(Color(rmap));
-	col.SetMapG(Color(gmap));
-	col.SetMapB(Color(bmap));
-	s2_actor->SetColor(col);
+	RenderColor rc = s2_actor->GetColor();
+	rc.SetRMapABGR(rmap);
+	rc.SetGMapABGR(gmap);
+	rc.SetBMapABGR(bmap);
+	s2_actor->SetColor(rc);
 }
 
 /************************************************************************/

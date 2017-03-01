@@ -64,8 +64,8 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 			b = (col >> 16) & 0xff,
 			g = (col >>  8) & 0xff,
 			r = (col) & 0xff;
-		const Color& mul = rp->ct.GetMul();
-		const Color& add = rp->ct.GetAdd();
+		Color mul = rp->ct.GetMul();
+		Color add = rp->ct.GetAdd();
 		a *= mul.a / 255.0f;
 		b *= mul.b / 255.0f;
 		g *= mul.g / 255.0f;

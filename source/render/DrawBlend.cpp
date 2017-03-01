@@ -10,7 +10,7 @@
 
 #include <SM_Rect.h>
 #include <unirender/RenderTarget.h>
-#include <unirender/Texture.h>
+#include <unirender/UR_Texture.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>

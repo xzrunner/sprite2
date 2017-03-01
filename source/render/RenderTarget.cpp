@@ -2,7 +2,7 @@
 
 #include <unirender/RenderContext.h>
 #include <unirender/RenderTarget.h>
-#include <unirender/Texture.h>
+#include <unirender/UR_Texture.h>
 #include <shaderlab/ShaderMgr.h>
 
 namespace s2

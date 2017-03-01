@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <stdint.h>
+#include <stddef.h>
 
 struct rg_skeleton_pose;
 struct rg_skeleton_skin;

@@ -6,6 +6,7 @@
 #include <CU_Uncopyable.h>
 
 #include <vector>
+#include <string>
 
 namespace s2
 {

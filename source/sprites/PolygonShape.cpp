@@ -15,14 +15,14 @@ PolygonShape::PolygonShape(const PolygonShape& poly)
 	: PolylineShape(poly)
 	, m_poly(NULL)
 {
-	cu::RefCountObjAssign(m_poly, const_cast<Polygon*>(poly.m_poly));
+	cu::RefCountObjAssign(m_poly, poly.m_poly);
 }
 
 PolygonShape& PolygonShape::operator = (const PolygonShape& poly)
 {
 	PolylineShape::operator = (poly);
 
-	cu::RefCountObjAssign(m_poly, const_cast<Polygon*>(poly.m_poly));
+	cu::RefCountObjAssign(m_poly, poly.m_poly);
 	return *this;
 }
 

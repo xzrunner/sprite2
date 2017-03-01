@@ -1,7 +1,7 @@
 #include "TexturePolygon.h"
 #include "ImageSymbol.h"
 #include "RenderParams.h"
-#include "Texture.h"
+#include "S2_Texture.h"
 #include "TexcoordsMap.h"
 
 #include <SM_Process.h>
@@ -25,13 +25,13 @@ TexturePolygon::TexturePolygon(const TexturePolygon& poly)
 	: m_img(NULL)
 	, m_texcoords(poly.m_texcoords)
 {
-	cu::RefCountObjAssign(m_img, const_cast<ImageSymbol*>(poly.m_img));
+	cu::RefCountObjAssign(m_img, poly.m_img);
 }
 
 TexturePolygon& TexturePolygon::operator = (const TexturePolygon& poly)
 {
 	m_img = NULL;
-	cu::RefCountObjAssign(m_img, const_cast<ImageSymbol*>(poly.m_img));
+	cu::RefCountObjAssign(m_img, poly.m_img);
 	m_texcoords = poly.m_texcoords;
 	return *this;
 }

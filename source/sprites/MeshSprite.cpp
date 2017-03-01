@@ -30,7 +30,7 @@ MeshSprite& MeshSprite::operator = (const MeshSprite& mesh)
 	Sprite::operator = (mesh);
 	m_speed = mesh.m_speed;
 	m_trans = mesh.m_trans;
-	cu::RefCountObjAssign(m_base, const_cast<const Symbol*>(mesh.m_base));
+	cu::RefCountObjAssign(m_base, mesh.m_base);
 	m_only_draw_bound = mesh.m_only_draw_bound;
 	return *this;
 }

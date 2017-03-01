@@ -6,6 +6,7 @@
 #include <CU_RefCountObj.h>
 
 #include <assert.h>
+#include <string.h>
 
 namespace s2
 {
@@ -30,13 +31,13 @@ Anim2Curr::Anim2Curr(const Anim2Curr& curr)
 	, m_sk_skin(NULL)
 	, m_active(curr.m_active)
 {
-	cu::RefCountObjAssign(m_sym, const_cast<Anim2Symbol*>(curr.m_sym));
+	cu::RefCountObjAssign(m_sym, curr.m_sym);
 }
 
 Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 {
 	m_sym = NULL;
-	cu::RefCountObjAssign(m_sym, const_cast<Anim2Symbol*>(curr.m_sym));
+	cu::RefCountObjAssign(m_sym, curr.m_sym);
 	m_frame = curr.m_frame;
 	m_frames_ptr = curr.m_frames_ptr;
 	m_start_time = curr.m_start_time;

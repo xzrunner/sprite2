@@ -5,6 +5,8 @@
 
 #include S2_MAT_HEADER
 
+#include <stddef.h>
+
 namespace s2
 {
 

@@ -8,6 +8,7 @@
 #include "AnimLerp.h"
 
 #include <algorithm>
+#include <climits>
 
 namespace s2
 {

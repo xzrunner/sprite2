@@ -1,5 +1,7 @@
 #include "RenderColor.h"
 
+#include <string.h>
+
 namespace s2
 {
 

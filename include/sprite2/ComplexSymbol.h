@@ -4,6 +4,7 @@
 #include "S2_Symbol.h"
 
 #include <vector>
+#include <string>
 
 namespace s2
 {

@@ -1,6 +1,6 @@
 #include "DrawRT.h"
-#include "RenderTargetMgr.h"
-#include "RenderTarget.h"
+#include "S2_RenderTargetMgr.h"
+#include "S2_RenderTarget.h"
 #include "RenderCtxStack.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
@@ -8,7 +8,7 @@
 #include "Shape.h"
 
 #include <SM_Rect.h>
-#include <unirender/RenderContext.h>
+#include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>
@@ -72,7 +72,7 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 	RenderParams params;
 	params.mt.Scale(scale, -scale, 1);
 	params.mt.Translate(-dx, dy, 0);
-	params.set_shader = false;
+	params.SetChangeShader(false);
 	DrawNode::Draw(spr, params);
 
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
@@ -139,7 +139,9 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 
 	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
 
-	shape->Draw(sm::mat4::Scaled(1, -1, 1));
+	RenderParams rp;
+	rp.mt = sm::mat4::Scaled(1, -1, 1);
+	shape->Draw(rp);
 
 	RenderCtxStack::Instance()->Pop();
 

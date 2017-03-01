@@ -7,6 +7,7 @@
 #include S2_MAT_HEADER
 
 #include <vector>
+#include <string>
 
 namespace s2
 {

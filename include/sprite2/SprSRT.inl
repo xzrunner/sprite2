@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SPR_SRT_INL_
 #define _SPRITE2_SPR_SRT_INL_
 
+#include "string.h"
+
 #include <SM_Calc.h>
 
 namespace s2
@@ -8,30 +10,34 @@ namespace s2
 
 inline
 SprSRT::SprSRT()
-	: position(0, 0)
-	, angle(0)
-	, scale(1, 1)
-	, shear(0, 0)
-	, offset(0, 0)
-	, center(0, 0)
 {
+	memset(srt, 0, sizeof(srt));
+	srt[IDX_SCALE_X] = 1;
+	srt[IDX_SCALE_Y] = 1;
 }
 
 inline
-void SprSRT::Init()
+SprSRT::SprSRT(const SprSRT& srt)
 {
-	position.Set(0, 0);
-	angle = 0;
-	scale.Set(1, 1);
-	shear.Set(0, 0);
-	offset.Set(0, 0);
-	center.Set(0, 0);
+	memcpy(this->srt, srt.srt, sizeof(this->srt));
+}
+
+inline
+SprSRT& SprSRT::operator = (const SprSRT& srt)
+{
+	memcpy(this->srt, srt.srt, sizeof(this->srt));
+	return *this;
 }
 
 inline
 void SprSRT::UpdateCenter()
 {
-	center = position + sm::rotate_vector(-offset, angle) + offset;
+	sm::vec2 position(srt[IDX_POS_X], srt[IDX_POS_Y]);
+	sm::vec2 offset(srt[IDX_OFFSET_X], srt[IDX_OFFSET_Y]);
+	float angle = srt[IDX_ANGLE];
+	sm::vec2 center = position + sm::rotate_vector(-offset, angle) + offset;
+	srt[IDX_CENTER_X] = center.x;
+	srt[IDX_CENTER_Y] = center.y;
 }
 
 }

@@ -388,7 +388,7 @@ sm::vec2 Sprite::GetCenter() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-const sm::vec2& Sprite::GetPosition() const	
+sm::vec2 Sprite::GetPosition() const	
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetPosition();
@@ -406,7 +406,7 @@ float Sprite::GetAngle() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-const sm::vec2&	Sprite::GetScale() const
+sm::vec2 Sprite::GetScale() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	return IsGeoMatrix() ? POS1_PROXY : m_geo->GetScale();
@@ -415,7 +415,7 @@ const sm::vec2&	Sprite::GetScale() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-const sm::vec2&	Sprite::GetShear() const
+sm::vec2	Sprite::GetShear() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetShear();
@@ -424,7 +424,7 @@ const sm::vec2&	Sprite::GetShear() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-const sm::vec2& Sprite::GetOffset() const
+sm::vec2 Sprite::GetOffset() const
 { 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	if (IsGeoMatrix()) {
@@ -492,9 +492,9 @@ void Sprite::SetCamera(const RenderCamera& camera)
 	SetDirty(true);
 }
 
-const SprSRT& Sprite::GetLocalSRT() const
+void Sprite::GetLocalSRT(SprSRT& srt) const
 {
-	return m_geo->GetSRT();
+	m_geo->GetSRT(srt);
 }
 
 void Sprite::SetLocalSRT(const SprSRT& srt)
@@ -676,7 +676,7 @@ void Sprite::InitFlags()
 
 void Sprite::InitFromSpr(const Sprite& spr)
 {
-	cu::RefCountObjAssign(m_sym, const_cast<Symbol*>(spr.m_sym));
+	cu::RefCountObjAssign(m_sym, spr.m_sym);
 
 	m_name = spr.m_name;
 

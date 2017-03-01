@@ -9,19 +9,29 @@ namespace s2
 class SprSRT
 {
 public:
-	sm::vec2 position;
-	float    angle;
-	sm::vec2 scale;
-	sm::vec2 shear;
+	enum SRT_IDX
+	{
+		IDX_POS_X = 0,
+		IDX_POS_Y,
+		IDX_ANGLE,
+		IDX_SCALE_X,
+		IDX_SCALE_Y,
+		IDX_SHEAR_X,
+		IDX_SHEAR_Y,
+		IDX_OFFSET_X,
+		IDX_OFFSET_Y,
+		IDX_CENTER_X,
+		IDX_CENTER_Y,
 
-	sm::vec2 offset;
+		SRT_MAX
+	};
 
-	sm::vec2 center;
+	float srt[SRT_MAX];
 
 public:
 	SprSRT();
-
-	void Init();
+	SprSRT(const SprSRT& srt);
+	SprSRT& operator = (const SprSRT& srt);
 
 	void UpdateCenter();
 

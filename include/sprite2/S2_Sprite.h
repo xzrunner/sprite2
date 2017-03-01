@@ -93,12 +93,12 @@ public:
 	void Rotate(float rot);
 	void Scale(const sm::vec2& scale);
 
-	sm::vec2			GetCenter() const;
-	const sm::vec2&		GetPosition() const;
-	float		        GetAngle() const;
-	const sm::vec2&		GetScale() const;
-	const sm::vec2&		GetShear() const;
-	const sm::vec2&		GetOffset() const;
+	sm::vec2 GetCenter() const;
+	sm::vec2 GetPosition() const;
+	float	 GetAngle() const;
+	sm::vec2 GetScale() const;
+	sm::vec2 GetShear() const;
+	sm::vec2 GetOffset() const;
 
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
@@ -108,7 +108,7 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	const SprSRT& GetLocalSRT() const;
+	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);
 
 	S2_MAT GetLocalMat() const;

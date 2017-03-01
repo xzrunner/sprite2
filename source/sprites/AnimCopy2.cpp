@@ -137,15 +137,13 @@ void AnimCopy2::LoadLerpData(const AnimSymbol& sym)
 				const Sprite* end = layers[ilayer]->frames[iframe+1]->sprs[actor.next];
 				int dt = layer.frames[iframe + 1].time - layer.frames[iframe].time;
 
-				const SprSRT& bsrt = begin->GetLocalSRT();
-				const SprSRT& esrt = end->GetLocalSRT();
+				SprSRT bsrt, esrt;
+				begin->GetLocalSRT(bsrt);
+				end->GetLocalSRT(esrt);
 				dst.srt = bsrt;
-				dst.dsrt.position = (esrt.position - bsrt.position) / dt;
-				dst.dsrt.angle    = (esrt.angle - bsrt.angle) / dt;
-				dst.dsrt.scale    = (esrt.scale - bsrt.scale) / dt;
-				dst.dsrt.shear    = (esrt.shear - bsrt.shear) / dt;
-				dst.dsrt.offset   = (esrt.offset - bsrt.offset) / dt;
-				dst.dsrt.center   = (esrt.center - bsrt.center) / dt;
+				for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
+					dst.dsrt.srt[i] = (esrt.srt[i] - bsrt.srt[i]) / dt;
+				}
 
 				const RenderColor& rcb = begin->GetColor();
 				const RenderColor& rce = end->GetColor();

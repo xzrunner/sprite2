@@ -8,6 +8,7 @@
 #include "AnimLerp.h"
 
 #include <algorithm>
+#include <climits>
 
 namespace s2
 {
@@ -364,7 +365,8 @@ void AnimCurr3::LoadCurrSprites()
 			}
 			else
 			{
-				const SprSRT& srt = m_copy->m_slots[actor.slot]->GetLocalSRT();
+				SprSRT srt;
+				m_copy->m_slots[actor.slot]->GetLocalSRT(srt);
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 
@@ -378,12 +380,10 @@ void AnimCurr3::LoadCurrSprites()
 
 void AnimCurr3::LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int time)
 {
-	SprSRT srt = lerp.srt;
-	srt.position += lerp.dsrt.position * time;
-	srt.angle    += lerp.dsrt.angle * time;
-	srt.scale    += lerp.dsrt.scale * time;
-	srt.shear    += lerp.dsrt.shear * time;
-	srt.offset   += lerp.dsrt.offset * time;
+	SprSRT srt;
+	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
+		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
+	}
 	srt.UpdateCenter();
 	spr->SetLocalSRT(srt);
 

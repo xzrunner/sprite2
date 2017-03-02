@@ -1,6 +1,6 @@
 #include "MeshSprite.h"
 #include "MeshSymbol.h"
-#include "Mesh.h"
+#include "S2_Mesh.h"
 
 #include <stddef.h>
 

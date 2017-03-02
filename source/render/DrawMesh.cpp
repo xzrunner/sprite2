@@ -1,5 +1,5 @@
 #include "DrawMesh.h"
-#include "Mesh.h"
+#include "S2_Mesh.h"
 #include "S2_RVG.h"
 #include "Color.h"
 #include "RenderCtxStack.h"

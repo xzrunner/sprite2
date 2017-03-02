@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include "S2_Mesh.h"
 #include "S2_Symbol.h"
 
 #include <polymesh/Mesh.h>

@@ -5,7 +5,7 @@
 #include "RenderParams.h"
 #include "DrawMesh.h"
 #include "DrawNode.h"
-#include "Mesh.h"
+#include "S2_Mesh.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>

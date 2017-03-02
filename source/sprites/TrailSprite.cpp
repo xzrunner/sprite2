@@ -76,6 +76,8 @@ void TrailSprite::OnMessage(Message msg)
 			t2d_emitter_start(m_et);
 		}
 		break;
+	default:
+		break;
 	}
 }
 

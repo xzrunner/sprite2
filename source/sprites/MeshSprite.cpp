@@ -18,10 +18,11 @@ MeshSprite::MeshSprite(const MeshSprite& mesh)
 	: Sprite(mesh)
 	, m_speed(mesh.m_speed)
 	, m_trans(mesh.m_trans)
+	, m_base(mesh.m_base)
 	, m_only_draw_bound(mesh.m_only_draw_bound)
 {
-	if (m_base = mesh.m_base) {
-		m_base->AddReference();
+	if (mesh.m_base) {
+		mesh.m_base->AddReference();
 	}
 }
 
@@ -40,7 +41,8 @@ MeshSprite::MeshSprite(Symbol* sym, uint32_t id)
 	, m_only_draw_bound(false)
 {
 	Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(sym)->GetMesh();
-	if (m_base = mesh->GetBaseSymbol()) {
+	m_base = mesh->GetBaseSymbol();
+	if (m_base) {
 		m_base->AddReference();
 	}
 

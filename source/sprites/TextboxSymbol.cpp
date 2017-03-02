@@ -57,7 +57,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
  	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (rp_child.shader.GetFilter() && rp_child.shader.GetFilter()->GetMode() == sl::FM_GRAY) {
+	if (rp_child.shader.GetFilter() && sl::FILTER_MODE(rp_child.shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);

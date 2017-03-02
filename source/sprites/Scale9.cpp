@@ -158,6 +158,8 @@ void Scale9::SetSize(float width, float height)
 			ResizeSprite(S9_TOP_CENTER, sm::vec2(0.0f, h1*0.5f+h2*0.5f), width, h2);
 		}
 		break;
+	default:
+		break;
 	}
 }
 
@@ -303,6 +305,8 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center,
 				src_h = m_sz_right;
 				src_w = m_sz_top;
 				break;
+			default:
+				break;
 			}
 		}
 		else
@@ -336,6 +340,8 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center,
 			case S9_TOP_RIGHT:
 				src_w = m_sz_right;
 				src_h = m_sz_top;
+				break;
+			default:
 				break;
 			}
 		}

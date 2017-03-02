@@ -1,5 +1,5 @@
 #ifndef _SPRITE2_BOUNDING_BOX_H_
-#define _SPRITE2_BOUNDING_H_
+#define _SPRITE2_BOUNDING_BOX_H_
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
@@ -43,4 +43,4 @@ public:
 
 }
 
-#endif // _SPRITE2_BOUNDING_H_
+#endif // _SPRITE2_BOUNDING_BOX_H_

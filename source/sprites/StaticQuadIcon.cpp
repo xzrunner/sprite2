@@ -73,7 +73,7 @@ void StaticQuadIcon::SetScreen(const sm::vec2* screen)
 
 void StaticQuadIcon::GetQuad(float process, sm::vec2 quad[4]) const
 {
-	memcpy(quad, m_src, sizeof(quad));
+	memcpy(&quad[0], &m_src[0], sizeof(m_src));
 }
 
 void StaticQuadIcon::Update()

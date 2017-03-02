@@ -1,6 +1,8 @@
 #include "AnimSprite.h"
 #include "AnimSymbol.h"
 
+#include <stdlib.h>
+
 namespace s2
 {
 
@@ -45,9 +47,10 @@ void AnimSprite::OnMessage(Message msg)
 			RandomStartTime();
 		}
 		break;
+	default:
+		break;
 	}
 }
-
 bool AnimSprite::Update(const RenderParams& rp)
 {
 	return m_curr.Update(rp, m_loop, m_interval, m_fps);

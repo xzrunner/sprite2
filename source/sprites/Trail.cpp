@@ -93,7 +93,9 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 	vertices.resize(count);
 	int ptr = 0;
 	for (int i = 0; i < count; ++i) {
-		vertices[i] = rp->mat * sm::vec2(positions[ptr++], positions[ptr++]);
+		float x = positions[ptr++],
+		      y = positions[ptr++];		
+		vertices[i] = rp->mat * sm::vec2(x, y);
 	}
 	shader->Draw(&vertices[0].x, &t_colors[0], count);
 }

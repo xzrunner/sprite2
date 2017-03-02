@@ -1,4 +1,7 @@
 #include "ModelSymbol.h"
+
+#ifndef S2_DISABLE_MODEL
+
 #include "SymType.h"
 
 #include <model3/Model.h>
@@ -63,3 +66,5 @@ void ModelSymbol::SetModel(m3::Model* model)
 }
 
 }
+
+#endif // S2_DISABLE_MODEL

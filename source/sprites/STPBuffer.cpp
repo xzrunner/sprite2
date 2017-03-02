@@ -1,5 +1,7 @@
 #include "STPBuffer.h"
 
+#include <string.h>
+
 namespace s2
 {
 

@@ -65,7 +65,7 @@ sm::rect SkeletonSymbol::GetBounding(const Sprite* spr) const
 
 void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
 {
-	cu::RefCountObjAssign((Skeleton*)m_skeleton, skeleton);
+	cu::RefCountObjAssign(m_skeleton, skeleton);
 }
 
 }

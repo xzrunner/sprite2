@@ -37,9 +37,11 @@ TexturePolygon& TexturePolygon::operator = (const TexturePolygon& poly)
 }
 
 TexturePolygon::TexturePolygon(const ImageSymbol* img)
-	: m_img(NULL)
+	: m_img(const_cast<ImageSymbol*>(img))
 {
-	cu::RefCountObjAssign(m_img, img);	
+	if (img) {
+		img->AddReference();
+	}
 }
 
 TexturePolygon::~TexturePolygon()

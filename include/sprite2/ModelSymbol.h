@@ -1,6 +1,10 @@
 #ifndef _SPRITE2_MODEL_SYMBOL_H_
 #define _SPRITE2_MODEL_SYMBOL_H_
 
+#include "s2_config.h"
+
+#ifndef S2_DISABLE_MODEL
+
 #include "S2_Symbol.h"
 
 #include <model3/AABB.h>
@@ -37,5 +41,7 @@ protected:
 }; // ModelSymbol
 
 }
+
+#endif // S2_DISABLE_MODEL
 
 #endif // _SPRITE2_MODEL_SYMBOL_H_

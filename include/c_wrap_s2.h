@@ -137,7 +137,7 @@ int   s2_rt_get_texid(void* rt);
 
 void* s2_cam_create();
 void  s2_cam_release(void* cam);
-void  s2_cam_bind(const void* cam);
+void  s2_cam_bind(void* cam);
 void  s2_cam_set(void* cam, float x, float y, float scale);
 
 /************************************************************************/

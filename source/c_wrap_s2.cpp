@@ -788,9 +788,9 @@ void s2_cam_release(void* cam)
 }
 
 extern "C"
-void s2_cam_bind(const void* cam)
+void s2_cam_bind(void* cam)
 {
-	const Camera* c = static_cast<const Camera*>(cam);
+	Camera* c = static_cast<Camera*>(cam);
 	c->Bind();
 	Blackboard::Instance()->SetCamera(c);
 }

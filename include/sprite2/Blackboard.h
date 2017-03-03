@@ -15,16 +15,16 @@ public:
 	int  GetScreenCacheTexID() const { return m_screen_cache_texid; }
 	void SetScreenCacheTexID(int tex_id) { m_screen_cache_texid = tex_id; }
 
-	const Camera* GetCamera() const { return m_cam; }
-	void SetCamera(const Camera* cam) { m_cam = cam; }
+	Camera* GetCamera() const { return m_cam; }
+	void SetCamera(Camera* cam) { m_cam = cam; }
 
 	const sm::ivec2& GetScreenSize() const { return m_screen_sz; }
-	void SetScreenSize(int w, int h) { m_screen_sz.x = w; m_screen_sz.y = h; }
+	void SetScreenSize(int w, int h);
 
 private:
 	int m_screen_cache_texid;
 
-	const Camera* m_cam;
+	Camera* m_cam;
 
 	sm::ivec2 m_screen_sz;
 	

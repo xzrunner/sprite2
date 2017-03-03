@@ -67,6 +67,8 @@ void Particle2dSprite::OnMessage(Message msg)
 			p2d_emitter_start(m_et);
 		}
 		break;
+	default:
+		break;
 	}
 }
 

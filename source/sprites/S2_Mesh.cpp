@@ -97,6 +97,8 @@ void Mesh::Update(const rg_skeleton_pose* sk_pose)
 	case pm::MESH_SKIN2:
 		static_cast<pm::Skin2Mesh*>(m_mesh)->Update(query_joint_world_mt, sk_pose);
 		break;
+	default:
+		break;
 	}
 }
 

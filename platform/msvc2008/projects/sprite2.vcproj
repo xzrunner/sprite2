@@ -312,11 +312,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\dataset\Texture.cpp"
+					RelativePath="..\..\..\source\dataset\S2_Texture.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\Texture.h"
+					RelativePath="..\..\..\include\sprite2\S2_Texture.h"
 					>
 				</File>
 			</Filter>
@@ -788,14 +788,6 @@
 				Name="11.mesh"
 				>
 				<File
-					RelativePath="..\..\..\source\sprites\Mesh.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\Mesh.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprites\MeshSprite.cpp"
 					>
 				</File>
@@ -809,6 +801,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\MeshSymbol.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\S2_Mesh.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_Mesh.h"
 					>
 				</File>
 			</Filter>
@@ -1116,6 +1116,10 @@
 				Name="symbol"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\S2_Symbol.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\sprite2\S2_Symbol.h"
 					>
 				</File>
@@ -1312,19 +1316,19 @@
 				Name="rt"
 				>
 				<File
-					RelativePath="..\..\..\source\render\RenderTarget.cpp"
+					RelativePath="..\..\..\source\render\S2_RenderTarget.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\RenderTarget.h"
+					RelativePath="..\..\..\include\sprite2\S2_RenderTarget.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\render\RenderTargetMgr.cpp"
+					RelativePath="..\..\..\source\render\S2_RenderTargetMgr.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\RenderTargetMgr.h"
+					RelativePath="..\..\..\include\sprite2\S2_RenderTargetMgr.h"
 					>
 				</File>
 			</Filter>
@@ -1352,19 +1356,19 @@
 				Name="ctx"
 				>
 				<File
-					RelativePath="..\..\..\source\render\RenderContext.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\RenderContext.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\render\RenderCtxStack.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\RenderCtxStack.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\render\S2_RenderContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\S2_RenderContext.h"
 					>
 				</File>
 			</Filter>

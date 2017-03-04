@@ -4,6 +4,7 @@
 #include "STPBuffer.h"
 
 #include <assert.h>
+#include <string.h>
 
 namespace s2
 {

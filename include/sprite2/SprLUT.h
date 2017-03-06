@@ -18,6 +18,8 @@ public:
 
 	Sprite* Query(int id);
 
+	void Clear();
+
 private:
 	static const size_t HASH_SZ_TBL[];
 	static const int HASH_SZ_TBL_SZ;

@@ -21,6 +21,8 @@ public:
 
 	int Count() const { return m_count; }
 
+	void Clear();
+
 private:
 	static const size_t HASH_SZ_TBL[];
 	static const int HASH_SZ_TBL_SZ;

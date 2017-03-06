@@ -72,6 +72,17 @@ Sprite* SprLUT::Query(int id)
 	return NULL;
 }
 
+void SprLUT::Clear()
+{
+	m_hash_sz_idx = 0;
+	m_search_length = m_search_times = 0;
+
+	int sz = HASH_SZ_TBL[m_hash_sz_idx];
+	for (int i = 0; i < sz; ++i) {
+		m_hash[i].clear();
+	}
+}
+
 void SprLUT::Rehash()
 {
 	if (m_hash_sz_idx + 1 >= HASH_SZ_TBL_SZ) {

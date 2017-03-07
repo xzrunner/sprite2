@@ -18,6 +18,7 @@ public:
 	 *    Symbol
 	 */
 	virtual int Type() const;
+	virtual void Traverse(const SymVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const {}
 	virtual sm::rect GetBounding(const Sprite* spr = NULL) const { return sm::rect(0, 0); }
 

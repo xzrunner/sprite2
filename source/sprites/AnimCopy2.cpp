@@ -99,8 +99,7 @@ void AnimCopy2::ConnectActors(const AnimSymbol& sym)
 				for (int inext = 0, nnext = next.actors.size(); inext < nnext; ++inext) {
 					const Sprite* curr_spr = src_layer->frames[iframe]->sprs[icurr];
 					const Sprite* next_spr = src_layer->frames[iframe+1]->sprs[inext];
-					if (curr_spr->GetSymbol() == next_spr->GetSymbol() &&
-						curr_spr->GetName() == next_spr->GetName()) {
+					if (curr_spr->GetName() == next_spr->GetName()) {
 						curr.actors[icurr].next = inext;
 						next.actors[inext].prev = icurr;
 						break;

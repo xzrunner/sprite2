@@ -575,15 +575,37 @@ void s2_actor_set_pos(void* actor, float x, float y) {
 }
 
 extern "C"
+void s2_actor_get_pos(void* actor, float* x, float* y) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	sm::vec2 pos = s2_actor->GetPosition();
+	*x = pos.x;
+	*y = pos.y;
+}
+
+extern "C"
 void s2_actor_set_angle(void* actor, float angle) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetAngle(angle);
 }
 
 extern "C"
+float s2_actor_get_angle(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	return s2_actor->GetAngle();
+}
+
+extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetScale(sm::vec2(sx, sy));
+}
+
+extern "C"
+void s2_actor_get_scale(void* actor, float* sx, float* sy) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	sm::vec2 scale = s2_actor->GetScale();
+	*sx = scale.x;
+	*sy = scale.y;
 }
 
 extern "C"

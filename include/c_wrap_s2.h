@@ -101,8 +101,11 @@ void  s2_actor_set_text(void* actor, const char* text);
 void  s2_actor_print_path(void* actor);
 
 void  s2_actor_set_pos(void* actor, float x, float y);
+void  s2_actor_get_pos(void* actor, float* x, float* y);
 void  s2_actor_set_angle(void* actor, float angle);
+float s2_actor_get_angle(void* actor);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
+void  s2_actor_get_scale(void* actor, float* sx, float* sy);
 
 void* s2_actor_get_parent(void* actor);
 

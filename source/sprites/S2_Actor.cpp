@@ -70,6 +70,15 @@ void Actor::SetPosition(const sm::vec2& pos)
 	}
 }
 
+sm::vec2 Actor::GetPosition() const
+{
+	if (m_geo) {
+		return m_geo->GetPosition();
+	} else {
+		return sm::vec2(0, 0);
+	}
+}
+
 void Actor::SetAngle(float angle)
 {
 	if (m_geo) {
@@ -82,6 +91,15 @@ void Actor::SetAngle(float angle)
 	}
 }
 
+float Actor::GetAngle() const
+{
+	if (m_geo) {
+		return m_geo->GetAngle();
+	} else {
+		return 0;
+	}
+}
+
 void Actor::SetScale(const sm::vec2& scale)
 {
 	if (m_geo) {
@@ -91,6 +109,15 @@ void Actor::SetScale(const sm::vec2& scale)
 			m_geo = new ActorGeo;
 			m_geo->SetScale(scale);
 		}
+	}
+}
+
+sm::vec2 Actor::GetScale() const
+{
+	if (m_geo) {
+		return m_geo->GetScale();
+	} else {
+		return sm::vec2(1, 1);
 	}
 }
 

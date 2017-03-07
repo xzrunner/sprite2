@@ -30,8 +30,11 @@ public:
 	void SetTreePath(const SprTreePath& path) { m_path = path; }
 
 	void SetPosition(const sm::vec2& pos);
+	sm::vec2 GetPosition() const;
 	void SetAngle(float angle);
+	float GetAngle() const;
 	void SetScale(const sm::vec2& scale);
+	sm::vec2 GetScale() const;
 	
 	S2_MAT GetLocalMat() const;
 

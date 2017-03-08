@@ -49,6 +49,9 @@ VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams&
 	}
 
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
+	if (sz.Width() == 0 || sz.Height() == 0) {
+		return VISIT_CONTINUE;
+	}
 	std::vector<sm::vec2> vertices(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
 	vertices[1] = sm::vec2(sz.xmin, sz.ymax);

@@ -25,7 +25,7 @@ public:
 	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
-	virtual Sprite* FetchChild(const std::string& name) const;
+	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 
 	VI_DUMMY_FUNC
 

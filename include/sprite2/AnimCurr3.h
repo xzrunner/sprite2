@@ -18,6 +18,7 @@ class AnimSymbol;
 class SprVisitor;
 class SprVisitorParams;
 class RenderParams;
+class SprTreePath;
 
 class AnimCurr3 : private cu::Uncopyable
 {
@@ -35,7 +36,7 @@ public:
 		float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
-	Sprite* FetchChild(const std::string& name) const;
+	Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 
 	void Start();
 

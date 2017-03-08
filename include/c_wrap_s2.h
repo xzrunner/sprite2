@@ -29,8 +29,9 @@ void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, floa
 				  float xmin, float ymin, float xmax, float ymax);
 void  s2_spr_update(void* spr);
 
-void* s2_spr_fetch_child(const void* spr, const char* name);
-void* s2_spr_fetch_child_by_index(const void* spr, int idx);
+void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name);
+void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx);
+void* s2_spr_fetch_child_no_proxy(const void* spr, const char* name);
 
 void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);

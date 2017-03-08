@@ -52,8 +52,8 @@ public:
 	
  	virtual bool Update(const RenderParams& rp) { return false; }
 	virtual bool SetFrame(int frame) { return false; }
-	virtual Sprite* FetchChild(const std::string& name) const { return NULL; }
-	virtual Sprite* FetchChild(int idx) const { return NULL; }
+	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const { return NULL; }
+	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const { return NULL; }
 
 	virtual void SetSymbol(Symbol* sym);
 

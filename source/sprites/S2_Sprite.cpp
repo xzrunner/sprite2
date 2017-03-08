@@ -650,7 +650,6 @@ const Sprite* Sprite::GetProxy(const SprTreePath& parent_path) const
 	path.Push(GetID());
 	const Actor* actor = QueryActor(path);
 	if (actor) {
-		const Sprite* spr = actor->GetProxy();
 		return actor->GetProxy();
 	} else {
 		return NULL;

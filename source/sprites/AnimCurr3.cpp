@@ -162,7 +162,7 @@ void AnimCurr3::Draw(const RenderParams& rp) const
 	}
 }
 
-Sprite* AnimCurr3::FetchChild(const std::string& name) const
+Sprite* AnimCurr3::FetchChild(const std::string& name, const SprTreePath& path) const
 {
 // 	for (int i = 0; i < m_curr_num; ++i) {
 // 		if (m_slots[m_curr[i]]->GetName() == name) {
@@ -173,8 +173,18 @@ Sprite* AnimCurr3::FetchChild(const std::string& name) const
 	//////////////////////////////////////////////////////////////////////////
 
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		if (m_slots[i]->GetName() == name) {
-			return m_slots[i];
+		Sprite* spr = m_slots[i];
+		if (spr->GetName() == name) {
+			if (spr->IsHasProxy()) {
+				const Sprite* proxy = spr->GetProxy(path);
+				if (proxy) {
+					return const_cast<Sprite*>(proxy);
+				} else {
+					return spr;
+				}
+			} else {
+				return spr;
+			}
 		}
 	}
 

@@ -52,7 +52,7 @@ bool MaskSprite::SetFrame(int frame)
 	return false;
 }
 
-Sprite* MaskSprite::FetchChild(const std::string& name) const
+Sprite* MaskSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
 	if (name == "base") {
 		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());

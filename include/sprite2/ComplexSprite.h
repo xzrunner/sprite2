@@ -25,8 +25,8 @@ public:
 	virtual void OnMessage(Message msg);
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
-	virtual Sprite* FetchChild(const std::string& name) const;
-	virtual Sprite* FetchChild(int idx) const;
+	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
+	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
 
 	void SetAction(const std::string& name);
 	void SetAction(int idx) { m_action = idx; }

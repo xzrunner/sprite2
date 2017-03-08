@@ -74,25 +74,44 @@ bool ComplexSprite::SetFrame(int frame)
 	return dirty;
 }
 
-Sprite* ComplexSprite::FetchChild(const std::string& name) const
+Sprite* ComplexSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
 		if (child->GetName() == name) {
-			return child;
+			if (child->IsHasProxy()) {
+				const Sprite* proxy = child->GetProxy(path);
+				if (proxy) {
+					return const_cast<Sprite*>(proxy);
+				} else {
+					return child;
+				}
+			} else {
+				return child;
+			}
 		}
 	}
 	return NULL;
 }
 
-Sprite* ComplexSprite::FetchChild(int idx) const
+Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 {
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	if (idx >= 0 && idx < children.size()) {
-		return children[idx];
+		Sprite* child = children[idx];
+		if (child->IsHasProxy()) {
+			const Sprite* proxy = child->GetProxy(path);
+			if (proxy) {
+				return const_cast<Sprite*>(proxy);
+			} else {
+				return child;
+			}
+		} else {
+			return child;
+		}
 	} else {
 		return NULL;
 	}

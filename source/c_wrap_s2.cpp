@@ -87,8 +87,10 @@ void s2_spr_update(void* spr) {
 }
 
 extern "C"
-void* s2_spr_fetch_child(const void* spr, const char* name) {
-	const Sprite* child = static_cast<const Sprite*>(spr)->FetchChild(name);
+void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -97,8 +99,21 @@ void* s2_spr_fetch_child(const void* spr, const char* name) {
 }
 
 extern "C"
-void* s2_spr_fetch_child_by_index(const void* spr, int idx) {
-	const Sprite* child = static_cast<const Sprite*>(spr)->FetchChild(idx);
+void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* child = s2_spr->FetchChild(idx, s2_actor->GetTreePath());
+	if (child) {
+		return const_cast<Sprite*>(child);
+	} else {
+		return NULL;
+	}
+}
+
+extern "C"
+void* s2_spr_fetch_child_no_proxy(const void* spr, const char* name) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	const Sprite* child = s2_spr->FetchChild(name, SprTreePath());
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {

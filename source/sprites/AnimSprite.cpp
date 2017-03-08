@@ -62,9 +62,9 @@ bool AnimSprite::SetFrame(int frame)
 	return true;
 }
 
-Sprite* AnimSprite::FetchChild(const std::string& name) const
+Sprite* AnimSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
-	return m_curr.FetchChild(name);
+	return m_curr.FetchChild(name, path);
 }
 
 void AnimSprite::SetStartRandom(bool random) 

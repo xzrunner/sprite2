@@ -61,6 +61,29 @@ void s2_on_size(int w, int h)
 /* symbol                                                               */
 /************************************************************************/
 
+extern "C"
+void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, float sy,
+				    float xmin, float ymin, float xmax, float ymax) {
+	RenderParams rp;
+	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	rp.view_region.xmin = xmin;
+	rp.view_region.ymin = ymin;
+	rp.view_region.xmax = xmax;
+	rp.view_region.ymax = ymax;
+
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
+	SprTreePath path = s2_actor->GetTreePath();
+	path.Pop();
+	const Sprite* proxy = s2_spr->GetProxy(path);
+	if (proxy) {
+		DrawNode::Draw(proxy->GetSymbol(), rp);
+	} else {
+		DrawNode::Draw(s2_spr->GetSymbol(), rp);
+	}
+}
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
@@ -513,6 +536,40 @@ void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 /************************************************************************/
 
 extern "C"
+void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
+				   float xmin, float ymin, float xmax, float ymax) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+
+	RenderParams rp;
+	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	rp.view_region.xmin = xmin;
+	rp.view_region.ymin = ymin;
+	rp.view_region.xmax = xmax;
+	rp.view_region.ymax = ymax;
+
+	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
+
+	SprTreePath path = s2_actor->GetTreePath();
+	std::vector<int> path_tmp;
+	while (!path.Empty()) {
+		path_tmp.push_back(path.Top());
+		path.Pop();
+	}
+
+	SprTreePath curr_path;
+	RenderParams rp_parent = rp, rp_child;
+	while (path_tmp.size() > 1) {
+		curr_path.Push(path_tmp.back());
+		path_tmp.pop_back();
+		Actor* actor = ActorLUT::Instance()->Query(curr_path);
+		DrawNode::Prepare(rp_parent, actor->GetSpr(), rp_child);
+		rp_parent = rp_child;
+	}
+	DrawNode::Draw(s2_spr, rp_parent);
+}
+
+extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 
@@ -621,6 +678,24 @@ void s2_actor_get_scale(void* actor, float* sx, float* sy) {
 	sm::vec2 scale = s2_actor->GetScale();
 	*sx = scale.x;
 	*sy = scale.y;
+}
+
+extern "C"
+void s2_actor_get_world_pos(void* actor, float* x, float* y) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	SprTreePath path = s2_actor->GetTreePath();
+	assert(!path.Empty());
+	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
+	path.Pop();
+	while (!path.Empty()) {
+		Actor* actor = ActorLUT::Instance()->Query(path);
+		mat = mat * actor->GetSpr()->GetLocalMat();
+		mat = actor->GetLocalMat() * mat;
+		path.Pop();
+	}
+	sm::vec2 pos = mat * sm::vec2(0, 0);
+	*x = pos.x;
+	*y = pos.y;
 }
 
 extern "C"

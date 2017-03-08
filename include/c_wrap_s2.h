@@ -19,7 +19,8 @@ void s2_on_size(int w, int h);
 /* symbol                                                               */
 /************************************************************************/
 
-
+void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, float sy,
+					 float xmin, float ymin, float xmax, float ymax);
 
 /************************************************************************/
 /* sprite                                                               */
@@ -90,6 +91,9 @@ void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
 /* actor                                                                */
 /************************************************************************/
 
+void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
+					float xmin, float ymin, float xmax, float ymax);
+
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 
 void* s2_get_actor(const void* parent_actor, void* child_spr);
@@ -107,6 +111,8 @@ void  s2_actor_set_angle(void* actor, float angle);
 float s2_actor_get_angle(void* actor);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
 void  s2_actor_get_scale(void* actor, float* sx, float* sy);
+
+void  s2_actor_get_world_pos(void* actor, float* x, float* y);
 
 void* s2_actor_get_parent(void* actor);
 

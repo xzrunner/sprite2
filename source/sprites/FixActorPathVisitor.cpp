@@ -28,15 +28,17 @@ VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams
 	return VISIT_CONTINUE;
 }
 
-void FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
+VisitResult FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_parent_path.Push(spr->GetID());
+	return VISIT_CONTINUE;
 }
 
-void FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
+VisitResult FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	assert(!m_parent_path.Empty() && m_parent_path.Top() == spr->GetID());
 	m_parent_path.Pop();
+	return VISIT_CONTINUE;
 }
 
 }

@@ -325,8 +325,12 @@ bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 	{
 		visitor.VisitChildrenBegin(this, p);
 		bool ret = TraverseChildren(visitor, p);
-		visitor.VisitChildrenEnd(this, p);
-		return ret;
+		VisitResult ret2 = visitor.VisitChildrenEnd(this, p);
+		if (!ret || ret2 == VISIT_STOP) {
+			return false;
+		} else {
+			return true;
+		}
 	} 
 	else 
 	{

@@ -14,8 +14,8 @@ public:
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
 
-	virtual void VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params);
-	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
 
 private:
 	SprTreePath m_parent_path;

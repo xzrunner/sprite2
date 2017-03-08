@@ -27,8 +27,8 @@ public:
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params) = 0;
 
-	virtual void VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params) {}
-	virtual void VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params) {}
+	virtual VisitResult VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params) { return VISIT_CONTINUE; }
+	virtual VisitResult VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params) { return VISIT_CONTINUE; }
 
 	bool GetOrder() const { return m_order; }
 

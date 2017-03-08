@@ -68,7 +68,11 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = params.mt;
 		m_layer_find = true;
-		return VISIT_STOP;
+		if (spr->IsEditable()) {
+			return VISIT_STOP;
+		} else {
+			return VISIT_CONTINUE;
+		}
 	}
 	else
 	{
@@ -76,16 +80,20 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	}
 }
 
-void PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_layer_find = false;
+	return VISIT_CONTINUE;
 }
 
-void PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (m_layer_find && !m_spr->IsEditable()) {		
 		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = params.mt;
+		return VISIT_STOP;
+	} else {
+		return VISIT_CONTINUE;
 	}
 }
 

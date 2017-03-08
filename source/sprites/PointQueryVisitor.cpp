@@ -91,7 +91,11 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 	if (m_layer_find && !m_spr->IsEditable()) {		
 		cu::RefCountObjAssign(m_spr, spr);
 		m_mat = params.mt;
-		return VISIT_STOP;
+		if (spr->IsEditable()) {
+			return VISIT_STOP;
+		} else {
+			return VISIT_CONTINUE;
+		}
 	} else {
 		return VISIT_CONTINUE;
 	}

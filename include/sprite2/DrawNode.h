@@ -22,6 +22,7 @@ public:
 						   const float* c2_query_spr(const s2::Sprite* spr, int* tex_id));
 
 	static bool Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child);
+	static S2_MAT PrepareMat(const RenderParams& parent, const Sprite* spr);
 
 	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool scissor = true);
 

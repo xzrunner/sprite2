@@ -121,6 +121,7 @@ public:
 
 	void AddActor(Actor* actor) const;
 	const Actor* QueryActor(const SprTreePath& path) const;
+	bool HaveActor() const { return !m_actors.empty(); }
 	void ClearActors() const;
 	void FixActorPath(const SprTreePath& parent_path);
 	const Sprite* GetProxy(const SprTreePath& parent_path) const;

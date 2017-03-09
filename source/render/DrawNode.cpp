@@ -76,6 +76,22 @@ bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderPara
 	return true;
 }
 
+S2_MAT DrawNode::PrepareMat(const RenderParams& parent, const Sprite* spr)
+{
+	S2_MAT mat = spr->GetLocalMat() * parent.mt;
+	if (!spr->HaveActor()) {
+		return mat;
+	}
+
+	SprTreePath path = parent.path;
+	path.Push(spr->GetID());
+	const Actor* actor = spr->QueryActor(path);
+	if (actor) {
+		mat = actor->GetLocalMat() * mat;
+	}
+	return mat;
+}
+
 void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
 {
 	if (scissor && IsOutsideView(spr, rp)) {
@@ -207,16 +223,7 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-
-	S2_MAT mat = spr->GetLocalMat() * rp.mt;
-
-	SprTreePath path = rp.path;
-	path.Push(spr->GetID());
-	const Actor* actor = spr->QueryActor(path);
-	if (actor) {
-		mat = actor->GetLocalMat() * mat;
-	}
-
+	S2_MAT mat = PrepareMat(rp, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));
@@ -229,15 +236,8 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	sm::mat4 mt = spr->GetLocalMat();
-	SprTreePath path = rp.path;
-	path.Push(spr->GetID());
-	const Actor* actor = spr->QueryActor(path);
-	if (actor) {
-		mt = actor->GetLocalMat() * mt;
-	}
-
 	RenderParams rp_child = rp;
+	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
 	rp_child.mt = mt.Inverted();
 	DrawSprImpl(spr, rp_child);
 
@@ -248,21 +248,13 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 
 void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
-	sm::mat4 mt = spr->GetLocalMat() * rp.mt;
-	SprTreePath path = rp.path;
-	path.Push(spr->GetID());
-	const Actor* actor = spr->QueryActor(path);
-	if (actor) {
-		mt = actor->GetLocalMat() * mt;
-	}
-
-	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-
 	sm::vec2 vertices[4];
+	sm::rect r = spr->GetSymbol()->GetBounding(spr);
 	vertices[0] = sm::vec2(r.xmin, r.ymin);
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);
 	vertices[3] = sm::vec2(r.xmin, r.ymax);
+	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}

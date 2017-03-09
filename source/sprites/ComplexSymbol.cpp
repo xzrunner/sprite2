@@ -321,7 +321,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	S2_MAT mat = spr->GetLocalMat() * rp.mt;
+	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	sm::rect sr(r_min, r_max);

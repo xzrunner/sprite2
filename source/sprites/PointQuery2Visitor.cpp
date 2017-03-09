@@ -31,6 +31,15 @@ PointQuery2Visitor::~PointQuery2Visitor()
 
 VisitResult PointQuery2Visitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
+	if (spr->IsHasProxy()) {
+		SprTreePath path = params.path;
+		path.Pop();
+		const Sprite* proxy = spr->GetProxy(path);
+		if (proxy) {
+			spr = proxy;
+		}
+	}
+
 	if (!spr->IsVisible()) {
 		return VISIT_CONTINUE;
 	}

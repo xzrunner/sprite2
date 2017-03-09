@@ -117,11 +117,6 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 	}
 }
 
-void ComplexSprite::SetAction(const std::string& name)
-{
-	m_action = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionIdx(name);
-}
-
 bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	const std::vector<Sprite*>& children 
@@ -140,6 +135,11 @@ bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams
 		}
 	}
 	return true;
+}
+
+void ComplexSprite::SetAction(const std::string& name)
+{
+	m_action = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionIdx(name);
 }
 
 }

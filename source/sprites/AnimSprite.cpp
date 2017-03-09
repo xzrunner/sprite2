@@ -67,6 +67,11 @@ Sprite* AnimSprite::FetchChild(const std::string& name, const SprTreePath& path)
 	return m_curr.FetchChild(name, path);
 }
 
+bool AnimSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
+{
+	return m_curr.Traverse(visitor, params);
+}
+
 void AnimSprite::SetStartRandom(bool random) 
 { 
 	m_start_random = random; 
@@ -78,11 +83,6 @@ void AnimSprite::SetStartRandom(bool random)
 void AnimSprite::SetActive(bool active)
 {
 	m_curr.SetActive(active);
-}
-
-bool AnimSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
-{
-	return m_curr.Traverse(visitor, params);
 }
 
 void AnimSprite::RandomStartTime()

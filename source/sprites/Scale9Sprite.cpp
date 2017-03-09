@@ -22,11 +22,6 @@ Scale9Sprite* Scale9Sprite::Clone() const
 	return new Scale9Sprite(*this);
 }
 
-void Scale9Sprite::Resize(float width, float height)
-{
-	m_s9.SetSize(width, height);
-}
-
 bool Scale9Sprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	std::vector<Sprite*> grids;
@@ -45,6 +40,11 @@ bool Scale9Sprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams&
 		}
 	}
 	return true;
+}
+
+void Scale9Sprite::Resize(float width, float height)
+{
+	m_s9.SetSize(width, height);
 }
 
 }

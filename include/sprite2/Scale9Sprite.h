@@ -21,12 +21,11 @@ public:
 	 */
 	virtual Scale9Sprite* Clone() const;
 
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
+
 	const Scale9& GetScale9() const { return m_s9; }
 
 	void Resize(float width, float height);
-
-protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 protected:
 	Scale9 m_s9;

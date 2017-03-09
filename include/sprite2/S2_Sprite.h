@@ -64,10 +64,10 @@ public:
 	virtual void SetShear(const sm::vec2& shear);
 	virtual void SetOffset(const sm::vec2& offset);
 
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return true; }
+
 	static void InitHook(void (*init_flags)(Sprite* spr));
 
-protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return true; }
 public:
 
 	/**

@@ -27,14 +27,12 @@ public:
 	virtual bool SetFrame(int frame);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
+	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 	void SetAction(const std::string& name);
 	void SetAction(int idx) { m_action = idx; }
 	int GetAction() const { return m_action; }
 	
-protected:
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
-
 protected:
 	int m_action;
 

@@ -5,6 +5,7 @@
 #include "SprVisitorParams.h"
 #include "RenderColor.h"
 #include "SprDefault.h"
+#include "SprSRT.h"
 
 namespace s2
 {
@@ -147,6 +148,10 @@ void Actor::SetProxy(Sprite* proxy)
 	if (!proxy) {
 		return;
 	}
+
+	SprSRT srt;
+	m_spr->GetLocalSRT(srt);
+	m_proxy->SetLocalSRT(srt);
 
 	m_spr->SetHasProxy(true);
 

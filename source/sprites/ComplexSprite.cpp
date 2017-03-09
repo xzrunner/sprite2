@@ -137,9 +137,4 @@ bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams
 	return true;
 }
 
-void ComplexSprite::SetAction(const std::string& name)
-{
-	m_action = VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionIdx(name);
-}
-
 }

@@ -1,4 +1,5 @@
 #include "ComplexSymbol.h"
+#include "ComplexActor.h"
 #include "SymType.h"
 #include "ComplexSprite.h"
 #include "S2_Sprite.h"
@@ -71,8 +72,14 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	int action = -1;
-	if (spr) {
+	if (spr) 
+	{
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
+		const Actor* actor = spr->QueryActor(rp_child.path);
+		if (actor) {
+			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+			action = comp_actor->GetAction();
+		}
 	}
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
@@ -121,6 +128,7 @@ sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 	m_size.MakeEmpty();
 	int action = -1;
 	if (spr) {
+		// todo actor's action
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
 	}
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);

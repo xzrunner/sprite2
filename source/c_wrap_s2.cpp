@@ -25,6 +25,7 @@
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
+#include "ComplexActor.h"
 #include "AnimSymbol.h"
 #include "AnimSprite.h"
 #include "TextboxSprite.h"
@@ -244,12 +245,15 @@ void s2_spr_set_frame(void* spr, int frame) {
 }
 
 extern "C"
-void s2_spr_set_action(void* spr, const char* action) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_COMPLEX) {
-		ComplexSprite* complex = VI_DOWNCASTING<ComplexSprite*>(s2_spr);
-		complex->SetAction(action);
+void s2_spr_set_action(void* actor, const char* action) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_COMPLEX) {
+		return;
 	}
+
+	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(s2_actor->GetSpr()->GetSymbol());
+	ComplexActor* actor_complex = static_cast<ComplexActor*>(s2_actor);
+	actor_complex->SetAction(sym_complex->GetActionIdx(action));
 }
 
 extern "C"

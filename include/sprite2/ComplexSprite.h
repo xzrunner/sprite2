@@ -29,8 +29,7 @@ public:
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
 	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
-	void SetAction(const std::string& name);
-	void SetAction(int idx) { m_action = idx; }
+	void SetAction(int action) { m_action = action; }
 	int GetAction() const { return m_action; }
 	
 protected:

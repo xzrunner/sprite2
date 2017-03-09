@@ -6,6 +6,7 @@
 #include "SymType.h"
 
 #include "TextboxActor.h"
+#include "ComplexActor.h"
 #include "DummyActor.h"
 
 #include <assert.h>
@@ -35,6 +36,9 @@ Actor* ActorFactory::Create(const SprTreePath& parent, const Sprite* child) cons
 	{
 	case SYM_TEXTBOX:
 		actor = new TextboxActor(child, path);
+		break;
+	case SYM_COMPLEX:
+		actor = new ComplexActor(child, path);
 		break;
 	default:
 		actor = new DummyActor(child, path);

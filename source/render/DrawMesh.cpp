@@ -180,7 +180,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	}
 
 	assert(sym->Type() == SYM_IMAGE);
-	const ImageSymbol* img_sym = dynamic_cast<const ImageSymbol*>(sym);
+	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
 	float src_texcoords[8];
 	int tex_id;
 	img_sym->QueryTexcoords(rp, src_texcoords, tex_id);

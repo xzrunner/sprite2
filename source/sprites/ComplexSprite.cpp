@@ -1,7 +1,9 @@
 #include "ComplexSprite.h"
 #include "ComplexSymbol.h"
+#include "ComplexActor.h"
 #include "RenderParams.h"
 #include "SprVisitor.h"
+#include "SprVisitorParams.h"
 
 namespace s2
 {
@@ -39,8 +41,14 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	rp_child.path.Push(GetID());
 
 	bool dirty = false;
+	int action = m_action;
+	const Actor* actor = QueryActor(rp_child.path);
+	if (actor) {
+		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+		action = comp_actor->GetAction();
+	}
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* spr = children[i];
@@ -119,8 +127,14 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 
 bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
+	int action = m_action;
+	const Actor* actor = QueryActor(params.path);
+	if (actor) {
+		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+		action = comp_actor->GetAction();
+	}
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) {
 			if (!children[i]->Traverse(visitor, params)) {

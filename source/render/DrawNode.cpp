@@ -275,6 +275,17 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	if (rp.IsDisableRenderDraw()) {
 		rs = *SprDefault::Instance()->Shader();
 		rc = *SprDefault::Instance()->Camera();
+	} else if (spr->HaveActor()) {
+		SprTreePath path = rp.path;
+		path.Push(spr->GetID());
+		const Actor* actor = spr->QueryActor(path);
+		if (actor) {
+			rs = actor->GetShader() * rp.shader;
+			rc = actor->GetCamera() * rp.camera;
+		} else {
+			rs = spr->GetShader() * rp.shader;
+			rc = spr->GetCamera() * rp.camera;
+		}
 	} else {
 		rs = spr->GetShader() * rp.shader;
 		rc = spr->GetCamera() * rp.camera;

@@ -16,6 +16,9 @@ namespace s2
 class Sprite;
 class ActorGeo;
 class RenderColor;
+class RenderShader;
+class RenderCamera;
+class SprRender;
 
 class Actor : private cu::Uncopyable
 {
@@ -38,8 +41,13 @@ public:
 	
 	S2_MAT GetLocalMat() const;
 
-	void SetColor(const RenderColor& col);
-	const RenderColor& GetColor() const { return *m_color; }
+	const RenderColor&	GetColor() const;
+	const RenderShader& GetShader() const;
+	const RenderCamera& GetCamera() const;
+
+	void SetColor(const RenderColor& color);
+	void SetShader(const RenderShader& shader);
+	void SetCamera(const RenderCamera& camera);
 
 	void SetProxy(Sprite* proxy);
 	const Sprite* GetProxy() const { return m_proxy; }
@@ -58,7 +66,7 @@ private:
 	SprTreePath      m_path;
 
 	ActorGeo*        m_geo;
-	RenderColor*     m_color;
+	SprRender*       m_render;
 	Sprite*          m_proxy;
 	mutable uint32_t m_flags;
 

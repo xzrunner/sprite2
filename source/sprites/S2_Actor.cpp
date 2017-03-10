@@ -3,9 +3,9 @@
 #include "ActorGeo.h"
 #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
-#include "RenderColor.h"
 #include "SprDefault.h"
 #include "SprSRT.h"
+#include "SprRender.h"
 
 namespace s2
 {
@@ -17,7 +17,7 @@ static int COUNT = 0;
 Actor::Actor()
 	: m_spr(NULL)
 	, m_geo(NULL)
-	, m_color(SprDefault::Instance()->Color())
+	, m_render(SprDefault::Instance()->Render())
 	, m_proxy(NULL)
 {
 }
@@ -26,7 +26,7 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	: m_spr(spr)
 	, m_path(path)
 	, m_geo(NULL)
-	, m_color(SprDefault::Instance()->Color())
+	, m_render(SprDefault::Instance()->Render())
 	, m_proxy(NULL)
 {
 #ifdef S2_RES_LOG
@@ -51,8 +51,8 @@ Actor::~Actor()
 	if (m_geo) {
 		delete m_geo;
 	}
-	if (m_color != SprDefault::Instance()->Color()) {
-		RenderColorPool::Instance()->Push(m_color);
+	if (m_render != SprDefault::Instance()->Render()) {
+		SprRenderPool::Instance()->Push(m_render);
 	}
 	if (m_proxy) {
 		m_proxy->RemoveReference();
@@ -134,12 +134,55 @@ S2_MAT Actor::GetLocalMat() const
 	return mt;
 }
 
-void Actor::SetColor(const RenderColor& col)
+const RenderColor& Actor::GetColor() const
 {
-	if (m_color == SprDefault::Instance()->Color()) {
-		m_color = RenderColorPool::Instance()->Pop();
+	if (!m_render || (m_render && !m_render->GetColor())) {
+		return *SprDefault::Instance()->Render()->GetColor();
+	} else {
+		return *m_render->GetColor();
 	}
- 	*m_color = col;
+}
+
+const RenderShader& Actor::GetShader() const
+{
+	if (!m_render || (m_render && !m_render->GetShader())) {
+		return *SprDefault::Instance()->Render()->GetShader();
+	} else {
+		return *m_render->GetShader();
+	}
+}
+
+const RenderCamera& Actor::GetCamera() const
+{
+	if (!m_render || (m_render && !m_render->GetCamera())) {
+		return *SprDefault::Instance()->Render()->GetCamera();
+	} else {
+		return *m_render->GetCamera();
+	}
+}
+
+void Actor::SetColor(const RenderColor& color)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = SprRenderPool::Instance()->Pop();
+	}
+	m_render->SetColor(color);
+}
+
+void Actor::SetShader(const RenderShader& shader)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = SprRenderPool::Instance()->Pop();
+	}
+	m_render->SetShader(shader);
+}
+
+void Actor::SetCamera(const RenderCamera& camera)
+{
+	if (m_render == SprDefault::Instance()->Render() || !m_render) {
+		m_render = SprRenderPool::Instance()->Pop();
+	}
+	m_render->SetCamera(camera);
 }
 
 void Actor::SetProxy(Sprite* proxy)

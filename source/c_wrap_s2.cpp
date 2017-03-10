@@ -292,23 +292,6 @@ int s2_spr_get_component_count(void* spr) {
 }
 
 extern "C"
-void s2_spr_set_filter(void* spr, int mode) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	const RenderFilter* filter = s2_spr->GetShader().GetFilter();
-	FilterMode ori = FM_NULL;
-	if (filter) {
-		ori = filter->GetMode();
-	}
-	if (ori == mode) {
-		return;
-	}
-
-	RenderShader shader = s2_spr->GetShader();
-	shader.SetFilter(FilterMode(mode));
-	s2_spr->SetShader(shader);
-}
-
-extern "C"
 const char* s2_spr_get_text(void* spr) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_TEXTBOX) {
@@ -784,6 +767,23 @@ void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bm
 	rc.SetGMapABGR(gmap);
 	rc.SetBMapABGR(bmap);
 	s2_actor->SetColor(rc);
+}
+
+extern "C"
+void s2_actor_set_filter(void* actor, int mode) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	const RenderFilter* filter = s2_actor->GetShader().GetFilter();
+	FilterMode ori = FM_NULL;
+	if (filter) {
+		ori = filter->GetMode();
+	}
+	if (ori == mode) {
+		return;
+	}
+
+	RenderShader shader = s2_actor->GetShader();
+	shader.SetFilter(FilterMode(mode));
+	s2_actor->SetShader(shader);
 }
 
 /************************************************************************/

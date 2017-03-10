@@ -64,8 +64,6 @@ int   s2_spr_get_frame(void* spr);
 int   s2_spr_get_frame_count(void* spr);
 int   s2_spr_get_component_count(void* spr);
 
-void  s2_spr_set_filter(void* spr, int mode);
-
 const char* s2_spr_get_text(void* spr);
 void  s2_spr_set_text(void* spr, const char* text);
 
@@ -125,6 +123,8 @@ uint32_t s2_actor_get_col_add(void* actor);
 void     s2_actor_set_col_add(void* actor, uint32_t abgr);
 void     s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap);
 void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
+
+void  s2_actor_set_filter(void* spr, int mode);
 
 /************************************************************************/
 /* rt                                                                   */

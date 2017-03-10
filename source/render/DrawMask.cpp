@@ -33,7 +33,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 		RenderScissor::Instance()->Open();
 		return;
 	}
-	DrawBaseToRT(rt_base, base, rp.color);
+	DrawBaseToRT(rt_base, base, rp.color, rp.path);
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -53,7 +53,8 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	RT->Return(rt_mask);
 }
 
-void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc)
+void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
+							const RenderColor& rc, const SprTreePath& path)
 {
 	rt->Bind();
 
@@ -66,6 +67,7 @@ void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderCo
 	RenderParams rp;
 	rp.SetChangeShader(false);
 	rp.color = rc;
+	rp.path = path;
 	DrawNode::Draw(base, rp);
 
 	shader->Commit();

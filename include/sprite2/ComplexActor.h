@@ -10,7 +10,9 @@ class ComplexActor : public Actor
 {
 public:
 	ComplexActor(const Sprite* spr, const SprTreePath& path)
-		: Actor(spr, path) {}
+		: Actor(spr, path) 
+		, m_action(-1)
+	{}
 
 	void SetAction(int action) { m_action = action; }
 	int GetAction() const { return m_action; }

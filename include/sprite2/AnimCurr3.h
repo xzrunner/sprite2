@@ -3,6 +3,7 @@
 
 #include "S2_Message.h"
 #include "AnimCopy2.h"
+#include "VisitResult.h"
 
 #include <CU_Uncopyable.h>
 
@@ -28,7 +29,7 @@ public:
 	AnimCurr3& operator = (const AnimCurr3& curr);
 	~AnimCurr3();
 	
-	bool Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
+	VisitResult Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 	void OnMessage(Message msg);
 

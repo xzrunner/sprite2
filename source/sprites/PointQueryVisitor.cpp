@@ -1,13 +1,11 @@
 #include "PointQueryVisitor.h"
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
+#include "S2_Actor.h"
 #include "SymType.h"
 #include "BoundingBox.h"
-#include "S2_Actor.h"
 #include "SprVisitorParams.h"
 #include "ActorLUT.h"
-
-#include "S2_RVG.h"
 
 #include <SM_Calc.h>
 
@@ -19,15 +17,14 @@ namespace s2
 PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
 	: SprVisitor(false)
 	, m_pos(pos)
-	, m_spr(NULL)
-	, m_layer_find(false)
+	, m_selected_spr(NULL)
 {
 }
 
 PointQueryVisitor::~PointQueryVisitor()
 {
-	if (m_spr) {
-		m_spr->RemoveReference();
+	if (m_selected_spr) {
+		m_selected_spr->RemoveReference();
 	}
 }
 
@@ -43,25 +40,78 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	}
 
 	if (!spr->IsVisible()) {
-		return VISIT_CONTINUE;
+		return VISIT_OVER;
 	}
-
+	
 	Actor* actor = ActorLUT::Instance()->Query(params.path);
 	if (actor && !actor->IsVisible()) {
-		return VISIT_CONTINUE;
+		return VISIT_OVER;
 	}
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
-		return VISIT_IGNORE;
+		return VISIT_OVER;
+	}
+	if (!QuerySprite(spr, params.mt)) {
+		return VISIT_OVER;
 	}
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION) {
 		return VISIT_INTO;
 	}
 
+	if (spr->IsEditable()) {
+		cu::RefCountObjAssign(m_selected_spr, spr);
+		m_selected_params = params;
+		return VISIT_STOP;
+	} else {
+		if (!m_selected_spr) {
+			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_params = params;
+			return VISIT_OVER;
+		} else {
+			return VISIT_OVER;
+		}
+	}
+}
+
+VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
+{
+	return VISIT_OVER;
+}
+
+VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
+{
+	if (spr->IsHasProxy()) {
+		SprTreePath path = params.path;
+		path.Pop();
+		const Sprite* proxy = spr->GetProxy(path);
+		if (proxy) {
+			spr = proxy;
+		}
+	}
+
+	if (spr->IsEditable()) {
+		cu::RefCountObjAssign(m_selected_spr, spr);
+		m_selected_params = params;
+		return VISIT_STOP;
+	} else {
+		return VISIT_OVER;
+	}
+}
+
+Actor* PointQueryVisitor::GetSelectedActor() const
+{
+	if (!m_selected_spr) {
+		return NULL;
+	}
+	return ActorLUT::Instance()->Query(m_selected_params.path);
+}
+
+bool PointQueryVisitor::QuerySprite(const Sprite* spr, const sm::mat4& mat) const
+{
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
 	if (sz.Width() == 0 || sz.Height() == 0) {
-		return VISIT_CONTINUE;
+		return false;
 	}
 	std::vector<sm::vec2> vertices(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
@@ -69,45 +119,10 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
 	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = params.mt * vertices[i];
+		vertices[i] = mat * vertices[i];
 	}
-	RVG::Polyline(vertices, true);
-	if (sm::is_point_in_convex(m_pos, vertices)) 
-	{
-		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = params.mt;
-		m_layer_find = true;
-		if (spr->IsEditable()) {
-			return VISIT_STOP;
-		} else {
-			return VISIT_CONTINUE;
-		}
-	}
-	else
-	{
-		return VISIT_CONTINUE;
-	}
-}
 
-VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
-{
-	m_layer_find = false;
-	return VISIT_CONTINUE;
-}
-
-VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
-{
-	if (m_layer_find && !m_spr->IsEditable()) {		
-		cu::RefCountObjAssign(m_spr, spr);
-		m_mat = params.mt;
-		if (spr->IsEditable()) {
-			return VISIT_STOP;
-		} else {
-			return VISIT_CONTINUE;
-		}
-	} else {
-		return VISIT_CONTINUE;
-	}
+	return sm::is_point_in_convex(m_pos, vertices);
 }
 
 }

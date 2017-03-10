@@ -68,26 +68,27 @@ AnimCurr3::~AnimCurr3()
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-bool AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
+	VisitResult ret = VISIT_OVER;
 	if (m_curr_num == 0) {
-		return true;
+		return ret;
 	}
 
 	if (visitor.GetOrder()) {
 		for (int i = 0; i < m_curr_num; ++i) {
-			if (!m_slots[m_curr[i]]->Traverse(visitor, params)) {
-				return false;
+			if (!SprVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+				break;
 			}
 		}
 	} else {
 		for (int i = m_curr_num - 1; i >= 0; --i) {
-			if (!m_slots[m_curr[i]]->Traverse(visitor, params)) {
-				return false;
+			if (!SprVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+				break;
 			}
 		}
 	}
-	return true;
+	return ret;
 }
 
 void AnimCurr3::OnMessage(Message msg)

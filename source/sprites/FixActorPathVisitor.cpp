@@ -18,27 +18,24 @@ VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams
 	const_cast<Sprite*>(spr)->FixActorPath(m_parent_path);
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
-	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
-		return VISIT_IGNORE;
-	}
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION) {
 		return VISIT_INTO;
 	}
 
-	return VISIT_CONTINUE;
+	return VISIT_OVER;
 }
 
 VisitResult FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	m_parent_path.Push(spr->GetID());
-	return VISIT_CONTINUE;
+	return VISIT_OVER;
 }
 
 VisitResult FixActorPathVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	assert(!m_parent_path.Empty() && m_parent_path.Top() == spr->GetID());
 	m_parent_path.Pop();
-	return VISIT_CONTINUE;
+	return VISIT_OVER;
 }
 
 }

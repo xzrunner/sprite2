@@ -37,7 +37,7 @@ public:
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 #ifdef S2_ANIM_CURR_V0
 	const AnimCurr& GetAnimCurr() const { return m_curr; }

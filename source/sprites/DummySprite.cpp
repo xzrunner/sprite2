@@ -4,7 +4,7 @@
 namespace s2
 {
 
-bool DummySprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult DummySprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	if (IsHasProxy()) 
 	{
@@ -15,7 +15,7 @@ bool DummySprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& 
 			return proxy->TraverseChildren(visitor, params);
 		}
 	}
-	return true;
+	return VISIT_OVER;
 }
 
 }

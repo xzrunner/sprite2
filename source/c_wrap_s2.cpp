@@ -8,13 +8,12 @@
 #include "SymType.h"
 #include "TextboxActor.h"
 #include "ActorLUT.h"
-#include "PointQuery2Visitor.h"
+#include "PointQueryVisitor.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "RenderFilter.h"
 #include "BoundingBox.h"
 #include "S2_RVG.h"
-#include "PointQueryVisitor.h"
 #include "SprTimer.h"
 #include "SprVisitorParams.h"∫
 #include "S2_RenderTargetMgr.h"
@@ -370,7 +369,7 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	PointQueryVisitor visitor(sm::vec2(x, y));
 
 	s2_spr->Traverse(visitor, SprVisitorParams());
-	const Sprite* ret = visitor.GetSelectedSpr();
+	Actor* ret = visitor.GetSelectedActor();
 	if (!ret) {
 		return NULL;
 	}
@@ -392,7 +391,7 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	mat[5] = selected_mat.x[13];
 #endif // S2_MATRIX_FIX
 
-	return const_cast<Sprite*>(ret);
+	return ret;
 }
 
 extern "C"
@@ -560,7 +559,7 @@ extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 
-	PointQuery2Visitor visitor(sm::vec2(x, y));
+	PointQueryVisitor visitor(sm::vec2(x, y));
 	parent->GetSpr()->Traverse(visitor, SprVisitorParams());
 
 	const S2_MAT& selected_mat = visitor.GetSelectedMat();

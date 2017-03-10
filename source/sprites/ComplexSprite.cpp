@@ -125,8 +125,9 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 	}
 }
 
-bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
 {
+	VisitResult ret = VISIT_OVER;
 	int action = m_action;
 	const Actor* actor = QueryActor(params.path);
 	if (actor) {
@@ -137,18 +138,19 @@ bool ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (!children[i]->Traverse(visitor, params)) {
-				return false;
+			if (!SprVisitor::VisitChild(visitor, params, children[i], ret)) {
+				break;
 			}
 		}
 	} else {
 		for (int i = children.size() - 1; i >= 0; --i) {
-			if (!children[i]->Traverse(visitor, params)) {
-				return false;
+			if (!SprVisitor::VisitChild(visitor, params, children[i], ret)) {
+				break;
 			}
 		}
 	}
-	return true;
+	return ret;
 }
+
 
 }

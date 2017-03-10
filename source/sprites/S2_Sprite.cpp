@@ -308,7 +308,7 @@ void Sprite::InitHook(void (*init_flags)(Sprite* spr))
 	INIT_FLAGS = init_flags;
 }
 
-bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 {
 	SprVisitorParams p;
 
@@ -320,22 +320,35 @@ bool Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
 		p.mt = actor->GetLocalMat() * p.mt;
 	}
 
+	VisitResult ret = VISIT_OVER;
+
 	VisitResult v_ret = visitor.Visit(this, p);
-	if (v_ret == VISIT_INTO) 
+	switch (v_ret)
 	{
-		visitor.VisitChildrenBegin(this, p);
-		bool ret = TraverseChildren(visitor, p);
-		VisitResult ret2 = visitor.VisitChildrenEnd(this, p);
-		if (!ret || ret2 == VISIT_STOP) {
-			return false;
-		} else {
-			return true;
+	case VISIT_INTO:
+		{
+			visitor.VisitChildrenBegin(this, p);
+			VisitResult v = TraverseChildren(visitor, p);
+			switch (v)
+			{
+			case VISIT_INTO:
+				assert(0);
+				break;
+			case VISIT_OVER:
+				ret = visitor.VisitChildrenEnd(this, p);
+				break;
+			case VISIT_OUT: case VISIT_STOP:
+				ret = v;
+				break;
+			}
 		}
-	} 
-	else 
-	{
-		return v_ret == VISIT_CONTINUE;
+		break;
+	default:
+		ret = v_ret;
+		break;
 	}
+
+	return ret;
 }
 
 const BoundingBox* Sprite::GetBounding() const 

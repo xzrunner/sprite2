@@ -4,6 +4,7 @@
 #include "pre_defined.h"
 #include "S2_Message.h"
 #include "s2_macro.h"
+#include "VisitResult.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -64,7 +65,7 @@ public:
 	virtual void SetShear(const sm::vec2& shear);
 	virtual void SetOffset(const sm::vec2& offset);
 
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return true; }
+	virtual VisitResult TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
 
 	static void InitHook(void (*init_flags)(Sprite* spr));
 
@@ -78,7 +79,7 @@ public:
 	 */
 	virtual Sprite* Clone() const { return NULL; }
 
-	bool Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
+	VisitResult Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }

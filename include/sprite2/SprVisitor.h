@@ -5,19 +5,13 @@
 
 #include S2_MAT_HEADER
 
+#include "VisitResult.h"
+
 namespace s2
 {
 
 class Sprite;
 class SprVisitorParams;
-
-enum VisitResult
-{
-	VISIT_IGNORE = 0,
-	VISIT_INTO,
-	VISIT_STOP,
-	VISIT_CONTINUE,
-};
 
 class SprVisitor
 {
@@ -27,10 +21,12 @@ public:
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params) = 0;
 
-	virtual VisitResult VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params) { return VISIT_CONTINUE; }
-	virtual VisitResult VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params) { return VISIT_CONTINUE; }
+	virtual VisitResult VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params) { return VISIT_OVER; }
+	virtual VisitResult VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params) { return VISIT_OVER; }
 
 	bool GetOrder() const { return m_order; }
+
+	static bool VisitChild(SprVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret);
 
 private:
 	bool m_order;

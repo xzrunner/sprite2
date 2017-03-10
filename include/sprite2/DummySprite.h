@@ -10,7 +10,7 @@ class DummySprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	DummySprite() {}
-	DummySprite(Symbol* sym) : Sprite(sym) {}
+   	DummySprite(Symbol* sym) : Sprite(sym) {}
 
 	/**
 	 *  @interface
@@ -18,7 +18,7 @@ public:
 	 */
 	virtual DummySprite* Clone() const { return new DummySprite(*this); }
 
-	virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
+    virtual bool TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return false; }
 
 	VI_DUMMY_FUNC
 

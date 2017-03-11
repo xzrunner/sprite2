@@ -38,15 +38,15 @@ Color::Color(float r, float g, float b, float a)
 }
 
 inline
-bool Color::operator != (const Color& col) const
-{
-	return !(this->operator == (col));
-}
-
-inline
 bool Color::operator == (const Color& col) const
 {
 	return r == col. r && g == col. g && b == col. b && a == col.a ;
+}
+
+inline
+bool Color::operator != (const Color& col) const
+{
+	return !(this->operator == (col));
 }
 
 inline

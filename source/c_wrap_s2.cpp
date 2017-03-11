@@ -218,16 +218,6 @@ int s2_spr_get_sym_type(void* spr) {
 }
 
 extern "C"
-bool s2_spr_get_editable(void* spr) {
-	return static_cast<Sprite*>(spr)->IsEditable();	
-}
-
-extern "C"
-void s2_spr_set_editable(void* spr, bool editable) {
-	static_cast<Sprite*>(spr)->SetEditable(editable);
-}
-
-extern "C"
 bool s2_spr_get_force_up_frame(void* spr) {
 	return static_cast<Sprite*>(spr)->IsForceUpFrame();
 }
@@ -743,6 +733,18 @@ extern "C"
 void s2_actor_set_visible(void* actor, bool visible) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetVisible(visible);
+}
+
+extern "C"
+bool s2_actor_get_editable(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	return s2_actor->IsEditable();
+}
+
+extern "C"
+void s2_actor_set_editable(void* actor, bool editable) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->SetEditable(editable);
 }
 
 extern "C"

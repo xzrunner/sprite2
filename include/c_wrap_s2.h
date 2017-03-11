@@ -51,9 +51,6 @@ const char* s2_spr_get_name(void* spr);
 int   s2_spr_get_sym_id(void* spr);
 int   s2_spr_get_sym_type(void* spr);
 
-bool  s2_spr_get_editable(void* spr);
-void  s2_spr_set_editable(void* spr, bool editable);
-
 bool  s2_spr_get_force_up_frame(void* spr);
 void  s2_spr_set_force_up_frame(void* spr, bool force);
 
@@ -118,6 +115,8 @@ void* s2_actor_get_parent(void* actor);
 
 bool  s2_actor_get_visible(void* actor);
 void  s2_actor_set_visible(void* actor, bool visible);
+bool  s2_actor_get_editable(void* actor);
+void  s2_actor_set_editable(void* actor, bool editable);
 
 uint32_t s2_actor_get_col_mul(void* actor);
 void     s2_actor_set_col_mul(void* actor, uint32_t abgr);

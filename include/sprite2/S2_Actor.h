@@ -56,10 +56,12 @@ private:
 	void InitFlags();
 
 private:
-	static const uint32_t FLAG_VISIBLE = 0x00000001;
+	static const uint32_t FLAG_VISIBLE  = 0x00000001;
+	static const uint32_t FLAG_EDITABLE = 0x00000002;
 
 public:
 	FLAG_METHOD(Visible, FLAG_VISIBLE)
+	FLAG_METHOD(Editable, FLAG_EDITABLE)
 	
 private:
 	const Sprite*    m_spr;

@@ -20,6 +20,7 @@ Actor::Actor()
 	, m_render(SprDefault::Instance()->Render())
 	, m_proxy(NULL)
 {
+	InitFlags();
 }
 
 Actor::Actor(const Sprite* spr, const SprTreePath& path)
@@ -207,6 +208,11 @@ void Actor::SetProxy(Sprite* proxy)
 void Actor::InitFlags()
 {
 	SetVisible(true);
+#ifdef S2_SPR_DEFAULT_EDITABLE
+	SetEditable(S2_SPR_DEFAULT_EDITABLE);
+#else
+	SetEditable(true);
+#endif // S2_SPR_DEFAULT_EDITABLE
 }
 
 }

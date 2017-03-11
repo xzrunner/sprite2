@@ -6,6 +6,7 @@
 #include "BoundingBox.h"
 #include "SprVisitorParams.h"
 #include "ActorLUT.h"
+#include "QueryAABBVisitor.h"
 
 #include <SM_Calc.h>
 
@@ -52,14 +53,18 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
 		return VISIT_OVER;
 	}
-	if (!QuerySprite(spr, params.mt)) {
+	if (!QuerySprite(spr, params)) {
 		return VISIT_OVER;
 	}
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION) {
 		return VISIT_INTO;
 	}
 
-	if (spr->IsEditable()) {
+	bool editable = spr->IsEditable();
+	if (actor) {
+		editable = actor->IsEditable();
+	}
+	if (editable) {
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
 		return VISIT_STOP;
@@ -90,7 +95,12 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 		}
 	}
 
-	if (spr->IsEditable()) {
+	bool editable = spr->IsEditable();
+	Actor* actor = ActorLUT::Instance()->Query(params.path);
+	if (actor) {
+		editable = actor->IsEditable();
+	}
+	if (editable) {
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
 		return VISIT_STOP;
@@ -107,7 +117,7 @@ Actor* PointQueryVisitor::GetSelectedActor() const
 	return ActorLUT::Instance()->Query(m_selected_params.path);
 }
 
-bool PointQueryVisitor::QuerySprite(const Sprite* spr, const sm::mat4& mat) const
+bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
 {
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
 	if (sz.Width() == 0 || sz.Height() == 0) {
@@ -119,10 +129,35 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const sm::mat4& mat) cons
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
 	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = mat * vertices[i];
+		vertices[i] = params.mt * vertices[i];
 	}
-
 	return sm::is_point_in_convex(m_pos, vertices);
+
+	//////////////////////////////////////////////////////////////////////////
+
+//  	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
+//  	if (sz.Width() == 0 || sz.Height() == 0) {
+//  		return false;
+//  	}
+//  	std::vector<sm::vec2> vertices(4);
+//  	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
+//  	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
+//  	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
+//  	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
+// 	sm::rect aabb;
+//  	for (int i = 0; i < 4; ++i) {
+//  		aabb.Combine(params.mt * vertices[i]);
+//  	}
+// 
+// 	QueryAABBVisitor visitor;
+// //	QueryAABBVisitor visitor(false, false, true);
+// 	spr->Traverse(visitor, params);
+// 
+// 	if (visitor.GetAABB() != aabb) {
+// 		int zz = 0;
+// 	}
+// 
+// 	return sm::is_point_in_rect(m_pos, visitor.GetAABB());
 }
 
 }

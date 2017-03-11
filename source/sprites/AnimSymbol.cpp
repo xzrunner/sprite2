@@ -19,9 +19,6 @@ AnimSymbol::AnimSymbol()
 	, m_curr(this)
 #endif // S2_ANIM_CURR_V0
 {
-#ifndef S2_ANIM_CURR_V0
-	m_curr.SetAnimCopy(&m_copy);
-#endif // S2_ANIM_CURR_V0
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
@@ -31,9 +28,6 @@ AnimSymbol::AnimSymbol(uint32_t id)
 	, m_curr(this)
 #endif // S2_ANIM_CURR_V0
 {
-#ifndef S2_ANIM_CURR_V0
-	m_curr.SetAnimCopy(&m_copy);
-#endif // S2_ANIM_CURR_V0
 }
 
 AnimSymbol::~AnimSymbol()
@@ -146,6 +140,7 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 void AnimSymbol::LoadCopy()
 {
 	m_copy.LoadFromSym(*this);
+	m_curr.SetAnimCopy(&m_copy);
 }
 #endif // S2_ANIM_CURR_V0
 

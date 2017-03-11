@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 
 #include <assert.h>
 
@@ -56,7 +56,7 @@ AnimCurr::~AnimCurr()
 {
 }
 
-bool AnimCurr::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+bool AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = m_layers.size(); i < n; ++i) {

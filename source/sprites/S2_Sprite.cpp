@@ -9,7 +9,7 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "S2_Actor.h"
 #include "ActorLUT.h"
 #include "ClearActorsVisitor.h"
@@ -308,7 +308,7 @@ void Sprite::InitHook(void (*init_flags)(Sprite* spr))
 	INIT_FLAGS = init_flags;
 }
 
-VisitResult Sprite::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	SprVisitorParams p;
 

@@ -15,7 +15,7 @@ namespace s2
 {
 
 PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
-	: SprVisitor(false)
+	: SpriteVisitor(false)
 	, m_pos(pos)
 	, m_selected_spr(NULL)
 {

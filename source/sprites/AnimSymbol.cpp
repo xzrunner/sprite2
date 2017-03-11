@@ -6,7 +6,7 @@
 #include "RenderParams.h"
 #include "AnimLerp.h"
 #include "DrawNode.h"
-#include "SymVisitor.h"
+#include "SymbolVisitor.h"
 
 #include <assert.h>
 
@@ -54,7 +54,7 @@ int AnimSymbol::Type() const
 	return SYM_ANIMATION; 
 }
 
-void AnimSymbol::Traverse(const SymVisitor& visitor)
+void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 {
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) {
 		Layer* layer = m_layers[ilayer];

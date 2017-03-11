@@ -5,7 +5,7 @@
 #include "DrawMask.h"
 #include "DrawNode.h"
 #include "BoundingBox.h"
-#include "SymVisitor.h"
+#include "SymbolVisitor.h"
 
 namespace s2
 {
@@ -38,7 +38,7 @@ int MaskSymbol::Type() const
 	return SYM_MASK; 
 }
 
-void MaskSymbol::Traverse(const SymVisitor& visitor)
+void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 {
 	if (m_base) {
 		visitor.Visit(m_base);

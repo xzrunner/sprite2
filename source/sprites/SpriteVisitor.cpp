@@ -1,4 +1,4 @@
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "S2_Sprite.h"
 
 #include <assert.h>
@@ -6,12 +6,12 @@
 namespace s2
 {
 
-SprVisitor::SprVisitor(bool order)
+SpriteVisitor::SpriteVisitor(bool order)
 	: m_order(order)
 {
 }
 
-bool SprVisitor::VisitChild(SprVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret)
+bool SpriteVisitor::VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret)
 {
 	bool stop = false;
 	VisitResult v = child->Traverse(visitor, params);

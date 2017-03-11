@@ -2,7 +2,7 @@
 #include "AnimCopy.h"
 #include "S2_Sprite.h"
 #include "Animation.h"
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "DrawNode.h"
 #include "AnimLerp.h"
 #include "AnimLerp.h"
@@ -60,7 +60,7 @@ AnimCurr2::~AnimCurr2()
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-bool AnimCurr2::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+bool AnimCurr2::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = m_curr.size(); i < n; ++i) {

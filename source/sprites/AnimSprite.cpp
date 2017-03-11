@@ -67,7 +67,7 @@ Sprite* AnimSprite::FetchChild(const std::string& name, const SprTreePath& path)
 	return m_curr.FetchChild(name, path);
 }
 
-VisitResult AnimSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	return m_curr.Traverse(visitor, params);
 }

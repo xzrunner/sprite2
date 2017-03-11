@@ -1,13 +1,13 @@
 #ifndef _SPRITE2_FIX_ACTOR_PATH_VISITOR_H_
 #define _SPRITE2_FIX_ACTOR_PATH_VISITOR_H_
 
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "SprTreePath.h"
 
 namespace s2
 {
 
-class FixActorPathVisitor : public SprVisitor
+class FixActorPathVisitor : public SpriteVisitor
 {
 public:	
 	FixActorPathVisitor(const SprTreePath& parent_path);

@@ -9,7 +9,7 @@
 #include "RenderScissor.h"
 #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
-#include "SymVisitor.h"
+#include "SymbolVisitor.h"
 #include "S2_Actor.h"
 
 #include <SM_Test.h>
@@ -42,7 +42,7 @@ int ComplexSymbol::Type() const
 	return SYM_COMPLEX; 
 }
 
-void ComplexSymbol::Traverse(const SymVisitor& visitor)
+void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 {
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
 		visitor.Visit(m_children[i]);

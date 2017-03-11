@@ -1,5 +1,5 @@
-#ifndef _SPRITE2_SPR_VISITOR_H_
-#define _SPRITE2_SPR_VISITOR_H_
+#ifndef _SPRITE2_SPRITE_VISITOR_H_
+#define _SPRITE2_SPRITE_VISITOR_H_
 
 #include "pre_defined.h"
 
@@ -13,11 +13,11 @@ namespace s2
 class Sprite;
 class SprVisitorParams;
 
-class SprVisitor
+class SpriteVisitor
 {
 public:
-	SprVisitor(bool order = true);
-	virtual ~SprVisitor() {}
+	SpriteVisitor(bool order = true);
+	virtual ~SpriteVisitor() {}
 
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params) = 0;
 
@@ -26,13 +26,13 @@ public:
 
 	bool GetOrder() const { return m_order; }
 
-	static bool VisitChild(SprVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret);
+	static bool VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret);
 
 private:
 	bool m_order;
 
-}; // SprVisitor
+}; // SpriteVisitor
 
 }
 
-#endif // _SPRITE2_SPR_VISITOR_H_
+#endif // _SPRITE2_SPRITE_VISITOR_H_

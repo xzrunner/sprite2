@@ -18,7 +18,7 @@ public:
 	 */
 	virtual DummySprite* Clone() const { return new DummySprite(*this); }
 
-    virtual VisitResult TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
+    virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	VI_DUMMY_FUNC
 

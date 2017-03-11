@@ -27,7 +27,7 @@ class SprRender;
 class RenderColor;
 class RenderShader;
 class RenderCamera;
-class SprVisitor;
+class SpriteVisitor;
 class Actor;
 class SprTreePath;
 class SprVisitorParams;
@@ -65,7 +65,7 @@ public:
 	virtual void SetShear(const sm::vec2& shear);
 	virtual void SetOffset(const sm::vec2& offset);
 
-	virtual VisitResult TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
+	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
 
 	static void InitHook(void (*init_flags)(Sprite* spr));
 
@@ -79,7 +79,7 @@ public:
 	 */
 	virtual Sprite* Clone() const { return NULL; }
 
-	VisitResult Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
+	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }

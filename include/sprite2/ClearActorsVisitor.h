@@ -1,12 +1,12 @@
 #ifndef _SPRITE2_CLEAR_ACTORS_VISITOR_H_
 #define _SPRITE2_CLEAR_ACTORS_VISITOR_H_
 
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 
 namespace s2
 {
 
-class ClearActorsVisitor : public SprVisitor
+class ClearActorsVisitor : public SpriteVisitor
 {
 public:	
 	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);

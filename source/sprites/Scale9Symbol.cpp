@@ -4,7 +4,7 @@
 #include "S2_Sprite.h"
 #include "Scale9Sprite.h"
 #include "DrawNode.h"
-#include "SymVisitor.h"
+#include "SymbolVisitor.h"
 
 #include <assert.h>
 
@@ -25,7 +25,7 @@ int Scale9Symbol::Type() const
 	return SYM_SCALE9; 
 }
 
-void Scale9Symbol::Traverse(const SymVisitor& visitor)
+void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 {
 	std::vector<Sprite*> grids;
 	m_s9.GetGrids(grids);

@@ -2,7 +2,7 @@
 #include "AnimCopy2.h"
 #include "S2_Sprite.h"
 #include "Animation.h"
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "DrawNode.h"
 #include "AnimLerp.h"
 #include "AnimLerp.h"
@@ -68,7 +68,7 @@ AnimCurr3::~AnimCurr3()
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-VisitResult AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnimCurr3::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	if (m_curr_num == 0) {
@@ -77,13 +77,13 @@ VisitResult AnimCurr3::Traverse(SprVisitor& visitor, const SprVisitorParams& par
 
 	if (visitor.GetOrder()) {
 		for (int i = 0; i < m_curr_num; ++i) {
-			if (!SprVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
 				break;
 			}
 		}
 	} else {
 		for (int i = m_curr_num - 1; i >= 0; --i) {
-			if (!SprVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
 				break;
 			}
 		}

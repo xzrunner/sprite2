@@ -1,12 +1,12 @@
 #ifndef _SPRITE2_CACHE_MAT_VISITOR_H_
 #define _SPRITE2_CACHE_MAT_VISITOR_H_
 
-#include "SymVisitor.h"
+#include "SymbolVisitor.h"
 
 namespace s2
 {
 
-class CacheMatVisitor : public SymVisitor
+class CacheMatVisitor : public SymbolVisitor
 {
 public:
 	virtual void Visit(Sprite* spr) const;

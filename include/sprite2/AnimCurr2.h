@@ -14,7 +14,7 @@ namespace s2
 class AnimCopy;
 class Sprite;
 class AnimSymbol;
-class SprVisitor;
+class SpriteVisitor;
 class SprVisitorParams;
 class RenderParams;
 
@@ -26,7 +26,7 @@ public:
 	AnimCurr2& operator = (const AnimCurr2& curr);
 	~AnimCurr2();
 	
-	bool Traverse(SprVisitor& visitor, const SprVisitorParams& params) const;
+	bool Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void OnMessage(Message msg);
 

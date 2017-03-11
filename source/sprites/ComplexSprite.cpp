@@ -2,7 +2,7 @@
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
 #include "RenderParams.h"
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
 
 namespace s2
@@ -125,7 +125,7 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 	}
 }
 
-VisitResult ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const
+VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	int action = m_action;
@@ -138,13 +138,13 @@ VisitResult ComplexSprite::TraverseChildren(SprVisitor& visitor, const SprVisito
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (!SprVisitor::VisitChild(visitor, params, children[i], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, params, children[i], ret)) {
 				break;
 			}
 		}
 	} else {
 		for (int i = children.size() - 1; i >= 0; --i) {
-			if (!SprVisitor::VisitChild(visitor, params, children[i], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, params, children[i], ret)) {
 				break;
 			}
 		}

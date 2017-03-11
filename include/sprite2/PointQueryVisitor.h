@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_POINT_QUERY_VISITOR_H_
 #define _SPRITE2_POINT_QUERY_VISITOR_H_
 
-#include "SprVisitor.h"
+#include "SpriteVisitor.h"
 #include "SprTreePath.h"
 #include "SprVisitorParams.h"
 
@@ -14,7 +14,7 @@ namespace s2
 
 class Actor;
 
-class PointQueryVisitor : public SprVisitor
+class PointQueryVisitor : public SpriteVisitor
 {
 public:
 	PointQueryVisitor(const sm::vec2& pos);

@@ -27,13 +27,13 @@ public:
 	virtual bool SetFrame(int frame);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
-	virtual VisitResult TraverseChildren(SprVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void SetAction(int action) { m_action = action; }
 	int GetAction() const { return m_action; }
 	
 private:
-	bool VisitChild(SprVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret) const;
+	bool VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret) const;
 
 protected:
 	int m_action;

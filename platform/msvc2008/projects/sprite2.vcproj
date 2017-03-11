@@ -409,8 +409,12 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="dummy"
+				Name="00.dummy"
 				>
+				<File
+					RelativePath="..\..\..\source\sprites\DummySprite.cpp"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\DummySprite.h"
 					>
@@ -1075,6 +1079,10 @@
 					RelativePath="..\..\..\include\sprite2\SprRender.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\VisitResult.h"
+					>
+				</File>
 				<Filter
 					Name="visitor"
 					>
@@ -1103,11 +1111,19 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\sprites\SprVisitor.cpp"
+						RelativePath="..\..\..\source\sprites\QueryAABBVisitor.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\include\sprite2\SprVisitor.h"
+						RelativePath="..\..\..\include\sprite2\QueryAABBVisitor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\SpriteVisitor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SpriteVisitor.h"
 						>
 					</File>
 				</Filter>

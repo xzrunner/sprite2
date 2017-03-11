@@ -29,7 +29,7 @@ public:
 	const S2_MAT& GetSelectedMat() const { return m_selected_params.mt; }
 	
 private:
-	bool QuerySprite(const Sprite* spr, const sm::mat4& mat) const;
+	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 
 private:
 	sm::vec2 m_pos;

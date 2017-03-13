@@ -29,21 +29,20 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 		}
 	}
 
-	if (m_use_visible && !spr->IsVisible()) {
+	bool visible = spr->IsVisible();
+	bool editable = spr->IsEditable();
+	if (spr->HaveActor()) {
+		Actor* actor = ActorLUT::Instance()->Query(params.path);
+		if (actor) {
+			visible = actor->IsVisible();
+			editable = actor->IsEditable();
+		}
+	}
+	if (m_use_visible && !visible) {
 		return VISIT_OVER;
 	}
-	if (m_use_editable && !spr->IsEditable()) {
+	if (m_use_editable && !editable) {
 		return VISIT_OVER;
-	}
-
-	Actor* actor = ActorLUT::Instance()->Query(params.path);
-	if (actor) {
-		if (m_use_visible && !actor->IsVisible()) {
-			return VISIT_OVER;
-		}
-		if (m_use_editable && !actor->IsEditable()) {
-			return VISIT_OVER;
-		}
 	}
 
 	VisitResult ret = VISIT_OVER;

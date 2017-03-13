@@ -27,6 +27,7 @@
 #include "ComplexActor.h"
 #include "AnimSymbol.h"
 #include "AnimSprite.h"
+#include "Anim2Sprite.h"
 #include "TextboxSprite.h"
 #include "Scale9Sprite.h"
 #include "OrthoCamera.h"
@@ -436,6 +437,18 @@ void s2_spr_scale9_resize(void* spr, int w, int h)
 
 	Scale9Sprite* s9_spr = static_cast<Scale9Sprite*>(s2_spr);
 	s9_spr->Resize(w, h);
+}
+
+extern "C"
+void s2_spr_anim2_set_static_time(void* spr, int time) 
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_ANIM2) {
+		return;
+	}
+
+	Anim2Sprite* a2_spr = static_cast<Anim2Sprite*>(s2_spr);
+	a2_spr->SetStaticTime(time);
 }
 
 extern "C"

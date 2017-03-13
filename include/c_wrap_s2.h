@@ -71,6 +71,8 @@ bool  s2_spr_set_scissor(void* spr, float x, float y, float w, float h);
 
 void  s2_spr_scale9_resize(void* spr, int w, int h);
 
+void  s2_spr_anim2_set_static_time(void* spr, int time);
+
 void  s2_spr_set_dtex_enable(void* spr, bool enable);
 void  s2_spr_set_dtex_force_cached(void* spr, bool cache);
 void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
@@ -119,7 +121,7 @@ void     s2_actor_set_col_add(void* actor, uint32_t abgr);
 void     s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap);
 void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 
-void  s2_actor_set_filter(void* spr, int mode);
+void  s2_actor_set_filter(void* actor, int mode);
 
 const char* s2_actor_get_text(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);

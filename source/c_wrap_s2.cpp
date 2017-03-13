@@ -105,11 +105,6 @@ void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float
 }
 
 extern "C"
-void s2_spr_update(void* spr) {
-	static_cast<Sprite*>(spr)->Update(RenderParams());
-}
-
-extern "C"
 void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
@@ -537,6 +532,16 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		rp_parent = rp_child;
 	}
 	DrawNode::Draw(s2_spr, rp_parent);
+}
+
+extern "C"
+void s2_actor_update(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_sprite = s2_actor->GetSpr();
+	RenderParams rp;
+	rp.path = s2_actor->GetTreePath();
+	rp.path.Pop();
+	const_cast<Sprite*>(s2_sprite)->Update(rp);
 }
 
 extern "C"

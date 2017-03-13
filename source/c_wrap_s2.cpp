@@ -270,26 +270,6 @@ int s2_spr_get_component_count(void* spr) {
 }
 
 extern "C"
-const char* s2_spr_get_text(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_TEXTBOX) {
-		TextboxSprite* text = VI_DOWNCASTING<TextboxSprite*>(s2_spr);
-		return text->GetText().c_str();
-	} else {
-		return NULL;
-	}
-}
-
-extern "C"
-void s2_spr_set_text(void* spr, const char* text) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_TEXTBOX) {
-		TextboxSprite* text_spr = VI_DOWNCASTING<TextboxSprite*>(s2_spr);
-		text_spr->SetText(text);
-	}
-}
-
-extern "C"
 void s2_spr_get_aabb(const void* spr, float aabb[4]) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	sm::rect sz = s2_spr->GetBounding()->GetSize();
@@ -406,22 +386,6 @@ _init_gtxt_label_style(struct gtxt_label_style* dst, const Textbox& src) {
 	dst->gs.edge_color.integer = src.edge_color.ToRGBA();
 
 	dst->overflow = src.overflow;
-}
-
-extern "C"
-bool s2_spr_get_text_size(const void* spr, float* w, float* h) {
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() != SYM_TEXTBOX) {
-		return false;
-	}
-
-	const TextboxSprite* text_spr = static_cast<const TextboxSprite*>(s2_spr);
-
-	struct gtxt_label_style style;
-	_init_gtxt_label_style(&style, text_spr->GetTextbox());
-	gtxt_get_label_size(text_spr->GetText().c_str(), &style, w, h);	
-
-	return true;
 }
 
 extern "C"
@@ -605,17 +569,6 @@ void s2_actor_set_proxy(void* actor, void* spr) {
 extern "C"
 void* s2_actor_get_spr(void* actor) {
 	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
-}
-
-extern "C"
-void s2_actor_set_text(void* actor, const char* text) {	
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
-		return;
-	}
-
-	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
-	textbox->SetText(text);
 }
 
 extern "C"
@@ -830,6 +783,45 @@ void s2_actor_set_filter(void* actor, int mode) {
 	RenderShader shader = s2_actor->GetShader();
 	shader.SetFilter(FilterMode(mode));
 	s2_actor->SetShader(shader);
+}
+
+extern "C"
+const char* s2_actor_get_text(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+		return NULL;
+	}
+
+	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
+	return textbox->GetText().c_str();
+}
+
+extern "C"
+void s2_actor_set_text(void* actor, const char* text) {	
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+		return;
+	}
+
+	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
+	textbox->SetText(text);
+}
+
+extern "C"
+bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+		return false;
+	}
+
+	const TextboxActor* textbox = static_cast<const TextboxActor*>(s2_actor);
+	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(s2_actor->GetSpr());
+
+	struct gtxt_label_style style;
+	_init_gtxt_label_style(&style, tb_spr->GetTextbox());
+	gtxt_get_label_size(textbox->GetText().c_str(), &style, w, h);	
+
+	return true;
 }
 
 /************************************************************************/

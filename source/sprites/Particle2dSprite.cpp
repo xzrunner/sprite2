@@ -108,7 +108,7 @@ bool Particle2dSprite::Update(const RenderParams& rp)
 	return true;
 }
 
-bool Particle2dSprite::SetFrame(int frame)
+bool Particle2dSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
 	Update(RenderParams());
 	return true;

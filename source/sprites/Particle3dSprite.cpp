@@ -146,7 +146,7 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool Particle3dSprite::SetFrame(int frame)
+bool Particle3dSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
 	Update(RenderParams());
 	return true;

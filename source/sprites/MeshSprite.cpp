@@ -73,7 +73,7 @@ bool MeshSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool MeshSprite::SetFrame(int frame)
+bool MeshSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
 	// todo
 	return false;

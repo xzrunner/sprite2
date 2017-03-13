@@ -65,17 +65,32 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(int frame)
+bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
 	bool dirty = false;
+	int action = m_action;
+	SprTreePath path = parent_path;
+	path.Push(GetID());
+	const Actor* actor = QueryActor(path);
+	if (actor) {
+		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+		action = comp_actor->GetAction();
+	}
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		Sprite* spr = children[i];
-		if (!spr->IsForceUpFrame() && !spr->GetName().empty()) {
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
+	for (int i = 0, n = children.size(); i < n; ++i) 
+	{
+		Sprite* child = children[i];
+		if (child->IsHasProxy()) {
+			const Sprite* proxy = child->GetProxy(path);
+			if (proxy) {
+				child = const_cast<Sprite*>(proxy);
+			}
+		}
+		if (!child->IsForceUpFrame() && !child->GetName().empty()) {
 			continue;
 		}
-		if (spr->SetFrame(frame)) {
+		if (child->SetFrame(frame, path)) {
 			dirty = true;
 		}
 	}

@@ -28,7 +28,7 @@ public:
 	 *    Sprite
 	 */
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame);
+	virtual bool SetFrame(int frame, const SprTreePath& parent_path);
 
 	void Lerp(const MeshSprite* begin, const MeshSprite* end, float process);
 

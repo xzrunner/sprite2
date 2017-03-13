@@ -54,7 +54,6 @@ int   s2_spr_get_sym_type(void* spr);
 bool  s2_spr_get_force_up_frame(void* spr);
 void  s2_spr_set_force_up_frame(void* spr, bool force);
 
-void  s2_spr_set_frame(void* spr, int frame);
 void  s2_spr_set_action(void* spr, const char* action);
 
 int   s2_spr_get_frame(void* spr);
@@ -88,6 +87,7 @@ void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
 
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					float xmin, float ymin, float xmax, float ymax);
+void  s2_actor_set_frame(void* actor, int frame);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 

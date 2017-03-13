@@ -228,12 +228,6 @@ void s2_spr_set_force_up_frame(void* spr, bool force) {
 }
 
 extern "C"
-void s2_spr_set_frame(void* spr, int frame) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	s2_spr->SetFrame(frame);
-}
-
-extern "C"
 void s2_spr_set_action(void* actor, const char* action) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_COMPLEX) {
@@ -543,6 +537,15 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		rp_parent = rp_child;
 	}
 	DrawNode::Draw(s2_spr, rp_parent);
+}
+
+extern "C"
+void s2_actor_set_frame(void* actor, int frame) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_sprite = s2_actor->GetSpr();
+	SprTreePath path = s2_actor->GetTreePath();
+	path.Pop();
+	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path);
 }
 
 extern "C"

@@ -59,6 +59,8 @@ private:
 	void ResetLayerCursor();
 
 	void LoadCurrSprites();
+	void UpdateCursor(bool cursor_update);
+	void LoadCurrSprites(bool cursor_update);
 
 	static void LoadSprLerpData(Sprite* spr, const AnimCopy2::Lerp& lerp, int time);
 	

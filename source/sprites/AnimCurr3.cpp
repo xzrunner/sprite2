@@ -301,9 +301,12 @@ void AnimCurr3::LoadCurrSprites()
 	}
 
 	bool cursor_update = m_frame == 1;
+	UpdateCursor(cursor_update);
+	LoadCurrSprites(cursor_update);
+}
 
-
-	// update cursor
+void AnimCurr3::UpdateCursor(bool cursor_update)
+{
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		const AnimCopy2::Layer& layer = m_copy->m_layers[i];
@@ -330,8 +333,10 @@ void AnimCurr3::LoadCurrSprites()
 		}
 		m_layer_cursor[i] = cursor;
 	}
+}
 
-	// load sprites
+void AnimCurr3::LoadCurrSprites(bool cursor_update)
+{
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
 
 	m_curr_num = 0;
@@ -350,6 +355,7 @@ void AnimCurr3::LoadCurrSprites()
 			{
 				assert(actor.lerp != -1);
 				const AnimCopy2::Frame& next_frame = m_copy->m_layers[i].frames[cursor + 1];
+
 				assert(actor.slot == next_frame.actors[actor.next].slot);
 				Sprite* tween = m_slots[actor.slot];
 				int time = m_frame - frame.time;

@@ -14,6 +14,11 @@ public:
 		, m_iterations(9)
 	{}
 
+	virtual bool operator == (const RenderFilter& rf) const {
+		return GetMode() == rf.GetMode() &&
+			   m_iterations == static_cast<const RFGaussianBlur&>(rf).m_iterations;
+	}
+
 	virtual RenderFilter* Clone() const { return new RFGaussianBlur(*this); }
 
 	int GetIterations() const { return m_iterations; }

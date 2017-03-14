@@ -17,6 +17,14 @@ public:
 		, m_rise_factor(0.2f)
 	{}
 
+	virtual bool operator == (const RenderFilter& rf) const {
+		const RFHeatHaze& rf_hh = static_cast<const RFHeatHaze&>(rf);
+		return GetMode() == rf.GetMode() &&
+			   m_filepath == rf_hh.m_filepath &&
+			   m_distortion_factor == rf_hh.m_distortion_factor &&
+			   m_rise_factor == rf_hh.m_rise_factor;
+	}
+
 	virtual RenderFilter* Clone() const { return new RFHeatHaze(*this); }
 
 	const std::string& GetFilepath() const { return m_filepath; }

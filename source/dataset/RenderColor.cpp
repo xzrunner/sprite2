@@ -21,6 +21,11 @@ RenderColor& RenderColor::operator = (const RenderColor& col)
 	return *this;
 }
 
+bool RenderColor::operator == (const RenderColor& col) const
+{
+	return memcmp(m_state.colors, col.m_state.colors, sizeof(m_state.colors)) == 0;
+}
+
 static const float INV_255 = 1.0f / 255;
 
 static inline 

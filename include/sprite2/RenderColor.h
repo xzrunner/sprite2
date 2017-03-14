@@ -14,6 +14,8 @@ public:
 	RenderColor(const RenderColor& col);
 	RenderColor& operator = (const RenderColor& col);
 
+	bool operator == (const RenderColor& col) const;
+
 	RenderColor operator * (const RenderColor& rc) const;
 
 	Color GetMul() const { Color ret; ret.FromABGR(m_state.colors[IDX_MUL]); return ret; }

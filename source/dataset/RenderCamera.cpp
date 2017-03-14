@@ -17,6 +17,12 @@ RenderCamera::RenderCamera()
 	Init();
 }
 
+bool RenderCamera::operator == (const RenderCamera& cam) const
+{
+	return m_state.mode == cam.m_state.mode
+		&& m_state.base_y == cam.m_state.base_y;
+}
+
 RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 {
 	RenderCamera ret;

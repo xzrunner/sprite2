@@ -13,6 +13,11 @@ public:
 		: RenderFilter(FM_COL_GRADING) 
 	{}
 
+	virtual bool operator == (const RenderFilter& rf) const {
+		return GetMode() == rf.GetMode() &&
+			   m_filepath == static_cast<const RFColGrading&>(rf).GetFilepath();
+	}
+
 	virtual RenderFilter* Clone() const { return new RFColGrading(*this); }
 
 	const std::string& GetFilepath() const { return m_filepath; }

@@ -14,6 +14,8 @@ class RenderCamera
 public:
 	RenderCamera();
 
+	bool operator == (const RenderCamera& cam) const;
+
 	RenderCamera operator * (const RenderCamera& rc) const;
 
 	void CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4]) const;

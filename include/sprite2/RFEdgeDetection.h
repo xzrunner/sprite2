@@ -14,6 +14,11 @@ public:
 		, m_blend(0.5f)
 	{}
 
+	virtual bool operator == (const RenderFilter& rf) const {
+		return GetMode() == rf.GetMode() &&
+			   m_blend == static_cast<const RFEdgeDetection&>(rf).m_blend;
+	}
+
 	virtual RenderFilter* Clone() const { return new RFEdgeDetection(*this); }
 
 	float GetBlend() const { return m_blend; }

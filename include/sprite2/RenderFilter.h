@@ -19,6 +19,10 @@ public:
 		: m_mode(mode) 
 	{}
 
+	virtual bool operator == (const RenderFilter& rf) const {
+		return GetMode() == rf.GetMode();
+	}
+
 	virtual RenderFilter* Clone() const { return NULL; }
 
 	FilterMode GetMode() const { return m_mode; }

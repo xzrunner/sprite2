@@ -19,8 +19,8 @@ public:
 	int GetTexID(int idx) const;
 
 public:
-	static const int WIDTH  = 1024;
-	static const int HEIGHT = 1024;
+	static const int WIDTH;
+	static const int HEIGHT;
 
 private:
 	struct Item

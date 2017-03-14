@@ -202,6 +202,7 @@ void RVG::Rect(const sm::vec2& p0, const sm::vec2& p1, bool filling)
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE2);
 		rvg_rect(p0.x, p0.y, p1.x, p1.y, filling);
+		sl::ShaderMgr::Instance()->GetShader()->Commit();
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
 		rvg_rect3(p0.x, p0.y, p1.x, p1.y, 0, filling);

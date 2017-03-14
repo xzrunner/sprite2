@@ -641,19 +641,22 @@ void Sprite::ClearActors() const
 	}
 }
 
-void Sprite::FixActorPath(const SprTreePath& parent_path)
+void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent)
 {
 	if (m_actors.empty()) {
 		return;
 	}
-	SprTreePath this_path(parent_path);
+	SprTreePath this_path(new_parent);
 	this_path.Push(m_id);
 	for (int i = 0, n = m_actors.size(); i < n; ++i) 
 	{
 		Actor* actor = m_actors[i];
-		ActorLUT::Instance()->Delete(actor);
-		actor->SetTreePath(this_path);
-		ActorLUT::Instance()->Insert(actor);		
+		if (actor->GetTreePath() == path) 
+		{
+	 		ActorLUT::Instance()->Delete(actor);
+	 		actor->SetTreePath(this_path);
+	 		ActorLUT::Instance()->Insert(actor);
+		}
 	}
 }
 

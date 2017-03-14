@@ -109,6 +109,14 @@ extern "C"
 void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	if (s2_spr->IsHasProxy()) {
+		SprTreePath path = s2_actor->GetTreePath();
+		path.Pop();
+		const Sprite* proxy = s2_spr->GetProxy(path);
+		if (proxy) {
+			s2_spr = proxy;
+		}
+	}
 	const Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
 	if (child) {
 		return const_cast<Sprite*>(child);

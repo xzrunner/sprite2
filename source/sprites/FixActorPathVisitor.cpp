@@ -2,6 +2,7 @@
 #include "SymType.h"
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
+#include "SprVisitorParams.h"
 
 #include <assert.h>
 
@@ -15,7 +16,7 @@ FixActorPathVisitor::FixActorPathVisitor(const SprTreePath& parent_path)
 
 VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	const_cast<Sprite*>(spr)->FixActorPath(m_parent_path);
+	const_cast<Sprite*>(spr)->FixActorPath(params.path, m_parent_path);
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION) {

@@ -31,15 +31,6 @@ PointQueryVisitor::~PointQueryVisitor()
 
 VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	if (spr->IsHasProxy()) {
-		SprTreePath path = params.path;
-		path.Pop();
-		const Sprite* proxy = spr->GetProxy(path);
-		if (proxy) {
-			spr = proxy;
-		}
-	}
-
 	if (!spr->IsVisible()) {
 		return VISIT_OVER;
 	}
@@ -86,15 +77,6 @@ VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVi
 
 VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
-	if (spr->IsHasProxy()) {
-		SprTreePath path = params.path;
-		path.Pop();
-		const Sprite* proxy = spr->GetProxy(path);
-		if (proxy) {
-			spr = proxy;
-		}
-	}
-
 	bool editable = spr->IsEditable();
 	Actor* actor = ActorLUT::Instance()->Query(params.path);
 	if (actor) {

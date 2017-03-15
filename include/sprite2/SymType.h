@@ -26,7 +26,7 @@ enum SymType
 	SYM_SKELETON,
 	SYM_MODEL,
 
-	SYM_DUMMY = 100,
+	SYM_ANCHOR = 100,
 };
 
 }

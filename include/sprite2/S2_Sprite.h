@@ -55,6 +55,7 @@ public:
 	virtual bool SetFrame(int frame, const SprTreePath& parent_path) { return false; }
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const { return NULL; }
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const { return NULL; }
+	virtual void Mount(const std::string& name, const Sprite* anchor, const SprTreePath& path) {}
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -125,7 +126,6 @@ public:
 	bool HaveActor() const { return !m_actors.empty(); }
 	void ClearActors() const;
 	void FixActorPath(const SprTreePath& path, const SprTreePath& new_parent);
-	const Sprite* GetProxy(const SprTreePath& parent_path) const;
 
 private:
 	void InitFlags();
@@ -143,7 +143,6 @@ protected:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	static const uint32_t FLAG_HAS_PROXY      = 0x00000040;
 	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
 
 	static const uint32_t FLAG_DTEX_DISABLE            = 0x00000100;
@@ -161,7 +160,6 @@ public:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	S2_FLAG_METHOD(HasProxy, FLAG_HAS_PROXY)
 	S2_FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
 
 	S2_FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)

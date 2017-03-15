@@ -176,16 +176,7 @@ Sprite* AnimCurr3::FetchChild(const std::string& name, const SprTreePath& path) 
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
 		Sprite* spr = m_slots[i];
 		if (spr->GetName() == name) {
-			if (spr->IsHasProxy()) {
-				const Sprite* proxy = spr->GetProxy(path);
-				if (proxy) {
-					return const_cast<Sprite*>(proxy);
-				} else {
-					return spr;
-				}
-			} else {
-				return spr;
-			}
+			return spr;
 		}
 	}
 

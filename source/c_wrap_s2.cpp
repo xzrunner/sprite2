@@ -77,12 +77,7 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
-	const Sprite* proxy = s2_spr->GetProxy(path);
-	if (proxy) {
-		DrawNode::Draw(proxy->GetSymbol(), rp);
-	} else {
-		DrawNode::Draw(s2_spr->GetSymbol(), rp);
-	}
+	DrawNode::Draw(s2_spr->GetSymbol(), rp);
 }
 
 /************************************************************************/
@@ -109,14 +104,6 @@ extern "C"
 void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	if (s2_spr->IsHasProxy()) {
-		SprTreePath path = s2_actor->GetTreePath();
-		path.Pop();
-		const Sprite* proxy = s2_spr->GetProxy(path);
-		if (proxy) {
-			s2_spr = proxy;
-		}
-	}
 	const Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
 	if (child) {
 		return const_cast<Sprite*>(child);
@@ -138,14 +125,11 @@ void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx) {
 }
 
 extern "C"
-void* s2_spr_fetch_child_no_proxy(const void* spr, const char* name) {
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	const Sprite* child = s2_spr->FetchChild(name, SprTreePath());
-	if (child) {
-		return const_cast<Sprite*>(child);
-	} else {
-		return NULL;
-	}
+void s2_spr_mount(const void* actor, const char* name, const void* anchor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
+	const_cast<Sprite*>(s2_spr)->Mount(name, s2_anchor, s2_actor->GetTreePath());
 }
 
 extern "C"
@@ -592,11 +576,6 @@ void* s2_get_actor(const void* parent_actor, void* child_spr) {
 extern "C"
 int s2_get_actor_count() {
 	return ActorLUT::Instance()->Count();
-}
-
-extern "C"
-void s2_actor_set_proxy(void* actor, void* spr) {
-	static_cast<Actor*>(actor)->SetProxy(static_cast<Sprite*>(spr));
 }
 
 extern "C"

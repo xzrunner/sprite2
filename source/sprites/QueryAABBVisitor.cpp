@@ -20,15 +20,6 @@ QueryAABBVisitor::QueryAABBVisitor(bool filter_visible, bool filter_editable, bo
 
 VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	if (spr->IsHasProxy()) {
-		SprTreePath path = params.path;
-		path.Pop();
-		const Sprite* proxy = spr->GetProxy(path);
-		if (proxy) {
-			spr = proxy;
-		}
-	}
-
 	bool visible = spr->IsVisible();
 	bool editable = spr->IsEditable();
 	if (spr->HaveActor()) {

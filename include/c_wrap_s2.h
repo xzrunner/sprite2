@@ -31,7 +31,7 @@ void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, floa
 
 void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name);
 void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx);
-void* s2_spr_fetch_child_no_proxy(const void* spr, const char* name);
+void  s2_spr_mount(const void* actor, const char* name, const void* anchor);
 
 void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);
@@ -91,8 +91,6 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 
 void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();
-
-void  s2_actor_set_proxy(void* actor, void* spr);
 
 void* s2_actor_get_spr(void* actor);
 void  s2_actor_print_path(void* actor);

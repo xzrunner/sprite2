@@ -49,9 +49,6 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	void SetProxy(Sprite* proxy);
-	const Sprite* GetProxy() const { return m_proxy; }
-
 private:
 	void InitFlags();
 
@@ -69,7 +66,6 @@ private:
 
 	ActorGeo*        m_geo;
 	SprRender*       m_render;
-	Sprite*          m_proxy;
 	mutable uint32_t m_flags;
 
 }; // Actor

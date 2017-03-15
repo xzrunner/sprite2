@@ -7,7 +7,7 @@
 
 #include "TextboxActor.h"
 #include "ComplexActor.h"
-#include "DummyActor.h"
+#include "AnchorActor.h"
 
 #include <assert.h>
 
@@ -41,7 +41,7 @@ Actor* ActorFactory::Create(const SprTreePath& parent, const Sprite* child) cons
 		actor = new ComplexActor(child, path);
 		break;
 	default:
-		actor = new DummyActor(child, path);
+		actor = new AnchorActor(child, path);
 	}
 
 	ActorLUT::Instance()->Insert(actor);

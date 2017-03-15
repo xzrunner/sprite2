@@ -4,6 +4,8 @@
 #include "RenderParams.h"
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
+#include "SymType.h"
+#include "AnchorSprite.h"
 
 namespace s2
 {
@@ -49,15 +51,8 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	}
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
-	for (int i = 0, n = children.size(); i < n; ++i) 
-	{
+	for (int i = 0, n = children.size(); i < n; ++i) {
 		const Sprite* spr = children[i];
-		if (spr->IsHasProxy()) {
-			const Sprite* proxy = spr->GetProxy(rp_child.path);
-			if (proxy) {
-				spr = proxy;
-			}
-		}
 		if (const_cast<Sprite*>(spr)->Update(rp_child)) {
 			dirty = true;
 		}
@@ -81,12 +76,6 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path)
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		Sprite* child = children[i];
-		if (child->IsHasProxy()) {
-			const Sprite* proxy = child->GetProxy(path);
-			if (proxy) {
-				child = const_cast<Sprite*>(proxy);
-			}
-		}
 		if (!child->IsForceUpFrame() && !child->GetName().empty()) {
 			continue;
 		}
@@ -104,16 +93,7 @@ Sprite* ComplexSprite::FetchChild(const std::string& name, const SprTreePath& pa
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
 		if (child->GetName() == name) {
-			if (child->IsHasProxy()) {
-				const Sprite* proxy = child->GetProxy(path);
-				if (proxy) {
-					return const_cast<Sprite*>(proxy);
-				} else {
-					return child;
-				}
-			} else {
-				return child;
-			}
+			return child;
 		}
 	}
 	return NULL;
@@ -124,19 +104,28 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	if (idx >= 0 && idx < children.size()) {
-		Sprite* child = children[idx];
-		if (child->IsHasProxy()) {
-			const Sprite* proxy = child->GetProxy(path);
-			if (proxy) {
-				return const_cast<Sprite*>(proxy);
-			} else {
-				return child;
-			}
-		} else {
-			return child;
-		}
+		return children[idx];
 	} else {
 		return NULL;
+	}
+}
+
+void ComplexSprite::Mount(const std::string& name, const Sprite* anchor, const SprTreePath& path)
+{
+	const std::vector<Sprite*>& children 
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
+	for (int i = 0, n = children.size(); i < n; ++i) 
+	{
+		Sprite* child = children[i];
+		if (child->GetName() != name) {
+			continue;
+		}
+		if (child->GetSymbol()->Type() != SYM_ANCHOR) {
+			break;
+		}
+		AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(child);
+		anchor_spr->AddAnchor(anchor, path);
+		break;
 	}
 }
 

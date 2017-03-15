@@ -85,12 +85,6 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
 		const Sprite* spr = sprs[i];
-		if (spr->IsHasProxy()) {
-			const Sprite* proxy = spr->GetProxy(rp_child.path);
-			if (proxy) {
-				spr = proxy;
-			}
-		}
 		if (IsChildOutside(spr, rp_child)) {
 			continue;
 		}

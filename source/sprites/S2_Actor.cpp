@@ -18,7 +18,6 @@ Actor::Actor()
 	: m_spr(NULL)
 	, m_geo(NULL)
 	, m_render(SprDefault::Instance()->Render())
-	, m_proxy(NULL)
 {
 	InitFlags();
 }
@@ -28,7 +27,6 @@ Actor::Actor(const Sprite* spr, const SprTreePath& path)
 	, m_path(path)
 	, m_geo(NULL)
 	, m_render(SprDefault::Instance()->Render())
-	, m_proxy(NULL)
 {
 #ifdef S2_RES_LOG
 	++COUNT;
@@ -54,9 +52,6 @@ Actor::~Actor()
 	}
 	if (m_render != SprDefault::Instance()->Render()) {
 		SprRenderPool::Instance()->Push(m_render);
-	}
-	if (m_proxy) {
-		m_proxy->RemoveReference();
 	}
 }
 
@@ -184,25 +179,6 @@ void Actor::SetCamera(const RenderCamera& camera)
 		m_render = SprRenderPool::Instance()->Pop();
 	}
 	m_render->SetCamera(camera);
-}
-
-void Actor::SetProxy(Sprite* proxy)
-{
-	cu::RefCountObjAssign(m_proxy, proxy);
-	if (!proxy) {
-		return;
-	}
-
-	SprSRT srt;
-	m_spr->GetLocalSRT(srt);
-	m_proxy->SetLocalSRT(srt);
-
-	m_spr->SetHasProxy(true);
-
-	SprTreePath parent_path = m_path;
-	parent_path.Pop();
-	FixActorPathVisitor visitor(parent_path);
-	m_proxy->Traverse(visitor, SprVisitorParams());
 }
 
 void Actor::InitFlags()

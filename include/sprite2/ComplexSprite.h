@@ -27,6 +27,7 @@ public:
 	virtual bool SetFrame(int frame, const SprTreePath& parent_path);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
+	virtual void Mount(const std::string& name, const Sprite* anchor, const SprTreePath& path);
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void SetAction(int action) { m_action = action; }

@@ -70,6 +70,7 @@ bool  s2_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h
 bool  s2_spr_set_scissor(void* spr, float x, float y, float w, float h);
 
 void  s2_spr_scale9_resize(void* spr, int w, int h);
+void  s2_spr_textbox_reset_time(void* spr);
 
 void  s2_spr_anim2_set_static_time(void* spr, int time);
 

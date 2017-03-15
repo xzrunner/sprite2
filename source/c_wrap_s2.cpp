@@ -448,6 +448,18 @@ void s2_spr_scale9_resize(void* spr, int w, int h)
 }
 
 extern "C"
+void s2_spr_textbox_reset_time(void* spr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_TEXTBOX) {
+		return;
+	}
+
+	TextboxSprite* tb_spr = static_cast<TextboxSprite*>(s2_spr);
+	tb_spr->ResetTime();
+}
+
+extern "C"
 void s2_spr_anim2_set_static_time(void* spr, int time) 
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);

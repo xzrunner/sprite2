@@ -29,6 +29,7 @@ public:
 
 	int GetTime() const { return m_time; }
 	void UpdateTime() const { ++m_time; }
+	void ResetTime() { m_time = 0; }
 
 protected:
 	Textbox m_tb;

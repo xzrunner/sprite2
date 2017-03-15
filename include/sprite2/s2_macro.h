@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_MACRO_H_
 #define _SPRITE2_MACRO_H_
 
-#define FLAG_METHOD(name, bit) \
+#define S2_FLAG_METHOD(name, bit) \
 	bool Is##name() const { \
 		return (m_flags & bit) != 0; \
 	} \

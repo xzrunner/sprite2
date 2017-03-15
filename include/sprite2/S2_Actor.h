@@ -60,8 +60,8 @@ private:
 	static const uint32_t FLAG_EDITABLE = 0x00000002;
 
 public:
-	FLAG_METHOD(Visible, FLAG_VISIBLE)
-	FLAG_METHOD(Editable, FLAG_EDITABLE)
+	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
+	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	
 private:
 	const Sprite*    m_spr;

@@ -11,10 +11,10 @@
 namespace s2
 {
 
-QueryAABBVisitor::QueryAABBVisitor(bool use_visible, bool use_editable, bool use_scissor)
-	: m_use_visible(use_visible)
-	, m_use_editable(use_editable)
-	, m_use_scissor(use_scissor)
+QueryAABBVisitor::QueryAABBVisitor(bool filter_visible, bool filter_editable, bool filter_scissor)
+	: m_filter_visible(filter_visible)
+	, m_filter_editable(filter_editable)
+	, m_filter_scissor(filter_scissor)
 {
 }
 
@@ -38,10 +38,10 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 			editable = actor->IsEditable();
 		}
 	}
-	if (m_use_visible && !visible) {
+	if (m_filter_visible && !visible) {
 		return VISIT_OVER;
 	}
-	if (m_use_editable && !editable) {
+	if (m_filter_editable && !editable) {
 		return VISIT_OVER;
 	}
 
@@ -57,7 +57,7 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 		{
 			const s2::ComplexSymbol* complex_sym = VI_DOWNCASTING<const s2::ComplexSymbol*>(spr->GetSymbol());
 			const sm::rect& scissor = complex_sym->GetScissor();
-			if (m_use_scissor && scissor.Width() > 0 && scissor.Height() > 0) {
+			if (m_filter_scissor && scissor.Width() > 0 && scissor.Height() > 0) {
 				CombineAABB(scissor, params.mt);
 				ret = VISIT_OVER;
 			} else {

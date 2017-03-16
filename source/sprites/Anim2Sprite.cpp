@@ -28,6 +28,9 @@ bool Anim2Sprite::Update(const RenderParams& rp)
 
 bool Anim2Sprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
+	if (!IsForceUpFrame() && !GetName().empty()) {
+		return false;
+	}
 	m_curr.Update();
 	return true;
 }

@@ -61,6 +61,10 @@ bool ComplexSprite::Update(const RenderParams& rp)
 
 bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
+	if (!IsForceUpFrame() && !GetName().empty()) {
+		return false;
+	}
+
 	bool dirty = false;
 	int action = m_action;
 	SprTreePath path = parent_path;
@@ -72,12 +76,8 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path)
 	}
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
-	for (int i = 0, n = children.size(); i < n; ++i) 
-	{
+	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
-		if (!child->IsForceUpFrame() && !child->GetName().empty()) {
-			continue;
-		}
 		if (child->SetFrame(frame, path)) {
 			dirty = true;
 		}

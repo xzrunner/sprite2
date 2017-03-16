@@ -409,22 +409,30 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="00.dummy"
+				Name="00.anchor"
 				>
 				<File
-					RelativePath="..\..\..\source\sprites\DummySprite.cpp"
+					RelativePath="..\..\..\source\sprites\AnchorActor.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\DummySprite.h"
+					RelativePath="..\..\..\include\sprite2\AnchorActor.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\sprites\DummySymbol.cpp"
+					RelativePath="..\..\..\source\sprites\AnchorSprite.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\DummySymbol.h"
+					RelativePath="..\..\..\include\sprite2\AnchorSprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\AnchorSymbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AnchorSymbol.h"
 					>
 				</File>
 			</Filter>

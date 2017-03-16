@@ -222,8 +222,13 @@ void AnimCurr3::SetFrame(int frame, int fps)
 
 	// update children
 	RenderParams rp;
-	for (int i = 0; i < m_curr_num; ++i) {
-		m_slots[m_curr[i]]->Update(rp);
+	for (int i = 0; i < m_curr_num; ++i) 
+	{
+		Sprite* child = m_slots[m_curr[i]];
+		if (!child->IsForceUpFrame() && !child->GetName().empty()) {
+			continue;
+		}
+		child->Update(rp);
 	}
 }
 

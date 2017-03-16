@@ -75,9 +75,6 @@ bool MeshSprite::Update(const RenderParams& rp)
 
 bool MeshSprite::SetFrame(int frame, const SprTreePath& parent_path)
 {
-	if (!IsForceUpFrame() && !GetName().empty()) {
-		return false;
-	}
 	// todo
 	return false;
 }

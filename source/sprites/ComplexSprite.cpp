@@ -59,9 +59,9 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path)
+bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 {
-	if (!IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
 

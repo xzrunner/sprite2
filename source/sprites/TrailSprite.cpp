@@ -102,9 +102,9 @@ bool TrailSprite::Update(const RenderParams& rp)
 	return true;
 }
 
-bool TrailSprite::SetFrame(int frame, const SprTreePath& parent_path)
+bool TrailSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 {
-	if (!IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
 	Update(RenderParams());

@@ -56,9 +56,9 @@ bool AnimSprite::Update(const RenderParams& rp)
 	return m_curr.Update(rp, m_loop, m_interval, m_fps);
 }
 
-bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path)
+bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 {
-	if (!IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
 	m_curr.SetFrame(frame, m_fps);

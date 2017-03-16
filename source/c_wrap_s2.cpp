@@ -490,7 +490,7 @@ void s2_actor_set_frame(void* actor, int frame) {
 	const Sprite* s2_sprite = s2_actor->GetSpr();
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
-	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path);
+	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path, true);
 }
 
 extern "C"

@@ -22,7 +22,7 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool AnchorSprite::SetFrame(int frame, const SprTreePath& parent_path)
+bool AnchorSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 {
 	bool dirty = false;
 	SprTreePath path = parent_path;

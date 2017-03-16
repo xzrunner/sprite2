@@ -46,9 +46,9 @@ bool MaskSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool MaskSprite::SetFrame(int frame, const SprTreePath& parent_path)
+bool MaskSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 {
-	if (!IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
 	// todo

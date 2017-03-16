@@ -29,10 +29,6 @@ void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx,
 void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
 				  float xmin, float ymin, float xmax, float ymax);
 
-void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name);
-void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx);
-void  s2_spr_mount(const void* actor, const char* name, const void* anchor);
-
 void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);
 void  s2_spr_set_scale(void* spr, float sx, float sy);
@@ -49,9 +45,6 @@ const char* s2_spr_get_name(void* spr);
 
 int   s2_spr_get_sym_id(void* spr);
 int   s2_spr_get_sym_type(void* spr);
-
-bool  s2_spr_get_force_up_frame(void* spr);
-void  s2_spr_set_force_up_frame(void* spr, bool force);
 
 void  s2_spr_set_action(void* spr, const char* action);
 
@@ -86,6 +79,13 @@ void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, 
 					float xmin, float ymin, float xmax, float ymax);
 void  s2_actor_update(void* actor);
 void  s2_actor_set_frame(void* actor, int frame);
+
+void* s2_actor_fetch_child(const void* actor, const char* name);
+void* s2_actor_fetch_child_by_index(const void* actor, int idx);
+void  s2_actor_mount(const void* actor, const char* name, const void* anchor);
+
+bool  s2_actor_get_force_up_frame(void* actor);
+void  s2_actor_set_force_up_frame(void* actor, bool force);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 

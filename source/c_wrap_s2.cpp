@@ -30,6 +30,7 @@
 #include "Anim2Sprite.h"
 #include "TextboxSprite.h"
 #include "Scale9Sprite.h"
+#include "AnchorSprite.h"
 #include "OrthoCamera.h"
 
 #include <gtxt_label.h>
@@ -98,38 +99,6 @@ void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	DrawNode::Draw(s2_spr, rp);
-}
-
-extern "C"
-void* s2_spr_fetch_child(const void* spr, const void* actor, const char* name) {
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
-	if (child) {
-		return const_cast<Sprite*>(child);
-	} else {
-		return NULL;
-	}
-}
-
-extern "C"
-void* s2_spr_fetch_child_by_index(const void* spr, const void* actor, int idx) {
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* child = s2_spr->FetchChild(idx, s2_actor->GetTreePath());
-	if (child) {
-		return const_cast<Sprite*>(child);
-	} else {
-		return NULL;
-	}
-}
-
-extern "C"
-void s2_spr_mount(const void* actor, const char* name, const void* anchor) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
-	const_cast<Sprite*>(s2_spr)->Mount(name, s2_anchor, s2_actor->GetTreePath());
 }
 
 extern "C"
@@ -203,16 +172,6 @@ int s2_spr_get_sym_id(void* spr) {
 extern "C"
 int s2_spr_get_sym_type(void* spr) {
 	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
-}
-
-extern "C"
-bool s2_spr_get_force_up_frame(void* spr) {
-	return static_cast<Sprite*>(spr)->IsForceUpFrame();
-}
-
-extern "C"
-void s2_spr_set_force_up_frame(void* spr, bool force) {
-	static_cast<Sprite*>(spr)->SetForceUpFrame(force);
 }
 
 extern "C"
@@ -532,6 +491,66 @@ void s2_actor_set_frame(void* actor, int frame) {
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
 	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path);
+}
+
+extern "C"
+void* s2_actor_fetch_child(const void* actor, const char* name) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);	
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, s2_actor->GetTreePath());
+	if (child) {
+		return const_cast<Sprite*>(child);
+	} else {
+		return NULL;
+	}
+}
+
+extern "C"
+void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, s2_actor->GetTreePath());
+	if (child) {
+		return const_cast<Sprite*>(child);
+	} else {
+		return NULL;
+	}
+}
+
+extern "C"
+void s2_actor_mount(const void* actor, const char* name, const void* anchor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
+	const_cast<Sprite*>(s2_spr)->Mount(name, s2_anchor, s2_actor->GetTreePath());
+}
+
+extern "C"
+bool s2_actor_get_force_up_frame(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
+		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
+		const Sprite* real = anchor_spr->QueryAnchor(s2_actor->GetTreePath());
+		if (real) {
+			s2_spr = real;
+		} else {
+			return false;
+		}
+	}
+	return s2_spr->IsForceUpFrame();
+}
+
+extern "C"
+void s2_actor_set_force_up_frame(void* actor, bool force) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
+		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
+		const Sprite* real = anchor_spr->QueryAnchor(s2_actor->GetTreePath());
+		if (real) {
+			s2_spr = real;
+		}
+	}
+	s2_spr->SetForceUpFrame(force);
 }
 
 extern "C"

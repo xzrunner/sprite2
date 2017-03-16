@@ -5,7 +5,6 @@
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
 #include "SymType.h"
-#include "AnchorSprite.h"
 
 namespace s2
 {
@@ -107,25 +106,6 @@ Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
 		return children[idx];
 	} else {
 		return NULL;
-	}
-}
-
-void ComplexSprite::Mount(const std::string& name, const Sprite* anchor, const SprTreePath& path)
-{
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) 
-	{
-		Sprite* child = children[i];
-		if (child->GetName() != name) {
-			continue;
-		}
-		if (child->GetSymbol()->Type() != SYM_ANCHOR) {
-			break;
-		}
-		AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(child);
-		anchor_spr->AddAnchor(anchor, path);
-		break;
 	}
 }
 

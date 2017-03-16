@@ -55,7 +55,6 @@ public:
 	virtual bool SetFrame(int frame, const SprTreePath& parent_path) { return false; }
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const { return NULL; }
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const { return NULL; }
-	virtual void Mount(const std::string& name, const Sprite* anchor, const SprTreePath& path) {}
 
 	virtual void SetSymbol(Symbol* sym);
 

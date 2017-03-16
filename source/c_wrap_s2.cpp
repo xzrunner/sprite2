@@ -515,12 +515,23 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	}
 }
 
+// ret: 0 ok, -1 no child with name, -2 child isn't anchor
 extern "C"
-void s2_actor_mount(const void* actor, const char* name, const void* anchor) {
+int s2_actor_mount(const void* actor, const char* name, const void* anchor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
-	const_cast<Sprite*>(s2_spr)->Mount(name, s2_anchor, s2_actor->GetTreePath());
+	Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
+	if (!child) {
+		return -1;		
+	}
+	if (child->GetSymbol()->Type() != SYM_ANCHOR) {
+		return -2;
+	}
+
+	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(child);
+	anchor_spr->AddAnchor(s2_anchor, s2_actor->GetTreePath());
+	return 0;
 }
 
 extern "C"

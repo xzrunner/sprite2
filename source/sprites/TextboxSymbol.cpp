@@ -52,7 +52,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (!text) {
 		text = &tb_spr->GetText();
 	}
- 	if (!text) {
+ 	if (!text || text->empty()) {
  		return;
  	}
 

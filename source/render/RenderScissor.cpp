@@ -20,7 +20,7 @@ RenderScissor::~RenderScissor()
 {
 }
 
-void RenderScissor::Push(float x, float y, float w, float h, bool use_render_screen)
+void RenderScissor::Push(float x, float y, float w, float h, bool use_render_screen, bool no_intersect)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
@@ -28,8 +28,8 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 		mgr->GetContext()->EnableScissor(true);
 	}
 
-	if (!m_stack.empty()) {
-//		Intersection(m_stack.back(), x, y, w, h);
+	if (!no_intersect && !m_stack.empty()) {
+		Intersection(m_stack.back(), x, y, w, h);
 	}
 
 	Rect r;

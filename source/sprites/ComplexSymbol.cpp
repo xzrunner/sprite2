@@ -68,7 +68,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		if (min.y > max.y) {
 			std::swap(min.y, max.y);
 		}
-		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y);
+		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
 	int action = -1;
@@ -81,6 +81,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			action = comp_actor->GetAction();
 		}
 	}
+
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{

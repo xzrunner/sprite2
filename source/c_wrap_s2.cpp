@@ -15,7 +15,7 @@
 #include "BoundingBox.h"
 #include "S2_RVG.h"
 #include "SprTimer.h"
-#include "SprVisitorParams.h"∫
+#include "SprVisitorParams.h"
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
 #include "RenderScissor.h"

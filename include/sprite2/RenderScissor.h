@@ -29,6 +29,9 @@ public:
 	};
 
 private:
+	static void Intersection(const Rect& r, float& x, float& y, float& w, float& h);
+
+private:
 	std::vector<Rect> m_stack;
 	
 	SINGLETON_DECLARATION(RenderScissor)

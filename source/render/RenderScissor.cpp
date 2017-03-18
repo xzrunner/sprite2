@@ -28,6 +28,10 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 		mgr->GetContext()->EnableScissor(true);
 	}
 
+	if (!m_stack.empty()) {
+		Intersection(m_stack.back(), x, y, w, h);
+	}
+
 	Rect r;
 	r.x = x;
 	r.y = y;
@@ -91,6 +95,28 @@ bool RenderScissor::IsOutside(const sm::rect& r) const
 		}
 	}
 	return false;
+}
+
+void RenderScissor::Intersection(const Rect& r, float& x, float& y, float& w, float& h)
+{
+	float newx = r.x > x ? r.x : x,
+		  newy = r.y > y ? r.y : y;
+
+	float bx = r.x + r.w,
+		  by = r.y + r.h;
+	float ax = x + w,
+		  ay = y + h;
+	float neww = (bx > ax ? ax : bx) - newx,
+		  newh = (by > ay ? ay : by) - newy;
+
+	x = newx;
+	y = newy;
+	w = neww;
+	h = newh;
+
+	if (x < 0 || y < 0 || w < 0 || h < 0) {
+		int zz=  0;
+	}
 }
 
 }

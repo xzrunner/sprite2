@@ -29,7 +29,7 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 	}
 
 	if (!m_stack.empty()) {
-		Intersection(m_stack.back(), x, y, w, h);
+//		Intersection(m_stack.back(), x, y, w, h);
 	}
 
 	Rect r;

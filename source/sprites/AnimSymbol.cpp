@@ -15,18 +15,12 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-#ifdef S2_ANIM_CURR_V0
-	, m_curr(this)
-#endif // S2_ANIM_CURR_V0
 {
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-#ifdef S2_ANIM_CURR_V0
-	, m_curr(this)
-#endif // S2_ANIM_CURR_V0
 {
 }
 
@@ -66,7 +60,8 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (spr) {
 		RenderParams rp_child;
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
-			VI_DOWNCASTING<const AnimSprite*>(spr)->GetAnimCurr().Draw(rp_child);
+			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
+			anim->GetAnimCurr(rp.path).Draw(rp_child);
 		}
 	} else {
 		m_curr.Draw(rp);
@@ -136,13 +131,11 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 	}
 }
 
-#ifndef S2_ANIM_CURR_V0
 void AnimSymbol::LoadCopy()
 {
 	m_copy.LoadFromSym(*this);
 	m_curr.SetAnimCopy(&m_copy);
 }
-#endif // S2_ANIM_CURR_V0
 
 void AnimSymbol::AddLayer(Layer* layer)
 {

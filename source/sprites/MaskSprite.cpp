@@ -1,5 +1,6 @@
 #include "MaskSprite.h"
 #include "MaskSymbol.h"
+#include "SprTreePath.h"
 
 namespace s2
 {
@@ -18,14 +19,16 @@ MaskSprite* MaskSprite::Clone() const
 	return new MaskSprite(*this);
 }
 
-void MaskSprite::OnMessage(Message msg)
+void MaskSprite::OnMessage(Message msg, const SprTreePath& path)
 {
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		const_cast<Sprite*>(base)->OnMessage(msg);
+		const_cast<Sprite*>(base)->OnMessage(msg, cpath);
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		const_cast<Sprite*>(mask)->OnMessage(msg);
+		const_cast<Sprite*>(mask)->OnMessage(msg, cpath);
 	}
 }
 

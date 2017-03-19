@@ -58,7 +58,7 @@ Particle2dSprite* Particle2dSprite::Clone() const
 	return new Particle2dSprite(*this);
 }
 
-void Particle2dSprite::OnMessage(Message msg)
+void Particle2dSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	switch (msg)
 	{

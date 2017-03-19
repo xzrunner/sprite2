@@ -1,10 +1,11 @@
 #ifndef _SPRITE2_ANIM_CURR_H_
 #define _SPRITE2_ANIM_CURR_H_
 
-#include "pre_defined.h"
 #include "S2_Message.h"
+#include "AnimCopy.h"
+#include "VisitResult.h"
 
-#include S2_MAT_HEADER
+#include <CU_RefCountObj.h>
 
 #include <vector>
 #include <string>
@@ -12,37 +13,40 @@
 namespace s2
 {
 
+class AnimCopy;
 class Sprite;
 class AnimSymbol;
-class RenderParams;
 class SpriteVisitor;
 class SprVisitorParams;
+class RenderParams;
+class SprTreePath;
 
-class AnimCurr
+class AnimCurr : public cu::RefCountObj
 {
 public:
 	AnimCurr();
 	AnimCurr(const AnimCurr& curr);
 	AnimCurr& operator = (const AnimCurr& curr);
-	AnimCurr(AnimSymbol* sym);
 	~AnimCurr();
+	
+	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	bool Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
-
-	void OnMessage(Message msg);
+	void OnMessage(Message msg, const SprTreePath& path);
 
 	bool Update(const RenderParams& rp, bool loop = true, 
 		float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
-	Sprite* FetchChild(const std::string& name) const;
+	Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
 
-	void Start();
+	void Start(const SprTreePath& path);
 
 	void SetTime(float time);
-	void SetFrame(int frame, int fps);
+	void SetFrame(int frame, int fps, const SprTreePath& path);
 
 	int GetFrame() const { return m_frame; }
+
+	void SetAnimCopy(const AnimCopy* copy);
 
 	void SetActive(bool active);
 	bool IsActive() const { return m_active; }
@@ -50,46 +54,29 @@ public:
 	void Clear();
 
 private:
-	void LoadFromSym();
-
 	void ResetTime();
 
+	void ResetLayerCursor();
+
+	void LoadCurrSprites(const SprTreePath& path);
+	void UpdateCursor(bool cursor_update);
+	void LoadCurrSprites(bool cursor_update, const SprTreePath& path);
+
+	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
+	
 private:
-	class Frame
-	{
-	public:
-		Frame();
- 		Frame(const Frame& f);
- 		Frame& operator = (const Frame& f);
-		~Frame();
+	const AnimCopy* m_copy;
 
-		Sprite* Query(const Sprite* spr, int idx);
+	std::vector<int> m_layer_cursor;
 
-		void Clear();
+	std::vector<Sprite*> m_slots;
 
-	private:
-		void CopyFrom(const std::vector<Sprite*>& src);
-
-	public:
-		std::vector<Sprite*> sprs;		
-
-	}; // Frame
-
-	class Layer
-	{
-	public:
-		Frame frame;
-	}; // Layer
-
-private:
-	AnimSymbol* m_sym;
+	int* m_curr;
+	int  m_curr_num;
 
 	int m_frame;
 
-	std::vector<Layer> m_layers;
-
 	float m_start_time, m_curr_time;
-
 	float m_stop_time, m_stop_during;
 
 	bool m_active;

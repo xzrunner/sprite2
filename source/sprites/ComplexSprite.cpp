@@ -25,12 +25,14 @@ ComplexSprite* ComplexSprite::Clone() const
 	return new ComplexSprite(*this);
 }
 
-void ComplexSprite::OnMessage(Message msg)
+void ComplexSprite::OnMessage(Message msg, const SprTreePath& path)
 {
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->OnMessage(msg);
+		children[i]->OnMessage(msg, cpath);
 	}
 }
 

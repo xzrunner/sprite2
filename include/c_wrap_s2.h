@@ -48,7 +48,6 @@ int   s2_spr_get_sym_type(void* spr);
 
 void  s2_spr_set_action(void* spr, const char* action);
 
-int   s2_spr_get_frame(void* spr);
 int   s2_spr_get_frame_count(void* spr);
 int   s2_spr_get_component_count(void* spr);
 
@@ -78,7 +77,9 @@ void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					float xmin, float ymin, float xmax, float ymax);
 void  s2_actor_update(void* actor);
+
 void  s2_actor_set_frame(void* actor, int frame);
+int   s2_actor_get_frame(void* actor);
 
 void* s2_actor_fetch_child(const void* actor, const char* name);
 void* s2_actor_fetch_child_by_index(const void* actor, int idx);

@@ -187,17 +187,6 @@ void s2_spr_set_action(void* actor, const char* action) {
 }
 
 extern "C"
-int s2_spr_get_frame(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
-		AnimSprite* anim = VI_DOWNCASTING<AnimSprite*>(s2_spr);
-		return anim->GetFrame();
-	} else {
-		return -1;
-	}
-}
-
-extern "C"
 int s2_spr_get_frame_count(void* spr) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
@@ -491,6 +480,18 @@ void s2_actor_set_frame(void* actor, int frame) {
 	SprTreePath path = s2_actor->GetTreePath();
 	path.Pop();
 	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path, true);
+}
+
+extern "C"
+int s2_actor_get_frame(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
+		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
+		return anim->GetFrame(s2_actor->GetTreePath());
+	} else {
+		return -1;
+	}
 }
 
 extern "C"

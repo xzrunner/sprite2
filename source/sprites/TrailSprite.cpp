@@ -67,7 +67,7 @@ TrailSprite* TrailSprite::Clone() const
 	return new TrailSprite(*this);
 }
 
-void TrailSprite::OnMessage(Message msg)
+void TrailSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	switch (msg)
 	{

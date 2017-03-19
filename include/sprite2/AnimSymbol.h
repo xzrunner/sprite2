@@ -1,19 +1,10 @@
 #ifndef _SPRITE2_ANIM_SYMBOL_H_
 #define _SPRITE2_ANIM_SYMBOL_H_
 
-#include "s2_config.h"
-
 #include "AnimLerp.h"
 #include "S2_Symbol.h"
-#ifdef S2_ANIM_CURR_V0
 #include "AnimCurr.h"
-#elif defined S2_ANIM_CURR_V1
-#include "AnimCurr2.h"
 #include "AnimCopy.h"
-#elif defined S2_ANIM_CURR_V2
-#include "AnimCurr3.h"
-#include "AnimCopy2.h"
-#endif
 
 #include <vector>
 
@@ -72,13 +63,8 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
-#ifdef S2_ANIM_CURR_V1
 	const AnimCopy& GetCopy() const { return m_copy; }
 	void LoadCopy();
-#elif defined S2_ANIM_CURR_V2
-	const AnimCopy2& GetCopy() const { return m_copy; }
-	void LoadCopy();
-#endif
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -94,15 +80,8 @@ protected:
 
 	int m_fps;
 
-#ifdef S2_ANIM_CURR_V0
+	AnimCopy m_copy;
 	AnimCurr m_curr;
-#elif defined S2_ANIM_CURR_V1
-	AnimCopy  m_copy;
-	AnimCurr2 m_curr;
-#elif defined S2_ANIM_CURR_V2
-	AnimCopy2 m_copy;
-	AnimCurr3 m_curr;
-#endif
 
 	mutable sm::rect m_size;
 

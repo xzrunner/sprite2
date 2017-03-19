@@ -7,6 +7,16 @@
 namespace s2
 {
 
+void AnchorSprite::OnMessage(Message msg, const SprTreePath& path)
+{
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	const Sprite* anchor = QueryAnchor(cpath);
+	if (anchor) {
+		const_cast<Sprite*>(anchor)->OnMessage(msg, cpath);
+	}
+}
+
 bool AnchorSprite::Update(const RenderParams& rp)
 {
 	RenderParams rp_child = rp;

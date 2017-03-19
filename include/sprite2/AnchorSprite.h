@@ -18,7 +18,7 @@ public:
 	 */
 	virtual AnchorSprite* Clone() const { return new AnchorSprite(*this); }
 
-//	virtual void OnMessage(Message msg);
+	virtual void OnMessage(Message msg, const SprTreePath& path);
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame, const SprTreePath& parent_path, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;

@@ -28,7 +28,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(Message msg);
+	virtual void OnMessage(Message msg, const SprTreePath& path);
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame, const SprTreePath& parent_path, bool force = false);
 

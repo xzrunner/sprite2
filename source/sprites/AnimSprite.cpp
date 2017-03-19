@@ -1,5 +1,9 @@
 #include "AnimSprite.h"
 #include "AnimSymbol.h"
+#include "AnimCurr.h"
+#include "AnimActor.h"
+#include "RenderParams.h"
+#include "SprVisitorParams.h"
 
 #include <stdlib.h>
 
@@ -11,6 +15,7 @@ AnimSprite::AnimSprite()
 	, m_interval(0)
 	, m_fps(30)
 	, m_start_random(false)
+	, m_curr(new AnimCurr)
 {
 }
 
@@ -20,14 +25,33 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 	, m_interval(0)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 	, m_start_random(false)
-#ifdef S2_ANIM_CURR_V0
-	, m_curr(VI_DOWNCASTING<AnimSymbol*>(m_sym))
-#endif // S2_ANIM_CURR_V0
+	, m_curr(new AnimCurr)
 {
-#ifndef S2_ANIM_CURR_V0
-	m_curr.SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(m_sym)->GetCopy());
-#endif // S2_ANIM_CURR_V0
-	m_curr.Start();
+	m_curr->SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(m_sym)->GetCopy());
+	m_curr->Start(SprTreePath());
+}
+
+AnimSprite::AnimSprite(const AnimSprite& spr)
+{
+	this->operator = (spr);
+}
+
+AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
+{
+	m_loop = spr.m_loop;
+	m_interval = spr.m_interval;
+	m_fps = spr.m_fps;
+	m_start_random = spr.m_start_random;
+	m_curr = new AnimCurr(*spr.m_curr);
+	m_curr->Start(SprTreePath());
+	return *this;
+}
+
+AnimSprite::~AnimSprite()
+{
+	if (m_curr) {
+		m_curr->RemoveReference();
+	}
 }
 
 AnimSprite* AnimSprite::Clone() const
@@ -35,16 +59,17 @@ AnimSprite* AnimSprite::Clone() const
 	return new AnimSprite(*this);
 }
 
-void AnimSprite::OnMessage(Message msg)
+void AnimSprite::OnMessage(Message msg, const SprTreePath& path)
 {
-	m_curr.OnMessage(msg);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
+	curr.OnMessage(msg, path);
 
 	switch (msg)
 	{
 	case MSG_START:
-		m_curr.Start();
+		curr.Start(path);
 		if (m_start_random) {
-			RandomStartTime();
+			RandomStartTime(path);
 		}
 		break;
 	default:
@@ -53,7 +78,8 @@ void AnimSprite::OnMessage(Message msg)
 }
 bool AnimSprite::Update(const RenderParams& rp)
 {
-	return m_curr.Update(rp, m_loop, m_interval, m_fps);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(rp.path));
+	return curr.Update(rp, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
@@ -61,40 +87,64 @@ bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	m_curr.SetFrame(frame, m_fps);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(parent_path));
+	curr.SetFrame(frame, m_fps, parent_path);
 	return true;
 }
 
 Sprite* AnimSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
-	return m_curr.FetchChild(name, path);
+	return GetAnimCurr(path).FetchChild(name, path);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	return m_curr.Traverse(visitor, params);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(params.path));
+	return curr.Traverse(visitor, params);
 }
 
-void AnimSprite::SetStartRandom(bool random) 
+const AnimCurr& AnimSprite::GetAnimCurr(const SprTreePath& path) const 
+{ 
+	const AnimCurr* curr = m_curr;
+	if (ActorCount() > 1)
+	{
+		SprTreePath cpath = path;
+		cpath.Push(GetID());
+		const AnimActor* actor = static_cast<const AnimActor*>(QueryActor(cpath));
+		if (actor && actor->GetCurr()) {
+			curr = actor->GetCurr();
+		}
+	}
+	return *curr;
+}
+
+void AnimSprite::SetStartRandom(bool random, const SprTreePath& path) 
 { 
 	m_start_random = random; 
 	if (m_start_random) {
-		RandomStartTime();
+		RandomStartTime(path);
 	}
 }
 
-void AnimSprite::SetActive(bool active)
-{
-	m_curr.SetActive(active);
+int AnimSprite::GetFrame(const SprTreePath& path) const 
+{ 
+	return GetAnimCurr(path).GetFrame(); 
 }
 
-void AnimSprite::RandomStartTime()
+void AnimSprite::SetActive(bool active, const SprTreePath& path)
+{
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
+	curr.SetActive(active);
+}
+
+void AnimSprite::RandomStartTime(const SprTreePath& path)
 {
 	int start = VI_DOWNCASTING<const AnimSymbol*>(m_sym)->GetMaxFrameIdx();
 	float p = (rand() / static_cast<float>(RAND_MAX));
 	start *= p;
-//	m_curr.SetTime(start / m_fps);
-	m_curr.SetFrame(start, m_fps);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
+//	curr.SetTime(start / m_fps);
+	curr.SetFrame(start, m_fps, path);
 }
 
 }

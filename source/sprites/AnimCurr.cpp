@@ -204,7 +204,7 @@ void AnimCurr::SetTime(float time)
 
 void AnimCurr::SetFrame(int frame, int fps, const SprTreePath& path)
 {
-	frame = frame % m_copy->m_max_frame_idx;
+	frame = frame % m_copy->m_max_frame_idx + 1;
 
 	if (frame < m_frame) {
 		ResetLayerCursor();

@@ -25,7 +25,7 @@ Symbol::Symbol(uint32_t id)
 {
 #ifdef S2_RES_LOG
 	++COUNT;
-	std::cout << "++ symbol " << COUNT << "\n";
+	std::cout << "++ symbol id:" << m_id << ", count: " << COUNT << "\n";
 #endif // S2_RES_LOG
 }
 
@@ -33,7 +33,7 @@ Symbol::~Symbol()
 {
 #ifdef S2_RES_LOG
 	--COUNT;
-	std::cout << "-- symbol " << COUNT << "\n";
+	std::cout << "-- symbol id:" << m_id << ", count: " << COUNT << "\n";
 #endif // S2_RES_LOG
 }
 

@@ -26,6 +26,8 @@ public:
 	void Pop();
 	int Top() const;
 
+	void Clear();
+
 	int GetVal() const { return m_val; }
  
 private:

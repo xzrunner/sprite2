@@ -13,6 +13,7 @@ void AnchorSprite::OnMessage(Message msg, const SprTreePath& path)
 	cpath.Push(GetID());
 	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
+		cpath.Clear();
 		const_cast<Sprite*>(anchor)->OnMessage(msg, cpath);
 	}
 }
@@ -26,7 +27,8 @@ bool AnchorSprite::Update(const RenderParams& rp)
 
 	const Sprite* anchor = QueryAnchor(rp_child.path);
 	if (anchor) {
-		return const_cast<Sprite*>(anchor)->Update(rp);
+		rp_child.path.Clear();
+		return const_cast<Sprite*>(anchor)->Update(rp_child);
 	} else {
 		return false;
 	}
@@ -39,6 +41,7 @@ bool AnchorSprite::SetFrame(int frame, const SprTreePath& parent_path, bool forc
 	path.Push(GetID());
 	const Sprite* anchor = QueryAnchor(path);
 	if (anchor) {
+		path.Clear();
 		const_cast<Sprite*>(anchor)->SetFrame(frame, path);
 		dirty = true;
 	}
@@ -70,7 +73,7 @@ VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	const Sprite* anchor = QueryAnchor(params.path);
 	if (anchor) {
 		SprVisitorParams p_child = params;
-		p_child.path.Push(GetID());
+		p_child.path.Clear();
 		return anchor->TraverseChildren(visitor, p_child);
 	} else {
 		return VISIT_OVER;

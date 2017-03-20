@@ -81,6 +81,17 @@ int SprTreePath::Top() const
 #endif // SPR_TREE_PATH_STATIC
 }
 
+inline
+void SprTreePath::Clear()
+{
+#ifdef SPR_TREE_PATH_STATIC
+	m_num = 0;
+#else
+	m_buf->num = 0;
+#endif // SPR_TREE_PATH_STATIC
+	m_val = 0;
+}
+
 }
 
 #endif // _SPRITE2_SPR_TREE_PATH_INL_

@@ -28,6 +28,7 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	assert(spr);
 	const Sprite* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp_child.path);
 	if (anchor) {
+		rp_child.path.Clear();
 		DrawNode::Draw(anchor, rp_child, false);
 	}
 }

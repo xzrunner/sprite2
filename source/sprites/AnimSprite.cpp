@@ -32,6 +32,7 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 }
 
 AnimSprite::AnimSprite(const AnimSprite& spr)
+	: Sprite(spr)
 {
 	this->operator = (spr);
 }

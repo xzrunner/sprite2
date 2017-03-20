@@ -183,7 +183,11 @@ void s2_spr_set_action(void* actor, const char* action) {
 
 	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(s2_actor->GetSpr()->GetSymbol());
 	ComplexActor* actor_complex = static_cast<ComplexActor*>(s2_actor);
-	actor_complex->SetAction(sym_complex->GetActionIdx(action));
+	int action_idx = -1;
+	if (action) {
+		action_idx = sym_complex->GetActionIdx(action);
+	}
+	actor_complex->SetAction(action_idx);
 }
 
 extern "C"

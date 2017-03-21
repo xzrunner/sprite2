@@ -29,7 +29,7 @@ public:
 	 */
 	virtual void OnMessage(Message msg, const SprTreePath& path);
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const SprTreePath& parent_path, bool force = false);
+	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
 
 	void Draw(const RenderParams& rp) const;
 

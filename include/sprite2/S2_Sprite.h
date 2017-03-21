@@ -52,7 +52,7 @@ public:
 	virtual void OnMessage(Message msg, const SprTreePath& path) {}
 	
  	virtual bool Update(const RenderParams& rp) { return false; }
-	virtual bool SetFrame(int frame, const SprTreePath& parent_path, bool force = false) { return false; }
+	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false) { return false; }
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const { return NULL; }
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const { return NULL; }
 

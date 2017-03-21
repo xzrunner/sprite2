@@ -49,7 +49,7 @@ bool MaskSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool MaskSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
+bool MaskSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -57,17 +57,17 @@ bool MaskSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 
 	bool dirty = false;
 
-	SprTreePath path = parent_path;
-	path.Push(GetID());
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		if (const_cast<Sprite*>(base)->SetFrame(frame, path)) {
+		if (const_cast<Sprite*>(base)->SetFrame(frame, cpath)) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		if (const_cast<Sprite*>(mask)->SetFrame(frame, path)) {
+		if (const_cast<Sprite*>(mask)->SetFrame(frame, cpath)) {
 			dirty = true;
 		}
 	}

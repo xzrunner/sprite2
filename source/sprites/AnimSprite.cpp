@@ -83,13 +83,15 @@ bool AnimSprite::Update(const RenderParams& rp)
 	return curr.Update(rp, m_loop, m_interval, m_fps);
 }
 
-bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
+bool AnimSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(parent_path));
-	curr.SetFrame(frame, m_fps, parent_path);
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	curr.SetFrame(frame, m_fps, cpath);
 	return true;
 }
 

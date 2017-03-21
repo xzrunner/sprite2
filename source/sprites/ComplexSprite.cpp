@@ -61,7 +61,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
+bool ComplexSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -69,9 +69,9 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path, bool for
 
 	bool dirty = false;
 	int action = m_action;
-	SprTreePath path = parent_path;
-	path.Push(GetID());
-	const Actor* actor = QueryActor(path);
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	const Actor* actor = QueryActor(cpath);
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
@@ -80,7 +80,7 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& parent_path, bool for
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
-		if (child->SetFrame(frame, path)) {
+		if (child->SetFrame(frame, cpath)) {
 			dirty = true;
 		}
 	}

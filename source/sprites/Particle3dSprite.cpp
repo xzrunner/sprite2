@@ -146,7 +146,7 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool Particle3dSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
+bool Particle3dSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;

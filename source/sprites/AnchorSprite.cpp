@@ -34,15 +34,15 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool AnchorSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
+bool AnchorSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	bool dirty = false;
-	SprTreePath path = parent_path;
-	path.Push(GetID());
-	const Sprite* anchor = QueryAnchor(path);
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
-		path.Clear();
-		const_cast<Sprite*>(anchor)->SetFrame(frame, path);
+		cpath.Clear();
+		const_cast<Sprite*>(anchor)->SetFrame(frame, cpath);
 		dirty = true;
 	}
 	return dirty;

@@ -54,8 +54,25 @@ bool MaskSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	// todo
-	return false;
+
+	bool dirty = false;
+
+	SprTreePath path = parent_path;
+	path.Push(GetID());
+
+	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
+	if (const Sprite* base = sym->GetBase()) {
+		if (const_cast<Sprite*>(base)->SetFrame(frame, path)) {
+			dirty = true;
+		}
+	}
+	if (const Sprite* mask = sym->GetMask()) {
+		if (const_cast<Sprite*>(mask)->SetFrame(frame, path)) {
+			dirty = true;
+		}
+	}
+
+	return dirty;
 }
 
 Sprite* MaskSprite::FetchChild(const std::string& name, const SprTreePath& path) const

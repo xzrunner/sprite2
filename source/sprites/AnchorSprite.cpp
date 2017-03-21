@@ -50,9 +50,11 @@ bool AnchorSprite::SetFrame(int frame, const SprTreePath& parent_path, bool forc
 
 Sprite* AnchorSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
-	const Sprite* anchor = QueryAnchor(path);
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
-		return anchor->FetchChild(name, path);
+		return anchor->FetchChild(name, cpath);
 	} else {
 		return NULL;
 	}
@@ -60,9 +62,11 @@ Sprite* AnchorSprite::FetchChild(const std::string& name, const SprTreePath& pat
 
 Sprite* AnchorSprite::FetchChild(int idx, const SprTreePath& path) const
 {
-	const Sprite* anchor = QueryAnchor(path);
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
-		return anchor->FetchChild(idx, path);
+		return anchor->FetchChild(idx, cpath);
 	} else {
 		return NULL;
 	}

@@ -512,8 +512,10 @@ int s2_actor_get_component_count(void* actor) {
 
 extern "C"
 void* s2_actor_fetch_child(const void* actor, const char* name) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);	
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, s2_actor->GetTreePath());
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	SprTreePath parent_path = s2_actor->GetTreePath();
+	parent_path.Pop();
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, parent_path);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -524,7 +526,9 @@ void* s2_actor_fetch_child(const void* actor, const char* name) {
 extern "C"
 void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, s2_actor->GetTreePath());
+	SprTreePath parent_path = s2_actor->GetTreePath();
+	parent_path.Pop();
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, parent_path);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {

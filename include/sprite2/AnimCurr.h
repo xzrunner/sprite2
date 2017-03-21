@@ -37,7 +37,8 @@ public:
 		float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
-	Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
+	Sprite* FetchChild(const std::string& name) const;
+	Sprite* FetchChild(int idx) const;
 
 	void Start(const SprTreePath& path);
 
@@ -45,6 +46,8 @@ public:
 	void SetFrame(int frame, int fps, const SprTreePath& path);
 
 	int GetFrame() const { return m_frame; }
+
+	int GetSlotSize() const { return m_slots.size(); }
 
 	void SetAnimCopy(const AnimCopy* copy);
 

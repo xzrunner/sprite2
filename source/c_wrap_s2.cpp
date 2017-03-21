@@ -203,18 +203,6 @@ int s2_spr_get_frame_count(void* spr) {
 }
 
 extern "C"
-int s2_spr_get_component_count(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_COMPLEX) {
-		ComplexSprite* complex = VI_DOWNCASTING<ComplexSprite*>(s2_spr);
-		const ComplexSymbol* sym = VI_DOWNCASTING<const ComplexSymbol*>(complex->GetSymbol());
-		return sym->GetActionChildren(complex->GetAction()).size();
-	} else {
-		return -1;
-	}
-}
-
-extern "C"
 void s2_spr_get_aabb(const void* spr, float aabb[4]) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	sm::rect sz = s2_spr->GetBounding()->GetSize();
@@ -496,6 +484,30 @@ int s2_actor_get_frame(void* actor) {
 	} else {
 		return -1;
 	}
+}
+
+extern "C"
+int s2_actor_get_component_count(void* actor) {
+	int ret = -1;
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_spr = s2_actor->GetSpr();
+	switch (s2_spr->GetSymbol()->Type())
+	{
+	case SYM_COMPLEX:
+		{
+			const ComplexSprite* complex = VI_DOWNCASTING<const ComplexSprite*>(s2_spr);
+			const ComplexSymbol* sym = VI_DOWNCASTING<const ComplexSymbol*>(complex->GetSymbol());
+			ret = sym->GetActionChildren(complex->GetAction()).size();
+		}
+		break;
+	case SYM_ANIMATION:
+		{
+			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
+			ret = anim->GetAnimCurr(s2_actor->GetTreePath()).GetSlotSize();
+		}
+		break;
+	}
+	return ret;
 }
 
 extern "C"

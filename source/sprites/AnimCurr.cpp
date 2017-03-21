@@ -163,26 +163,24 @@ void AnimCurr::Draw(const RenderParams& rp) const
 	}
 }
 
-Sprite* AnimCurr::FetchChild(const std::string& name, const SprTreePath& path) const
+Sprite* AnimCurr::FetchChild(const std::string& name) const
 {
-// 	for (int i = 0; i < m_curr_num; ++i) {
-// 		if (m_slots[m_curr[i]]->GetName() == name) {
-// 			return m_slots[m_curr[i]];
-// 		}
-// 	}
-
-	//////////////////////////////////////////////////////////////////////////
-
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
 		Sprite* spr = m_slots[i];
 		if (spr->GetName() == name) {
 			return spr;
 		}
 	}
-
-	//////////////////////////////////////////////////////////////////////////
-
 	return NULL;
+}
+
+Sprite* AnimCurr::FetchChild(int idx) const
+{
+	if (idx < 0 || idx >= m_slots.size()) {
+		return NULL;
+	} else {
+		return m_slots[idx];
+	}
 }
 
 void AnimCurr::Start(const SprTreePath& path)

@@ -49,7 +49,6 @@ int   s2_spr_get_sym_type(void* spr);
 void  s2_spr_set_action(void* spr, const char* action);
 
 int   s2_spr_get_frame_count(void* spr);
-int   s2_spr_get_component_count(void* spr);
 
 void  s2_spr_get_aabb(const void* spr, float aabb[4]);
 void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
@@ -80,6 +79,8 @@ void  s2_actor_update(void* actor);
 
 void  s2_actor_set_frame(void* actor, int frame);
 int   s2_actor_get_frame(void* actor);
+
+int   s2_actor_get_component_count(void* actor);
 
 void* s2_actor_fetch_child(const void* actor, const char* name);
 void* s2_actor_fetch_child_by_index(const void* actor, int idx);

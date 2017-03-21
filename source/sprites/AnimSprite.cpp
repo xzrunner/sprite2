@@ -95,7 +95,12 @@ bool AnimSprite::SetFrame(int frame, const SprTreePath& parent_path, bool force)
 
 Sprite* AnimSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
-	return GetAnimCurr(path).FetchChild(name, path);
+	return GetAnimCurr(path).FetchChild(name);
+}
+
+Sprite* AnimSprite::FetchChild(int idx, const SprTreePath& path) const
+{
+	return GetAnimCurr(path).FetchChild(idx);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const

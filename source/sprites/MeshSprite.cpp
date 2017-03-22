@@ -2,6 +2,7 @@
 #include "MeshSymbol.h"
 #include "S2_Mesh.h"
 #include "RenderParams.h"
+#include "SymbolVisitor.h"
 
 #include <stddef.h>
 
@@ -64,6 +65,11 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
+void MeshSprite::OnMessage(Message msg, const SprTreePath& path)
+{
+	
+}
+
 bool MeshSprite::Update(const RenderParams& rp) 
 {
 	RenderParams rp_child = rp;
@@ -86,6 +92,41 @@ bool MeshSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	}
 	// todo
 	return false;
+}
+
+Sprite* MeshSprite::FetchChild(const std::string& name, const SprTreePath& path) const
+{
+	class FetchVisitor : public SymbolVisitor
+	{
+	public:
+		FetchVisitor(const std::string& name) 
+			: m_name(name)
+			, m_spr(NULL) 
+		{}
+
+		virtual void Visit(Sprite* spr) const
+		{
+			if (!m_spr && spr->GetName() == m_name) {
+				m_spr = spr;
+			}
+		}
+
+		Sprite* GetResult() { return m_spr; }
+		
+	private:
+		std::string m_name;
+		mutable Sprite* m_spr;
+
+	}; // FetchVisitor
+
+	FetchVisitor visitor(name);
+	if (m_base) {
+		const_cast<Symbol*>(m_base)->Traverse(visitor);
+	} else {
+		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
+		const_cast<Symbol*>(mesh->GetBaseSymbol())->Traverse(visitor);
+	}
+	return visitor.GetResult();
 }
 
 void MeshSprite::Lerp(const MeshSprite* begin, const MeshSprite* end, float process)

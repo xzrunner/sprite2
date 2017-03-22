@@ -14,14 +14,15 @@ AnimActor::AnimActor(const Sprite* spr, const SprTreePath& path)
 	, m_curr(NULL)
 {
 	assert(spr->HaveActor());
-	if (spr->ActorCount() == 1) {
-		const AnimSprite* anim_spr = VI_DOWNCASTING<const AnimSprite*>(spr);
-		const AnimCurr& curr = anim_spr->GetAnimCurr(path);
-		curr.AddReference();
-		m_curr = const_cast<AnimCurr*>(&curr);
-	} else {
+//	// can't reuse curr, spr's curr will be used when can't find one from a path
+// 	if (spr->ActorCount() == 1) {
+// 		const AnimSprite* anim_spr = VI_DOWNCASTING<const AnimSprite*>(spr);
+// 		const AnimCurr& curr = anim_spr->GetAnimCurr(path);
+// 		curr.AddReference();
+// 		m_curr = const_cast<AnimCurr*>(&curr);
+// 	} else {
 		m_curr = new AnimCurr();
-	}
+//	}
 
 	const AnimSymbol* anim_sym = VI_DOWNCASTING<const AnimSymbol*>(spr->GetSymbol());
 	m_curr->SetAnimCopy(&const_cast<AnimSymbol*>(anim_sym)->GetCopy());

@@ -10,7 +10,7 @@ namespace s2
 void AnchorSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
 		cpath.Clear();
@@ -23,7 +23,7 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(GetID());
+	rp_child.path.Push(*this);
 
 	const Sprite* anchor = QueryAnchor(rp_child.path);
 	if (anchor) {
@@ -38,7 +38,7 @@ bool AnchorSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 {
 	bool dirty = false;
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
 		cpath.Clear();
@@ -51,7 +51,7 @@ bool AnchorSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 Sprite* AnchorSprite::FetchChild(const std::string& name, const SprTreePath& path) const
 {
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
 		return anchor->FetchChild(name, cpath);
@@ -63,7 +63,7 @@ Sprite* AnchorSprite::FetchChild(const std::string& name, const SprTreePath& pat
 Sprite* AnchorSprite::FetchChild(int idx, const SprTreePath& path) const
 {
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const Sprite* anchor = QueryAnchor(cpath);
 	if (anchor) {
 		return anchor->FetchChild(idx, cpath);

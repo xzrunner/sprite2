@@ -23,7 +23,7 @@ MaskSprite* MaskSprite::Clone() const
 void MaskSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
 		const_cast<Sprite*>(base)->OnMessage(msg, cpath);
@@ -40,7 +40,7 @@ bool MaskSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(GetID());
+	rp_child.path.Push(*this);
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
@@ -65,7 +65,7 @@ bool MaskSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	bool dirty = false;
 
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {

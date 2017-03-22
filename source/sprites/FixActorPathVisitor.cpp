@@ -28,7 +28,7 @@ VisitResult FixActorPathVisitor::Visit(const Sprite* spr, const SprVisitorParams
 
 VisitResult FixActorPathVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
-	m_parent_path.Push(spr->GetID());
+	m_parent_path.Push(*spr);
 	return VISIT_OVER;
 }
 

@@ -14,6 +14,10 @@ SprTreePath::SprTreePath()
 	, m_buf(NULL)
 #endif // SPR_TREE_PATH_STATIC
 {
+#ifdef S2_SPR_TREE_DEBUG
+	m_name_paths.reserve(16);
+	m_sym_paths.reserve(16);
+#endif // S2_SPR_TREE_DEBUG
 }
 
 SprTreePath::SprTreePath(const SprTreePath& path)
@@ -23,6 +27,10 @@ SprTreePath::SprTreePath(const SprTreePath& path)
 #else
 	, m_buf(NULL)
 #endif // SPR_TREE_PATH_STATIC
+#ifdef S2_SPR_TREE_DEBUG
+	, m_name_paths(path.m_name_paths)
+	, m_sym_paths(path.m_sym_paths)
+#endif // S2_SPR_TREE_DEBUG
 {
 #ifdef SPR_TREE_PATH_STATIC
 	memcpy(m_ids, path.m_ids, sizeof(int) * m_num);
@@ -68,6 +76,11 @@ SprTreePath& SprTreePath::operator = (const SprTreePath& path)
 	}
 #endif // SPR_TREE_PATH_STATIC
 
+#ifdef S2_SPR_TREE_DEBUG
+	m_name_paths = path.m_name_paths;
+	m_sym_paths = path.m_sym_paths;
+#endif // S2_SPR_TREE_DEBUG
+
 	return *this;
 }
 
@@ -82,7 +95,7 @@ SprTreePath::~SprTreePath()
 
 #ifndef SPR_TREE_PATH_STATIC
 
-void SprTreePath::Push(int id) 
+void SprTreePath::Push(int spr_id)
 {
 	if (!m_buf)
 	{
@@ -96,8 +109,17 @@ void SprTreePath::Push(int id)
 		m_buf = new_buf;
 	}
 
-	m_buf->ids[m_buf->num++] = id;
-	m_val += id * m_buf->num;
+	m_buf->ids[m_buf->num++] = spr_id;
+	m_val += spr_id * m_buf->num;
+}
+
+void SprTreePath::Push(const Sprite& spr) 
+{
+	Push(spr.GetID());
+#ifdef S2_SPR_TREE_DEBUG
+	m_name_paths.push_back(spr.GetName());
+	m_sym_paths.push_back(spr.GetSymbol()->GetID());
+#endif // S2_SPR_TREE_DEBUG
 }
 
 #endif // SPR_TREE_PATH_STATIC

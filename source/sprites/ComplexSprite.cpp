@@ -28,7 +28,7 @@ ComplexSprite* ComplexSprite::Clone() const
 void ComplexSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
@@ -41,7 +41,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(GetID());
+	rp_child.path.Push(*this);
 
 	bool dirty = false;
 	int action = m_action;
@@ -70,7 +70,7 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	bool dirty = false;
 	int action = m_action;
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	const Actor* actor = QueryActor(cpath);
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);

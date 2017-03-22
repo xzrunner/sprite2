@@ -123,7 +123,7 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	rp_child.path.Push(spr->GetID());
+	rp_child.path.Push(*spr);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));

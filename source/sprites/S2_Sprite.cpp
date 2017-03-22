@@ -314,7 +314,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 
 	p.mt = GetLocalMat() * params.mt;
 	p.path = params.path;
-	p.path.Push(m_id);
+	p.path.Push(*this);
 	const Actor* actor = QueryActor(p.path);
 	if (actor) {
 		p.mt = actor->GetLocalMat() * p.mt;
@@ -647,7 +647,7 @@ void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent
 		return;
 	}
 	SprTreePath this_path(new_parent);
-	this_path.Push(m_id);
+	this_path.Push(*this);
 	for (int i = 0, n = m_actors.size(); i < n; ++i) 
 	{
 		Actor* actor = m_actors[i];

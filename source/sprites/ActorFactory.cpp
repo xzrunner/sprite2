@@ -26,7 +26,7 @@ Actor* ActorFactory::Create(const SprTreePath& parent, const Sprite* child) cons
 	assert(child);
 
 	SprTreePath path = parent;
-	path.Push(child->GetID());
+	path.Push(*child);
 
 	Actor* actor = ActorLUT::Instance()->Query(path);
 	if (actor) {

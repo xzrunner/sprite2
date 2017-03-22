@@ -1,14 +1,22 @@
 #ifndef _SPRITE2_SPR_TREE_PATH_H_
 #define _SPRITE2_SPR_TREE_PATH_H_
 
+#include "s2_config.h"
+
 #include <iostream>
 
 #define SPR_TREE_PATH_STATIC
+
+#ifdef S2_SPR_TREE_DEBUG
+#include <vector>
+#include <stdint.h>
+#endif // S2_SPR_TREE_DEBUG
 
 namespace s2
 {
 
 struct STPBuffer;
+class Sprite;
 
 class SprTreePath
 {
@@ -22,7 +30,8 @@ public:
 
 	bool Empty() const;
 
-	void Push(int id);
+	void Push(int spr_id);
+	void Push(const Sprite& spr);
 	void Pop();
 	int Top() const;
 
@@ -43,6 +52,11 @@ private:
 #else
 	STPBuffer* m_buf;
 #endif // SPR_TREE_PATH_STATIC
+
+#ifdef S2_SPR_TREE_DEBUG
+	std::vector<std::string> m_name_paths;
+	std::vector<uint32_t>    m_sym_paths;
+#endif // S2_SPR_TREE_DEBUG
 
 }; // SprTreePath
 

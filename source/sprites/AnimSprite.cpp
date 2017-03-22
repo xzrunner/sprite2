@@ -65,7 +65,7 @@ void AnimSprite::OnMessage(Message msg, const SprTreePath& path)
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
 
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	curr.OnMessage(msg, cpath);
 
 	switch (msg)
@@ -87,7 +87,7 @@ bool AnimSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(GetID());
+	rp_child.path.Push(*this);
 	return curr.Update(rp_child, m_loop, m_interval, m_fps);
 }
 
@@ -98,7 +98,7 @@ bool AnimSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	}
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
 	SprTreePath cpath = path;
-	cpath.Push(GetID());
+	cpath.Push(*this);
 	curr.SetFrame(frame, m_fps, cpath);
 	return true;
 }
@@ -125,7 +125,7 @@ const AnimCurr& AnimSprite::GetAnimCurr(const SprTreePath& parent_path) const
 	if (ActorCount() > 1)
 	{
 		SprTreePath cpath = parent_path;
-		cpath.Push(GetID());
+		cpath.Push(*this);
 		const AnimActor* actor = static_cast<const AnimActor*>(QueryActor(cpath));
 		if (actor && actor->GetCurr()) {
 			curr = actor->GetCurr();

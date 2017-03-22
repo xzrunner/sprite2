@@ -2,6 +2,10 @@
 #define _SPRITE2_SPR_TREE_PATH_INL_
 
 #include "STPBuffer.h"
+#include "S2_Sprite.h"
+#ifdef S2_SPR_TREE_DEBUG
+#include "S2_Symbol.h"
+#endif // S2_SPR_TREE_DEBUG
 
 #include <assert.h>
 #include <string.h>
@@ -42,12 +46,23 @@ bool SprTreePath::Empty() const
 }
 
 #ifdef SPR_TREE_PATH_STATIC
+
 inline
-void SprTreePath::Push(int id)
+void SprTreePath::Push(int spr_id)
 {
 	assert(m_num < MAX_PATH_NUM);
-	m_ids[m_num++] = id;
-	m_val += id * m_num;
+	m_ids[m_num++] = spr_id;
+	m_val += spr_id * m_num;
+}
+
+inline
+void SprTreePath::Push(const Sprite& spr)
+{
+	Push(spr.GetID());
+#ifdef S2_SPR_TREE_DEBUG
+	m_name_paths.push_back(spr.GetName());
+	m_sym_paths.push_back(spr.GetSymbol()->GetID());
+#endif // S2_SPR_TREE_DEBUG
 }
 #endif // SPR_TREE_PATH_STATIC
 
@@ -69,6 +84,11 @@ void SprTreePath::Pop()
 	m_val -= m_buf->ids[m_buf->num - 1] * m_buf->num;
 	--m_buf->num;
 #endif // SPR_TREE_PATH_STATIC
+
+#ifdef S2_SPR_TREE_DEBUG
+	m_name_paths.pop_back();
+	m_sym_paths.pop_back();
+#endif // S2_SPR_TREE_DEBUG
 }
 
 inline

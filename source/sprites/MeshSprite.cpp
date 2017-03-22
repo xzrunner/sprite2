@@ -1,6 +1,7 @@
 #include "MeshSprite.h"
 #include "MeshSymbol.h"
 #include "S2_Mesh.h"
+#include "RenderParams.h"
 
 #include <stddef.h>
 
@@ -64,12 +65,17 @@ MeshSprite* MeshSprite::Clone() const
 }
 
 bool MeshSprite::Update(const RenderParams& rp) 
-{ 
+{
+	RenderParams rp_child = rp;
+	rp_child.mt = GetLocalMat() * rp.mt;
+	rp_child.shader = GetShader() * rp.shader;
+	rp_child.path.Push(GetID());
+
 	if (m_base) {
-		return const_cast<Symbol*>(m_base)->Update(rp, 0);
+		return const_cast<Symbol*>(m_base)->Update(rp_child, 0);
 	} else {
 		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(rp, 0);
+		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(rp_child, 0);
 	}
 }
 

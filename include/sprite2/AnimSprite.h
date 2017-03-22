@@ -36,7 +36,7 @@ public:
 	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	const AnimCurr& GetAnimCurr(const SprTreePath& path) const;
+	const AnimCurr& GetAnimCurr(const SprTreePath& parent_path) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }

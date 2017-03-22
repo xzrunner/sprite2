@@ -63,14 +63,17 @@ AnimSprite* AnimSprite::Clone() const
 void AnimSprite::OnMessage(Message msg, const SprTreePath& path)
 {
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
-	curr.OnMessage(msg, path);
+
+	SprTreePath cpath = path;
+	cpath.Push(GetID());
+	curr.OnMessage(msg, cpath);
 
 	switch (msg)
 	{
 	case MSG_START:
-		curr.Start(path);
+		curr.Start(cpath);
 		if (m_start_random) {
-			RandomStartTime(path);
+			RandomStartTime(cpath);
 		}
 		break;
 	default:
@@ -80,7 +83,12 @@ void AnimSprite::OnMessage(Message msg, const SprTreePath& path)
 bool AnimSprite::Update(const RenderParams& rp)
 {
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(rp.path));
-	return curr.Update(rp, m_loop, m_interval, m_fps);
+
+	RenderParams rp_child = rp;
+	rp_child.mt = GetLocalMat() * rp.mt;
+	rp_child.shader = GetShader() * rp.shader;
+	rp_child.path.Push(GetID());
+	return curr.Update(rp_child, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::SetFrame(int frame, const SprTreePath& path, bool force)
@@ -111,12 +119,12 @@ VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisito
 	return curr.Traverse(visitor, params);
 }
 
-const AnimCurr& AnimSprite::GetAnimCurr(const SprTreePath& path) const 
+const AnimCurr& AnimSprite::GetAnimCurr(const SprTreePath& parent_path) const 
 { 
 	const AnimCurr* curr = m_curr;
 	if (ActorCount() > 1)
 	{
-		SprTreePath cpath = path;
+		SprTreePath cpath = parent_path;
 		cpath.Push(GetID());
 		const AnimActor* actor = static_cast<const AnimActor*>(QueryActor(cpath));
 		if (actor && actor->GetCurr()) {

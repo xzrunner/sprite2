@@ -11,6 +11,7 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
+#include "BoundingDirtyVisitor.h"
 
 #include <SM_Test.h>
 
@@ -23,12 +24,14 @@ namespace s2
 
 ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
+	, m_aabb_update_times(0)
 {
 }
 
 ComplexSymbol::ComplexSymbol(uint32_t id)
 	: Symbol(id)
 	, m_scissor(0, 0)
+	, m_aabb_update_times(0)
 {
 }
 
@@ -115,9 +118,13 @@ bool ComplexSymbol::Update(const RenderParams& rp, float time)
 
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 {
- 	if (m_size.IsValid()) {
- 		return m_size;
- 	}
+	++m_aabb_update_times;
+	if (m_size.IsValid() && m_aabb_update_times < AABB_UPDATE_FREQ) {
+		return m_size;
+	}
+	if (m_aabb_update_times >= AABB_UPDATE_FREQ) {
+		m_aabb_update_times = 0;
+	}
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
@@ -125,7 +132,6 @@ sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 		return m_size;
 	}
 
-	m_size.MakeEmpty();
 	int action = -1;
 	if (spr) {
 		// todo actor's action
@@ -133,8 +139,22 @@ sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
 	}
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		sprs[i]->GetBounding()->CombineTo(m_size);
+		BoundingDirtyVisitor visitor;
+		sprs[i]->Traverse(visitor, SprVisitorParams());
+		if (visitor.IsDirty()) {
+			m_size.MakeEmpty();
+			break;
+		}
 	}
+
+	if (m_size.IsValid()) {
+		return m_size;
+	}
+
+	m_size.MakeEmpty();
+ 	for (int i = 0, n = sprs.size(); i < n; ++i) {
+ 		sprs[i]->GetBounding()->CombineTo(m_size);
+ 	}
 
 	return m_size;
 }

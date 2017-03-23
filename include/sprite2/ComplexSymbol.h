@@ -68,6 +68,10 @@ protected:
 
 	mutable sm::rect m_size;
 
+private:
+	static const int AABB_UPDATE_FREQ = 100;
+	mutable int m_aabb_update_times;
+
 }; // ComplexSymbol
 
 }

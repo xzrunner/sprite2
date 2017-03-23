@@ -72,6 +72,9 @@ sm::rect Anim2Symbol::GetBounding(const Sprite* spr) const
 
 		Symbol* sym = static_cast<Symbol*>(skin->ud);
 		sm::rect sb = sym->GetBounding();
+		if (sb.Width() == 0 || sb.Height() == 0) {
+			continue;
+		}
 
 #ifdef S2_MATRIX_FIX
 		sm::MatrixFix m;

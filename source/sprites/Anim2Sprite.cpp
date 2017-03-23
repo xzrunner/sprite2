@@ -23,7 +23,11 @@ Anim2Sprite* Anim2Sprite::Clone() const
 
 bool Anim2Sprite::Update(const RenderParams& rp)
 {
-	return m_curr.Update();
+	bool ret = m_curr.Update();
+	if (ret) {
+		SetBoundingDirty(true);
+	}
+	return ret;
 }
 
 bool Anim2Sprite::SetFrame(int frame, const Actor* actor, bool force)
@@ -31,8 +35,11 @@ bool Anim2Sprite::SetFrame(int frame, const Actor* actor, bool force)
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	m_curr.Update();
-	return true;
+	bool ret = m_curr.Update();
+	if (ret) {
+		SetBoundingDirty(true);
+	}
+	return ret;
 }
 
 void Anim2Sprite::SetStaticTime(int static_time)

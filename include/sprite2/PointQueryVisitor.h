@@ -2,7 +2,6 @@
 #define _SPRITE2_POINT_QUERY_VISITOR_H_
 
 #include "SpriteVisitor.h"
-#include "SprTreePath.h"
 #include "SprVisitorParams.h"
 
 #include <SM_Vector.h>

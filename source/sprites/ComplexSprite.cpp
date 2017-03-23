@@ -27,25 +27,25 @@ ComplexSprite* ComplexSprite::Clone() const
 
 void ComplexSprite::OnMessage(Message msg, const Actor* actor)
 {
-	SprTreePath cpath = path;
-	cpath.Push(*this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->OnMessage(msg, cpath);
+		Sprite* spr = children[i];
+		spr->OnMessage(msg, spr->QueryActor(actor));
 	}
 }
 
 bool ComplexSprite::Update(const RenderParams& rp)
 {
+	const Actor* actor = QueryActor(rp.prev);
+
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(*this);
+	rp_child.prev = actor;
 
 	bool dirty = false;
 	int action = m_action;
-	const Actor* actor = QueryActor(rp_child.path);
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
@@ -61,7 +61,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(int frame, const SprTreePath& path, bool force)
+bool ComplexSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -69,9 +69,6 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 
 	bool dirty = false;
 	int action = m_action;
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-	const Actor* actor = QueryActor(cpath);
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
@@ -80,14 +77,14 @@ bool ComplexSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
-		if (child->SetFrame(frame, cpath)) {
+		if (child->SetFrame(frame, child->QueryActor(actor))) {
 			dirty = true;
 		}
 	}
 	return dirty;
 }
 
-Sprite* ComplexSprite::FetchChild(const std::string& name, const SprTreePath& path) const
+Sprite* ComplexSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
@@ -100,7 +97,7 @@ Sprite* ComplexSprite::FetchChild(const std::string& name, const SprTreePath& pa
 	return NULL;
 }
 
-Sprite* ComplexSprite::FetchChild(int idx, const SprTreePath& path) const
+Sprite* ComplexSprite::FetchChild(int idx, const Actor* actor) const
 {
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
@@ -115,22 +112,24 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 {
 	VisitResult ret = VISIT_OVER;
 	int action = m_action;
-	const Actor* actor = QueryActor(params.path);
+	const Actor* actor = QueryActor(params.prev);
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
 	}
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
+	SprVisitorParams cp = params;
+	cp.prev = actor;
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, children[i], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, cp, children[i], ret)) {
 				break;
 			}
 		}
 	} else {
 		for (int i = children.size() - 1; i >= 0; --i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, children[i], ret)) {
+			if (!SpriteVisitor::VisitChild(visitor, cp, children[i], ret)) {
 				break;
 			}
 		}

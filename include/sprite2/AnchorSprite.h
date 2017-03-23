@@ -6,6 +6,8 @@
 namespace s2
 {
 
+class Actor;
+
 class AnchorSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
@@ -20,12 +22,12 @@ public:
 
 	virtual void OnMessage(Message msg, const Actor* actor);
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
-	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
-	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
+	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
+	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
     virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	void AddAnchor(const Sprite* anchor, const SprTreePath& path);
+	void AddAnchor(const Sprite* anchor, const Actor* parent);
 	const Sprite* QueryAnchor(const Actor* actor) const;
 
 	VI_DUMMY_FUNC

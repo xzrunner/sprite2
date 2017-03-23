@@ -31,7 +31,7 @@ public:
 
 	RenderCamera camera;
 	
-	const Actor* prev;
+	const Actor* actor;
 
 public:
 	RenderParams();

@@ -1,6 +1,5 @@
 #include "MaskSprite.h"
 #include "MaskSymbol.h"
-#include "SprTreePath.h"
 #include "RenderParams.h"
 
 namespace s2
@@ -22,14 +21,12 @@ MaskSprite* MaskSprite::Clone() const
 
 void MaskSprite::OnMessage(Message msg, const Actor* actor)
 {
-	SprTreePath cpath = path;
-	cpath.Push(*this);
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		const_cast<Sprite*>(base)->OnMessage(msg, cpath);
+		const_cast<Sprite*>(base)->OnMessage(msg, base->QueryActor(actor));
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		const_cast<Sprite*>(mask)->OnMessage(msg, cpath);
+		const_cast<Sprite*>(mask)->OnMessage(msg, mask->QueryActor(actor));
 	}
 }
 
@@ -56,7 +53,7 @@ bool MaskSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool MaskSprite::SetFrame(int frame, const SprTreePath& path, bool force)
+bool MaskSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -64,17 +61,14 @@ bool MaskSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 
 	bool dirty = false;
 
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		if (const_cast<Sprite*>(base)->SetFrame(frame, cpath)) {
+		if (const_cast<Sprite*>(base)->SetFrame(frame, base->QueryActor(actor))) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		if (const_cast<Sprite*>(mask)->SetFrame(frame, cpath)) {
+		if (const_cast<Sprite*>(mask)->SetFrame(frame, mask->QueryActor(actor))) {
 			dirty = true;
 		}
 	}
@@ -82,7 +76,7 @@ bool MaskSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	return dirty;
 }
 
-Sprite* MaskSprite::FetchChild(const std::string& name, const SprTreePath& path) const
+Sprite* MaskSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	if (name == "base") {
 		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());

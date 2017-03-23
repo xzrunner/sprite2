@@ -75,7 +75,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (spr) 
 	{
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
-		const Actor* actor = spr->QueryActor(rp_child.path);
+		const Actor* actor = spr->QueryActor(rp_child.prev);
 		if (actor) {
 			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 			action = comp_actor->GetAction();
@@ -186,41 +186,41 @@ bool ComplexSymbol::Remove(Sprite* spr)
 	return false;
 }
 
-bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Sprite* dst)
-{
-	int idx = -1;
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (m_children[i]->GetName() == name) {
-			idx = i;
-			break;
-		}
-	}
-
-	if (idx == -1 || m_children[idx] == dst) {
-		return false;
-	}
-
-	if (!dst) {
-		m_children[idx]->RemoveReference();
-		m_children.erase(m_children.begin() + idx);
-		m_size.MakeEmpty();
-		return true;
-	}
-
-	assert(m_children[idx]);
-
-	m_children[idx]->RemoveReference();
-	m_children[idx] = dst;
-	dst->SetName(name);
-	dst->AddReference();
-
-	FixActorPathVisitor visitor(path);
-	dst->Traverse(visitor, SprVisitorParams());
-
-	m_size.MakeEmpty();
-
-	return true;
-}
+//bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Sprite* dst)
+//{
+//	int idx = -1;
+//	for (int i = 0, n = m_children.size(); i < n; ++i) {
+//		if (m_children[i]->GetName() == name) {
+//			idx = i;
+//			break;
+//		}
+//	}
+//
+//	if (idx == -1 || m_children[idx] == dst) {
+//		return false;
+//	}
+//
+//	if (!dst) {
+//		m_children[idx]->RemoveReference();
+//		m_children.erase(m_children.begin() + idx);
+//		m_size.MakeEmpty();
+//		return true;
+//	}
+//
+//	assert(m_children[idx]);
+//
+//	m_children[idx]->RemoveReference();
+//	m_children[idx] = dst;
+//	dst->SetName(name);
+//	dst->AddReference();
+//
+//	FixActorPathVisitor visitor(path);
+//	dst->Traverse(visitor, SprVisitorParams());
+//
+//	m_size.MakeEmpty();
+//
+//	return true;
+//}
 
 bool ComplexSymbol::Clear()
 {
@@ -308,15 +308,15 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 	return true;
 }
 
-bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) const
+bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& parent) const
 {
 	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->Empty() && !rp.view_region.IsValid()) {
+	if (rs->Empty() && !parent.view_region.IsValid()) {
 		return false;
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
+	S2_MAT mat = DrawNode::PrepareMat(parent, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	sm::rect sr(r_min, r_max);
@@ -324,7 +324,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	if (!rs->Empty() && rs->IsOutside(sr)) {
 		return true;
 	}
-	if (rp.view_region.IsValid() && !sm::is_rect_intersect_rect(rp.view_region, sr)) {
+	if (parent.view_region.IsValid() && !sm::is_rect_intersect_rect(parent.view_region, sr)) {
 		return true;
 	}
 	return false;

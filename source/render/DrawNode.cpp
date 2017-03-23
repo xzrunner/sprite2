@@ -27,7 +27,7 @@ namespace s2
 
 static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
-static void (*PREPARE_REDNER_PARAMS)(const RenderParams& parent, const Sprite* spr, RenderParams& child);
+static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 static void (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
 static const float* (*C2_QUERY_SPR)(const s2::Sprite* spr, int* tex_id);
 
@@ -36,7 +36,7 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 	AFTER_SPR = after_spr;
 }
 
-void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& parent, const Sprite* spr, RenderParams& child),
+void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
 						  void (*c2_insert_spr)(const s2::Sprite*, int tex_id, int tex_w, int tex_h),
 						  const float* c2_query_spr(const s2::Sprite* spr, int* tex_id))
 {
@@ -45,46 +45,44 @@ void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& pare
 	C2_QUERY_SPR = c2_query_spr;
 }
 
-bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderParams& child)
+bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child)
 {
 	if (!spr) {
-		child = parent;
+		child = rp;
 		return true;
 	}
 	if (!spr->IsVisible()) {
 		return false;
 	}
 
-	const Actor* actor = spr->QueryActor(parent.prev);
-	child.prev = actor;
+	const Actor* actor = rp.actor;
+	child.actor = spr->QueryActor(actor);
 	if (actor && !actor->IsVisible()) {
 		return false;
 	}
 
-	child.mt = spr->GetLocalMat() * parent.mt;
-	child.color = spr->GetColor() * parent.color;
+	child.mt = spr->GetLocalMat() * rp.mt;
+	child.color = spr->GetColor() * rp.color;
 	if (actor) {
 		child.mt = actor->GetLocalMat() * child.mt;
 		child.color = actor->GetColor() * child.color;
 	}
 
 	if (PREPARE_REDNER_PARAMS) {
-		PREPARE_REDNER_PARAMS(parent, spr, child);
+		PREPARE_REDNER_PARAMS(rp, spr, child);
 	}
 
 	return true;
 }
 
-S2_MAT DrawNode::PrepareMat(const RenderParams& parent, const Sprite* spr)
+S2_MAT DrawNode::PrepareMat(const RenderParams& rp, const Sprite* spr)
 {
-	S2_MAT mat = spr->GetLocalMat() * parent.mt;
+	S2_MAT mat = spr->GetLocalMat() * rp.mt;
 	if (!spr->HaveActor()) {
 		return mat;
 	}
-
-	const Actor* actor = spr->QueryActor(parent.prev);
-	if (actor) {
-		mat = actor->GetLocalMat() * mat;
+	if (rp.actor) {
+		mat = rp.actor->GetLocalMat() * mat;
 	}
 	return mat;
 }
@@ -274,10 +272,9 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	} else if (spr->HaveActor()) {
 		rs = spr->GetShader() * rp.shader;
 		rc = spr->GetCamera() * rp.camera;
-		const Actor* actor = spr->QueryActor(rp.prev);
-		if (actor) {
-			rs = actor->GetShader() * rs;
-			rc = actor->GetCamera() * rc;
+		if (rp.actor) {
+			rs = rp.actor->GetShader() * rs;
+			rc = rp.actor->GetCamera() * rc;
 		}
 	} else {
 		rs = spr->GetShader() * rp.shader;

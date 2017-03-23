@@ -30,7 +30,7 @@ public:
 	 */
 	virtual void OnMessage(Message msg, const Actor* actor);
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
+	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
 
 	void Draw(const RenderParams& rp) const;
 

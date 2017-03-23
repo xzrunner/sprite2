@@ -39,6 +39,7 @@
 #include <shaderlab/FilterShader.h>
 
 #include <iostream>
+#include <stack>
 
 namespace s2
 {
@@ -75,9 +76,8 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 	rp.view_region.ymax = ymax;
 
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	rp.actor = s2_actor;
 	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
-	SprTreePath path = s2_actor->GetTreePath();
-	path.Pop();
 	DrawNode::Draw(s2_spr->GetSymbol(), rp);
 }
 
@@ -436,23 +436,25 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
 
-	SprTreePath path = s2_actor->GetTreePath();
-	std::vector<int> path_tmp;
-	while (!path.Empty()) {
-		path_tmp.push_back(path.Top());
-		path.Pop();
+	std::stack<const Actor*> path;
+	const Actor* curr = s2_actor;
+	while (curr) {
+		path.push(curr);
+		curr = curr->GetParent();
 	}
 
-	SprTreePath curr_path;
-	RenderParams rp_parent = rp, rp_child;
-	while (path_tmp.size() > 1) {
-		curr_path.Push(path_tmp.back());
-		path_tmp.pop_back();
-		Actor* actor = ActorLUT::Instance()->Query(curr_path);
-		DrawNode::Prepare(rp_parent, actor->GetSpr(), rp_child);
-		rp_parent = rp_child;
+	rp.actor = path.top();
+	path.pop();
+
+	const Sprite* spr = rp.actor->GetSpr();
+
+	RenderParams rp_child;
+	while (path.size() > 1) {
+		DrawNode::Prepare(rp, spr, rp_child);
+		rp = rp_child;
+		spr = rp.actor->GetSpr();
 	}
-	DrawNode::Draw(s2_spr, rp_parent);
+	DrawNode::Draw(s2_spr, rp);
 }
 
 extern "C"
@@ -460,8 +462,7 @@ void s2_actor_update(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
 	RenderParams rp;
-	rp.path = s2_actor->GetTreePath();
-	rp.path.Pop();
+	rp.actor = s2_actor;
 	const_cast<Sprite*>(s2_sprite)->Update(rp);
 }
 
@@ -469,9 +470,7 @@ extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
-	SprTreePath path = s2_actor->GetTreePath();
-	path.Pop();
-	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, path, true);
+	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, s2_actor, true);
 }
 
 extern "C"
@@ -480,7 +479,7 @@ int s2_actor_get_frame(void* actor) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
-		return anim->GetFrame(s2_actor->GetTreePath());
+		return anim->GetFrame(s2_actor);
 	} else {
 		return -1;
 	}
@@ -503,7 +502,7 @@ int s2_actor_get_component_count(void* actor) {
 	case SYM_ANIMATION:
 		{
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
-			ret = anim->GetAnimCurr(s2_actor->GetTreePath()).GetSlotSize();
+			ret = anim->GetAnimCurr(s2_actor).GetSlotSize();
 		}
 		break;
 	}
@@ -513,9 +512,7 @@ int s2_actor_get_component_count(void* actor) {
 extern "C"
 void* s2_actor_fetch_child(const void* actor, const char* name) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	SprTreePath parent_path = s2_actor->GetTreePath();
-	parent_path.Pop();
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, parent_path);
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, s2_actor);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -526,9 +523,7 @@ void* s2_actor_fetch_child(const void* actor, const char* name) {
 extern "C"
 void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	SprTreePath parent_path = s2_actor->GetTreePath();
-	parent_path.Pop();
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, parent_path);
+	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, s2_actor);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -542,7 +537,7 @@ int s2_actor_mount(const void* actor, const char* name, const void* anchor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
-	Sprite* child = s2_spr->FetchChild(name, s2_actor->GetTreePath());
+	Sprite* child = s2_spr->FetchChild(name, s2_actor);
 	if (!child) {
 		return -1;		
 	}
@@ -551,7 +546,7 @@ int s2_actor_mount(const void* actor, const char* name, const void* anchor) {
 	}
 
 	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(child);
-	anchor_spr->AddAnchor(s2_anchor, s2_actor->GetTreePath());
+	anchor_spr->AddAnchor(s2_anchor, s2_actor);
 	return 0;
 }
 
@@ -561,7 +556,7 @@ bool s2_actor_get_force_up_frame(void* actor) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor->GetTreePath());
+		const Sprite* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
 			s2_spr = real;
 		} else {
@@ -577,7 +572,7 @@ void s2_actor_set_force_up_frame(void* actor, bool force) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor->GetTreePath());
+		const Sprite* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
 			s2_spr = real;
 		}
@@ -617,16 +612,16 @@ void* s2_get_actor(const void* parent_actor, void* child_spr) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 	Sprite* child = static_cast<Sprite*>(child_spr);
 	if (parent) {
-		return ActorFactory::Instance()->Create(parent->GetTreePath(), child);
+		return ActorFactory::Instance()->Create(parent, child);
 	} else {
-		SprTreePath path;
-		return ActorFactory::Instance()->Create(path, child);
+		return NULL;
 	}
 }
 
 extern "C"
 int s2_get_actor_count() {
-	return ActorLUT::Instance()->Count();
+//	return ActorLUT::Instance()->Count();
+	return -1;
 }
 
 extern "C"
@@ -636,8 +631,8 @@ void* s2_actor_get_spr(void* actor) {
 
 extern "C"
 void s2_actor_print_path(void* actor) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	std::cout << s2_actor->GetTreePath() << '\n';
+// 	Actor* s2_actor = static_cast<Actor*>(actor);
+// 	std::cout << s2_actor->GetTreePath() << '\n';
 }
 
 extern "C"
@@ -682,69 +677,63 @@ void s2_actor_get_scale(void* actor, float* sx, float* sy) {
 
 extern "C"
 void s2_actor_get_world_pos(void* actor, float* x, float* y) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	SprTreePath path = s2_actor->GetTreePath();
-	assert(!path.Empty());
-	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-	path.Pop();
-	while (!path.Empty()) {
-		Actor* actor = ActorLUT::Instance()->Query(path);
-		mat = mat * actor->GetSpr()->GetLocalMat();
-		mat = actor->GetLocalMat() * mat;
-		path.Pop();
-	}
-	sm::vec2 pos = mat * sm::vec2(0, 0);
-	*x = pos.x;
-	*y = pos.y;
+// 	Actor* s2_actor = static_cast<Actor*>(actor);
+// 	SprTreePath path = s2_actor->GetTreePath();
+// 	assert(!path.Empty());
+// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
+// 	path.Pop();
+// 	while (!path.Empty()) {
+// 		Actor* actor = ActorLUT::Instance()->Query(path);
+// 		mat = mat * actor->GetSpr()->GetLocalMat();
+// 		mat = actor->GetLocalMat() * mat;
+// 		path.Pop();
+// 	}
+// 	sm::vec2 pos = mat * sm::vec2(0, 0);
+// 	*x = pos.x;
+// 	*y = pos.y;
 }
 
 extern "C"
 float s2_actor_get_world_angle(void* actor) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	SprTreePath path = s2_actor->GetTreePath();
-	assert(!path.Empty());
-	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-	path.Pop();
-	while (!path.Empty()) {
-		Actor* actor = ActorLUT::Instance()->Query(path);
-		mat = mat * actor->GetSpr()->GetLocalMat();
-		mat = actor->GetLocalMat() * mat;
-		path.Pop();
-	}
-	sm::vec2 pos = mat * sm::vec2(0, 0);
-	sm::vec2 dir = mat * sm::vec2(1, 0);
-	return sm::get_line_angle(pos, dir);
+// 	Actor* s2_actor = static_cast<Actor*>(actor);
+// 	SprTreePath path = s2_actor->GetTreePath();
+// 	assert(!path.Empty());
+// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
+// 	path.Pop();
+// 	while (!path.Empty()) {
+// 		Actor* actor = ActorLUT::Instance()->Query(path);
+// 		mat = mat * actor->GetSpr()->GetLocalMat();
+// 		mat = actor->GetLocalMat() * mat;
+// 		path.Pop();
+// 	}
+// 	sm::vec2 pos = mat * sm::vec2(0, 0);
+// 	sm::vec2 dir = mat * sm::vec2(1, 0);
+// 	return sm::get_line_angle(pos, dir);
 }
 
 extern "C"
 void s2_actor_get_world_scale(void* actor, float* sx, float* sy) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	SprTreePath path = s2_actor->GetTreePath();
-	assert(!path.Empty());
-	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-	path.Pop();
-	while (!path.Empty()) {
-		Actor* actor = ActorLUT::Instance()->Query(path);
-		mat = mat * actor->GetSpr()->GetLocalMat();
-		mat = actor->GetLocalMat() * mat;
-		path.Pop();
-	}
-
-	sm::vec2 scale = (mat * sm::vec2(1, 1)) - (mat * sm::vec2(0, 0));
-	*sx = scale.x;
-	*sy = scale.y;
+// 	Actor* s2_actor = static_cast<Actor*>(actor);
+// 	SprTreePath path = s2_actor->GetTreePath();
+// 	assert(!path.Empty());
+// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
+// 	path.Pop();
+// 	while (!path.Empty()) {
+// 		Actor* actor = ActorLUT::Instance()->Query(path);
+// 		mat = mat * actor->GetSpr()->GetLocalMat();
+// 		mat = actor->GetLocalMat() * mat;
+// 		path.Pop();
+// 	}
+// 
+// 	sm::vec2 scale = (mat * sm::vec2(1, 1)) - (mat * sm::vec2(0, 0));
+// 	*sx = scale.x;
+// 	*sy = scale.y;
 }
 
 extern "C"
 void* s2_actor_get_parent(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetTreePath().Empty()) {
-		return NULL;
-	}
-
-	SprTreePath path = s2_actor->GetTreePath();
-	path.Pop();
-	return ActorLUT::Instance()->Query(path);
+	return const_cast<Actor*>(s2_actor->GetParent());
 }
 
 extern "C"

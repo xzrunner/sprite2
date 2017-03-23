@@ -21,37 +21,35 @@ ActorFactory::ActorFactory()
 {
 }
 
-Actor* ActorFactory::Create(const SprTreePath& parent, const Sprite* child) const
+Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 {
 	assert(child);
 
-	SprTreePath path = parent;
-	path.Push(*child);
+// 	Actor* actor = ActorLUT::Instance()->Query(path);
+// 	if (actor) {
+// 		return actor;
+// 	}
 
-	Actor* actor = ActorLUT::Instance()->Query(path);
-	if (actor) {
-		return actor;
-	}
-
+	Actor* actor = NULL;
 	switch (child->GetSymbol()->Type())
 	{
 	case SYM_ANCHOR:
-		actor = new AnchorActor(child, path);
+		actor = new AnchorActor(child, parent);
 		break;
 	case SYM_TEXTBOX:
-		actor = new TextboxActor(child, path);
+		actor = new TextboxActor(child, parent);
 		break;
 	case SYM_COMPLEX:
-		actor = new ComplexActor(child, path);
+		actor = new ComplexActor(child, parent);
 		break;
 	case SYM_ANIMATION:
-		actor = new AnimActor(child, path);
+		actor = new AnimActor(child, parent);
 		break;
 	default:
-		actor = new Actor(child, path);
+		actor = new Actor(child, parent);
 	}
 
-	ActorLUT::Instance()->Insert(actor);
+//	ActorLUT::Instance()->Insert(actor);
 
 	return actor;
 }

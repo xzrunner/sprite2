@@ -8,12 +8,11 @@ namespace s2
 
 class Actor;
 class Sprite;
-class SprTreePath;
 
 class ActorFactory
 {
 public:
-	Actor* Create(const SprTreePath& parent, const Sprite* child) const;
+	Actor* Create(const Actor* parent, const Sprite* child) const;
 
 private:
 	SINGLETON_DECLARATION(ActorFactory);

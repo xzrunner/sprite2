@@ -13,13 +13,13 @@
 namespace s2
 {
 
+class Actor;
 class AnimCopy;
 class Sprite;
 class AnimSymbol;
 class SpriteVisitor;
 class SprVisitorParams;
 class RenderParams;
-class SprTreePath;
 
 class AnimCurr : public cu::RefCountObj
 {
@@ -33,17 +33,17 @@ public:
 
 	void OnMessage(Message msg, const Actor* actor);
 
-	bool Update(const RenderParams& rp, bool loop = true, 
+	bool Update(const Actor* actor, bool loop = true, 
 		float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
 	Sprite* FetchChild(const std::string& name) const;
 	Sprite* FetchChild(int idx) const;
 
-	void Start(const SprTreePath& path);
+	void Start(const Actor* actor);
 
 	void SetTime(float time);
-	void SetFrame(int frame, int fps, const SprTreePath& path);
+	void SetFrame(int frame, int fps, const Actor* actor);
 
 	int GetFrame() const { return m_frame; }
 
@@ -61,9 +61,9 @@ private:
 
 	void ResetLayerCursor();
 
-	void LoadCurrSprites(const SprTreePath& path);
+	void LoadCurrSprites(const Actor* actor);
 	void UpdateCursor(bool cursor_update);
-	void LoadCurrSprites(bool cursor_update, const SprTreePath& path);
+	void LoadCurrSprites(bool cursor_update, const Actor* actor);
 
 	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
 	

@@ -24,8 +24,8 @@ public:
 	 */
 	virtual void OnMessage(Message msg, const Actor* actor);
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
-	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
+	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 
 	VI_DUMMY_FUNC
 

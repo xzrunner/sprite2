@@ -18,22 +18,21 @@ void AnchorSymbol::Traverse(const SymbolVisitor& visitor)
 	// todo: path
 }
 
-void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+void AnchorSymbol::Draw(const RenderParams& parent, const Sprite* spr) const
 {
 	RenderParams rp_child;
-	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+	if (!DrawNode::Prepare(parent, spr, rp_child)) {
 		return;
 	}
 
 	assert(spr);
-	const Sprite* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp_child.path);
+	const Sprite* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp_child.actor);
 	if (anchor) {
-		rp_child.path.Clear();
 		DrawNode::Draw(anchor, rp_child, false);
 	}
 }
 
-bool AnchorSymbol::Update(const RenderParams& rp, float time)
+bool AnchorSymbol::Update(const RenderParams& parent, float time)
 {
 	// todo
 	return false;

@@ -108,7 +108,7 @@ bool Particle2dSprite::Update(const RenderParams& rp)
 	return true;
 }
 
-bool Particle2dSprite::SetFrame(int frame, const SprTreePath& path, bool force)
+bool Particle2dSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;

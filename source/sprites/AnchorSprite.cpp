@@ -23,7 +23,7 @@ bool AnchorSprite::Update(const RenderParams& rp)
 
 	const Actor* actor = QueryActor(rp.prev);
 	const Sprite* anchor = QueryAnchor(actor);
-	rp_child.prev = anchor;
+	rp_child.prev = anchor->QueryActor(actor);
 	if (anchor) {
 		return const_cast<Sprite*>(anchor)->Update(rp_child);
 	} else {
@@ -31,39 +31,32 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool AnchorSprite::SetFrame(int frame, const SprTreePath& path, bool force)
+bool AnchorSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	bool dirty = false;
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-	const Sprite* anchor = QueryAnchor(cpath);
+	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
-		cpath.Clear();
-		const_cast<Sprite*>(anchor)->SetFrame(frame, cpath);
+		const_cast<Sprite*>(anchor)->SetFrame(frame, anchor->QueryActor(actor));
 		dirty = true;
 	}
 	return dirty;
 }
 
-Sprite* AnchorSprite::FetchChild(const std::string& name, const SprTreePath& path) const
+Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-	const Sprite* anchor = QueryAnchor(cpath);
+	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
-		return anchor->FetchChild(name, cpath);
+		return anchor->FetchChild(name, anchor->QueryActor(actor));
 	} else {
 		return NULL;
 	}
 }
 
-Sprite* AnchorSprite::FetchChild(int idx, const SprTreePath& path) const
+Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
 {
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-	const Sprite* anchor = QueryAnchor(cpath);
+	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
-		return anchor->FetchChild(idx, cpath);
+		return anchor->FetchChild(idx, anchor->QueryActor(actor));
 	} else {
 		return NULL;
 	}
@@ -71,29 +64,31 @@ Sprite* AnchorSprite::FetchChild(int idx, const SprTreePath& path) const
 
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	const Sprite* anchor = QueryAnchor(params.path);
+	const Actor* actor = QueryActor(params.prev);
+	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
-		SprVisitorParams p_child = params;
-		p_child.path.Clear();
-		return anchor->TraverseChildren(visitor, p_child);
+		SprVisitorParams cp = params;
+		cp.prev = anchor->QueryActor(actor);
+		return anchor->TraverseChildren(visitor, cp);
 	} else {
 		return VISIT_OVER;
 	}
 }
 
-void AnchorSprite::AddAnchor(const Sprite* anchor, const SprTreePath& path)
+void AnchorSprite::AddAnchor(const Sprite* anchor, const Actor* parent)
 {
-	AnchorActor* actor = VI_DOWNCASTING<AnchorActor*>(ActorFactory::Instance()->Create(path, this));
+	AnchorActor* actor = VI_DOWNCASTING<AnchorActor*>(ActorFactory::Instance()->Create(parent, this));
 	actor->SetAnchor(anchor);
 }
 
 const Sprite* AnchorSprite::QueryAnchor(const Actor* actor) const
 {
-	if (!actor) {
+	if (actor) {
+		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
+		return anchor_actor->GetAnchor();
+	} else {
 		return NULL;
 	}
-	const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
-	return anchor_actor->GetAnchor();
 }
 
 }

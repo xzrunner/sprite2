@@ -31,26 +31,26 @@ public:
 	 */
 	virtual void OnMessage(Message msg, const Actor* actor);
 	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
-	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
-	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const;
+	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
+	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	const AnimCurr& GetAnimCurr(const SprTreePath& parent_path) const;
+	const AnimCurr& GetAnimCurr(const Actor* actor) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
 
 	void SetFPS(int fps) { m_fps = fps; }
 
-	void SetStartRandom(bool random, const SprTreePath& path);
+	void SetStartRandom(bool random, const Actor* actor);
 
-	int  GetFrame(const SprTreePath& path) const;
+	int  GetFrame(const Actor* actor) const;
 
-	void SetActive(bool active, const SprTreePath& path);
+	void SetActive(bool active, const Actor* actor);
 
 private:
-	void RandomStartTime(const SprTreePath& path);
+	void RandomStartTime(const Actor* actor);
 
 protected:
 	bool m_loop;

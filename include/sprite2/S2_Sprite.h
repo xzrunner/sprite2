@@ -29,7 +29,6 @@ class RenderShader;
 class RenderCamera;
 class SpriteVisitor;
 class Actor;
-class SprTreePath;
 class SprVisitorParams;
 class SprSRT;
 
@@ -52,9 +51,9 @@ public:
 	virtual void OnMessage(Message msg, const Actor* actor) {}
 	
  	virtual bool Update(const RenderParams& rp) { return false; }
-	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false) { return false; }
-	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const { return NULL; }
-	virtual Sprite* FetchChild(int idx, const SprTreePath& path) const { return NULL; }
+	virtual bool SetFrame(int frame, const Actor* actor, bool force = false) { return false; }
+	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const { return NULL; }
+	virtual Sprite* FetchChild(int idx, const Actor* actor) const { return NULL; }
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -125,7 +124,7 @@ public:
 	bool HaveActor() const { return !m_actors.empty(); }
 	int ActorCount() const { return m_actors.size(); }
 	void ClearActors() const;
-	void FixActorPath(const SprTreePath& path, const SprTreePath& new_parent);
+	//void FixActorPath(const SprTreePath& path, const SprTreePath& new_parent);
 
 private:
 	void InitFlags();

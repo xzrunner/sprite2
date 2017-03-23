@@ -313,12 +313,11 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 
 	p.mt = GetLocalMat() * params.mt;
-	p.path = params.path;
-// 	p.path.Push(*this);
 	const Actor* actor = QueryActor(params.prev);
 	if (actor) {
 		p.mt = actor->GetLocalMat() * p.mt;
 	}
+	p.prev = actor;
 
 	VisitResult ret = VISIT_OVER;
 
@@ -636,29 +635,29 @@ void Sprite::ClearActors() const
 {
 	for (int i = 0, n = m_actors.size(); i < n; ++i)
 	{
-		ActorLUT::Instance()->Delete(m_actors[i]);
+//		ActorLUT::Instance()->Delete(m_actors[i]);
 		delete m_actors[i];
 	}
 }
 
-void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent)
-{
-	if (m_actors.empty()) {
-		return;
-	}
-	SprTreePath this_path(new_parent);
-	this_path.Push(*this);
-	for (int i = 0, n = m_actors.size(); i < n; ++i) 
-	{
-		Actor* actor = m_actors[i];
-		if (actor->GetTreePath() == path) 
-		{
-	 		ActorLUT::Instance()->Delete(actor);
-	 		actor->SetTreePath(this_path);
-	 		ActorLUT::Instance()->Insert(actor);
-		}
-	}
-}
+//void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent)
+//{
+//	if (m_actors.empty()) {
+//		return;
+//	}
+//	SprTreePath this_path(new_parent);
+//	this_path.Push(*this);
+//	for (int i = 0, n = m_actors.size(); i < n; ++i) 
+//	{
+//		Actor* actor = m_actors[i];
+//		if (actor->GetTreePath() == path) 
+//		{
+//	 		ActorLUT::Instance()->Delete(actor);
+//	 		actor->SetTreePath(this_path);
+//	 		ActorLUT::Instance()->Insert(actor);
+//		}
+//	}
+//}
 
 void Sprite::InitFlags()
 {

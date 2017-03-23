@@ -85,7 +85,7 @@ bool MeshSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool MeshSprite::SetFrame(int frame, const SprTreePath& path, bool force)
+bool MeshSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -94,7 +94,7 @@ bool MeshSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	return false;
 }
 
-Sprite* MeshSprite::FetchChild(const std::string& name, const SprTreePath& path) const
+Sprite* MeshSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	class FetchVisitor : public SymbolVisitor
 	{

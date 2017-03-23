@@ -75,7 +75,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (spr) 
 	{
 		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
-		const Actor* actor = spr->QueryActor(rp_child.prev);
+		const Actor* actor = rp.actor;
 		if (actor) {
 			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 			action = comp_actor->GetAction();
@@ -86,6 +86,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
 		const Sprite* spr = sprs[i];
+		rp_child.actor = spr->QueryActor(rp.actor);
 		if (IsChildOutside(spr, rp_child)) {
 			continue;
 		}
@@ -100,8 +101,12 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 bool ComplexSymbol::Update(const RenderParams& rp, float time)
 {
 	bool ret = false;
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (m_children[i]->Update(rp)) {
+	RenderParams rp_child = rp;
+	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	{
+		Sprite* child = m_children[i];
+		rp_child.actor = child->QueryActor(rp.actor);
+		if (child->Update(rp_child)) {
 			ret = true;
 		}
 	}

@@ -21,9 +21,9 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
 
-	const Actor* actor = QueryActor(rp.prev);
+	const Actor* actor = rp.actor;
 	const Sprite* anchor = QueryAnchor(actor);
-	rp_child.prev = anchor->QueryActor(actor);
+	rp_child.actor = anchor->QueryActor(actor);
 	if (anchor) {
 		return const_cast<Sprite*>(anchor)->Update(rp_child);
 	} else {
@@ -64,11 +64,11 @@ Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
 
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	const Actor* actor = QueryActor(params.prev);
+	const Actor* actor = params.actor;
 	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
 		SprVisitorParams cp = params;
-		cp.prev = anchor->QueryActor(actor);
+		cp.actor = anchor->QueryActor(actor);
 		return anchor->TraverseChildren(visitor, cp);
 	} else {
 		return VISIT_OVER;

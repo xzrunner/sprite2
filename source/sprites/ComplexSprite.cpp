@@ -37,12 +37,11 @@ void ComplexSprite::OnMessage(Message msg, const Actor* actor)
 
 bool ComplexSprite::Update(const RenderParams& rp)
 {
-	const Actor* actor = QueryActor(rp.prev);
+	const Actor* actor = rp.actor;
 
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.prev = actor;
 
 	bool dirty = false;
 	int action = m_action;
@@ -52,8 +51,10 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	}
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
-	for (int i = 0, n = children.size(); i < n; ++i) {
+	for (int i = 0, n = children.size(); i < n; ++i) 
+	{
 		const Sprite* spr = children[i];
+		rp_child.actor = spr->QueryActor(rp.actor);
 		if (const_cast<Sprite*>(spr)->Update(rp_child)) {
 			dirty = true;
 		}
@@ -112,7 +113,7 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 {
 	VisitResult ret = VISIT_OVER;
 	int action = m_action;
-	const Actor* actor = QueryActor(params.prev);
+	const Actor* actor = params.actor;
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
@@ -120,16 +121,21 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	SprVisitorParams cp = params;
-	cp.prev = actor;
 	if (visitor.GetOrder()) {
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (!SpriteVisitor::VisitChild(visitor, cp, children[i], ret)) {
+		for (int i = 0, n = children.size(); i < n; ++i) 
+		{
+			Sprite* child = children[i];
+			cp.actor = child->QueryActor(actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}
 	} else {
-		for (int i = children.size() - 1; i >= 0; --i) {
-			if (!SpriteVisitor::VisitChild(visitor, cp, children[i], ret)) {
+		for (int i = children.size() - 1; i >= 0; --i) 
+		{
+			Sprite* child = children[i];
+			cp.actor = child->QueryActor(actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}

@@ -61,7 +61,7 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		RenderParams rp_child;
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			anim->GetAnimCurr(rp.path).Draw(rp_child);
+			anim->GetAnimCurr(rp.actor).Draw(rp_child);
 		}
 	} else {
 		m_curr.Draw(rp);

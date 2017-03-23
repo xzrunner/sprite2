@@ -13,10 +13,10 @@ class SprVisitorParams
 public:
 	S2_MAT mt;
 
-	const Actor* prev;
+	const Actor* actor;
 
 public:
-	SprVisitorParams() : prev(NULL) {}
+	SprVisitorParams() : actor(NULL) {}
 
 }; // SprVisitorParams
 

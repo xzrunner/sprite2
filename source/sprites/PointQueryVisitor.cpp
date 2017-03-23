@@ -105,41 +105,13 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	if (sz.Width() == 0 || sz.Height() == 0) {
 		return false;
 	}
-	std::vector<sm::vec2> vertices(4);
-	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
-	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
-	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
-	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
-	for (int i = 0; i < 4; ++i) {
-		vertices[i] = params.mt * vertices[i];
-	}
-	return sm::is_point_in_convex(m_pos, vertices);
 
-	//////////////////////////////////////////////////////////////////////////
+	SprVisitorParams p;
+	p.actor = params.actor;
+	QueryAABBVisitor visitor(true, false, true);
+	spr->Traverse(visitor, p);
 
-//	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
-//	if (sz.Width() == 0 || sz.Height() == 0) {
-//		return false;
-//	}
-//	std::vector<sm::vec2> vertices(4);
-//	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
-//	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
-//	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
-//	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
-//	sm::rect aabb;
-//	for (int i = 0; i < 4; ++i) {
-//		aabb.Combine(params.mt * vertices[i]);
-//	}
-//
-////	QueryAABBVisitor visitor();
-//	QueryAABBVisitor visitor(true, false, true);
-//	spr->Traverse(visitor, params);
-//
-//	if (visitor.GetAABB() != aabb) {
-//		int zz = 0;
-//	}
-//
-//	return sm::is_point_in_rect(m_pos, visitor.GetAABB());
+	return sm::is_point_in_rect(m_pos, visitor.GetAABB());
 }
 
 }

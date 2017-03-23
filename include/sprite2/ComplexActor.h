@@ -9,8 +9,8 @@ namespace s2
 class ComplexActor : public Actor
 {
 public:
-	ComplexActor(const Sprite* spr, const SprTreePath& path)
-		: Actor(spr, path) 
+	ComplexActor(const Sprite* spr, const Actor* parent)
+		: Actor(spr, parent) 
 		, m_action(-1)
 	{}
 

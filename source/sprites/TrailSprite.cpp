@@ -3,6 +3,9 @@
 #include "RenderParams.h"
 #include "Trail.h"
 
+#include "ActorLUT.h"
+#include "S2_Actor.h"
+
 #include <mt_2d.h>
 
 #include <assert.h>
@@ -67,7 +70,7 @@ TrailSprite* TrailSprite::Clone() const
 	return new TrailSprite(*this);
 }
 
-void TrailSprite::OnMessage(Message msg, const SprTreePath& path)
+void TrailSprite::OnMessage(Message msg, const Actor* actor)
 {
 	switch (msg)
 	{
@@ -91,11 +94,24 @@ bool TrailSprite::Update(const RenderParams& rp)
 
 	float dt = time - m_et->time;
 	sm::vec2 pos;
-	if (m_local && !m_in_p3d) {
-		pos = GetPosition();
-	} else {
+// 	if (m_local && !m_in_p3d) {
+// //		pos = GetPosition();
+// 
+// 		// get parent world pos
+// 		S2_MAT mat;
+// 		SprTreePath path = rp.path;
+// 		path.Pop();
+// 		while (!path.Empty()) {
+// 			Actor* actor = ActorLUT::Instance()->Query(path);
+// 			mat = mat * actor->GetSpr()->GetLocalMat();
+// 			mat = actor->GetLocalMat() * mat;
+// 			path.Pop();
+// 		}
+// 		pos = mat * GetPosition();
+// 
+// 	} else {
 		pos = rp.mt * GetPosition();
-	}
+//	}
 	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
 	m_et->time = time;
 
@@ -107,7 +123,11 @@ bool TrailSprite::SetFrame(int frame, const SprTreePath& path, bool force)
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	Update(RenderParams());
+
+	RenderParams rp;
+	rp.path = path;
+	rp.path.Push(*this);
+	Update(rp);
 	return true;
 }
 

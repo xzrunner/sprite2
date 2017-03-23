@@ -11,8 +11,8 @@ namespace s2
 class TextboxActor : public Actor
 {
 public:
-	TextboxActor(const Sprite* spr, const SprTreePath& path)
-		: Actor(spr, path) {}
+	TextboxActor(const Sprite* spr, const Actor* parent)
+		: Actor(spr, parent) {}
 
 	void SetText(const std::string& text) { m_text = text; }
 	const std::string& GetText() const { return m_text; }

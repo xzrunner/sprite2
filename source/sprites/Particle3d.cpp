@@ -115,6 +115,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[13]= mat[5];
 #endif // S2_MATRIX_FIX
 		rp_child.mt = _mat * rp->mat;
+
+		rp_child.mt.x[12] = rp_child.mt.x[13] = 0;
 	}
 
 	if (spr) {
@@ -176,6 +178,11 @@ add_func(p3d_particle* p, void* ud)
 			{
 				Sprite* s2_p3d = new Particle3dSprite(sym);
 				p->ud = s2_p3d;
+			}
+			break;
+		default:
+			{
+				int zz = 0;
 			}
 			break;
 		}

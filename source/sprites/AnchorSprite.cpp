@@ -7,14 +7,11 @@
 namespace s2
 {
 
-void AnchorSprite::OnMessage(Message msg, const SprTreePath& path)
+void AnchorSprite::OnMessage(Message msg, const Actor* actor)
 {
-	SprTreePath cpath = path;
-	cpath.Push(*this);
-	const Sprite* anchor = QueryAnchor(cpath);
+	const Sprite* anchor = QueryAnchor(actor);
 	if (anchor) {
-		cpath.Clear();
-		const_cast<Sprite*>(anchor)->OnMessage(msg, cpath);
+		const_cast<Sprite*>(anchor)->OnMessage(msg, anchor->QueryActor(actor));
 	}
 }
 
@@ -23,11 +20,11 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(*this);
 
-	const Sprite* anchor = QueryAnchor(rp_child.path);
+	const Actor* actor = QueryActor(rp.prev);
+	const Sprite* anchor = QueryAnchor(actor);
+	rp_child.prev = anchor;
 	if (anchor) {
-		rp_child.path.Clear();
 		return const_cast<Sprite*>(anchor)->Update(rp_child);
 	} else {
 		return false;
@@ -90,9 +87,8 @@ void AnchorSprite::AddAnchor(const Sprite* anchor, const SprTreePath& path)
 	actor->SetAnchor(anchor);
 }
 
-const Sprite* AnchorSprite::QueryAnchor(const SprTreePath& path) const
+const Sprite* AnchorSprite::QueryAnchor(const Actor* actor) const
 {
-	const Actor* actor = QueryActor(path);
 	if (!actor) {
 		return NULL;
 	}

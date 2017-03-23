@@ -18,7 +18,7 @@ public:
 	 */
 	virtual AnchorSprite* Clone() const { return new AnchorSprite(*this); }
 
-	virtual void OnMessage(Message msg, const SprTreePath& path);
+	virtual void OnMessage(Message msg, const Actor* actor);
 	virtual bool Update(const RenderParams& rp);
 	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const SprTreePath& path) const;
@@ -26,7 +26,7 @@ public:
     virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void AddAnchor(const Sprite* anchor, const SprTreePath& path);
-	const Sprite* QueryAnchor(const SprTreePath& path) const;
+	const Sprite* QueryAnchor(const Actor* actor) const;
 
 	VI_DUMMY_FUNC
 

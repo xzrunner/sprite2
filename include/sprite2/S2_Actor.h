@@ -2,7 +2,6 @@
 #define _SPRITE2_ACTOR_H_
 
 #include "pre_defined.h"
-#include "SprTreePath.h"
 #include "s2_macro.h"
 
 #include <CU_RefCountObj.h>
@@ -24,13 +23,13 @@ class Actor : private cu::Uncopyable
 {
 public:
 	Actor();
-	Actor(const Sprite* spr, const SprTreePath& path);
+	Actor(const Sprite* spr, const Actor* parent);
 	virtual ~Actor();
 	
 	const Sprite* GetSpr() const { return m_spr; }
 	
-	const SprTreePath& GetTreePath() const { return m_path; }
-	void SetTreePath(const SprTreePath& path) { m_path = path; }
+	const Actor* GetParent() const { return m_parent; }
+	void SetParent(const Actor* parent) { m_parent = parent; }
 
 	void SetPosition(const sm::vec2& pos);
 	sm::vec2 GetPosition() const;
@@ -62,7 +61,7 @@ public:
 	
 private:
 	const Sprite*    m_spr;
-	SprTreePath      m_path;
+	const Actor*     m_parent;
 
 	ActorGeo*        m_geo;
 	SprRender*       m_render;

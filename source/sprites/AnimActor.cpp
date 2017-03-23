@@ -9,8 +9,8 @@
 namespace s2
 {
 
-AnimActor::AnimActor(const Sprite* spr, const SprTreePath& path)
-	: Actor(spr, path) 
+AnimActor::AnimActor(const Sprite* spr, const Actor* parent)
+	: Actor(spr, parent) 
 	, m_curr(NULL)
 {
 	assert(spr->HaveActor());
@@ -26,7 +26,7 @@ AnimActor::AnimActor(const Sprite* spr, const SprTreePath& path)
 
 	const AnimSymbol* anim_sym = VI_DOWNCASTING<const AnimSymbol*>(spr->GetSymbol());
 	m_curr->SetAnimCopy(&const_cast<AnimSymbol*>(anim_sym)->GetCopy());
-	m_curr->Start(path);
+	m_curr->Start(this);
 }
 
 AnimActor::~AnimActor()

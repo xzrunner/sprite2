@@ -25,7 +25,7 @@ ComplexSprite* ComplexSprite::Clone() const
 	return new ComplexSprite(*this);
 }
 
-void ComplexSprite::OnMessage(Message msg, const SprTreePath& path)
+void ComplexSprite::OnMessage(Message msg, const Actor* actor)
 {
 	SprTreePath cpath = path;
 	cpath.Push(*this);

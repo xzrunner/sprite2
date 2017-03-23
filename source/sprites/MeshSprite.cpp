@@ -65,7 +65,7 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
-void MeshSprite::OnMessage(Message msg, const SprTreePath& path)
+void MeshSprite::OnMessage(Message msg, const Actor* actor)
 {
 	
 }

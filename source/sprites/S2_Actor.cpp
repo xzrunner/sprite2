@@ -16,15 +16,16 @@ static int COUNT = 0;
 
 Actor::Actor()
 	: m_spr(NULL)
+	, m_parent(NULL)
 	, m_geo(NULL)
 	, m_render(SprDefault::Instance()->Render())
 {
 	InitFlags();
 }
 
-Actor::Actor(const Sprite* spr, const SprTreePath& path)
+Actor::Actor(const Sprite* spr, const Actor* parent)
 	: m_spr(spr)
-	, m_path(path)
+	, m_parent(parent)
 	, m_geo(NULL)
 	, m_render(SprDefault::Instance()->Render())
 {

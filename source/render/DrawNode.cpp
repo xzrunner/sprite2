@@ -55,9 +55,8 @@ bool DrawNode::Prepare(const RenderParams& parent, const Sprite* spr, RenderPara
 		return false;
 	}
 
-	child = parent;
-	child.path.Push(*spr);
-	const Actor* actor = spr->QueryActor(child.path);
+	const Actor* actor = spr->QueryActor(parent.prev);
+	child.prev = actor;
 	if (actor && !actor->IsVisible()) {
 		return false;
 	}
@@ -83,9 +82,7 @@ S2_MAT DrawNode::PrepareMat(const RenderParams& parent, const Sprite* spr)
 		return mat;
 	}
 
-	SprTreePath path = parent.path;
-	path.Push(*spr);
-	const Actor* actor = spr->QueryActor(path);
+	const Actor* actor = spr->QueryActor(parent.prev);
 	if (actor) {
 		mat = actor->GetLocalMat() * mat;
 	}
@@ -277,9 +274,7 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	} else if (spr->HaveActor()) {
 		rs = spr->GetShader() * rp.shader;
 		rc = spr->GetCamera() * rp.camera;
-		SprTreePath path = rp.path;
-		path.Push(*spr);
-		const Actor* actor = spr->QueryActor(path);
+		const Actor* actor = spr->QueryActor(rp.prev);
 		if (actor) {
 			rs = actor->GetShader() * rs;
 			rc = actor->GetCamera() * rc;

@@ -4,7 +4,6 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
-#include "SprTreePath.h"
 #include "pre_defined.h"
 #include "s2_macro.h"
 
@@ -15,7 +14,7 @@ namespace s2
 {
 
 class Sprite;
-class SprTreePath;
+class Actor;
 
 class RenderParams
 {
@@ -32,7 +31,7 @@ public:
 
 	RenderCamera camera;
 	
-	SprTreePath path;
+	const Actor* prev;
 
 public:
 	RenderParams();

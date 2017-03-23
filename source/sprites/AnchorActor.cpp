@@ -4,8 +4,8 @@
 namespace s2
 {
 
-AnchorActor::AnchorActor(const Sprite* spr, const SprTreePath& path)
-	: Actor(spr, path) 
+AnchorActor::AnchorActor(const Sprite* spr, const Actor* parent)
+	: Actor(spr, parent) 
 	, m_anchor(NULL)
 {
 }

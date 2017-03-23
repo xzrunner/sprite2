@@ -13,7 +13,10 @@ class SprVisitorParams
 public:
 	S2_MAT mt;
 
-	SprTreePath path;
+	const Actor* prev;
+
+public:
+	SprVisitorParams() : prev(NULL) {}
 
 }; // SprVisitorParams
 

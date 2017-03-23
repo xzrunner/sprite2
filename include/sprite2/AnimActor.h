@@ -11,7 +11,7 @@ class AnimCurr;
 class AnimActor : public Actor
 {
 public:
-	AnimActor(const Sprite* spr, const SprTreePath& path);
+	AnimActor(const Sprite* spr, const Actor* parent);
 	virtual ~AnimActor();
 
 	const AnimCurr* GetCurr() const { return m_curr; }

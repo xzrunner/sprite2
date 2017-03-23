@@ -91,7 +91,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 	return ret;
 }
 
-void AnimCurr::OnMessage(Message msg, const SprTreePath& path)
+void AnimCurr::OnMessage(Message msg, const Actor* actor)
 {
 	for (int i = 0; i < m_curr_num; ++i) {
 		m_slots[m_curr[i]]->OnMessage(msg, path);

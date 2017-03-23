@@ -78,7 +78,7 @@ Particle3dSprite* Particle3dSprite::Clone() const
 	return new Particle3dSprite(*this);
 }
 
-void Particle3dSprite::OnMessage(Message msg, const SprTreePath& path)
+void Particle3dSprite::OnMessage(Message msg, const Actor* actor)
 {
 	if (!m_spr) {
 		return;

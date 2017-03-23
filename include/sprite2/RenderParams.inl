@@ -7,6 +7,7 @@ namespace s2
 inline
 RenderParams::RenderParams()
 	: vertex_offset(0, 0)
+	, prev(NULL)
 	, m_flags(0)
 {
 	SetChangeShader(true);

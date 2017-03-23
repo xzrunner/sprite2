@@ -49,7 +49,7 @@ public:
 	virtual void AddReference() const;
 	virtual void RemoveReference() const;
 
-	virtual void OnMessage(Message msg, const SprTreePath& path) {}
+	virtual void OnMessage(Message msg, const Actor* actor) {}
 	
  	virtual bool Update(const RenderParams& rp) { return false; }
 	virtual bool SetFrame(int frame, const SprTreePath& path, bool force = false) { return false; }
@@ -121,7 +121,7 @@ public:
 	int GetID() const { return m_id; }
 
 	void AddActor(Actor* actor) const;
-	const Actor* QueryActor(const SprTreePath& path) const;
+	const Actor* QueryActor(const Actor* prev) const;
 	bool HaveActor() const { return !m_actors.empty(); }
 	int ActorCount() const { return m_actors.size(); }
 	void ClearActors() const;

@@ -60,7 +60,7 @@ AnimSprite* AnimSprite::Clone() const
 	return new AnimSprite(*this);
 }
 
-void AnimSprite::OnMessage(Message msg, const SprTreePath& path)
+void AnimSprite::OnMessage(Message msg, const Actor* actor)
 {
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(path));
 

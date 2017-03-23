@@ -9,10 +9,10 @@ namespace s2
 {
 
 class Sprite;
+class Actor;
 class RenderParams;
 class RenderColor;
 class RenderTarget;
-class SprTreePath;
 
 class DrawMask
 {
@@ -20,7 +20,7 @@ public:
 	static void Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 
 private:
-	static void DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc, const SprTreePath& path);
+	static void DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc, const Actor* prev);
 	static void DrawMaskToRT(RenderTarget* rt, const Sprite* mask);
 
 	static void DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt);

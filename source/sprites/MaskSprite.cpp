@@ -20,7 +20,7 @@ MaskSprite* MaskSprite::Clone() const
 	return new MaskSprite(*this);
 }
 
-void MaskSprite::OnMessage(Message msg, const SprTreePath& path)
+void MaskSprite::OnMessage(Message msg, const Actor* actor)
 {
 	SprTreePath cpath = path;
 	cpath.Push(*this);

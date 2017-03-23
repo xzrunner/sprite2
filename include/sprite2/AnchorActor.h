@@ -9,7 +9,7 @@ namespace s2
 class AnchorActor : public Actor
 {
 public:
-	AnchorActor(const Sprite* spr, const SprTreePath& path);
+	AnchorActor(const Sprite* spr, const Actor* parent);
 	virtual ~AnchorActor();
 
 	void SetAnchor(const Sprite* anchor);

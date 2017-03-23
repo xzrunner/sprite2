@@ -31,7 +31,7 @@ public:
 	
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	void OnMessage(Message msg, const SprTreePath& path);
+	void OnMessage(Message msg, const Actor* actor);
 
 	bool Update(const RenderParams& rp, bool loop = true, 
 		float interval = 0, int fps = 30);

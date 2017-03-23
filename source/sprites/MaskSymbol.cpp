@@ -58,8 +58,10 @@ void MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		DrawMask::Draw(m_base, m_mask, rp_child);
 	} else {
 		if (m_base) {
+			rp_child.actor = m_base->QueryActor(rp.actor);
 			DrawNode::Draw(m_base, rp_child);
 		} else if (m_mask) {
+			rp_child.actor = m_mask->QueryActor(rp.actor);
 			DrawNode::Draw(m_mask, rp_child);
 		}
 	}

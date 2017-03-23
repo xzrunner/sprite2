@@ -57,7 +57,7 @@ public:
 	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
 
 protected:
-	bool IsChildOutside(const Sprite* spr, const RenderParams& parent) const;
+	bool IsChildOutside(const Sprite* spr, const RenderParams& rp) const;
 
 protected:
 	std::vector<Sprite*> m_children;

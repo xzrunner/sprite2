@@ -313,15 +313,15 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 	return true;
 }
 
-bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& parent) const
+bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) const
 {
 	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->Empty() && !parent.view_region.IsValid()) {
+	if (rs->Empty() && !rp.view_region.IsValid()) {
 		return false;
 	}
 
 	sm::rect r = spr->GetSymbol()->GetBounding(spr);
-	S2_MAT mat = DrawNode::PrepareMat(parent, spr);
+	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
 	sm::rect sr(r_min, r_max);
@@ -329,7 +329,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& parent
 	if (!rs->Empty() && rs->IsOutside(sr)) {
 		return true;
 	}
-	if (parent.view_region.IsValid() && !sm::is_rect_intersect_rect(parent.view_region, sr)) {
+	if (rp.view_region.IsValid() && !sm::is_rect_intersect_rect(rp.view_region, sr)) {
 		return true;
 	}
 	return false;

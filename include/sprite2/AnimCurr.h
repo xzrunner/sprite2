@@ -33,7 +33,7 @@ public:
 
 	void OnMessage(Message msg, const Actor* actor);
 
-	bool Update(const Actor* actor, bool loop = true, 
+	bool Update(const RenderParams& rp, bool loop = true, 
 		float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 

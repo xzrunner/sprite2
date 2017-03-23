@@ -7,7 +7,7 @@ namespace s2
 
 void Facade::Clear()
 {
-	ActorLUT::Instance()->Clear();
+//	ActorLUT::Instance()->Clear();
 	SprLUT::Instance()->Clear();
 }
 

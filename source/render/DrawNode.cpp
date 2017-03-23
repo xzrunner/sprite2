@@ -56,6 +56,7 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	}
 
 	const Actor* actor = rp.actor;
+	child.actor = actor;
 	if (actor && !actor->IsVisible()) {
 		return false;
 	}

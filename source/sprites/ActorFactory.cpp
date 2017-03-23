@@ -23,14 +23,22 @@ ActorFactory::ActorFactory()
 
 Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 {
+	if ((child->GetSymbol()->GetID() >> 20) == 127) {
+		int zz = 0;
+	}
+
 	assert(child);
+
+	Actor* actor = const_cast<Actor*>(child->QueryActor(parent));
+	if (actor) {
+		return actor;
+	}
 
 // 	Actor* actor = ActorLUT::Instance()->Query(path);
 // 	if (actor) {
 // 		return actor;
 // 	}
 
-	Actor* actor = NULL;
 	switch (child->GetSymbol()->Type())
 	{
 	case SYM_ANCHOR:

@@ -313,11 +313,11 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 
 	p.mt = GetLocalMat() * params.mt;
-	const Actor* actor = QueryActor(params.prev);
+	const Actor* actor = params.actor;
 	if (actor) {
 		p.mt = actor->GetLocalMat() * p.mt;
+		p.actor = params.actor;
 	}
-	p.prev = actor;
 
 	VisitResult ret = VISIT_OVER;
 

@@ -35,7 +35,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_OVER;
 	}
 	
-	Actor* actor = ActorLUT::Instance()->Query(params.path);
+	const Actor* actor = params.actor;
 	if (actor && !actor->IsVisible()) {
 		return VISIT_OVER;
 	}
@@ -78,7 +78,7 @@ VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVi
 VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	bool editable = spr->IsEditable();
-	Actor* actor = ActorLUT::Instance()->Query(params.path);
+	const Actor* actor = params.actor;
 	if (actor) {
 		editable = actor->IsEditable();
 	}
@@ -91,12 +91,12 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 	}
 }
 
-Actor* PointQueryVisitor::GetSelectedActor() const
+const Actor* PointQueryVisitor::GetSelectedActor() const
 {
 	if (!m_selected_spr) {
 		return NULL;
 	}
-	return ActorLUT::Instance()->Query(m_selected_params.path);
+	return m_selected_params.actor;
 }
 
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const

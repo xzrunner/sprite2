@@ -86,9 +86,11 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 /************************************************************************/
 
 extern "C"
-void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
+void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				 float xmin, float ymin, float xmax, float ymax)
 {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+
 	RenderParams rp;
 	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
 
@@ -97,8 +99,9 @@ void s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float
 	rp.view_region.xmax = xmax;
 	rp.view_region.ymax = ymax;
 
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	DrawNode::Draw(s2_spr, rp);
+	rp.actor = s2_actor;
+
+	DrawNode::Draw(s2_actor->GetSpr(), rp);
 }
 
 extern "C"
@@ -261,7 +264,7 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	PointQueryVisitor visitor(sm::vec2(x, y));
 
 	s2_spr->Traverse(visitor, SprVisitorParams());
-	Actor* ret = visitor.GetSelectedActor();
+	const Actor* ret = visitor.GetSelectedActor();
 	if (!ret) {
 		return NULL;
 	}
@@ -283,7 +286,7 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	mat[5] = selected_mat.x[13];
 #endif // S2_MATRIX_FIX
 
-	return ret;
+	return const_cast<Actor*>(ret);
 }
 
 extern "C"
@@ -584,8 +587,11 @@ extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 
+	SprVisitorParams params;
+	params.actor = parent;
+
 	PointQueryVisitor visitor(sm::vec2(x, y));
-	parent->GetSpr()->Traverse(visitor, SprVisitorParams());
+	parent->GetSpr()->Traverse(visitor, params);
 
 	const S2_MAT& selected_mat = visitor.GetSelectedMat();
 #ifdef S2_MATRIX_FIX
@@ -604,18 +610,14 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	mat[5] = selected_mat.x[13];
 #endif // S2_MATRIX_FIX
 
-	return visitor.GetSelectedActor();
+	return const_cast<Actor*>(visitor.GetSelectedActor());
 }
 
 extern "C"
 void* s2_get_actor(const void* parent_actor, void* child_spr) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 	Sprite* child = static_cast<Sprite*>(child_spr);
-	if (parent) {
-		return ActorFactory::Instance()->Create(parent, child);
-	} else {
-		return NULL;
-	}
+	return ActorFactory::Instance()->Create(parent, child);
 }
 
 extern "C"

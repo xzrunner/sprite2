@@ -79,14 +79,13 @@ void AnimSprite::OnMessage(Message msg, const Actor* actor)
 
 bool AnimSprite::Update(const RenderParams& rp)
 {
-	const Actor* actor = QueryActor(rp.prev);
+	const Actor* actor = rp.actor;
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
 
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.prev = actor;
-	return curr.Update(actor, m_loop, m_interval, m_fps);
+	return curr.Update(rp_child, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::SetFrame(int frame, const Actor* actor, bool force)
@@ -111,7 +110,7 @@ Sprite* AnimSprite::FetchChild(int idx, const Actor* actor) const
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	const Actor* actor = QueryActor(params.prev);
+	const Actor* actor = params.actor;
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
 	return curr.Traverse(visitor, params);
 }

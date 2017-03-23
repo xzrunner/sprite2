@@ -41,7 +41,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	const std::string* text = NULL;
-	const Actor* actor = spr->QueryActor(rp_child.path);
+	const Actor* actor = rp.actor;
 	if (actor) {
 		const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);
 		text = &tb_actor->GetText();

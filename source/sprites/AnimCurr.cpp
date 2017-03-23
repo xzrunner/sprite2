@@ -6,6 +6,7 @@
 #include "DrawNode.h"
 #include "AnimLerp.h"
 #include "AnimLerp.h"
+#include "SprVisitorParams.h"
 
 #include <algorithm>
 #include <climits>
@@ -77,15 +78,22 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		return ret;
 	}
 
+	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
-		for (int i = 0; i < m_curr_num; ++i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+		for (int i = 0; i < m_curr_num; ++i) 
+		{
+			Sprite* child = m_slots[m_curr[i]];
+			cp.actor = child->QueryActor(cp.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}
 	} else {
-		for (int i = m_curr_num - 1; i >= 0; --i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, m_slots[m_curr[i]], ret)) {
+		for (int i = m_curr_num - 1; i >= 0; --i) 
+		{
+			Sprite* child = m_slots[m_curr[i]];
+			cp.actor = child->QueryActor(cp.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}
@@ -101,7 +109,7 @@ void AnimCurr::OnMessage(Message msg, const Actor* actor)
 	}
 }
 
-bool AnimCurr::Update(const Actor* actor, bool loop, float interval, int fps)
+bool AnimCurr::Update(const RenderParams& rp, bool loop, float interval, int fps)
 {
 	bool dirty = false;
 
@@ -143,10 +151,12 @@ bool AnimCurr::Update(const Actor* actor, bool loop, float interval, int fps)
 	}
 
 	// update children
+	RenderParams rp_child = rp;
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* spr = m_slots[m_curr[i]];
-		if (spr->Update(spr->QueryActor(actor))) {
+		rp_child.actor = spr->QueryActor(rp.actor);
+		if (spr->Update(rp_child)) {
 			dirty = true;
 		}
 	}
@@ -155,7 +165,7 @@ bool AnimCurr::Update(const Actor* actor, bool loop, float interval, int fps)
 	if (curr_frame != m_frame) {
 		m_frame = curr_frame;
 		dirty = true;
-		LoadCurrSprites(actor);
+		LoadCurrSprites(rp.actor);
 	}
 
 	return dirty;
@@ -163,8 +173,11 @@ bool AnimCurr::Update(const Actor* actor, bool loop, float interval, int fps)
 
 void AnimCurr::Draw(const RenderParams& rp) const
 {
+	RenderParams child_rp = rp;
 	for (int i = 0; i < m_curr_num; ++i) {
-		DrawNode::Draw(m_slots[m_curr[i]], rp);
+		Sprite* child = m_slots[m_curr[i]];
+		child_rp.actor = child->QueryActor(rp.actor);
+		DrawNode::Draw(child, child_rp);
 	}
 }
 
@@ -224,9 +237,11 @@ void AnimCurr::SetFrame(int frame, int fps, const Actor* actor)
 	LoadCurrSprites(actor);
 
 	// update children
+	RenderParams rp;
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* spr = m_slots[m_curr[i]];
-		spr->Update(spr->QueryActor(actor));
+		rp.actor = spr->QueryActor(actor);
+		spr->Update(rp);
 	}
 }
 

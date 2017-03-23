@@ -125,8 +125,7 @@ bool TrailSprite::SetFrame(int frame, const Actor* actor, bool force)
 	}
 
 	RenderParams rp;
-	rp.path = path;
-	rp.path.Push(*this);
+	rp.actor = actor;
 	Update(rp);
 	return true;
 }

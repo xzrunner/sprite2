@@ -37,15 +37,16 @@ bool MaskSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(*this);
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
+		rp_child.actor = base->QueryActor(rp.actor);
 		if (const_cast<Sprite*>(base)->Update(rp_child)) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
+		rp_child.actor = mask->QueryActor(rp.actor);
 		if (const_cast<Sprite*>(mask)->Update(rp_child)) {
 			dirty = true;
 		}

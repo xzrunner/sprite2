@@ -1,6 +1,7 @@
 #include "Scale9Sprite.h"
 #include "Scale9Symbol.h"
 #include "SpriteVisitor.h"
+#include "SprVisitorParams.h"
 
 #include <stddef.h>
 
@@ -27,15 +28,22 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	VisitResult ret = VISIT_OVER;
 	std::vector<Sprite*> grids;
 	m_s9.GetGrids(grids);
+	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
-		for (int i = 0, n = grids.size(); i < n; ++i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, grids[i], ret)) {
+		for (int i = 0, n = grids.size(); i < n; ++i) 
+		{
+			Sprite* child = grids[i];
+			cp.actor = child->QueryActor(params.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}
 	} else {
-		for (int i = grids.size() - 1; i >= 0; --i) {
-			if (!SpriteVisitor::VisitChild(visitor, params, grids[i], ret)) {
+		for (int i = grids.size() - 1; i >= 0; --i) 
+		{
+			Sprite* child = grids[i];
+			cp.actor = child->QueryActor(params.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}

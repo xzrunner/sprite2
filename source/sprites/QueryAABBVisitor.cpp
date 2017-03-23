@@ -22,7 +22,7 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 	bool visible = spr->IsVisible();
 	bool editable = spr->IsEditable();
 	if (spr->HaveActor()) {
-		Actor* actor = ActorLUT::Instance()->Query(params.path);
+		const Actor* actor = params.actor;
 		if (actor) {
 			visible = actor->IsVisible();
 			editable = actor->IsEditable();

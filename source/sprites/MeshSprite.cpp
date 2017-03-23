@@ -75,7 +75,6 @@ bool MeshSprite::Update(const RenderParams& rp)
 	RenderParams rp_child = rp;
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
-	rp_child.path.Push(*this);
 
 	if (m_base) {
 		return const_cast<Symbol*>(m_base)->Update(rp_child, 0);

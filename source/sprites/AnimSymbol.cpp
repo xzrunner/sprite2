@@ -57,11 +57,16 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
+	if (spr->GetID() == 2774) {
+		int zz = 0;
+	}
+
 	if (spr) {
 		RenderParams rp_child;
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			anim->GetAnimCurr(rp.actor).Draw(rp_child);
+			const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
+			curr.Draw(rp_child);
 		}
 	} else {
 		m_curr.Draw(rp);

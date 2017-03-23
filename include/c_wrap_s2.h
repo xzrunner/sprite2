@@ -26,7 +26,7 @@ void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx,
 /* sprite                                                               */
 /************************************************************************/
 
-void  s2_spr_draw(const void* spr, float x, float y, float angle, float sx, float sy,
+void  s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				  float xmin, float ymin, float xmax, float ymax);
 
 void  s2_spr_set_pos(void* spr, float x, float y);

@@ -13,6 +13,8 @@
 #include <gimg_typedef.h>
 #include <gimg_export.h>
 
+#include <string.h>
+
 namespace s2
 {
 

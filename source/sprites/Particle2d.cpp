@@ -7,6 +7,8 @@
 #include S2_MAT_HEADER
 #include <ps_2d.h>
 
+#include <string.h>
+
 namespace s2
 {
 

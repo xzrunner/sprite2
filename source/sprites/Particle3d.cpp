@@ -17,6 +17,7 @@
 #include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>
+#include <string.h>
 
 namespace s2
 {

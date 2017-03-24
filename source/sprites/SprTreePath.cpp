@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include <string.h>
+
 namespace s2
 {
 

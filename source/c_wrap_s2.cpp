@@ -889,7 +889,12 @@ void* s2_actor_get_anchor_real(void* actor) {
 	}
 
 	const AnchorActor* anchor_actor = VI_DOWNCASTING<const AnchorActor*>(s2_actor);
-	return const_cast<Actor*>(anchor_actor->GetAnchor());
+	void* ret = const_cast<Actor*>(anchor_actor->GetAnchor());
+	if (ret) {
+		return ret;
+	} else {
+		return actor;
+	}
 }
 
 /************************************************************************/

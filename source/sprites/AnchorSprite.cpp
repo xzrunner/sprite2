@@ -71,6 +71,7 @@ VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
 		SprVisitorParams cp = params;
+		cp.actor = anchor;
 		return anchor->GetSpr()->TraverseChildren(visitor, cp);
 	} else {
 		return VISIT_OVER;

@@ -46,11 +46,11 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_OVER;
 	} else if (type == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(spr);
-		const Sprite* real = anchor_spr->QueryAnchor(actor);
+		const Actor* real = anchor_spr->QueryAnchor(actor);
 		if (real) {
 			SprVisitorParams cp = params;
-			cp.actor = real->QueryActor(actor);
-			return Visit(real, cp);
+			cp.actor = real->GetSpr()->QueryActor(actor);
+			return Visit(real->GetSpr(), cp);
 		} else {
 			return VISIT_OVER;
 		}

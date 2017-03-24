@@ -129,6 +129,8 @@ const char* s2_actor_get_text(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);
 bool  s2_actor_get_text_size(const void* actor, float* w, float* h);
 
+void* s2_actor_get_anchor_real(void* actor);
+
 /************************************************************************/
 /* rt                                                                   */
 /************************************************************************/

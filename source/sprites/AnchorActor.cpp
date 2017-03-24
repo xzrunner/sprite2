@@ -13,19 +13,28 @@ AnchorActor::AnchorActor(const Sprite* spr, const Actor* parent)
 AnchorActor::~AnchorActor() 
 {
 	if (m_anchor) {
-		m_anchor->RemoveReference();
+		m_anchor->GetSpr()->RemoveReference();
 	}
 }
 
-void AnchorActor::SetAnchor(const Sprite* anchor) 
+void AnchorActor::SetAnchor(const Actor* anchor) 
 {
-	cu::RefCountObjAssign(m_anchor, anchor);
+	if (m_anchor != anchor) {
+		if (m_anchor) {
+			m_anchor->GetSpr()->RemoveReference();
+		}
+		m_anchor = anchor;
+		if (anchor) {
+			anchor->GetSpr()->AddReference();
+		}
+	}
+
 	if (anchor) {
-		anchor->ConnectActors(this);
+		anchor->GetSpr()->ConnectActors(this);
 	}
 }
 
-const Sprite* AnchorActor::GetAnchor() const
+const Actor* AnchorActor::GetAnchor() const
 {
 	return m_anchor;
 }

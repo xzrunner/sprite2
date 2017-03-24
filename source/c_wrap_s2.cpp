@@ -31,6 +31,7 @@
 #include "TextboxSprite.h"
 #include "Scale9Sprite.h"
 #include "AnchorSprite.h"
+#include "AnchorActor.h"
 #include "OrthoCamera.h"
 
 #include <gtxt_label.h>
@@ -536,20 +537,22 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 
 // ret: 0 ok, -1 no child with name, -2 child isn't anchor
 extern "C"
-int s2_actor_mount(const void* actor, const char* name, const void* anchor) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	const Sprite* s2_anchor = static_cast<const Sprite*>(anchor);
-	Sprite* child = s2_spr->FetchChild(name, s2_actor);
-	if (!child) {
+int s2_actor_mount(const void* parent, const char* name, const void* child) {
+	const Actor* p_actor = static_cast<const Actor*>(parent);
+	const Sprite* p_spr = p_actor->GetSpr();
+	const Actor* c_actor = static_cast<const Actor*>(child);
+	Sprite* c_spr = p_spr->FetchChild(name, p_actor);
+	if (!c_spr) {
 		return -1;		
 	}
-	if (child->GetSymbol()->Type() != SYM_ANCHOR) {
+	if (c_spr->GetSymbol()->Type() != SYM_ANCHOR) {
 		return -2;
 	}
 
-	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(child);
-	anchor_spr->AddAnchor(s2_anchor, s2_actor);
+	S2_MAT mat = p_actor->GetLocalMat();
+
+	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
+	anchor_spr->AddAnchor(c_actor, p_actor);
 	return 0;
 }
 
@@ -559,9 +562,9 @@ bool s2_actor_get_force_up_frame(void* actor) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor);
+		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
-			s2_spr = real;
+			s2_spr = real->GetSpr();
 		} else {
 			return false;
 		}
@@ -575,9 +578,9 @@ void s2_actor_set_force_up_frame(void* actor, bool force) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor);
+		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
-			s2_spr = real;
+			s2_spr = real->GetSpr();
 		}
 	}
 	s2_spr->SetForceUpFrame(force);
@@ -876,6 +879,17 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 	gtxt_get_label_size(textbox->GetText().c_str(), &style, w, h);	
 
 	return true;
+}
+
+extern "C"
+void* s2_actor_get_anchor_real(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_ANCHOR) {
+		return actor;
+	}
+
+	const AnchorActor* anchor_actor = VI_DOWNCASTING<const AnchorActor*>(s2_actor);
+	return const_cast<Actor*>(anchor_actor->GetAnchor());
 }
 
 /************************************************************************/

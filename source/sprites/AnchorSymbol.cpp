@@ -30,7 +30,7 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	assert(spr);
 	const Sprite* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
 	if (anchor) {
-		rp_child.actor = rp.actor;
+		rp_child.actor = spr->QueryActor(rp.actor);
 		DrawNode::Draw(anchor, rp_child, false);
 	}
 }

@@ -562,9 +562,9 @@ bool s2_actor_get_force_up_frame(void* actor) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor)->GetSpr();
+		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
-			s2_spr = real;
+			s2_spr = real->GetSpr();
 		} else {
 			return false;
 		}
@@ -578,9 +578,9 @@ void s2_actor_set_force_up_frame(void* actor, bool force) {
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Sprite* real = anchor_spr->QueryAnchor(s2_actor)->GetSpr();
+		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
 		if (real) {
-			s2_spr = real;
+			s2_spr = real->GetSpr();
 		}
 	}
 	s2_spr->SetForceUpFrame(force);

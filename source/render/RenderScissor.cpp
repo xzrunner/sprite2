@@ -113,10 +113,6 @@ void RenderScissor::Intersection(const Rect& r, float& x, float& y, float& w, fl
 	y = newy;
 	w = neww;
 	h = newh;
-
-	if (x < 0 || y < 0 || w < 0 || h < 0) {
-		int zz=  0;
-	}
 }
 
 }

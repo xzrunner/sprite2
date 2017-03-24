@@ -7,6 +7,7 @@
 #include "SprVisitorParams.h"
 #include "ActorLUT.h"
 #include "QueryAABBVisitor.h"
+#include "AnchorSprite.h"
 
 #include <SM_Calc.h>
 
@@ -43,6 +44,16 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
 		return VISIT_OVER;
+	} else if (type == SYM_ANCHOR) {
+		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(spr);
+		const Sprite* real = anchor_spr->QueryAnchor(actor);
+		if (real) {
+			SprVisitorParams cp = params;
+			cp.actor = real->QueryActor(actor);
+			return Visit(real, cp);
+		} else {
+			return VISIT_OVER;
+		}
 	}
 	if (!QuerySprite(spr, params)) {
 		return VISIT_OVER;

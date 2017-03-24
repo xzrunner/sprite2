@@ -6,6 +6,8 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
+#include <string.h>
+
 namespace s2
 {
 

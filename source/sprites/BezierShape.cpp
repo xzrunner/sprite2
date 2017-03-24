@@ -5,6 +5,8 @@
 
 #include <SM_Calc.h>
 
+#include <string.h>
+
 namespace s2
 {
 

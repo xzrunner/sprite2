@@ -640,6 +640,13 @@ void Sprite::ClearActors() const
 	}
 }
 
+void Sprite::ConnectActors(const Actor* parent) const
+{
+	for (int i = 0, n = m_actors.size(); i < n; ++i) {
+		m_actors[i]->SetParent(parent);
+	}
+}
+
 //void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent)
 //{
 //	if (m_actors.empty()) {

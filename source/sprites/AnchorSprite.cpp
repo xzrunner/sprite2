@@ -17,14 +17,13 @@ void AnchorSprite::OnMessage(Message msg, const Actor* actor)
 
 bool AnchorSprite::Update(const RenderParams& rp)
 {
-	RenderParams rp_child = rp;
-	rp_child.mt = GetLocalMat() * rp.mt;
-	rp_child.shader = GetShader() * rp.shader;
-
 	const Actor* actor = rp.actor;
 	const Sprite* anchor = QueryAnchor(actor);
-	rp_child.actor = anchor->QueryActor(actor);
 	if (anchor) {
+		RenderParams rp_child = rp;
+		rp_child.mt = GetLocalMat() * rp.mt;
+		rp_child.shader = GetShader() * rp.shader;
+		rp_child.actor = anchor->QueryActor(actor);
 		return const_cast<Sprite*>(anchor)->Update(rp_child);
 	} else {
 		return false;

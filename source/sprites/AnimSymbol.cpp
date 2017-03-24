@@ -57,10 +57,6 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
-	if (spr->GetID() == 2774) {
-		int zz = 0;
-	}
-
 	if (spr) {
 		RenderParams rp_child;
 		if (DrawNode::Prepare(rp, spr, rp_child)) {

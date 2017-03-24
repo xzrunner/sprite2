@@ -33,7 +33,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 		RenderScissor::Instance()->Open();
 		return;
 	}
-	DrawBaseToRT(rt_base, base, rp.color, rp.actor);
+	DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -42,7 +42,7 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 		RenderScissor::Instance()->Open();
 		return;
 	}
-	DrawMaskToRT(rt_mask, mask);
+	DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Open();
@@ -75,7 +75,7 @@ void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	rt->Unbind();
 }
 
-void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask)
+void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor)
 {
 	rt->Bind();
 
@@ -87,6 +87,7 @@ void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask)
 
 	RenderParams rp;
 	rp.SetChangeShader(false);
+	rp.actor = actor;
 	DrawNode::Draw(mask, rp);
 
 	shader->Commit();

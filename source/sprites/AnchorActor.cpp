@@ -20,6 +20,9 @@ AnchorActor::~AnchorActor()
 void AnchorActor::SetAnchor(const Sprite* anchor) 
 {
 	cu::RefCountObjAssign(m_anchor, anchor);
+	if (anchor) {
+		anchor->ConnectActors(this);
+	}
 }
 
 const Sprite* AnchorActor::GetAnchor() const

@@ -124,6 +124,7 @@ public:
 	bool HaveActor() const { return !m_actors.empty(); }
 	int ActorCount() const { return m_actors.size(); }
 	void ClearActors() const;
+	void ConnectActors(const Actor* parent) const;
 	//void FixActorPath(const SprTreePath& path, const SprTreePath& new_parent);
 
 private:

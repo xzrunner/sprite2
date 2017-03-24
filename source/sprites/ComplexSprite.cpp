@@ -133,9 +133,6 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 	} else {
 		for (int i = children.size() - 1; i >= 0; --i) 
 		{
-			if (i == 2) {
-				int zz = 0;
-			}
 			Sprite* child = children[i];
 			cp.actor = child->QueryActor(actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {

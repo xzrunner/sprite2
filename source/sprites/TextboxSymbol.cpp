@@ -97,9 +97,9 @@ sm::rect TextboxSymbol::GetBounding(const Sprite* spr) const
 {
 	int w, h;
 	if (spr) {
-		const Textbox& tb = VI_DOWNCASTING<const TextboxSprite*>(spr)->GetTextbox();
-		w = tb.width;
-		h = tb.height;
+		const sm::vec2& sz = VI_DOWNCASTING<const TextboxSprite*>(spr)->GetSize();
+		w = sz.x;
+		h = sz.y;
 	} else {
 		w = m_tb.width;
 		h = m_tb.height;

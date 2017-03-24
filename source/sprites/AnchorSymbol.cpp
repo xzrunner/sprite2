@@ -22,16 +22,14 @@ void AnchorSymbol::Traverse(const SymbolVisitor& visitor)
 
 void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams rp_child;
-	if (!DrawNode::Prepare(rp, spr, rp_child)) {
-		return;
-	}
-
 	assert(spr);
-	const Sprite* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
-	if (anchor) {
-		rp_child.actor = rp.actor;
-		DrawNode::Draw(anchor, rp_child, false);
+	const Actor* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
+	if (anchor) 
+	{
+		RenderParams rp_child = rp;
+ 		const Actor* anchor_actor = anchor->GetSpr()->QueryActor(rp.actor);
+		rp_child.actor = anchor_actor;
+		DrawNode::Draw(anchor->GetSpr(), rp_child, false);
 	}
 }
 

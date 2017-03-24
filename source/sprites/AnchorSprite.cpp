@@ -9,7 +9,7 @@ namespace s2
 
 void AnchorSprite::OnMessage(Message msg, const Actor* actor)
 {
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		const_cast<Sprite*>(anchor)->OnMessage(msg, anchor->QueryActor(actor));
 	}
@@ -18,7 +18,7 @@ void AnchorSprite::OnMessage(Message msg, const Actor* actor)
 bool AnchorSprite::Update(const RenderParams& rp)
 {
 	const Actor* actor = rp.actor;
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		RenderParams rp_child = rp;
 		rp_child.mt = GetLocalMat() * rp.mt;
@@ -33,7 +33,7 @@ bool AnchorSprite::Update(const RenderParams& rp)
 bool AnchorSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
 	bool dirty = false;
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		const_cast<Sprite*>(anchor)->SetFrame(frame, anchor->QueryActor(actor));
 		dirty = true;
@@ -43,7 +43,7 @@ bool AnchorSprite::SetFrame(int frame, const Actor* actor, bool force)
 
 Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		return anchor->FetchChild(name, anchor->QueryActor(actor));
 	} else {
@@ -53,7 +53,7 @@ Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) co
 
 Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
 {
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		return anchor->FetchChild(idx, anchor->QueryActor(actor));
 	} else {
@@ -64,7 +64,7 @@ Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;
-	const Sprite* anchor = QueryAnchor(actor);
+	const Sprite* anchor = QueryAnchor(actor)->GetSpr();
 	if (anchor) {
 		SprVisitorParams cp = params;
 		return anchor->TraverseChildren(visitor, cp);
@@ -73,13 +73,13 @@ VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	}
 }
 
-void AnchorSprite::AddAnchor(const Sprite* anchor, const Actor* parent)
+void AnchorSprite::AddAnchor(const Actor* child, const Actor* parent)
 {
 	AnchorActor* actor = VI_DOWNCASTING<AnchorActor*>(ActorFactory::Instance()->Create(parent, this));
-	actor->SetAnchor(anchor);
+	actor->SetAnchor(child);
 }
 
-const Sprite* AnchorSprite::QueryAnchor(const Actor* actor) const
+const Actor* AnchorSprite::QueryAnchor(const Actor* actor) const
 {
 	if (actor) {
 		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);

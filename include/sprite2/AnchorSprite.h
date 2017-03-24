@@ -27,8 +27,8 @@ public:
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
     virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	void AddAnchor(const Sprite* anchor, const Actor* parent);
-	const Sprite* QueryAnchor(const Actor* actor) const;
+	void AddAnchor(const Actor* child, const Actor* parent);
+	const Actor* QueryAnchor(const Actor* actor) const;
 
 	VI_DUMMY_FUNC
 

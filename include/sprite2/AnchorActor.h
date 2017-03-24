@@ -12,11 +12,11 @@ public:
 	AnchorActor(const Sprite* spr, const Actor* parent);
 	virtual ~AnchorActor();
 
-	void SetAnchor(const Sprite* anchor);
-	const Sprite* GetAnchor() const;
+	void SetAnchor(const Actor* anchor);
+	const Actor* GetAnchor() const;
 
 private:
-	const Sprite* m_anchor;
+	const Actor* m_anchor;
 
 }; // AnchorActor
 

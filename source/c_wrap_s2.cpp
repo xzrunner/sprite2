@@ -680,59 +680,42 @@ void s2_actor_get_scale(void* actor, float* sx, float* sy) {
 	*sy = scale.y;
 }
 
-extern "C"
-void s2_actor_get_world_pos(void* actor, float* x, float* y) {
-// 	Actor* s2_actor = static_cast<Actor*>(actor);
-// 	SprTreePath path = s2_actor->GetTreePath();
-// 	assert(!path.Empty());
-// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-// 	path.Pop();
-// 	while (!path.Empty()) {
-// 		Actor* actor = ActorLUT::Instance()->Query(path);
-// 		mat = mat * actor->GetSpr()->GetLocalMat();
-// 		mat = actor->GetLocalMat() * mat;
-// 		path.Pop();
-// 	}
-// 	sm::vec2 pos = mat * sm::vec2(0, 0);
-// 	*x = pos.x;
-// 	*y = pos.y;
+static S2_MAT _get_actor_world_mat(const void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	S2_MAT mat;
+	while (s2_actor) {
+		mat = mat * s2_actor->GetSpr()->GetLocalMat();
+		mat = s2_actor->GetLocalMat() * mat;
+		s2_actor = s2_actor->GetParent();
+	}
+	return mat;
 }
 
 extern "C"
-float s2_actor_get_world_angle(void* actor) {
-// 	Actor* s2_actor = static_cast<Actor*>(actor);
-// 	SprTreePath path = s2_actor->GetTreePath();
-// 	assert(!path.Empty());
-// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-// 	path.Pop();
-// 	while (!path.Empty()) {
-// 		Actor* actor = ActorLUT::Instance()->Query(path);
-// 		mat = mat * actor->GetSpr()->GetLocalMat();
-// 		mat = actor->GetLocalMat() * mat;
-// 		path.Pop();
-// 	}
-// 	sm::vec2 pos = mat * sm::vec2(0, 0);
-// 	sm::vec2 dir = mat * sm::vec2(1, 0);
-// 	return sm::get_line_angle(pos, dir);
+void s2_actor_get_world_pos(const void* actor, float* x, float* y) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	S2_MAT mat = _get_actor_world_mat(s2_actor);
+ 	sm::vec2 pos = mat * sm::vec2(0, 0);
+ 	*x = pos.x;
+ 	*y = pos.y;
 }
 
 extern "C"
-void s2_actor_get_world_scale(void* actor, float* sx, float* sy) {
-// 	Actor* s2_actor = static_cast<Actor*>(actor);
-// 	SprTreePath path = s2_actor->GetTreePath();
-// 	assert(!path.Empty());
-// 	S2_MAT mat = s2_actor->GetSpr()->GetLocalMat();
-// 	path.Pop();
-// 	while (!path.Empty()) {
-// 		Actor* actor = ActorLUT::Instance()->Query(path);
-// 		mat = mat * actor->GetSpr()->GetLocalMat();
-// 		mat = actor->GetLocalMat() * mat;
-// 		path.Pop();
-// 	}
-// 
-// 	sm::vec2 scale = (mat * sm::vec2(1, 1)) - (mat * sm::vec2(0, 0));
-// 	*sx = scale.x;
-// 	*sy = scale.y;
+float s2_actor_get_world_angle(const void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	S2_MAT mat = _get_actor_world_mat(s2_actor);
+ 	sm::vec2 pos = mat * sm::vec2(0, 0);
+ 	sm::vec2 dir = mat * sm::vec2(1, 0);
+ 	return sm::get_line_angle(pos, dir);
+}
+
+extern "C"
+void s2_actor_get_world_scale(const void* actor, float* sx, float* sy) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	S2_MAT mat = _get_actor_world_mat(s2_actor);
+ 	sm::vec2 scale = (mat * sm::vec2(1, 1)) - (mat * sm::vec2(0, 0));
+ 	*sx = scale.x;
+ 	*sy = scale.y;
 }
 
 extern "C"

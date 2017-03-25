@@ -4,6 +4,7 @@
 #include "Particle3d.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#include "S2_Actor.h"
 
 #include <ps_3d_sprite.h>
 #include <shaderlab/ShaderMgr.h>
@@ -101,10 +102,15 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		if (!p3d) {
 			return;
 		}
-		P3dRenderParams* rp = static_cast<P3dRenderParams*>(p3d->draw_params);
-		rp->mat = rp_child.mt;
-		rp->ct = rp_child.color;
-		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
+		p3d_rp->mat = rp_child.mt;
+		p3d_rp->ct = rp_child.color;
+		S2_MAT mt;
+		if (rp.actor) {
+			mt = rp.actor->GetLocalMat() * rp_child.mt;
+		} else {
+			mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		}
 #ifdef S2_MATRIX_FIX
 		p3d->mat[0] = mt.x[0] * sm::MatrixFix::SCALE;
 		p3d->mat[1] = mt.x[1] * sm::MatrixFix::SCALE;
@@ -129,7 +135,11 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
 
 	if (p3d_spr->IsLocalModeDraw()) {
-		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		if (rp.actor) {
+			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		} else {
+			rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		}
 	}
 	p3d_spr->Draw(rp_child);
 }

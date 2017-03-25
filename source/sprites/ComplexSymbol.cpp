@@ -116,7 +116,7 @@ bool ComplexSymbol::Update(const RenderParams& rp, float time)
 	return ret;
 }
 
-sm::rect ComplexSymbol::GetBounding(const Sprite* spr) const
+sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	++m_aabb_update_times;
 	if (m_size.IsValid() && m_aabb_update_times < AABB_UPDATE_FREQ) {
@@ -340,7 +340,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 		return false;
 	}
 
-	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);

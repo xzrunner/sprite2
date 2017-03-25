@@ -24,7 +24,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
 
 	void SetEmitterCfg(p3d_emitter_cfg* cfg);
 	const p3d_emitter_cfg* GetEmitterCfg() const { return m_et_cfg; }

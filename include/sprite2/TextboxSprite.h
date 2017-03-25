@@ -25,9 +25,7 @@ public:
 	Textbox& GetTextbox() { return m_tb; }
 
 	const std::string& GetText() const { return m_text; }
-	void SetText(const std::string& text);
-
-	const sm::vec2& GetSize() const { return m_size; }
+	void SetText(const std::string& text) { m_text = text; }
 
 	int GetTime() const { return m_time; }
 	void UpdateTime() const { ++m_time; }
@@ -39,8 +37,6 @@ protected:
 	std::string m_text;
 
 private:
-	sm::vec2 m_size;
-
 	// for dynamic draw
 	mutable int m_time;	
 

@@ -37,7 +37,7 @@ bool AnchorSymbol::Update(const RenderParams& rp, float time)
 	return false;
 }
 
-sm::rect AnchorSymbol::GetBounding(const Sprite* spr) const
+sm::rect AnchorSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	// todo: path
 	return sm::rect(100, 100);

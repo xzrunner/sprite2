@@ -14,11 +14,15 @@ public:
 	TextboxActor(const Sprite* spr, const Actor* parent)
 		: Actor(spr, parent) {}
 
-	void SetText(const std::string& text) { m_text = text; }
+	void SetText(const std::string& text);
 	const std::string& GetText() const { return m_text; }
+
+	const sm::vec2& GetSize() const { return m_size; }
 
 private:
 	std::string m_text;
+
+	sm::vec2 m_size;
 
 }; // TextboxActor
 

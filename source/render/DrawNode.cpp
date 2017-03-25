@@ -217,7 +217,7 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 		return false;
 	}
 
-	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	S2_MAT mat = PrepareMat(rp, spr);
 	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
 	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
@@ -244,7 +244,7 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
-	sm::rect r = spr->GetSymbol()->GetBounding(spr);
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(r.xmin, r.ymin);
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);

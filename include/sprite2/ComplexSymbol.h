@@ -24,7 +24,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const RenderParams& rp, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
 	
 	const std::vector<Sprite*>& GetActionChildren(int action) const;
 	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }

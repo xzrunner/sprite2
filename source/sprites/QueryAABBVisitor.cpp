@@ -59,7 +59,7 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 		ret = VISIT_INTO;
 		break;
 	default:
-		CombineAABB(spr->GetSymbol()->GetBounding(spr), params.mt);
+		CombineAABB(spr->GetSymbol()->GetBounding(spr, params.actor), params.mt);
 		break;
 	}
 

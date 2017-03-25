@@ -144,7 +144,7 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	p3d_spr->Draw(rp_child);
 }
 
-sm::rect Particle3dSymbol::GetBounding(const Sprite* spr) const
+sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	return sm::rect(sm::vec2(0, 0), 200, 200);
 }

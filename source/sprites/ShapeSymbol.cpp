@@ -45,7 +45,7 @@ void ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect ShapeSymbol::GetBounding(const Sprite* spr) const
+sm::rect ShapeSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	if (m_shape) {
 		return m_shape->GetBounding();

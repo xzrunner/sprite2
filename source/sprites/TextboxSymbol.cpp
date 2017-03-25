@@ -93,11 +93,11 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	tb_spr->UpdateTime();
 }
 
-sm::rect TextboxSymbol::GetBounding(const Sprite* spr) const
+sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	int w, h;
-	if (spr) {
-		const sm::vec2& sz = VI_DOWNCASTING<const TextboxSprite*>(spr)->GetSize();
+	if (actor) {
+		const sm::vec2& sz = VI_DOWNCASTING<const TextboxActor*>(actor)->GetSize();
 		w = sz.x;
 		h = sz.y;
 	} else {

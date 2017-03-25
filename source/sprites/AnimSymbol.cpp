@@ -75,7 +75,7 @@ bool AnimSymbol::Update(const RenderParams& rp, float time)
 	return m_curr.Update(rp);
 }
 
-sm::rect AnimSymbol::GetBounding(const Sprite* spr) const
+sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	if (m_size.IsValid()) {
 		return m_size;

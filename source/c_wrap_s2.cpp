@@ -408,8 +408,6 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
 	RenderParams rp;
-	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
-
 	rp.view_region.xmin = xmin;
 	rp.view_region.ymin = ymin;
 	rp.view_region.xmax = xmax;
@@ -424,17 +422,20 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		curr = curr->GetParent();
 	}
 
-	rp.actor = path.top();
-	path.pop();
-
-	const Sprite* spr = rp.actor->GetSpr();
-
-	RenderParams rp_child;
+	RenderParams rp_child = rp;
 	while (path.size() > 1) {
-		DrawNode::Prepare(rp, spr, rp_child);
+		const Actor* curr = path.top();
+		path.pop();
+		rp.actor = curr;
+		DrawNode::Prepare(rp, curr->GetSpr(), rp_child);
 		rp = rp_child;
-		spr = rp.actor->GetSpr();
 	}
+
+	S2_MAT mt;
+	mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	rp.actor = s2_actor;
+	rp.mt = mt * rp.mt;
 	DrawNode::Draw(s2_spr, rp);
 }
 
@@ -832,8 +833,7 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 	}
 
 	const TextboxActor* textbox = static_cast<const TextboxActor*>(s2_actor);
-	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(s2_actor->GetSpr());
-	const sm::vec2& size = tb_spr->GetSize();
+	const sm::vec2& size = textbox->GetSize();
 	*w = size.x;
 	*h = size.y;
 

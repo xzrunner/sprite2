@@ -57,7 +57,7 @@ void IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	m_icon->Draw(rp_child, process);
 }
 
-sm::rect IconSymbol::GetBounding(const Sprite* spr) const
+sm::rect IconSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	sm::rect r;
 	if (!m_icon) {

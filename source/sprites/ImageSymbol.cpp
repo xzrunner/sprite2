@@ -83,7 +83,7 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect ImageSymbol::GetBounding(const Sprite* spr) const
+sm::rect ImageSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	return m_size;
 }

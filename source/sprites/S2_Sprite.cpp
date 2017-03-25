@@ -308,15 +308,16 @@ void Sprite::InitHook(void (*init_flags)(Sprite* spr))
 	INIT_FLAGS = init_flags;
 }
 
-VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
+VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat) const
 {
 	SprVisitorParams p;
-
-	p.mt = GetLocalMat() * params.mt;
-	const Actor* actor = params.actor;
-	if (actor) {
-		p.mt = actor->GetLocalMat() * p.mt;
-		p.actor = params.actor;
+	p.actor = params.actor;
+	if (init_mat) {
+		p.mt = GetLocalMat() * params.mt;
+		const Actor* actor = params.actor;
+		if (actor) {
+			p.mt = actor->GetLocalMat() * p.mt;
+		}
 	}
 
 	VisitResult ret = VISIT_OVER;

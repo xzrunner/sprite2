@@ -78,7 +78,7 @@ public:
 	 */
 	virtual Sprite* Clone() const { return NULL; }
 
-	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat = true) const;
 
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }

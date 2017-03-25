@@ -136,9 +136,20 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 // 	SprVisitorParams p;
 // 	p.actor = params.actor;
 // 	QueryAABBVisitor visitor(true, false, true);
-// 	spr->Traverse(visitor, p);
+// 	spr->Traverse(visitor, p, false);
 // 
-// 	return sm::is_point_in_rect(m_pos, visitor.GetAABB());
+// 	const sm::rect& aabb = visitor.GetAABB();
+// 
+//  	std::vector<sm::vec2> vertices(4);
+//  	vertices[0] = sm::vec2(aabb.xmin, aabb.ymin);
+//  	vertices[1] = sm::vec2(aabb.xmin, aabb.ymax);
+//  	vertices[2] = sm::vec2(aabb.xmax, aabb.ymax);
+//  	vertices[3] = sm::vec2(aabb.xmax, aabb.ymin);
+//  	for (int i = 0; i < 4; ++i) {
+//  		vertices[i] = params.mt * vertices[i];
+//  	}
+// 
+// 	return sm::is_point_in_convex(m_pos, vertices);
 }
 
 }

@@ -54,7 +54,7 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 
 void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams rp_child;
+	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
@@ -74,17 +74,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
-	int action = -1;
-	if (spr) 
-	{
-		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
-		const Actor* actor = rp.actor;
-		if (actor) {
-			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
-			action = comp_actor->GetAction();
-		}
-	}
-
+	int action = GetAction(spr, rp.actor);
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
@@ -118,45 +108,32 @@ bool ComplexSymbol::Update(const RenderParams& rp, float time)
 
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
+	bool use_cache = false;
+
 	++m_aabb_update_times;
 	if (m_size.IsValid() && m_aabb_update_times < AABB_UPDATE_FREQ) {
-		return m_size;
+		use_cache = true;
 	}
 	if (m_aabb_update_times >= AABB_UPDATE_FREQ) {
 		m_aabb_update_times = 0;
 	}
 
-	sm::vec2 scissor_sz = m_scissor.Size();
-	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
-		m_size = m_scissor;
+	if (actor && actor->IsAABBDirty()) {
+		use_cache = false;
+	}
+
+	if (use_cache) {
 		return m_size;
 	}
 
-	int action = -1;
-	if (spr) {
-		// todo actor's action
-		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
+	sm::rect aabb = CalcAABB(spr, actor);
+	if (actor && actor->IsAABBDirty()) {
+		// not reset cached aabb, other actors will use it
+		return aabb;
+	} else {
+		m_size = aabb;
+		return aabb;
 	}
-	const std::vector<Sprite*>& sprs = GetActionChildren(action);
-	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		BoundingDirtyVisitor visitor;
-		sprs[i]->Traverse(visitor, SprVisitorParams());
-		if (visitor.IsDirty()) {
-			m_size.MakeEmpty();
-			break;
-		}
-	}
-
-	if (m_size.IsValid()) {
-		return m_size;
-	}
-
-	m_size.MakeEmpty();
- 	for (int i = 0, n = sprs.size(); i < n; ++i) {
- 		sprs[i]->GetBounding()->CombineTo(m_size);
- 	}
-
-	return m_size;
 }
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
@@ -353,6 +330,64 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 		return true;
 	}
 	return false;
+}
+
+sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+{
+	sm::vec2 scissor_sz = m_scissor.Size();
+	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
+		return m_scissor;
+	}
+
+	sm::rect aabb;
+
+	int action = GetAction(spr, actor);
+	const std::vector<Sprite*>& sprs = GetActionChildren(action);
+
+// 	for (int i = 0, n = sprs.size(); i < n; ++i) {
+// 		BoundingDirtyVisitor visitor;
+// 		sprs[i]->Traverse(visitor, SprVisitorParams());
+// 		if (visitor.IsDirty()) {
+// 			m_size.MakeEmpty();
+// 			break;
+// 		}
+// 	}
+// 
+// 	if (m_size.IsValid()) {
+// 		return m_size;
+// 	}
+
+	for (int i = 0, n = sprs.size(); i < n; ++i) 
+	{
+		const Sprite* c_spr = sprs[i];
+		const Actor* c_actor = c_spr->QueryActor(actor);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+
+		S2_MAT mat = c_spr->GetLocalMat();
+		if (c_actor) {
+			mat = c_actor->GetLocalMat() * mat;
+		}
+		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymin));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymin));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymax));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymax));
+	}
+
+	return aabb;
+}
+
+int ComplexSymbol::GetAction(const Sprite* spr, const Actor* actor) const
+{
+	int action = -1;
+	if (spr) 
+	{
+		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
+		if (actor) {
+			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+			action = comp_actor->GetAction();
+		}
+	}
+	return action;
 }
 
 }

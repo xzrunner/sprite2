@@ -184,6 +184,8 @@ void Actor::SetCamera(const RenderCamera& camera)
 
 void Actor::InitFlags()
 {
+	m_flags = 0;
+
 	SetVisible(true);
 #ifdef S2_SPR_DEFAULT_EDITABLE
 	SetEditable(S2_SPR_DEFAULT_EDITABLE);

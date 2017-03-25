@@ -35,11 +35,22 @@ void TextboxActor::SetText(const std::string& text)
 
 	const TextboxSprite* text_spr = VI_DOWNCASTING<const TextboxSprite*>(GetSpr());
 
+	const Textbox& tb = text_spr->GetTextbox();
+
 	struct gtxt_label_style style;
-	_init_gtxt_label_style(&style, text_spr->GetTextbox());
+	_init_gtxt_label_style(&style, tb);
 	gtxt_get_label_size(m_text.c_str(), &style, &m_size.x, &m_size.y);
 
-	GetSpr()->SetBoundingDirty(true);
+	// set aabb dirty
+	if (m_size.y > tb.height)
+	{
+		SetAABBOverflow(true);
+		const Actor* curr = GetParent();
+		while (curr) {
+			curr->SetAABBDirty(true);
+			curr = curr->GetParent();
+		}
+	}
 }
 
 }

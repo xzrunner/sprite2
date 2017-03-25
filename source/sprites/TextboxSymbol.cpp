@@ -35,7 +35,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child;
+	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
@@ -95,16 +95,17 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-	int w, h;
-	if (actor) {
-		const sm::vec2& sz = VI_DOWNCASTING<const TextboxActor*>(actor)->GetSize();
-		w = sz.x;
-		h = sz.y;
-	} else {
-		w = m_tb.width;
-		h = m_tb.height;
+	if (!actor) {
+		return sm::rect(m_tb.width, m_tb.height);
 	}
-	return sm::rect(w, h);
+
+	const sm::vec2& sz = VI_DOWNCASTING<const TextboxActor*>(actor)->GetSize();
+	sm::rect aabb;
+	aabb.xmin = -m_tb.width * 0.5f;
+	aabb.ymax = m_tb.height * 0.5f;
+	aabb.xmax = aabb.xmin + sz.x;
+	aabb.ymin = aabb.ymax - sz.y;
+	return aabb;
 }
 
 }

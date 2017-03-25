@@ -39,7 +39,7 @@ void SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child;
+	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}

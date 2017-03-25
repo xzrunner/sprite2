@@ -35,6 +35,8 @@ public:
 
 public:
 	RenderParams();
+	RenderParams(const RenderParams& params);
+	RenderParams& operator = (const RenderParams& params);
 
 private:
 	static const uint32_t FLAG_CHANGE_SHADER        = 0x00000001;

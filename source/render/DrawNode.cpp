@@ -48,7 +48,6 @@ void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, 
 bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child)
 {
 	if (!spr) {
-		child = rp;
 		return true;
 	}
 	if (!spr->IsVisible()) {

@@ -39,7 +39,7 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (spr) {
-		RenderParams rp_child;
+		RenderParams rp_child(rp);
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
 			VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(rp_child);
 		}

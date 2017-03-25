@@ -422,7 +422,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		curr = curr->GetParent();
 	}
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	while (path.size() > 1) {
 		const Actor* curr = path.top();
 		path.pop();

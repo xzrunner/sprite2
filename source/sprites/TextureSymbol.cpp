@@ -32,7 +32,7 @@ int TextureSymbol::Type() const
 
 void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams rp_child;
+	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}

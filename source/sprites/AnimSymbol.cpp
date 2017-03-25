@@ -58,7 +58,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
 	if (spr) {
-		RenderParams rp_child;
+		RenderParams rp_child(rp);
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
 			const AnimCurr& curr = anim->GetAnimCurr(rp.actor);

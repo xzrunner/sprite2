@@ -21,7 +21,7 @@ bool AnchorSprite::Update(const RenderParams& rp)
 	const Actor* actor = rp.actor;
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
-		RenderParams rp_child = rp;
+		RenderParams rp_child(rp);
 		rp_child.mt = GetLocalMat() * rp.mt;
 		rp_child.shader = GetShader() * rp.shader;
 		rp_child.actor = anchor->GetSpr()->QueryActor(actor);

@@ -92,7 +92,7 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.color = spr->GetColor() * rp.color;
 
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
@@ -105,11 +105,9 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
 		p3d_rp->mat = rp_child.mt;
 		p3d_rp->ct = rp_child.color;
-		S2_MAT mt;
+		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		if (rp.actor) {
-			mt = rp.actor->GetLocalMat() * rp_child.mt;
-		} else {
-			mt = p3d_spr->GetLocalMat() * rp_child.mt;
+			mt = rp.actor->GetLocalMat() * mt;
 		}
 #ifdef S2_MATRIX_FIX
 		p3d->mat[0] = mt.x[0] * sm::MatrixFix::SCALE;
@@ -135,10 +133,9 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
 
 	if (p3d_spr->IsLocalModeDraw()) {
+		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		if (rp.actor) {
 			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-		} else {
-			rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		}
 	}
 	p3d_spr->Draw(rp_child);

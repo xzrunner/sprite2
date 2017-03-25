@@ -82,9 +82,13 @@ bool AnimSprite::Update(const RenderParams& rp)
 	const Actor* actor = rp.actor;
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
+	if (actor) {
+		rp_child.mt = actor->GetLocalMat() * rp_child.mt;
+		rp_child.shader = actor->GetShader() * rp_child.shader;
+	}
 	return curr.Update(rp_child, m_loop, m_interval, m_fps);
 }
 

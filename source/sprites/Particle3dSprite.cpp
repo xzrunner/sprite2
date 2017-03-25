@@ -1,5 +1,6 @@
 #include "Particle3dSprite.h"
 #include "Particle3dSymbol.h"
+#include "S2_Actor.h"
 
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
@@ -122,6 +123,9 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 
 		float mt[6];
 		S2_MAT inner_mat = GetLocalMat();
+		if (rp.actor) {
+			inner_mat = rp.actor->GetLocalMat() * inner_mat;
+		}
 #ifdef S2_MATRIX_FIX
 		mt[0] = inner_mat.x[0] * sm::MatrixFix::SCALE_INV;
 		mt[1] = inner_mat.x[1] * sm::MatrixFix::SCALE_INV;

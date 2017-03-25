@@ -39,9 +39,13 @@ bool ComplexSprite::Update(const RenderParams& rp)
 {
 	const Actor* actor = rp.actor;
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
+	if (rp.actor) {
+		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
+	}
 
 	bool dirty = false;
 	int action = m_action;

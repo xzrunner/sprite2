@@ -527,8 +527,6 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 		return -2;
 	}
 
-	S2_MAT mat = p_actor->GetLocalMat();
-
 	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
 	anchor_spr->AddAnchor(c_actor, p_actor);
 	return 0;

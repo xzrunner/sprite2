@@ -21,7 +21,7 @@ void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iteratio
 	DrawGaussianBlur::DrawFromRT(rt, spr->GetPosition());
 	RT->Return(rt);
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.SetChangeShader(false);
 	rp_child.SetDisableRenderDraw(true);
 

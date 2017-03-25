@@ -3,6 +3,7 @@
 #include "S2_Mesh.h"
 #include "RenderParams.h"
 #include "SymbolVisitor.h"
+#include "S2_Actor.h"
 
 #include <stddef.h>
 
@@ -72,9 +73,13 @@ void MeshSprite::OnMessage(Message msg, const Actor* actor)
 
 bool MeshSprite::Update(const RenderParams& rp) 
 {
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
+	if (rp.actor) {
+		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
+	}
 
 	if (m_base) {
 		return const_cast<Symbol*>(m_base)->Update(rp_child, 0);

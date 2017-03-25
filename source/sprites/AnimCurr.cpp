@@ -152,7 +152,7 @@ bool AnimCurr::Update(const RenderParams& rp, bool loop, float interval, int fps
 	}
 
 	// update children
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* spr = m_slots[m_curr[i]];
@@ -174,11 +174,11 @@ bool AnimCurr::Update(const RenderParams& rp, bool loop, float interval, int fps
 
 void AnimCurr::Draw(const RenderParams& rp) const
 {
-	RenderParams child_rp = rp;
+	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* child = m_slots[m_curr[i]];
-		child_rp.actor = child->QueryActor(rp.actor);
-		DrawNode::Draw(child, child_rp);
+		rp_child.actor = child->QueryActor(rp.actor);
+		DrawNode::Draw(child, rp_child);
 	}
 }
 

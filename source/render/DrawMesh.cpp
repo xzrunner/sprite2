@@ -281,7 +281,7 @@ void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbo
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt.Identity();
 	DrawNode::Draw(sym, rp_child);
 

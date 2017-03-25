@@ -1,6 +1,7 @@
 #include "MaskSprite.h"
 #include "MaskSymbol.h"
 #include "RenderParams.h"
+#include "S2_Actor.h"
 
 namespace s2
 {
@@ -34,9 +35,13 @@ bool MaskSprite::Update(const RenderParams& rp)
 {
 	bool dirty = false;
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt = GetLocalMat() * rp.mt;
 	rp_child.shader = GetShader() * rp.shader;
+	if (rp.actor) {
+		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
+	}
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {

@@ -43,7 +43,7 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.color = spr->GetColor() * rp.color;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

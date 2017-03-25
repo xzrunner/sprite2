@@ -90,7 +90,7 @@ void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const Rende
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	const sm::vec2& offset = spr->GetPosition();
 #ifdef S2_MATRIX_FIX
 	rp_child.mt.Translate(-offset.x, -offset.y);

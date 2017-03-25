@@ -94,7 +94,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 bool ComplexSymbol::Update(const RenderParams& rp, float time)
 {
 	bool ret = false;
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	for (int i = 0, n = m_children.size(); i < n; ++i) 
 	{
 		Sprite* child = m_children[i];

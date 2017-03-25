@@ -144,7 +144,7 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
 	mt = mt * rp.mt;
 
- 	RenderParams rp_child = rp;
+ 	RenderParams rp_child(rp);
  	rp_child.mt = mt;
  
 	BlendMode blend = BM_NULL;
@@ -179,7 +179,7 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 {
 	S2_MAT mt = _mt * rp.mt;
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	rp_child.mt = mt;
 
 	BlendMode blend = BM_NULL;
@@ -230,7 +230,7 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams rp_child = rp;
+	RenderParams rp_child(rp);
 	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
 	rp_child.mt = mt.Inverted();
 	DrawSprImpl(spr, rp_child);
@@ -319,18 +319,18 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	{
 		const RenderFilter* rf = rs.GetFilter();
 
-		RenderParams t = rp;
-		t.shader.SetFilter(rf);
-		t.camera = rc;
+		RenderParams rp_child(rp);
+		rp_child.shader.SetFilter(rf);
+		rp_child.camera = rc;
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
 			int itrs = static_cast<const RFGaussianBlur*>(rf)->GetIterations();
-			DrawGaussianBlur::Draw(spr, t, itrs);
+			DrawGaussianBlur::Draw(spr, rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
 			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
-			DrawOuterGlow::Draw(spr, t, itrs);
+			DrawOuterGlow::Draw(spr, rp_child, itrs);
 		} 
 		else 
 		{
@@ -349,7 +349,7 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 				}
 				break;
 			}
-			DrawSprImplFinal(spr, t);
+			DrawSprImplFinal(spr, rp_child);
 		}
 	} 
 	else 
@@ -357,9 +357,9 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		if (rp.IsChangeShader()) {
 			mgr->SetShader(sl::SPRITE2);
 		}
-		RenderParams t = rp;
-		t.camera = rc;
-		DrawSprImplFinal(spr, t);
+		RenderParams rp_child(rp);
+		rp_child.camera = rc;
+		DrawSprImplFinal(spr, rp_child);
 	}
 }
 

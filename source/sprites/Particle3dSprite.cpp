@@ -2,6 +2,8 @@
 #include "Particle3dSymbol.h"
 #include "S2_Actor.h"
 #include "UpdateParams.h"
+#include "P3dRenderParams.h"
+#include "RenderParams.h"
 
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
@@ -31,7 +33,6 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	, m_alone(spr.m_alone)
 	, m_reuse(spr.m_reuse)
 	, m_start_radius(spr.m_start_radius)
-	, m_rp(spr.m_rp)
 {
 	CreateSpr();
 }
@@ -45,7 +46,6 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	m_alone          = spr.m_alone;
 	m_reuse          = spr.m_reuse;
 	m_start_radius   = spr.m_start_radius;
-	m_rp             = spr.m_rp;
 
 	return *this;
 }
@@ -165,12 +165,15 @@ bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 
 void Particle3dSprite::Draw(const RenderParams& rp) const
 {
-	if (!m_alone && m_spr) {
-		m_rp.mat = rp.mt;
-		m_rp.ct  = rp.color;
-		m_rp.p3d = m_spr;
-		p3d_emitter_draw(m_spr->et, &m_rp);
+	if (m_alone || !m_spr) {
+		return;
 	}
+
+	P3dRenderParams p3d_rp;
+	p3d_rp.mt    = rp.mt;
+	p3d_rp.rc    = rp.color;
+	p3d_rp.local = m_spr->local_mode_draw;
+	p3d_emitter_draw(m_spr->et, &p3d_rp);
 }
 
 void Particle3dSprite::SetOuterMatrix(const S2_MAT& mat) const

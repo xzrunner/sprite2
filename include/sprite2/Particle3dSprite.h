@@ -9,6 +9,8 @@ struct p3d_sprite;
 namespace s2
 {
 
+class RenderParams;
+
 class Particle3dSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
@@ -70,8 +72,6 @@ protected:
 	bool m_reuse;
 
 	float m_start_radius;
-
-	mutable P3dRenderParams m_rp;
 
 	VI_DUMMY_FUNC
 

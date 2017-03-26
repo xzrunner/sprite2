@@ -103,52 +103,55 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 {
 	if (!m_spr) {
 		return false;
-	} else if (m_alone) {
+	} 
+	
+	// update outside
+	if (m_alone) {
 		p3d_emitter* et = m_spr->et;
 
 		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
 		cfg->start_radius = m_start_radius;
 
 		return false;
-	} else {
-		p3d_emitter* et = m_spr->et;
+	} 
+	
+	p3d_emitter* et = m_spr->et;
 
-		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
-		cfg->start_radius = m_start_radius;
+	p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
+	cfg->start_radius = m_start_radius;
 
-		float time = Particle3d::Instance()->GetTime();
-		assert(et->time <= time);
-		if (et->time == time) {
-			return false;
-		}
-
-		UpdateParams up_child(up);
-		up_child.Push(this);
-
-		float mt[6];
-		const S2_MAT& inner_mat = up_child.GetPrevMat();
-#ifdef S2_MATRIX_FIX
-		mt[0] = inner_mat.x[0] * sm::MatrixFix::SCALE_INV;
-		mt[1] = inner_mat.x[1] * sm::MatrixFix::SCALE_INV;
-		mt[2] = inner_mat.x[2] * sm::MatrixFix::SCALE_INV;
-		mt[3] = inner_mat.x[3] * sm::MatrixFix::SCALE_INV;
-		mt[4] = inner_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-		mt[5] = inner_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-#else
-		mt[0] = inner_mat.x[0];
-		mt[1] = inner_mat.x[1];
-		mt[2] = inner_mat.x[4];
-		mt[3] = inner_mat.x[5];
-		mt[4] = inner_mat.x[12];
-		mt[5] = inner_mat.x[13];
-#endif // S2_MATRIX_FIX
-		
-		float dt = time - et->time;
-		p3d_emitter_update(et, dt, mt);
-		et->time = time;
-
-		return true;
+	float time = Particle3d::Instance()->GetTime();
+	assert(et->time <= time);
+	if (et->time == time) {
+		return false;
 	}
+
+	UpdateParams up_child(up);
+	up_child.Push(this);
+
+	float mt[6];
+	const S2_MAT& world_mat = up_child.GetPrevMat();
+#ifdef S2_MATRIX_FIX
+	mt[0] = world_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mt[1] = world_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mt[2] = world_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mt[3] = world_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mt[4] = world_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mt[5] = world_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
+	mt[0] = world_mat.x[0];
+	mt[1] = world_mat.x[1];
+	mt[2] = world_mat.x[4];
+	mt[3] = world_mat.x[5];
+	mt[4] = world_mat.x[12];
+	mt[5] = world_mat.x[13];
+#endif // S2_MATRIX_FIX
+	
+	float dt = time - et->time;
+	p3d_emitter_update(et, dt, mt);
+	et->time = time;
+
+	return true;
 }
 
 bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)

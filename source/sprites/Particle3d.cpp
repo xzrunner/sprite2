@@ -97,8 +97,10 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	// todo color trans
 
 	if (rp->p3d && rp->p3d->local_mode_draw) {
+		// local mode, use node's mat
 		rp_child.mt = rp->mat;
 	} else {
+		// no local mode, use particle's mat
 #ifdef S2_MATRIX_FIX
 		sm::MatrixFix _mat;
 		_mat.x[0] = mat[0] * sm::MatrixFix::SCALE;
@@ -116,7 +118,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[12]= mat[4];
 		_mat.x[13]= mat[5];
 #endif // S2_MATRIX_FIX
-		rp_child.mt = _mat * rp->mat;
+		rp_child.mt = _mat;
 	}
 
 	if (spr) {

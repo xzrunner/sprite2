@@ -81,9 +81,7 @@ bool AnimSprite::Update(const UpdateParams& up)
 {
 	const Actor* actor = up.GetActor();
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
-	UpdateParams up_child(up);
-	up_child.Push(this);
-	return curr.Update(up_child, this, m_loop, m_interval, m_fps);
+	return curr.Update(up, this, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::SetFrame(const UpdateParams& up, int frame, bool force)

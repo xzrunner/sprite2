@@ -21,7 +21,7 @@ Anim2Sprite* Anim2Sprite::Clone() const
 	return new Anim2Sprite(*this);
 }
 
-bool Anim2Sprite::Update(const RenderParams& rp)
+bool Anim2Sprite::Update(const UpdateParams& up)
 {
 	bool ret = m_curr.Update();
 	if (ret) {
@@ -30,7 +30,7 @@ bool Anim2Sprite::Update(const RenderParams& rp)
 	return ret;
 }
 
-bool Anim2Sprite::SetFrame(int frame, const Actor* actor, bool force)
+bool Anim2Sprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;

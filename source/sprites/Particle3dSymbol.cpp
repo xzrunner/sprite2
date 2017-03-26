@@ -48,7 +48,7 @@ Particle3dSymbol::~Particle3dSymbol()
 	p3d_emitter_release(m_et);
 }
 
-//bool Particle3dSymbol::Update(const RenderParams& rp)
+//bool Particle3dSymbol::Update(const UpdateParams& up)
 //{
 //	float time = Particle3d::Instance()->GetTime();
 //	assert(m_et->time <= time);

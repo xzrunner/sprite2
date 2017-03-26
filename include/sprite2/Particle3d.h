@@ -29,8 +29,8 @@ public:
 class Particle3d
 {
 public:
-	bool Update(float dt);
-	void Draw() const;
+	bool BufferUpdate(float dt);
+	void BufferDraw(float x = 0, float y = 0, float scale = 1) const;
 
 	void BufferClear();
 

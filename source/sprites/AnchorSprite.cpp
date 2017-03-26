@@ -2,42 +2,49 @@
 #include "AnchorActor.h"
 #include "SprVisitorParams.h"
 #include "ActorFactory.h"
-#include "RenderParams.h"
+#include "UpdateParams.h"
 
 namespace s2
 {
 
-void AnchorSprite::OnMessage(Message msg, const Actor* actor)
+void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
+		UpdateParams up_child(up);
+		up_child.Push(this);
 		const Sprite* anchor_spr = anchor->GetSpr();
-		const_cast<Sprite*>(anchor_spr)->OnMessage(msg, anchor_spr->QueryActor(actor));
+		up_child.SetActor(anchor_spr->QueryActor(actor));
+		const_cast<Sprite*>(anchor_spr)->OnMessage(up_child, msg);
 	}
 }
 
-bool AnchorSprite::Update(const RenderParams& rp)
+bool AnchorSprite::Update(const UpdateParams& up)
 {
-	const Actor* actor = rp.actor;
+	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
-		RenderParams rp_child(rp);
-		rp_child.mt = GetLocalMat() * rp.mt;
-		rp_child.shader = GetShader() * rp.shader;
-		rp_child.actor = anchor->GetSpr()->QueryActor(actor);
-		return const_cast<Sprite*>(anchor->GetSpr())->Update(rp_child);
+		UpdateParams up_child(up);
+		up_child.Push(this);
+		up_child.SetActor(anchor->GetSpr()->QueryActor(actor));
+		return const_cast<Sprite*>(anchor->GetSpr())->Update(up_child);
 	} else {
 		return false;
 	}
 }
 
-bool AnchorSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool AnchorSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	bool dirty = false;
+	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
+		UpdateParams up_child(up);
+		up_child.Push(this);
 		const Sprite* anchor_spr = anchor->GetSpr();
-		const_cast<Sprite*>(anchor_spr)->SetFrame(frame, anchor_spr->QueryActor(actor));
+		up_child.SetActor(anchor_spr->QueryActor(actor));
+		const_cast<Sprite*>(anchor_spr)->SetFrame(up_child, frame);
 		dirty = true;
 	}
 	return dirty;

@@ -5,6 +5,8 @@
 #include "Particle3d.h"
 #include "Trail.h"
 
+#include "UpdateParams.h"
+
 namespace s2
 {
 
@@ -27,7 +29,7 @@ void SprTimer::Update(float dt)
 {
 	Animation::Instance()->Update(dt);
 	Particle2d::Instance()->Update(dt);
-	Particle3d::Instance()->Update(dt);
+	Particle3d::Instance()->BufferUpdate(dt);
 	Trail::Instance()->Update(dt);
 }
 

@@ -4,6 +4,7 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "SymType.h"
+#include "UpdateParams.h"
 
 #include "TrailSymbol.h"
 #include "TrailSprite.h"
@@ -30,15 +31,15 @@ Particle3d::Particle3d()
 	Init();
 }
 
-bool Particle3d::Update(float dt)
+bool Particle3d::BufferUpdate(float dt)
 {
 	m_time += dt;
 	return p3d_buffer_update(m_time);
 }
 
-void Particle3d::Draw() const
+void Particle3d::BufferDraw(float x, float y, float scale) const
 {
-	p3d_buffer_draw(0, 0, 1);
+	p3d_buffer_draw(x, y, scale);
 }
 
 void Particle3d::BufferClear()
@@ -124,7 +125,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	} else if (sym) {
 		Symbol* s2_sym = static_cast<Symbol*>(sym);
 		DrawNode::Draw(s2_sym, rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
-		s2_sym->Update(rp_child, time);
+		s2_sym->Update(UpdateParams(), time);
 	}
 
 	// todo record
@@ -143,13 +144,15 @@ update_func(void* spr, float x, float y)
 	}
 
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	RenderParams rp;
+	UpdateParams up;
+	S2_MAT mat;
 #ifdef S2_MATRIX_FIX
-	rp.mt.Translate(x, y);
+	mat.Translate(x, y);
 #else
-	rp.mt = sm::mat4::Translated(x, y, 0);
+	mat = sm::mat4::Translated(x, y, 0);
 #endif // S2_MATRIX_FIX
-	s2_spr->Update(rp);
+	up.SetPrevMat(mat);
+	s2_spr->Update(up);
 }
 
 static void 

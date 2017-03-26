@@ -19,7 +19,7 @@
 namespace s2
 {
 
-class RenderParams;
+class UpdateParams;
 class Symbol;
 class BoundingBox;
 class SprGeo;
@@ -48,10 +48,10 @@ public:
 	virtual void AddReference() const;
 	virtual void RemoveReference() const;
 
-	virtual void OnMessage(Message msg, const Actor* actor) {}
+	virtual void OnMessage(const UpdateParams& up, Message msg) {}
 	
- 	virtual bool Update(const RenderParams& rp) { return false; }
-	virtual bool SetFrame(int frame, const Actor* actor, bool force = false) { return false; }
+ 	virtual bool Update(const UpdateParams& up) { return false; }
+	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false) { return false; }
 	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const { return NULL; }
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const { return NULL; }
 

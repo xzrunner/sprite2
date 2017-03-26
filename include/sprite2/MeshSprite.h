@@ -27,9 +27,9 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(Message msg, const Actor* actor);
-	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual void OnMessage(const UpdateParams& up, Message msg);
+	virtual bool Update(const UpdateParams& up);
+	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 
 	void Lerp(const MeshSprite* begin, const MeshSprite* end, float process);

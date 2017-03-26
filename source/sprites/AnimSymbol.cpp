@@ -69,10 +69,10 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-bool AnimSymbol::Update(const RenderParams& rp, float time)
+bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
 	m_curr.SetTime(time);
-	return m_curr.Update(rp);
+	return m_curr.Update(up, false);
 }
 
 sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor) const

@@ -76,10 +76,10 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 //  	}
 }
 
-bool MeshSymbol::Update(const RenderParams& rp, float time)
+bool MeshSymbol::Update(const UpdateParams& up, float time)
 {
  	if (m_mesh) {
- 		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(rp, time);
+ 		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(up, time);
  	} else {
 		return false;
 	}

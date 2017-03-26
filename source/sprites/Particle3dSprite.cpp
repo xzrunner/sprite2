@@ -1,6 +1,7 @@
 #include "Particle3dSprite.h"
 #include "Particle3dSymbol.h"
 #include "S2_Actor.h"
+#include "UpdateParams.h"
 
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
@@ -79,7 +80,7 @@ Particle3dSprite* Particle3dSprite::Clone() const
 	return new Particle3dSprite(*this);
 }
 
-void Particle3dSprite::OnMessage(Message msg, const Actor* actor)
+void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	if (!m_spr) {
 		return;
@@ -98,10 +99,10 @@ void Particle3dSprite::OnMessage(Message msg, const Actor* actor)
 	}
 }
 
-bool Particle3dSprite::Update(const RenderParams& rp)
+bool Particle3dSprite::Update(const UpdateParams& up)
 {
 	if (!m_spr) {
-		return true;
+		return false;
 	} else if (m_alone) {
 		p3d_emitter* et = m_spr->et;
 
@@ -121,11 +122,11 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 			return false;
 		}
 
+		UpdateParams up_child(up);
+		up_child.Push(this);
+
 		float mt[6];
-		S2_MAT inner_mat = GetLocalMat();
-		if (rp.actor) {
-			inner_mat = rp.actor->GetLocalMat() * inner_mat;
-		}
+		const S2_MAT& inner_mat = up_child.GetPrevMat();
 #ifdef S2_MATRIX_FIX
 		mt[0] = inner_mat.x[0] * sm::MatrixFix::SCALE_INV;
 		mt[1] = inner_mat.x[1] * sm::MatrixFix::SCALE_INV;
@@ -150,12 +151,12 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 	}
 }
 
-bool Particle3dSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
-	Update(RenderParams());
+	Update(up);
 	return true;
 }
 
@@ -289,6 +290,34 @@ void Particle3dSprite::SetLocalModeDraw(bool local)
 	if (m_spr) {
 		m_spr->local_mode_draw = local;
 	}
+}
+
+bool Particle3dSprite::IsEmitterFinished() const
+{
+	if (m_spr) {
+		return p3d_emitter_is_finished(m_spr->et);
+	} else {
+		return true;
+	}
+}
+
+void Particle3dSprite::EmitterStart()
+{
+	if (m_spr) {
+		p3d_emitter_start(m_spr->et);
+	}
+}
+
+void Particle3dSprite::EmitterStop()
+{
+	if (m_spr) {
+		p3d_emitter_stop(m_spr->et);
+	}
+}
+
+void Particle3dSprite::EmitterUpdate(float dt)
+{
+	// todo
 }
 
 }

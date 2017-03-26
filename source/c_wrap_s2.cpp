@@ -10,6 +10,7 @@
 #include "ActorLUT.h"
 #include "PointQueryVisitor.h"
 #include "RenderParams.h"
+#include "UpdateParams.h"
 #include "DrawNode.h"
 #include "RenderFilter.h"
 #include "BoundingBox.h"
@@ -32,6 +33,7 @@
 #include "Scale9Sprite.h"
 #include "AnchorSprite.h"
 #include "AnchorActor.h"
+#include "Particle3dSprite.h"
 #include "OrthoCamera.h"
 
 #include <shaderlab/ShaderMgr.h>
@@ -377,6 +379,84 @@ void s2_spr_anim2_set_static_time(void* spr, int time)
 }
 
 extern "C"
+void s2_spr_p3d_set_local(void* spr, bool local) 
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return;
+	}
+
+	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
+	p3d_spr->SetLocalModeDraw(local);
+}
+
+extern "C"
+void s2_spr_p3d_set_loop(void* spr, bool loop)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return;
+	}
+
+	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
+	p3d_spr->SetLoop(loop);
+}
+
+extern "C"
+bool s2_spr_p3d_is_finished(const void* spr) 
+{
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return true;
+	}
+
+	const Particle3dSprite* p3d_spr = static_cast<const Particle3dSprite*>(s2_spr);
+	return p3d_spr->IsEmitterFinished();
+}
+
+extern "C"
+void s2_spr_p3d_start(void* spr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return;
+	}
+
+	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
+	p3d_spr->EmitterStart();
+}
+
+extern "C"
+void s2_spr_p3d_stop(void* spr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return;
+	}
+
+	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
+	p3d_spr->EmitterStop();
+}
+
+extern "C"
+void s2_spr_p3d_update(void* spr, float dt)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
+		return;
+	}
+
+	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
+	p3d_spr->EmitterUpdate(dt);
+}
+
+extern "C"
+void s2_spr_p3d_buffer_draw(float x, float y, float scale)
+{
+	Particle3d::Instance()->BufferDraw(x, y, scale);
+}
+
+extern "C"
 void s2_spr_set_dtex_enable(void* spr, bool enable)
 {
 	static_cast<Sprite*>(spr)->SetDTexDisable(!enable);
@@ -443,16 +523,14 @@ extern "C"
 void s2_actor_update(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
-	RenderParams rp;
-	rp.actor = s2_actor;
-	const_cast<Sprite*>(s2_sprite)->Update(rp);
+	const_cast<Sprite*>(s2_sprite)->Update(UpdateParams(s2_actor));
 }
 
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_sprite)->SetFrame(frame, s2_actor, true);
+	const_cast<Sprite*>(s2_sprite)->SetFrame(UpdateParams(s2_actor), frame, true);
 }
 
 extern "C"
@@ -608,12 +686,6 @@ int s2_get_actor_count() {
 extern "C"
 void* s2_actor_get_spr(void* actor) {
 	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
-}
-
-extern "C"
-void s2_actor_print_path(void* actor) {
-// 	Actor* s2_actor = static_cast<Actor*>(actor);
-// 	std::cout << s2_actor->GetTreePath() << '\n';
 }
 
 extern "C"

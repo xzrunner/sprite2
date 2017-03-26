@@ -3,6 +3,7 @@
 #include "AnimCurr.h"
 #include "AnimSymbol.h"
 #include "S2_Sprite.h"
+#include "UpdateParams.h"
 
 #include <assert.h>
 
@@ -26,7 +27,7 @@ AnimActor::AnimActor(const Sprite* spr, const Actor* parent)
 
 	const AnimSymbol* anim_sym = VI_DOWNCASTING<const AnimSymbol*>(spr->GetSymbol());
 	m_curr->SetAnimCopy(&const_cast<AnimSymbol*>(anim_sym)->GetCopy());
-	m_curr->Start(this);
+	m_curr->Start(UpdateParams(parent), spr);
 }
 
 AnimActor::~AnimActor()

@@ -5,6 +5,7 @@
 #include "S2_Sprite.h"
 #include "BoundingBox.h"
 #include "RenderParams.h"
+#include "UpdateParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
 #include "FixActorPathVisitor.h"
@@ -91,15 +92,15 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-bool ComplexSymbol::Update(const RenderParams& rp, float time)
+bool ComplexSymbol::Update(const UpdateParams& up, float time)
 {
 	bool ret = false;
-	RenderParams rp_child(rp);
+	UpdateParams up_child(up);
 	for (int i = 0, n = m_children.size(); i < n; ++i) 
 	{
 		Sprite* child = m_children[i];
-		rp_child.actor = child->QueryActor(rp.actor);
-		if (child->Update(rp_child)) {
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(up_child)) {
 			ret = true;
 		}
 	}

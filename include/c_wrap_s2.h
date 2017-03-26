@@ -55,15 +55,29 @@ void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx,
 bool  s2_spr_point_test(const void* spr, float x, float y);
 void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
 
+// complex
 bool  s2_spr_has_action(const void* spr, const char* name);
 
 bool  s2_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h);
 bool  s2_spr_set_scissor(void* spr, float x, float y, float w, float h);
 
+// scale9
 void  s2_spr_scale9_resize(void* spr, int w, int h);
+
+// textbox
 void  s2_spr_textbox_reset_time(void* spr);
 
+// anim2
 void  s2_spr_anim2_set_static_time(void* spr, int time);
+
+// particle3d
+void  s2_spr_p3d_set_local(void* spr, bool local);
+void  s2_spr_p3d_set_loop(void* spr, bool loop);
+bool  s2_spr_p3d_is_finished(const void* spr);
+void  s2_spr_p3d_start(void* spr);
+void  s2_spr_p3d_stop(void* spr);
+void  s2_spr_p3d_update(void* spr, float dt);
+void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 
 void  s2_spr_set_dtex_enable(void* spr, bool enable);
 void  s2_spr_set_dtex_force_cached(void* spr, bool cache);
@@ -96,7 +110,6 @@ void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();
 
 void* s2_actor_get_spr(void* actor);
-void  s2_actor_print_path(void* actor);
 
 void  s2_actor_set_pos(void* actor, float x, float y);
 void  s2_actor_get_pos(void* actor, float* x, float* y);

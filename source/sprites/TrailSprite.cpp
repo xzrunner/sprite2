@@ -1,5 +1,6 @@
 #include "TrailSprite.h"
 #include "TrailSymbol.h"
+#include "UpdateParams.h"
 #include "RenderParams.h"
 #include "Trail.h"
 
@@ -70,7 +71,7 @@ TrailSprite* TrailSprite::Clone() const
 	return new TrailSprite(*this);
 }
 
-void TrailSprite::OnMessage(Message msg, const Actor* actor)
+void TrailSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	switch (msg)
 	{
@@ -84,7 +85,7 @@ void TrailSprite::OnMessage(Message msg, const Actor* actor)
 	}
 }
 
-bool TrailSprite::Update(const RenderParams& rp)
+bool TrailSprite::Update(const UpdateParams& up)
 {
 	float time = Trail::Instance()->GetTime();
 	assert(m_et->time <= time);
@@ -97,7 +98,7 @@ bool TrailSprite::Update(const RenderParams& rp)
 	if (m_local && !m_in_p3d) {
 		pos = GetPosition();
 	} else {
-		pos = rp.mt * GetPosition();
+		pos = up.GetPrevMat() * GetPosition();
 	}
 	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
 	m_et->time = time;
@@ -105,15 +106,13 @@ bool TrailSprite::Update(const RenderParams& rp)
 	return true;
 }
 
-bool TrailSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool TrailSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
 	}
 
-	RenderParams rp;
-	rp.actor = actor;
-	Update(rp);
+	Update(up);
 	return true;
 }
 

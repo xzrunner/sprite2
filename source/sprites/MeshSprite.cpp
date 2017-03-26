@@ -1,7 +1,7 @@
 #include "MeshSprite.h"
 #include "MeshSymbol.h"
 #include "S2_Mesh.h"
-#include "RenderParams.h"
+#include "UpdateParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
 
@@ -66,30 +66,24 @@ MeshSprite* MeshSprite::Clone() const
 	return new MeshSprite(*this);
 }
 
-void MeshSprite::OnMessage(Message msg, const Actor* actor)
+void MeshSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	
 }
 
-bool MeshSprite::Update(const RenderParams& rp) 
+bool MeshSprite::Update(const UpdateParams& up) 
 {
-	RenderParams rp_child(rp);
-	rp_child.mt = GetLocalMat() * rp.mt;
-	rp_child.shader = GetShader() * rp.shader;
-	if (rp.actor) {
-		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
-	}
-
+	UpdateParams up_child(up);
+	up_child.Push(this);
 	if (m_base) {
-		return const_cast<Symbol*>(m_base)->Update(rp_child, 0);
+		return const_cast<Symbol*>(m_base)->Update(up_child, 0);
 	} else {
 		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(rp_child, 0);
+		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(up_child, 0);
 	}
 }
 
-bool MeshSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool MeshSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;

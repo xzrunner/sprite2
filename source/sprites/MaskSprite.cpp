@@ -1,6 +1,6 @@
 #include "MaskSprite.h"
 #include "MaskSymbol.h"
-#include "RenderParams.h"
+#include "UpdateParams.h"
 #include "S2_Actor.h"
 
 namespace s2
@@ -20,46 +20,47 @@ MaskSprite* MaskSprite::Clone() const
 	return new MaskSprite(*this);
 }
 
-void MaskSprite::OnMessage(Message msg, const Actor* actor)
+void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
+
+	UpdateParams up_child(up);
+	up_child.Push(this);
+
 	if (const Sprite* base = sym->GetBase()) {
-		const_cast<Sprite*>(base)->OnMessage(msg, base->QueryActor(actor));
+		up_child.SetActor(base->QueryActor(up.GetActor()));
+		const_cast<Sprite*>(base)->OnMessage(up_child, msg);
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		const_cast<Sprite*>(mask)->OnMessage(msg, mask->QueryActor(actor));
+		up_child.SetActor(mask->QueryActor(up.GetActor()));
+		const_cast<Sprite*>(mask)->OnMessage(up_child, msg);
 	}
 }
 
-bool MaskSprite::Update(const RenderParams& rp)
+bool MaskSprite::Update(const UpdateParams& up)
 {
 	bool dirty = false;
 
-	RenderParams rp_child(rp);
-	rp_child.mt = GetLocalMat() * rp.mt;
-	rp_child.shader = GetShader() * rp.shader;
-	if (rp.actor) {
-		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
-	}
+	UpdateParams up_child(up);
+	up_child.Push(this);
 
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		rp_child.actor = base->QueryActor(rp.actor);
-		if (const_cast<Sprite*>(base)->Update(rp_child)) {
+		up_child.SetActor(base->QueryActor(up.GetActor()));
+		if (const_cast<Sprite*>(base)->Update(up_child)) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		rp_child.actor = mask->QueryActor(rp.actor);
-		if (const_cast<Sprite*>(mask)->Update(rp_child)) {
+		up_child.SetActor(mask->QueryActor(up.GetActor()));
+		if (const_cast<Sprite*>(mask)->Update(up_child)) {
 			dirty = true;
 		}
 	}
 	return dirty;
 }
 
-bool MaskSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool MaskSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !IsForceUpFrame() && !GetName().empty()) {
 		return false;
@@ -67,14 +68,19 @@ bool MaskSprite::SetFrame(int frame, const Actor* actor, bool force)
 
 	bool dirty = false;
 
+	UpdateParams up_child(up);
+	up_child.Push(this);
+
 	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
 	if (const Sprite* base = sym->GetBase()) {
-		if (const_cast<Sprite*>(base)->SetFrame(frame, base->QueryActor(actor))) {
+		up_child.SetActor(base->QueryActor(up.GetActor()));
+		if (const_cast<Sprite*>(base)->SetFrame(up_child, frame)) {
 			dirty = true;
 		}
 	}
 	if (const Sprite* mask = sym->GetMask()) {
-		if (const_cast<Sprite*>(mask)->SetFrame(frame, mask->QueryActor(actor))) {
+		up_child.SetActor(mask->QueryActor(up.GetActor()));
+		if (const_cast<Sprite*>(mask)->SetFrame(up_child, frame)) {
 			dirty = true;
 		}
 	}

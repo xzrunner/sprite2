@@ -29,9 +29,9 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(Message msg, const Actor* actor);
-	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual void OnMessage(const UpdateParams& up, Message msg);
+	virtual bool Update(const UpdateParams& up);
+	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
@@ -43,14 +43,14 @@ public:
 
 	void SetFPS(int fps) { m_fps = fps; }
 
-	void SetStartRandom(bool random, const Actor* actor);
+	void SetStartRandom(const UpdateParams& up, bool random);
 
 	int  GetFrame(const Actor* actor) const;
 
 	void SetActive(bool active, const Actor* actor);
 
 private:
-	void RandomStartTime(const Actor* actor);
+	void RandomStartTime(const UpdateParams& up);
 
 protected:
 	bool m_loop;

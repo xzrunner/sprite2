@@ -15,7 +15,7 @@ namespace s2
 
 TrailSprite::TrailSprite()
 	: m_et(NULL)
-	, m_local(true)
+	, m_local(false)
 	, m_in_p3d(false)
 {
 }
@@ -48,7 +48,7 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(NULL)
-	, m_local(true)
+	, m_local(false)
 	, m_in_p3d(false)
 {
 	const t2d_emitter_cfg* cfg = VI_DOWNCASTING<TrailSymbol*>(sym)->GetEmitterCfg();
@@ -94,24 +94,11 @@ bool TrailSprite::Update(const RenderParams& rp)
 
 	float dt = time - m_et->time;
 	sm::vec2 pos;
-// 	if (m_local && !m_in_p3d) {
-// //		pos = GetPosition();
-// 
-// 		// get parent world pos
-// 		S2_MAT mat;
-// 		SprTreePath path = rp.path;
-// 		path.Pop();
-// 		while (!path.Empty()) {
-// 			Actor* actor = ActorLUT::Instance()->Query(path);
-// 			mat = mat * actor->GetSpr()->GetLocalMat();
-// 			mat = actor->GetLocalMat() * mat;
-// 			path.Pop();
-// 		}
-// 		pos = mat * GetPosition();
-// 
-// 	} else {
+	if (m_local && !m_in_p3d) {
+		pos = GetPosition();
+	} else {
 		pos = rp.mt * GetPosition();
-//	}
+	}
 	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
 	m_et->time = time;
 

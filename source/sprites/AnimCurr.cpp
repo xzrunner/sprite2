@@ -7,12 +7,15 @@
 #include "AnimLerp.h"
 #include "AnimLerp.h"
 #include "SprVisitorParams.h"
+#include "S2_Symbol.h"
+#include "S2_Actor.h"
 
 #include <algorithm>
 #include <climits>
 
 #include <assert.h>
 #include <string.h>
+#include <fault.h>
 
 namespace s2
 {
@@ -365,6 +368,14 @@ void AnimCurr::LoadCurrSprites(bool cursor_update, const Actor* _actor)
 			{
 				assert(actor.lerp != -1);
 				const AnimCopy::Frame& next_frame = m_copy->m_layers[i].frames[cursor + 1];
+
+				if (actor.slot != next_frame.actors[actor.next].slot) {
+					int sym_id = 0;
+					if (_actor) {
+						sym_id = _actor->GetSpr()->GetSymbol()->GetID();
+					}
+					fault("anim lerp err: sym_id %d, frame %d\n", sym_id, m_frame);
+				}
 
 				assert(actor.slot == next_frame.actors[actor.next].slot);
 				Sprite* tween = m_slots[actor.slot];

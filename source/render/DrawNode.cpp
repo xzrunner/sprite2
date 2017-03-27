@@ -60,11 +60,12 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 		return false;
 	}
 
-	child.mt = spr->GetLocalMat() * rp.mt;
-	child.color = spr->GetColor() * rp.color;
 	if (actor) {
-		child.mt = actor->GetLocalMat() * child.mt;
-		child.color = actor->GetColor() * child.color;
+		child.mt = spr->GetLocalMat() * actor->GetLocalMat() * rp.mt;
+		child.color = spr->GetColor() * actor->GetColor() * rp.color;
+	} else {
+		child.mt = spr->GetLocalMat() * rp.mt;
+		child.color = spr->GetColor() * rp.color;
 	}
 
 	if (PREPARE_REDNER_PARAMS) {

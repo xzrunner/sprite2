@@ -3,6 +3,8 @@
 
 #include S2_MAT_HEADER
 
+#include <cstddef>
+
 namespace s2
 {
 

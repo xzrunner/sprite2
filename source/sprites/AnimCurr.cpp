@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <map>
 
 #include <assert.h>
 #include <string.h>
@@ -41,6 +42,7 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	: m_copy(curr.m_copy)
 	, m_layer_cursor(curr.m_layer_cursor)
 	, m_slots(curr.m_slots)
+	, m_slotmap(curr.m_slotmap)
 	, m_curr_num(curr.m_curr_num)
 	, m_frame(curr.m_frame)
 	, m_start_time(curr.m_start_time)
@@ -61,6 +63,7 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	m_layer_cursor = curr.m_layer_cursor;
 	m_slots = curr.m_slots;
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());
+	m_slotmap = curr.m_slotmap;
 	m_curr_num = curr.m_curr_num;
 	m_curr = new int[curr.m_copy->m_max_actor_num];
 	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
@@ -183,7 +186,7 @@ void AnimCurr::Draw(const RenderParams& rp) const
 {
 	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) {
-		Sprite* child = m_slots[m_curr[i]];
+		Sprite* child = m_slots[m_slotmap[m_curr[i]]];
 		rp_child.actor = child->QueryActor(rp.actor);
 		DrawNode::Draw(child, rp_child);
 	}
@@ -294,6 +297,20 @@ void AnimCurr::SetAnimCopy(const AnimCopy* copy)
 		Sprite* src = const_cast<Sprite*>(m_copy->m_slots[i]);
 		Sprite* dst = VI_CLONE(Sprite, src);
 		m_slots[i] = dst;
+	}
+
+	std::map<int,int> symbol2index;
+	m_slotmap.resize(m_slots.size());
+	for (int i = 0, n = m_slots.size(); i < n; ++i) {
+		Sprite* spr = m_slots[i];
+		int symbol_id = spr->GetSymbol()->GetID();
+		std::map<int,int>::iterator iter = symbol2index.find(symbol_id);
+		if (iter == symbol2index.end()) {
+			symbol2index[symbol_id] = i;
+			m_slotmap[i] = i;
+		} else {
+			m_slotmap[i] = iter->second;
+		}
 	}
 }
 

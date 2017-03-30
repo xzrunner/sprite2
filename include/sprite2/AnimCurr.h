@@ -75,6 +75,7 @@ private:
 	std::vector<int> m_layer_cursor;
 
 	std::vector<Sprite*> m_slots;
+	std::vector<int> m_slotmap;
 
 	int* m_curr;
 	int  m_curr_num;

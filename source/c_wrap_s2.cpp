@@ -519,18 +519,33 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	DrawNode::Draw(s2_spr, rp);
 }
 
+static S2_MAT 
+get_actor_world_mat(const Actor* actor) {
+	S2_MAT mt;
+	const Actor* curr = actor;
+	while (curr) {
+		mt = mt * curr->GetLocalMat() * curr->GetSpr()->GetLocalMat();
+		curr = curr->GetParent();
+	}
+	return mt;
+}
+
 extern "C"
 void s2_actor_update(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_sprite)->Update(UpdateParams(s2_actor));
+	UpdateParams up(s2_actor);
+	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
+	const_cast<Sprite*>(s2_sprite)->Update(up);
 }
 
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_sprite)->SetFrame(UpdateParams(s2_actor), frame, true);
+	UpdateParams up(s2_actor);
+	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
+	const_cast<Sprite*>(s2_sprite)->SetFrame(up, frame, true);
 }
 
 extern "C"

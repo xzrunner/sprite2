@@ -5,6 +5,7 @@
 #include "DrawNode.h"
 #include "SymType.h"
 #include "UpdateParams.h"
+#include "P3dRenderParams.h"
 
 #include "TrailSymbol.h"
 #include "TrailSprite.h"
@@ -89,16 +90,18 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	RenderParams rp_child;
 
-	rp_child.color.SetMul(mul * rp->ct.GetMul());
-	rp_child.color.SetAdd(add + rp->ct.GetAdd());
+	rp_child.color.SetMul(mul * rp->rc.GetMul());
+	rp_child.color.SetAdd(add + rp->rc.GetAdd());
 
 	rp_child.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 
+	rp_child.view_region = rp->view_region;
+
 	// todo color trans
 
-	if (rp->p3d && rp->p3d->local_mode_draw) {
+	if (rp->local) {
 		// local mode, use node's mat
-		rp_child.mt = rp->mat;
+		rp_child.mt = rp->mt;
 	} else {
 		// no local mode, use particle's mat
 #ifdef S2_MATRIX_FIX
@@ -209,11 +212,11 @@ static void
 update_srt_func(void* params, float x, float y, float scale) {
 	P3dRenderParams* rp = static_cast<P3dRenderParams*>(params);
 #ifdef S2_MATRIX_FIX
-	rp->mat.Translate(x, y);
-	rp->mat.Scale(scale, scale);
+	rp->mt.Translate(x, y);
+	rp->mt.Scale(scale, scale);
 #else
-	rp->mat.Translate(x, y, 0);
-	rp->mat.Scale(scale, scale, 1);
+	rp->mt.Translate(x, y, 0);
+	rp->mt.Scale(scale, scale, 1);
 #endif // S2_MATRIX_FIX
 }
 
@@ -224,7 +227,9 @@ buf_remove_func(struct p3d_sprite* spr) {
 static void
 create_draw_params_func(struct p3d_sprite* spr) {
 	P3dRenderParams* rp = new P3dRenderParams;
-	rp->p3d = spr;
+	if (spr) {
+		rp->local = spr->local_mode_draw;
+	}
 	spr->draw_params = rp;
 }
 

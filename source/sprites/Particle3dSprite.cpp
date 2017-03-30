@@ -114,7 +114,7 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 
 		return false;
 	} 
-	
+
 	p3d_emitter* et = m_spr->et;
 
 	p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
@@ -170,9 +170,10 @@ void Particle3dSprite::Draw(const RenderParams& rp) const
 	}
 
 	P3dRenderParams p3d_rp;
-	p3d_rp.mt    = rp.mt;
-	p3d_rp.rc    = rp.color;
-	p3d_rp.local = m_spr->local_mode_draw;
+	p3d_rp.mt          = rp.mt;
+	p3d_rp.rc          = rp.color;
+	p3d_rp.local       = m_spr->local_mode_draw;
+	p3d_rp.view_region = rp.view_region;
 	p3d_emitter_draw(m_spr->et, &p3d_rp);
 }
 

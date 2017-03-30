@@ -142,16 +142,14 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
 		}
 	}
+
 	p3d_spr->Draw(rp_child);
 }
 
 sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-#ifdef S2_ALL_SYM_SELECTED
-	return sm::rect(sm::vec2(0, 0), 200, 200);
-#else
-	return sm::rect(0, 0);
-#endif // S2_ALL_SYM_SELECTED
+	// empty
+	return sm::rect();
 }
 
 void Particle3dSymbol::SetEmitterCfg(p3d_emitter_cfg* cfg) 

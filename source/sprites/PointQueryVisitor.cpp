@@ -113,9 +113,10 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
 {
 	sm::rect sz = spr->GetSymbol()->GetBounding(spr, params.actor);
-	if (sz.Width() == 0 || sz.Height() == 0) {
+	if (sz.Width() == 0 || sz.Height() == 0 || !sz.IsValid()) {
 		return false;
 	}
+
 	std::vector<sm::vec2> vertices(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
 	vertices[1] = sm::vec2(sz.xmin, sz.ymax);

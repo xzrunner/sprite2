@@ -15,6 +15,7 @@ public:
 	S2_MAT      mt;
 	RenderColor rc;
 	bool        local;
+	sm::rect    view_region;
 
 public:
 	P3dRenderParams() : local(true) {}

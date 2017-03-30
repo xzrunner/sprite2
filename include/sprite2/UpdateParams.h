@@ -9,6 +9,7 @@ namespace s2
 {
 
 class Actor;
+class Sprite;
 
 class UpdateParams
 {

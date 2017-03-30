@@ -9,6 +9,10 @@
 #include "SprVisitorParams.h"
 #include "S2_Symbol.h"
 #include "S2_Actor.h"
+#include "ActorFactory.h"
+#include "SymType.h"
+#include "ComplexSymbol.h"
+#include "ComplexActor.h"
 
 #include <algorithm>
 #include <climits>
@@ -202,6 +206,25 @@ Sprite* AnimCurr::FetchChild(int idx) const
 		return NULL;
 	} else {
 		return m_slots[idx];
+	}
+}
+
+void AnimCurr::SetChildAction(const Actor* parent, int symid, const char* action)
+{
+	for (int i = 0, n = m_slots.size(); i < n; ++i) {
+		Sprite* spr = m_slots[i];
+		if (spr->GetSymbol()->GetID() == symid) {
+			Actor * actor = ActorFactory::Instance()->Create(parent, spr);
+			if(actor->GetSpr()->GetSymbol()->Type() == SYM_COMPLEX) {
+				const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(actor->GetSpr()->GetSymbol());
+				ComplexActor* actor_complex = static_cast<ComplexActor*>(actor);
+				int action_idx = -1;
+				if (action) {
+					action_idx = sym_complex->GetActionIdx(action);
+				}
+				actor_complex->SetAction(action_idx);
+			}
+		}
 	}
 }
 

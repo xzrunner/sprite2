@@ -112,6 +112,12 @@ Sprite* AnimSprite::FetchChild(int idx, const Actor* actor) const
 	return GetAnimCurr(actor).FetchChild(idx);
 }
 
+// use TraverseChildren instead?
+void AnimSprite::SetChildAction(const Actor* actor, int symid, const char* action)
+{
+	const_cast<AnimCurr&>(GetAnimCurr(actor)).SetChildAction(actor, symid, action);
+}
+
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;

@@ -184,6 +184,14 @@ void s2_spr_set_action(void* actor, const char* action) {
 		return;
 	}
 
+	const Actor* s2_parent = s2_actor->GetParent();
+	if(s2_parent && s2_parent->GetSpr()->GetSymbol()->Type() == SYM_ANIMATION) {
+		const Sprite* child  = s2_actor->GetSpr();
+		const Sprite* parent = s2_parent->GetSpr();
+		static_cast<AnimSprite*>(const_cast<Sprite*>(parent))->SetChildAction(s2_parent, child->GetSymbol()->GetID(), action);
+		return;
+	}
+
 	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(s2_actor->GetSpr()->GetSymbol());
 	ComplexActor* actor_complex = static_cast<ComplexActor*>(s2_actor);
 	int action_idx = -1;

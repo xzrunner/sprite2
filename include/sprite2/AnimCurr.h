@@ -56,6 +56,8 @@ public:
 
 	void Clear();
 
+	void SetChildAction(const Actor* actor, int symid, const char* action);
+
 private:
 	void ResetTime();
 

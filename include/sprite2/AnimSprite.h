@@ -49,6 +49,8 @@ public:
 
 	void SetActive(bool active, const Actor* actor);
 
+	void SetChildAction(const Actor* actor, int symid, const char* action);
+
 private:
 	void RandomStartTime(const Actor* actor);
 

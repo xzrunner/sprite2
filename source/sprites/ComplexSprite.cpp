@@ -58,9 +58,11 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* spr = children[i];
-		rp_child.actor = spr->QueryActor(rp.actor);
-		if (const_cast<Sprite*>(spr)->Update(rp_child)) {
-			dirty = true;
+		if(spr->IsForceUpFrame() || spr->GetName().empty()) {
+			rp_child.actor = spr->QueryActor(rp.actor);
+			if (const_cast<Sprite*>(spr)->Update(rp_child)) {
+				dirty = true;
+			}
 		}
 	}
 	return dirty;

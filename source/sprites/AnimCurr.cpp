@@ -186,8 +186,9 @@ void AnimCurr::Draw(const RenderParams& rp) const
 {
 	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) {
-		Sprite* child = m_slots[m_slotmap[m_curr[i]]];
-		rp_child.actor = child->QueryActor(rp.actor);
+		Sprite* child = m_slots[m_curr[i]];
+		Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
+		rp_child.actor = actor_holder->QueryActor(rp.actor);
 		DrawNode::Draw(child, rp_child);
 	}
 }

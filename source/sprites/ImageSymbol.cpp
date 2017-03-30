@@ -54,13 +54,27 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
+	float xmin = FLT_MAX, ymin = FLT_MAX,
+		  xmax =-FLT_MAX, ymax =-FLT_MAX;
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
 	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
 	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
 	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
-	for (int i = 0; i < 4; ++i) {
-		vertices[i] = rp_child.mt * vertices[i];
+	for (int i = 0; i < 4; ++i) 
+	{
+		sm::vec2 pos = rp_child.mt * vertices[i];
+		if (pos.x < xmin) xmin = pos.x;
+		if (pos.x > xmax) xmax = pos.x;
+		if (pos.y < ymin) ymin = pos.y;
+		if (pos.y > ymax) ymax = pos.y;
+		vertices[i] = pos;
+	}
+
+	if (rp.view_region.IsValid() && 
+		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
+		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
+		return;
 	}
 
 	float texcoords[8];

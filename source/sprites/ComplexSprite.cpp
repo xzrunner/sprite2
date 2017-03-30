@@ -58,7 +58,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* spr = children[i];
-		if(spr->IsForceUpFrame() || spr->GetName().empty()) {
+		if (spr->ShouldInheritFrame()) {
 			rp_child.actor = spr->QueryActor(rp.actor);
 			if (const_cast<Sprite*>(spr)->Update(rp_child)) {
 				dirty = true;
@@ -70,7 +70,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 
 bool ComplexSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 

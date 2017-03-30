@@ -86,6 +86,11 @@ public:
 	const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name) { m_name = name; }
 
+	bool ShouldInheritFrame() const {
+		std::string name = GetName();
+		return IsForceUpFrame() || name.length() <= 0 || name[0] == '_';
+	}
+
 	const BoundingBox* GetBounding() const; 
 	void UpdateBounding() const;
 

@@ -107,7 +107,7 @@ bool TrailSprite::Update(const RenderParams& rp)
 
 bool TrailSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 

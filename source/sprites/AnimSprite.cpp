@@ -94,7 +94,7 @@ bool AnimSprite::Update(const RenderParams& rp)
 
 bool AnimSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));

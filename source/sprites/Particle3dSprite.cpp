@@ -152,7 +152,7 @@ bool Particle3dSprite::Update(const RenderParams& rp)
 
 bool Particle3dSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 	Update(RenderParams());

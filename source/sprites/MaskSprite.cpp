@@ -61,7 +61,7 @@ bool MaskSprite::Update(const RenderParams& rp)
 
 bool MaskSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 

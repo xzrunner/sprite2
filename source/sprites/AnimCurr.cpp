@@ -270,7 +270,7 @@ void AnimCurr::SetFrame(int frame, int fps, const Actor* actor)
 	RenderParams rp;
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* spr = m_slots[m_curr[i]];
-		if(spr->IsForceUpFrame() || spr->GetName().empty()) {
+		if (spr->ShouldInheritFrame()) {
 			rp.actor = spr->QueryActor(actor);
 			spr->Update(rp);
 		}

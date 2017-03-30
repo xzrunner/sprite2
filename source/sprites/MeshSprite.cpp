@@ -91,7 +91,7 @@ bool MeshSprite::Update(const RenderParams& rp)
 
 bool MeshSprite::SetFrame(int frame, const Actor* actor, bool force)
 {
-	if (!force && !IsForceUpFrame() && !GetName().empty()) {
+	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
 	// todo

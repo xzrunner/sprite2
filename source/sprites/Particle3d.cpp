@@ -4,6 +4,8 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "SymType.h"
+#include "UpdateParams.h"
+#include "P3dRenderParams.h"
 
 #include "TrailSymbol.h"
 #include "TrailSprite.h"
@@ -30,15 +32,15 @@ Particle3d::Particle3d()
 	Init();
 }
 
-bool Particle3d::Update(float dt)
+bool Particle3d::BufferUpdate(float dt)
 {
 	m_time += dt;
 	return p3d_buffer_update(m_time);
 }
 
-void Particle3d::Draw() const
+void Particle3d::BufferDraw(float x, float y, float scale) const
 {
-	p3d_buffer_draw(0, 0, 1);
+	p3d_buffer_draw(x, y, scale);
 }
 
 void Particle3d::BufferClear()
@@ -88,16 +90,20 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	RenderParams rp_child;
 
-	rp_child.color.SetMul(mul * rp->ct.GetMul());
-	rp_child.color.SetAdd(add + rp->ct.GetAdd());
+	rp_child.color.SetMul(mul * rp->rc.GetMul());
+	rp_child.color.SetAdd(add + rp->rc.GetAdd());
 
 	rp_child.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 
+	rp_child.view_region = rp->view_region;
+
 	// todo color trans
 
-	if (rp->p3d && rp->p3d->local_mode_draw) {
-		rp_child.mt = rp->mat;
+	if (rp->local) {
+		// local mode, use node's mat
+		rp_child.mt = rp->mt;
 	} else {
+		// no local mode, use particle's mat
 #ifdef S2_MATRIX_FIX
 		sm::MatrixFix _mat;
 		_mat.x[0] = mat[0] * sm::MatrixFix::SCALE;
@@ -115,7 +121,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[12]= mat[4];
 		_mat.x[13]= mat[5];
 #endif // S2_MATRIX_FIX
-		rp_child.mt = _mat * rp->mat;
+		rp_child.mt = _mat;
 	}
 
 	if (spr) {
@@ -124,7 +130,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	} else if (sym) {
 		Symbol* s2_sym = static_cast<Symbol*>(sym);
 		DrawNode::Draw(s2_sym, rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
-		s2_sym->Update(rp_child, time);
+		s2_sym->Update(UpdateParams(), time);
 	}
 
 	// todo record
@@ -143,13 +149,15 @@ update_func(void* spr, float x, float y)
 	}
 
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	RenderParams rp;
+	UpdateParams up;
+	S2_MAT mat;
 #ifdef S2_MATRIX_FIX
-	rp.mt.Translate(x, y);
+	mat.Translate(x, y);
 #else
-	rp.mt = sm::mat4::Translated(x, y, 0);
+	mat = sm::mat4::Translated(x, y, 0);
 #endif // S2_MATRIX_FIX
-	s2_spr->Update(rp);
+	up.SetPrevMat(mat);
+	s2_spr->Update(up);
 }
 
 static void 
@@ -204,11 +212,11 @@ static void
 update_srt_func(void* params, float x, float y, float scale) {
 	P3dRenderParams* rp = static_cast<P3dRenderParams*>(params);
 #ifdef S2_MATRIX_FIX
-	rp->mat.Translate(x, y);
-	rp->mat.Scale(scale, scale);
+	rp->mt.Translate(x, y);
+	rp->mt.Scale(scale, scale);
 #else
-	rp->mat.Translate(x, y, 0);
-	rp->mat.Scale(scale, scale, 1);
+	rp->mt.Translate(x, y, 0);
+	rp->mt.Scale(scale, scale, 1);
 #endif // S2_MATRIX_FIX
 }
 
@@ -219,7 +227,9 @@ buf_remove_func(struct p3d_sprite* spr) {
 static void
 create_draw_params_func(struct p3d_sprite* spr) {
 	P3dRenderParams* rp = new P3dRenderParams;
-	rp->p3d = spr;
+	if (spr) {
+		rp->local = spr->local_mode_draw;
+	}
 	spr->draw_params = rp;
 }
 

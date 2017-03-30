@@ -58,7 +58,7 @@ Particle2dSprite* Particle2dSprite::Clone() const
 	return new Particle2dSprite(*this);
 }
 
-void Particle2dSprite::OnMessage(Message msg, const Actor* actor)
+void Particle2dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	switch (msg)
 	{
@@ -72,7 +72,7 @@ void Particle2dSprite::OnMessage(Message msg, const Actor* actor)
 	}
 }
 
-bool Particle2dSprite::Update(const RenderParams& rp)
+bool Particle2dSprite::Update(const UpdateParams& up)
 {
 	if (!m_et) {
 		return false;
@@ -108,12 +108,12 @@ bool Particle2dSprite::Update(const RenderParams& rp)
 	return true;
 }
 
-bool Particle2dSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool Particle2dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
-	Update(RenderParams());
+	Update(up);
 	return true;
 }
 

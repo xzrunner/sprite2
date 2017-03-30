@@ -23,8 +23,8 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual bool Update(const RenderParams& rp);
-	virtual bool SetFrame(int frame, const Actor* actor, bool force = false);
+	virtual bool Update(const UpdateParams& up);
+	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 

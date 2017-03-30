@@ -5,6 +5,7 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "S2_Actor.h"
+#include "P3dRenderParams.h"
 
 #include <ps_3d_sprite.h>
 #include <shaderlab/ShaderMgr.h>
@@ -48,7 +49,7 @@ Particle3dSymbol::~Particle3dSymbol()
 	p3d_emitter_release(m_et);
 }
 
-//bool Particle3dSymbol::Update(const RenderParams& rp)
+//bool Particle3dSymbol::Update(const UpdateParams& up)
 //{
 //	float time = Particle3d::Instance()->GetTime();
 //	assert(m_et->time <= time);
@@ -79,15 +80,16 @@ int Particle3dSymbol::Type() const
 
 void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	if (!spr) {
+	if (!spr) 
+	{
 		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 		shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 		P3dRenderParams p3d_rp;
-		p3d_rp.mat = rp.mt;
-		p3d_rp.ct = rp.color;
-		p3d_rp.p3d = NULL;
+		p3d_rp.mt    = rp.mt;
+		p3d_rp.rc    = rp.color;
+		p3d_rp.local = m_local;
 		p3d_emitter_draw(m_et, &p3d_rp);
 		return;
 	}
@@ -97,14 +99,16 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 	p3d_spr->SetOuterMatrix(rp_child.mt);
-	if (p3d_spr->IsAlone()) {
+	if (p3d_spr->IsAlone()) 
+	{
 		p3d_sprite* p3d = p3d_spr->GetP3dSpr();
 		if (!p3d) {
 			return;
 		}
 		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
-		p3d_rp->mat = rp_child.mt;
-		p3d_rp->ct = rp_child.color;
+		p3d_rp->mt    = rp_child.mt;
+		p3d_rp->rc    = rp_child.color;
+		p3d_rp->local = m_local;
 		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		if (rp.actor) {
 			mt = rp.actor->GetLocalMat() * mt;
@@ -138,16 +142,14 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
 		}
 	}
+
 	p3d_spr->Draw(rp_child);
 }
 
 sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-#ifdef S2_ALL_SYM_SELECTED
-	return sm::rect(sm::vec2(0, 0), 200, 200);
-#else
-	return sm::rect(0, 0);
-#endif // S2_ALL_SYM_SELECTED
+	// empty
+	return sm::rect();
 }
 
 void Particle3dSymbol::SetEmitterCfg(p3d_emitter_cfg* cfg) 

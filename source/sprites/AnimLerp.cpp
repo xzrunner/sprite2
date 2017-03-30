@@ -10,6 +10,7 @@
 #include "LerpSpiral.h"
 #include "S2_Symbol.h"
 #include "SymType.h"
+#include "RenderColor.h"
 
 #include <SM_Vector.h>
 

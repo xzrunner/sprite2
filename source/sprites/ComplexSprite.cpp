@@ -1,7 +1,7 @@
 #include "ComplexSprite.h"
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
-#include "RenderParams.h"
+#include "UpdateParams.h"
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
 #include "SymType.h"
@@ -25,42 +25,40 @@ ComplexSprite* ComplexSprite::Clone() const
 	return new ComplexSprite(*this);
 }
 
-void ComplexSprite::OnMessage(Message msg, const Actor* actor)
+void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	UpdateParams up_child(up);
+	up_child.Push(this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
-		Sprite* spr = children[i];
-		spr->OnMessage(msg, spr->QueryActor(actor));
+		Sprite* child = children[i];
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(up_child, msg);
 	}
 }
 
-bool ComplexSprite::Update(const RenderParams& rp)
+bool ComplexSprite::Update(const UpdateParams& up)
 {
-	const Actor* actor = rp.actor;
-
-	RenderParams rp_child(rp);
-	rp_child.mt = GetLocalMat() * rp.mt;
-	rp_child.shader = GetShader() * rp.shader;
-	if (rp.actor) {
-		rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-		rp_child.shader = rp.actor->GetShader() * rp_child.shader;
-	}
-
 	bool dirty = false;
+
 	int action = m_action;
+	const Actor* actor = up.GetActor();
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
 	}
+
+	UpdateParams up_child(up);
+	up_child.Push(this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
-		const Sprite* spr = children[i];
-		if (spr->ShouldInheritFrame()) {
-			rp_child.actor = spr->QueryActor(rp.actor);
-			if (const_cast<Sprite*>(spr)->Update(rp_child)) {
+		const Sprite* child = children[i];
+		if (child->ShouldInheritFrame()) {
+			up_child.SetActor(child->QueryActor(up.GetActor()));
+			if (const_cast<Sprite*>(child)->Update(up_child)) {
 				dirty = true;
 			}
 		}
@@ -68,7 +66,7 @@ bool ComplexSprite::Update(const RenderParams& rp)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool ComplexSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !ShouldInheritFrame()) {
 		return false;
@@ -76,15 +74,19 @@ bool ComplexSprite::SetFrame(int frame, const Actor* actor, bool force)
 
 	bool dirty = false;
 	int action = m_action;
+	const Actor* actor = up.GetActor();
 	if (actor) {
 		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
 		action = comp_actor->GetAction();
 	}
+	UpdateParams up_child(up);
+	up_child.Push(this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
-		if (child->SetFrame(frame, child->QueryActor(actor))) {
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (child->SetFrame(up_child, frame)) {
 			dirty = true;
 		}
 	}

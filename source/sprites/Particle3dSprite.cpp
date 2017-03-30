@@ -1,6 +1,9 @@
 #include "Particle3dSprite.h"
 #include "Particle3dSymbol.h"
 #include "S2_Actor.h"
+#include "UpdateParams.h"
+#include "P3dRenderParams.h"
+#include "RenderParams.h"
 
 #include <ps_3d.h>
 #include <ps_3d_sprite.h>
@@ -30,7 +33,6 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	, m_alone(spr.m_alone)
 	, m_reuse(spr.m_reuse)
 	, m_start_radius(spr.m_start_radius)
-	, m_rp(spr.m_rp)
 {
 	CreateSpr();
 }
@@ -44,7 +46,6 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	m_alone          = spr.m_alone;
 	m_reuse          = spr.m_reuse;
 	m_start_radius   = spr.m_start_radius;
-	m_rp             = spr.m_rp;
 
 	return *this;
 }
@@ -79,7 +80,7 @@ Particle3dSprite* Particle3dSprite::Clone() const
 	return new Particle3dSprite(*this);
 }
 
-void Particle3dSprite::OnMessage(Message msg, const Actor* actor)
+void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	if (!m_spr) {
 		return;
@@ -98,75 +99,82 @@ void Particle3dSprite::OnMessage(Message msg, const Actor* actor)
 	}
 }
 
-bool Particle3dSprite::Update(const RenderParams& rp)
+bool Particle3dSprite::Update(const UpdateParams& up)
 {
 	if (!m_spr) {
-		return true;
-	} else if (m_alone) {
+		return false;
+	} 
+	
+	// update outside
+	if (m_alone) {
 		p3d_emitter* et = m_spr->et;
 
 		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
 		cfg->start_radius = m_start_radius;
 
 		return false;
-	} else {
-		p3d_emitter* et = m_spr->et;
+	} 
 
-		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
-		cfg->start_radius = m_start_radius;
+	p3d_emitter* et = m_spr->et;
 
-		float time = Particle3d::Instance()->GetTime();
-		assert(et->time <= time);
-		if (et->time == time) {
-			return false;
-		}
+	p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
+	cfg->start_radius = m_start_radius;
 
-		float mt[6];
-		S2_MAT inner_mat = GetLocalMat();
-		if (rp.actor) {
-			inner_mat = rp.actor->GetLocalMat() * inner_mat;
-		}
-#ifdef S2_MATRIX_FIX
-		mt[0] = inner_mat.x[0] * sm::MatrixFix::SCALE_INV;
-		mt[1] = inner_mat.x[1] * sm::MatrixFix::SCALE_INV;
-		mt[2] = inner_mat.x[2] * sm::MatrixFix::SCALE_INV;
-		mt[3] = inner_mat.x[3] * sm::MatrixFix::SCALE_INV;
-		mt[4] = inner_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-		mt[5] = inner_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-#else
-		mt[0] = inner_mat.x[0];
-		mt[1] = inner_mat.x[1];
-		mt[2] = inner_mat.x[4];
-		mt[3] = inner_mat.x[5];
-		mt[4] = inner_mat.x[12];
-		mt[5] = inner_mat.x[13];
-#endif // S2_MATRIX_FIX
-		
-		float dt = time - et->time;
-		p3d_emitter_update(et, dt, mt);
-		et->time = time;
-
-		return true;
+	float time = Particle3d::Instance()->GetTime();
+	assert(et->time <= time);
+	if (et->time == time) {
+		return false;
 	}
+
+	UpdateParams up_child(up);
+	up_child.Push(this);
+
+	float mt[6];
+	const S2_MAT& world_mat = up_child.GetPrevMat();
+#ifdef S2_MATRIX_FIX
+	mt[0] = world_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mt[1] = world_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mt[2] = world_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mt[3] = world_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mt[4] = world_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mt[5] = world_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
+	mt[0] = world_mat.x[0];
+	mt[1] = world_mat.x[1];
+	mt[2] = world_mat.x[4];
+	mt[3] = world_mat.x[5];
+	mt[4] = world_mat.x[12];
+	mt[5] = world_mat.x[13];
+#endif // S2_MATRIX_FIX
+	
+	float dt = time - et->time;
+	p3d_emitter_update(et, dt, mt);
+	et->time = time;
+
+	return true;
 }
 
-bool Particle3dSprite::SetFrame(int frame, const Actor* actor, bool force)
+bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	if (!force && !ShouldInheritFrame()) {
 		return false;
 	}
-	Update(RenderParams());
+	Update(up);
 	return true;
 }
 
 void Particle3dSprite::Draw(const RenderParams& rp) const
 {
-	if (!m_alone && m_spr) {
-		m_rp.mat = rp.mt;
-		m_rp.ct  = rp.color;
-		m_rp.p3d = m_spr;
-		p3d_emitter_draw(m_spr->et, &m_rp);
+	if (m_alone || !m_spr) {
+		return;
 	}
+
+	P3dRenderParams p3d_rp;
+	p3d_rp.mt          = rp.mt;
+	p3d_rp.rc          = rp.color;
+	p3d_rp.local       = m_spr->local_mode_draw;
+	p3d_rp.view_region = rp.view_region;
+	p3d_emitter_draw(m_spr->et, &p3d_rp);
 }
 
 void Particle3dSprite::SetOuterMatrix(const S2_MAT& mat) const
@@ -289,6 +297,34 @@ void Particle3dSprite::SetLocalModeDraw(bool local)
 	if (m_spr) {
 		m_spr->local_mode_draw = local;
 	}
+}
+
+bool Particle3dSprite::IsEmitterFinished() const
+{
+	if (m_spr) {
+		return p3d_emitter_is_finished(m_spr->et);
+	} else {
+		return true;
+	}
+}
+
+void Particle3dSprite::EmitterStart()
+{
+	if (m_spr) {
+		p3d_emitter_start(m_spr->et);
+	}
+}
+
+void Particle3dSprite::EmitterStop()
+{
+	if (m_spr) {
+		p3d_emitter_stop(m_spr->et);
+	}
+}
+
+void Particle3dSprite::EmitterUpdate(float dt)
+{
+	// todo
 }
 
 }

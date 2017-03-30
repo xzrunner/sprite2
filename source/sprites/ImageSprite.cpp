@@ -3,7 +3,7 @@
 #include "RenderShader.h"
 #include "RenderFilter.h"
 #include "RenderShader.h"
-#include "RenderParams.h"
+#include "UpdateParams.h"
 #include "S2_Symbol.h"
 #include "SprGeo.h"
 
@@ -27,16 +27,17 @@ ImageSprite* ImageSprite::Clone() const
 	return new ImageSprite(*this);
 }
 
-bool ImageSprite::Update(const RenderParams& rp)
+bool ImageSprite::Update(const UpdateParams& up)
 {
-	RenderShader rs = GetShader() * rp.shader;
-	if (rs.GetFilter()) {
-		FilterMode mode = rs.GetFilter()->GetMode();
-		return mode == FM_HEAT_HAZE 
-			|| mode == FM_SHOCK_WAVE 
-			|| mode == FM_SWIRL
-			|| mode == FM_BURNING_MAP;
+	FilterMode filter_mode = up.GetPrevFilter();
+	const RenderFilter* filter = GetShader().GetFilter();
+	if (filter && filter->GetMode() != FM_NULL) {
+		filter_mode = filter->GetMode();
 	}
+	return filter_mode == FM_HEAT_HAZE 
+		|| filter_mode == FM_SHOCK_WAVE 
+		|| filter_mode == FM_SWIRL
+		|| filter_mode == FM_BURNING_MAP;
 	return false;
 }
 

@@ -13,6 +13,7 @@
 #include "SymType.h"
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
+#include "UpdateParams.h"
 
 #include <algorithm>
 #include <climits>
@@ -112,15 +113,20 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 	return ret;
 }
 
-void AnimCurr::OnMessage(Message msg, const Actor* actor)
+void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 {
-	for (int i = 0; i < m_curr_num; ++i) {
-		Sprite* spr = m_slots[m_curr[i]];
-		spr->OnMessage(msg, spr->QueryActor(actor));
+	UpdateParams up_child(up);
+	up_child.Push(spr);
+	for (int i = 0; i < m_curr_num; ++i) 
+	{
+		Sprite* child = m_slots[m_curr[i]];
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(up_child, msg);
 	}
 }
 
-bool AnimCurr::Update(const RenderParams& rp, bool loop, float interval, int fps)
+bool AnimCurr::Update(const UpdateParams& up, const Sprite* spr, 
+					  bool loop, float interval, int fps)
 {
 	bool dirty = false;
 
@@ -161,22 +167,16 @@ bool AnimCurr::Update(const RenderParams& rp, bool loop, float interval, int fps
 		}
 	}
 
-	// update children
-	RenderParams rp_child(rp);
-	for (int i = 0; i < m_curr_num; ++i) 
-	{
-		Sprite* spr = m_slots[m_curr[i]];
-		rp_child.actor = spr->QueryActor(rp.actor);
-		if (spr->Update(rp_child)) {
-			dirty = true;
-		}
-	}
-
 	// update curr frame
-	if (curr_frame != m_frame) {
+	if (curr_frame != m_frame) 
+	{
 		m_frame = curr_frame;
 		dirty = true;
-		LoadCurrSprites(rp.actor);
+		LoadCurrSprites(up, spr);
+	}
+
+	if (UpdateChildren(up, spr)) {
+		dirty = true;
 	}
 
 	return dirty;
@@ -232,12 +232,12 @@ void AnimCurr::SetChildAction(const Actor* parent, int symid, const char* action
 	}
 }
 
-void AnimCurr::Start(const Actor* actor)
+void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	ResetTime();
 	ResetLayerCursor();
 	m_frame = 1;
-	LoadCurrSprites(actor);
+	LoadCurrSprites(up, spr);
 }
 
 void AnimCurr::SetTime(float time)
@@ -249,7 +249,7 @@ void AnimCurr::SetTime(float time)
 	m_stop_during = -dt;
 }
 
-void AnimCurr::SetFrame(int frame, int fps, const Actor* actor)
+void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
 	frame = frame % m_copy->m_max_frame_idx + 1;
 
@@ -265,17 +265,9 @@ void AnimCurr::SetFrame(int frame, int fps, const Actor* actor)
 	m_stop_time = 0;
 	m_stop_during = 0;
 
-	LoadCurrSprites(actor);
+	LoadCurrSprites(up, spr);
 
-	// update children
-	RenderParams rp;
-	for (int i = 0; i < m_curr_num; ++i) {
-		Sprite* spr = m_slots[m_curr[i]];
-		if (spr->ShouldInheritFrame()) {
-			rp.actor = spr->QueryActor(actor);
-			spr->Update(rp);
-		}
-	}
+	UpdateChildren(up, spr);
 }
 
 void AnimCurr::SetAnimCopy(const AnimCopy* copy)
@@ -350,7 +342,7 @@ void AnimCurr::ResetLayerCursor()
 	}
 }
 
-void AnimCurr::LoadCurrSprites(const Actor* actor)
+void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 {
 	if (m_copy->m_max_actor_num < 0) {
 		return;
@@ -358,7 +350,7 @@ void AnimCurr::LoadCurrSprites(const Actor* actor)
 
 	bool cursor_update = m_frame == 1;
 	UpdateCursor(cursor_update);
-	LoadCurrSprites(cursor_update, actor);
+	LoadCurrSprites(up, spr, cursor_update);
 }
 
 void AnimCurr::UpdateCursor(bool cursor_update)
@@ -391,9 +383,12 @@ void AnimCurr::UpdateCursor(bool cursor_update)
 	}
 }
 
-void AnimCurr::LoadCurrSprites(bool cursor_update, const Actor* _actor)
+void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool cursor_update)
 {
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
+
+	UpdateParams up_child(up);
+	up_child.Push(spr);
 
 	m_curr_num = 0;
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
@@ -452,11 +447,30 @@ void AnimCurr::LoadCurrSprites(bool cursor_update, const Actor* _actor)
 			}
 
 			if (cursor_update && actor.prev == -1) {
-				Sprite* spr = m_slots[actor.slot];
-				spr->OnMessage(MSG_TRIGGER, spr->QueryActor(_actor));
+				Sprite* child = m_slots[actor.slot];
+				up_child.SetActor(child->QueryActor(up.GetActor()));
+				child->OnMessage(up_child, MSG_TRIGGER);
 			}
 		}
 	}
+}
+
+bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
+{
+	bool dirty = false;
+	UpdateParams up_child(up);
+	up_child.Push(spr);
+	for (int i = 0; i < m_curr_num; ++i) 
+	{
+		Sprite* child = m_slots[m_curr[i]];
+		if (child->ShouldInheritFrame()) {
+			up_child.SetActor(child->QueryActor(up.GetActor()));
+			if (child->Update(up_child)) {
+				dirty = true;
+			}
+		}
+	}
+	return dirty;
 }
 
 void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)

@@ -20,6 +20,7 @@ class AnimSymbol;
 class SpriteVisitor;
 class SprVisitorParams;
 class RenderParams;
+class UpdateParams;
 
 class AnimCurr : public cu::RefCountObj
 {
@@ -31,19 +32,19 @@ public:
 	
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	void OnMessage(Message msg, const Actor* actor);
+	void OnMessage(const UpdateParams& up, const Sprite* spr, Message msg);
 
-	bool Update(const RenderParams& rp, bool loop = true, 
-		float interval = 0, int fps = 30);
+	bool Update(const UpdateParams& up, const Sprite* spr,
+		bool loop = true, float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
 	Sprite* FetchChild(const std::string& name) const;
 	Sprite* FetchChild(int idx) const;
 
-	void Start(const Actor* actor);
+	void Start(const UpdateParams& up, const Sprite* spr);
 
 	void SetTime(float time);
-	void SetFrame(int frame, int fps, const Actor* actor);
+	void SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 
 	int GetFrame() const { return m_frame; }
 
@@ -63,9 +64,10 @@ private:
 
 	void ResetLayerCursor();
 
-	void LoadCurrSprites(const Actor* actor);
+	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr);
 	void UpdateCursor(bool cursor_update);
-	void LoadCurrSprites(bool cursor_update, const Actor* actor);
+	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool cursor_update);
+	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
 	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
 	

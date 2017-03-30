@@ -52,7 +52,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual bool Update(const RenderParams& rp, float time);
+	virtual bool Update(const UpdateParams& up, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }

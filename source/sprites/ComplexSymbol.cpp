@@ -363,6 +363,9 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		const Sprite* c_spr = sprs[i];
 		const Actor* c_actor = c_spr->QueryActor(actor);
 		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+		if (!c_aabb.IsValid()) {
+			continue;
+		}
 
 		S2_MAT mat = c_spr->GetLocalMat();
 		if (c_actor) {

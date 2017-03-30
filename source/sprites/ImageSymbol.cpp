@@ -101,12 +101,6 @@ void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
 {
 	cu::RefCountObjAssign(m_tex, tex);
 	m_region = region;
-
-	sm::vec2 sz = m_tex->GetOriSize();
-	m_size.xmin = region.xmin - sz.x * 0.5f;
-	m_size.ymin = region.ymin - sz.y * 0.5f;
-	m_size.xmax = region.xmax - sz.x * 0.5f;
-	m_size.ymax = region.ymax - sz.y * 0.5f;
 }
 
 void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const

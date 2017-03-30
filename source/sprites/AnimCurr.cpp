@@ -300,14 +300,14 @@ void AnimCurr::SetAnimCopy(const AnimCopy* copy)
 		m_slots[i] = dst;
 	}
 
-	std::map<int,int> symbol2index;
+	std::map<std::string,int> name2index;
 	m_slotmap.resize(m_slots.size());
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
 		Sprite* spr = m_slots[i];
-		int symbol_id = spr->GetSymbol()->GetID();
-		std::map<int,int>::iterator iter = symbol2index.find(symbol_id);
-		if (iter == symbol2index.end()) {
-			symbol2index[symbol_id] = i;
+		std::string name = spr->GetName();
+		std::map<std::string,int>::iterator iter = name2index.find(name);
+		if (iter == name2index.end()) {
+			name2index[name] = i;
 			m_slotmap[i] = i;
 		} else {
 			m_slotmap[i] = iter->second;

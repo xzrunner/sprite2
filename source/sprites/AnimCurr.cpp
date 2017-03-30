@@ -409,8 +409,8 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool c
 
 				if (actor.slot != next_frame.actors[actor.next].slot) {
 					int sym_id = 0;
-					if (_actor) {
-						sym_id = _actor->GetSpr()->GetSymbol()->GetID();
+					if (spr) {
+						sym_id = spr->GetSymbol()->GetID();
 					}
 					fault("anim lerp err: sym_id %d, frame %d\n", sym_id, m_frame);
 				}

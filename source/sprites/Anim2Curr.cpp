@@ -67,6 +67,8 @@ Anim2Curr::Anim2Curr(Anim2Symbol* sym)
 	int skin_sz = SIZEOF_RG_SKELETON_SKIN + sizeof(uint16_t) * sk->slot_count;
 	m_sk_skin = (rg_skeleton_skin*)malloc(skin_sz);
 	memset(m_sk_skin, 0, skin_sz);
+
+	UpdateRigging();
 }
 
 Anim2Curr::~Anim2Curr()

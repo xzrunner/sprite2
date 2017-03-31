@@ -346,6 +346,7 @@ bool s2_spr_set_scissor(void* spr, float x, float y, float w, float h)
 	scissor.ymin = y;
 	scissor.xmax = x + w;
 	scissor.ymax = y + h;
+	const_cast<ComplexSymbol*>(sym)->SetScissor(scissor);
 
 	return true;
 }

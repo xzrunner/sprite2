@@ -21,6 +21,8 @@ void AnchorActor::SetAnchor(const Actor* anchor)
 {
 	if (m_anchor != anchor) {
 		if (m_anchor) {
+			// disconnect
+			const_cast<Actor*>(m_anchor)->SetParent(NULL);
 			m_anchor->GetSpr()->RemoveReference();
 		}
 		m_anchor = anchor;

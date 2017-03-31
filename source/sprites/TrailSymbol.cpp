@@ -58,11 +58,8 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 sm::rect TrailSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-#ifdef S2_ALL_SYM_SELECTED
-	return sm::rect(sm::vec2(0, 0), 200, 200);
-#else
-	return sm::rect(0, 0);
-#endif // S2_ALL_SYM_SELECTED
+	// empty
+	return sm::rect();
 }
 
 void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)

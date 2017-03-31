@@ -12,5 +12,3 @@
 #define S2_DISABLE_MODEL
 
 //#define S2_SPR_TREE_DEBUG
-
-//#define S2_ALL_SYM_SELECTED

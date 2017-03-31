@@ -6,6 +6,8 @@
 #include S2_MAT_HEADER
 #include "RenderColor.h"
 
+#include <SM_Rect.h>
+
 namespace s2
 {
 

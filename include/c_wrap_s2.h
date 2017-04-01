@@ -58,8 +58,8 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
 // complex
 bool  s2_spr_has_action(const void* spr, const char* name);
 
-bool  s2_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h);
-bool  s2_spr_set_scissor(void* spr, float x, float y, float w, float h);
+bool  s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax);
+bool  s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax);
 
 // scale9
 void  s2_spr_scale9_resize(void* spr, int w, int h);

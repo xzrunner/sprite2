@@ -313,26 +313,27 @@ bool s2_spr_has_action(const void* spr, const char* name) {
 }
 
 extern "C"
-bool s2_spr_get_scissor(const void* spr, float* x, float* y, float* w, float* h)
+bool s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax)
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() != SYM_COMPLEX) {
+		*xmin = *ymin = *xmax = *ymax = 0;
 		return false;
 	}
 
 	const ComplexSprite* complex_spr = static_cast<const ComplexSprite*>(s2_spr);
 	const ComplexSymbol* sym = static_cast<const ComplexSymbol*>(complex_spr->GetSymbol());
 	const sm::rect& scissor = sym->GetScissor();
-	*x = scissor.xmin;
-	*y = scissor.ymin;
-	*w = scissor.xmax - scissor.xmin;
-	*h = scissor.ymax - scissor.ymin;
+	*xmin = scissor.xmin;
+	*ymin = scissor.ymin;
+	*xmax = scissor.xmax;
+	*ymax = scissor.ymax;
 
 	return true;
 }
 
 extern "C"
-bool s2_spr_set_scissor(void* spr, float x, float y, float w, float h)
+bool s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax)
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() != SYM_COMPLEX) {
@@ -342,10 +343,10 @@ bool s2_spr_set_scissor(void* spr, float x, float y, float w, float h)
 	const ComplexSprite* complex_spr = static_cast<const ComplexSprite*>(s2_spr);
 	const ComplexSymbol* sym = static_cast<const ComplexSymbol*>(complex_spr->GetSymbol());
 	sm::rect scissor;
-	scissor.xmin = x;
-	scissor.ymin = y;
-	scissor.xmax = x + w;
-	scissor.ymax = y + h;
+	scissor.xmin = xmin;
+	scissor.ymin = ymin;
+	scissor.xmax = xmax;
+	scissor.ymax = ymax;
 	const_cast<ComplexSymbol*>(sym)->SetScissor(scissor);
 
 	return true;

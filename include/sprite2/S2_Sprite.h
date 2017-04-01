@@ -130,7 +130,6 @@ public:
 	int ActorCount() const { return m_actors.size(); }
 	void ClearActors() const;
 	void ConnectActors(const Actor* parent) const;
-	//void FixActorPath(const SprTreePath& path, const SprTreePath& new_parent);
 
 private:
 	void InitFlags();

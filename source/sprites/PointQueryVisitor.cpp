@@ -5,7 +5,6 @@
 #include "SymType.h"
 #include "BoundingBox.h"
 #include "SprVisitorParams.h"
-#include "ActorLUT.h"
 #include "QueryAABBVisitor.h"
 #include "AnchorSprite.h"
 

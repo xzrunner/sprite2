@@ -1,5 +1,4 @@
 #include "ActorFactory.h"
-#include "ActorLUT.h"
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
@@ -30,11 +29,6 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 		return actor;
 	}
 
-// 	Actor* actor = ActorLUT::Instance()->Query(path);
-// 	if (actor) {
-// 		return actor;
-// 	}
-
 	switch (child->GetSymbol()->Type())
 	{
 	case SYM_ANCHOR:
@@ -52,8 +46,6 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 	default:
 		actor = new Actor(child, parent);
 	}
-
-//	ActorLUT::Instance()->Insert(actor);
 
 	return actor;
 }

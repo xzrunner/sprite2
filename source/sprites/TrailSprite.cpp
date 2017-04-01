@@ -3,8 +3,6 @@
 #include "UpdateParams.h"
 #include "RenderParams.h"
 #include "Trail.h"
-
-#include "ActorLUT.h"
 #include "S2_Actor.h"
 
 #include <mt_2d.h>

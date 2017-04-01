@@ -11,7 +11,6 @@
 #include "RenderCamera.h"
 #include "SpriteVisitor.h"
 #include "S2_Actor.h"
-#include "ActorLUT.h"
 #include "ClearActorsVisitor.h"
 #include "SymType.h"
 #include "SprVisitorParams.h"
@@ -634,9 +633,7 @@ const Actor* Sprite::QueryActor(const Actor* prev) const
 
 void Sprite::ClearActors() const
 {
-	for (int i = 0, n = m_actors.size(); i < n; ++i)
-	{
-//		ActorLUT::Instance()->Delete(m_actors[i]);
+	for (int i = 0, n = m_actors.size(); i < n; ++i) {
 		delete m_actors[i];
 	}
 }
@@ -647,25 +644,6 @@ void Sprite::ConnectActors(const Actor* parent) const
 		m_actors[i]->SetParent(parent);
 	}
 }
-
-//void Sprite::FixActorPath(const SprTreePath& path, const SprTreePath& new_parent)
-//{
-//	if (m_actors.empty()) {
-//		return;
-//	}
-//	SprTreePath this_path(new_parent);
-//	this_path.Push(*this);
-//	for (int i = 0, n = m_actors.size(); i < n; ++i) 
-//	{
-//		Actor* actor = m_actors[i];
-//		if (actor->GetTreePath() == path) 
-//		{
-//	 		ActorLUT::Instance()->Delete(actor);
-//	 		actor->SetTreePath(this_path);
-//	 		ActorLUT::Instance()->Insert(actor);
-//		}
-//	}
-//}
 
 void Sprite::InitFlags()
 {

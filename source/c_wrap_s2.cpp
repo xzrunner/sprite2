@@ -7,7 +7,6 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "TextboxActor.h"
-#include "ActorLUT.h"
 #include "PointQueryVisitor.h"
 #include "RenderParams.h"
 #include "UpdateParams.h"
@@ -704,7 +703,6 @@ void* s2_get_actor(const void* parent_actor, void* child_spr) {
 
 extern "C"
 int s2_get_actor_count() {
-//	return ActorLUT::Instance()->Count();
 	return -1;
 }
 

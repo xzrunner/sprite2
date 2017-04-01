@@ -1,7 +1,6 @@
 #include "QueryAABBVisitor.h"
 #include "S2_Sprite.h"
 #include "SprVisitorParams.h"
-#include "ActorLUT.h"
 #include "S2_Actor.h"
 #include "SymType.h"
 #include "S2_Symbol.h"

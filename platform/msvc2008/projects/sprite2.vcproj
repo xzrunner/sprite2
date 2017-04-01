@@ -1111,14 +1111,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\sprites\FixActorPathVisitor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\FixActorPathVisitor.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\sprites\PointQueryVisitor.cpp"
 						>
 					</File>
@@ -1177,14 +1169,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\ActorGeo.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\ActorLUT.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\ActorLUT.h"
 					>
 				</File>
 				<File

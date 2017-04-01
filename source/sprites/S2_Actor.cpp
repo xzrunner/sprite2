@@ -1,7 +1,7 @@
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
 #include "ActorGeo.h"
-#include "FixActorPathVisitor.h"
+// #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
 #include "SprDefault.h"
 #include "SprSRT.h"

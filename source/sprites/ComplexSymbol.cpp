@@ -8,7 +8,7 @@
 #include "UpdateParams.h"
 #include "DrawNode.h"
 #include "RenderScissor.h"
-#include "FixActorPathVisitor.h"
+// #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"

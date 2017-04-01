@@ -8,6 +8,7 @@
 #include "SymType.h"
 #include "TextboxActor.h"
 #include "PointQueryVisitor.h"
+#include "SpriteTestVisitor.h"
 #include "RenderParams.h"
 #include "UpdateParams.h"
 #include "DrawNode.h"
@@ -662,6 +663,19 @@ void s2_actor_set_force_up_frame(void* actor, bool force) {
 		}
 	}
 	s2_spr->SetForceUpFrame(force);
+}
+
+extern "C"
+void* s2_sprite_test_actor(const void* parent_actor, float x, float y) {
+	const Actor* parent = static_cast<const Actor*>(parent_actor);
+
+	SprVisitorParams params;
+	params.actor = parent;
+
+	SpriteTestVisitor visitor(sm::vec2(x, y));
+	parent->GetSpr()->Traverse(visitor, params);
+
+	return const_cast<Actor*>(visitor.GetSelectedActor());
 }
 
 extern "C"

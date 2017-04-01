@@ -117,7 +117,7 @@ Sprite* ComplexSprite::FetchChild(int idx, const Actor* actor) const
 	}
 }
 
-VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
+VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	int action = m_action;
@@ -148,6 +148,7 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 			}
 		}
 	}
+	params.selected = cp.selected;
 	return ret;
 }
 

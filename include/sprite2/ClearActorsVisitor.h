@@ -9,7 +9,7 @@ namespace s2
 class ClearActorsVisitor : public SpriteVisitor
 {
 public:	
-	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const Sprite* spr, SprVisitorParams& params);
 
 }; // ClearActorsVisitor
 

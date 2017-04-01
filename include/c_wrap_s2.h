@@ -105,6 +105,7 @@ bool  s2_actor_get_force_up_frame(void* actor);
 void  s2_actor_set_force_up_frame(void* actor, bool force);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
+void* s2_sprite_test_actor(const void* parent_actor, float x, float y);
 
 void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();

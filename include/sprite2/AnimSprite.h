@@ -34,7 +34,7 @@ public:
 	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
-	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const;
 
 	const AnimCurr& GetAnimCurr(const Actor* actor) const;
 

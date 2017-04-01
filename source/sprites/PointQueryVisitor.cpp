@@ -29,7 +29,7 @@ PointQueryVisitor::~PointQueryVisitor()
 	}
 }
 
-VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::Visit(const Sprite* spr, SprVisitorParams& params)
 {
 	if (!spr->IsVisible()) {
 		return VISIT_OVER;
@@ -80,12 +80,12 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	}
 }
 
-VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, SprVisitorParams& params)
 {
 	return VISIT_OVER;
 }
 
-VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, SprVisitorParams& params)
 {
 	bool editable = spr->IsEditable();
 	const Actor* actor = params.actor;

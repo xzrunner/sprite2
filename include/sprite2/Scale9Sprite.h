@@ -21,7 +21,7 @@ public:
 	 */
 	virtual Scale9Sprite* Clone() const;
 
-	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const;
 
 	const Scale9& GetScale9() const { return m_s9; }
 

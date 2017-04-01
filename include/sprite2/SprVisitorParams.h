@@ -16,9 +16,10 @@ public:
 	S2_MAT mt;
 
 	const Actor* actor;
+	bool selected;
 
 public:
-	SprVisitorParams() : actor(NULL) {}
+	SprVisitorParams() : actor(NULL), selected(false) {}
 
 }; // SprVisitorParams
 

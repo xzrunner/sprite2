@@ -72,14 +72,16 @@ Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
 	}
 }
 
-VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
 		SprVisitorParams cp = params;
 		cp.actor = anchor;
-		return anchor->GetSpr()->TraverseChildren(visitor, cp);
+		VisitResult ret = anchor->GetSpr()->TraverseChildren(visitor, cp);
+		params.selected = cp.selected;
+		return ret;
 	} else {
 		return VISIT_OVER;
 	}

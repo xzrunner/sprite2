@@ -1,23 +1,19 @@
-#ifndef _SPRITE2_POINT_QUERY_VISITOR_H_
-#define _SPRITE2_POINT_QUERY_VISITOR_H_
+#ifndef _SPRITE2_SPRITE_TEST_VISITOR_H_
+#define _SPRITE2_SPRITE_TEST_VISITOR_H_
 
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
 
 #include <SM_Vector.h>
 
-#include <vector>
-
 namespace s2
 {
 
-class Actor;
-
-class PointQueryVisitor : public SpriteVisitor
+class SpriteTestVisitor : public SpriteVisitor
 {
 public:
-	PointQueryVisitor(const sm::vec2& pos);
-	virtual ~PointQueryVisitor();
+	SpriteTestVisitor(const sm::vec2& pos);
+	virtual ~SpriteTestVisitor();
 
 	virtual VisitResult Visit(const Sprite* spr, SprVisitorParams& params);
 
@@ -25,19 +21,15 @@ public:
 	virtual VisitResult VisitChildrenEnd(const Sprite* spr, SprVisitorParams& params);
 
 	const Actor* GetSelectedActor() const;
-	const S2_MAT& GetSelectedMat() const { return m_selected_params.mt; }
 	
 private:
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 
 private:
 	sm::vec2 m_pos;
-
-	const Sprite*    m_selected_spr;
 	SprVisitorParams m_selected_params;
-
-}; // PointQueryVisitor
+}; // SpriteTestVisitor
 
 }
 
-#endif // _SPRITE2_POINT_QUERY_VISITOR_H_
+#endif // _SPRITE2_SPRITE_TEST_VISITOR_H_

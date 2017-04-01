@@ -83,7 +83,7 @@ AnimCurr::~AnimCurr()
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	if (m_curr_num == 0) {
@@ -110,6 +110,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 			}
 		}
 	}
+	params.selected = cp.selected;
 	return ret;
 }
 

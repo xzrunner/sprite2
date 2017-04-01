@@ -307,7 +307,7 @@ void Sprite::InitHook(void (*init_flags)(Sprite* spr))
 	INIT_FLAGS = init_flags;
 }
 
-VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat) const
+VisitResult Sprite::Traverse(SpriteVisitor& visitor, SprVisitorParams& params, bool init_mat) const
 {
 	SprVisitorParams p;
 	p.actor = params.actor;
@@ -345,6 +345,9 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	default:
 		ret = v_ret;
 		break;
+	}
+	if(p.selected) {
+		params.selected = p.selected;
 	}
 
 	return ret;

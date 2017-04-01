@@ -3,12 +3,14 @@
 
 #include "S2_Symbol.h"
 
-#include <ps_3d.h>
-
 #include <stdint.h>
+
+struct p3d_emitter_cfg;
 
 namespace s2
 {
+
+class Particle3dEmitter;
 
 class Particle3dSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -29,20 +31,15 @@ public:
 	void SetEmitterCfg(p3d_emitter_cfg* cfg);
 	const p3d_emitter_cfg* GetEmitterCfg() const { return m_et_cfg; }
 
-	p3d_emitter* GetEmitter() { return m_et; }
+	Particle3dEmitter* GetEmitter() { return m_et; }
 
-	bool IsLoop() const { return m_loop; }
-	void SetLoop(bool loop) { m_loop = loop; }
-
-	bool IsLocal() const { return m_local; }
-	void SetLocal(bool local) { m_local = local; }
-
-protected:
+private:
 	p3d_emitter_cfg* m_et_cfg;
 
-	p3d_emitter* m_et;
+	Particle3dEmitter* m_et;
 
-	bool m_loop, m_local;
+	bool m_loop;
+	bool m_local;
 
 }; // Particle3dSymbol
 

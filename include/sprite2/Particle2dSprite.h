@@ -38,11 +38,11 @@ public:
 
 	void SetMatrix(const S2_MAT& mat) const { m_mat = mat; }
 
-	bool GetLoop() const;
+	bool IsLoop() const;
 	void SetLoop(bool loop);
 
-	bool GetLocalModeDraw() const;
-	void SetLocalModeDraw(bool local);
+	bool IsLocal() const;
+	void SetLocal(bool local);
 
 protected:
 	p2d_emitter* m_et;

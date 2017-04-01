@@ -16,7 +16,7 @@ class P3dRenderParams;
 class Particle3dEmitter : private cu::Uncopyable
 {
 public:
-	Particle3dEmitter(const p3d_emitter_cfg* cfg);
+	Particle3dEmitter();
 	~Particle3dEmitter();
 
 	bool Update(float time);
@@ -25,19 +25,21 @@ public:
 	bool IsLoop() const;
 	void SetLoop(bool loop);
 
-	bool IsLocalModeDraw() const;
-	void SetLocalModeDraw(bool local);
+	bool IsLocal() const;
+	void SetLocal(bool local);
 
 	bool IsFinished() const;
 
 	void Start();
 	void Stop();
 
+	void CreateEmitter(const p3d_emitter_cfg* cfg);
+
 	/**
 	 *  @interface
 	 *    ObjectPool
 	 */
-	void Init(const p3d_emitter_cfg* cfg);
+	void Init();
 	void Term();
 	Particle3dEmitter* GetNext() const { return m_state.next; }
 	void SetNext(Particle3dEmitter* next) { m_state.next = next; }
@@ -49,7 +51,7 @@ private:
 		{
 			p3d_emitter* et;
 			float        mt[6];
-			bool         local_mode_draw;
+			bool         local;
 		};
 
 		Particle3dEmitter* next;

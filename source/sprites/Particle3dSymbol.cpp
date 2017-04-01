@@ -6,8 +6,10 @@
 #include "DrawNode.h"
 #include "S2_Actor.h"
 #include "P3dRenderParams.h"
+#include "Particle3dEmitter.h"
 
 #include <ps_3d_sprite.h>
+#include <ps_3d.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
@@ -37,16 +39,14 @@ Particle3dSymbol::Particle3dSymbol(uint32_t id)
 
 Particle3dSymbol::~Particle3dSymbol()
 {
-	if (!m_et) {
-		return;
-	}
-
-	for (int i = 0, n = m_et->cfg->sym_count; i < n; ++i) {
-		Symbol* sym = static_cast<Symbol*>(m_et->cfg->syms[i].ud);
+	for (int i = 0, n = m_et_cfg->sym_count; i < n; ++i) {
+		Symbol* sym = static_cast<Symbol*>(m_et_cfg->syms[i].ud);
 		sym->RemoveReference();
 	}
 
-	p3d_emitter_release(m_et);
+	if (m_et) {
+		P3dEmitterPool::Instance()->Push(m_et);
+	}
 }
 
 //bool Particle3dSymbol::Update(const UpdateParams& up)
@@ -82,6 +82,9 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) 
 	{
+		if (!m_et) {
+			return;
+		}
 		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
@@ -90,7 +93,7 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		p3d_rp.mt    = rp.mt;
 		p3d_rp.rc    = rp.color;
 		p3d_rp.local = m_local;
-		p3d_emitter_draw(m_et, &p3d_rp);
+		m_et->Draw(p3d_rp);
 		return;
 	}
 
@@ -136,7 +139,7 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
 	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
 
-	if (p3d_spr->IsLocalModeDraw()) {
+	if (p3d_spr->IsLocal()) {
 		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		if (rp.actor) {
 			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
@@ -161,10 +164,11 @@ void Particle3dSymbol::SetEmitterCfg(p3d_emitter_cfg* cfg)
 	m_et_cfg = cfg;
 
 	if (m_et) {
-		p3d_emitter_release(m_et);
+		P3dEmitterPool::Instance()->Push(m_et);
 	}
-	m_et = p3d_emitter_create(m_et_cfg);
-	p3d_emitter_start(m_et);
+	m_et = P3dEmitterPool::Instance()->Pop();
+	m_et->CreateEmitter(m_et_cfg);
+	m_et->Start();
 }
 
 }

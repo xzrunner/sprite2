@@ -9,9 +9,9 @@
 namespace s2
 {
 
-Particle3dEmitter::Particle3dEmitter(const p3d_emitter_cfg* cfg)
+Particle3dEmitter::Particle3dEmitter()
 {
-	Init(cfg);
+	Init();
 }
 
 Particle3dEmitter::~Particle3dEmitter()
@@ -86,19 +86,25 @@ bool Particle3dEmitter::IsLoop() const
 
 void Particle3dEmitter::SetLoop(bool loop)
 {
+// 	// removed from buffer
+// 	if (!m_spr) {
+// 		CreateSpr();
+// 		p3d_buffer_insert(m_spr);
+// 	}
+
 	if (m_state.et) {
 		m_state.et->loop = loop;
 	}
 }
 
-bool Particle3dEmitter::IsLocalModeDraw() const
+bool Particle3dEmitter::IsLocal() const
 {
-	return m_state.local_mode_draw;
+	return m_state.local;
 }
 
-void Particle3dEmitter::SetLocalModeDraw(bool local)
+void Particle3dEmitter::SetLocal(bool local)
 {
-	m_state.local_mode_draw = local;
+	m_state.local = local;
 }
 
 bool Particle3dEmitter::IsFinished() const
@@ -124,11 +130,19 @@ void Particle3dEmitter::Stop()
 	}
 }
 
-void Particle3dEmitter::Init(const p3d_emitter_cfg* cfg)
+void Particle3dEmitter::CreateEmitter(const p3d_emitter_cfg* cfg)
 {
+	if (m_state.et) {
+		p3d_emitter_release(m_state.et);
+	}
 	m_state.et = p3d_emitter_create(cfg);
+}
+
+void Particle3dEmitter::Init()
+{
+	m_state.et = NULL;
 	memset(m_state.mt, 0, sizeof(m_state.mt));
-	m_state.local_mode_draw = true;
+	m_state.local = true;	
 }
 
 void Particle3dEmitter::Term()

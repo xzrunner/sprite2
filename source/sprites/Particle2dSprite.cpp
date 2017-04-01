@@ -129,7 +129,7 @@ void Particle2dSprite::Draw(const RenderParams& rp) const
 	}
 }
 
-bool Particle2dSprite::GetLoop() const
+bool Particle2dSprite::IsLoop() const
 {
 	if (m_et) {
 		return m_et->loop;
@@ -152,7 +152,7 @@ void Particle2dSprite::SetLoop(bool loop)
 	}
 }
 
-bool Particle2dSprite::GetLocalModeDraw() const
+bool Particle2dSprite::IsLocal() const
 {
 	if (m_et) {
 		return m_et->local_mode_draw;
@@ -161,7 +161,7 @@ bool Particle2dSprite::GetLocalModeDraw() const
 	}
 }
 
-void Particle2dSprite::SetLocalModeDraw(bool local)
+void Particle2dSprite::SetLocal(bool local)
 {
 	if (m_et) {
 		m_et->local_mode_draw = local;

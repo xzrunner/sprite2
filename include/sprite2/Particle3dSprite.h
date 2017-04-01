@@ -43,28 +43,14 @@ public:
 
 	void SetReuse(bool reuse);
 
-	void SetLoop(bool loop);
-
-	bool IsLocalModeDraw() const;
-	void SetLocalModeDraw(bool local);
-
 	float GetStartRadius() const { return m_start_radius; }
 	void SetStartRadius(float radius) { m_start_radius = radius; }
-
-	bool IsEmitterFinished() const;
-
-	void EmitterStart();
-	void EmitterStop();
-
-	void EmitterUpdate(float dt);
-
-	p3d_sprite* GetP3dSpr() const { return m_spr; }
 
 protected:
 	void CreateSpr();
 
 protected:
-	p3d_sprite* m_spr;
+	Particle3dEmitter* m_et;
 
 	bool m_loop;
 	bool m_local;

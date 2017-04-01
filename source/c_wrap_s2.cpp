@@ -399,7 +399,7 @@ void s2_spr_p3d_set_local(void* spr, bool local)
 	}
 
 	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
-	p3d_spr->SetLocalModeDraw(local);
+	p3d_spr->SetLocal(local);
 }
 
 extern "C"

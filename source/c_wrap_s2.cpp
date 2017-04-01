@@ -273,7 +273,8 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 
 	PointQueryVisitor visitor(sm::vec2(x, y));
 
-	s2_spr->Traverse(visitor, SprVisitorParams());
+	SprVisitorParams params;
+	s2_spr->Traverse(visitor, params);
 	const Actor* ret = visitor.GetSelectedActor();
 	if (!ret) {
 		return NULL;

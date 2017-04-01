@@ -97,7 +97,8 @@ Sprite::~Sprite()
 #endif // S2_RES_LOG
 
 	ClearActorsVisitor visitor;
-	Traverse(visitor, SprVisitorParams());
+	SprVisitorParams params;
+	Traverse(visitor, params);
 
 	if (m_sym) {
 		m_sym->RemoveReference();

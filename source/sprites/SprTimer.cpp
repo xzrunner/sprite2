@@ -25,12 +25,16 @@ void SprTimer::Init()
 	Trail::Instance();
 }
 
-void SprTimer::Update(float dt)
+bool SprTimer::Update(float dt)
 {
+	bool ret = false;
 	Animation::Instance()->Update(dt);
 	Particle2d::Instance()->Update(dt);
-	Particle3d::Instance()->BufferUpdate(dt);
+	if (Particle3d::Instance()->BufferUpdate(dt)) {
+		ret = true;
+	}
 	Trail::Instance()->Update(dt);
+	return ret;
 }
 
 }

@@ -1,13 +1,14 @@
 #include "Particle3dSprite.h"
 #include "Particle3dSymbol.h"
+#include "Particle3dEmitter.h"
+#include "P3dEmitterCfg.h"
+#include "Particle3dBuffer.h"
 #include "S2_Actor.h"
 #include "UpdateParams.h"
 #include "P3dRenderParams.h"
 #include "RenderParams.h"
 
 #include <ps_3d.h>
-#include <ps_3d_sprite.h>
-#include <ps_3d_buffer.h>
 
 #include <stddef.h>
 #include <assert.h>
@@ -52,6 +53,7 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 
 Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id) 
 	: Sprite(sym, id)
+	, m_et(NULL)
 	, m_alone(false)
 	, m_reuse(false)
 	, m_start_radius(FLT_MAX)
@@ -65,14 +67,9 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 
 Particle3dSprite::~Particle3dSprite()
 {
-	if (!m_spr) {
-		return;
+	if (m_et) {
+		m_et->RemoveReference();
 	}
-
-	if (m_spr->et->loop) {
-		p3d_buffer_remove(m_spr);
-	}
-	p3d_sprite_release(m_spr);
 }
 
 Particle3dSprite* Particle3dSprite::Clone() const
@@ -82,47 +79,44 @@ Particle3dSprite* Particle3dSprite::Clone() const
 
 void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	if (!m_spr) {
+	if (!m_et) {
 		return;
 	}
 
 	switch (msg)
 	{
 	case MSG_START: case MSG_TRIGGER:
-		p3d_emitter_start(m_spr->et);
+		m_et->Start();
 		break;
 	case MSG_INIT:
-		if (m_spr->et->time == 0) {
-			m_spr->et->time = Particle3d::Instance()->GetTime();
-		}
+		m_et->ResetTime();
 		break;
 	}
 }
 
 bool Particle3dSprite::Update(const UpdateParams& up)
 {
-	if (!m_spr) {
+	if (!m_et) {
 		return false;
 	} 
 	
+	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
+	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	if (!cfg) {
+		return false;
+	}
+
+	const_cast<P3dEmitterCfg*>(cfg)->SetStartRadius(m_start_radius);
+
 	// update outside
 	if (m_alone) {
-		p3d_emitter* et = m_spr->et;
-
-		p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
-		cfg->start_radius = m_start_radius;
-
 		return false;
 	} 
 
-	p3d_emitter* et = m_spr->et;
-
-	p3d_emitter_cfg* cfg = const_cast<p3d_emitter_cfg*>(et->cfg);
-	cfg->start_radius = m_start_radius;
-
 	float time = Particle3d::Instance()->GetTime();
-	assert(et->time <= time);
-	if (et->time == time) {
+	float et_time = m_et->GetTime();
+	assert(et_time <= time);
+	if (et_time == time) {
 		return false;
 	}
 
@@ -146,11 +140,10 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 	mt[4] = world_mat.x[12];
 	mt[5] = world_mat.x[13];
 #endif // S2_MATRIX_FIX
-	
-	float dt = time - et->time;
-	p3d_emitter_update(et, dt, mt);
-	et->time = time;
 
+	m_et->SetMat(mt);
+	m_et->Update(time);
+	
 	return true;
 }
 
@@ -165,107 +158,117 @@ bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 
 void Particle3dSprite::Draw(const RenderParams& rp) const
 {
-	if (m_alone || !m_spr) {
+	if (m_alone || !m_et) {
 		return;
 	}
 
 	P3dRenderParams p3d_rp;
 	p3d_rp.mt          = rp.mt;
 	p3d_rp.rc          = rp.color;
-	p3d_rp.local       = m_spr->local_mode_draw;
+	p3d_rp.local       = m_local;
 	p3d_rp.view_region = rp.view_region;
-	p3d_emitter_draw(m_spr->et, &p3d_rp);
+	m_et->Draw(p3d_rp, false);
 }
 
-void Particle3dSprite::SetOuterMatrix(const S2_MAT& mat) const
-{ 
-	if (m_spr && m_alone) 
-	{
-		float* mt = m_spr->mat;
-#ifdef S2_MATRIX_FIX
-		mt[0] = mat.x[0] * sm::MatrixFix::SCALE_INV;
-		mt[1] = mat.x[1] * sm::MatrixFix::SCALE_INV;
-		mt[2] = mat.x[2] * sm::MatrixFix::SCALE_INV;
-		mt[3] = mat.x[3] * sm::MatrixFix::SCALE_INV;
-		mt[4] = mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-		mt[5] = mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
-#else
-		mt[0] = mat.x[0];
-		mt[1] = mat.x[1];
-		mt[2] = mat.x[4];
-		mt[3] = mat.x[5];
-		mt[4] = mat.x[12];
-		mt[5] = mat.x[13];	
-#endif // S2_MATRIX_FIX
+void Particle3dSprite::SetPrevMat(const S2_MAT& mat) const
+{
+	if (!m_et || !m_alone) {
+		return;
 	}
+
+	float mt[6];
+#ifdef S2_MATRIX_FIX
+	mt[0] = mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mt[1] = mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mt[2] = mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mt[3] = mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mt[4] = mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mt[5] = mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
+#else
+	mt[0] = mat.x[0];
+	mt[1] = mat.x[1];
+	mt[2] = mat.x[4];
+	mt[3] = mat.x[5];
+	mt[4] = mat.x[12];
+	mt[5] = mat.x[13];	
+#endif // S2_MATRIX_FIX
+
+	m_et->SetMat(mt);
 }
 
 void Particle3dSprite::CreateSpr()
 {
+	assert(!m_et);
+
 	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const p3d_emitter_cfg* cfg = sym->GetEmitterCfg();
+	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
 	if (!cfg) {
 		return;
 	}
 
-	m_spr = p3d_sprite_create();
-	m_spr->local_mode_draw = m_local;
-	m_spr->et              = p3d_emitter_create(cfg);
-	m_spr->et->loop        = m_loop;
-	p3d_emitter_start(m_spr->et);
-	m_spr->ptr_self        = &m_spr;
+	m_et = P3dEmitterPool::Instance()->Pop();
+	m_et->CreateEmitter(cfg);
+	m_et->Start();
+
+	m_et->SetLoop(m_loop);
+	m_et->SetLocal(m_local);
+	
 	if (m_start_radius == FLT_MAX) {
-		m_start_radius = cfg->start_radius;
+		m_start_radius = cfg->GetImpl()->start_radius;
 	}
 
-	if (m_alone && m_spr) {
-		p3d_buffer_insert(m_spr);
+	if (m_alone && m_et) {
+		Particle3dBuffer::Instance()->Insert(m_et);
 	}
+}
+
+void Particle3dSprite::SetLoop(bool loop)
+{
+	if (m_loop == loop || !m_et) {
+		return;
+	}
+
+	if (m_alone && loop) {
+		return;
+	}
+
+	m_loop = loop;
+	m_et->SetLoop(loop);
+}
+
+void Particle3dSprite::SetLocal(bool local)
+{
+	if (m_local == local || !m_et) {
+		return;
+	}
+
+	m_local = local;
+	m_et->SetLocal(local);
 }
 
 void Particle3dSprite::SetAlone(bool alone) 
 { 
-	if (m_alone == alone || !m_spr) {
+	if (m_alone == alone || !m_et) {
 		return;
 	}
 
-	if (m_spr->et) {
-		p3d_emitter_clear(m_spr->et);
-	}
-
-	const p3d_emitter_cfg* cfg = m_spr->et->cfg;
-	p3d_emitter* et = p3d_emitter_create(cfg);
-	if (m_alone) {
-		p3d_buffer_remove(m_spr);
-	} else {
-		p3d_buffer_insert(m_spr);
-	}
-	m_spr->et = et;
-	p3d_emitter_start(m_spr->et);
-
-	m_alone = alone;
-}
-
-void Particle3dSprite::SetReuse(bool reuse)
-{
-	if (m_reuse == reuse || !m_spr) {
-		return;
-	}
-
-	if (m_spr->et) {
-		p3d_emitter_release(m_spr->et);
-		m_spr->et = NULL;
-	}
+	m_et->Clear();
 
 	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	if (m_reuse) {
-		m_spr->et = sym->GetEmitter();
-	} else {
-		m_spr->et = p3d_emitter_create(sym->GetEmitterCfg());
+	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	if (!cfg) {
+		return;
 	}
-	p3d_emitter_start(m_spr->et);
 
-	m_reuse = reuse;
+	m_et->CreateEmitter(cfg);
+	if (m_alone) {
+		Particle3dBuffer::Instance()->Remove(m_et);
+	} else {
+		Particle3dBuffer::Instance()->Insert(m_et);
+	}
+	m_et->Start();
+
+	m_alone = alone;
 }
 
 }

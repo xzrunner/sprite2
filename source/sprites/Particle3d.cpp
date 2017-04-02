@@ -1,4 +1,5 @@
 #include "Particle3d.h"
+#include "Particle3dBuffer.h"
 #include "FastBlendMode.h"
 #include "S2_Symbol.h"
 #include "S2_Sprite.h"
@@ -13,8 +14,6 @@
 #include "Particle3dSprite.h"
 
 #include <ps_3d.h>
-#include <ps_3d_sprite.h>
-#include <ps_3d_buffer.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
@@ -35,17 +34,17 @@ Particle3d::Particle3d()
 bool Particle3d::BufferUpdate(float dt)
 {
 	m_time += dt;
-	return p3d_buffer_update(m_time);
+	return Particle3dBuffer::Instance()->Update(m_time);
 }
 
 void Particle3d::BufferDraw(float x, float y, float scale) const
 {
-	p3d_buffer_draw(x, y, scale);
+	Particle3dBuffer::Instance()->Draw(sm::vec2(x, y), scale);
 }
 
 void Particle3d::BufferClear()
 {
-	p3d_buffer_clear();
+	Particle3dBuffer::Instance()->Clear();
 }
 
 static void
@@ -208,44 +207,10 @@ remove_func(p3d_particle* p, void* ud)
 	}
 }
 
-static void
-update_srt_func(void* params, float x, float y, float scale) {
-	P3dRenderParams* rp = static_cast<P3dRenderParams*>(params);
-#ifdef S2_MATRIX_FIX
-	rp->mt.Translate(x, y);
-	rp->mt.Scale(scale, scale);
-#else
-	rp->mt.Translate(x, y, 0);
-	rp->mt.Scale(scale, scale, 1);
-#endif // S2_MATRIX_FIX
-}
-
-static void
-buf_remove_func(struct p3d_sprite* spr) {
-}
-
-static void
-create_draw_params_func(struct p3d_sprite* spr) {
-	P3dRenderParams* rp = new P3dRenderParams;
-	if (spr) {
-		rp->local = spr->local_mode_draw;
-	}
-	spr->draw_params = rp;
-}
-
-void 
-release_draw_params_func(struct p3d_sprite* spr) {
-	P3dRenderParams* rp = static_cast<P3dRenderParams*>(spr->draw_params);
-	delete rp;
-	spr->draw_params = NULL;
-}
-
 void Particle3d::Init()
 {
 	p3d_init();
 	p3d_regist_cb(blend_begin_func, blend_end_func, render_func, update_func, add_func, remove_func);	
-	p3d_buffer_init(update_srt_func, buf_remove_func);
-	p3d_sprite_init(create_draw_params_func, release_draw_params_func);
 }
 
 }

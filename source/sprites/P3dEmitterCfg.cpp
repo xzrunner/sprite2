@@ -13,7 +13,7 @@ P3dEmitterCfg::P3dEmitterCfg()
 {
 }
 
-P3dEmitterCfg::P3dEmitterCfg(const p3d_emitter_cfg* impl)
+P3dEmitterCfg::P3dEmitterCfg(p3d_emitter_cfg* impl)
 	: m_impl(impl)
 {
 }
@@ -24,12 +24,15 @@ P3dEmitterCfg::~P3dEmitterCfg()
 		return;
 	}
 
-	for (int i = 0; i < m_impl->sym_count; ++i)
-	{
-		const p3d_symbol& p_symbol = m_impl->syms[i];
-		Symbol* sym = VI_DOWNCASTING<Symbol*>(static_cast<Symbol*>(p_symbol.ud));
-		sym->RemoveReference();
+	for (int i = 0; i < m_impl->sym_count; ++i) {
+		static_cast<Symbol*>(m_impl->syms[i].ud)->RemoveReference();
 	}
+	delete m_impl;
+}
+
+void P3dEmitterCfg::SetStartRadius(float radius)
+{
+	m_impl->start_radius = radius;
 }
 
 }

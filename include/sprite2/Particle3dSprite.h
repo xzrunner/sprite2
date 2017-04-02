@@ -4,8 +4,6 @@
 #include "S2_Sprite.h"
 #include "Particle3d.h"
 
-struct p3d_sprite;
-
 namespace s2
 {
 
@@ -37,12 +35,18 @@ public:
 
 	void Draw(const RenderParams& rp) const;
 
-	void SetOuterMatrix(const S2_MAT& mat) const;
+	void SetPrevMat(const S2_MAT& mat) const;
+
+	bool IsLoop() const { return m_loop; }
+	void SetLoop(bool loop);
+
+	bool IsLocal() const { return m_local; }
+	void SetLocal(bool local);
 
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);
 
-	void SetReuse(bool reuse);
+//	void SetReuse(bool reuse);
 
 	float GetStartRadius() const { return m_start_radius; }
 	void SetStartRadius(float radius) { m_start_radius = radius; }

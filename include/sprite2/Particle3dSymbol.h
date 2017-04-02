@@ -33,7 +33,10 @@ public:
 	Particle3dEmitter* GetEmitter() { return m_et; }
 
 	void SetLoop(bool loop) { m_loop = loop; }
+	bool IsLoop() const { return m_loop; }
+
 	void SetLocal(bool local) { m_local = local; }
+	bool IsLocal() const { return m_local; }
 
 private:
 	const P3dEmitterCfg* m_et_cfg;

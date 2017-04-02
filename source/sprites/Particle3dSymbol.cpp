@@ -7,8 +7,8 @@
 #include "S2_Actor.h"
 #include "P3dRenderParams.h"
 #include "Particle3dEmitter.h"
+#include "P3dEmitterCfg.h"
 
-#include <ps_3d_sprite.h>
 #include <ps_3d.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -39,13 +39,11 @@ Particle3dSymbol::Particle3dSymbol(uint32_t id)
 
 Particle3dSymbol::~Particle3dSymbol()
 {
-	for (int i = 0, n = m_et_cfg->sym_count; i < n; ++i) {
-		Symbol* sym = static_cast<Symbol*>(m_et_cfg->syms[i].ud);
-		sym->RemoveReference();
+	if (m_et_cfg) {
+		m_et_cfg->RemoveReference();
 	}
-
 	if (m_et) {
-		P3dEmitterPool::Instance()->Push(m_et);
+		m_et->RemoveReference();
 	}
 }
 
@@ -80,31 +78,30 @@ int Particle3dSymbol::Type() const
 
 void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-//	if (!spr) 
-//	{
-//		if (!m_et) {
-//			return;
-//		}
-//		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-//		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-//		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-//		shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-//		P3dRenderParams p3d_rp;
-//		p3d_rp.mt    = rp.mt;
-//		p3d_rp.rc    = rp.color;
-//		p3d_rp.local = m_local;
-//		m_et->Draw(p3d_rp);
-//		return;
-//	}
-//
-//	RenderParams rp_child(rp);
-//	rp_child.color = spr->GetColor() * rp.color;
-//
-//	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-//	p3d_spr->SetOuterMatrix(rp_child.mt);
-//	if (p3d_spr->IsAlone()) 
-//	{
-//		p3d_sprite* p3d = p3d_spr->GetP3dSpr();
+	if (!spr) 
+	{
+		if (!m_et) {
+			return;
+		}
+		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+		shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
+		P3dRenderParams p3d_rp;
+		p3d_rp.mt    = rp.mt;
+		p3d_rp.rc    = rp.color;
+		p3d_rp.local = m_local;
+		m_et->Draw(p3d_rp, false);
+		return;
+	}
+
+	RenderParams rp_child(rp);
+	rp_child.color = spr->GetColor() * rp.color;
+
+	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+	p3d_spr->SetPrevMat(rp_child.mt);
+	if (p3d_spr->IsAlone()) 
+	{
 //		if (!p3d) {
 //			return;
 //		}
@@ -131,22 +128,22 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 //		p3d->mat[4] = mt.x[12];
 //		p3d->mat[5] = mt.x[13];
 //#endif // S2_MATRIX_FIX
-//		return;
-//	}
-//
-//	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-//	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-//	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-//	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
-//
-//	if (p3d_spr->IsLocal()) {
-//		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
-//		if (rp.actor) {
-//			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-//		}
-//	}
-//
-//	p3d_spr->Draw(rp_child);
+		return;
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
+	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+
+	if (p3d_spr->IsLocal()) {
+		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		if (rp.actor) {
+			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		}
+	}
+
+	p3d_spr->Draw(rp_child);
 }
 
 sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
@@ -167,7 +164,7 @@ void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg)
 	}
 
 	if (m_et) {
-		P3dEmitterPool::Instance()->Push(m_et);
+		m_et->RemoveReference();
 	}
 	m_et = P3dEmitterPool::Instance()->Pop();
 	m_et->CreateEmitter(m_et_cfg);

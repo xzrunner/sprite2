@@ -13,13 +13,15 @@ class P3dEmitterCfg : public cu::RefCountObj, private cu::Uncopyable
 {
 public:
 	P3dEmitterCfg();
-	P3dEmitterCfg(const p3d_emitter_cfg* impl);
+	P3dEmitterCfg(p3d_emitter_cfg* impl);
 	virtual ~P3dEmitterCfg();
-	
-	const p3d_emitter_cfg* GetCfg() const { return m_impl; }
+
+	void SetStartRadius(float radius);
+
+	const p3d_emitter_cfg* GetImpl() const { return m_impl; }
 	
 private:
-	const p3d_emitter_cfg* m_impl;
+	p3d_emitter_cfg* m_impl;
 
 }; // P3dEmitterCfg
 

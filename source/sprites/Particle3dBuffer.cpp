@@ -5,6 +5,8 @@
 namespace s2
 {
 
+SINGLETON_DEFINITION(Particle3dBuffer)
+
 static void (*UPDATE_SRT_FUNC)(void* params, float x, float y, float scale);
 static void (*REMOVE_FUNC)(struct Particle3dEmitter*);
 
@@ -19,6 +21,11 @@ Particle3dBuffer::~Particle3dBuffer()
 
 void Particle3dBuffer::Insert(Particle3dEmitter* emitter)
 {
+	if (!emitter) {
+		return;
+	}
+
+	emitter->AddReference();
 	m_emitters.push_back(emitter);
 }
 
@@ -27,7 +34,7 @@ void Particle3dBuffer::Remove(Particle3dEmitter* emitter)
 	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
 	for ( ; itr != m_emitters.end(); ++itr) {
 		if (*itr == emitter) {
-			P3dEmitterPool::Instance()->Push(*itr);
+			(*itr)->RemoveReference();
 			m_emitters.erase(itr);
 			break;
 		}
@@ -38,25 +45,29 @@ void Particle3dBuffer::Clear()
 {
 	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
 	for ( ; itr != m_emitters.end(); ++itr) {
-		P3dEmitterPool::Instance()->Push(*itr);
+		(*itr)->RemoveReference();
 	}
 	m_emitters.clear();
 }
 
-void Particle3dBuffer::Update(float time)
+bool Particle3dBuffer::Update(float time)
 {
+	bool ret = false;
 	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
-	for ( ; itr != m_emitters.end(); ++itr) 
+	for ( ; itr != m_emitters.end(); ) 
 	{
 		Particle3dEmitter* emitter = *itr;
 		if (emitter->IsFinished()) {
-			P3dEmitterPool::Instance()->Push(emitter);
+			(*itr)->RemoveReference();
 			itr = m_emitters.erase(itr);
 		} else {
-			emitter->Update(time);
+			if (emitter->Update(time)) {
+				ret = true;
+			}
 			++itr;
 		}
 	}
+	return ret;
 }
 
 void Particle3dBuffer::Draw(const sm::vec2& pos, float scale) const
@@ -68,7 +79,7 @@ void Particle3dBuffer::Draw(const sm::vec2& pos, float scale) const
 		rp.mt.Identity();
 		rp.mt.Scale(scale, scale, scale);
 		rp.mt.Translate(pos.x, pos.y, 0);
-		(*itr)->Draw(rp);
+		(*itr)->Draw(rp, true);
 	}
 }
 

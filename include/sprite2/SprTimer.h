@@ -11,7 +11,7 @@ class SprTimer
 public:
 	void Init();
 
-	void Update(float dt);
+	bool Update(float dt);
 
 	SINGLETON_DECLARATION(SprTimer)
 

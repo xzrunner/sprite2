@@ -572,8 +572,16 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="buffer"
+					Name="wrap"
 					>
+					<File
+						RelativePath="..\..\..\source\sprites\P3dEmitterCfg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\P3dEmitterCfg.h"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\source\sprites\Particle3dBuffer.cpp"
 						>

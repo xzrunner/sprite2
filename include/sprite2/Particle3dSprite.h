@@ -10,6 +10,7 @@ namespace s2
 {
 
 class RenderParams;
+class Particle3dEmitter;
 
 class Particle3dSprite : public VIRTUAL_INHERITANCE Sprite
 {

@@ -1,5 +1,6 @@
 #include "Particle3dEmitter.h"
 #include "P3dRenderParams.h"
+#include "P3dEmitterCfg.h"
 
 #include <ps_3d.h>
 
@@ -130,16 +131,21 @@ void Particle3dEmitter::Stop()
 	}
 }
 
-void Particle3dEmitter::CreateEmitter(const p3d_emitter_cfg* cfg)
+void Particle3dEmitter::CreateEmitter(const P3dEmitterCfg* cfg)
 {
+	cu::RefCountObjAssign(m_state.cfg, cfg);
 	if (m_state.et) {
 		p3d_emitter_release(m_state.et);
+		m_state.et = NULL;
 	}
-	m_state.et = p3d_emitter_create(cfg);
+	if (m_state.cfg) {
+		m_state.et = p3d_emitter_create(m_state.cfg->GetCfg());
+	}	
 }
 
 void Particle3dEmitter::Init()
 {
+	m_state.cfg = NULL;
 	m_state.et = NULL;
 	memset(m_state.mt, 0, sizeof(m_state.mt));
 	m_state.local = true;	
@@ -147,6 +153,9 @@ void Particle3dEmitter::Init()
 
 void Particle3dEmitter::Term()
 {
+	if (m_state.cfg) {
+		m_state.cfg->RemoveReference();
+	}
 	if (m_state.et) {
 		p3d_emitter_release(m_state.et);
 		m_state.et = NULL;

@@ -6,12 +6,12 @@
 #include <CU_Uncopyable.h>
 
 struct p3d_emitter;
-struct p3d_emitter_cfg;
 
 namespace s2
 {
 
 class P3dRenderParams;
+class P3dEmitterCfg;
 
 class Particle3dEmitter : private cu::Uncopyable
 {
@@ -33,7 +33,7 @@ public:
 	void Start();
 	void Stop();
 
-	void CreateEmitter(const p3d_emitter_cfg* cfg);
+	void CreateEmitter(const P3dEmitterCfg* cfg);
 
 	/**
 	 *  @interface
@@ -49,6 +49,8 @@ private:
 	{
 		struct 
 		{
+			const P3dEmitterCfg* cfg;
+
 			p3d_emitter* et;
 			float        mt[6];
 			bool         local;

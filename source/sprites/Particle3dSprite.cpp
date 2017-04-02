@@ -16,7 +16,7 @@ namespace s2
 {
 
 Particle3dSprite::Particle3dSprite() 
-	: m_spr(NULL)
+	: m_et(NULL)
 	, m_loop(true)
 	, m_local(true)
 	, m_alone(false)
@@ -27,7 +27,7 @@ Particle3dSprite::Particle3dSprite()
 
 Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	: Sprite(spr)
-	, m_spr(NULL)
+	, m_et(NULL)
 	, m_loop(spr.m_loop)
 	, m_local(spr.m_local)
 	, m_alone(spr.m_alone)
@@ -40,7 +40,7 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_spr            = NULL;
+	m_et             = NULL;
 	m_loop           = spr.m_loop;
 	m_local          = spr.m_local;
 	m_alone          = spr.m_alone;

@@ -21,7 +21,7 @@ Particle3dSprite::Particle3dSprite()
 	, m_loop(true)
 	, m_local(true)
 	, m_alone(false)
-	, m_reuse(false)
+	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
 {
 }
@@ -55,7 +55,7 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(NULL)
 	, m_alone(false)
-	, m_reuse(false)
+	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
 {
 	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
@@ -98,53 +98,22 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 {
 	if (!m_et) {
 		return false;
-	} 
-	
-	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
-	if (!cfg) {
-		return false;
 	}
 
-	const_cast<P3dEmitterCfg*>(cfg)->SetStartRadius(m_start_radius);
-
-	// update outside
-	if (m_alone) {
-		return false;
-	} 
-
-	float time = Particle3d::Instance()->GetTime();
-	float et_time = m_et->GetTime();
-	assert(et_time <= time);
-	if (et_time == time) {
-		return false;
+	bool ret = false;
+	switch (m_reuse)
+	{
+	case REUSE_ALL:
+		ret = UpdateSymbol(up);
+		break;
+	case REUSE_COMMON:
+		ret = UpdateSprite(up);
+		break;
+	case REUSE_NONE:
+		ret = UpdateActor(up);
+		break;
 	}
-
-	UpdateParams up_child(up);
-	up_child.Push(this);
-
-	float mt[6];
-	const S2_MAT& world_mat = up_child.GetPrevMat();
-#ifdef S2_MATRIX_FIX
-	mt[0] = world_mat.x[0] * sm::MatrixFix::SCALE_INV;
-	mt[1] = world_mat.x[1] * sm::MatrixFix::SCALE_INV;
-	mt[2] = world_mat.x[2] * sm::MatrixFix::SCALE_INV;
-	mt[3] = world_mat.x[3] * sm::MatrixFix::SCALE_INV;
-	mt[4] = world_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-	mt[5] = world_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-#else
-	mt[0] = world_mat.x[0];
-	mt[1] = world_mat.x[1];
-	mt[2] = world_mat.x[4];
-	mt[3] = world_mat.x[5];
-	mt[4] = world_mat.x[12];
-	mt[5] = world_mat.x[13];
-#endif // S2_MATRIX_FIX
-
-	m_et->SetMat(mt);
-	m_et->Update(time);
-	
-	return true;
+	return ret;
 }
 
 bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
@@ -170,7 +139,7 @@ void Particle3dSprite::Draw(const RenderParams& rp) const
 	m_et->Draw(p3d_rp, false);
 }
 
-void Particle3dSprite::SetPrevMat(const S2_MAT& mat) const
+void Particle3dSprite::SetEmitterMat(const S2_MAT& mat) const
 {
 	if (!m_et || !m_alone) {
 		return;
@@ -246,6 +215,15 @@ void Particle3dSprite::SetLocal(bool local)
 	m_et->SetLocal(local);
 }
 
+void Particle3dSprite::SetReuse(Particle3dSprite::ReuseType reuse)
+{
+	if (m_reuse == reuse || !m_et) {
+		return;
+	}
+
+	m_reuse = reuse;
+}
+
 void Particle3dSprite::SetAlone(bool alone) 
 { 
 	if (m_alone == alone || !m_et) {
@@ -269,6 +247,65 @@ void Particle3dSprite::SetAlone(bool alone)
 	m_et->Start();
 
 	m_alone = alone;
+}
+
+bool Particle3dSprite::UpdateSymbol(const UpdateParams& up)
+{
+	float time = Particle3d::Instance()->GetTime();
+	return m_sym->Update(up, time);
+}
+
+bool Particle3dSprite::UpdateSprite(const UpdateParams& up)
+{
+	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
+	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	if (!cfg) {
+		return false;
+	}
+
+	const_cast<P3dEmitterCfg*>(cfg)->SetStartRadius(m_start_radius);
+
+	UpdateParams up_child(up);
+	up_child.Push(this);
+
+	float mt[6];
+	const S2_MAT& world_mat = up_child.GetPrevMat();
+#ifdef S2_MATRIX_FIX
+	mt[0] = world_mat.x[0] * sm::MatrixFix::SCALE_INV;
+	mt[1] = world_mat.x[1] * sm::MatrixFix::SCALE_INV;
+	mt[2] = world_mat.x[2] * sm::MatrixFix::SCALE_INV;
+	mt[3] = world_mat.x[3] * sm::MatrixFix::SCALE_INV;
+	mt[4] = world_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+	mt[5] = world_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+#else
+	mt[0] = world_mat.x[0];
+	mt[1] = world_mat.x[1];
+	mt[2] = world_mat.x[4];
+	mt[3] = world_mat.x[5];
+	mt[4] = world_mat.x[12];
+	mt[5] = world_mat.x[13];
+#endif // S2_MATRIX_FIX
+
+	m_et->SetMat(mt);
+	if (m_alone) {
+		return false;
+	}
+
+	float time = Particle3d::Instance()->GetTime();
+	float et_time = m_et->GetTime();
+	assert(et_time <= time);
+	if (et_time == time) {
+		return false;
+	}
+
+	m_et->Update(time);
+
+	return true;
+}
+
+bool Particle3dSprite::UpdateActor(const UpdateParams& up)
+{
+	return false;
 }
 
 }

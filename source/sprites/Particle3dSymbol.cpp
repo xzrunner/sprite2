@@ -47,30 +47,6 @@ Particle3dSymbol::~Particle3dSymbol()
 	}
 }
 
-//bool Particle3dSymbol::Update(const UpdateParams& up)
-//{
-//	float time = Particle3d::Instance()->GetTime();
-//	assert(m_et->time <= time);
-//	if (m_et->time == time) {
-//		return false;
-//	}
-//
-//	float mt[6];
-//	sm::mat4 inner_mat;
-//	mt[0] = inner_mat.x[0];
-//	mt[1] = inner_mat.x[1];
-//	mt[2] = inner_mat.x[4];
-//	mt[3] = inner_mat.x[5];
-//	mt[4] = inner_mat.x[12];
-//	mt[5] = inner_mat.x[13];	
-//
-//	float dt = time - m_et->time;
-//	p3d_emitter_update(m_et, dt, mt);
-//	m_et->time = time;
-//
-//	return true;
-//}
-
 int Particle3dSymbol::Type() const 
 { 
 	return SYM_PARTICLE3D; 
@@ -78,72 +54,56 @@ int Particle3dSymbol::Type() const
 
 void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	if (!spr) 
+	Particle3dSprite::ReuseType reuse;
+	if (spr) {
+		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		reuse = p3d_spr->GetReuse();
+	} else {
+		reuse = Particle3dSprite::REUSE_ALL;
+	}
+	switch (reuse)
 	{
-		if (!m_et) {
-			return;
-		}
-		sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-		shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-		P3dRenderParams p3d_rp;
-		p3d_rp.mt    = rp.mt;
-		p3d_rp.rc    = rp.color;
-		p3d_rp.local = m_local;
-		m_et->Draw(p3d_rp, false);
-		return;
+	case Particle3dSprite::REUSE_ALL:
+		DrawSymbol(rp, spr);
+		break;
+	case Particle3dSprite::REUSE_COMMON:
+		DrawSprite(rp, spr);
+		break;
+	case Particle3dSprite::REUSE_NONE:
+		DrawActor(rp, spr);
+		break;
+	default:
+		break;
 	}
+}
 
-	RenderParams rp_child(rp);
-	rp_child.color = spr->GetColor() * rp.color;
+bool Particle3dSymbol::Update(const UpdateParams& up, float time)
+{
+// 	time = Particle3d::Instance()->GetTime();
+// 	assert(m_et->time <= time);
+// 	if (m_et->time == time) {
+// 		return false;
+// 	}
+// 
+// 	float mt[6];
+// 	sm::mat4 inner_mat;
+// 	mt[0] = inner_mat.x[0];
+// 	mt[1] = inner_mat.x[1];
+// 	mt[2] = inner_mat.x[4];
+// 	mt[3] = inner_mat.x[5];
+// 	mt[4] = inner_mat.x[12];
+// 	mt[5] = inner_mat.x[13];	
+// 
+// 	float dt = time - m_et->time;
+// 	p3d_emitter_update(m_et, dt, mt);
+// 	m_et->time = time;
+//	return true;
 
-	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-	p3d_spr->SetPrevMat(rp_child.mt);
-	if (p3d_spr->IsAlone()) 
-	{
-//		if (!p3d) {
-//			return;
-//		}
-//		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
-//		p3d_rp->mt    = rp_child.mt;
-//		p3d_rp->rc    = rp_child.color;
-//		p3d_rp->local = m_local;
-//		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
-//		if (rp.actor) {
-//			mt = rp.actor->GetLocalMat() * mt;
-//		}
-//#ifdef S2_MATRIX_FIX
-//		p3d->mat[0] = mt.x[0] * sm::MatrixFix::SCALE;
-//		p3d->mat[1] = mt.x[1] * sm::MatrixFix::SCALE;
-//		p3d->mat[2] = mt.x[2] * sm::MatrixFix::SCALE;
-//		p3d->mat[3] = mt.x[3] * sm::MatrixFix::SCALE;
-//		p3d->mat[4] = mt.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-//		p3d->mat[5] = mt.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
-//#else
-//		p3d->mat[0] = mt.x[0];
-//		p3d->mat[1] = mt.x[1];
-//		p3d->mat[2] = mt.x[4];
-//		p3d->mat[3] = mt.x[5];
-//		p3d->mat[4] = mt.x[12];
-//		p3d->mat[5] = mt.x[13];
-//#endif // S2_MATRIX_FIX
-		return;
+	if (m_et) {
+		return m_et->Update(time);
+	} else {
+		return false;
 	}
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
-
-	if (p3d_spr->IsLocal()) {
-		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
-		if (rp.actor) {
-			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
-		}
-	}
-
-	p3d_spr->Draw(rp_child);
 }
 
 sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
@@ -169,6 +129,93 @@ void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg)
 	m_et = P3dEmitterPool::Instance()->Pop();
 	m_et->CreateEmitter(m_et_cfg);
 	m_et->Start();
+}
+
+void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
+{
+	if (!m_et) {
+		return;
+	}
+
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+		return;
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
+	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+	P3dRenderParams p3d_rp;
+	p3d_rp.mt    = rp_child.mt;
+	p3d_rp.rc    = rp_child.color;
+	p3d_rp.local = m_local;
+	m_et->Draw(p3d_rp, false);
+}
+
+void Particle3dSymbol::DrawSprite(const RenderParams& rp, const Sprite* spr) const
+{
+	RenderParams rp_child(rp);
+	rp_child.color = spr->GetColor() * rp.color;
+
+	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+	if (p3d_spr->IsAlone()) 
+	{
+		// 		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		// 		if (rp.actor) {
+		// 			mt = rp.actor->GetLocalMat() * mt;
+		// 		}	
+		// 		p3d_spr->SetEmitterMat(mt);
+
+		//////////////////////////////////////////////////////////////////////////
+
+		//		if (!p3d) {
+		//			return;
+		//		}
+		//		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
+		//		p3d_rp->mt    = rp_child.mt;
+		//		p3d_rp->rc    = rp_child.color;
+		//		p3d_rp->local = m_local;
+		//		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		//		if (rp.actor) {
+		//			mt = rp.actor->GetLocalMat() * mt;
+		//		}
+		//#ifdef S2_MATRIX_FIX
+		//		p3d->mat[0] = mt.x[0] * sm::MatrixFix::SCALE;
+		//		p3d->mat[1] = mt.x[1] * sm::MatrixFix::SCALE;
+		//		p3d->mat[2] = mt.x[2] * sm::MatrixFix::SCALE;
+		//		p3d->mat[3] = mt.x[3] * sm::MatrixFix::SCALE;
+		//		p3d->mat[4] = mt.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
+		//		p3d->mat[5] = mt.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
+		//#else
+		//		p3d->mat[0] = mt.x[0];
+		//		p3d->mat[1] = mt.x[1];
+		//		p3d->mat[2] = mt.x[4];
+		//		p3d->mat[3] = mt.x[5];
+		//		p3d->mat[4] = mt.x[12];
+		//		p3d->mat[5] = mt.x[13];
+		//#endif // S2_MATRIX_FIX
+		return;
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
+	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+
+	if (p3d_spr->IsLocal()) {
+		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		if (rp.actor) {
+			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		}
+	}
+
+	p3d_spr->Draw(rp_child);
+}
+
+void Particle3dSymbol::DrawActor(const RenderParams& rp, const Sprite* spr) const
+{
+	
 }
 
 }

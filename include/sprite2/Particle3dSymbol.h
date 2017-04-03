@@ -25,6 +25,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual bool Update(const UpdateParams& up, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
 
 	void SetEmitterCfg(const P3dEmitterCfg* cfg);
@@ -37,6 +38,11 @@ public:
 
 	void SetLocal(bool local) { m_local = local; }
 	bool IsLocal() const { return m_local; }
+
+private:
+	void DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
+	void DrawSprite(const RenderParams& rp, const Sprite* spr) const;
+	void DrawActor(const RenderParams& rp, const Sprite* spr) const;
 
 private:
 	const P3dEmitterCfg* m_et_cfg;

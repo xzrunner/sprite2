@@ -35,7 +35,7 @@ public:
 
 	void Draw(const RenderParams& rp) const;
 
-	void SetPrevMat(const S2_MAT& mat) const;
+	void SetEmitterMat(const S2_MAT& mat) const;
 
 	bool IsLoop() const { return m_loop; }
 	void SetLoop(bool loop);
@@ -46,7 +46,14 @@ public:
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);
 
-//	void SetReuse(bool reuse);
+	enum ReuseType
+	{
+		REUSE_ALL = 0,
+		REUSE_COMMON,
+		REUSE_NONE
+	};
+	void SetReuse(ReuseType reuse);
+	ReuseType GetReuse() const { return m_reuse; }
 
 	float GetStartRadius() const { return m_start_radius; }
 	void SetStartRadius(float radius) { m_start_radius = radius; }
@@ -54,13 +61,18 @@ public:
 protected:
 	void CreateSpr();
 
+private:
+	bool UpdateSymbol(const UpdateParams& up);
+	bool UpdateSprite(const UpdateParams& up);
+	bool UpdateActor(const UpdateParams& up);
+
 protected:
 	Particle3dEmitter* m_et;
 
 	bool m_loop;
 	bool m_local;
 	bool m_alone;
-	bool m_reuse;
+	ReuseType m_reuse;
 
 	float m_start_radius;
 

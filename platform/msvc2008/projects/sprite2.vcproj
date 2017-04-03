@@ -392,6 +392,10 @@
 				Name="06.complex"
 				>
 				<File
+					RelativePath="..\..\..\include\sprite2\ComplexActor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\ComplexSprite.cpp"
 					>
 				</File>

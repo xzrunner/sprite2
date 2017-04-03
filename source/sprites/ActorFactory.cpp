@@ -8,6 +8,7 @@
 #include "ComplexActor.h"
 #include "AnimActor.h"
 #include "AnchorActor.h"
+#include "Particle3dActor.h"
 
 #include <assert.h>
 
@@ -42,6 +43,9 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 		break;
 	case SYM_ANIMATION:
 		actor = new AnimActor(child, parent);
+		break;
+	case SYM_PARTICLE3D:
+		actor = new Particle3dActor(child, parent);
 		break;
 	default:
 		actor = new Actor(child, parent);

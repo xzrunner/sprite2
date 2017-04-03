@@ -1115,30 +1115,6 @@
 					Name="visitor"
 					>
 					<File
-						RelativePath="..\..\..\source\sprites\ClearActorsVisitor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\ClearActorsVisitor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\PointQueryVisitor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\PointQueryVisitor.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\QueryAABBVisitor.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\QueryAABBVisitor.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\source\sprites\SpriteVisitor.cpp"
 						>
 					</File>
@@ -1146,6 +1122,54 @@
 						RelativePath="..\..\..\include\sprite2\SpriteVisitor.h"
 						>
 					</File>
+					<Filter
+						Name="actor"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\ClearActorsVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\ClearActorsVisitor.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\CreateActorsVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\CreateActorsVisitor.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\ResetActorFlagVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\ResetActorFlagVisitor.h"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="query"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\PointQueryVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\PointQueryVisitor.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\QueryAABBVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\QueryAABBVisitor.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter

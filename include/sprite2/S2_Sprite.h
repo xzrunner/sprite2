@@ -147,11 +147,18 @@ protected:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000080;
+	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000040;
+	// 0x00000080
 
-	static const uint32_t FLAG_DTEX_DISABLE            = 0x00000100;
-	static const uint32_t FLAG_DTEX_FORCE_CACHED       = 0x00000200;
-	static const uint32_t FLAG_DTEX_FORCE_CACHED_DIRTY = 0x00000400;
+	// actor
+	static const uint32_t FLAG_NEED_ACTOR           = 0x00000100;
+	static const uint32_t FLAG_NEED_ACTOR_FOR_CHILD = 0x00000200;
+
+	// dtex
+	static const uint32_t FLAG_DTEX_DISABLE            = 0x00001000;
+	static const uint32_t FLAG_DTEX_FORCE_CACHED       = 0x00002000;
+	static const uint32_t FLAG_DTEX_FORCE_CACHED_DIRTY = 0x00004000;
+	// 0x00008000
 
 	static const uint32_t FLAG_MAX            = 0x00008000;
 
@@ -166,6 +173,11 @@ public:
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
 
+	// actor
+	S2_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)
+	S2_FLAG_METHOD(NeedActorForChild, FLAG_NEED_ACTOR_FOR_CHILD)
+
+	// dtex
 	S2_FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)
 	S2_FLAG_METHOD(DTexForceCached, FLAG_DTEX_FORCE_CACHED)
 	S2_FLAG_METHOD(DTexForceCachedDirty, FLAG_DTEX_FORCE_CACHED_DIRTY)

@@ -9,6 +9,7 @@ namespace s2
 
 class RenderParams;
 class Particle3dEmitter;
+class P3dEmitterCfg;
 
 class Particle3dSprite : public VIRTUAL_INHERITANCE Sprite
 {
@@ -33,8 +34,6 @@ public:
 	virtual bool Update(const UpdateParams& up);
 	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 
-	void Draw(const RenderParams& rp) const;
-
 	void SetEmitterMat(const S2_MAT& mat) const;
 
 	bool IsLoop() const { return m_loop; }
@@ -45,6 +44,8 @@ public:
 
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);
+
+	const Particle3dEmitter* GetEmitter() const { return m_et; }
 
 	enum ReuseType
 	{
@@ -62,9 +63,10 @@ protected:
 	void CreateSpr();
 
 private:
-	bool UpdateSymbol(const UpdateParams& up);
-	bool UpdateSprite(const UpdateParams& up);
-	bool UpdateActor(const UpdateParams& up);
+	bool UpdateEmitter(const UpdateParams& up, Particle3dEmitter* et);
+
+	void ChangeEmitterBuffer(ReuseType reuse, const P3dEmitterCfg* cfg, bool add);
+	static void ChangeEmitterBuffer(Particle3dEmitter* et, const P3dEmitterCfg* cfg, bool add);
 
 protected:
 	Particle3dEmitter* m_et;

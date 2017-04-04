@@ -18,8 +18,8 @@ class DrawNode
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
 	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
-		                   void (*c2_insert_spr)(const s2::Sprite*, int tex_id, int tex_w, int tex_h),
-						   const float* c2_query_spr(const s2::Sprite* spr, int* tex_id));
+		                   void (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
+						   const float* c2_query_spr(const Sprite* spr, int* tex_id));
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 	static S2_MAT PrepareMat(const RenderParams& rp, const Sprite* spr);

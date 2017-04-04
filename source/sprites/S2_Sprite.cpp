@@ -640,6 +640,7 @@ void Sprite::ClearActors() const
 	for (int i = 0, n = m_actors.size(); i < n; ++i) {
 		delete m_actors[i];
 	}
+	m_actors.clear();
 }
 
 void Sprite::ConnectActors(const Actor* parent) const

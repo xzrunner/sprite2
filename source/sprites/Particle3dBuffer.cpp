@@ -25,6 +25,13 @@ void Particle3dBuffer::Insert(Particle3dEmitter* emitter)
 		return;
 	}
 
+	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
+	for ( ; itr != m_emitters.end(); ++itr) {
+		if (*itr == emitter) {
+			return;
+		}
+	}
+
 	emitter->AddReference();
 	m_emitters.push_back(emitter);
 }

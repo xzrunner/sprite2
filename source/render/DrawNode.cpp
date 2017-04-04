@@ -29,7 +29,7 @@ static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
 static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 static void (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
-static const float* (*C2_QUERY_SPR)(const s2::Sprite* spr, int* tex_id);
+static const float* (*C2_QUERY_SPR)(const Sprite* spr, int* tex_id);
 
 void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
@@ -37,8 +37,8 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 }
 
 void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
-						  void (*c2_insert_spr)(const s2::Sprite*, int tex_id, int tex_w, int tex_h),
-						  const float* c2_query_spr(const s2::Sprite* spr, int* tex_id))
+						  void (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
+						  const float* c2_query_spr(const Sprite* spr, int* tex_id))
 {
 	PREPARE_REDNER_PARAMS = prepare_render_params;
 	C2_INSERT_SPR = c2_insert_spr;

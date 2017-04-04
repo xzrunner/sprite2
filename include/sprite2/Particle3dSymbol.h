@@ -41,8 +41,8 @@ public:
 
 private:
 	void DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
-	void DrawSprite(const RenderParams& rp, const Sprite* spr) const;
-	void DrawActor(const RenderParams& rp, const Sprite* spr) const;
+	void DrawEmitter(const RenderParams& rp, const Sprite* spr, 
+		const Particle3dEmitter* et) const;
 
 private:
 	const P3dEmitterCfg* m_et_cfg;

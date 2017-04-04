@@ -209,10 +209,10 @@ protected:
 	/************************************************************************/
 	mutable uint32_t		m_flags;
 
+	mutable std::vector<Actor*> m_actors;
+
 private:
 	int m_id;
-
-	mutable std::vector<Actor*> m_actors;
 
 }; // Sprite
 

@@ -3,8 +3,12 @@
 
 #include "SpriteVisitor.h"
 
+#include <stack>
+
 namespace s2
 {
+
+class Actor;
 
 class CreateActorsVisitor : public SpriteVisitor
 {
@@ -18,6 +22,8 @@ public:
 
 private:
 	bool m_need_actor;
+
+	std::stack<const Actor*> m_path;
 
 }; // CreateActorsVisitor
 

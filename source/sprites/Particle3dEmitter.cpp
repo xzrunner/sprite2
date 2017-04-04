@@ -200,6 +200,7 @@ void Particle3dEmitter::Init()
 	m_state.cfg = NULL;
 	m_state.et = NULL;
 	memset(m_state.mt, 0, sizeof(m_state.mt));
+	m_state.mt[0] = m_state.mt[3] = 1;
 	m_state.local = true;	
 }
 

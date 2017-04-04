@@ -11,10 +11,11 @@ class Particle3dEmitter;
 class Particle3dActor : public Actor
 {
 public:
-	Particle3dActor(const Sprite* spr, const Actor* parent)
-		: Actor(spr, parent) 
-		, m_et(NULL)
-	{}
+	Particle3dActor(const Sprite* spr, const Actor* parent);
+	virtual ~Particle3dActor();
+
+	Particle3dEmitter* GetEmitter() { return m_et; }
+	const Particle3dEmitter* GetEmitter() const { return m_et; }
 
 private:
 	Particle3dEmitter* m_et;

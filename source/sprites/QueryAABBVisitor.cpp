@@ -44,7 +44,7 @@ VisitResult QueryAABBVisitor::Visit(const Sprite* spr, const SprVisitorParams& p
 		break;
 	case SYM_COMPLEX:
 		{
-			const s2::ComplexSymbol* complex_sym = VI_DOWNCASTING<const s2::ComplexSymbol*>(spr->GetSymbol());
+			const ComplexSymbol* complex_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
 			const sm::rect& scissor = complex_sym->GetScissor();
 			if (m_filter_scissor && scissor.Width() > 0 && scissor.Height() > 0) {
 				CombineAABB(scissor, params.mt);

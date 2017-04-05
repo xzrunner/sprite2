@@ -216,16 +216,6 @@ int s2_spr_get_frame_count(void* spr) {
 }
 
 extern "C"
-void s2_spr_get_aabb(const void* spr, float aabb[4]) {
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	sm::rect sz = s2_spr->GetBounding()->GetSize();
-	aabb[0] = sz.xmin;
-	aabb[1] = sz.ymin;
-	aabb[2] = sz.xmax;
-	aabb[3] = sz.ymax;
-}
-
-extern "C"
 void s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]) {
 	S2_MAT outer;
 #ifdef S2_MATRIX_FIX
@@ -724,6 +714,16 @@ int s2_get_actor_count() {
 extern "C"
 void* s2_actor_get_spr(void* actor) {
 	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
+}
+
+extern "C"
+void s2_spr_get_aabb(const void* actor, float aabb[4]) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	sm::rect sz = s2_actor->GetSpr()->GetBounding(s2_actor)->GetSize();
+	aabb[0] = sz.xmin;
+	aabb[1] = sz.ymin;
+	aabb[2] = sz.xmax;
+	aabb[3] = sz.ymax;
 }
 
 extern "C"

@@ -50,7 +50,6 @@ void  s2_spr_set_action(void* spr, const char* action);
 
 int   s2_spr_get_frame_count(void* spr);
 
-void  s2_spr_get_aabb(const void* spr, float aabb[4]);
 void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
 bool  s2_spr_point_test(const void* spr, float x, float y);
 void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
@@ -111,6 +110,7 @@ void* s2_get_actor(const void* parent_actor, void* child_spr);
 int   s2_get_actor_count();
 
 void* s2_actor_get_spr(void* actor);
+void  s2_actor_get_aabb(const void* actor, float aabb[4]);
 
 void  s2_actor_set_pos(void* actor, float x, float y);
 void  s2_actor_get_pos(void* actor, float* x, float* y);

@@ -91,8 +91,8 @@ public:
 		return IsForceUpFrame() || name.length() <= 0 || name[0] == '_';
 	}
 
-	const BoundingBox* GetBounding() const; 
-	void UpdateBounding() const;
+	const BoundingBox* GetBounding(const Actor* actor = NULL) const; 
+	void UpdateBounding(const Actor* actor = NULL) const;
 
 	void Translate(const sm::vec2& trans);
 	void Rotate(float rot);

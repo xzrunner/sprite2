@@ -354,22 +354,22 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, SprVisitorParams& params, b
 	return ret;
 }
 
-const BoundingBox* Sprite::GetBounding() const 
+const BoundingBox* Sprite::GetBounding(const Actor* actor) const 
 { 
 	if (IsBoundingDirty()) {
-		UpdateBounding();
+		UpdateBounding(actor);
 	}
 	return m_bounding; 
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
-void Sprite::UpdateBounding() const
+void Sprite::UpdateBounding(const Actor* actor) const
 {
 	if (!m_sym) {
 		return;
 	}
 
-	sm::rect rect = m_sym->GetBounding(this);
+	sm::rect rect = m_sym->GetBounding(this, actor);
 	if (!rect.IsValid()) {
 		return;
 	}

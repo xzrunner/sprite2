@@ -34,6 +34,7 @@
 #include "AnchorSprite.h"
 #include "AnchorActor.h"
 #include "Particle3dSprite.h"
+#include "Particle3dEmitter.h"
 #include "OrthoCamera.h"
 
 #include <shaderlab/ShaderMgr.h>
@@ -423,7 +424,11 @@ bool s2_spr_p3d_is_finished(const void* spr)
 	}
 
 	const Particle3dSprite* p3d_spr = static_cast<const Particle3dSprite*>(s2_spr);
-	return p3d_spr->IsEmitterFinished();
+	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
+		return et->IsFinished();
+	} else {
+		return true;
+	}
 }
 
 extern "C"
@@ -435,7 +440,9 @@ void s2_spr_p3d_start(void* spr)
 	}
 
 	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
-	p3d_spr->EmitterStart();
+	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
+		const_cast<Particle3dEmitter*>(et)->Start();
+	}
 }
 
 extern "C"
@@ -447,7 +454,9 @@ void s2_spr_p3d_stop(void* spr)
 	}
 
 	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
-	p3d_spr->EmitterStop();
+	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
+		const_cast<Particle3dEmitter*>(et)->Stop();
+	}
 }
 
 extern "C"
@@ -459,7 +468,9 @@ void s2_spr_p3d_update(void* spr, float dt)
 	}
 
 	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(s2_spr);
-	p3d_spr->EmitterUpdate(dt);
+	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
+		const_cast<Particle3dEmitter*>(et)->Update(et->GetTime() + dt);
+	}
 }
 
 extern "C"

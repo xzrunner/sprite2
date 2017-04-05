@@ -22,6 +22,9 @@ public:
 
 	bool IsOutside(const sm::rect& r) const;
 
+	void SaveAndClearStack();
+	void RecoverStack();
+
 public:
 	struct Rect
 	{
@@ -33,6 +36,7 @@ private:
 
 private:
 	std::vector<Rect> m_stack;
+	std::vector<Rect> m_save_stack;
 	
 	SINGLETON_DECLARATION(RenderScissor)
 

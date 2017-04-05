@@ -20,6 +20,17 @@ RenderScissor::~RenderScissor()
 {
 }
 
+
+void RenderScissor::SaveAndClearStack() {
+	m_save_stack = m_stack;
+	m_stack.clear();
+}
+
+void RenderScissor::RecoverStack() {
+	m_stack = m_save_stack;
+	m_save_stack.clear();
+}
+
 void RenderScissor::Push(float x, float y, float w, float h, bool use_render_screen, bool no_intersect)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

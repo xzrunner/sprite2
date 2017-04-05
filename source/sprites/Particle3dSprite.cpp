@@ -264,7 +264,8 @@ void Particle3dSprite::SetReuse(Particle3dSprite::ReuseType reuse)
 	if (reuse == REUSE_NONE) {
 		SetNeedActor(true);
 		CreateActorsVisitor visitor;
-		Traverse(visitor, SprVisitorParams());
+		SprVisitorParams vp;
+		Traverse(visitor, vp);
 	}
 	ChangeEmitterBuffer(reuse, cfg, true);
 

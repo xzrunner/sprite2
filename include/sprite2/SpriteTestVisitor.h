@@ -23,6 +23,7 @@ public:
 	const Actor* GetSelectedActor() const;
 	
 private:
+	bool QueryScissor(const Sprite* spr, const SprVisitorParams& params, bool* out_has_scissor) const;
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 
 private:

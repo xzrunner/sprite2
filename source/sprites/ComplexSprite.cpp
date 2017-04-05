@@ -152,5 +152,10 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorPa
 	return ret;
 }
 
+void ComplexSprite::SetAction(int action) 
+{ 
+	m_action = action; 
+	SetBoundingDirty(true);
+}
 
 }

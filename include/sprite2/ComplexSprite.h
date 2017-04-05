@@ -29,7 +29,7 @@ public:
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const;
 
-	void SetAction(int action) { m_action = action; }
+	void SetAction(int action);
 	int GetAction() const { return m_action; }
 	
 private:

@@ -25,14 +25,12 @@ namespace s2
 
 ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
-	, m_aabb_update_times(0)
 {
 }
 
 ComplexSymbol::ComplexSymbol(uint32_t id)
 	: Symbol(id)
 	, m_scissor(0, 0)
-	, m_aabb_update_times(0)
 {
 }
 
@@ -109,32 +107,19 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-	bool use_cache = false;
-
-	++m_aabb_update_times;
-	if (m_size.IsValid() && m_aabb_update_times < AABB_UPDATE_FREQ) {
-		use_cache = true;
-	}
-	if (m_aabb_update_times >= AABB_UPDATE_FREQ) {
-		m_aabb_update_times = 0;
-	}
-
 	if (actor && actor->IsAABBDirty()) {
-		use_cache = false;
-	}
-
-	if (use_cache) {
+		return CalcAABB(spr, actor);
+	} else {
+		if (!m_size.IsValid()) {
+			m_size = CalcAABB(spr, actor);
+		}
 		return m_size;
 	}
+}
 
-	sm::rect aabb = CalcAABB(spr, actor);
-	if (actor && actor->IsAABBDirty()) {
-		// not reset cached aabb, other actors will use it
-		return aabb;
-	} else {
-		m_size = aabb;
-		return aabb;
-	}
+void ComplexSymbol::SetBoundingDirty()
+{
+	m_size.MakeEmpty();
 }
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const

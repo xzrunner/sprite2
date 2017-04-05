@@ -30,6 +30,7 @@ public:
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const = 0;
+	virtual void SetBoundingDirty() {}
 	
 	int GetID() const { return m_id; }
 	

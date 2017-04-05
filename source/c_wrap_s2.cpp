@@ -179,6 +179,15 @@ int s2_spr_get_sym_type(void* spr) {
 	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
 }
 
+static void set_actor_aabb_dirty(Actor* actor) {
+	const Actor* curr = actor;
+	while (curr) {
+		curr->SetAABBDirty(true);
+		curr->GetSpr()->SetBoundingDirty(true);
+		curr = curr->GetParent();
+	}
+}
+
 extern "C"
 void s2_spr_set_action(void* actor, const char* action) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
@@ -201,6 +210,8 @@ void s2_spr_set_action(void* actor, const char* action) {
 		action_idx = sym_complex->GetActionIdx(action);
 	}
 	actor_complex->SetAction(action_idx);
+
+	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"

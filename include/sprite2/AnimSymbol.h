@@ -54,6 +54,7 @@ public:
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
+	virtual void SetBoundingDirty();
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -74,6 +75,8 @@ public:
 
 private:
 	void Draw(const RenderParams& rp, int idx = 1);
+
+	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 protected:
 	std::vector<Layer*> m_layers;

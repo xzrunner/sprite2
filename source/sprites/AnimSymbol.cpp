@@ -7,6 +7,7 @@
 #include "AnimLerp.h"
 #include "DrawNode.h"
 #include "SymbolVisitor.h"
+#include "S2_Actor.h"
 
 #include <assert.h>
 
@@ -77,21 +78,19 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 
 sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-	if (m_size.IsValid()) {
+	if (actor && actor->IsAABBDirty()) {
+		return CalcAABB(spr, actor);
+	} else {
+		if (!m_size.IsValid()) {
+			m_size = CalcAABB(spr, actor);
+		}
 		return m_size;
 	}
+}
 
+void AnimSymbol::SetBoundingDirty()
+{
 	m_size.MakeEmpty();
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		Layer* layer = m_layers[i];
-		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			Frame* frame = layer->frames[j];
-			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
-				frame->sprs[k]->GetBounding()->CombineTo(m_size);
-			}
-		}
-	}
-	return m_size;
 }
 
 int AnimSymbol::GetMaxFrameIdx() const
@@ -161,6 +160,40 @@ bool AnimSymbol::Clear()
 	m_curr.Clear();
 	m_size.MakeEmpty();
 	return dirty;	
+}
+
+sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+{
+	sm::rect aabb;
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
+		Layer* layer = m_layers[i];
+		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
+			Frame* frame = layer->frames[j];
+			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
+				const Sprite* c_spr = frame->sprs[k];
+				const Actor* c_actor = c_spr->QueryActor(actor);
+
+				// use spr's aabb
+//				frame->sprs[k]->GetBounding()->CombineTo(aabb);
+
+				// calc sym's aabb
+				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+				if (!c_aabb.IsValid()) {
+					continue;
+				}
+
+				S2_MAT mat = c_spr->GetLocalMat();
+				if (c_actor) {
+					mat = c_actor->GetLocalMat() * mat;
+				}
+				aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymin));
+				aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymin));
+				aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymax));
+				aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymax));
+			}
+		}
+	}
+	return aabb;
 }
 
 /************************************************************************/

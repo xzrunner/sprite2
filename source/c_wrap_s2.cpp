@@ -179,7 +179,7 @@ int s2_spr_get_sym_type(void* spr) {
 	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
 }
 
-static void set_actor_aabb_dirty(Actor* actor) {
+static void set_actor_aabb_dirty(const Actor* actor) {
 	const Actor* curr = actor;
 	while (curr) {
 		curr->SetAABBDirty(true);
@@ -634,6 +634,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 
 	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
 	anchor_spr->AddAnchor(c_actor, p_actor);
+	set_actor_aabb_dirty(p_actor);
 	return 0;
 }
 

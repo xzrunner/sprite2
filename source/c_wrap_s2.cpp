@@ -717,7 +717,7 @@ void* s2_actor_get_spr(void* actor) {
 }
 
 extern "C"
-void s2_spr_get_aabb(const void* actor, float aabb[4]) {
+void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	sm::rect sz = s2_actor->GetSpr()->GetBounding(s2_actor)->GetSize();
 	aabb[0] = sz.xmin;

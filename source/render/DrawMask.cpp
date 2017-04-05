@@ -31,8 +31,8 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	RenderTarget* rt_base = RT->Fetch();
 	if (!rt_base) {
 		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->Open();
 		RenderScissor::Instance()->RecoverStack();
+		RenderScissor::Instance()->Open();
 		return;
 	}
 	DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
@@ -41,15 +41,15 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	if (!rt_mask) {
 		RT->Return(rt_base);
 		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->Open();
 		RenderScissor::Instance()->RecoverStack();
+		RenderScissor::Instance()->Open();
 		return;
 	}
 	DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
 	RenderScissor::Instance()->RecoverStack();
+	RenderScissor::Instance()->Open();
 
 	DrawMaskFromRT(rt_base, rt_mask, mask, rp.mt);
 

@@ -95,7 +95,8 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, SprVisitorParams& params)
 		for (int i = 0; i < m_curr_num; ++i) 
 		{
 			Sprite* child = m_slots[m_curr[i]];
-			cp.actor = child->QueryActor(params.actor);
+			Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
+			cp.actor = actor_holder->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -104,7 +105,8 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, SprVisitorParams& params)
 		for (int i = m_curr_num - 1; i >= 0; --i) 
 		{
 			Sprite* child = m_slots[m_curr[i]];
-			cp.actor = child->QueryActor(params.actor);
+			Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
+			cp.actor = actor_holder->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}

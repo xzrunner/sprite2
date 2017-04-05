@@ -5,6 +5,7 @@
 #include "RenderFilter.h"
 #include "TextboxActor.h"
 #include "DrawNode.h"
+#include "UpdateParams.h"
 
 #include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
@@ -50,7 +51,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
  	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
 
 	if (!text) {
-		text = &tb_spr->GetText();
+		text = &tb_spr->GetText(UpdateParams());
 	}
  	if (!text || text->empty()) {
  		return;

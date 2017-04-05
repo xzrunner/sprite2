@@ -668,6 +668,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\TextboxActor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\TextboxActor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\TextboxSprite.cpp"
 					>
 				</File>

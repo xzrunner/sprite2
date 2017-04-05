@@ -24,8 +24,8 @@ public:
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }
 
-	const std::string& GetText() const { return m_text; }
-	void SetText(const std::string& text) { m_text = text; }
+	const std::string& GetText(const UpdateParams& up) const;
+	void SetText(const UpdateParams& up, const std::string& text);
 
 	int GetTime() const { return m_time; }
 	void UpdateTime() const { ++m_time; }

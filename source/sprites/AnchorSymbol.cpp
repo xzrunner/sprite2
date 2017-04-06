@@ -4,6 +4,8 @@
 #include "SymType.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
+#include "S2_Sprite.h"
+#include "BoundingBox.h"
 
 #include <assert.h>
 
@@ -31,6 +33,14 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 sm::rect AnchorSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
+	if(actor) {
+		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
+		const Actor* _actor = anchor_actor->GetAnchor();
+		if(_actor) {
+			const Sprite* _spr = _actor->GetSpr();
+			return _spr->GetBounding(_actor)->GetSize();
+		}
+	}
 	return sm::rect(100, 100);
 }
 

@@ -145,12 +145,12 @@ bool SpriteTestVisitor::QueryScissor(const Sprite* spr, const SprVisitorParams& 
 		std::swap(min.y, max.y);
 	}
 
-	std::vector<sm::vec2> vertices(4);
+	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(min.x, min.y);
 	vertices[1] = sm::vec2(min.x, max.y);
 	vertices[2] = sm::vec2(max.x, max.y);
 	vertices[3] = sm::vec2(max.x, min.y);
-	return sm::is_point_in_convex(m_pos, vertices);
+	return sm::is_point_in_convex(m_pos, vertices, 4);
 }
 
 bool SpriteTestVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
@@ -160,7 +160,7 @@ bool SpriteTestVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 		return false;
 	}
 
-	std::vector<sm::vec2> vertices(4);
+	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
 	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
@@ -168,7 +168,7 @@ bool SpriteTestVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = params.mt * vertices[i];
 	}
-	return sm::is_point_in_convex(m_pos, vertices);
+	return sm::is_point_in_convex(m_pos, vertices, 4);
 }
 
 }

@@ -1,8 +1,9 @@
 #include "Scale9Symbol.h"
+#include "Scale9Sprite.h"
+#include "Scale9Actor.h"
 #include "SymType.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
-#include "Scale9Sprite.h"
 #include "DrawNode.h"
 #include "SymbolVisitor.h"
 
@@ -38,7 +39,12 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 
 void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	if (spr) {
+	if (rp.actor) {
+		RenderParams rp_child(rp);
+		if (DrawNode::Prepare(rp, spr, rp_child)) {
+			VI_DOWNCASTING<const Scale9Actor*>(rp.actor)->GetScale9().Draw(rp_child);
+		}
+	} else if (spr) {
 		RenderParams rp_child(rp);
 		if (DrawNode::Prepare(rp, spr, rp_child)) {
 			VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(rp_child);
@@ -51,7 +57,9 @@ void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 sm::rect Scale9Symbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
 	sm::vec2 sz;
-	if (spr) {
+	if (actor) {
+		sz = VI_DOWNCASTING<const Scale9Actor*>(actor)->GetScale9().GetSize();
+	} else if (spr) {
 		sz = VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().GetSize();
 	} else {
 		sz = m_s9.GetSize();

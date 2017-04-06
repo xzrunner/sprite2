@@ -31,6 +31,7 @@
 #include "Anim2Sprite.h"
 #include "TextboxSprite.h"
 #include "Scale9Sprite.h"
+#include "Scale9Actor.h"
 #include "AnchorSprite.h"
 #include "AnchorActor.h"
 #include "Particle3dSprite.h"
@@ -353,18 +354,6 @@ bool s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float yma
 	const_cast<ComplexSymbol*>(sym)->SetScissor(scissor);
 
 	return true;
-}
-
-extern "C"
-void s2_spr_scale9_resize(void* spr, int w, int h)
-{
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() != SYM_SCALE9) {
-		return;
-	}
-
-	Scale9Sprite* s9_spr = static_cast<Scale9Sprite*>(s2_spr);
-	s9_spr->Resize(w, h);
 }
 
 extern "C"
@@ -989,6 +978,17 @@ void* s2_actor_get_anchor_real(void* actor) {
 	} else {
 		return actor;
 	}
+}
+
+extern "C"
+void s2_actor_scale9_resize(void* actor, int w, int h) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_SCALE9) {
+		return;
+	}
+
+	Scale9Actor* s9_actor = static_cast<Scale9Actor*>(s2_actor);
+	s9_actor->Resize(w, h);
 }
 
 /************************************************************************/

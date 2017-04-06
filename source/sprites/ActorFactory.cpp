@@ -4,10 +4,11 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 
+#include "AnchorActor.h"
+#include "Scale9Actor.h"
 #include "TextboxActor.h"
 #include "ComplexActor.h"
 #include "AnimActor.h"
-#include "AnchorActor.h"
 #include "Particle3dActor.h"
 
 #include <assert.h>
@@ -35,6 +36,8 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 	case SYM_ANCHOR:
 		actor = new AnchorActor(child, parent);
 		break;
+	case SYM_SCALE9:
+		actor = new Scale9Actor(child, parent);
 	case SYM_TEXTBOX:
 		actor = new TextboxActor(child, parent);
 		break;

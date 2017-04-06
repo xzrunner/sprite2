@@ -60,9 +60,6 @@ bool  s2_spr_has_action(const void* spr, const char* name);
 bool  s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax);
 bool  s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax);
 
-// scale9
-void  s2_spr_scale9_resize(void* spr, int w, int h);
-
 // textbox
 void  s2_spr_textbox_reset_time(void* spr);
 
@@ -139,11 +136,16 @@ void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_
 
 void  s2_actor_set_filter(void* actor, int mode);
 
+// text
 const char* s2_actor_get_text(void* actor);
 void  s2_actor_set_text(void* actor, const char* text);
 bool  s2_actor_get_text_size(const void* actor, float* w, float* h);
 
+// anchor
 void* s2_actor_get_anchor_real(void* actor);
+
+// scale9
+void  s2_actor_scale9_resize(void* actor, int w, int h);
 
 /************************************************************************/
 /* rt                                                                   */

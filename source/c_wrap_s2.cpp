@@ -753,6 +753,7 @@ extern "C"
 void s2_actor_set_pos(void* actor, float x, float y) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetPosition(sm::vec2(x, y));
+	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -767,6 +768,7 @@ extern "C"
 void s2_actor_set_angle(void* actor, float angle) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetAngle(angle);
+	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -779,6 +781,7 @@ extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetScale(sm::vec2(sx, sy));
+	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -954,6 +957,7 @@ void s2_actor_set_text(void* actor, const char* text) {
 
 	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
 	textbox->SetText(text);
+	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"

@@ -61,11 +61,11 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
 {
-	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	m_loop  = p3d_sym->IsLoop();
-	m_local = p3d_sym->IsLocal();
-
 	CreateSpr();
+
+	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
+	SetLoop(p3d_sym->IsLoop());
+	SetLocal(p3d_sym->IsLocal());
 }
 
 Particle3dSprite::~Particle3dSprite()
@@ -301,9 +301,6 @@ void Particle3dSprite::CreateSpr()
 	m_et = P3dEmitterPool::Instance()->Pop();
 	m_et->CreateEmitter(cfg);
 	m_et->Start();
-
-	m_et->SetLoop(m_loop);
-	m_et->SetLocal(m_local);
 
 	if (m_start_radius == FLT_MAX) {
 		m_start_radius = cfg->GetImpl()->start_radius;

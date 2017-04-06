@@ -561,6 +561,15 @@ void s2_actor_start(void* actor) {
 }
 
 extern "C"
+void s2_actor_stop(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_sprite = s2_actor->GetSpr();
+	UpdateParams up(s2_actor);
+	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
+	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_STOP);
+}
+
+extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();

@@ -111,6 +111,10 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 	case MSG_START: case MSG_TRIGGER:
 		et->Start();
 		break;
+	case MSG_STOP:
+		et->Clear();
+		et->Stop();
+		break;
 	case MSG_INIT:
 		et->ResetTime();
 		break;

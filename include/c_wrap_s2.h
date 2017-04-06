@@ -87,6 +87,8 @@ void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, 
 					float xmin, float ymin, float xmax, float ymax);
 void  s2_actor_update(void* actor);
 
+void  s2_actor_start(void* actor);
+
 void  s2_actor_set_frame(void* actor, int frame);
 int   s2_actor_get_frame(void* actor);
 

@@ -110,6 +110,7 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 	{
 	case MSG_START: 
 		et->Start();
+		et->ResetTime();
 		break;
 	case MSG_STOP:
 		et->Stop();

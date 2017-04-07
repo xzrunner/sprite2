@@ -128,9 +128,7 @@ bool Particle3dEmitter::IsFinished() const
 void Particle3dEmitter::ResetTime()
 {
 	if (m_state.et) {
-		if (m_state.et->time == 0) {
-			m_state.et->time = Particle3d::Instance()->GetTime();
-		}
+		m_state.et->time = Particle3d::Instance()->GetTime();
 	}
 }
 
@@ -138,7 +136,6 @@ void Particle3dEmitter::Start()
 {
 	if (m_state.et) {
 		p3d_emitter_start(m_state.et);
-		m_state.et->time = Particle3d::Instance()->GetTime();
 	}
 }
 

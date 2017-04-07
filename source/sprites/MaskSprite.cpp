@@ -2,6 +2,7 @@
 #include "MaskSymbol.h"
 #include "UpdateParams.h"
 #include "S2_Actor.h"
+#include "SprVisitorParams.h"
 
 namespace s2
 {
@@ -97,6 +98,16 @@ Sprite* MaskSprite::FetchChild(const std::string& name, const Actor* actor) cons
 	} else {
 		return NULL;
 	}
+}
+
+VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const
+{
+	const Sprite* mask = VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask();
+	SprVisitorParams cp = params;
+	cp.actor = mask->QueryActor(params.actor);
+	VisitResult ret = mask->TraverseChildren(visitor, cp);
+	params.selected = cp.selected;
+	return ret;
 }
 
 }

@@ -59,6 +59,9 @@ VisitResult SpriteTestVisitor::Visit(const Sprite* spr, SprVisitorParams& params
 	if (type == SYM_ANIMATION) {
 		return VISIT_INTO;
 	}
+	if (type == SYM_MASK) {
+		return VISIT_INTO;
+	}
 	if (type == SYM_COMPLEX) {
 		if (QueryScissor(spr, params, NULL)) {
 			return VISIT_INTO;

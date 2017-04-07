@@ -38,6 +38,7 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 		break;
 	case SYM_SCALE9:
 		actor = new Scale9Actor(child, parent);
+		break;
 	case SYM_TEXTBOX:
 		actor = new TextboxActor(child, parent);
 		break;

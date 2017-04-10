@@ -34,7 +34,7 @@ void  s2_spr_set_angle(void* spr, float angle);
 void  s2_spr_set_scale(void* spr, float sx, float sy);
 
 void  s2_spr_get_pos(const void* spr, float* x, float* y);
-void  s2_spr_get_angle(const void* spr, float* angle);
+float s2_spr_get_angle(const void* spr);
 void  s2_spr_get_scale(const void* spr, float* sx, float* sy);
 
 void  s2_spr_retain(void* spr);

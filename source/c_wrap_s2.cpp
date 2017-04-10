@@ -131,9 +131,9 @@ void s2_spr_get_pos(const void* spr, float* x, float* y) {
 }
 
 extern "C"
-void s2_spr_get_angle(const void* spr, float* angle) {
+float s2_spr_get_angle(const void* spr) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	*angle = s2_spr->GetAngle();
+	return s2_spr->GetAngle();
 }
 
 extern "C"

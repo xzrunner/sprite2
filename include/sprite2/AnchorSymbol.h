@@ -22,6 +22,9 @@ public:
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
 
+private:
+	static const Actor* GetRealActor(const Sprite* spr, const Actor* actor);
+
 }; // AnchorSymbol
 
 }

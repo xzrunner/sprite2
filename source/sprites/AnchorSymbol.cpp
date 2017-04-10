@@ -26,22 +26,32 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	RenderParams rp_child(rp);
-	rp_child.actor = anchor->GetSpr()->QueryActor(rp.actor);
-	rp_child.mt = spr->GetLocalMat() * rp_child.mt;
-	DrawNode::Draw(anchor->GetSpr(), rp_child, false);
+	rp_child.actor = GetRealActor(spr, rp.actor);
+	if (rp_child.actor) {
+		rp_child.mt = spr->GetLocalMat() * rp_child.mt;
+		DrawNode::Draw(rp_child.actor->GetSpr(), rp_child, false);
+	}
 }
 
 sm::rect AnchorSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
 {
-	if(actor) {
-		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
-		const Actor* _actor = anchor_actor->GetAnchor();
-		if(_actor) {
-			const Sprite* _spr = _actor->GetSpr();
-			return _spr->GetBounding(_actor)->GetSize();
-		}
+	const Actor* real_actor = GetRealActor(spr, actor);
+	if (real_actor) {
+		return real_actor->GetSpr()->GetBounding(real_actor)->GetSize();
+	} else {
+		return sm::rect(100, 100);
 	}
-	return sm::rect(100, 100);
+}
+
+const Actor* AnchorSymbol::GetRealActor(const Sprite* spr, const Actor* actor)
+{
+	if (spr && actor) {
+		const AnchorActor* anchor_actor = VI_DOWNCASTING<const AnchorActor*>(spr->QueryActor(actor->GetParent()));
+		if (anchor_actor) {
+			return anchor_actor->GetAnchor();
+		}
+	}	
+	return NULL;
 }
 
 }

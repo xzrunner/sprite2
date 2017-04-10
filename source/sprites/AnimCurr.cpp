@@ -415,7 +415,8 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool c
 					if (spr) {
 						sym_id = spr->GetSymbol()->GetID();
 					}
-					fault("anim lerp err: sym_id %d, frame %d\n", sym_id, m_frame);
+//					fault("anim lerp err: sym_id %d, frame %d\n", sym_id, m_frame);
+					return;
 				}
 
 				assert(actor.slot == next_frame.actors[actor.next].slot);

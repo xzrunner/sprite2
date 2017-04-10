@@ -65,7 +65,7 @@ private:
 	void ResetLayerCursor();
 
 	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr);
-	void UpdateCursor(bool cursor_update);
+	void UpdateCursor(bool& cursor_update);
 	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool cursor_update);
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 

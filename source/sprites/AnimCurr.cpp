@@ -356,7 +356,7 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 	LoadCurrSprites(up, spr, cursor_update);
 }
 
-void AnimCurr::UpdateCursor(bool cursor_update)
+void AnimCurr::UpdateCursor(bool& cursor_update)
 {
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{

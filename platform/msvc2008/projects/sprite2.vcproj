@@ -616,6 +616,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\Scale9Actor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Scale9Actor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\Scale9Sprite.cpp"
 					>
 				</File>

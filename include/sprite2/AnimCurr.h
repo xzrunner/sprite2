@@ -65,8 +65,8 @@ private:
 	void ResetLayerCursor();
 
 	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr);
-	void UpdateCursor(bool& cursor_update);
-	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool cursor_update);
+	void UpdateCursor();
+	void LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr);
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
 	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
@@ -75,6 +75,7 @@ private:
 	const AnimCopy* m_copy;
 
 	std::vector<int> m_layer_cursor;
+	std::vector<bool> m_layer_cursor_update;
 
 	std::vector<Sprite*> m_slots;
 	std::vector<int> m_slotmap;

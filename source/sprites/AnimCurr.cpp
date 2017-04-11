@@ -42,6 +42,7 @@ AnimCurr::AnimCurr()
 AnimCurr::AnimCurr(const AnimCurr& curr)
 	: m_copy(curr.m_copy)
 	, m_layer_cursor(curr.m_layer_cursor)
+	, m_layer_cursor_update(curr.m_layer_cursor_update)
 	, m_slots(curr.m_slots)
 	, m_slotmap(curr.m_slotmap)
 	, m_curr_num(curr.m_curr_num)
@@ -62,6 +63,7 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 {	
 	m_copy = curr.m_copy;
 	m_layer_cursor = curr.m_layer_cursor;
+	m_layer_cursor_update = curr.m_layer_cursor_update;
 	m_slots = curr.m_slots;
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());
 	m_slotmap = curr.m_slotmap;
@@ -342,6 +344,7 @@ void AnimCurr::ResetLayerCursor()
 {
 	if (m_copy) {
 		m_layer_cursor.assign(m_copy->m_layers.size(), 0);
+		m_layer_cursor_update.assign(m_copy->m_layers.size(), false);
 	}
 }
 
@@ -351,15 +354,16 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 		return;
 	}
 
-	bool cursor_update = m_frame == 1;
-	UpdateCursor(cursor_update);
-	LoadCurrSprites(up, spr, cursor_update);
+	UpdateCursor();
+	LoadCurrSpritesImpl(up, spr);
 }
 
-void AnimCurr::UpdateCursor(bool& cursor_update)
+void AnimCurr::UpdateCursor()
 {
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
+		m_layer_cursor_update[i] = false;
+
 		const AnimCopy::Layer& layer = m_copy->m_layers[i];
 		if (layer.frames.empty()) {
 			continue;
@@ -372,9 +376,13 @@ void AnimCurr::UpdateCursor(bool& cursor_update)
 
 		int frame_num = layer.frames.size();
 		assert(cursor < frame_num);
-		while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
-			++cursor;
-			cursor_update = true;
+		if (cursor >= 0 && cursor < layer.frames.size() && layer.frames[cursor].time == m_frame) {
+			m_layer_cursor_update[i] = true;
+		} else {
+			while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
+				++cursor;
+				m_layer_cursor_update[i] = true;
+			}
 		}
 		if (cursor == 0 && m_frame < layer.frames[cursor].time) {
 			cursor = -1;
@@ -386,7 +394,7 @@ void AnimCurr::UpdateCursor(bool& cursor_update)
 	}
 }
 
-void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool cursor_update)
+void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 {
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
 
@@ -450,7 +458,9 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr, bool c
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 
-			if (cursor_update && actor.prev == -1) {
+			bool last_frame = cursor == m_copy->m_layers[i].frames.size() - 1;
+			if (!last_frame && m_layer_cursor_update[i] && actor.prev == -1) 
+			{
 				Sprite* child = m_slots[actor.slot];
 				up_child.SetActor(child->QueryActor(up.GetActor()));
 				child->OnMessage(up_child, MSG_TRIGGER);

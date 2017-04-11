@@ -135,6 +135,8 @@ void Particle3dEmitter::ResetTime()
 void Particle3dEmitter::Start()
 {
 	if (m_state.et) {
+		m_state.et->time = Particle3d::Instance()->GetTime();
+		p3d_emitter_clear(m_state.et);
 		p3d_emitter_start(m_state.et);
 	}
 }
@@ -142,8 +144,8 @@ void Particle3dEmitter::Start()
 void Particle3dEmitter::Stop()
 {
 	if (m_state.et) {
-		p3d_emitter_clear(m_state.et);
 		p3d_emitter_stop(m_state.et);
+		p3d_emitter_clear(m_state.et);
 	}
 }
 

@@ -67,33 +67,6 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	return dirty;
 }
 
-bool ComplexSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-
-	bool dirty = false;
-	int action = m_action;
-	const Actor* actor = up.GetActor();
-	if (actor) {
-		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
-		action = comp_actor->GetAction();
-	}
-	UpdateParams up_child(up);
-	up_child.Push(this);
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		Sprite* child = children[i];
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		if (child->SetFrame(up_child, frame)) {
-			dirty = true;
-		}
-	}
-	return dirty;
-}
-
 Sprite* ComplexSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;

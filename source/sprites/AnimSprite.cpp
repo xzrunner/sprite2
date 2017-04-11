@@ -89,16 +89,6 @@ bool AnimSprite::Update(const UpdateParams& up)
 	}
 }
 
-bool AnimSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
-	curr.SetFrame(up, this, frame, m_fps);
-	return true;
-}
-
 Sprite* AnimSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	return GetAnimCurr(actor).FetchChild(name, actor);
@@ -140,6 +130,12 @@ void AnimSprite::SetStartRandom(const UpdateParams& up, bool random)
 int AnimSprite::GetFrame(const Actor* actor) const 
 { 
 	return GetAnimCurr(actor).GetFrame(); 
+}
+
+void AnimSprite::SetFrame(const UpdateParams& up, int frame)
+{
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
+	curr.SetFrame(up, this, frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const Actor* actor)

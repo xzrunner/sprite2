@@ -30,18 +30,6 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 	return ret;
 }
 
-bool Anim2Sprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-	bool ret = m_curr.Update();
-	if (ret) {
-		SetBoundingDirty(true);
-	}
-	return ret;
-}
-
 void Anim2Sprite::SetStaticTime(int static_time)
 {
 	if (m_static_time == static_time) {

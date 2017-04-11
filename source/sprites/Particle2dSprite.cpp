@@ -104,15 +104,6 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 	return true;
 }
 
-bool Particle2dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-	Update(up);
-	return true;
-}
-
 void Particle2dSprite::Draw(const RenderParams& rp) const
 {
 	if (!m_et) {

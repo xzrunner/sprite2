@@ -31,7 +31,6 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 
 	void Draw(const RenderParams& rp) const;
 

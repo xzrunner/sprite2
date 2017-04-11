@@ -160,15 +160,6 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 	return ret;
 }
 
-bool Particle3dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-	Update(up);
-	return true;
-}
-
 void Particle3dSprite::SetEmitterMat(const S2_MAT& mat) const
 {
 	if (!m_et || !m_alone) {

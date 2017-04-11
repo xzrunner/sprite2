@@ -34,22 +34,6 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	}
 }
 
-bool AnchorSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	bool dirty = false;
-	const Actor* actor = up.GetActor();
-	const Actor* anchor = QueryAnchor(actor);
-	if (anchor) {
-		UpdateParams up_child(up);
-		up_child.Push(this);
-		const Sprite* anchor_spr = anchor->GetSpr();
-		up_child.SetActor(anchor_spr->QueryActor(actor));
-		const_cast<Sprite*>(anchor_spr)->SetFrame(up_child, frame);
-		dirty = true;
-	}
-	return dirty;
-}
-
 Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	const Actor* anchor = QueryAnchor(actor);

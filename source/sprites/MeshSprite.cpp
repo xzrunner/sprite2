@@ -83,15 +83,6 @@ bool MeshSprite::Update(const UpdateParams& up)
 	}
 }
 
-bool MeshSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-	// todo
-	return false;
-}
-
 Sprite* MeshSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	class FetchVisitor : public SymbolVisitor

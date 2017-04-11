@@ -24,7 +24,6 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual bool SetFrame(const UpdateParams& up, int frame, bool force = false);
 	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 	virtual Sprite* FetchChild(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;

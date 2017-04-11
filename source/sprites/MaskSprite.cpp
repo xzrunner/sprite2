@@ -62,34 +62,6 @@ bool MaskSprite::Update(const UpdateParams& up)
 	return dirty;
 }
 
-bool MaskSprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	if (!force && !IsInheritUpdate()) {
-		return false;
-	}
-
-	bool dirty = false;
-
-	UpdateParams up_child(up);
-	up_child.Push(this);
-
-	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
-	if (const Sprite* base = sym->GetBase()) {
-		up_child.SetActor(base->QueryActor(up.GetActor()));
-		if (const_cast<Sprite*>(base)->SetFrame(up_child, frame)) {
-			dirty = true;
-		}
-	}
-	if (const Sprite* mask = sym->GetMask()) {
-		up_child.SetActor(mask->QueryActor(up.GetActor()));
-		if (const_cast<Sprite*>(mask)->SetFrame(up_child, frame)) {
-			dirty = true;
-		}
-	}
-
-	return dirty;
-}
-
 Sprite* MaskSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	if (name == "base") {

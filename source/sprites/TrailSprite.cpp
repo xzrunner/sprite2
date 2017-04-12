@@ -106,7 +106,7 @@ bool TrailSprite::Update(const UpdateParams& up)
 
 bool TrailSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 

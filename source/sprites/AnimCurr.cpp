@@ -477,7 +477,7 @@ bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* child = m_slots[m_curr[i]];
-		if (child->ShouldInheritFrame()) {
+		if (child->IsInheritUpdate()) {
 			up_child.SetActor(child->QueryActor(up.GetActor()));
 			if (child->Update(up_child)) {
 				dirty = true;

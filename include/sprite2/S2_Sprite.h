@@ -83,13 +83,8 @@ public:
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }
 
-	const std::string& GetName() const { return m_name; }
-	void SetName(const std::string& name) { m_name = name; }
-
-	bool ShouldInheritFrame() const {
-		std::string name = GetName();
-		return IsForceUpFrame() || name.length() <= 0 || name[0] == '_';
-	}
+	const std::string& GetName() const;
+	void SetName(const std::string& name);
 
 	const BoundingBox* GetBounding(const Actor* actor = NULL) const; 
 	void UpdateBounding(const Actor* actor = NULL) const;
@@ -147,8 +142,8 @@ protected:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	static const uint32_t FLAG_FORCE_UP_FRAME = 0x00000040;
-	// 0x00000080
+	static const uint32_t FLAG_FORCE_UPDATE   = 0x00000040;
+	static const uint32_t FLAG_INHERIT_UPDATE = 0x00000080;
 
 	// actor
 	static const uint32_t FLAG_NEED_ACTOR           = 0x00000100;
@@ -171,7 +166,8 @@ public:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	S2_FLAG_METHOD(ForceUpFrame, FLAG_FORCE_UP_FRAME)
+	S2_FLAG_METHOD(ForceUpdate, FLAG_FORCE_UPDATE)
+	S2_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
 
 	// actor
 	S2_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)
@@ -217,5 +213,7 @@ private:
 }; // Sprite
 
 }
+
+#include "S2_Sprite.inl"
 
 #endif // _SPRITE2_SPRITE_H_

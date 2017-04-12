@@ -100,8 +100,8 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx);
 // ret: 0 ok, -1 no child with name, -2 child isn't anchor
 int   s2_actor_mount(const void* actor, const char* name, const void* anchor);
 
-bool  s2_actor_get_force_up_frame(void* actor);
-void  s2_actor_set_force_up_frame(void* actor, bool force);
+bool  s2_actor_get_force_update(void* actor);
+void  s2_actor_set_force_update(void* actor, bool force);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 void* s2_sprite_test_actor(const void* parent_actor, float x, float y);

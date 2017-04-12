@@ -86,7 +86,7 @@ bool AnimSprite::Update(const UpdateParams& up)
 
 bool AnimSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));

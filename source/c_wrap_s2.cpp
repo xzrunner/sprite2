@@ -657,7 +657,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 }
 
 extern "C"
-bool s2_actor_get_force_up_frame(void* actor) {
+bool s2_actor_get_force_update(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
@@ -669,11 +669,11 @@ bool s2_actor_get_force_up_frame(void* actor) {
 			return false;
 		}
 	}
-	return s2_spr->IsForceUpFrame();
+	return s2_spr->IsForceUpdate();
 }
 
 extern "C"
-void s2_actor_set_force_up_frame(void* actor, bool force) {
+void s2_actor_set_force_update(void* actor, bool force) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
@@ -683,20 +683,7 @@ void s2_actor_set_force_up_frame(void* actor, bool force) {
 			s2_spr = real->GetSpr();
 		}
 	}
-	s2_spr->SetForceUpFrame(force);
-}
-
-extern "C"
-void* s2_sprite_test_actor(const void* parent_actor, float x, float y) {
-	const Actor* parent = static_cast<const Actor*>(parent_actor);
-
-	SprVisitorParams params;
-	params.actor = parent;
-
-	SpriteTestVisitor visitor(sm::vec2(x, y));
-	parent->GetSpr()->Traverse(visitor, params);
-
-	return const_cast<Actor*>(visitor.GetSelectedActor());
+	s2_spr->SetForceUpdate(force);
 }
 
 extern "C"
@@ -725,6 +712,19 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	mat[4] = selected_mat.x[12];
 	mat[5] = selected_mat.x[13];
 #endif // S2_MATRIX_FIX
+
+	return const_cast<Actor*>(visitor.GetSelectedActor());
+}
+
+extern "C"
+void* s2_sprite_test_actor(const void* parent_actor, float x, float y) {
+	const Actor* parent = static_cast<const Actor*>(parent_actor);
+
+	SprVisitorParams params;
+	params.actor = parent;
+
+	SpriteTestVisitor visitor(sm::vec2(x, y));
+	parent->GetSpr()->Traverse(visitor, params);
 
 	return const_cast<Actor*>(visitor.GetSelectedActor());
 }

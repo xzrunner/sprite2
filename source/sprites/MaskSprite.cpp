@@ -63,7 +63,7 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 bool MaskSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 

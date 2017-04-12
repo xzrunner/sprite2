@@ -56,7 +56,7 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* child = children[i];
-		if (child->ShouldInheritFrame()) {
+		if (child->IsInheritUpdate()) {
 			up_child.SetActor(child->QueryActor(up.GetActor()));
 			if (const_cast<Sprite*>(child)->Update(up_child)) {
 				dirty = true;
@@ -68,7 +68,7 @@ bool ComplexSprite::Update(const UpdateParams& up)
 
 bool ComplexSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 

@@ -32,7 +32,7 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 
 bool Anim2Sprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 	bool ret = m_curr.Update();

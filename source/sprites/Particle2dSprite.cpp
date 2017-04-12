@@ -110,7 +110,7 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 
 bool Particle2dSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
-	if (!force && !ShouldInheritFrame()) {
+	if (!force && !IsInheritUpdate()) {
 		return false;
 	}
 	Update(up);

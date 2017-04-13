@@ -23,7 +23,7 @@ Scale9Sprite* Scale9Sprite::Clone() const
 	return new Scale9Sprite(*this);
 }
 
-VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const
+VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	std::vector<Sprite*> grids;
@@ -48,7 +48,6 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorPar
 			}
 		}
 	}
-	params.selected = cp.selected;
 	return ret;
 }
 

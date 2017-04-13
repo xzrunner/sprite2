@@ -110,7 +110,7 @@ void AnimSprite::SetChildAction(const Actor* actor, int symid, const char* actio
 	const_cast<AnimCurr&>(GetAnimCurr(actor)).SetChildAction(actor, symid, action);
 }
 
-VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, SprVisitorParams& params) const
+VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));

@@ -30,7 +30,7 @@ public:
 	AnimCurr& operator = (const AnimCurr& curr);
 	~AnimCurr();
 	
-	VisitResult Traverse(SpriteVisitor& visitor, SprVisitorParams& params) const;
+	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void OnMessage(const UpdateParams& up, const Sprite* spr, Message msg);
 

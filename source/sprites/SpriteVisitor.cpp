@@ -11,7 +11,7 @@ SpriteVisitor::SpriteVisitor(bool order)
 {
 }
 
-bool SpriteVisitor::VisitChild(SpriteVisitor& visitor, SprVisitorParams& params, Sprite* child, VisitResult& ret)
+bool SpriteVisitor::VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret)
 {
 	bool stop = false;
 	VisitResult v = child->Traverse(visitor, params);

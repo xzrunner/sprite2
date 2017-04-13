@@ -6,7 +6,7 @@
 namespace s2
 {
 
-VisitResult ClearActorsVisitor::Visit(const Sprite* spr, SprVisitorParams& params)
+VisitResult ClearActorsVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	const_cast<Sprite*>(spr)->ClearActors();
 

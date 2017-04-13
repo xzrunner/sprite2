@@ -12,12 +12,12 @@ CreateActorsVisitor::CreateActorsVisitor()
 	m_path.push(NULL);
 }
 
-VisitResult CreateActorsVisitor::Visit(const Sprite* spr, SprVisitorParams& params)
+VisitResult CreateActorsVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	return VISIT_INTO;
 }
 
-VisitResult CreateActorsVisitor::VisitChildrenBegin(const Sprite* spr, SprVisitorParams& params)
+VisitResult CreateActorsVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (spr->IsNeedActor() || spr->IsNeedActorForChild()) 
 	{
@@ -28,7 +28,7 @@ VisitResult CreateActorsVisitor::VisitChildrenBegin(const Sprite* spr, SprVisito
 	return VISIT_OVER;
 }
 
-VisitResult CreateActorsVisitor::VisitChildrenEnd(const Sprite* spr, SprVisitorParams& params)
+VisitResult CreateActorsVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (spr->IsNeedActor() || spr->IsNeedActorForChild()) {
 		m_path.pop();

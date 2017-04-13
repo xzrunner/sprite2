@@ -9,7 +9,7 @@ ResetActorFlagVisitor::ResetActorFlagVisitor()
 {
 }
 
-VisitResult ResetActorFlagVisitor::Visit(const Sprite* spr, SprVisitorParams& params)
+VisitResult ResetActorFlagVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (spr->IsNeedActor()) {
 		m_need_actor = true;
@@ -17,7 +17,7 @@ VisitResult ResetActorFlagVisitor::Visit(const Sprite* spr, SprVisitorParams& pa
 	return VISIT_INTO;
 }
 
-VisitResult ResetActorFlagVisitor::VisitChildrenEnd(const Sprite* spr, SprVisitorParams& params)
+VisitResult ResetActorFlagVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
 	if (m_need_actor) {
 		spr->SetNeedActorForChild(true);

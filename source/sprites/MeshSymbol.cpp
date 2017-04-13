@@ -85,7 +85,7 @@ bool MeshSymbol::Update(const UpdateParams& up, float time)
 	}
 }
 
-sm::rect MeshSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect MeshSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
  	if (m_mesh) {
  		return m_mesh->GetRegion();

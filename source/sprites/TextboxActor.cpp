@@ -6,7 +6,6 @@
 namespace s2
 {
 
-
 static void
 _init_gtxt_label_style(struct gtxt_label_style* dst, const Textbox& src) {
 	dst->width  = src.width;
@@ -39,18 +38,12 @@ void TextboxActor::SetText(const std::string& text)
 
 	struct gtxt_label_style style;
 	_init_gtxt_label_style(&style, tb);
-	gtxt_get_label_size(m_text.c_str(), &style, &m_size.x, &m_size.y);
+	float w, h;
+	gtxt_get_label_size(m_text.c_str(), &style, &w, &h);
 
-	// set aabb dirty
-	if (m_size.y > tb.height)
-	{
-		SetAABBOverflow(true);
-		const Actor* curr = GetParent();
-		while (curr) {
-			curr->SetAABBDirty(true);
-			curr = curr->GetParent();
-		}
-	}
+	ActorAABB& aabb = GetAABB();
+	aabb.SetRect(sm::rect(w, h));
+	aabb.UpdateParent(this);
 }
 
 }

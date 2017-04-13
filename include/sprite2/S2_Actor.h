@@ -3,10 +3,12 @@
 
 #include "pre_defined.h"
 #include "s2_macro.h"
+#include "ActorAABB.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 #include <SM_Vector.h>
+#include <SM_Rect.h>
 #include S2_MAT_HEADER
 
 namespace s2
@@ -40,6 +42,9 @@ public:
 	
 	S2_MAT GetLocalMat() const;
 
+	ActorAABB& GetAABB() { return m_aabb; }
+	const ActorAABB& GetAABB() const { return m_aabb; }
+
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
 	const RenderCamera& GetCamera() const;
@@ -54,20 +59,24 @@ private:
 private:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
-	static const uint32_t FLAG_AABB_DIRTY     = 0x00000004;
-	static const uint32_t FLAG_AABB_OVERFLOW  = 0x00000008;
+// 	static const uint32_t FLAG_AABB_DIRTY     = 0x00000004;
+// 	static const uint32_t FLAG_AABB_OVERFLOW  = 0x00000008;
+
+	static const uint32_t FLAG_AABB_TIGHT     = 0x00000004;
 
 public:
 	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
-	S2_FLAG_METHOD(AABBDirty, FLAG_AABB_DIRTY)
-	S2_FLAG_METHOD(AABBOverflow, FLAG_AABB_OVERFLOW)
+// 	S2_FLAG_METHOD(AABBDirty, FLAG_AABB_DIRTY)
+// 	S2_FLAG_METHOD(AABBOverflow, FLAG_AABB_OVERFLOW)
+	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
 	
 private:
 	const Sprite*    m_spr;
 	const Actor*     m_parent;
 
 	ActorGeo*        m_geo;
+	ActorAABB        m_aabb;
 	SprRender*       m_render;
 	mutable uint32_t m_flags;
 

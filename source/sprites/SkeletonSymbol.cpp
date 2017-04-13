@@ -51,7 +51,7 @@ void SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	m_skeleton->Draw(rp_child);
 }
 
-sm::rect SkeletonSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect SkeletonSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_skeleton) {
 		return sm::rect();

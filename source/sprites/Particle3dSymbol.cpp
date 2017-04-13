@@ -115,7 +115,7 @@ bool Particle3dSymbol::Update(const UpdateParams& up, float time)
 	}
 }
 
-sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	// empty
 	return sm::rect();

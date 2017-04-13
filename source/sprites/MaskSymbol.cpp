@@ -67,7 +67,7 @@ void MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect MaskSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect MaskSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (m_mask) {
 		sm::rect b;

@@ -180,15 +180,6 @@ int s2_spr_get_sym_type(void* spr) {
 	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
 }
 
-static void set_actor_aabb_dirty(const Actor* actor) {
-	const Actor* curr = actor;
-	while (curr) {
-		curr->SetAABBDirty(true);
-		curr->GetSpr()->SetBoundingDirty(true);
-		curr = curr->GetParent();
-	}
-}
-
 extern "C"
 void s2_spr_set_action(void* actor, const char* action) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
@@ -213,8 +204,6 @@ void s2_spr_set_action(void* actor, const char* action) {
 	actor_complex->SetAction(action_idx);
 
 	s2_actor_start(actor);
-
-	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -653,7 +642,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 
 	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
 	anchor_spr->AddAnchor(c_actor, p_actor);
-	set_actor_aabb_dirty(p_actor);
+
 	return 0;
 }
 
@@ -737,18 +726,17 @@ void* s2_actor_get_spr(void* actor) {
 extern "C"
 void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	sm::rect sz = s2_actor->GetSpr()->GetBounding(s2_actor)->GetSize();
-	aabb[0] = sz.xmin;
-	aabb[1] = sz.ymin;
-	aabb[2] = sz.xmax;
-	aabb[3] = sz.ymax;
+	const sm::rect& src = s2_actor->GetAABB().GetRect();
+	aabb[0] = src.xmin;
+	aabb[1] = src.ymin;
+	aabb[2] = src.xmax;
+	aabb[3] = src.ymax;
 }
 
 extern "C"
 void s2_actor_set_pos(void* actor, float x, float y) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetPosition(sm::vec2(x, y));
-	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -763,7 +751,6 @@ extern "C"
 void s2_actor_set_angle(void* actor, float angle) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetAngle(angle);
-	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -776,7 +763,6 @@ extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->SetScale(sm::vec2(sx, sy));
-	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -952,7 +938,6 @@ void s2_actor_set_text(void* actor, const char* text) {
 
 	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
 	textbox->SetText(text);
-	set_actor_aabb_dirty(s2_actor);
 }
 
 extern "C"
@@ -962,10 +947,9 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 		return false;
 	}
 
-	const TextboxActor* textbox = static_cast<const TextboxActor*>(s2_actor);
-	const sm::vec2& size = textbox->GetSize();
-	*w = size.x;
-	*h = size.y;
+	const sm::rect& aabb = s2_actor->GetAABB().GetRect();
+	*w = aabb.Width();
+	*h = aabb.Height();
 
 	return true;
 }

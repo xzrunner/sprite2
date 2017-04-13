@@ -28,7 +28,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	void UpdateMesh(const rg_skeleton_pose* sk_pose);
 	void UpdateMesh(const rg_tl_deform_state* deform_state, const float* vertices);

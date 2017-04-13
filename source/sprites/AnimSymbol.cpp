@@ -76,21 +76,16 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 	return m_curr.Update(up, NULL);
 }
 
-sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	if (actor && actor->IsAABBDirty()) {
+	if (!cache) {
 		return CalcAABB(spr, actor);
-	} else {
-		if (!m_size.IsValid()) {
-			m_size = CalcAABB(spr, actor);
-		}
-		return m_size;
 	}
-}
 
-void AnimSymbol::SetBoundingDirty()
-{
-	m_size.MakeEmpty();
+	if (!m_aabb.IsValid()) {
+		m_aabb = CalcAABB(spr, actor);
+	}
+	return m_aabb;
 }
 
 int AnimSymbol::GetMaxFrameIdx() const
@@ -141,7 +136,7 @@ void AnimSymbol::AddLayer(Layer* layer)
 {
 	m_layers.push_back(layer);
 
-	m_size.MakeEmpty();
+	m_aabb.MakeEmpty();
 }
 
 bool AnimSymbol::Clear()
@@ -158,7 +153,7 @@ bool AnimSymbol::Clear()
  	}
 	m_layers.clear();
 	m_curr.Clear();
-	m_size.MakeEmpty();
+	m_aabb.MakeEmpty();
 	return dirty;	
 }
 

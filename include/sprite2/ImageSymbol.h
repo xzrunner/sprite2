@@ -24,7 +24,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	// todo: only for scale9 layout
 	virtual sm::vec2 GetNoTrimedSize() const;

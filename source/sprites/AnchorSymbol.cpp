@@ -33,7 +33,7 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect AnchorSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect AnchorSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	const Actor* real_actor = GetRealActor(spr, actor);
 	if (real_actor) {

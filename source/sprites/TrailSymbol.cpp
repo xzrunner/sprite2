@@ -56,7 +56,7 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	t2d_spr->Draw(rp_child);
 }
 
-sm::rect TrailSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect TrailSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	// empty
 	return sm::rect();

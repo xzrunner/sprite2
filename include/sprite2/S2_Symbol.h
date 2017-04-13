@@ -29,8 +29,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const = 0;
-	virtual void SetBoundingDirty() {}
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const = 0;
 	
 	int GetID() const { return m_id; }
 	

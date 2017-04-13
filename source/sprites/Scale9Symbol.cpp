@@ -54,7 +54,7 @@ void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect Scale9Symbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect Scale9Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::vec2 sz;
 	if (actor) {

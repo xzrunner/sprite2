@@ -26,7 +26,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	void SetEmitterCfg(const P3dEmitterCfg* cfg);
 	const P3dEmitterCfg* GetEmitterCfg() const { return m_et_cfg; }

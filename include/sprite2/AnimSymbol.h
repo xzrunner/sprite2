@@ -53,8 +53,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
-	virtual void SetBoundingDirty();
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -86,7 +85,7 @@ protected:
 	AnimCopy m_copy;
 	AnimCurr m_curr;
 
-	mutable sm::rect m_size;
+	mutable sm::rect m_aabb;
 
 }; // AnimSymbol
 

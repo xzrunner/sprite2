@@ -47,7 +47,7 @@ void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect TextureSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect TextureSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect rect;
 	for (size_t i = 0, n = m_polygons.size(); i < n; ++i) {

@@ -39,6 +39,8 @@ Actor::Actor(const Sprite* spr, const Actor* parent)
 	}
 
 	InitFlags();
+
+	m_aabb.Init(this);
 }
 
 Actor::~Actor()
@@ -58,13 +60,12 @@ Actor::~Actor()
 
 void Actor::SetPosition(const sm::vec2& pos)
 {
+	if (!m_geo && pos != sm::vec2(0, 0)) {
+		m_geo = new ActorGeo;
+	}
 	if (m_geo) {
 		m_geo->SetPosition(pos);
-	} else {
-		if (pos != sm::vec2(0, 0)) {
-			m_geo = new ActorGeo;
-			m_geo->SetPosition(pos);
-		}
+		m_aabb.Update(this);
 	}
 }
 
@@ -79,13 +80,12 @@ sm::vec2 Actor::GetPosition() const
 
 void Actor::SetAngle(float angle)
 {
+	if (!m_geo && angle != 0) {
+		m_geo = new ActorGeo;
+	}
 	if (m_geo) {
 		m_geo->SetAngle(angle);
-	} else {
-		if (angle != 0) {
-			m_geo = new ActorGeo;
-			m_geo->SetAngle(angle);
-		}
+		m_aabb.Update(this);
 	}
 }
 
@@ -100,13 +100,12 @@ float Actor::GetAngle() const
 
 void Actor::SetScale(const sm::vec2& scale)
 {
+	if (!m_geo && scale != sm::vec2(1, 1)) {
+		m_geo = new ActorGeo;
+	}
 	if (m_geo) {
 		m_geo->SetScale(scale);
-	} else {
-		if (scale != sm::vec2(1, 1)) {
-			m_geo = new ActorGeo;
-			m_geo->SetScale(scale);
-		}
+		m_aabb.Update(this);
 	}
 }
 

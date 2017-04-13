@@ -15,6 +15,8 @@
 #include "SymType.h"
 #include "SprVisitorParams.h"
 
+#include <rigging.h>
+
 #include <assert.h>
 
 namespace s2

@@ -94,19 +94,13 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	tb_spr->UpdateTime();
 }
 
-sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	if (!actor) {
+	if (actor) {
+		return actor->GetAABB().GetRect();
+	} else {
 		return sm::rect(m_tb.width, m_tb.height);
 	}
-
-	const sm::vec2& sz = VI_DOWNCASTING<const TextboxActor*>(actor)->GetSize();
-	sm::rect aabb;
-	aabb.xmin = -m_tb.width * 0.5f;
-	aabb.ymax = m_tb.height * 0.5f;
-	aabb.xmax = aabb.xmin + sz.x;
-	aabb.ymin = aabb.ymax - sz.y;
-	return aabb;
 }
 
 }

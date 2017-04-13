@@ -12,7 +12,6 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
-#include "BoundingDirtyVisitor.h"
 
 #include <SM_Test.h>
 
@@ -105,21 +104,16 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	return ret;
 }
 
-sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	if (actor && actor->IsAABBDirty()) {
+	if (!cache) {
 		return CalcAABB(spr, actor);
-	} else {
-		if (!m_size.IsValid()) {
-			m_size = CalcAABB(spr, actor);
-		}
-		return m_size;
 	}
-}
 
-void ComplexSymbol::SetBoundingDirty()
-{
-	m_size.MakeEmpty();
+	if (!m_aabb.IsValid()) {
+		m_aabb = CalcAABB(spr, actor);
+	}
+	return m_aabb;
 }
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
@@ -157,7 +151,7 @@ bool ComplexSymbol::Add(Sprite* spr, int idx)
 	} else {
 		m_children.insert(m_children.begin() + idx, spr);
 	}
-	m_size.MakeEmpty();
+	m_aabb.MakeEmpty();
 	return true;
 }
 
@@ -167,7 +161,7 @@ bool ComplexSymbol::Remove(Sprite* spr)
 		if (spr == m_children[i]) {
 			spr->RemoveReference();
 			m_children.erase(m_children.begin() + i);
-			m_size.MakeEmpty();
+			m_aabb.MakeEmpty();
 			return true;
 		}
 	}
@@ -222,7 +216,7 @@ bool ComplexSymbol::Clear()
 	// todo
 // 	m_actions.clear();
 
-	m_size.MakeEmpty();
+	m_aabb.MakeEmpty();
 
 	return true;
 }
@@ -329,19 +323,6 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 
 	int action = GetAction(spr, actor);
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
-
-// 	for (int i = 0, n = sprs.size(); i < n; ++i) {
-// 		BoundingDirtyVisitor visitor;
-// 		sprs[i]->Traverse(visitor, SprVisitorParams());
-// 		if (visitor.IsDirty()) {
-// 			m_size.MakeEmpty();
-// 			break;
-// 		}
-// 	}
-// 
-// 	if (m_size.IsValid()) {
-// 		return m_size;
-// 	}
 
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{

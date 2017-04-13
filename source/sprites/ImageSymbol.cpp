@@ -97,7 +97,7 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect ImageSymbol::GetBounding(const Sprite* spr, const Actor* actor) const
+sm::rect ImageSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return m_size;
 }

@@ -24,8 +24,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const;
-	virtual void SetBoundingDirty();
+	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const std::vector<Sprite*>& GetActionChildren(int action) const;
 	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }
@@ -72,7 +71,7 @@ protected:
 
 	sm::rect m_scissor;
 
-	mutable sm::rect m_size;
+	mutable sm::rect m_aabb;
 
 }; // ComplexSymbol
 

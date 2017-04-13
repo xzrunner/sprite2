@@ -83,7 +83,7 @@ public:
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }
 
-	const std::string& GetName() const;
+	const std::string& GetName() const { return m_name; }
 	void SetName(const std::string& name);
 
 	const BoundingBox* GetBounding(const Actor* actor = NULL) const; 
@@ -133,6 +133,8 @@ private:
 
 	void UpdateCenter();
 
+	void UpdateInheritUpdate() const;
+
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
@@ -166,7 +168,11 @@ public:
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	S2_FLAG_METHOD(ForceUpdate, FLAG_FORCE_UPDATE)
+
+//	S2_FLAG_METHOD(ForceUpdate, FLAG_FORCE_UPDATE)
+	bool IsForceUpdate() const { return (m_flags & FLAG_FORCE_UPDATE) != 0; }
+	void SetForceUpdate(bool flag) const;
+
 	S2_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
 
 	// actor

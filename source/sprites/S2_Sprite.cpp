@@ -661,6 +661,7 @@ void Sprite::InitFlags()
 	SetEditable(true);
 #endif // S2_SPR_DEFAULT_EDITABLE
 	SetBoundingDirty(true);
+	SetInheritUpdate(true);
 
 	if (INIT_FLAGS) {
 		INIT_FLAGS(this);

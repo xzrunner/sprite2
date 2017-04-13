@@ -37,6 +37,4 @@ Symbol::~Symbol()
 #endif // S2_RES_LOG
 }
 
-const sm::rect Symbol::m_dummy_rect;
-
 }

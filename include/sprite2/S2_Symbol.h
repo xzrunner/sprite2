@@ -30,16 +30,12 @@ public:
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL) const = 0;
-	virtual const sm::rect& GetScissor() const { return m_dummy_rect; }
 	virtual void SetBoundingDirty() {}
 	
 	int GetID() const { return m_id; }
 	
 private:
 	uint32_t m_id;
-
-private:
-	static const sm::rect m_dummy_rect;
 
 }; // Symbol
 

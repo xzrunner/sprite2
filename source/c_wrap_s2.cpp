@@ -213,6 +213,8 @@ void s2_spr_set_action(void* actor, const char* action) {
 	}
 	actor_complex->SetAction(action_idx);
 
+	s2_actor_start(actor);
+
 	set_actor_aabb_dirty(s2_actor);
 }
 

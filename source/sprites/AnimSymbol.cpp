@@ -79,11 +79,11 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 sm::rect AnimSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
-		return CalcAABB(spr, actor);
+		return CalcAABB(spr, actor, cache);
 	}
 
 	if (!m_aabb.IsValid()) {
-		m_aabb = CalcAABB(spr, actor);
+		m_aabb = CalcAABB(spr, actor, cache);
 	}
 	return m_aabb;
 }
@@ -157,7 +157,7 @@ bool AnimSymbol::Clear()
 	return dirty;	
 }
 
-sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect aabb;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
@@ -172,7 +172,7 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 //				frame->sprs[k]->GetBounding()->CombineTo(aabb);
 
 				// calc sym's aabb
-				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor, cache);
 				if (!c_aabb.IsValid()) {
 					continue;
 				}

@@ -727,10 +727,17 @@ extern "C"
 void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const sm::rect& src = s2_actor->GetAABB().GetRect();
-	aabb[0] = src.xmin;
-	aabb[1] = src.ymin;
-	aabb[2] = src.xmax;
-	aabb[3] = src.ymax;
+
+	sm::vec2 min(src.xmin, src.ymin),
+		     max(src.xmax, src.ymax);
+	sm::mat4 mat = 	s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
+	min = mat * min;
+	max = mat * max;
+	
+	aabb[0] = min.x;
+	aabb[1] = min.y;
+	aabb[2] = max.x;
+	aabb[3] = max.y;
 }
 
 extern "C"
@@ -947,9 +954,15 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 		return false;
 	}
 
-	const sm::rect& aabb = s2_actor->GetAABB().GetRect();
-	*w = aabb.Width();
-	*h = aabb.Height();
+	const sm::rect& src = s2_actor->GetAABB().GetRect();
+	sm::vec2 min(src.xmin, src.ymin),
+		     max(src.xmax, src.ymax);
+	sm::mat4 mat = s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
+	min = mat * min;
+	max = mat * max;
+
+	*w = max.x - min.x;
+	*h = max.y - min.y;
 
 	return true;
 }

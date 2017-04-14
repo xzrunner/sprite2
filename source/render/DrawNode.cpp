@@ -14,6 +14,7 @@
 #include "S2_RenderTargetMgr.h"
 #include "RenderScissor.h"
 #include "S2_RenderTarget.h"
+#include "S2_RVG.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -218,10 +219,20 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 		return false;
 	}
 
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	sm::vec2 r_min, r_max;
+	if (rp.actor) {
+		const sm::rect& r = rp.actor->GetAABB().GetRect();
+		r_min.Set(r.xmin, r.ymin);
+		r_max.Set(r.xmax, r.ymax);
+	} else {
+		sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+		r_min.Set(r.xmin, r.ymin);
+		r_max.Set(r.xmax, r.ymax);
+	}
 	S2_MAT mat = PrepareMat(rp, spr);
-	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
-	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
+	r_min = mat * r_min;
+	r_max = mat * r_max;
+
 	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));
 }
 
@@ -368,9 +379,39 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 {
 	spr->GetSymbol()->Draw(rp, spr);
+
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}
+}
+
+void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
+{
+	std::vector<sm::vec2> vertices(4);
+	if (rp.actor) 
+	{
+		const sm::rect& rect = rp.actor->GetAABB().GetRect();
+		vertices[0] = sm::vec2(rect.xmin, rect.ymin);
+		vertices[1] = sm::vec2(rect.xmin, rect.ymax);
+		vertices[2] = sm::vec2(rect.xmax, rect.ymax);
+		vertices[3] = sm::vec2(rect.xmax, rect.ymin);
+	} 
+	else 
+	{
+		sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
+		vertices[0] = sm::vec2(rect.xmin, rect.ymin);
+		vertices[1] = sm::vec2(rect.xmin, rect.ymax);
+		vertices[2] = sm::vec2(rect.xmax, rect.ymax);
+		vertices[3] = sm::vec2(rect.xmax, rect.ymin);
+	}
+	RenderParams rp_child(rp);
+	DrawNode::Prepare(rp, spr, rp_child);
+	for (int i = 0; i < 4; ++i) {
+		vertices[i] = rp_child.mt * vertices[i];
+	}
+
+	RVG::SetColor(col);
+	RVG::Polyline(vertices, true);
 }
 
 }

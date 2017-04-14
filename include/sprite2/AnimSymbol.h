@@ -75,7 +75,7 @@ public:
 private:
 	void Draw(const RenderParams& rp, int idx = 1);
 
-	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
+	sm::rect CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const;
 
 protected:
 	std::vector<Layer*> m_layers;

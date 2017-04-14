@@ -47,6 +47,8 @@ private:
 
 	static void DrawSprImplFinal(const Sprite* spr, const RenderParams& rp);
 
+	static void DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
+
 }; // DrawNode
 
 }

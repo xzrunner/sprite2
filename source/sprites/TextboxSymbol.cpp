@@ -72,7 +72,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
  
  	s.width					= tb.width;
  	s.height				= tb.height;
- 
+
  	s.gs.font				= tb.font_type;
  	s.gs.font_size			= tb.font_size;
  	s.gs.font_color.integer = tb.font_color.ToRGBA();
@@ -96,11 +96,18 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	if (actor) {
-		return actor->GetAABB().GetRect();
-	} else {
+	if (!actor) {
 		return sm::rect(m_tb.width, m_tb.height);
 	}
+
+	const sm::rect& r = actor->GetAABB().GetRect();
+	sm::rect ret(r.Width(), r.Height());
+
+	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+	float offy = - (r.Height() - tb_spr->GetTextbox().height) * 0.5f;
+	ret.ymin += offy;
+	ret.ymax += offy;
+	return ret;
 }
 
 }

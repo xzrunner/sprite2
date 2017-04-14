@@ -5,7 +5,6 @@
 #include "SymType.h"
 #include "BoundingBox.h"
 #include "SprVisitorParams.h"
-#include "QueryAABBVisitor.h"
 #include "AnchorSprite.h"
 
 #include <SM_Calc.h>
@@ -54,6 +53,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 			return VISIT_OVER;
 		}
 	}
+
 	if (!QuerySprite(spr, params)) {
 		return VISIT_OVER;
 	}
@@ -68,11 +68,13 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	if (editable) {
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
+		m_selected_path = m_curr_path;
 		return VISIT_STOP;
 	} else {
 		if (!m_selected_spr) {
 			cu::RefCountObjAssign(m_selected_spr, spr);
 			m_selected_params = params;
+			m_selected_path = m_curr_path;
 			return VISIT_OVER;
 		} else {
 			return VISIT_OVER;
@@ -82,23 +84,30 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 
 VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
+	m_curr_path.push_back(spr->GetID());
 	return VISIT_OVER;
 }
 
 VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
 {
-	bool editable = spr->IsEditable();
-	const Actor* actor = params.actor;
-	if (actor) {
-		editable = actor->IsEditable();
+	VisitResult ret = VISIT_OVER;
+
+	if (IsSelectedOnCurrPath())
+	{
+		bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
+		if (editable) 
+		{
+			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_params = params;
+			m_selected_path = m_curr_path;
+			ret = VISIT_STOP;
+		}
 	}
-	if (editable) {
-		cu::RefCountObjAssign(m_selected_spr, spr);
-		m_selected_params = params;
-		return VISIT_STOP;
-	} else {
-		return VISIT_OVER;
-	}
+
+ 	assert(!m_curr_path.empty());
+ 	m_curr_path.pop_back();
+
+	return ret;
 }
 
 const Actor* PointQueryVisitor::GetSelectedActor() const
@@ -111,7 +120,12 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
 {
-	sm::rect sz = spr->GetSymbol()->GetBounding(spr, params.actor);
+	sm::rect sz;
+	if (params.actor) {
+		sz = params.actor->GetAABB().GetRect();		
+	} else {
+		sz = spr->GetSymbol()->GetBounding(spr, params.actor);
+	}
 	if (sz.Width() == 0 || sz.Height() == 0 || !sz.IsValid()) {
 		return false;
 	}
@@ -124,32 +138,21 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = params.mt * vertices[i];
 	}
+
 	return sm::is_point_in_convex(m_pos, vertices, 4);
+}
 
-	//////////////////////////////////////////////////////////////////////////
-
-// 	sm::rect sz = spr->GetSymbol()->GetBounding(spr);
-// 	if (sz.Width() == 0 || sz.Height() == 0) {
-// 		return false;
-// 	}
-// 
-// 	SprVisitorParams p;
-// 	p.actor = params.actor;
-// 	QueryAABBVisitor visitor(true, false, true);
-// 	spr->Traverse(visitor, p, false);
-// 
-// 	const sm::rect& aabb = visitor.GetAABB();
-// 
-//  	std::vector<sm::vec2> vertices[4];
-//  	vertices[0] = sm::vec2(aabb.xmin, aabb.ymin);
-//  	vertices[1] = sm::vec2(aabb.xmin, aabb.ymax);
-//  	vertices[2] = sm::vec2(aabb.xmax, aabb.ymax);
-//  	vertices[3] = sm::vec2(aabb.xmax, aabb.ymin);
-//  	for (int i = 0; i < 4; ++i) {
-//  		vertices[i] = params.mt * vertices[i];
-//  	}
-// 
-// 	return sm::is_point_in_convex(m_pos, vertices, 4);
+bool PointQueryVisitor::IsSelectedOnCurrPath() const
+{
+	if (m_curr_path.size() > m_selected_path.size()) {
+		return false;
+	}
+	for (int i = 0, n = m_curr_path.size(); i < n; ++i) {
+		if (m_curr_path[i] != m_selected_path[i]) {
+			return false;
+		}
+	}
+	return true;
 }
 
 }

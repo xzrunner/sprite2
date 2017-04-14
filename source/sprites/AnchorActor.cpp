@@ -36,9 +36,8 @@ void AnchorActor::SetAnchor(const Actor* anchor)
 
 	if (anchor) {
 		anchor->GetSpr()->ConnectActors(this);
+		const_cast<Actor*>(anchor)->GetAABB().Update(this);
 	}
-
-	const_cast<Actor*>(anchor)->GetAABB().Update(this);
 }
 
 const Actor* AnchorActor::GetAnchor() const

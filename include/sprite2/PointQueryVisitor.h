@@ -30,11 +30,16 @@ public:
 private:
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 
+	bool IsSelectedOnCurrPath() const;
+
 private:
 	sm::vec2 m_pos;
 
 	const Sprite*    m_selected_spr;
 	SprVisitorParams m_selected_params;
+
+	std::vector<int> m_curr_path;
+	std::vector<int> m_selected_path;
 
 }; // PointQueryVisitor
 

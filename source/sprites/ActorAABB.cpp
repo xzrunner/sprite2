@@ -12,21 +12,42 @@ namespace s2
 void ActorAABB::Init(const Actor* curr)
 {
 	// not pass actor, in ctor
-	m_rect = curr->GetSpr()->GetBounding()->GetSize();
+	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr());
 
 	UpdateTight(curr);
 }
 
 void ActorAABB::Update(const Actor* curr)
 {
-	m_rect = Build(curr);
+	sm::rect new_rect = Build(curr);
+	if (new_rect == m_rect) {
+		return;
+	}
+	m_rect = new_rect;
+
 	UpdateParent(curr);
 	UpdateTight(curr);
 }
 
 void ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
 {
-	m_rect.Combine(rect);
+	sm::rect new_rect = m_rect;
+	sm::vec2 bounding[4] = {
+		sm::vec2(rect.xmin, rect.ymin),
+		sm::vec2(rect.xmax, rect.ymin),
+		sm::vec2(rect.xmax, rect.ymax),
+		sm::vec2(rect.xmin, rect.ymax),
+	};
+	const Sprite* spr = curr->GetSpr();
+	for (int i = 0; i < 4; ++i) {
+		new_rect.Combine(bounding[i]);
+	}
+
+	if (new_rect == m_rect) {
+		return;
+	}
+	m_rect = new_rect;
+
 	UpdateParent(curr);
 	UpdateTight(curr);
 }
@@ -75,8 +96,7 @@ sm::rect ActorAABB::Build(const Actor* curr)
 
 	sm::rect ret;
 	for (int i = 0; i < 4; ++i) {
-		sm::vec2 pos = spr->GetLocalMat() * bounding[i];
-		ret.Combine(curr->GetLocalMat() * pos);
+		ret.Combine(bounding[i]);
 	}
 	return ret;
 }

@@ -107,11 +107,11 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
-		return CalcAABB(spr, actor);
+		return CalcAABB(spr, actor, cache);
 	}
 
 	if (!m_aabb.IsValid()) {
-		m_aabb = CalcAABB(spr, actor);
+		m_aabb = CalcAABB(spr, actor, cache);
 	}
 	return m_aabb;
 }
@@ -297,10 +297,20 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 		return false;
 	}
 
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	sm::vec2 r_min, r_max;
+	if (rp.actor) {
+		const sm::rect& r = rp.actor->GetAABB().GetRect();
+		r_min.Set(r.xmin, r.ymin);
+		r_max.Set(r.xmax, r.ymax);
+	} else {
+		sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+		r_min.Set(r.xmin, r.ymin);
+		r_max.Set(r.xmax, r.ymax);
+	}
 	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
-	sm::vec2 r_min = mat * sm::vec2(r.xmin, r.ymin);
-	sm::vec2 r_max = mat * sm::vec2(r.xmax, r.ymax);
+	r_min = mat * r_min;
+	r_max = mat * r_max;
+
 	sm::rect sr(r_min, r_max);
 
 	if (!rs->Empty() && rs->IsOutside(sr)) {
@@ -312,7 +322,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	return false;
 }
 
-sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
@@ -328,7 +338,7 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 	{
 		const Sprite* c_spr = sprs[i];
 		const Actor* c_actor = c_spr->QueryActor(actor);
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor, cache);
 		if (!c_aabb.IsValid()) {
 			continue;
 		}

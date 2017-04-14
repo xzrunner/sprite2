@@ -41,8 +41,13 @@ void TextboxActor::SetText(const std::string& text)
 	float w, h;
 	gtxt_get_label_size(m_text.c_str(), &style, &w, &h);
 
+	sm::rect rect = GetAABB().GetRect();
+	// base from left-top
+	rect.xmax = rect.xmin + w;
+	rect.ymin = rect.ymax - h;
+
 	ActorAABB& aabb = GetAABB();
-	aabb.SetRect(sm::rect(w, h));
+	aabb.SetRect(rect);
 	aabb.UpdateParent(this);
 }
 

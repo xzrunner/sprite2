@@ -30,10 +30,14 @@ sprite2里的Symbol和Sprite对应SNode和DNode，但又不完全相同。<a id=
 
 ## 跟ejoy2d相比的的优势？
 
+ejoy2d里不能动态改变场景图的结构，只能从spritepack中读取打包好的结构，用mount来替换某个节点。sprite2中可以通过改变Symbol中Sprite子节点的组成来实现。
+
 ejoy2d的场景图是两层结构spritepack和sprite对应SNode和DNode，[sprite会有大量重复](#twolayer)。[在sprite2里SNode会指向DNode，从而消除了这种重复](#spr_sym)。
 
-节点有AABB信息，可以在渲染的时候根据实际显示的范围来减枝，点击查询时也可以根据输入的查询位置来减枝。
+节点有AABB信息，可以在渲染和查询时来减枝。
 
-好维护，封装的更好，增加一个节点类型，就只需要实现它自己的一些接口，不需要影响到别的代码。
+维护更方便，封装的更好，增加一个节点类型，就只需要实现它自己的一些接口，不需要影响到别的地方的代码。
 
 扩展更方便，每一种节点都可以作为组件被其他节点使用。
+
+资源管理更简洁高效。资源统一通过Sprite的引用计数来管理。资源用到了才被创建出来，比如ImageSymbol中的贴图，MeshSymbol中的mesh数据等，随着各自的Sprite的创建才会被创建出来。资源不用时可以立即被释放，Symbol不被任何Sprite引用时会清除自己占有的资源。

@@ -57,7 +57,12 @@ void IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	m_icon->Draw(rp_child, process);
 }
 
-sm::rect IconSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+void IconSymbol::SetIcon(Icon* icon)
+{
+	cu::RefCountObjAssign(m_icon, icon);
+}
+
+sm::rect IconSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect r;
 	if (!m_icon) {
@@ -69,11 +74,6 @@ sm::rect IconSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cac
 		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
 	}
 	return m_icon->GetRegion(process);
-}
-
-void IconSymbol::SetIcon(Icon* icon)
-{
-	cu::RefCountObjAssign(m_icon, icon);
 }
 
 }

@@ -54,7 +54,12 @@ void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect Scale9Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+void Scale9Symbol::Resize(float width, float height)
+{
+	m_s9.SetSize(width, height);
+}
+
+sm::rect Scale9Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::vec2 sz;
 	if (actor) {
@@ -65,11 +70,6 @@ sm::rect Scale9Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool c
 		sz = m_s9.GetSize();
 	}
 	return sm::rect(sz.x, sz.y);
-}
-
-void Scale9Symbol::Resize(float width, float height)
-{
-	m_s9.SetSize(width, height);
 }
 
 }

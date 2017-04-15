@@ -24,7 +24,6 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const std::vector<Sprite*>& GetActionChildren(int action) const;
 	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }
@@ -57,6 +56,8 @@ public:
 	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
 
 protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+
 	bool IsChildOutside(const Sprite* spr, const RenderParams& rp) const;
 
 private:

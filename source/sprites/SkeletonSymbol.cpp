@@ -51,7 +51,12 @@ void SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	m_skeleton->Draw(rp_child);
 }
 
-sm::rect SkeletonSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
+{
+	cu::RefCountObjAssign(m_skeleton, skeleton);
+}
+
+sm::rect SkeletonSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_skeleton) {
 		return sm::rect();
@@ -61,11 +66,6 @@ sm::rect SkeletonSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool
 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
 	}
 	return m_skeleton->GetBounding();
-}
-
-void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
-{
-	cu::RefCountObjAssign(m_skeleton, skeleton);
 }
 
 }

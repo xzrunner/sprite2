@@ -20,13 +20,15 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const Sprite* GetBase() const { return m_base; }
 	void SetBase(Sprite* base);
 
 	const Sprite* GetMask() const { return m_mask; }
 	void SetMask(Sprite* mask);
+
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 protected:
 	Sprite* m_base;

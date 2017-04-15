@@ -115,12 +115,6 @@ bool Particle3dSymbol::Update(const UpdateParams& up, float time)
 	}
 }
 
-sm::rect Particle3dSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
-	// empty
-	return sm::rect();
-}
-
 void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg) 
 { 
 	if (m_et_cfg == cfg) {
@@ -138,6 +132,12 @@ void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg)
 	m_et = P3dEmitterPool::Instance()->Pop();
 	m_et->CreateEmitter(m_et_cfg);
 	m_et->Start();
+}
+
+sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	// empty
+	return sm::rect();
 }
 
 void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const

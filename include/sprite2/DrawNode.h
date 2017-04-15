@@ -37,6 +37,8 @@ public:
 		             const RenderParams& rp,
 					 const S2_MAT& mt);
 
+	static void DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
+
 	static bool IsOutsideView(const Sprite* spr, const RenderParams& rp);
 
 private:
@@ -46,8 +48,6 @@ private:
 	static void DrawSprImpl(const Sprite* spr, const RenderParams& rp);
 
 	static void DrawSprImplFinal(const Sprite* spr, const RenderParams& rp);
-
-	static void DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
 
 }; // DrawNode
 

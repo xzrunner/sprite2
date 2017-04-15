@@ -97,11 +97,6 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect ImageSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
-	return m_size;
-}
-
 sm::vec2 ImageSymbol::GetNoTrimedSize() const
 {
 	if (m_tex) {
@@ -115,6 +110,11 @@ void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
 {
 	cu::RefCountObjAssign(m_tex, tex);
 	m_region = region;
+}
+
+sm::rect ImageSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	return m_size;
 }
 
 void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const

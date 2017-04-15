@@ -26,7 +26,6 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const std::vector<PolygonShape*>& GetPolygons() const { return m_polygons; }
 	std::vector<PolygonShape*>& GetPolygons() { return m_polygons; }
@@ -34,6 +33,8 @@ public:
 	void AddPolygon(PolygonShape* poly);
 
 protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+
 	void Clear();
 
 protected:

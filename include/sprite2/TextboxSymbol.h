@@ -30,12 +30,13 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }
 
 protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+
 	virtual void DrawText(const gtxt_label_style& style, const S2_MAT& mt, const Color& mul, 
 		const Color& add, const std::string& text, int time, bool richtext) const = 0;
 

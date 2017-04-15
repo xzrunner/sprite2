@@ -104,18 +104,6 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	return ret;
 }
 
-sm::rect ComplexSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
-	if (!cache) {
-		return CalcAABB(spr, actor, cache);
-	}
-
-	if (!m_aabb.IsValid()) {
-		m_aabb = CalcAABB(spr, actor, cache);
-	}
-	return m_aabb;
-}
-
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
 {
 	if (action < 0 || action >= m_actions.size()) {
@@ -290,6 +278,18 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 	return true;
 }
 
+sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	if (!cache) {
+		return CalcAABB(spr, actor, cache);
+	}
+
+	if (!m_aabb.IsValid()) {
+		m_aabb = CalcAABB(spr, actor, cache);
+	}
+	return m_aabb;
+}
+
 bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) const
 {
 	RenderScissor* rs = RenderScissor::Instance();
@@ -298,15 +298,9 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	}
 
 	sm::vec2 r_min, r_max;
-	if (rp.actor) {
-		const sm::rect& r = rp.actor->GetAABB().GetRect();
-		r_min.Set(r.xmin, r.ymin);
-		r_max.Set(r.xmax, r.ymax);
-	} else {
-		sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
-		r_min.Set(r.xmin, r.ymin);
-		r_max.Set(r.xmax, r.ymax);
-	}
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	r_min.Set(r.xmin, r.ymin);
+	r_max.Set(r.xmax, r.ymax);
 	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
 	r_min = mat * r_min;
 	r_max = mat * r_max;

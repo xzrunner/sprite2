@@ -55,7 +55,7 @@ void Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	p2d_spr->Draw(rp_child);
 }
 
-sm::rect Particle2dSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	// empty
 	return sm::rect();

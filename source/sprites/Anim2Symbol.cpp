@@ -49,7 +49,7 @@ void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp_child);
 }
 
-sm::rect Anim2Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_anim) {
 		return sm::rect(200, 200);

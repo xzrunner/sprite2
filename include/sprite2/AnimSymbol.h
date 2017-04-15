@@ -53,7 +53,6 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -72,9 +71,10 @@ public:
 	void AddLayer(Layer* layer);
 	bool Clear();
 
-private:
-	void Draw(const RenderParams& rp, int idx = 1);
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
+private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const;
 
 protected:

@@ -120,12 +120,7 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
 {
-	sm::rect sz;
-	if (params.actor) {
-		sz = params.actor->GetAABB().GetRect();		
-	} else {
-		sz = spr->GetSymbol()->GetBounding(spr, params.actor);
-	}
+	sm::rect sz = spr->GetSymbol()->GetBounding(spr, params.actor);
 	if (sz.Width() == 0 || sz.Height() == 0 || !sz.IsValid()) {
 		return false;
 	}

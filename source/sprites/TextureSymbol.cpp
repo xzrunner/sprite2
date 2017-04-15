@@ -47,19 +47,19 @@ void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect TextureSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+void TextureSymbol::AddPolygon(PolygonShape* poly)
+{
+	poly->AddReference();
+	m_polygons.push_back(poly);
+}
+
+sm::rect TextureSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect rect;
 	for (size_t i = 0, n = m_polygons.size(); i < n; ++i) {
 		rect.Combine(m_polygons[i]->GetBounding());
 	}
 	return rect;
-}
-
-void TextureSymbol::AddPolygon(PolygonShape* poly)
-{
-	poly->AddReference();
-	m_polygons.push_back(poly);
 }
 
 void TextureSymbol::Clear()

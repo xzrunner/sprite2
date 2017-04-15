@@ -45,18 +45,18 @@ void ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect ShapeSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+void ShapeSymbol::SetShape(Shape* shape)
+{
+	cu::RefCountObjAssign(m_shape, shape);
+}
+
+sm::rect ShapeSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (m_shape) {
 		return m_shape->GetBounding();
 	} else {
 		return sm::rect(0, 0);
 	}
-}
-
-void ShapeSymbol::SetShape(Shape* shape)
-{
-	cu::RefCountObjAssign(m_shape, shape);
 }
 
 }

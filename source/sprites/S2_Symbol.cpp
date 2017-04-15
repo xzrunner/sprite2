@@ -1,4 +1,7 @@
 #include "S2_Symbol.h"
+#include "S2_Actor.h"
+
+#include "S2_Sprite.h"
 
 #ifdef S2_RES_LOG
 #include <iostream>
@@ -35,6 +38,17 @@ Symbol::~Symbol()
 	--COUNT;
 	std::cout << "-- symbol id:" << m_id << ", count: " << COUNT << "\n";
 #endif // S2_RES_LOG
+}
+
+sm::rect Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	if (actor) {
+		const sm::rect& rect = actor->GetAABB().GetRect();
+		if (rect.IsValid()) {
+			return rect;
+		}
+	}
+	return GetBoundingImpl(spr, actor, cache);
 }
 
 }

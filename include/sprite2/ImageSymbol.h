@@ -24,7 +24,6 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	// todo: only for scale9 layout
 	virtual sm::vec2 GetNoTrimedSize() const;
@@ -36,6 +35,9 @@ public:
 	const Texture* GetTexture() const { return m_tex; }
 
 	const sm::i16_rect& GetRegion() const { return m_region; }
+
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
 	void DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;

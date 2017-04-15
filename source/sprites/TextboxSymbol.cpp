@@ -94,7 +94,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	tb_spr->UpdateTime();
 }
 
-sm::rect TextboxSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!actor) {
 		return sm::rect(m_tb.width, m_tb.height);

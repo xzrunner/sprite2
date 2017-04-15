@@ -85,15 +85,6 @@ bool MeshSymbol::Update(const UpdateParams& up, float time)
 	}
 }
 
-sm::rect MeshSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
- 	if (m_mesh) {
- 		return m_mesh->GetRegion();
- 	} else {
-		return sm::rect();
-	}
-}
-
 void MeshSymbol::UpdateMesh(const rg_skeleton_pose* sk_pose)
 {
  	if (m_mesh) {
@@ -111,6 +102,15 @@ void MeshSymbol::UpdateMesh(const rg_tl_deform_state* deform_state, const float*
 void MeshSymbol::SetMesh(Mesh* mesh)
 {
 	cu::RefCountObjAssign(m_mesh, mesh);
+}
+
+sm::rect MeshSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	if (m_mesh) {
+		return m_mesh->GetRegion();
+	} else {
+		return sm::rect();
+	}
 }
 
 }

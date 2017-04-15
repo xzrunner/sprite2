@@ -29,10 +29,14 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const = 0;
 	
 	int GetID() const { return m_id; }
-	
+
+	sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const = 0;	
+
 private:
 	uint32_t m_id;
 

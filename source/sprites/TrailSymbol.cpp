@@ -56,12 +56,6 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	t2d_spr->Draw(rp_child);
 }
 
-sm::rect TrailSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
-	// empty
-	return sm::rect();
-}
-
 void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)
 {
 	if (m_et_cfg == cfg) {
@@ -75,6 +69,12 @@ void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)
 	}
 	m_et = t2d_emitter_create(m_et_cfg);
 	t2d_emitter_start(m_et);
+}
+
+sm::rect TrailSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	// empty
+	return sm::rect();
 }
 
 }

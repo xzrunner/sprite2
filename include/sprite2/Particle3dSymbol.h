@@ -26,7 +26,6 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 	void SetEmitterCfg(const P3dEmitterCfg* cfg);
 	const P3dEmitterCfg* GetEmitterCfg() const { return m_et_cfg; }
@@ -38,6 +37,9 @@ public:
 
 	void SetLocal(bool local) { m_local = local; }
 	bool IsLocal() const { return m_local; }
+
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
 	void DrawSymbol(const RenderParams& rp, const Sprite* spr) const;

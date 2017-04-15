@@ -3,6 +3,9 @@
 
 #include <gtxt_label.h>
 
+#include <S2_Sprite.h>
+#include <S2_Symbol.h>
+
 namespace s2
 {
 
@@ -30,6 +33,10 @@ _init_gtxt_label_style(struct gtxt_label_style* dst, const Textbox& src) {
 
 void TextboxActor::SetText(const std::string& text)
 {
+	if (m_text == text) {
+		return;
+	}
+
 	m_text = text;
 
 	const TextboxSprite* text_spr = VI_DOWNCASTING<const TextboxSprite*>(GetSpr());
@@ -41,7 +48,7 @@ void TextboxActor::SetText(const std::string& text)
 	float w, h;
 	gtxt_get_label_size(m_text.c_str(), &style, &w, &h);
 
-	sm::rect rect = GetAABB().GetRect();
+	sm::rect rect = GetSpr()->GetSymbol()->GetBounding();
 	// base from left-top
 	rect.xmax = rect.xmin + w;
 	rect.ymin = rect.ymax - h;

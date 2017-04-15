@@ -67,17 +67,6 @@ void MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 }
 
-sm::rect MaskSymbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
-	if (m_mask) {
-		sm::rect b;
-		m_mask->GetBounding()->CombineTo(b);
-		return b;
-	} else {
-		return sm::rect(sm::vec2(0, 0), 100, 100);
-	}
-}
-
 void MaskSymbol::SetBase(Sprite* base)
 {
 	cu::RefCountObjAssign(m_base, base);
@@ -86,6 +75,17 @@ void MaskSymbol::SetBase(Sprite* base)
 void MaskSymbol::SetMask(Sprite* mask)
 {
 	cu::RefCountObjAssign(m_mask, mask);
+}
+
+sm::rect MaskSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+{
+	if (m_mask) {
+		sm::rect b;
+		m_mask->GetBounding()->CombineTo(b);
+		return b;
+	} else {
+		return sm::rect(sm::vec2(0, 0), 100, 100);
+	}
 }
 
 }

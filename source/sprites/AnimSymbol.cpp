@@ -8,6 +8,7 @@
 #include "DrawNode.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
+#include "AnimActor.h"
 
 #include <assert.h>
 
@@ -148,17 +149,22 @@ bool AnimSymbol::Clear()
 sm::rect AnimSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
-		return CalcAABB(spr, actor, cache);
+		return CalcAABB(spr, actor);
 	}
 
 	if (!m_aabb.IsValid()) {
-		m_aabb = CalcAABB(spr, actor, cache);
+		m_aabb = CalcAABB(spr, actor);
 	}
 	return m_aabb;
 }
 
-sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 {
+	if (actor) {
+		const AnimActor* anim_actor = static_cast<const AnimActor*>(actor);
+		return anim_actor->GetCurr()->CalcAABB(actor);
+	}
+
 	sm::rect aabb;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		Layer* layer = m_layers[i];
@@ -172,7 +178,7 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cache)
 //				frame->sprs[k]->GetBounding()->CombineTo(aabb);
 
 				// calc sym's aabb
-				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor, cache);
+				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
 				if (!c_aabb.IsValid()) {
 					continue;
 				}

@@ -59,6 +59,8 @@ public:
 
 	void SetChildAction(const Actor* actor, int symid, const char* action);
 
+	sm::rect CalcAABB(const Actor* actor) const;
+
 private:
 	void ResetTime();
 

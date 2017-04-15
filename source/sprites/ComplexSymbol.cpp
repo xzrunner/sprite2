@@ -281,11 +281,11 @@ bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
 sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
-		return CalcAABB(spr, actor, cache);
+		return CalcAABB(spr, actor);
 	}
 
 	if (!m_aabb.IsValid()) {
-		m_aabb = CalcAABB(spr, actor, cache);
+		m_aabb = CalcAABB(spr, actor);
 	}
 	return m_aabb;
 }
@@ -316,7 +316,7 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	return false;
 }
 
-sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 {
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
@@ -332,7 +332,7 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor, bool cac
 	{
 		const Sprite* c_spr = sprs[i];
 		const Actor* c_actor = c_spr->QueryActor(actor);
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor, cache);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
 		if (!c_aabb.IsValid()) {
 			continue;
 		}

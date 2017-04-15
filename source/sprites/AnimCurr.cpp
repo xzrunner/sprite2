@@ -236,6 +236,19 @@ void AnimCurr::SetChildAction(const Actor* parent, int symid, const char* action
 	}
 }
 
+sm::rect AnimCurr::CalcAABB(const Actor* actor) const
+{
+	sm::rect aabb;
+	for (int i = 0; i < m_curr_num; ++i) 
+	{
+		Sprite* child = m_slots[m_curr[i]];
+		const Actor* c_actor = child->QueryActor(actor);
+		sm::rect c_aabb = child->GetSymbol()->GetBounding(child, c_actor);
+		aabb.Combine(c_aabb);
+	}
+	return aabb;
+}
+
 void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	ResetTime();

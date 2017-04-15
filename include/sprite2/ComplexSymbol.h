@@ -61,7 +61,7 @@ protected:
 	bool IsChildOutside(const Sprite* spr, const RenderParams& rp) const;
 
 private:
-	sm::rect CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const;
+	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 	int GetAction(const Sprite* spr, const Actor* actor) const;
 

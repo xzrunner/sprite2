@@ -396,7 +396,6 @@ void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 // 	}
 
 	spr->GetSymbol()->Draw(rp, spr);
-
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}

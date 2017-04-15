@@ -75,7 +75,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
-	sm::rect CalcAABB(const Sprite* spr, const Actor* actor, bool cache) const;
+	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 protected:
 	std::vector<Layer*> m_layers;

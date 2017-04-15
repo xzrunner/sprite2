@@ -1,3 +1,6 @@
 # Sprite2
 
-scene tree
+Sprite2 is a scene graph for game.
+
+- Three layers model: Symbol, Sprite and Actor
+

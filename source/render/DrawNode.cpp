@@ -283,7 +283,7 @@ void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, cons
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
-	shader->Draw(&vertices[0].x, texcoords, tex_id);
+	shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
 }
 
 void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)

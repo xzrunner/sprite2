@@ -144,7 +144,7 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
 		_vertices[3] = _vertices[2];
 		_texcoords[3] = _texcoords[2];
 
-		shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
+		shader->DrawQuad(&_vertices[0].x, &_texcoords[0].x, tex_id);
 	}
 }
 
@@ -153,7 +153,7 @@ static void draw_sprite2(const float* positions, const float* texcoords, int tex
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	assert(mgr->GetShaderType() == sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->Draw(positions, texcoords, tex_id);
+	shader->DrawQuad(positions, texcoords, tex_id);
 }
 
 static void draw_filter(const float* positions, const float* texcoords, int tex_id)

@@ -46,7 +46,7 @@ void StaticQuadIcon::Draw(const RenderParams& rp, float process) const
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	shader->Draw(&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());
+	shader->DrawQuad(&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());
 }
 
 sm::rect StaticQuadIcon::GetRegion(float process) const

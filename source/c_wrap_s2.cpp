@@ -1041,7 +1041,7 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
-			shader->Draw(vertices, texcoords, src_tex_id);
+			shader->DrawQuad(vertices, texcoords, src_tex_id);
 		}
 		break;
 	case sl::FILTER:

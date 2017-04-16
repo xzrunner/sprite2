@@ -78,7 +78,7 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 
 		TexcoordsMap::Trans(_texcoords, texcoords);
 
-		shader->Draw(&vertices[0].x, &texcoords[0].x, tex_id);
+		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 	}
 
 	//sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

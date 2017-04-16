@@ -78,7 +78,7 @@ void DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offset)
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
-	shader->Draw(&vertices[0].x, &texcoords[0].x, rt->GetTexID());
+	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, rt->GetTexID());
 
 	shader->Commit();
 }

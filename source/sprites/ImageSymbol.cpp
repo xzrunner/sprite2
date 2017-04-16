@@ -91,7 +91,6 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		if (cam && cam->Type() == CAM_PSEUDO3D) {
 			DrawPseudo3D(rp_child, vertices, texcoords, tex_id);
 		} else {
-
 			DrawOrtho(rp_child, vertices, texcoords, tex_id);
 		}
 	}
@@ -184,7 +183,7 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* t
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 		shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-		shader->Draw(&vertices[0].x, texcoords, tex_id);
+		shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
 	}
 }
 

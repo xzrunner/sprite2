@@ -84,7 +84,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 
 VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
-	m_curr_path.push_back(spr->GetID());
+	m_curr_path.Push(spr->GetID());
 	return VISIT_OVER;
 }
 
@@ -92,7 +92,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 {
 	VisitResult ret = VISIT_OVER;
 
-	if (IsSelectedOnCurrPath())
+	if (m_curr_path.IsPartOf(m_selected_path))
 	{
 		bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 		if (editable) 
@@ -104,8 +104,8 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 		}
 	}
 
- 	assert(!m_curr_path.empty());
- 	m_curr_path.pop_back();
+ 	assert(!m_curr_path.Empty());
+ 	m_curr_path.Pop();
 
 	return ret;
 }
@@ -135,19 +135,6 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	}
 
 	return sm::is_point_in_convex(m_pos, vertices, 4);
-}
-
-bool PointQueryVisitor::IsSelectedOnCurrPath() const
-{
-	if (m_curr_path.size() > m_selected_path.size()) {
-		return false;
-	}
-	for (int i = 0, n = m_curr_path.size(); i < n; ++i) {
-		if (m_curr_path[i] != m_selected_path[i]) {
-			return false;
-		}
-	}
-	return true;
 }
 
 }

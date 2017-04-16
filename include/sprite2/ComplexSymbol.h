@@ -9,6 +9,8 @@
 namespace s2
 {
 
+class Flat;
+
 class ComplexSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
@@ -32,6 +34,8 @@ public:
 	void SetScissor(const sm::rect& scissor) { m_scissor = scissor; }
 
 	int GetActionIdx(const std::string& name) const;
+
+	void BuildFlat();
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -73,6 +77,8 @@ protected:
 	sm::rect m_scissor;
 
 	mutable sm::rect m_aabb;
+
+	Flat* m_flat;
 
 }; // ComplexSymbol
 

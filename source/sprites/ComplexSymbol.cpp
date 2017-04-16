@@ -12,6 +12,8 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
+#include "Flat.h"
+#include "Blob.h"
 
 #include <SM_Test.h>
 
@@ -24,18 +26,23 @@ namespace s2
 
 ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
+	, m_flat(NULL)
 {
 }
 
 ComplexSymbol::ComplexSymbol(uint32_t id)
 	: Symbol(id)
 	, m_scissor(0, 0)
+	, m_flat(NULL)
 {
 }
 
 ComplexSymbol::~ComplexSymbol()
 {
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
+	if (m_flat) {
+		delete m_flat;
+	}
 }
 
 int ComplexSymbol::Type() const 
@@ -54,6 +61,14 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+		return;
+	}
+
+	if (m_flat) {
+		const std::vector<Blob*>& blobs = m_flat->GetAllBlobs();
+		for (int i = 0, n = blobs.size(); i < n; ++i) {
+			blobs[i]->Draw(rp);
+		}
 		return;
 	}
 
@@ -127,6 +142,20 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 		}
 	}
 	return idx;
+}
+
+void ComplexSymbol::BuildFlat()
+{
+	if (m_children.size() < 999) {
+		return;
+	}
+
+	m_flat = new Flat;
+	for (int i = 0, n = m_children.size(); i < n; ++i) {
+		const Sprite* child = m_children[i];
+		m_flat->Add(child, sm::mat4());
+	}
+	m_flat->Finish();
 }
 
 bool ComplexSymbol::Add(Sprite* spr, int idx)

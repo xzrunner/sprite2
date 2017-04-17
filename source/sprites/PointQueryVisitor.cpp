@@ -57,7 +57,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	if (!QuerySprite(spr, params)) {
 		return VISIT_OVER;
 	}
-	if (type == SYM_COMPLEX || type == SYM_ANIMATION) {
+	if (type == SYM_COMPLEX || type == SYM_ANIMATION || type == SYM_SCALE9) {
 		return VISIT_INTO;
 	}
 

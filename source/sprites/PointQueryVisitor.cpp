@@ -64,13 +64,26 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	}
 
 	bool editable = actor ? actor->IsEditable() : spr->IsEditable();
-	if (editable) {
+	if (editable) 
+	{
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
 		m_selected_path = m_curr_path;
 		return VISIT_STOP;
-	} else {
+	} 
+	else 
+	{
+		bool use_new = false;
 		if (!m_selected_spr || m_selected_path.IsPartOf(m_curr_path)) {
+			use_new = true;
+		}
+		if (m_selected_spr) {
+			if (!m_selected_path.IsEditable() && m_curr_path.IsEditable()) {
+				use_new = true;
+			}
+		}
+
+		if (use_new) {
 			cu::RefCountObjAssign(m_selected_spr, spr);
 			m_selected_params = params;
 			m_selected_path = m_curr_path;
@@ -83,7 +96,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 
 VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
-	m_curr_path.Push(spr->GetID());
+	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
+	m_curr_path.Push(spr->GetID(), editable);
 	return VISIT_OVER;
 }
 
@@ -134,6 +148,49 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	}
 
 	return sm::is_point_in_convex(m_pos, vertices, 4);
+}
+
+/************************************************************************/
+/* class PointQueryVisitor::SprPath                                     */
+/************************************************************************/
+
+bool PointQueryVisitor::SprPath::
+IsPartOf(const SprPath& long_path) const
+{
+	return m_impl.IsPartOf(long_path.m_impl);
+}
+
+bool PointQueryVisitor::SprPath::
+Empty() const
+{
+	return m_impl.Empty();
+}
+
+void PointQueryVisitor::SprPath::
+Push(int spr_id, bool editable)
+{
+	m_impl.Push(spr_id);
+	m_editable.push_back(editable);
+}
+
+void PointQueryVisitor::SprPath::
+Pop()
+{
+	m_impl.Pop();
+	if (!m_editable.empty()) {
+		m_editable.pop_back();
+	}
+}
+
+bool PointQueryVisitor::SprPath::
+IsEditable() const
+{
+	for (int i = 0, n = m_editable.size(); i < n; ++i) {
+		if (m_editable[i]) {
+			return true;
+		}
+	}
+	return false;
 }
 
 }

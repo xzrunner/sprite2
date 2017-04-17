@@ -32,13 +32,33 @@ private:
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 
 private:
+	class SprPath
+	{
+	public:
+
+		bool IsPartOf(const SprPath& long_path) const;
+
+		bool Empty() const;
+
+		void Push(int spr_id, bool editable);
+		void Pop();
+
+		bool IsEditable() const;
+
+	private:
+		SprTreePath m_impl;
+		std::vector<bool> m_editable;
+
+	}; // SprPath
+
+private:
 	sm::vec2 m_pos;
 
 	const Sprite*    m_selected_spr;
 	SprVisitorParams m_selected_params;
 
-	SprTreePath m_curr_path;
-	SprTreePath m_selected_path;
+	SprPath m_curr_path;
+	SprPath m_selected_path;
 
 }; // PointQueryVisitor
 

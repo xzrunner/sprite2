@@ -22,6 +22,11 @@ AnchorActor::~AnchorActor()
 
 void AnchorActor::SetAnchor(const Actor* anchor) 
 {
+	if (anchor == this) {
+		Clear();
+		return;
+	}
+
 	if (m_anchor != anchor) {
 		if (m_anchor) {
 			// disconnect
@@ -53,6 +58,20 @@ void AnchorActor::SetAnchor(const Actor* anchor)
 const Actor* AnchorActor::GetAnchor() const
 {
 	return m_anchor;
+}
+
+void AnchorActor::Clear()
+{
+	if (m_anchor) 
+	{
+		// disconnect
+		const_cast<Actor*>(m_anchor)->SetParent(NULL);
+		m_anchor->GetSpr()->RemoveReference();
+		m_anchor = NULL;
+	}
+
+	// make it empty
+	GetAABB().SetRect(sm::rect());
 }
 
 }

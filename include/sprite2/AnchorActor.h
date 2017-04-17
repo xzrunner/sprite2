@@ -16,6 +16,9 @@ public:
 	const Actor* GetAnchor() const;
 
 private:
+	void Clear();
+
+private:
 	const Actor* m_anchor;
 
 }; // AnchorActor

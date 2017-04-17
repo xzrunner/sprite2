@@ -57,21 +57,20 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	if (!QuerySprite(spr, params)) {
 		return VISIT_OVER;
 	}
+	
+	bool should_into = false;
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION || type == SYM_SCALE9) {
 		return VISIT_INTO;
 	}
 
-	bool editable = spr->IsEditable();
-	if (actor) {
-		editable = actor->IsEditable();
-	}
+	bool editable = actor ? actor->IsEditable() : spr->IsEditable();
 	if (editable) {
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
 		m_selected_path = m_curr_path;
 		return VISIT_STOP;
 	} else {
-		if (!m_selected_spr) {
+		if (!m_selected_spr || m_selected_path.IsPartOf(m_curr_path)) {
 			cu::RefCountObjAssign(m_selected_spr, spr);
 			m_selected_params = params;
 			m_selected_path = m_curr_path;

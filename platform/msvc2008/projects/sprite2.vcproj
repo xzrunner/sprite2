@@ -392,6 +392,10 @@
 				Name="06.complex"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\ComplexActor.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\include\sprite2\ComplexActor.h"
 					>
 				</File>
@@ -1208,6 +1212,14 @@
 				Name="actor"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\ActorAABB.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ActorAABB.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\ActorFactory.cpp"
 					>
 				</File>
@@ -1249,6 +1261,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\ModelSymbol.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="flat"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\Blob.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Blob.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\Flat.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Flat.h"
 					>
 				</File>
 			</Filter>

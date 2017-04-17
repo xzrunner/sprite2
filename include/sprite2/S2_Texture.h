@@ -26,6 +26,9 @@ public:
 
 	uint32_t GetTexID() const { return m_tex_id; }
 
+	bool IsLoadFinished() const { return m_load_finished; }
+	void SetLoadFinished(bool finished) { m_load_finished = finished; }
+
 private:
 	uint16_t m_width, m_height;
 
@@ -33,6 +36,8 @@ private:
 
 	uint16_t m_ori_w, m_ori_h;
 //		     m_ori_x, m_ori_y;
+
+	bool m_load_finished;
 
 }; // Texture
 

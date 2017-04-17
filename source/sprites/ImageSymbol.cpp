@@ -49,6 +49,10 @@ int ImageSymbol::Type() const
 
 void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+	if (!m_tex->IsLoadFinished()) {
+		return;
+	}
+
 	RenderParams rp_child(rp);
 	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;

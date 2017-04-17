@@ -6,6 +6,7 @@ namespace s2
 Texture::Texture(uint16_t w, uint16_t h, uint32_t id) 
 	: m_ori_w(0)
 	, m_ori_h(0)
+	, m_load_finished(true)
 {
 	Init(w, h, id);
 }

@@ -4,6 +4,7 @@
 #include "S2_Sprite.h"
 
 #include <assert.h>
+#include <string.h>
 
 namespace s2
 {

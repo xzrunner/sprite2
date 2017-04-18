@@ -18,6 +18,8 @@ class UpdateParams;
 class Sprite;
 class SymbolVisitor;
 class Actor;
+class Flatten;
+class FlattenParams;
 
 class Symbol : public VIRTUAL_INHERITANCE cu::RefCountObj, private cu::Uncopyable
 {
@@ -29,7 +31,8 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
-	
+	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const {}
+
 	int GetID() const { return m_id; }
 
 	sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;

@@ -6,6 +6,8 @@
 #include "DrawNode.h"
 #include "S2_Sprite.h"
 #include "BoundingBox.h"
+#include "Flatten.h"
+#include "FlattenParams.h"
 
 #include <assert.h>
 
@@ -30,6 +32,26 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (rp_child.actor) {
 		rp_child.mt = spr->GetLocalMat() * rp_child.mt;
 		DrawNode::Draw(rp_child.actor->GetSpr(), rp_child, false);
+	}
+}
+
+void AnchorSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	const Sprite* spr = fp.GetSpr();
+	const Actor* actor = fp.GetActor();
+	assert(spr);
+	const Actor* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(actor);
+	if (!anchor) {
+		return;
+	}
+
+	const Actor* real_actor = GetRealActor(spr, actor);
+	if (real_actor) 
+	{
+		const Sprite* real_spr = real_actor->GetSpr();
+		FlattenParams c_fp = fp;
+		c_fp.Push(real_spr, real_actor);
+		real_spr->GetSymbol()->Flattening(c_fp, ft);
 	}
 }
 

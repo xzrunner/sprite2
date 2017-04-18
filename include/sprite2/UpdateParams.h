@@ -28,7 +28,7 @@ public:
 	void SetActor(const Actor* actor);
 	const Actor* GetActor() const;
 
-public:
+private:
 	S2_MAT       m_prev_mat;
 	FilterMode   m_prev_filter;
 

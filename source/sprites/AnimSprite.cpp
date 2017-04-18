@@ -72,9 +72,6 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 			RandomStartTime(up);
 		}
 		break;
-	case MSG_CLEAR:
-		curr.Clear();
-		break;
 	default:
 		break;
 	}

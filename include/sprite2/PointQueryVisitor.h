@@ -60,6 +60,8 @@ private:
 	SprPath m_curr_path;
 	SprPath m_selected_path;
 
+	bool m_finded;
+
 }; // PointQueryVisitor
 
 }

@@ -19,6 +19,7 @@ PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
 	: SpriteVisitor(false)
 	, m_pos(pos)
 	, m_selected_spr(NULL)
+	, m_finded(false)
 {
 }
 
@@ -70,6 +71,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		cu::RefCountObjAssign(m_selected_spr, spr);
 		m_selected_params = params;
 		m_selected_path = m_curr_path;
+		m_finded = true;
 		return VISIT_STOP;
 	} 
 	else 
@@ -119,7 +121,12 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 				cu::RefCountObjAssign(m_selected_spr, spr);
 				m_selected_params = params;
 				m_selected_path = m_curr_path;
-				ret = editable ? VISIT_STOP : VISIT_OVER;
+				if (editable) {
+					m_finded = true;
+					ret = VISIT_STOP;
+				} else {
+					ret = VISIT_OVER;
+				}
 			}
 		}
 	}
@@ -131,6 +138,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 			cu::RefCountObjAssign(m_selected_spr, spr);
 			m_selected_params = params;
 			m_selected_path = m_curr_path;
+			m_finded = true;
 			ret = VISIT_STOP;
 		}
 	} 
@@ -143,10 +151,11 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 
 const Actor* PointQueryVisitor::GetSelectedActor() const
 {
-	if (!m_selected_spr) {
+	if (m_selected_spr && m_finded) {
+		return m_selected_params.actor;
+	} else {
 		return NULL;
 	}
-	return m_selected_params.actor;
 }
 
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const

@@ -110,23 +110,17 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 
 	if (m_selected_path.Empty())
 	{
-		SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
-		if (type == SYM_COMPLEX) 
+		if (IsPointInScissor(spr, params))
 		{
-			const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
-			sm::vec2 scissor_sz = comp_sym->GetScissor().Size();
-			if (scissor_sz.x > 0 && scissor_sz.y > 0) 
-			{
-				bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
-				cu::RefCountObjAssign(m_selected_spr, spr);
-				m_selected_params = params;
-				m_selected_path = m_curr_path;
-				if (editable) {
-					m_finded = true;
-					ret = VISIT_STOP;
-				} else {
-					ret = VISIT_OVER;
-				}
+			bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
+			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_params = params;
+			m_selected_path = m_curr_path;
+			if (editable) {
+				m_finded = true;
+				ret = VISIT_STOP;
+			} else {
+				ret = VISIT_OVER;
 			}
 		}
 	}
@@ -160,18 +154,39 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 
 bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
 {
-	sm::rect sz = spr->GetSymbol()->GetBounding(spr, params.actor);
-	if (sz.Width() == 0 || sz.Height() == 0 || !sz.IsValid()) {
+	sm::rect rect = spr->GetSymbol()->GetBounding(spr, params.actor);
+	if (rect.Width() == 0 || rect.Height() == 0 || !rect.IsValid()) {
+		return false;
+	} else {
+		return IsPointInRect(rect, params.mt);
+	}
+}
+
+bool PointQueryVisitor::IsPointInScissor(const Sprite* spr, const SprVisitorParams& params) const
+{
+	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
+	if (type != SYM_COMPLEX) {
 		return false;
 	}
 
+	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
+	const sm::rect& rect = comp_sym->GetScissor();
+	if (rect.Width() <= 0 || rect.Height() <= 0) {
+		return false;
+	}
+
+	return IsPointInRect(rect, params.mt);
+}
+
+bool PointQueryVisitor::IsPointInRect(const sm::rect& rect, const sm::mat4& mat) const
+{
 	sm::vec2 vertices[4];
-	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
-	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
-	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
-	vertices[3] = sm::vec2(sz.xmax, sz.ymin);
+	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
+	vertices[1] = sm::vec2(rect.xmin, rect.ymax);
+	vertices[2] = sm::vec2(rect.xmax, rect.ymax);
+	vertices[3] = sm::vec2(rect.xmax, rect.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = params.mt * vertices[i];
+		vertices[i] = mat * vertices[i];
 	}
 
 	return sm::is_point_in_convex(m_pos, vertices, 4);

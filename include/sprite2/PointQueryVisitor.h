@@ -6,6 +6,7 @@
 #include "SprTreePath.h"
 
 #include <SM_Vector.h>
+#include <SM_Rect.h>
 
 #include <vector>
 
@@ -30,6 +31,9 @@ public:
 	
 private:
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
+	bool IsPointInScissor(const Sprite* spr, const SprVisitorParams& params) const;
+
+	bool IsPointInRect(const sm::rect& rect, const sm::mat4& mat) const;	
 
 private:
 	class SprPath

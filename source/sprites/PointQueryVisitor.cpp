@@ -6,6 +6,7 @@
 #include "BoundingBox.h"
 #include "SprVisitorParams.h"
 #include "AnchorSprite.h"
+#include "ComplexSymbol.h"
 
 #include <SM_Calc.h>
 
@@ -105,7 +106,24 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 {
 	VisitResult ret = VISIT_OVER;
 
-	if (m_curr_path.IsPartOf(m_selected_path))
+	if (m_selected_path.Empty())
+	{
+		SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
+		if (type == SYM_COMPLEX) 
+		{
+			const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
+			sm::vec2 scissor_sz = comp_sym->GetScissor().Size();
+			if (scissor_sz.x > 0 && scissor_sz.y > 0) 
+			{
+				bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
+				cu::RefCountObjAssign(m_selected_spr, spr);
+				m_selected_params = params;
+				m_selected_path = m_curr_path;
+				ret = editable ? VISIT_STOP : VISIT_OVER;
+			}
+		}
+	}
+	else if (m_curr_path.IsPartOf(m_selected_path))
 	{
 		bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 		if (editable) 
@@ -115,7 +133,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 			m_selected_path = m_curr_path;
 			ret = VISIT_STOP;
 		}
-	}
+	} 
 
  	assert(!m_curr_path.Empty());
  	m_curr_path.Pop();

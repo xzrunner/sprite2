@@ -6,7 +6,6 @@
 #include "BoundingBox.h"
 #include "SprVisitorParams.h"
 #include "AnchorSprite.h"
-#include "ComplexSymbol.h"
 
 #include <SM_Calc.h>
 
@@ -59,18 +58,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_OVER;
 	}
 	
-	bool should_into = false;	
+	bool should_into = false;
 	if (type == SYM_COMPLEX || type == SYM_ANIMATION || type == SYM_SCALE9) {
-		should_into = true;
-	}
-	if (type == SYM_COMPLEX) {
-		const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
-		sm::vec2 scissor_sz = comp_sym->GetScissor().Size();
-		if (scissor_sz.x > 0 && scissor_sz.y > 0) {
-			should_into = false;
-		}
-	}
-	if (should_into) {
 		return VISIT_INTO;
 	}
 

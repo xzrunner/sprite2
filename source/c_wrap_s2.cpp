@@ -203,7 +203,7 @@ void s2_spr_set_action(void* actor, const char* action) {
 	}
 	actor_complex->SetAction(action_idx);
 
-	s2_actor_start(actor);
+	s2_actor_msg_start(actor);
 }
 
 extern "C"
@@ -542,7 +542,7 @@ void s2_actor_update(void* actor) {
 }
 
 extern "C"
-void s2_actor_start(void* actor) {
+void s2_actor_msg_start(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
@@ -551,12 +551,21 @@ void s2_actor_start(void* actor) {
 }
 
 extern "C"
-void s2_actor_stop(void* actor) {
+void s2_actor_msg_stop(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_sprite = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
 	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_STOP);
+}
+
+extern "C"
+void s2_actor_msg_clear(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const Sprite* s2_sprite = s2_actor->GetSpr();
+	UpdateParams up(s2_actor);
+	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
+	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_CLEAR);
 }
 
 extern "C"

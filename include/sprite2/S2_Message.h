@@ -10,6 +10,7 @@ enum Message
 	MSG_STOP,
 	MSG_TRIGGER,
 	MSG_INIT,
+	MSG_CLEAR,
 };
 
 }

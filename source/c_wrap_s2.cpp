@@ -21,6 +21,7 @@
 #include "RenderScissor.h"
 #include "Blackboard.h"
 #include "s2_trans_color.h"
+#include "SetStaticFrameVisitor.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -762,27 +763,14 @@ void s2_actor_msg_clear(void* actor) {
 	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_CLEAR);
 }
 
-static void
-_set_frame(const Actor* actor, int frame) {
-	UpdateParams up(actor);
-	up.SetPrevMat(get_actor_world_mat(actor->GetParent()));
-	const_cast<Sprite*>(actor->GetSpr())->SetFrame(up, frame, true);		
-}
-
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_frame(child_actor, frame);
-		}
-	} else {
-		_set_frame(s2_actor, frame);
-	}
+	const Sprite* s2_sprite = s2_actor->GetSpr();
+	SetStaticFrameVisitor visitor(frame);
+	SprVisitorParams vp;
+	vp.actor = s2_actor;
+	s2_sprite->Traverse(visitor, vp, false);
 }
 
 extern "C"

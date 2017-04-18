@@ -252,7 +252,7 @@ void AnimCurr::SetTime(float time)
 
 void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
-	frame = frame % m_copy->m_max_frame_idx + 1;
+	frame = frame % (m_copy->m_max_frame_idx + 1);
 
 	if (frame < m_frame) {
 		ResetLayerCursor();

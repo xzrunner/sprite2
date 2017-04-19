@@ -63,10 +63,6 @@ Actor::~Actor()
 
 void Actor::SetPosition(const sm::vec2& pos)
 {
-	if (GetSpr()->GetSymbol()->GetID() == 1052375) {
-		int zz = 0;
-	}
-
 	if (!m_geo && pos != sm::vec2(0, 0)) {
 		m_geo = new ActorGeo;
 	}

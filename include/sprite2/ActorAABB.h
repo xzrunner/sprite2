@@ -11,7 +11,7 @@ class Actor;
 class ActorAABB
 {
 public:
-	ActorAABB() {}
+	ActorAABB();
 
 	void Init(const Actor* curr);
 	void Update(const Actor* curr);
@@ -20,7 +20,9 @@ public:
 	void UpdateParent(const Actor* curr);
 
 	const sm::rect& GetRect() const { return m_rect; }
-	void SetRect(const sm::rect& rect) { m_rect = rect; }
+	void SetRect(const sm::rect& rect);
+
+	void SetStaticRect(const sm::rect& rect);
 
 private:
 	void UpdateTight(const Actor* curr);
@@ -30,6 +32,8 @@ private:
 
 private:
 	sm::rect m_rect;
+
+	bool m_static;
 
 }; // ActorAABB
 

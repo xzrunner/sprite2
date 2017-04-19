@@ -9,8 +9,17 @@
 namespace s2
 {
 
-void ActorAABB::Init(const Actor* curr)
+ActorAABB::ActorAABB()
+	: m_static(false)
 {
+}
+
+void ActorAABB::Init(const Actor* curr)
+{	
+	if (m_static) {
+		return;
+	}
+
 	// not pass actor, in ctor
 	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr());
 
@@ -19,6 +28,10 @@ void ActorAABB::Init(const Actor* curr)
 
 void ActorAABB::Update(const Actor* curr)
 {
+	if (m_static) {
+		return;
+	}
+
 	sm::rect new_rect = Build(curr);
 	if (new_rect == m_rect) {
 		return;
@@ -31,6 +44,10 @@ void ActorAABB::Update(const Actor* curr)
 
 void ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
 {
+	if (m_static) {
+		return;
+	}
+
 	sm::rect new_rect = m_rect;
 	new_rect.Combine(rect);
 	if (new_rect == m_rect) {
@@ -44,6 +61,10 @@ void ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
 
 void ActorAABB::UpdateParent(const Actor* curr)
 {
+	if (m_static) {
+		return;
+	}
+
 	const Actor* parent = curr->GetParent();
 	if (!parent) {
 		return;
@@ -76,8 +97,25 @@ void ActorAABB::UpdateParent(const Actor* curr)
 	}
 }
 
+void ActorAABB::SetRect(const sm::rect& rect) 
+{ 
+	if (!m_static) {
+		m_rect = rect; 
+	}
+}
+
+void ActorAABB::SetStaticRect(const sm::rect& rect)
+{
+	m_static = true;
+	m_rect = rect;
+}
+
 void ActorAABB::UpdateTight(const Actor* curr)
 {
+	if (m_static) {
+		return;
+	}
+
 	const Actor* parent = curr->GetParent();
 	bool tight = parent && IsRectTight(m_rect, parent->GetAABB().GetRect());
 	curr->SetAABBTight(tight);

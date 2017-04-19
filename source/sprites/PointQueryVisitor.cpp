@@ -54,6 +54,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		} else {
 			return VISIT_OVER;
 		}
+	} else if (type == SYM_ANIM2) {
+		return VISIT_OVER;
 	}
 
 	if (!QuerySprite(spr, params)) {

@@ -10,6 +10,7 @@
 #include "ComplexActor.h"
 #include "AnimActor.h"
 #include "Particle3dActor.h"
+#include "MaskActor.h"
 
 #include <assert.h>
 
@@ -50,6 +51,9 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 		break;
 	case SYM_PARTICLE3D:
 		actor = new Particle3dActor(child, parent);
+		break;
+	case SYM_MASK:
+		actor = new MaskActor(child, parent);
 		break;
 	default:
 		actor = new Actor(child, parent);

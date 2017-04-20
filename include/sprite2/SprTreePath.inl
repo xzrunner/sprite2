@@ -86,6 +86,16 @@ void SprTreePath::Clear()
 	m_val = 0;
 }
 
+inline
+int SprTreePath::QueryByIndex(int idx) const
+{
+	if (idx < 0 || idx >= m_num) {
+		return -1;
+	} else {
+		return m_ids[idx];
+	}
+}
+
 }
 
 #endif // _SPRITE2_SPR_TREE_PATH_INL_

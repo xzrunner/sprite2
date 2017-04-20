@@ -25,6 +25,8 @@ public:
 
 	void Clear();
 
+	int QueryByIndex(int idx) const;
+
 private:
 	int m_val;
 

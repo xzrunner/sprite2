@@ -32,12 +32,8 @@ PointQueryVisitor::~PointQueryVisitor()
 
 VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	if (!spr->IsVisible()) {
-		return VISIT_OVER;
-	}
-	
-	const Actor* actor = params.actor;
-	if (actor && !actor->IsVisible()) {
+	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
+	if (!visible) {
 		return VISIT_OVER;
 	}
 
@@ -46,16 +42,23 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_OVER;
 	} else if (type == SYM_ANCHOR) {
 		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(spr);
-		const Actor* real = anchor_spr->QueryAnchor(actor);
+		const Actor* real = anchor_spr->QueryAnchor(params.actor);
 		if (real) {
 			SprVisitorParams cp = params;
-			cp.actor = real->GetSpr()->QueryActor(actor);
+			cp.actor = real->GetSpr()->QueryActor(params.actor);
 			return Visit(real->GetSpr(), cp);
 		} else {
 			return VISIT_OVER;
 		}
 	} else if (type == SYM_ANIM2) {
 		return VISIT_OVER;
+	} else if (type == SYM_MASK) {
+		Sprite* base_spr = spr->FetchChild("base", params.actor);
+		const Actor* c_actor = base_spr->QueryActor(params.actor);
+		bool visible = c_actor ? c_actor->IsVisible() : base_spr->IsVisible();
+		if (!visible) {
+			return VISIT_OVER;
+		}
 	}
 
 	if (!QuerySprite(spr, params)) {
@@ -67,7 +70,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_INTO;
 	}
 
-	bool editable = actor ? actor->IsEditable() : spr->IsEditable();
+	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 	if (editable) 
 	{
 		cu::RefCountObjAssign(m_selected_spr, spr);
@@ -83,11 +86,10 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 			use_new = true;
 		}
 		if (m_selected_spr) {
-			if (!m_selected_path.IsEditable() && m_curr_path.IsEditable()) {
+			if (m_curr_path.IsBatterThan(m_selected_path)) {
 				use_new = true;
 			}
 		}
-
 		if (use_new) {
 			cu::RefCountObjAssign(m_selected_spr, spr);
 			m_selected_params = params;
@@ -102,7 +104,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
 {
 	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
-	m_curr_path.Push(spr->GetID(), editable);
+	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
+	m_curr_path.Push(spr->GetID(), editable, visible);
 	return VISIT_OVER;
 }
 
@@ -205,16 +208,53 @@ IsPartOf(const SprPath& long_path) const
 }
 
 bool PointQueryVisitor::SprPath::
+IsBatterThan(const SprPath& path) const
+{
+	int path_last_editable_id = -1;
+	for (int i = 0, n = path.m_editable.size(); i < n; ++i) {
+		if (path.m_editable[i]) {
+			path_last_editable_id = path.m_impl.QueryByIndex(i);
+		}
+	}
+
+	int curr_last_editable_id = -1;
+	for (int i = 0, n = m_editable.size(); i < n; ++i) {
+		if (m_editable[i]) {
+			curr_last_editable_id = m_impl.QueryByIndex(i);
+		}
+	}
+	
+	if (path_last_editable_id == -1 && curr_last_editable_id != -1) {
+		return true;
+	} else if (path_last_editable_id != -1 && curr_last_editable_id == -1) {
+		return false;
+	} else if (path_last_editable_id == -1 && curr_last_editable_id == -1) {
+		return false;
+	} else {
+		if (path_last_editable_id == curr_last_editable_id) {
+			return false;
+		}
+		for (int i = 0, n = m_editable.size(); i < n; ++i) {
+			if (m_editable[i] && m_impl.QueryByIndex(i) == path_last_editable_id) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
+bool PointQueryVisitor::SprPath::
 Empty() const
 {
 	return m_impl.Empty();
 }
 
 void PointQueryVisitor::SprPath::
-Push(int spr_id, bool editable)
+Push(int spr_id, bool editable, bool visible)
 {
 	m_impl.Push(spr_id);
 	m_editable.push_back(editable);
+	m_visible.push_back(visible);
 }
 
 void PointQueryVisitor::SprPath::
@@ -224,13 +264,16 @@ Pop()
 	if (!m_editable.empty()) {
 		m_editable.pop_back();
 	}
+	if (!m_visible.empty()) {
+		m_visible.pop_back();
+	}
 }
 
 bool PointQueryVisitor::SprPath::
-IsEditable() const
+IsVisible() const
 {
 	for (int i = 0, n = m_editable.size(); i < n; ++i) {
-		if (m_editable[i]) {
+		if (m_visible[i]) {
 			return true;
 		}
 	}

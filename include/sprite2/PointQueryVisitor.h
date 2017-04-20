@@ -41,17 +41,19 @@ private:
 	public:
 
 		bool IsPartOf(const SprPath& long_path) const;
+		bool IsBatterThan(const SprPath& path) const;
 
 		bool Empty() const;
 
-		void Push(int spr_id, bool editable);
+		void Push(int spr_id, bool editable, bool visible);
 		void Pop();
 
-		bool IsEditable() const;
+		bool IsVisible() const;
 
 	private:
 		SprTreePath m_impl;
 		std::vector<bool> m_editable;
+		std::vector<bool> m_visible;
 
 	}; // SprPath
 

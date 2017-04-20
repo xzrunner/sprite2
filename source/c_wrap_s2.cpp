@@ -716,14 +716,14 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 }
 
 extern "C"
-void* s2_get_actor(const void* parent_actor, void* child_spr) {
+void* s2_actor_create(const void* parent_actor, void* child_spr) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 	Sprite* child = static_cast<Sprite*>(child_spr);
 	return ActorFactory::Instance()->Create(parent, child);
 }
 
 extern "C"
-int s2_get_actor_count() {
+int s2_actor_get_count() {
 	return -1;
 }
 

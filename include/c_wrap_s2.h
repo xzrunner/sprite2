@@ -106,8 +106,8 @@ void  s2_actor_set_force_update(void* actor, bool force);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 
-void* s2_get_actor(const void* parent_actor, void* child_spr);
-int   s2_get_actor_count();
+void* s2_actor_create(const void* parent_actor, void* child_spr);
+int   s2_actor_get_count();
 
 void* s2_actor_get_spr(void* actor);
 void  s2_actor_get_aabb(const void* actor, float aabb[4]);

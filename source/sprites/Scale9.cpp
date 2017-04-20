@@ -4,6 +4,7 @@
 #include "DrawNode.h"
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
+#include "SymType.h"
 
 #include <SM_Calc.h>
 
@@ -78,11 +79,11 @@ void Scale9::SetSize(float width, float height)
 	{
 	case S9_9GRID:
 		{
-			float w0 = m_grids[S9_DOWN_LEFT]->GetSymbol()->GetBounding().Size().x,
-				  w2 = m_grids[S9_DOWN_RIGHT]->GetSymbol()->GetBounding().Size().x,
+			float w0 = GetLeftWidth(),
+				  w2 = GetRightWidth(),
 				  w1 = width - w0 - w2;
-			float h0 = m_grids[S9_DOWN_LEFT]->GetSymbol()->GetBounding().Size().y,
-				  h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
+			float h0 = GetDownHeight(),
+				  h2 = GetTopHeight(),
 				  h1 = height - h0 - h2;
 
 			ResizeSprite(S9_DOWN_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
@@ -100,11 +101,11 @@ void Scale9::SetSize(float width, float height)
 		break;
 	case S9_9GRID_HOLLOW:
 		{
-			float w0 = m_grids[S9_DOWN_LEFT]->GetSymbol()->GetBounding().Size().x,
-				  w2 = m_grids[S9_DOWN_RIGHT]->GetSymbol()->GetBounding().Size().x,
+			float w0 = GetLeftWidth(),
+				  w2 = GetRightWidth(),
 				  w1 = width - w0 - w2;
-			float h0 = m_grids[S9_DOWN_LEFT]->GetSymbol()->GetBounding().Size().y,
-				  h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
+			float h0 = GetDownHeight(),
+				  h2 = GetTopHeight(),
 				  h1 = height - h0 - h2;
 
 			ResizeSprite(S9_DOWN_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, -h0*0.5f-h1*0.5f), w0, h0);
@@ -121,10 +122,10 @@ void Scale9::SetSize(float width, float height)
 		break;
 	case S9_6GRID_UPPER:
 		{
-			float w0 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().x,
-				  w2 = m_grids[S9_TOP_RIGHT]->GetSymbol()->GetBounding().Size().x,
+			float w0 = GetLeftWidth(),
+				  w2 = GetRightWidth(),
 				  w1 = width - w0 - w2;
-			float h2 = m_grids[S9_TOP_LEFT]->GetSymbol()->GetBounding().Size().y,
+			float h2 = GetTopHeight(),
 				  h1 = height - h2;
 
 			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, h1);
@@ -138,8 +139,8 @@ void Scale9::SetSize(float width, float height)
 		break;
 	case S9_3GRID_HORI:
 		{
-			float w0 = m_grids[S9_MID_LEFT]->GetSymbol()->GetBounding().Size().x,
-				  w2 = m_grids[S9_MID_RIGHT]->GetSymbol()->GetBounding().Size().x,
+			float w0 = GetLeftWidth(),
+				  w2 = GetRightWidth(),
 				  w1 = width - w0 - w2; 
 
 			ResizeSprite(S9_MID_LEFT, sm::vec2(-w0*0.5f-w1*0.5f, 0.0f), w0, height);
@@ -149,8 +150,8 @@ void Scale9::SetSize(float width, float height)
 		break;
 	case S9_3GRID_VERT:
 		{
-			float h0 = m_grids[S9_DOWN_CENTER]->GetSymbol()->GetBounding().Size().y,
-				  h2 = m_grids[S9_TOP_CENTER]->GetSymbol()->GetBounding().Size().y,
+			float h0 = GetDownHeight(),
+				  h2 = GetTopHeight(),
 				  h1 = height - h0 - h2;
 
 			ResizeSprite(S9_DOWN_CENTER, sm::vec2(0.0f, -h0*0.5f-h1*0.5f), width, h0);
@@ -363,6 +364,41 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center,
 	spr->SetScale(new_scale);
 
 	spr->Translate(sm::rotate_vector(spr->GetOffset(), spr->GetAngle()) - spr->GetOffset());
+}
+
+sm::vec2 Scale9::GetChildSize(SCALE9_IDX idx) const
+{
+	const Sprite* spr = m_grids[idx];
+	if (!spr) {
+		return sm::vec2(0, 0);
+	}
+	const Symbol* sym = spr->GetSymbol();
+	if (sym->Type() == SYM_IMAGE) {
+		const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
+		return img_sym->GetNoTrimedSize();
+	} else {
+		return sym->GetBounding(spr).Size();
+	}
+}
+
+float Scale9::GetLeftWidth() const
+{
+	return std::max(std::max(GetChildSize(S9_DOWN_LEFT).x, GetChildSize(S9_MID_LEFT).x), GetChildSize(S9_TOP_LEFT).x);
+}
+
+float Scale9::GetRightWidth() const
+{
+	return std::max(std::max(GetChildSize(S9_DOWN_RIGHT).x, GetChildSize(S9_MID_RIGHT).x), GetChildSize(S9_TOP_RIGHT).x);
+}
+
+float Scale9::GetDownHeight() const
+{
+	return std::max(std::max(GetChildSize(S9_DOWN_LEFT).y, GetChildSize(S9_DOWN_CENTER).y), GetChildSize(S9_DOWN_RIGHT).y);
+}
+
+float Scale9::GetTopHeight() const
+{
+	return std::max(std::max(GetChildSize(S9_TOP_LEFT).y, GetChildSize(S9_TOP_CENTER).y), GetChildSize(S9_TOP_RIGHT).y);
 }
 
 }

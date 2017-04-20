@@ -888,6 +888,14 @@
 				Name="12.mask"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\MaskActor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\MaskActor.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\MaskSprite.cpp"
 					>
 				</File>

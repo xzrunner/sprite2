@@ -241,10 +241,21 @@ sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 	sm::rect aabb;
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
-		Sprite* child = m_slots[m_curr[i]];
-		const Actor* c_actor = child->QueryActor(actor);
-		sm::rect c_aabb = child->GetSymbol()->GetBounding(child, c_actor);
-		aabb.Combine(c_aabb);
+		Sprite* c_spr = m_slots[m_curr[i]];
+		const Actor* c_actor = c_spr->QueryActor(actor);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+		if (!c_aabb.IsValid()) {
+			continue;
+		}
+		S2_MAT mat = c_spr->GetLocalMat();
+		if (c_actor) {
+			mat = c_actor->GetLocalMat() * mat;
+		}
+
+		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymin));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymin));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymax));
+		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymax));
 	}
 	return aabb;
 }

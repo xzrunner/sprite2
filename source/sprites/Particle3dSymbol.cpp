@@ -55,6 +55,10 @@ int Particle3dSymbol::Type() const
 
 void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+	if (!IsVisible(rp, spr)) {
+		return;
+	}
+
 	Particle3dSprite::ReuseType reuse;
 	if (spr) {
 		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
@@ -242,6 +246,18 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 	p3d_rp.local       = p3d_spr->IsLocal();
 	p3d_rp.view_region = rp.view_region;
 	et->Draw(p3d_rp, false);
+}
+
+bool Particle3dSymbol::IsVisible(const RenderParams& rp, const Sprite* spr)
+{
+	bool visible = true;
+	if (spr) {
+		visible = spr->IsVisible();
+	}
+	if (rp.actor) {
+		visible = rp.actor->IsVisible();
+	}
+	return visible;
 }
 
 }

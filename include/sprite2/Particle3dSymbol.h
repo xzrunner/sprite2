@@ -46,6 +46,8 @@ private:
 	void DrawEmitter(const RenderParams& rp, const Sprite* spr, 
 		const Particle3dEmitter* et) const;
 
+	static bool IsVisible(const RenderParams& rp, const Sprite* spr);
+
 private:
 	const P3dEmitterCfg* m_et_cfg;
 

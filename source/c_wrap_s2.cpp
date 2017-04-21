@@ -36,6 +36,7 @@
 #include "Particle3dSprite.h"
 #include "Particle3dEmitter.h"
 #include "OrthoCamera.h"
+#include "GroupSymbol.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -641,6 +642,24 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	}
 }
 
+static int
+_actor_mount(const Actor* parent, const char* name, const Actor* child) {
+	const Sprite* p_spr = parent->GetSpr();
+	Sprite* c_spr = p_spr->FetchChild(name, parent);
+	if (!c_spr) {
+		return -1;		
+	}
+
+	if (c_spr->GetSymbol()->Type() != SYM_ANCHOR) {
+		return -2;
+	}
+
+	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
+	anchor_spr->AddAnchor(child, parent);
+
+	return 0;
+}
+
 // ret: 0 ok, -1 no child with name, -2 child isn't anchor
 extern "C"
 int s2_actor_mount(const void* parent, const char* name, const void* child) {
@@ -651,14 +670,20 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	if (!c_spr) {
 		return -1;		
 	}
-	if (c_spr->GetSymbol()->Type() != SYM_ANCHOR) {
+
+	int sym_type = c_spr->GetSymbol()->Type();
+	if (sym_type == SYM_GROUP) {
+		const GroupSymbol* group_sym = VI_DOWNCASTING<const GroupSymbol*>(c_spr->GetSymbol());
+		const std::vector<Sprite*>& sprs = group_sym->GetAllChildren();
+		int ret = 0;
+		for (int i = 0, n = sprs.size(); i < n; ++i) {
+						
+		}
+	} else if (sym_type == SYM_ANCHOR) {
+		return _actor_mount(p_actor, name, c_actor);
+	} else {
 		return -2;
 	}
-
-	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
-	anchor_spr->AddAnchor(c_actor, p_actor);
-
-	return 0;
 }
 
 extern "C"

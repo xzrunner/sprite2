@@ -14,6 +14,8 @@
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
 #include "UpdateParams.h"
+#include "GroupSymbol.h"
+#include "GroupSprite.h"
 
 #include <algorithm>
 #include <climits>
@@ -192,13 +194,25 @@ void AnimCurr::Draw(const RenderParams& rp) const
 
 Sprite* AnimCurr::FetchChild(const std::string& name) const
 {
+	std::vector<Sprite*> group;
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
 		Sprite* spr = m_slots[i];
 		if (spr->GetName() == name) {
-			return spr;
+			group.push_back(spr);
 		}
 	}
-	return NULL;
+
+	Sprite* ret = NULL;
+	if (group.size() == 1) {
+		ret = group[0];
+	} else if (group.size() > 1) {
+ 		GroupSymbol* sym = new GroupSymbol(group);
+ 		GroupSprite* spr = new GroupSprite(sym);
+		sym->RemoveReference();
+		assert(sym->GetRefCount() == 1 && spr->GetRefCount() == 1);
+ 		ret = spr;
+	}
+	return ret;
 }
 
 Sprite* AnimCurr::FetchChild(int idx) const

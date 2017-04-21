@@ -40,7 +40,8 @@ bool Particle3dEmitter::Update(float time)
 
 	if (m_state.et->time == 0) 
 	{
-		m_state.et->time = time;
+		float tot_time = Particle3d::Instance()->GetTime();
+		m_state.et->time = std::min(time, tot_time);
 	} 
 	else 
 	{
@@ -49,12 +50,9 @@ bool Particle3dEmitter::Update(float time)
 			dirty = true;
 			float dt = time - m_state.et->time;
 			p3d_emitter_update(m_state.et, dt, m_state.mt);
-			m_state.et->time = time;
 
 			float tot_time = Particle3d::Instance()->GetTime();
-			if (m_state.et->time > tot_time) {
-				m_state.et->time = tot_time;
-			}
+			m_state.et->time = std::min(time, tot_time);
 		}
 	}
 

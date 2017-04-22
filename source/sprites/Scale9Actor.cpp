@@ -12,7 +12,12 @@ Scale9Actor::Scale9Actor(const Sprite* spr, const Actor* parent)
 
 void Scale9Actor::Resize(float width, float height)
 {
+	sm::vec2 sz = m_s9.GetSize();
+	if (width == sz.x && height == sz.y) {
+		return;
+	}
 	m_s9.SetSize(width, height);
+	SetFlattenDirtyToRoot();
 }
 
 }

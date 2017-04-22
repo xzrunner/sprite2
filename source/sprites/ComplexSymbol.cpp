@@ -72,6 +72,9 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 #ifdef S2_USE_FLATTEN
 	if (m_ft) {
+		if (rp.actor && rp.actor->IsFlattenDirty()) {
+			BuildFlatten(rp.actor);
+		}
 		m_ft->Draw(rp);
 		return;
 	}
@@ -128,7 +131,7 @@ void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 #ifdef S2_USE_FLATTEN
 	if (!m_ft) {
-		BuildFlatten();
+		BuildFlatten(fp.GetActor());
 	}
 	ft.Combine(*m_ft, fp.GetMat());
 #endif // S2_USE_FLATTEN
@@ -160,18 +163,23 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 }
 
 #ifdef S2_USE_FLATTEN
-void ComplexSymbol::BuildFlatten() const
+void ComplexSymbol::BuildFlatten(const Actor* actor) const
 {
 	if (m_ft) {
 		m_ft->Clear();
 	} else {
 		m_ft = new Flatten;
 	}
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		const Sprite* child = m_children[i];
+	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	{
+		const Sprite* c_spr = m_children[i];
 		FlattenParams fp;
-		fp.Push(child);
-		child->GetSymbol()->Flattening(fp, *m_ft);		
+		const Actor* c_actor = c_spr->QueryActor(actor);
+		fp.Push(c_spr, c_actor);
+		c_spr->GetSymbol()->Flattening(fp, *m_ft);		
+	}
+	if (actor) {
+		actor->SetFlattenDirty(false);
 	}
 }
 #endif // S2_USE_FLATTEN

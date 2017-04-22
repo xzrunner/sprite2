@@ -38,7 +38,7 @@ public:
 	int GetActionIdx(const std::string& name) const;
 
 #ifdef S2_USE_FLATTEN
-	void BuildFlatten() const;
+	void BuildFlatten(const Actor* actor) const;
 #endif // S2_USE_FLATTEN
 
 	/************************************************************************/

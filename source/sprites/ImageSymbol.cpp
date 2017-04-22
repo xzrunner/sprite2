@@ -115,7 +115,7 @@ void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 	quad.vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);
 	quad.vertices[3] = mt * sm::vec2(sz.xmin, sz.ymax);
 
-	ft.Add(quad);
+	ft.AddQuad(quad);
 }
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const

@@ -12,13 +12,15 @@ namespace s2
 {
 
 class RenderParams;
+class Sprite;
+class Actor;
 
 class Flatten
 {
 public:
 	void Combine(const Flatten& ft, const S2_MAT& mt);
 
-	void Clear() { m_list.clear(); }
+	void Clear();
 
 	void Draw(const RenderParams& rp) const;
 
@@ -31,10 +33,20 @@ public:
 		sm::vec2 vertices[4], texcoords[4];
 	}; // Quad
 
-	void Add(const Quad& quad) { m_list.push_back(quad); }
+	struct Node
+	{
+		const Sprite* spr;
+		const Actor*  actor;
+		S2_MAT mat;
+		int idx;
+	}; // Node
+
+	void AddQuad(const Quad& quad) { m_quads.push_back(quad); }
+	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
 
 private:
-	std::vector<Quad> m_list;
+	std::vector<Quad> m_quads;
+	std::vector<Node> m_nodes;
 
 }; // Flatten
 

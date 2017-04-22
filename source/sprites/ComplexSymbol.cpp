@@ -130,7 +130,7 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 #ifdef S2_USE_FLATTEN
-	if (!m_ft) {
+	if (!m_ft || (fp.GetActor() && fp.GetActor()->IsFlattenDirty())) {
 		BuildFlatten(fp.GetActor());
 	}
 	ft.Combine(*m_ft, fp.GetMat());

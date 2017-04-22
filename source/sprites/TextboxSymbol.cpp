@@ -6,6 +6,8 @@
 #include "TextboxActor.h"
 #include "DrawNode.h"
 #include "UpdateParams.h"
+#include "FlattenParams.h"
+#include "Flatten.h"
 
 #include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
@@ -92,6 +94,11 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	DrawText(s, rp_child.mt, rp_child.color.GetMul(), rp_child.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
+}
+
+void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	ft.AddNode(fp.GetSpr(), fp.GetActor(), fp.GetMat());
 }
 
 sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

@@ -36,7 +36,7 @@ void Blob::Add(const ImageSprite* img_spr, const sm::mat4& prev_mat)
 	float texcoords[8];
 	int tex_id;
 	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(img_spr->GetSymbol());
-	if (!img_sym->QueryTexcoords(RenderParams(), texcoords, tex_id)) {
+	if (!img_sym->QueryTexcoords(true, texcoords, tex_id)) {
 		return;
 	}
 	

@@ -183,7 +183,7 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
 	float src_texcoords[8];
 	int tex_id;
-	img_sym->QueryTexcoords(rp, src_texcoords, tex_id);
+	img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), src_texcoords, tex_id);
 
 	float x = src_texcoords[0], y = src_texcoords[1];
 	float w = src_texcoords[4] - src_texcoords[0],

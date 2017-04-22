@@ -28,7 +28,7 @@ public:
 	// todo: only for scale9 layout
 	virtual sm::vec2 GetNoTrimedSize() const;
 
-	virtual bool QueryTexcoords(const RenderParams& rp, float* texcoords, int& tex_id) const = 0;
+	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& tex_id) const = 0;
 
 	void InitTex(Texture* tex, const sm::i16_rect& region);
 

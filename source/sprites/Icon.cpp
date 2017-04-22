@@ -42,7 +42,7 @@ void Icon::Draw(const RenderParams& rp, float process) const
 	// tex_id
 	float _texcoords[8];
 	int tex_id;
-	m_img->QueryTexcoords(rp, _texcoords, tex_id);
+	m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id);
 
 	// texcoords
 	sm::vec2 texcoords[4];

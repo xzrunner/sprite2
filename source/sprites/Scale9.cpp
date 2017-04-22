@@ -383,22 +383,26 @@ sm::vec2 Scale9::GetChildSize(SCALE9_IDX idx) const
 
 float Scale9::GetLeftWidth() const
 {
-	return std::max(std::max(GetChildSize(S9_DOWN_LEFT).x, GetChildSize(S9_MID_LEFT).x), GetChildSize(S9_TOP_LEFT).x);
+	return m_sz_left == 0 ? 
+		std::max(std::max(GetChildSize(S9_DOWN_LEFT).x, GetChildSize(S9_MID_LEFT).x), GetChildSize(S9_TOP_LEFT).x) : m_sz_left;
 }
 
 float Scale9::GetRightWidth() const
 {
-	return std::max(std::max(GetChildSize(S9_DOWN_RIGHT).x, GetChildSize(S9_MID_RIGHT).x), GetChildSize(S9_TOP_RIGHT).x);
+	return m_sz_right == 0 ? 
+		std::max(std::max(GetChildSize(S9_DOWN_RIGHT).x, GetChildSize(S9_MID_RIGHT).x), GetChildSize(S9_TOP_RIGHT).x) : m_sz_right;
 }
 
 float Scale9::GetDownHeight() const
 {
-	return std::max(std::max(GetChildSize(S9_DOWN_LEFT).y, GetChildSize(S9_DOWN_CENTER).y), GetChildSize(S9_DOWN_RIGHT).y);
+	return m_sz_down == 0 ?
+		std::max(std::max(GetChildSize(S9_DOWN_LEFT).y, GetChildSize(S9_DOWN_CENTER).y), GetChildSize(S9_DOWN_RIGHT).y) : m_sz_down;
 }
 
 float Scale9::GetTopHeight() const
 {
-	return std::max(std::max(GetChildSize(S9_TOP_LEFT).y, GetChildSize(S9_TOP_CENTER).y), GetChildSize(S9_TOP_RIGHT).y);
+	return m_sz_top == 0 ?
+		std::max(std::max(GetChildSize(S9_TOP_LEFT).y, GetChildSize(S9_TOP_CENTER).y), GetChildSize(S9_TOP_RIGHT).y) : m_sz_top;
 }
 
 }

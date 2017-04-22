@@ -49,9 +49,33 @@ void TextboxActor::SetText(const std::string& text)
 	gtxt_get_label_size(m_text.c_str(), &style, &w, &h);
 
 	sm::rect rect = GetSpr()->GetSymbol()->GetBounding();
-	// base from left-top
-	rect.xmax = rect.xmin + w;
-	rect.ymin = rect.ymax - h;
+
+	switch (tb.align_hori)
+	{
+	case Textbox::HA_LEFT:
+		rect.xmax = rect.xmin + w;
+		break;
+	case Textbox::HA_RIGHT:
+		rect.xmin = rect.xmax - w;
+		break;
+	case Textbox::HA_CENTER:
+		rect.xmin = (rect.xmin + rect.xmax) * 0.5f - w * 0.5f;
+		rect.xmax = rect.xmin + w;
+		break;
+	}
+	switch (tb.align_vert)
+	{
+	case Textbox::VA_TOP:
+		rect.ymin = rect.ymax - h;
+		break;
+	case Textbox::VA_BOTTOM:
+		rect.ymax = rect.ymin + h;
+		break;
+	case Textbox::VA_CENTER:
+		rect.ymin = (rect.ymin + rect.ymax) * 0.5f - h * 0.5f;
+		rect.ymax = rect.ymin + h;
+		break;
+	}
 
 	ActorAABB& aabb = GetAABB();
 	aabb.SetRect(rect);

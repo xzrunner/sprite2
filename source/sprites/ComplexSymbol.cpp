@@ -12,8 +12,8 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
-#include "Flat.h"
-#include "Blob.h"
+#include "Flatten.h"
+#include "FlattenParams.h"
 
 #include <SM_Test.h>
 
@@ -26,23 +26,29 @@ namespace s2
 
 ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
-	, m_flat(NULL)
+#ifdef S2_USE_FLATTEN
+	, m_ft(NULL)
+#endif // S2_USE_FLATTEN
 {
 }
 
 ComplexSymbol::ComplexSymbol(uint32_t id)
 	: Symbol(id)
 	, m_scissor(0, 0)
-	, m_flat(NULL)
+#ifdef S2_USE_FLATTEN
+	, m_ft(NULL)
+#endif // S2_USE_FLATTEN
 {
 }
 
 ComplexSymbol::~ComplexSymbol()
 {
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
-	if (m_flat) {
-		delete m_flat;
+#ifdef S2_USE_FLATTEN
+	if (m_ft) {
+		delete m_ft;
 	}
+#endif // S2_USE_FLATTEN
 }
 
 int ComplexSymbol::Type() const 
@@ -64,13 +70,12 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	if (m_flat) {
-		const std::vector<Blob*>& blobs = m_flat->GetAllBlobs();
-		for (int i = 0, n = blobs.size(); i < n; ++i) {
-			blobs[i]->Draw(rp);
-		}
+#ifdef S2_USE_FLATTEN
+	if (m_ft) {
+		m_ft->Draw(rp);
 		return;
 	}
+#endif // S2_USE_FLATTEN
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
@@ -119,6 +124,16 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	return ret;
 }
 
+void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+#ifdef S2_USE_FLATTEN
+	if (!m_ft) {
+		BuildFlatten();
+	}
+	ft.Combine(*m_ft, fp.GetMat());
+#endif // S2_USE_FLATTEN
+}
+
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
 {
 	if (action < 0 || action >= m_actions.size()) {
@@ -144,19 +159,22 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 	return idx;
 }
 
-void ComplexSymbol::BuildFlat()
+#ifdef S2_USE_FLATTEN
+void ComplexSymbol::BuildFlatten() const
 {
-	if (m_children.size() < 999) {
-		return;
+	if (m_ft) {
+		m_ft->Clear();
+	} else {
+		m_ft = new Flatten;
 	}
-
-	m_flat = new Flat;
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
 		const Sprite* child = m_children[i];
-		m_flat->Add(child, sm::mat4());
+		FlattenParams fp;
+		fp.Push(child);
+		child->GetSymbol()->Flattening(fp, *m_ft);		
 	}
-	m_flat->Finish();
 }
+#endif // S2_USE_FLATTEN
 
 bool ComplexSymbol::Add(Sprite* spr, int idx)
 {

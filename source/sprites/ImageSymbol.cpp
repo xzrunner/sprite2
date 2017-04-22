@@ -9,6 +9,8 @@
 #include "Pseudo3DCamera.h"
 #include "S2_RenderContext.h"
 #include "RenderCtxStack.h"
+#include "Flatten.h"
+#include "FlattenParams.h"
 
 #include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
@@ -98,6 +100,22 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			DrawOrtho(rp_child, vertices, texcoords, tex_id);
 		}
 	}
+}
+
+void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	Flatten::Quad quad;
+	QueryTexcoords(false, &quad.texcoords[0].x, quad.tex_id);
+	quad.sym_id = GetID();
+
+	sm::rect sz = GetBounding();
+	const S2_MAT& mt = fp.GetMat();
+	quad.vertices[0] = mt * sm::vec2(sz.xmin, sz.ymin);
+	quad.vertices[1] = mt * sm::vec2(sz.xmax, sz.ymin);
+	quad.vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);
+	quad.vertices[3] = mt * sm::vec2(sz.xmin, sz.ymax);
+
+	ft.Add(quad);
 }
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const

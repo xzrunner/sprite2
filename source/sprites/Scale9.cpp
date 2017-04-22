@@ -5,6 +5,8 @@
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
 #include "SymType.h"
+#include "Flatten.h"
+#include "FlattenParams.h"
 
 #include <SM_Calc.h>
 
@@ -187,6 +189,20 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 	m_sz_top   = sz_top;
 	m_sz_down  = sz_down;
 	SetSize(w, h);
+}
+
+void Scale9::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	for (int i = 0; i < 9; ++i) 
+	{
+		if (!m_grids[i]) {
+			continue;
+		}
+		Sprite* spr = m_grids[i];
+		FlattenParams c_fp = fp;
+		c_fp.Push(spr);
+		spr->GetSymbol()->Flattening(c_fp, ft);
+	}
 }
 
 void Scale9::GetGrids(std::vector<Sprite*>& grids) const

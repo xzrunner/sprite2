@@ -10,6 +10,8 @@ namespace s2
 
 class Sprite;
 class RenderParams;
+class FlattenParams;
+class Flatten;
 
 enum SCALE9_TYPE
 {
@@ -51,6 +53,7 @@ public:
 
 	void Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9], 
 		int sz_left, int sz_right, int sz_top, int sz_down);
+	void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 	void GetGrids(std::vector<Sprite*>& grids) const;
 	const Sprite* GetGrid(SCALE9_IDX idx) const { return m_grids[idx]; }

@@ -6,6 +6,7 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #include "SymbolVisitor.h"
+#include "FlattenParams.h"
 
 #include <assert.h>
 
@@ -51,6 +52,17 @@ void Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		}
 	} else {
 		m_s9.Draw(rp);
+	}
+}
+
+void Scale9Symbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	if (fp.GetActor()) {
+		VI_DOWNCASTING<const Scale9Actor*>(fp.GetActor())->GetScale9().Flattening(fp, ft);
+	} else if (fp.GetSpr()) {
+		VI_DOWNCASTING<const Scale9Sprite*>(fp.GetSpr())->GetScale9().Flattening(fp, ft);
+	} else {
+		m_s9.Flattening(fp, ft);
 	}
 }
 

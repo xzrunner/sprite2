@@ -59,17 +59,14 @@ private:
 private:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
-// 	static const uint32_t FLAG_AABB_DIRTY     = 0x00000004;
-// 	static const uint32_t FLAG_AABB_OVERFLOW  = 0x00000008;
-
 	static const uint32_t FLAG_AABB_TIGHT     = 0x00000004;
+	static const uint32_t FLAG_FLATTEN_DIRTY  = 0x00000008;
 
 public:
 	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
-// 	S2_FLAG_METHOD(AABBDirty, FLAG_AABB_DIRTY)
-// 	S2_FLAG_METHOD(AABBOverflow, FLAG_AABB_OVERFLOW)
 	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
+	S2_FLAG_METHOD(FlattenDirty, FLAG_FLATTEN_DIRTY)
 	
 private:
 	const Sprite*    m_spr;

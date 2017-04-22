@@ -9,7 +9,8 @@
 namespace s2
 {
 
-class Flat;
+class FlattenParams;
+class Flatten;
 
 class ComplexSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -26,6 +27,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
+	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 	const std::vector<Sprite*>& GetActionChildren(int action) const;
 	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }
@@ -35,7 +37,9 @@ public:
 
 	int GetActionIdx(const std::string& name) const;
 
-	void BuildFlat();
+#ifdef S2_USE_FLATTEN
+	void BuildFlatten() const;
+#endif // S2_USE_FLATTEN
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -78,7 +82,9 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	Flat* m_flat;
+#ifdef S2_USE_FLATTEN
+	mutable Flatten* m_ft;
+#endif // S2_USE_FLATTEN
 
 }; // ComplexSymbol
 

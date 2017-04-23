@@ -842,6 +842,9 @@ bool s2_actor_get_visible(void* actor) {
 extern "C"
 void s2_actor_set_visible(void* actor, bool visible) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (visible != s2_actor->IsVisible()) {
+		s2_actor->SetFlattenDirtyToRoot();
+	}
 	s2_actor->SetVisible(visible);
 }
 

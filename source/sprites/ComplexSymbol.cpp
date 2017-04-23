@@ -173,8 +173,12 @@ void ComplexSymbol::BuildFlatten(const Actor* actor) const
 	for (int i = 0, n = m_children.size(); i < n; ++i) 
 	{
 		const Sprite* c_spr = m_children[i];
-		FlattenParams fp;
 		const Actor* c_actor = c_spr->QueryActor(actor);
+		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
+		if (!visible) {
+			continue;
+		}
+		FlattenParams fp;
 		fp.Push(c_spr, c_actor);
 		c_spr->GetSymbol()->Flattening(fp, *m_ft);		
 	}

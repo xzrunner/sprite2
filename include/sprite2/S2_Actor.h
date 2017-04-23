@@ -53,7 +53,6 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-protected:
 	void SetFlattenDirtyToRoot() const;
 
 private:

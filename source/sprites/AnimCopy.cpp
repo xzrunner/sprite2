@@ -2,6 +2,8 @@
 #include "AnimSymbol.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
+#include "Flatten.h"
+#include "AnimFlatten.h"
 
 #include <assert.h>
 
@@ -26,6 +28,61 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 	ConnectActors(sym);
 	LoadLerpData(sym);
 	CreateSprSlots(sym);
+}
+
+void AnimCopy::StoreToFlatten(AnimFlatten& ft)
+{
+	// prepare slots
+	std::vector<const Sprite*> slots;
+	slots.resize(m_slots.size());
+	for (int i = 0, n = m_slots.size(); i < n; ++i) {
+		Sprite* src = const_cast<Sprite*>(m_slots[i]);
+		Sprite* dst = VI_CLONE(Sprite, src);
+		slots[i] = dst;
+	}
+	
+
+	std::vector<Flatten> frames;
+	frames.reserve(m_max_frame_idx);
+	for (int i = 0; i < m_max_frame_idx; ++i)
+	{
+		int time = i + 1;
+		Flatten frame;
+		for (int j = 0, m = m_layers.size(); j < m; ++j)
+		{
+			const Layer& layer = m_layers[j];
+			if (layer.frames.empty()) {
+				continue;
+			}
+			const Frame* curr = NULL;
+			int curr_frame = -1;
+			for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe; ++iframe) {				
+				const Frame& frame = layer.frames[i];
+				if (frame.time > time) {
+					break;
+				} else {
+					curr = &frame;
+					curr_frame = iframe;
+				}
+			}
+			if (!curr) {
+				continue;
+			}
+			for (int iactor = 0, nactor = curr->actors.size(); iactor < nactor; ++iactor) 
+			{
+				const Actor& actor = curr->actors[iactor];
+				if (actor.next != -1)
+				{
+					assert(actor.lerp != -1);
+					const Frame& next_frame = layer.frames[curr_frame + 1];
+					assert(actor.slot == next_frame.actors[actor.next].slot);
+					
+				}
+			}
+		}
+		frames.push_back(frame);
+	}
+	ft.SetFrames(frames);
 }
 
 void AnimCopy::SetCountNum(const AnimSymbol& sym)

@@ -9,6 +9,8 @@
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
 #include "AnimActor.h"
+#include "AnimFlatten.h"
+#include "FlattenParams.h"
 
 #include <assert.h>
 
@@ -77,6 +79,11 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 	return m_curr.Update(up, NULL);
 }
 
+void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
+{
+	ft.AddNode(fp.GetSpr(), fp.GetActor(), fp.GetMat());
+}
+
 int AnimSymbol::GetMaxFrameIdx() const
 {
 	int index = 0;
@@ -120,6 +127,19 @@ void AnimSymbol::LoadCopy()
 	m_copy.LoadFromSym(*this);
 	m_curr.SetAnimCopy(&m_copy);
 }
+
+#ifdef S2_USE_FLATTEN
+void AnimSymbol::BuildFlatten(const Actor* actor) const
+{
+	if (m_ft) {
+		m_ft->Clear();
+	} else {
+		m_ft = new AnimFlatten;
+	}
+	
+	
+}
+#endif // S2_USE_FLATTEN
 
 void AnimSymbol::AddLayer(Layer* layer)
 {

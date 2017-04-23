@@ -53,6 +53,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
+	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -64,6 +65,10 @@ public:
 
 	const AnimCopy& GetCopy() const { return m_copy; }
 	void LoadCopy();
+
+#ifdef S2_USE_FLATTEN
+	void BuildFlatten(const Actor* actor) const;
+#endif // S2_USE_FLATTEN
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -78,7 +83,7 @@ private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 protected:
-	std::vector<Layer*> m_layers;
+	std::vector<Layer*> m_layers;	// todo rm
 
 	int m_fps;
 
@@ -86,6 +91,10 @@ protected:
 	AnimCurr m_curr;
 
 	mutable sm::rect m_aabb;
+
+#ifdef S2_USE_FLATTEN
+	mutable AnimFlatten* m_ft;
+#endif // S2_USE_FLATTEN
 
 }; // AnimSymbol
 

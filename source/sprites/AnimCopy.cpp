@@ -1,8 +1,10 @@
 #include "AnimCopy.h"
 #include "AnimSymbol.h"
+#include "AnimCurr.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
 #include "Flatten.h"
+#include "FlattenParams.h"
 #include "AnimFlatten.h"
 
 #include <assert.h>
@@ -12,7 +14,7 @@ namespace s2
 
 AnimCopy::AnimCopy()
 	: m_max_frame_idx(0)
-	, m_max_actor_num(0)
+	, m_max_item_num(0)
 {
 }
 
@@ -25,23 +27,21 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 {
 	SetCountNum(sym);
 	FillingLayers(sym);
-	ConnectActors(sym);
+	ConnectItems(sym);
 	LoadLerpData(sym);
 	CreateSprSlots(sym);
 }
 
-void AnimCopy::StoreToFlatten(AnimFlatten& ft)
+void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 {
 	// prepare slots
-	std::vector<const Sprite*> slots;
+	std::vector<Sprite*> slots;
 	slots.resize(m_slots.size());
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		Sprite* src = const_cast<Sprite*>(m_slots[i]);
-		Sprite* dst = VI_CLONE(Sprite, src);
-		slots[i] = dst;
+		slots[i] = VI_CLONE(Sprite, m_slots[i]);
 	}
 	
-
+	// filling frames
 	std::vector<Flatten> frames;
 	frames.reserve(m_max_frame_idx);
 	for (int i = 0; i < m_max_frame_idx; ++i)
@@ -54,35 +54,69 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft)
 			if (layer.frames.empty()) {
 				continue;
 			}
+			// find curr frame
 			const Frame* curr = NULL;
 			int curr_frame = -1;
 			for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe; ++iframe) {				
-				const Frame& frame = layer.frames[i];
-				if (frame.time > time) {
-					break;
-				} else {
+				const Frame& frame = layer.frames[iframe];
+				if (frame.time == time) {
 					curr = &frame;
 					curr_frame = iframe;
+					break;
+				} else if (frame.time > time) {
+					break;
+				} else if (iframe < nframe - 1) {
+					const Frame& next = layer.frames[iframe + 1];
+					if (next.time > time) {
+						curr = &frame;
+						curr_frame = iframe;
+					}
 				}
 			}
 			if (!curr) {
 				continue;
 			}
-			for (int iactor = 0, nactor = curr->actors.size(); iactor < nactor; ++iactor) 
+			// filling
+			for (int iitem = 0, nitem = curr->items.size(); iitem < nitem; ++iitem) 
 			{
-				const Actor& actor = curr->actors[iactor];
-				if (actor.next != -1)
+				const Item& item = curr->items[iitem];
+				const Sprite* spr = NULL;
+				if (item.next != -1)
 				{
-					assert(actor.lerp != -1);
+					assert(item.lerp != -1);
 					const Frame& next_frame = layer.frames[curr_frame + 1];
-					assert(actor.slot == next_frame.actors[actor.next].slot);
-					
+					assert(item.slot == next_frame.items[item.next].slot);
+					Sprite* tween = slots[item.slot];
+					AnimCurr::LoadSprLerpData(tween, m_lerps[item.lerp], time - curr->time);
+					// todo AnimLerp::LerpSpecial
+					spr = tween;
 				}
+				else if (item.prev != -1)
+				{
+					assert(item.lerp == -1);
+					const Frame& pre_frame = layer.frames[curr_frame - 1];
+					const Item& pre_item = pre_frame.items[item.prev];
+					assert(item.slot == pre_item.slot);
+					Sprite* tween = slots[pre_item.slot];
+					AnimCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - curr->time);
+					// todo AnimLerp::LerpSpecial
+					spr = tween;
+				}
+				else
+				{
+					spr = m_slots[item.slot];
+				}
+				FlattenParams fp;
+				fp.Push(spr, actor);
+				spr->GetSymbol()->Flattening(fp, frame);	
 			}
 		}
 		frames.push_back(frame);
 	}
 	ft.SetFrames(frames);
+
+	// release slots
+	for_each(slots.begin(), slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 void AnimCopy::SetCountNum(const AnimSymbol& sym)
@@ -103,7 +137,7 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 				max_count = count;
 			}
 		}
-		m_max_actor_num += max_count;
+		m_max_item_num += max_count;
 	}
 }
 
@@ -123,17 +157,17 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 			const AnimSymbol::Frame* src_frame = src_layer->frames[iframe];
 			Frame& dst_frame = dst_layer.frames[iframe];
 			dst_frame.time = src_frame->index;
-			dst_frame.actors.resize(src_frame->sprs.size());
-			for (int iactor = 0, nactor = src_frame->sprs.size(); iactor < nactor; ++iactor) {
-				const Sprite* src_spr = src_frame->sprs[iactor];
+			dst_frame.items.resize(src_frame->sprs.size());
+			for (int iitem = 0, nitem = src_frame->sprs.size(); iitem < nitem; ++iitem) {
+				const Sprite* src_spr = src_frame->sprs[iitem];
 				src_spr->AddReference();
-				dst_frame.actors[iactor].spr = src_spr;
+				dst_frame.items[iitem].spr = src_spr;
 			}
 		}
 	}
 }
 
-void AnimCopy::ConnectActors(const AnimSymbol& sym)
+void AnimCopy::ConnectItems(const AnimSymbol& sym)
 {
 	const std::vector<AnimSymbol::Layer*>& layers 
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
@@ -152,13 +186,13 @@ void AnimCopy::ConnectActors(const AnimSymbol& sym)
 
 			Frame& curr = layer.frames[iframe];
 			Frame& next = layer.frames[iframe + 1];
-			for (int icurr = 0, ncurr = curr.actors.size(); icurr < ncurr; ++icurr) {
-				for (int inext = 0, nnext = next.actors.size(); inext < nnext; ++inext) {
+			for (int icurr = 0, ncurr = curr.items.size(); icurr < ncurr; ++icurr) {
+				for (int inext = 0, nnext = next.items.size(); inext < nnext; ++inext) {
 					const Sprite* curr_spr = src_layer->frames[iframe]->sprs[icurr];
 					const Sprite* next_spr = src_layer->frames[iframe+1]->sprs[inext];
 					if (curr_spr->GetName() == next_spr->GetName()) {
-						curr.actors[icurr].next = inext;
-						next.actors[inext].prev = icurr;
+						curr.items[icurr].next = inext;
+						next.items[inext].prev = icurr;
 						break;
 					}
 				}
@@ -177,20 +211,20 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 		for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe; ++iframe) 
 		{
 			Frame& frame = layer.frames[iframe];
-			for (int iactor = 0, nactor = frame.actors.size(); iactor < nactor; ++iactor) 
+			for (int iitem = 0, nitem = frame.items.size(); iitem < nitem; ++iitem) 
 			{
-				Actor& actor = frame.actors[iactor];
-				if (actor.next == -1) {
+				Item& item = frame.items[iitem];
+				if (item.next == -1) {
 					continue;
 				}
-				assert(actor.lerp == -1);
+				assert(item.lerp == -1);
 
 				int idx = m_lerps.size();
 
 				Lerp dst;
 
-				const Sprite* begin = layers[ilayer]->frames[iframe]->sprs[iactor];
-				const Sprite* end = layers[ilayer]->frames[iframe+1]->sprs[actor.next];
+				const Sprite* begin = layers[ilayer]->frames[iframe]->sprs[iitem];
+				const Sprite* end = layers[ilayer]->frames[iframe+1]->sprs[item.next];
 				int dt = layer.frames[iframe + 1].time - layer.frames[iframe].time;
 
 				SprSRT bsrt, esrt;
@@ -209,7 +243,7 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 				CalcDeltaColor(rcb.GetAdd(), rce.GetAdd(), dt, dst.dcol_add);
 
 				m_lerps.push_back(dst);
-				actor.lerp = idx;
+				item.lerp = idx;
 			}
 		}
 	}
@@ -225,22 +259,22 @@ void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 		for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe; ++iframe) 
 		{
 			Frame& frame = layer.frames[iframe];
-			for (int iactor = 0, nactor = frame.actors.size(); iactor < nactor; ++iactor) 
+			for (int iitem = 0, nitem = frame.items.size(); iitem < nitem; ++iitem) 
 			{
-				Actor& actor = frame.actors[iactor];
-				if (actor.slot != -1) {
+				Item& item = frame.items[iitem];
+				if (item.slot != -1) {
 					continue;
 				}
 				int slot = m_slots.size();
-				const Sprite* spr = VI_CLONE(Sprite, layers[ilayer]->frames[iframe]->sprs[iactor]);
+				const Sprite* spr = VI_CLONE(Sprite, layers[ilayer]->frames[iframe]->sprs[iitem]);
 				m_slots.push_back(spr);
-				actor.slot = slot;
+				item.slot = slot;
 
-				Actor* ptr = &actor;
+				Item* ptr = &item;
 				int idx = iframe;
 				while (ptr->next != -1 && idx < nframe - 1) 
 				{
-					ptr = &layer.frames[++idx].actors[ptr->next];
+					ptr = &layer.frames[++idx].items[ptr->next];
 					ptr->slot = slot;
 				}
 			}
@@ -257,10 +291,10 @@ void AnimCopy::CalcDeltaColor(const Color& begin, const Color& end, int time, fl
 }
 
 /************************************************************************/
-/* struct AnimCopy::Actor                                              */
+/* struct AnimCopy::Item                                                */
 /************************************************************************/
 
-AnimCopy::Actor::Actor() 
+AnimCopy::Item::Item() 
 	: slot(-1)
 	, next(-1)
 	, prev(-1)
@@ -268,7 +302,7 @@ AnimCopy::Actor::Actor()
 	, spr(NULL) 
 {}
 
-AnimCopy::Actor::~Actor() 
+AnimCopy::Item::~Item() 
 {
 	if (spr) {
 		spr->RemoveReference();

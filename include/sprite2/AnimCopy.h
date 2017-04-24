@@ -14,6 +14,7 @@ namespace s2
 {
 
 class Sprite;
+class Actor;
 class AnimSymbol;
 class AnimFlatten;
 
@@ -25,12 +26,12 @@ public:
 
 	void LoadFromSym(const AnimSymbol& sym);
 
-	void StoreToFlatten(AnimFlatten& ft);
+	void StoreToFlatten(AnimFlatten& ft, const Actor* actor) const;
 	
 private:
 	void SetCountNum(const AnimSymbol& sym);
 	void FillingLayers(const AnimSymbol& sym);
-	void ConnectActors(const AnimSymbol& sym);
+	void ConnectItems(const AnimSymbol& sym);
 	void LoadLerpData(const AnimSymbol& sym);
 	void CreateSprSlots(const AnimSymbol& sym);
 
@@ -45,7 +46,7 @@ private:
 		float dcol_mul[4], dcol_add[4];
 	};
 
-	struct Actor
+	struct Item
 	{
 		int16_t next, prev;
 		int16_t slot;
@@ -53,14 +54,14 @@ private:
 
 		const Sprite* spr;
 
-		Actor();
-		~Actor();
+		Item();
+		~Item();
 	};
 
 	struct Frame
 	{
 		int time;
-		std::vector<Actor> actors;
+		std::vector<Item> items;
 	};
 
 	struct Layer
@@ -78,7 +79,7 @@ private:
 	std::vector<const Sprite*> m_sprites;	
 
 	int m_max_frame_idx;
-	int m_max_actor_num;
+	int m_max_item_num;
 
 	friend class AnimCurr;
 

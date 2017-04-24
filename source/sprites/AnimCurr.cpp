@@ -53,7 +53,7 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_stop_during(curr.m_stop_during)
 	, m_active(curr.m_active)
 {
-	m_curr = new int[curr.m_copy->m_max_actor_num];
+	m_curr = new int[curr.m_copy->m_max_item_num];
 	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
 
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());	
@@ -68,7 +68,7 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());
 	m_slotmap = curr.m_slotmap;
 	m_curr_num = curr.m_curr_num;
-	m_curr = new int[curr.m_copy->m_max_actor_num];
+	m_curr = new int[curr.m_copy->m_max_item_num];
 	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
 	m_frame = curr.m_frame;
 	m_start_time = curr.m_start_time;
@@ -260,6 +260,31 @@ sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 	return aabb;
 }
 
+void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
+{
+	SprSRT srt;
+	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
+		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
+	}
+	srt.UpdateCenter();
+	spr->SetLocalSRT(srt);
+
+	Color mul(lerp.col_mul), add(lerp.col_add);
+	mul.r += lerp.dcol_mul[0] * time;
+	mul.g += lerp.dcol_mul[1] * time;
+	mul.b += lerp.dcol_mul[2] * time;
+	mul.a += lerp.dcol_mul[3] * time;
+	add.r += lerp.dcol_add[0] * time;
+	add.g += lerp.dcol_add[1] * time;
+	add.b += lerp.dcol_add[2] * time;
+	add.a += lerp.dcol_add[3] * time;
+
+	RenderColor col = spr->GetColor();
+	col.SetMul(mul);
+	col.SetAdd(add);
+	spr->SetColor(col);
+}
+
 void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	ResetTime();
@@ -307,7 +332,7 @@ void AnimCurr::SetAnimCopy(const AnimCopy* copy)
 	m_copy = copy;
 
 	delete[] m_curr;
-	m_curr = new int[copy->m_max_actor_num];
+	m_curr = new int[copy->m_max_item_num];
 	m_curr_num = 0;
 
 	ResetLayerCursor();
@@ -373,7 +398,7 @@ void AnimCurr::ResetLayerCursor()
 
 void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 {
-	if (m_copy->m_max_actor_num < 0) {
+	if (m_copy->m_max_item_num < 0) {
 		return;
 	}
 
@@ -432,16 +457,16 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 			continue;
 		}
 		const AnimCopy::Frame& frame = m_copy->m_layers[i].frames[cursor];
-		for (int j = 0, m = frame.actors.size(); j < m; ++j)
+		for (int j = 0, m = frame.items.size(); j < m; ++j)
 		{
-			const AnimCopy::Actor& actor = frame.actors[j];
+			const AnimCopy::Item& actor = frame.items[j];
 			m_curr[m_curr_num++] = actor.slot;
 			if (actor.next != -1) 
 			{
 				assert(actor.lerp != -1);
 				const AnimCopy::Frame& next_frame = m_copy->m_layers[i].frames[cursor + 1];
 
-				if (actor.slot != next_frame.actors[actor.next].slot) {
+				if (actor.slot != next_frame.items[actor.next].slot) {
 					int sym_id = 0;
 					if (spr) {
 						sym_id = spr->GetSymbol()->GetID();
@@ -450,7 +475,7 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 					return;
 				}
 
-				assert(actor.slot == next_frame.actors[actor.next].slot);
+				assert(actor.slot == next_frame.items[actor.next].slot);
 				Sprite* tween = m_slots[actor.slot];
 				int time = m_frame - frame.time;
 				const AnimCopy::Lerp& lerp = m_copy->m_lerps[actor.lerp];
@@ -458,14 +483,14 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 
 				float process = (float) (m_frame - frame.time) / (next_frame.time - frame.time);
 				const Sprite* begin = actor.spr;
-				const Sprite* end = next_frame.actors[actor.next].spr;
+				const Sprite* end = next_frame.items[actor.next].spr;
 				AnimLerp::LerpSpecial(begin, end, tween, process);
 			}
 			else if (actor.prev != -1)
 			{
 				assert(actor.lerp == -1);
 				const AnimCopy::Frame& pre_frame = m_copy->m_layers[i].frames[cursor - 1];
-				const AnimCopy::Actor& pre_actor = pre_frame.actors[actor.prev];
+				const AnimCopy::Item& pre_actor = pre_frame.items[actor.prev];
 				assert(actor.slot == pre_actor.slot);
 				Sprite* tween = m_slots[pre_actor.slot];
 				int time = frame.time - pre_frame.time;
@@ -508,31 +533,6 @@ bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 		}
 	}
 	return dirty;
-}
-
-void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
-{
-	SprSRT srt;
-	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
-		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
-	}
-	srt.UpdateCenter();
-	spr->SetLocalSRT(srt);
-
-	Color mul(lerp.col_mul), add(lerp.col_add);
-	mul.r += lerp.dcol_mul[0] * time;
-	mul.g += lerp.dcol_mul[1] * time;
-	mul.b += lerp.dcol_mul[2] * time;
-	mul.a += lerp.dcol_mul[3] * time;
-	add.r += lerp.dcol_add[0] * time;
-	add.g += lerp.dcol_add[1] * time;
-	add.b += lerp.dcol_add[2] * time;
-	add.a += lerp.dcol_add[3] * time;
-
-	RenderColor col = spr->GetColor();
-	col.SetMul(mul);
-	col.SetAdd(add);
-	spr->SetColor(col);
 }
 
 }

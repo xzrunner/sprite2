@@ -11,7 +11,7 @@ class AnimFlatten
 public:
 	void Clear();
 
-	void Draw(const RenderParams& rp) const;
+	void Draw(const RenderParams& rp, int frame) const;
 
 	void SetFrames(const std::vector<Flatten>& frames) { m_frames = frames; }
 	

@@ -61,6 +61,8 @@ public:
 
 	sm::rect CalcAABB(const Actor* actor) const;
 
+	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
+
 private:
 	void ResetTime();
 
@@ -70,8 +72,6 @@ private:
 	void UpdateCursor();
 	void LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr);
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
-
-	static void LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time);
 	
 private:
 	const AnimCopy* m_copy;

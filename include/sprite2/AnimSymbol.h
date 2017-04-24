@@ -66,9 +66,7 @@ public:
 	const AnimCopy& GetCopy() const { return m_copy; }
 	void LoadCopy();
 
-#ifdef S2_USE_FLATTEN
 	void BuildFlatten(const Actor* actor) const;
-#endif // S2_USE_FLATTEN
 
 	/************************************************************************/
 	/* api for dynamic change                                               */

@@ -162,9 +162,9 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 	return idx;
 }
 
-#ifdef S2_USE_FLATTEN
 void ComplexSymbol::BuildFlatten(const Actor* actor) const
 {
+#ifdef S2_USE_FLATTEN
 	if (m_ft) {
 		m_ft->Clear();
 	} else {
@@ -185,8 +185,8 @@ void ComplexSymbol::BuildFlatten(const Actor* actor) const
 	if (actor) {
 		actor->SetFlattenDirty(false);
 	}
-}
 #endif // S2_USE_FLATTEN
+}
 
 bool ComplexSymbol::Add(Sprite* spr, int idx)
 {

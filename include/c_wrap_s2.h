@@ -150,6 +150,9 @@ void* s2_actor_get_anchor_real(void* actor);
 // scale9
 void  s2_actor_scale9_resize(void* actor, int w, int h);
 
+// flatten
+void  s2_actor_build_flatten(void* actor);
+
 /************************************************************************/
 /* rt                                                                   */
 /************************************************************************/

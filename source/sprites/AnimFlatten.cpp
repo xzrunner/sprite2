@@ -8,11 +8,12 @@ void AnimFlatten::Clear()
 	m_frames.clear();
 }
 
-void AnimFlatten::Draw(const RenderParams& rp) const
+void AnimFlatten::Draw(const RenderParams& rp, int frame) const
 {
-	for (int i = 0, n = m_frames.size(); i < n; ++i) {
-		m_frames[i].Draw(rp);
+	if (frame < 0 || frame >= m_frames.size()) {
+		return;
 	}
+	m_frames[frame].Draw(rp);
 }
 
 }

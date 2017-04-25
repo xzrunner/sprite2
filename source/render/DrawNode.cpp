@@ -215,6 +215,8 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 
 void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
 {
+	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
+
 	std::vector<sm::vec2> vertices(4);
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
@@ -229,6 +231,8 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 
 	RVG::SetColor(col);
 	RVG::Polyline(vertices, true);
+
+	sl::ShaderMgr::Instance()->SetShader(prev_shader);
 }
 
 bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)

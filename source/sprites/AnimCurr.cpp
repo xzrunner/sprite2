@@ -239,9 +239,9 @@ void AnimCurr::SetChildAction(const Actor* parent, int symid, const char* action
 sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 {
 	sm::rect aabb;
-	for (int i = 0; i < m_curr_num; ++i) 
+	for (int i = 0, n = m_slots.size(); i < n; ++i) 
 	{
-		Sprite* c_spr = m_slots[m_curr[i]];
+		Sprite* c_spr = m_slots[i];
 		const Actor* c_actor = c_spr->QueryActor(actor);
 		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
 		if (!c_aabb.IsValid()) {

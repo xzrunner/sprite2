@@ -36,6 +36,8 @@ public:
 
 	bool Update(const UpdateParams& up, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
+	bool UpdateOnlyFrame(const UpdateParams& up, const Sprite* spr,
+		bool loop = true, float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
 	Sprite* FetchChild(const std::string& name) const;
@@ -65,6 +67,9 @@ public:
 
 private:
 	void ResetTime();
+
+	bool UpdateTime();
+	int  UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor);
 
 	void ResetLayerCursor();
 

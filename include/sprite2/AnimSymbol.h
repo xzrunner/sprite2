@@ -67,6 +67,7 @@ public:
 	void LoadCopy();
 
 	void BuildFlatten(const Actor* actor) const;
+	bool HasFlatten() const { return m_ft != NULL; }
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -90,9 +91,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-#ifdef S2_USE_FLATTEN
 	mutable AnimFlatten* m_ft;
-#endif // S2_USE_FLATTEN
 
 }; // AnimSymbol
 

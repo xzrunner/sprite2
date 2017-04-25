@@ -132,44 +132,17 @@ void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 bool AnimCurr::Update(const UpdateParams& up, const Sprite* spr, 
 					  bool loop, float interval, int fps)
 {
-	bool dirty = false;
-
 	if (!m_active) {
-		return dirty;
+		return false;
 	}
 
-	// update time
-	float curr_time = Animation::Instance()->GetTime() - m_stop_during;
-	assert(m_curr_time <= curr_time);
-	if (curr_time == m_curr_time) {
-		m_curr_time = curr_time;
-		return dirty;
-	} else {
-		m_curr_time = curr_time;
+	if (!UpdateTime()) {
+		return false;
 	}
 
-	// update frame
-	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
-	int max_frame = m_copy->m_max_frame_idx;
-	int loop_max_frame = max_frame + interval * fps;
-	if (loop) {
-		if (curr_frame <= max_frame) {
-			;
-		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
-			curr_frame = 1;
-			m_frame = 0;
-			ResetLayerCursor();
-		} else {
-			curr_frame = 1;
-			m_frame = 0;
-			m_start_time = m_curr_time;
-			ResetLayerCursor();
-		}
-	} else {
-		if (curr_frame > max_frame) {
-			curr_frame = max_frame;
-		}
-	}
+	int curr_frame = UpdateFrameCursor(loop, interval, fps, true);
+
+	bool dirty = false;
 
 	// update curr frame
 	if (curr_frame != m_frame) 
@@ -184,6 +157,26 @@ bool AnimCurr::Update(const UpdateParams& up, const Sprite* spr,
 	}
 
 	return dirty;
+}
+
+bool AnimCurr::UpdateOnlyFrame(const UpdateParams& up, const Sprite* spr, 
+							   bool loop, float interval, int fps)
+{
+	if (!m_active) {
+		return false;
+	}
+
+	if (!UpdateTime()) {
+		return false;
+	}
+
+	int curr_frame = UpdateFrameCursor(loop, interval, fps, false);
+	if (curr_frame != m_frame) {
+		m_frame = curr_frame;
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void AnimCurr::Draw(const RenderParams& rp) const
@@ -386,6 +379,49 @@ void AnimCurr::ResetTime()
 {
 	m_start_time = m_curr_time = Animation::Instance()->GetTime();
 	m_stop_time = m_stop_during = 0;	
+}
+
+bool AnimCurr::UpdateTime()
+{
+	float curr_time = Animation::Instance()->GetTime() - m_stop_during;
+	assert(m_curr_time <= curr_time);
+	if (curr_time == m_curr_time) {
+		m_curr_time = curr_time;
+		return false;
+	} else {
+		m_curr_time = curr_time;
+		return true;
+	}
+}
+
+int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
+{
+	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
+	int max_frame = m_copy->m_max_frame_idx;
+	int loop_max_frame = max_frame + interval * fps;
+	if (loop) {
+		if (curr_frame <= max_frame) {
+			;
+		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
+			curr_frame = 1;
+			m_frame = 0;
+			if (reset_cursor) {
+				ResetLayerCursor();
+			}
+		} else {
+			curr_frame = 1;
+			m_frame = 0;
+			m_start_time = m_curr_time;
+			if (reset_cursor) {
+				ResetLayerCursor();
+			}
+		}
+	} else {
+		if (curr_frame > max_frame) {
+			curr_frame = max_frame;
+		}
+	}
+	return curr_frame;
 }
 
 void AnimCurr::ResetLayerCursor()

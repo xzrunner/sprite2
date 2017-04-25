@@ -10,5 +10,3 @@
 //#define S2_RES_LOG
 
 #define S2_DISABLE_MODEL
-
-//#define S2_USE_FLATTEN

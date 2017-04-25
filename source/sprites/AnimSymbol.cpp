@@ -19,18 +19,14 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-#ifdef S2_USE_FLATTEN
 	, m_ft(NULL)
-#endif // S2_USE_FLATTEN
 {
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-#ifdef S2_USE_FLATTEN
 	, m_ft(NULL)
-#endif // S2_USE_FLATTEN
 {
 }
 
@@ -46,11 +42,9 @@ AnimSymbol::~AnimSymbol()
 		delete layer;
 	}
 
-#ifdef S2_USE_FLATTEN
 	if (m_ft) {
 		delete m_ft;
 	}
-#endif // S2_USE_FLATTEN
 }
 
 int AnimSymbol::Type() const 
@@ -73,7 +67,6 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
-#ifdef S2_USE_FLATTEN
 	if (m_ft) 
 	{
 		int frame = -1;
@@ -93,7 +86,6 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		m_ft->Draw(rp_child, frame - 1);
 	} 
 	else
-#endif // S2_USE_FLATTEN
 	{
 		if (spr) {
 			RenderParams rp_child(rp);
@@ -111,7 +103,11 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
 	m_curr.SetTime(time);
-	return m_curr.Update(up, NULL);
+	if (m_ft) {
+		return m_curr.UpdateOnlyFrame(up, NULL);
+	} else {
+		return m_curr.Update(up, NULL);
+	}
 }
 
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
@@ -165,7 +161,6 @@ void AnimSymbol::LoadCopy()
 
 void AnimSymbol::BuildFlatten(const Actor* actor) const
 {
-#ifdef S2_USE_FLATTEN
 	if (m_ft) {
 		m_ft->Clear();
 	} else {
@@ -173,7 +168,6 @@ void AnimSymbol::BuildFlatten(const Actor* actor) const
 	}
 	
 	m_copy.StoreToFlatten(*m_ft, actor);
-#endif // S2_USE_FLATTEN
 }
 
 void AnimSymbol::AddLayer(Layer* layer)

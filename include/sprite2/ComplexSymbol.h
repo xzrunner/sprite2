@@ -80,9 +80,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-#ifdef S2_USE_FLATTEN
 	mutable Flatten* m_ft;
-#endif // S2_USE_FLATTEN
 
 }; // ComplexSymbol
 

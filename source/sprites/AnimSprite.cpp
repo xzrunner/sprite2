@@ -81,7 +81,12 @@ bool AnimSprite::Update(const UpdateParams& up)
 {
 	const Actor* actor = up.GetActor();
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
-	return curr.Update(up, this, m_loop, m_interval, m_fps);
+	bool has_flatten = VI_DOWNCASTING<AnimSymbol*>(m_sym)->HasFlatten();
+	if (has_flatten) {
+		return curr.UpdateOnlyFrame(up, this, m_loop, m_interval, m_fps);
+	} else {
+		return curr.Update(up, this, m_loop, m_interval, m_fps);
+	}
 }
 
 bool AnimSprite::SetFrame(const UpdateParams& up, int frame, bool force)

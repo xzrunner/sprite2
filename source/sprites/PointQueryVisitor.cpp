@@ -79,7 +79,11 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		m_finded = true;
 		return VISIT_STOP;
 	} 
-	else 
+	else if (type == SYM_MASK)
+    {
+        return VISIT_INTO;
+    }
+    else
 	{
 		bool use_new = false;
 		if (!m_selected_spr || m_selected_path.IsPartOf(m_curr_path)) {

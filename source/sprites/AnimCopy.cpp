@@ -107,7 +107,10 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 					spr = m_slots[item.slot];
 				}
 				FlattenParams fp;
-				fp.Push(spr, actor);
+				if (actor) {
+					fp.SetMat(actor->GetLocalMat() * actor->GetSpr()->GetLocalMat());	
+				}
+				fp.Push(spr, spr->QueryActor(actor));
 				spr->GetSymbol()->Flattening(fp, frame);	
 			}
 		}

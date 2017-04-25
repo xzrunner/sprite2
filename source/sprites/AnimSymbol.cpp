@@ -84,7 +84,13 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		} else {
 			frame = m_curr.GetFrame();
 		}
-		m_ft->Draw(rp, frame - 1);
+
+		RenderParams rp_child(rp);
+		rp_child.mt = spr->GetLocalMat() * rp.mt;
+		if (rp.actor) {
+			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		}
+		m_ft->Draw(rp_child, frame - 1);
 	} 
 	else
 #endif // S2_USE_FLATTEN

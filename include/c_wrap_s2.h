@@ -14,6 +14,7 @@ extern "C"
 void s2_init();
 
 void s2_on_size(int w, int h);
+void s2_get_screen_size(int* w, int* h);
 
 /************************************************************************/
 /* symbol                                                               */
@@ -177,6 +178,7 @@ void* s2_cam_create();
 void  s2_cam_release(void* cam);
 void  s2_cam_bind(void* cam);
 void  s2_cam_set(void* cam, float x, float y, float scale);
+void  s2_cam_get(const void* cam, float* x, float* y, float* scale);
 
 /************************************************************************/
 /* other                                                                */

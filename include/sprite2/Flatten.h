@@ -27,8 +27,6 @@ public:
 public:
 	struct Quad
 	{
-		// todo: color
-		uint32_t sym_id;
 		int tex_id;
 		sm::vec2 vertices[4], texcoords[4];
 	}; // Quad

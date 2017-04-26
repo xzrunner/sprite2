@@ -106,7 +106,6 @@ void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	Flatten::Quad quad;
 	QueryTexcoords(false, &quad.texcoords[0].x, quad.tex_id);
-	quad.sym_id = GetID();
 
 	sm::rect sz = GetBounding();
 	const S2_MAT& mt = fp.GetMat();

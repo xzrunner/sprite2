@@ -24,7 +24,7 @@ public:
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 	static S2_MAT PrepareMat(const RenderParams& rp, const Sprite* spr);
 
-	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool scissor = true);
+	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool culling = true);
 
 	static void Draw(const Symbol* sym, 
 		             const RenderParams& rp = RenderParams(),

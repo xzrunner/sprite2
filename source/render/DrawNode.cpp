@@ -89,9 +89,9 @@ S2_MAT DrawNode::PrepareMat(const RenderParams& rp, const Sprite* spr)
 	return mat;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool scissor)
+void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
 {
-	if (scissor && IsOutsideView(spr, rp)) {
+	if (culling && IsOutsideView(spr, rp)) {
 		return;
 	}
 

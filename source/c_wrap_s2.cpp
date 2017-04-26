@@ -63,6 +63,14 @@ void s2_on_size(int w, int h)
 	}
 }
 
+extern "C"
+void s2_get_screen_size(int* w, int* h)
+{
+	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
+	*w = sz.x;
+	*h = sz.y;
+}
+
 /************************************************************************/
 /* symbol                                                               */
 /************************************************************************/
@@ -88,14 +96,22 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 /* sprite                                                               */
 /************************************************************************/
 
+static RenderParams rp;
+
 extern "C"
 void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				 float xmin, float ymin, float xmax, float ymax)
 {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
-	RenderParams rp;
-	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+	float* m = rp.mt.x;
+	float c = sm::cos(angle), s = sm::sin(angle);
+	m[0] = c * sx;
+	m[1] = s * sx;
+	m[2] = - s * sy;
+	m[3] = c * sy;
+	m[4] = x;
+	m[5] = y;
 
 	rp.view_region.xmin = xmin;
 	rp.view_region.ymin = ymin;
@@ -104,7 +120,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 
 	rp.actor = s2_actor;
 
-	DrawNode::Draw(s2_actor->GetSpr(), rp);
+	DrawNode::Draw(s2_actor->GetSpr(), rp, false);
 }
 
 extern "C"
@@ -229,12 +245,7 @@ void s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, 
 	outer.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
 	outer.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-	outer.x[0] = mat[0];
-	outer.x[1] = mat[1];
-	outer.x[4] = mat[2];
-	outer.x[5] = mat[3];
-	outer.x[12]= mat[4];
-	outer.x[13]= mat[5];
+	memcpy(outer.x, mat, sizeof(outer.x));
 #endif // S2_MATRIX_FIX
 
 	S2_MAT m;
@@ -282,12 +293,7 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	mat[4] = selected_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 	mat[5] = selected_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 #else
-	mat[0] = selected_mat.x[0];
-	mat[1] = selected_mat.x[1];
-	mat[2] = selected_mat.x[4];
-	mat[3] = selected_mat.x[5];
-	mat[4] = selected_mat.x[12];
-	mat[5] = selected_mat.x[13];
+	memcpy(mat, selected_mat.x, sizeof(selected_mat.x));
 #endif // S2_MATRIX_FIX
 
 	return const_cast<Actor*>(ret);
@@ -704,12 +710,7 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	mat[4] = selected_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 	mat[5] = selected_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 #else
-	mat[0] = selected_mat.x[0];
-	mat[1] = selected_mat.x[1];
-	mat[2] = selected_mat.x[4];
-	mat[3] = selected_mat.x[5];
-	mat[4] = selected_mat.x[12];
-	mat[5] = selected_mat.x[13];
+	memcpy(mat, selected_mat.x, sizeof(selected_mat.x));
 #endif // S2_MATRIX_FIX
 
 	return const_cast<Actor*>(visitor.GetSelectedActor());
@@ -739,7 +740,7 @@ void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 
 	sm::vec2 min(src.xmin, src.ymin),
 		     max(src.xmax, src.ymax);
-	sm::mat4 mat = 	s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
+	S2_MAT mat = 	s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
 	min = mat * min;
 	max = mat * max;
 	
@@ -990,7 +991,7 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 	const sm::rect& src = s2_actor->GetAABB().GetRect();
 	sm::vec2 min(src.xmin, src.ymin),
 		     max(src.xmax, src.ymax);
-	sm::mat4 mat = s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
+	S2_MAT mat = s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
 	min = mat * min;
 	max = mat * max;
 
@@ -1168,6 +1169,16 @@ void s2_cam_set(void* cam, float x, float y, float scale)
 {
 	OrthoCamera* o_cam = static_cast<OrthoCamera*>(cam);
 	o_cam->Set(sm::vec2(x, y), scale);
+}
+
+extern "C"
+void s2_cam_get(const void* cam, float* x, float* y, float* scale)
+{
+	const OrthoCamera* o_cam = static_cast<const OrthoCamera*>(cam);
+	const sm::vec2& pos = o_cam->GetPosition();
+	*x = pos.x;
+	*y = pos.y;
+	*scale = o_cam->GetScale();
 }
 
 /************************************************************************/

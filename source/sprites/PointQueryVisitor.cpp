@@ -187,7 +187,7 @@ bool PointQueryVisitor::IsPointInScissor(const Sprite* spr, const SprVisitorPara
 	return IsPointInRect(rect, params.mt);
 }
 
-bool PointQueryVisitor::IsPointInRect(const sm::rect& rect, const sm::mat4& mat) const
+bool PointQueryVisitor::IsPointInRect(const sm::rect& rect, const S2_MAT& mat) const
 {
 	sm::vec2 vertices[4];
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);

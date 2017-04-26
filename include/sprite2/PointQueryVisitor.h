@@ -33,7 +33,7 @@ private:
 	bool QuerySprite(const Sprite* spr, const SprVisitorParams& params) const;
 	bool IsPointInScissor(const Sprite* spr, const SprVisitorParams& params) const;
 
-	bool IsPointInRect(const sm::rect& rect, const sm::mat4& mat) const;	
+	bool IsPointInRect(const sm::rect& rect, const S2_MAT& mat) const;	
 
 private:
 	class SprPath

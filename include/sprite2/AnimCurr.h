@@ -40,7 +40,7 @@ public:
 		bool loop = true, float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
-	Sprite* FetchChild(const std::string& name) const;
+	Sprite* FetchChild(const std::string& name, const Actor* actor) const;
 	Sprite* FetchChild(int idx) const;
 
 	void Start(const UpdateParams& up, const Sprite* spr);
@@ -58,8 +58,6 @@ public:
 	bool IsActive() const { return m_active; }
 
 	void Clear();
-
-	void SetChildAction(const Actor* actor, int symid, const char* action);
 
 	sm::rect CalcAABB(const Actor* actor) const;
 
@@ -85,7 +83,6 @@ private:
 	std::vector<bool> m_layer_cursor_update;
 
 	std::vector<Sprite*> m_slots;
-	std::vector<int> m_slotmap;
 
 	int* m_curr;
 	int  m_curr_num;

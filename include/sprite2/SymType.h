@@ -26,7 +26,7 @@ enum SymType
 	SYM_SKELETON,
 	SYM_MODEL,
 
-	SYM_GROUP = 99,
+	SYM_PROXY = 99,
 	SYM_ANCHOR = 100,
 };
 

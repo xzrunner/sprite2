@@ -14,8 +14,7 @@
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
 #include "UpdateParams.h"
-#include "GroupSymbol.h"
-#include "GroupSprite.h"
+#include "ProxyHelper.h"
 
 #include <algorithm>
 #include <climits>
@@ -46,7 +45,6 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_layer_cursor(curr.m_layer_cursor)
 	, m_layer_cursor_update(curr.m_layer_cursor_update)
 	, m_slots(curr.m_slots)
-	, m_slotmap(curr.m_slotmap)
 	, m_curr_num(curr.m_curr_num)
 	, m_frame(curr.m_frame)
 	, m_start_time(curr.m_start_time)
@@ -68,7 +66,6 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	m_layer_cursor_update = curr.m_layer_cursor_update;
 	m_slots = curr.m_slots;
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());
-	m_slotmap = curr.m_slotmap;
 	m_curr_num = curr.m_curr_num;
 	m_curr = new int[curr.m_copy->m_max_item_num];
 	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
@@ -99,8 +96,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		for (int i = 0; i < m_curr_num; ++i) 
 		{
 			Sprite* child = m_slots[m_curr[i]];
-			Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
-			cp.actor = actor_holder->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -109,8 +105,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		for (int i = m_curr_num - 1; i >= 0; --i) 
 		{
 			Sprite* child = m_slots[m_curr[i]];
-			Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
-			cp.actor = actor_holder->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -186,13 +181,12 @@ void AnimCurr::Draw(const RenderParams& rp) const
 	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* child = m_slots[m_curr[i]];
-		Sprite* actor_holder = m_slots[m_slotmap[m_curr[i]]];
-		rp_child.actor = actor_holder->QueryActor(rp.actor);
+		rp_child.actor = child->QueryActor(rp.actor);
 		DrawNode::Draw(child, rp_child);
 	}
 }
 
-Sprite* AnimCurr::FetchChild(const std::string& name) const
+Sprite* AnimCurr::FetchChild(const std::string& name, const Actor* actor) const
 {
 	std::vector<Sprite*> group;
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
@@ -201,18 +195,7 @@ Sprite* AnimCurr::FetchChild(const std::string& name) const
 			group.push_back(spr);
 		}
 	}
-
-	Sprite* ret = NULL;
-	if (group.size() == 1) {
-		ret = group[0];
-	} else if (group.size() > 1) {
- 		GroupSymbol* sym = new GroupSymbol(group);
- 		GroupSprite* spr = new GroupSprite(sym);
-		sym->RemoveReference();
-		assert(sym->GetRefCount() == 1 && spr->GetRefCount() == 1);
- 		ret = spr;
-	}
-	return ret;
+	return ProxyHelper::BuildGroup(group, actor);
 }
 
 Sprite* AnimCurr::FetchChild(int idx) const
@@ -221,25 +204,6 @@ Sprite* AnimCurr::FetchChild(int idx) const
 		return NULL;
 	} else {
 		return m_slots[idx];
-	}
-}
-
-void AnimCurr::SetChildAction(const Actor* parent, int symid, const char* action)
-{
-	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		Sprite* spr = m_slots[i];
-		if (spr->GetSymbol()->GetID() == symid) {
-			Actor * actor = ActorFactory::Instance()->Create(parent, spr);
-			if(actor->GetSpr()->GetSymbol()->Type() == SYM_COMPLEX) {
-				const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(actor->GetSpr()->GetSymbol());
-				ComplexActor* actor_complex = static_cast<ComplexActor*>(actor);
-				int action_idx = -1;
-				if (action) {
-					action_idx = sym_complex->GetActionIdx(action);
-				}
-				actor_complex->SetAction(action_idx);
-			}
-		}
 	}
 }
 
@@ -350,20 +314,6 @@ void AnimCurr::SetAnimCopy(const AnimCopy* copy)
 		Sprite* src = const_cast<Sprite*>(m_copy->m_slots[i]);
 		Sprite* dst = VI_CLONE(Sprite, src);
 		m_slots[i] = dst;
-	}
-
-	std::map<std::string,int> name2index;
-	m_slotmap.resize(m_slots.size());
-	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		Sprite* spr = m_slots[i];
-		std::string name = spr->GetName();
-		std::map<std::string,int>::iterator iter = name2index.find(name);
-		if (iter == name2index.end()) {
-			name2index[name] = i;
-			m_slotmap[i] = i;
-		} else {
-			m_slotmap[i] = iter->second;
-		}
 	}
 }
 

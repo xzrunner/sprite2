@@ -36,7 +36,7 @@
 #include "Particle3dSprite.h"
 #include "Particle3dEmitter.h"
 #include "OrthoCamera.h"
-#include "GroupSymbol.h"
+#include "ProxySymbol.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -197,23 +197,14 @@ int s2_spr_get_sym_type(void* spr) {
 	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
 }
 
-extern "C"
-void s2_spr_set_action(void* actor, const char* action) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_COMPLEX) {
+static 
+void _set_action(Actor* actor, const char* action) {
+	if (actor->GetSpr()->GetSymbol()->Type() != SYM_COMPLEX) {
 		return;
 	}
 
-	const Actor* s2_parent = s2_actor->GetParent();
-	if(s2_parent && s2_parent->GetSpr()->GetSymbol()->Type() == SYM_ANIMATION) {
-		const Sprite* child  = s2_actor->GetSpr();
-		const Sprite* parent = s2_parent->GetSpr();
-		static_cast<AnimSprite*>(const_cast<Sprite*>(parent))->SetChildAction(s2_parent, child->GetSymbol()->GetID(), action);
-		return;
-	}
-
-	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(s2_actor->GetSpr()->GetSymbol());
-	ComplexActor* actor_complex = static_cast<ComplexActor*>(s2_actor);
+	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(actor->GetSpr()->GetSymbol());
+	ComplexActor* actor_complex = static_cast<ComplexActor*>(actor);
 	int action_idx = -1;
 	if (action) {
 		action_idx = sym_complex->GetActionIdx(action);
@@ -221,6 +212,23 @@ void s2_spr_set_action(void* actor, const char* action) {
 	actor_complex->SetAction(action_idx);
 
 	s2_actor_msg_start(actor);
+}
+
+extern "C"
+void s2_spr_set_action(void* actor, const char* action) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	int type = s2_actor->GetSpr()->GetSymbol()->Type();
+	if (type == SYM_COMPLEX) {
+		_set_action(s2_actor, action);
+	} else if (type == SYM_PROXY) {
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
+		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
+		const Actor* parent = proxy_sym->GetParent();
+		for (int i = 0, n = children.size(); i < n; ++i) {
+			const Actor* child_actor = children[i]->QueryActor(parent);
+			_set_action(const_cast<Actor*>(child_actor), action);
+		}
+	}
 }
 
 extern "C"
@@ -643,20 +651,15 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 }
 
 static int
-_actor_mount(const Actor* parent, const char* name, const Actor* child) {
-	const Sprite* p_spr = parent->GetSpr();
-	Sprite* c_spr = p_spr->FetchChild(name, parent);
-	if (!c_spr) {
+_actor_mount(const Actor* parent, Sprite* old_child, const Actor* new_child) {
+	if (!old_child) {
 		return -1;		
 	}
-
-	if (c_spr->GetSymbol()->Type() != SYM_ANCHOR) {
+	if (old_child->GetSymbol()->Type() != SYM_ANCHOR) {
 		return -2;
 	}
-
-	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(c_spr);
-	anchor_spr->AddAnchor(child, parent);
-
+	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(old_child);
+	anchor_spr->AddAnchor(new_child, parent);
 	return 0;
 }
 
@@ -665,22 +668,28 @@ extern "C"
 int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	const Actor* p_actor = static_cast<const Actor*>(parent);
 	const Sprite* p_spr = p_actor->GetSpr();
-	const Actor* c_actor = static_cast<const Actor*>(child);
-	Sprite* c_spr = p_spr->FetchChild(name, p_actor);
-	if (!c_spr) {
+	const Actor* new_actor = static_cast<const Actor*>(child);
+	Sprite* old_spr = p_spr->FetchChild(name, p_actor);
+	if (!old_spr) {
 		return -1;		
 	}
 
-	int sym_type = c_spr->GetSymbol()->Type();
-	if (sym_type == SYM_GROUP) {
-		const GroupSymbol* group_sym = VI_DOWNCASTING<const GroupSymbol*>(c_spr->GetSymbol());
-		const std::vector<Sprite*>& sprs = group_sym->GetAllChildren();
+	int sym_type = old_spr->GetSymbol()->Type();
+	if (sym_type == SYM_PROXY) {
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(old_spr->GetSymbol());
+		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
 		int ret = 0;
-		for (int i = 0, n = sprs.size(); i < n; ++i) {
-						
+		const Actor* parent = proxy_sym->GetParent();
+		for (int i = 0, n = children.size(); i < n; ++i) {
+			int _ret = _actor_mount(p_actor, children[i], new_actor);
+			if (_ret != 0) {
+				ret = _ret;
+			}
 		}
+		old_spr->RemoveReference();
+		return ret;
 	} else if (sym_type == SYM_ANCHOR) {
-		return _actor_mount(p_actor, name, c_actor);
+		return _actor_mount(p_actor, old_spr, new_actor);
 	} else {
 		return -2;
 	}

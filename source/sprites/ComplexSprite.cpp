@@ -5,6 +5,7 @@
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
 #include "SymType.h"
+#include "ProxyHelper.h"
 
 namespace s2
 {
@@ -95,15 +96,16 @@ bool ComplexSprite::SetFrame(const UpdateParams& up, int frame, bool force)
 
 Sprite* ComplexSprite::FetchChild(const std::string& name, const Actor* actor) const
 {
+	std::vector<Sprite*> group;
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
 		if (child->GetName() == name) {
-			return child;
+			group.push_back(child);
 		}
 	}
-	return NULL;
+	return ProxyHelper::BuildGroup(group, actor);
 }
 
 Sprite* ComplexSprite::FetchChild(int idx, const Actor* actor) const

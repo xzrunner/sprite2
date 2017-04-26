@@ -42,12 +42,12 @@ public:
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void SetMatrix(const S2_MAT& mat);
-	const S2_MAT& GetMatrix() const;
+	S2_MAT GetMatrix() const;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
 	void SetMatrix(const S2_MAT& mat);
-	const S2_MAT& GetMatrix() const;
+	S2_MAT GetMatrix() const;
 #endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 	/**
@@ -66,13 +66,13 @@ private:
 			float srt[SprSRT::SRT_MAX];
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-			S2_MAT mat;
+			float mat[6];
 #endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 		};
 
  #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
  		struct {
- 			S2_MAT mat;
+ 			float mat[6];
  		};
  #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 

@@ -104,13 +104,15 @@ void SprGeo::SetSRT(const SprSRT& srt)
 inline
 void SprGeo::SetMatrix(const S2_MAT& mat)
 {
-	m_state.mat = mat;
+	memcpy(m_state.mat, mat.x, sizeof(m_state.mat));
 }
 
 inline
-const S2_MAT& SprGeo::GetMatrix() const
+S2_MAT SprGeo::GetMatrix() const
 {
-	return m_state.mat;
+	S2_MAT mat;
+	memcpy(mat.x, m_state.mat, sizeof(m_state.mat));
+	return mat;
 }
 
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -120,13 +122,15 @@ const S2_MAT& SprGeo::GetMatrix() const
 inline
 void SprGeo::SetMatrix(const S2_MAT& mat)
 {
-	m_state.mat = mat;
+	memcpy(m_state.mat, mat.x, sizeof(m_state.mat));
 }
 
 inline
-const S2_MAT& SprGeo::GetMatrix() const
+S2_MAT SprGeo::GetMatrix() const
 {
-	return m_state.mat;
+	S2_MAT mat;
+	memcpy(mat.x, m_state.mat, sizeof(m_state.mat));
+	return mat;
 }
 
 #endif // S2_SPR_CACHE_LOCAL_MAT_COPY

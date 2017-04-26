@@ -15,6 +15,7 @@
 
 #include <stddef.h>
 #include <assert.h>
+#include <string.h>
 
 namespace s2
 {

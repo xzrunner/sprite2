@@ -6,6 +6,8 @@
 
 #include <rigging.h>
 
+#include <string.h>
+
 namespace s2
 {
 

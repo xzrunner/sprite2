@@ -8,6 +8,8 @@
 
 #include <vector>
 
+namespace sl { class Sprite2Shader; }
+
 namespace s2
 {
 
@@ -41,6 +43,9 @@ public:
 
 	void AddQuad(const Quad& quad) { m_quads.push_back(quad); }
 	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
+
+private:
+	void DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const;
 
 private:
 	std::vector<Quad> m_quads;

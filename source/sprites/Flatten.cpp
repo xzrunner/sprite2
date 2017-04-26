@@ -47,19 +47,9 @@ void Flatten::Draw(const RenderParams& rp) const
 	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 	shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 
-	sm::vec2 vertices_trans[4];
 	if (m_nodes.empty())
 	{
-		for (int i = 0, n = m_quads.size(); i < n; ++i)
-		{
-			// draw quad
-			const Quad& q = m_quads[i];
-			vertices_trans[0] = rp.mt * q.vertices[0];
-			vertices_trans[1] = rp.mt * q.vertices[1];
-			vertices_trans[2] = rp.mt * q.vertices[2];
-			vertices_trans[3] = rp.mt * q.vertices[3];
-			shader->DrawQuad(&vertices_trans[0].x, &q.texcoords[0].x, q.tex_id);
-		}
+		DrawQuads(0, m_quads.size(), rp, shader);
 	} 
 	else
 	{
@@ -69,16 +59,8 @@ void Flatten::Draw(const RenderParams& rp) const
 			const Node& node = m_nodes[i];
 			begin = end;
 			end = node.idx;
-			for (int j = begin; j < end; ++j) 
-			{
-				// draw quad
-				const Quad& q = m_quads[j];
-				vertices_trans[0] = rp.mt * q.vertices[0];
-				vertices_trans[1] = rp.mt * q.vertices[1];
-				vertices_trans[2] = rp.mt * q.vertices[2];
-				vertices_trans[3] = rp.mt * q.vertices[3];
-				shader->DrawQuad(&vertices_trans[0].x, &q.texcoords[0].x, q.tex_id);
-			}
+			DrawQuads(begin, end, rp, shader);
+
 			RenderParams c_rp = rp;
 			c_rp.actor = node.actor;
 			c_rp.mt = node.mat;
@@ -95,6 +77,50 @@ void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
 	node.mat = mat;
 	node.idx = m_quads.size();
 	m_nodes.push_back(node);
+}
+
+void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
+{
+	static sm::vec2 VERTEX_BUF[4];
+
+	float x, y;
+	const Quad* ptr_quad = &m_quads[0];
+	const float* mt = rp.mt.x;
+	for (int i = begin; i < end; ++i, ++ptr_quad)
+	{
+		const sm::vec2* ptr_src = ptr_quad->vertices;
+		sm::vec2* ptr_dst = &VERTEX_BUF[0];
+
+		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
+		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		ptr_dst->x = x;
+		ptr_dst->y = y;
+		++ptr_dst;
+		++ptr_src;
+
+		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
+		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		ptr_dst->x = x;
+		ptr_dst->y = y;
+		++ptr_dst;
+		++ptr_src;
+
+		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
+		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		ptr_dst->x = x;
+		ptr_dst->y = y;
+		++ptr_dst;
+		++ptr_src;
+
+		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
+		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		ptr_dst->x = x;
+		ptr_dst->y = y;
+		++ptr_dst;
+		++ptr_src;
+
+		shader->DrawQuad(&VERTEX_BUF[0].x, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
+	}
 }
 
 }

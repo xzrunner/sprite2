@@ -31,10 +31,8 @@ render_func(void* sym, float* mat, const void* ud)
 	m.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
 	m.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-	sm::mat4 m;
-	m.c[0][0] = mat[0]; m.c[0][1] = mat[1];
-	m.c[1][0] = mat[2]; m.c[1][1] = mat[3];
-	m.c[3][0] = mat[4]; m.c[3][1] = mat[5];
+	sm::Matrix2D m;
+	memcpy(m.x, mat, sizeof(m.x));
 #endif // S2_MATRIX_FIX
 
 	DrawNode::Draw(s2_sym, *params, m);

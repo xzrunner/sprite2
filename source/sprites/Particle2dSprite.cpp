@@ -93,12 +93,7 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 	mt[4] = m_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 	mt[5] = m_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 #else
-	mt[0] = m_mat.x[0];
-	mt[1] = m_mat.x[1];
-	mt[2] = m_mat.x[4];
-	mt[3] = m_mat.x[5];
-	mt[4] = m_mat.x[12];
-	mt[5] = m_mat.x[13];
+	memcpy(mt, m_mat.x, sizeof(mt));
 #endif // S2_MATRIX_FIX
 
 	float dt = time - m_et->time;

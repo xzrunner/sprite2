@@ -78,12 +78,7 @@ void Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
 		d_mt.x[4] = s_mt[4] * sm::MatrixFix::TRANSLATE_SCALE;
 		d_mt.x[5] = s_mt[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-		d_mt.x[0]  = s_mt[0];
-		d_mt.x[1]  = s_mt[1];
-		d_mt.x[4]  = s_mt[2];
-		d_mt.x[5]  = s_mt[3];
-		d_mt.x[12] = s_mt[4];
-		d_mt.x[13] = s_mt[5];
+		memcpy(d_mt.x, s_mt, sizeof(d_mt.x));
 #endif // S2_MATRIX_FIX
 		rp_child.mt = d_mt;
 	}	

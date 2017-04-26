@@ -72,8 +72,8 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
 
 	RenderParams params;
-	params.mt.Scale(scale, -scale, 1);
-	params.mt.Translate(-dx, dy, 0);
+	params.mt.Scale(scale, -scale);
+	params.mt.Translate(-dx, dy);
 	params.SetChangeShader(false);
 	DrawNode::Draw(spr, params);
 
@@ -111,7 +111,7 @@ void DrawRT::Draw(const Symbol* sym, bool whitebg, float scale)
 	sm::vec2 center = rect.Center();
 	float dx = -center.x;
 	float dy = center.y;
-	params.mt.Translate(dx * scale, dy * scale, 0);
+	params.mt.Translate(dx * scale, dy * scale);
 	DrawNode::Draw(sym, params, sm::vec2(0, 0), 0.0f, sm::vec2(scale, -scale));
 
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
@@ -142,7 +142,7 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
 
 	RenderParams rp;
-	rp.mt = sm::mat4::Scaled(1, -1, 1);
+	rp.mt.Scale(1, -1);
 	shape->Draw(rp);
 
 	RenderCtxStack::Instance()->Pop();

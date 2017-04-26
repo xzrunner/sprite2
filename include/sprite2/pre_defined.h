@@ -31,8 +31,8 @@ namespace s2
 	#define S2_MAT sm::MatrixFix
 	#define S2_MAT_HEADER <SM_MatrixFix.h>
 #else
-	#define S2_MAT sm::mat4
-	#define S2_MAT_HEADER <SM_Matrix.h>
+	#define S2_MAT sm::Matrix2D
+	#define S2_MAT_HEADER <SM_Matrix2D.h>
 #endif // S2_MATRIX_FIX
 }
 

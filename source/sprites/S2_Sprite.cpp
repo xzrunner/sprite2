@@ -584,16 +584,9 @@ S2_MAT Sprite::GetLocalInvMat() const
 	} else {
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 		S2_MAT mat;
-#ifdef S2_MATRIX_FIX
 		mat.Rotate(-m_geo->GetAngle());
 		mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y);
 		mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y);
-#else
-		mat.RotateZ(-m_geo->GetAngle() * SM_RAD_TO_DEG);
-		mat.Shear(-m_geo->GetShear().x, -m_geo->GetShear().y);
-		mat.Translate(-m_geo->GetPosition().x/m_geo->GetScale().x, -m_geo->GetPosition().y/m_geo->GetScale().y, 0);
-		mat.Scale(1/m_geo->GetScale().x, 1/m_geo->GetScale().y, 1);
-#endif // S2_MATRIX_FIX
 		return mat;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	}

@@ -41,12 +41,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 		mt.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
 		mt.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-		mt.x[0] = mat[0];
-		mt.x[1] = mat[1];
-		mt.x[4] = mat[2];
-		mt.x[5] = mat[3];
-		mt.x[12] = mat[4];
-		mt.x[13] = mat[5];
+		memcpy(mt.x, mat, sizeof(mt.x));
 #endif // S2_MATRIX_FIX
 	}
 

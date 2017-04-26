@@ -183,12 +183,7 @@ void Particle3dSprite::SetEmitterMat(const S2_MAT& mat) const
 	mt[4] = mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 	mt[5] = mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;	
 #else
-	mt[0] = mat.x[0];
-	mt[1] = mat.x[1];
-	mt[2] = mat.x[4];
-	mt[3] = mat.x[5];
-	mt[4] = mat.x[12];
-	mt[5] = mat.x[13];	
+	memcpy(mt, mat.x, sizeof(mt));
 #endif // S2_MATRIX_FIX
 
 	m_et->SetMat(mt);
@@ -347,12 +342,7 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* 
 	mt[4] = world_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 	mt[5] = world_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
 #else
-	mt[0] = world_mat.x[0];
-	mt[1] = world_mat.x[1];
-	mt[2] = world_mat.x[4];
-	mt[3] = world_mat.x[5];
-	mt[4] = world_mat.x[12];
-	mt[5] = world_mat.x[13];
+	memcpy(mt, world_mat.x, sizeof(mt));
 #endif // S2_MATRIX_FIX
 
 	et->SetMat(mt);

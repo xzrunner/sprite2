@@ -85,10 +85,8 @@ sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, boo
 		m.x[4] = world.m[4] * sm::MatrixFix::TRANSLATE_SCALE;
 		m.x[5] = world.m[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-		sm::mat4 m;
-		m.c[0][0] = world.m[0]; m.c[0][1] = world.m[1];
-		m.c[1][0] = world.m[2]; m.c[1][1] = world.m[3];
-		m.c[3][0] = world.m[4]; m.c[3][1] = world.m[5];
+		sm::Matrix2D m;
+		memcpy(m.x, world.m, sizeof(m.x));
 #endif // S2_MATRIX_FIX
 
 		sm::vec2 min(sb.xmin, sb.ymin),

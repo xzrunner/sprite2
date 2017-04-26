@@ -84,8 +84,8 @@ void Particle3dBuffer::Draw(const sm::vec2& pos, float scale) const
 	for ( ; itr != m_emitters.end(); ++itr) 
 	{
 		rp.mt.Identity();
-		rp.mt.Scale(scale, scale, scale);
-		rp.mt.Translate(pos.x, pos.y, 0);
+		rp.mt.Scale(scale, scale);
+		rp.mt.Translate(pos.x, pos.y);
 		(*itr)->Draw(rp, true);
 	}
 }

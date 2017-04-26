@@ -92,11 +92,7 @@ void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const Rende
 
 	RenderParams rp_child(rp);
 	const sm::vec2& offset = spr->GetPosition();
-#ifdef S2_MATRIX_FIX
 	rp_child.mt.Translate(-offset.x, -offset.y);
-#else
-	rp_child.mt.Translate(-offset.x, -offset.y, 0);
-#endif // S2_MATRIX_FIX
 	rp_child.SetChangeShader(false);
 	rp_child.shader.SetFilter(FM_NULL);
 	rp_child.SetDisableFilter(true);

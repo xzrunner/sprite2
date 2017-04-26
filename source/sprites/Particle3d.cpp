@@ -112,13 +112,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		_mat.x[4] = mat[4] * sm::MatrixFix::TRANSLATE_SCALE;
 		_mat.x[5] = mat[5] * sm::MatrixFix::TRANSLATE_SCALE;
 #else
-		sm::mat4 _mat;
-		_mat.x[0] = mat[0];
-		_mat.x[1] = mat[1];
-		_mat.x[4] = mat[2];
-		_mat.x[5] = mat[3];
-		_mat.x[12]= mat[4];
-		_mat.x[13]= mat[5];
+		sm::Matrix2D _mat;
+		memcpy(_mat.x, mat, sizeof(_mat.x));
 #endif // S2_MATRIX_FIX
 		rp_child.mt = _mat;
 	}
@@ -150,11 +145,7 @@ update_func(void* spr, float x, float y)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	UpdateParams up;
 	S2_MAT mat;
-#ifdef S2_MATRIX_FIX
 	mat.Translate(x, y);
-#else
-	mat = sm::mat4::Translated(x, y, 0);
-#endif // S2_MATRIX_FIX
 	up.SetPrevMat(mat);
 	s2_spr->Update(up);
 }

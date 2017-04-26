@@ -120,7 +120,6 @@ float s2_actor_get_angle(void* actor);
 void  s2_actor_set_scale(void* actor, float sx, float sy);
 void  s2_actor_get_scale(void* actor, float* sx, float* sy);
 
-void  s2_actor_set_world_pos(void* actor, float x, float y);
 void  s2_actor_get_world_pos(const void* actor, float* x, float* y);
 float s2_actor_get_world_angle(const void* actor);
 void  s2_actor_get_world_scale(const void* actor, float* sx, float* sy);

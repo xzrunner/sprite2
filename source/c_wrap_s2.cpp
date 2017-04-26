@@ -802,27 +802,6 @@ static S2_MAT _get_actor_world_mat(const void* actor) {
 }
 
 extern "C"
-void s2_actor_set_world_pos(void* actor, float x, float y) {
-	S2_MAT world_mat = _get_actor_world_mat(actor);
-	sm::vec2 old_world_pos = world_mat * sm::vec2(0, 0);
-	if (old_world_pos.x == x && old_world_pos.y == y) {
-		return;
-	}
-
-	sm::vec2 old_local_pos;
-	s2_actor_get_pos(actor, &old_local_pos.x, &old_local_pos.y);
-	s2_actor_set_pos(actor, old_local_pos.x + 1, old_local_pos.y + 1);
-	
-	sm::vec2 new_world_pos;
-	s2_actor_get_world_pos(actor, &new_world_pos.x, &new_world_pos.y);
-
-	sm::vec2 new_local_pos;
-	new_local_pos.x = (x - old_world_pos.x) / (new_world_pos.x - old_world_pos.x);
-	new_local_pos.y = (y - old_world_pos.y) / (new_world_pos.y - old_world_pos.y);
-	s2_actor_set_pos(actor, new_local_pos.x, new_local_pos.y);
-}
-
-extern "C"
 void s2_actor_get_world_pos(const void* actor, float* x, float* y) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	S2_MAT mat = _get_actor_world_mat(s2_actor);

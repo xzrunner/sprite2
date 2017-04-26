@@ -66,7 +66,9 @@ void Actor::SetPosition(const sm::vec2& pos)
 	if (!m_geo && pos != sm::vec2(0, 0)) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) {
+	if (m_geo) 
+	{
+		SetGeoDirty(true);
 		m_geo->SetPosition(pos);
 		m_aabb.SetRect(sm::rect()); // make it empty
 		m_aabb.Update(this);
@@ -87,7 +89,9 @@ void Actor::SetAngle(float angle)
 	if (!m_geo && angle != 0) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) {
+	if (m_geo) 
+	{
+		SetGeoDirty(true);
 		m_geo->SetAngle(angle);
 		m_aabb.SetRect(sm::rect()); // make it empty
 		m_aabb.Update(this);
@@ -108,7 +112,9 @@ void Actor::SetScale(const sm::vec2& scale)
 	if (!m_geo && scale != sm::vec2(1, 1)) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) {
+	if (m_geo) 
+	{
+		SetGeoDirty(true);
 		m_geo->SetScale(scale);
 		m_aabb.SetRect(sm::rect()); // make it empty
 		m_aabb.Update(this);
@@ -130,10 +136,23 @@ S2_MAT Actor::GetLocalMat() const
 		return S2_MAT();
 	}
 
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	if (IsGeoDirty()) {
+		S2_MAT mt;
+		mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
+			m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
+		m_geo->SetMatrix(mt);
+		SetGeoDirty(false);
+		return mt;		
+	} else {
+		return m_geo->GetMatrix();
+	}
+#else
 	S2_MAT mt;
 	mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
 		m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
 	return mt;
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 }
 
 const RenderColor& Actor::GetColor() const

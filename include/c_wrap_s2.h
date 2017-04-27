@@ -71,8 +71,6 @@ void  s2_spr_anim2_set_static_time(void* spr, int time);
 void  s2_spr_p3d_set_local(void* spr, bool local);
 void  s2_spr_p3d_set_loop(void* spr, bool loop);
 bool  s2_spr_p3d_is_finished(const void* spr);
-void  s2_spr_p3d_start(void* spr);
-void  s2_spr_p3d_stop(void* spr);
 void  s2_spr_p3d_update(void* spr, float dt);
 void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 

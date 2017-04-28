@@ -234,10 +234,9 @@ void s2_spr_set_action(void* actor, const char* action) {
 	if (type == SYM_PROXY)
 	{
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			if (_set_action(const_cast<Actor*>(child_actor), action)) {
 				succ = true;
 			}
@@ -302,9 +301,9 @@ bool s2_spr_point_test(const void* spr, float x, float y) {
 	sm::vec2 pos(x, y);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (children[i]->GetBounding()->IsContain(pos)) {
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			if (items[i].second->GetBounding()->IsContain(pos)) {
 				return true;
 			}
 		}
@@ -346,9 +345,9 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	sm::vec2 pos(x, y);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			void* ret = _point_query(children[i], pos, mat);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			void* ret = _point_query(items[i].second, pos, mat);
 			if (ret) {
 				return ret;
 			}
@@ -381,9 +380,9 @@ bool s2_spr_has_action(const void* spr, const char* name) {
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
 	{
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (_has_action(children[i], name)) {
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			if (_has_action(items[i].second, name)) {
 				return true;
 			}
 		}
@@ -442,10 +441,10 @@ bool s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float yma
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
 	{
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
 		bool ret = false;
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			if (_set_scissor(s2_spr, xmin, ymin, xmax, ymax)) {
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			if (_set_scissor(items[i].second, xmin, ymin, xmax, ymax)) {
 				ret = true;
 			}
 		}
@@ -476,9 +475,9 @@ void s2_spr_textbox_reset_time(void* spr)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			_textbox_reset_time(children[i]);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			_textbox_reset_time(items[i].second);
 		}
 	} else {
 		_textbox_reset_time(s2_spr);
@@ -504,9 +503,9 @@ void s2_spr_anim2_set_static_time(void* spr, int time)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			_set_static_time(children[i], time);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			_set_static_time(items[i].second, time);
 		}
 	} else {
 		_set_static_time(s2_spr, time);
@@ -532,9 +531,9 @@ void s2_spr_p3d_set_local(void* spr, bool local)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			_p3d_set_local(children[i], local);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			_p3d_set_local(items[i].second, local);
 		}
 	} else {
 		_p3d_set_local(s2_spr, local);
@@ -560,9 +559,9 @@ void s2_spr_p3d_set_loop(void* spr, bool loop)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			_p3d_set_loop(children[i], loop);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			_p3d_set_loop(items[i].second, loop);
 		}
 	} else {
 		_p3d_set_loop(s2_spr, loop);
@@ -606,9 +605,9 @@ void s2_spr_p3d_update(void* spr, float dt)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			s2_spr_p3d_update(children[i], dt);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			s2_spr_p3d_update(items[i].second, dt);
 		}
 	} else {
 		s2_spr_p3d_update(s2_spr, dt);
@@ -627,9 +626,9 @@ void s2_spr_set_dtex_enable(void* spr, bool enable)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			static_cast<Sprite*>(children[i])->SetDTexDisable(!enable);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			static_cast<Sprite*>(items[i].second)->SetDTexDisable(!enable);
 		}
 	} else {
 		static_cast<Sprite*>(spr)->SetDTexDisable(!enable);
@@ -651,9 +650,9 @@ void s2_spr_set_dtex_force_cached(void* spr, bool cache)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			_set_dtex_force_cached(children[i], cache);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			_set_dtex_force_cached(items[i].second, cache);
 		}
 	} else {
 		_set_dtex_force_cached(s2_spr, cache);
@@ -666,9 +665,9 @@ void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			static_cast<Sprite*>(children[i])->SetDTexForceCachedDirty(dirty);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			static_cast<Sprite*>(items[i].second)->SetDTexForceCachedDirty(dirty);
 		}
 	} else {
 		static_cast<Sprite*>(spr)->SetDTexForceCachedDirty(dirty);
@@ -763,24 +762,26 @@ void s2_actor_msg_clear(void* actor) {
 	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_CLEAR);
 }
 
+static void
+_set_frame(const Actor* actor, int frame) {
+	UpdateParams up(actor);
+	up.SetPrevMat(get_actor_world_mat(actor->GetParent()));
+	const_cast<Sprite*>(actor->GetSpr())->SetFrame(up, frame, true);		
+}
+
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
-			UpdateParams up(child_actor);
-			up.SetPrevMat(get_actor_world_mat(parent));
-			const_cast<Sprite*>(s2_spr)->SetFrame(up, frame, true);		
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
+			_set_frame(child_actor, frame);
 		}
 	} else {
-		UpdateParams up(s2_actor);
-		up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-		const_cast<Sprite*>(s2_spr)->SetFrame(up, frame, true);		
+		_set_frame(s2_actor, frame);
 	}
 }
 
@@ -869,10 +870,11 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	int sym_type = old_spr->GetSymbol()->Type();
 	if (sym_type == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(old_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
 		int ret = 0;
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			int _ret = _actor_mount(p_actor, children[i], new_actor);
+		for (int i = 0, n = items.size(); i < n; ++i) 
+		{
+			int _ret = _actor_mount(p_actor, items[i].second, new_actor);
 			if (_ret != 0) {
 				ret = _ret;
 			}
@@ -915,9 +917,9 @@ void s2_actor_set_force_update(void* actor, bool force) {
 	}
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			children[i]->SetForceUpdate(force);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			items[i].second->SetForceUpdate(force);
 		}
 	} else {
 		s2_spr->SetForceUpdate(force);
@@ -989,10 +991,9 @@ void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	sm::rect rect;
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			rect.Combine(_get_actor_aabb(child_actor));
 		}
 	} else {
@@ -1009,10 +1010,9 @@ void s2_actor_set_pos(void* actor, float x, float y) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			const_cast<Actor*>(child_actor)->SetPosition(sm::vec2(x, y));
 		}
 	} else {
@@ -1033,10 +1033,9 @@ void s2_actor_set_angle(void* actor, float angle) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			const_cast<Actor*>(child_actor)->SetAngle(angle);
 		}
 	} else {
@@ -1055,10 +1054,9 @@ void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			const_cast<Actor*>(child_actor)->SetScale(sm::vec2(sx, sy));
 		}
 	} else {
@@ -1136,10 +1134,9 @@ void s2_actor_set_visible(void* actor, bool visible) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_visible(child_actor, visible);
 		}
 	} else {
@@ -1158,10 +1155,9 @@ void s2_actor_set_editable(void* actor, bool editable) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			child_actor->SetEditable(editable);
 		}
 	} else {
@@ -1190,10 +1186,9 @@ void s2_actor_set_col_mul(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_col_mul(child_actor, abgr);
 		}
 	} else {
@@ -1209,7 +1204,7 @@ uint32_t s2_actor_get_col_add(void* actor) {
 
 static void
 _set_col_add(const Actor* actor, uint32_t abgr) {
-	if (actor->GetColor().GetAddABGR() == abgr) 
+	if (actor->GetColor().GetAddABGR() != abgr) 
 	{
 		RenderColor rc = actor->GetColor();
 		rc.SetAddABGR(abgr);
@@ -1222,10 +1217,9 @@ void s2_actor_set_col_add(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_col_add(child_actor, abgr);
 		}
 	} else {
@@ -1260,10 +1254,9 @@ void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bm
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_col_map(child_actor, rmap, gmap, bmap);
 		}
 	} else {
@@ -1292,10 +1285,9 @@ void s2_actor_set_filter(void* actor, int mode) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_filter(child_actor, mode);
 		}
 	} else {
@@ -1327,10 +1319,9 @@ void s2_actor_set_text(void* actor, const char* text) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_set_text(child_actor, text);
 		}
 	} else {
@@ -1387,10 +1378,9 @@ void s2_actor_scale9_resize(void* actor, int w, int h) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<Sprite*>& children = proxy_sym->GetChildren();
-		const Actor* parent = proxy_sym->GetParent();
-		for (int i = 0, n = children.size(); i < n; ++i) {
-			const Actor* child_actor = children[i]->QueryActor(parent);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
 			_scale9_resize(child_actor, w, h);
 		}
 	} else {

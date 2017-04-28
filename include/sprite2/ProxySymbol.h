@@ -13,7 +13,7 @@ class Sprite;
 class ProxySymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
-	ProxySymbol(const std::vector<Sprite*>& children, const Actor* parent);
+	ProxySymbol(const std::vector<std::pair<const Actor*, Sprite*> >& items);
 	virtual ~ProxySymbol();
 	
 	/**
@@ -24,17 +24,13 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 
-	const std::vector<Sprite*>& GetChildren() const { return m_children; }
-
-	const Actor* GetParent() const { return m_parent; }
+	const std::vector<std::pair<const Actor*, Sprite*> >& GetItems() const { return m_items; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
-	const std::vector<Sprite*> m_children;
-
-	const Actor* m_parent;
+	std::vector<std::pair<const Actor*, Sprite*> > m_items;
 
 }; // ProxySymbol
 

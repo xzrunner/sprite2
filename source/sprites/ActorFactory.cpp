@@ -11,6 +11,7 @@
 #include "AnimActor.h"
 #include "Particle3dActor.h"
 #include "MaskActor.h"
+#include "ProxyActor.h"
 
 #include <assert.h>
 
@@ -54,6 +55,9 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 		break;
 	case SYM_MASK:
 		actor = new MaskActor(child, parent);
+		break;
+	case SYM_PROXY:
+		actor = new ProxyActor(child, parent);
 		break;
 	default:
 		actor = new Actor(child, parent);

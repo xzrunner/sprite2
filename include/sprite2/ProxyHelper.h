@@ -12,7 +12,7 @@ class Actor;
 class ProxyHelper
 {
 public:
-	static Sprite* BuildGroup(const std::vector<Sprite*>& sprs, const Actor* actor);
+	static Sprite* BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items);
 
 }; // ProxyHelper
 

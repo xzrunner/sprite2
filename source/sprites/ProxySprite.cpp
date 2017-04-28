@@ -1,6 +1,11 @@
 #include "ProxySprite.h"
 #include "ProxySymbol.h"
 #include "ProxyHelper.h"
+#include "S2_Actor.h"
+#include "S2_Sprite.h"
+#include "S2_Symbol.h"
+#include "SymType.h"
+#include "UpdateParams.h"
 
 namespace s2
 {
@@ -17,20 +22,26 @@ ProxySprite* ProxySprite::Clone() const
 
 void ProxySprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->OnMessage(up, msg);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) 
+	{
+		UpdateParams up_child(up);
+		up_child.SetActor(items[i].second->QueryActor(items[i].first));
+		items[i].second->OnMessage(up_child, msg);
 	}
 }
 
 bool ProxySprite::Update(const UpdateParams& up)
 {
 	bool ret = false;
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		if (children[i]->Update(up)) {
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) 
+	{
+		UpdateParams up_child(up);
+		up_child.SetActor(items[i].second->QueryActor(items[i].first));
+		if (items[i].second->Update(up_child)) {
 			ret = true;
 		}
 	}
@@ -40,10 +51,13 @@ bool ProxySprite::Update(const UpdateParams& up)
 bool ProxySprite::SetFrame(const UpdateParams& up, int frame, bool force)
 {
 	bool ret = false;
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		if (children[i]->SetFrame(up, frame, force)) {
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) 
+	{
+		UpdateParams up_child(up);
+		up_child.SetActor(items[i].second->QueryActor(items[i].first));
+		if (items[i].second->SetFrame(up_child, frame, force)) {
 			ret = true;
 		}
 	}
@@ -52,101 +66,121 @@ bool ProxySprite::SetFrame(const UpdateParams& up, int frame, bool force)
 
 Sprite* ProxySprite::FetchChild(const std::string& name, const Actor* actor) const
 {
-	std::vector<Sprite*> group;
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		Sprite* spr = children[i]->FetchChild(name, actor);
-		if (spr) {
-			group.push_back(spr);
+	std::vector<std::pair<const Actor*, Sprite*> > group;
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* real_actor = items[i].second->QueryActor(items[i].first);
+			Sprite* child = items[i].second->FetchChild(name, real_actor);
+			if (child) {
+				group.push_back(std::make_pair(real_actor, child));
+			}
+		}
+	} else {
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			Sprite* child = items[i].second->FetchChild(name, actor);
+			if (child) {
+				group.push_back(std::make_pair(actor, child));
+			}
 		}
 	}
-	return ProxyHelper::BuildGroup(group, actor);
+	return ProxyHelper::BuildGroup(group);
 }
 
 Sprite* ProxySprite::FetchChild(int idx, const Actor* actor) const
 {
-	std::vector<Sprite*> group;
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		Sprite* spr = children[i]->FetchChild(idx, actor);
-		if (spr) {
-			group.push_back(spr);
+	std::vector<std::pair<const Actor*, Sprite*> > group;
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* real_actor = items[i].second->QueryActor(items[i].first);
+			Sprite* child = items[i].second->FetchChild(idx, real_actor);
+			if (child) {
+				group.push_back(std::make_pair(real_actor, child));
+			}
+		}
+	} else {
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			Sprite* child = items[i].second->FetchChild(idx, actor);
+			if (child) {
+				group.push_back(std::make_pair(actor, child));
+			}
 		}
 	}
-	return ProxyHelper::BuildGroup(group, actor);
+	return ProxyHelper::BuildGroup(group);
 }
 
 void ProxySprite::SetSymbol(Symbol* sym)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetSymbol(sym);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetSymbol(sym);
 	}
 }
 
 void ProxySprite::SetCenter(const sm::vec2& pos)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetCenter(pos);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetCenter(pos);
 	}
 }
 
 void ProxySprite::SetPosition(const sm::vec2& pos)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetPosition(pos);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetPosition(pos);
 	}
 }
 
 void ProxySprite::SetAngle(float angle)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetAngle(angle);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetAngle(angle);
 	}
 }
 
 void ProxySprite::SetScale(const sm::vec2& scale)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetScale(scale);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetScale(scale);
 	}
 }
 
 void ProxySprite::SetShear(const sm::vec2& shear)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetShear(shear);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetShear(shear);
 	}
 }
 
 void ProxySprite::SetOffset(const sm::vec2& offset)
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		children[i]->SetOffset(offset);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		items[i].second->SetOffset(offset);
 	}
 }
 
 VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetChildren();
-	for (int i = 0, n = children.size(); i < n; ++i) {
-		VisitResult ret = children[i]->TraverseChildren(visitor, params);
+	const std::vector<std::pair<const Actor*, Sprite*> >& items 
+		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
+	for (int i = 0, n = items.size(); i < n; ++i) {
+		VisitResult ret = items[i].second->TraverseChildren(visitor, params);
 		if (ret == VISIT_STOP) {
 			return ret;
 		}

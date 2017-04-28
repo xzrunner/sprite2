@@ -4,24 +4,34 @@
 #include "S2_Actor.h"
 #include "DrawNode.h"
 
+#include <assert.h>
+
 namespace s2
 {
 
-ProxySymbol::ProxySymbol(const std::vector<Sprite*>& children, const Actor* parent)
-	: m_children(children)
-	, m_parent(parent)
+ProxySymbol::ProxySymbol(const std::vector<std::pair<const Actor*, Sprite*> >& items)
+	: m_items(items)
 {
-	for_each(m_children.begin(), m_children.end(), cu::AddRefFunctor<Sprite>());
-	if (parent) {
-		parent->GetSpr()->AddReference();
+	for (int i=  0, n = m_items.size(); i < n; ++i) 
+	{
+		Sprite* child = m_items[i].second;
+		assert(child);
+		child->AddReference();
+		const Actor* parent = m_items[i].first;
+		if (parent) {
+			parent->GetSpr()->AddReference();
+		}
 	}
 }
 
 ProxySymbol::~ProxySymbol()
 {
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
-	if (m_parent) {
-		m_parent->GetSpr()->RemoveReference();
+	for (int i = 0, n = m_items.size(); i < n; ++i) {
+		m_items[i].second->RemoveReference();
+		const Actor* parent = m_items[i].first;
+		if (parent) {
+			parent->GetSpr()->RemoveReference();
+		}
 	}
 }
 
@@ -32,8 +42,8 @@ int ProxySymbol::Type() const
 
 void ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		DrawNode::Draw(m_children[i], rp);
+	for (int i = 0, n = m_items.size(); i < n; ++i) {
+		DrawNode::Draw(m_items[i].second, rp);
 	}
 }
 

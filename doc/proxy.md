@@ -12,12 +12,4 @@ Sprite的FetchChild(name)接口可能会创建出来Proxy节点，如果Sprite�
 
 ## 注意
 
-有一些操作是没有意义的，比如：
-s2_spr_get_pos()
-s2_spr_get_angle()
-s2_spr_get_scale()
-s2_spr_get_frame_count()
-s2_spr_get_scissor()
-s2_spr_get_scissor()
-s2_spr_p3d_is_finished()
-基本都是get一个spr某一个属性的操作
+对proxy而言，有一些操作是没有意义的，比如：s2_spr_get_pos(), s2_spr_get_angle(), s2_spr_get_scale()，这种get某一个属性的操作。

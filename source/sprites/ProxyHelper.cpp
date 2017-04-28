@@ -7,13 +7,16 @@
 namespace s2
 {
 
-Sprite* ProxyHelper::BuildGroup(const std::vector<Sprite*>& sprs, const Actor* actor)
+Sprite* ProxyHelper::BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items)
 {
 	Sprite* ret = NULL;
-	if (sprs.size() == 1) {
-		ret = sprs[0];
-	} else if (sprs.size() > 1) {
-		ProxySymbol* sym = new ProxySymbol(sprs, actor);
+	if (items.size() == 1) 
+	{
+		ret = items[0].second;
+	} 
+	else if (items.size() > 1) 
+	{
+		ProxySymbol* sym = new ProxySymbol(items);
 		ProxySprite* spr = new ProxySprite(sym);
 		sym->RemoveReference();
 		assert(sym->GetRefCount() == 1 && spr->GetRefCount() == 1);

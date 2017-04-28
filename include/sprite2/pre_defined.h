@@ -21,7 +21,7 @@ namespace s2
 
 #ifdef S2_VIRTUAL_INHERITANCE
 	#define VI_CLONE(type, src) \
-		dynamic_cast<type*>(static_cast<cu::Cloneable*>(src)->Clone());
+		dynamic_cast<type*>(static_cast<const cu::Cloneable*>(src)->Clone());
 #else
 	#define VI_CLONE(type, src) \
 		src->Clone();

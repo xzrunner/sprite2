@@ -34,8 +34,22 @@ void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);
 void  s2_spr_set_scale(void* spr, float sx, float sy);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_spr_get_pos(const void* spr, float* x, float* y);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 float s2_spr_get_angle(const void* spr);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_spr_get_scale(const void* spr, float* sx, float* sy);
 
 void  s2_spr_retain(void* spr);
@@ -49,28 +63,55 @@ int   s2_spr_get_sym_type(void* spr);
 
 void  s2_spr_set_action(void* spr, const char* action);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 int   s2_spr_get_frame_count(void* spr);
 
 void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
 bool  s2_spr_point_test(const void* spr, float x, float y);
 void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
 
+//////////////////////////////////////////////////////////////////////////
 // complex
+//////////////////////////////////////////////////////////////////////////
+
 bool  s2_spr_has_action(const void* spr, const char* name);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 bool  s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax);
+
 bool  s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax);
 
+//////////////////////////////////////////////////////////////////////////
 // textbox
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_spr_textbox_reset_time(void* spr);
 
+//////////////////////////////////////////////////////////////////////////
 // anim2
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_spr_anim2_set_static_time(void* spr, int time);
 
+//////////////////////////////////////////////////////////////////////////
 // particle3d
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_spr_p3d_set_local(void* spr, bool local);
 void  s2_spr_p3d_set_loop(void* spr, bool loop);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 bool  s2_spr_p3d_is_finished(const void* spr);
+
 void  s2_spr_p3d_update(void* spr, float dt);
 void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 
@@ -91,13 +132,26 @@ void  s2_actor_msg_stop(void* actor);
 void  s2_actor_msg_clear(void* actor);
 
 void  s2_actor_set_frame(void* actor, int frame);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 int   s2_actor_get_frame(void* actor);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 int   s2_actor_get_component_count(void* actor);
 
 void* s2_actor_fetch_child(const void* actor, const char* name);
 void* s2_actor_fetch_child_by_index(const void* actor, int idx);
-// ret: 0 ok, -1 no child with name, -2 child isn't anchor
+
+/**
+ *  @return
+ *    0 ok, -1 no child with name, -2 child isn't anchor.
+ */
 int   s2_actor_mount(const void* actor, const char* name, const void* anchor);
 
 bool  s2_actor_get_force_update(void* actor);
@@ -112,44 +166,133 @@ void* s2_actor_get_spr(void* actor);
 void  s2_actor_get_aabb(const void* actor, float aabb[4]);
 
 void  s2_actor_set_pos(void* actor, float x, float y);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_actor_get_pos(void* actor, float* x, float* y);
+
 void  s2_actor_set_angle(void* actor, float angle);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 float s2_actor_get_angle(void* actor);
+
 void  s2_actor_set_scale(void* actor, float sx, float sy);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_actor_get_scale(void* actor, float* sx, float* sy);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_actor_get_world_pos(const void* actor, float* x, float* y);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 float s2_actor_get_world_angle(const void* actor);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void  s2_actor_get_world_scale(const void* actor, float* sx, float* sy);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void* s2_actor_get_parent(void* actor);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 bool  s2_actor_get_visible(void* actor);
+
 void  s2_actor_set_visible(void* actor, bool visible);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 bool  s2_actor_get_editable(void* actor);
+
 void  s2_actor_set_editable(void* actor, bool editable);
 
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 uint32_t s2_actor_get_col_mul(void* actor);
+
 void     s2_actor_set_col_mul(void* actor, uint32_t abgr);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 uint32_t s2_actor_get_col_add(void* actor);
+
 void     s2_actor_set_col_add(void* actor, uint32_t abgr);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void     s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap);
+
 void     s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 
 void  s2_actor_set_filter(void* actor, int mode);
 
+//////////////////////////////////////////////////////////////////////////
 // text
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 const char* s2_actor_get_text(void* actor);
+
 void  s2_actor_set_text(void* actor, const char* text);
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 bool  s2_actor_get_text_size(const void* actor, float* w, float* h);
 
+//////////////////////////////////////////////////////////////////////////
 // anchor
+//////////////////////////////////////////////////////////////////////////
+
+/**
+ *  @note
+ *    No use for proxy node.
+ */
 void* s2_actor_get_anchor_real(void* actor);
 
+//////////////////////////////////////////////////////////////////////////
 // scale9
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_actor_scale9_resize(void* actor, int w, int h);
 
+//////////////////////////////////////////////////////////////////////////
 // flatten
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_actor_build_flatten(void* actor);
 
 /************************************************************************/

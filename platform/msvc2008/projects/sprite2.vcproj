@@ -464,6 +464,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\AnimFlatten.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AnimFlatten.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\AnimSprite.cpp"
 					>
 				</File>
@@ -1273,22 +1281,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="flat"
+				Name="flatten"
 				>
 				<File
-					RelativePath="..\..\..\source\sprites\Blob.cpp"
+					RelativePath="..\..\..\source\sprites\Flatten.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\Blob.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\Flat.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\Flat.h"
+					RelativePath="..\..\..\include\sprite2\Flatten.h"
 					>
 				</File>
 			</Filter>

@@ -730,46 +730,46 @@ get_actor_world_mat(const Actor* actor) {
 extern "C"
 void s2_actor_update(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	const_cast<Sprite*>(s2_sprite)->Update(up);
+	const_cast<Sprite*>(s2_spr)->Update(up);
 }
 
 extern "C"
 void s2_actor_msg_start(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_START);
+	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_START);
 }
 
 extern "C"
 void s2_actor_msg_stop(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_STOP);
+	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_STOP);
 }
 
 extern "C"
 void s2_actor_msg_clear(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	const_cast<Sprite*>(s2_sprite)->OnMessage(up, MSG_CLEAR);
+	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_CLEAR);
 }
 
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	const_cast<Sprite*>(s2_sprite)->SetFrame(up, frame, true);
+	const_cast<Sprite*>(s2_spr)->SetFrame(up, frame, true);
 }
 
 extern "C"

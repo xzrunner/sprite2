@@ -23,6 +23,7 @@ VisitResult CreateActorsVisitor::VisitChildrenBegin(const Sprite* spr, const Spr
 	{
 		const Actor* parent = m_path.top();
 		const Actor* child = ActorFactory::Instance()->Create(parent, spr);
+		const_cast<SprVisitorParams&>(params).actor = child;
 		m_path.push(child);
 	}
 	return VISIT_OVER;

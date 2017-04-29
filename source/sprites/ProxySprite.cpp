@@ -48,22 +48,6 @@ bool ProxySprite::Update(const UpdateParams& up)
 	return ret;
 }
 
-bool ProxySprite::SetFrame(const UpdateParams& up, int frame, bool force)
-{
-	bool ret = false;
-	const std::vector<std::pair<const Actor*, Sprite*> >& items 
-		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
-	for (int i = 0, n = items.size(); i < n; ++i) 
-	{
-		UpdateParams up_child(up);
-		up_child.SetActor(items[i].second->QueryActor(items[i].first));
-		if (items[i].second->SetFrame(up_child, frame, force)) {
-			ret = true;
-		}
-	}
-	return ret;
-}
-
 Sprite* ProxySprite::FetchChild(const std::string& name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;

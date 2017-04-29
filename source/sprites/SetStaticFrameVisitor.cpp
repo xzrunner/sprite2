@@ -17,6 +17,10 @@ SetStaticFrameVisitor::SetStaticFrameVisitor(int static_frame)
 
 VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
+	if (!spr->IsInheritUpdate()) {
+		return VISIT_OVER;
+	}
+
 	VisitResult ret = VISIT_OVER;
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());

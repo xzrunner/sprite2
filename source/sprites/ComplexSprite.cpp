@@ -57,11 +57,12 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* child = children[i];
-		if (child->IsInheritUpdate()) {
-			up_child.SetActor(child->QueryActor(up.GetActor()));
-			if (const_cast<Sprite*>(child)->Update(up_child)) {
-				dirty = true;
-			}
+		if (!child->IsInheritUpdate()) {
+			continue;
+		}
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (const_cast<Sprite*>(child)->Update(up_child)) {
+			dirty = true;
 		}
 	}
 	return dirty;

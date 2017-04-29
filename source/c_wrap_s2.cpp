@@ -766,11 +766,14 @@ void s2_actor_msg_clear(void* actor) {
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_sprite = s2_actor->GetSpr();
+	const Sprite* s2_spr = s2_actor->GetSpr();
 	SetStaticFrameVisitor visitor(frame);
 	SprVisitorParams vp;
 	vp.actor = s2_actor;
-	s2_sprite->Traverse(visitor, vp, false);
+	bool old_inherit_update = s2_spr->IsInheritUpdate();
+	s2_spr->SetInheritUpdate(true);
+	s2_spr->Traverse(visitor, vp);
+	s2_spr->SetInheritUpdate(old_inherit_update);
 }
 
 extern "C"

@@ -233,6 +233,31 @@ sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 	return aabb;
 }
 
+void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
+{
+	SprSRT srt;
+	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
+		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
+	}
+	srt.UpdateCenter();
+	spr->SetLocalSRT(srt);
+
+	Color mul(lerp.col_mul), add(lerp.col_add);
+	mul.r += lerp.dcol_mul[0] * time;
+	mul.g += lerp.dcol_mul[1] * time;
+	mul.b += lerp.dcol_mul[2] * time;
+	mul.a += lerp.dcol_mul[3] * time;
+	add.r += lerp.dcol_add[0] * time;
+	add.g += lerp.dcol_add[1] * time;
+	add.b += lerp.dcol_add[2] * time;
+	add.a += lerp.dcol_add[3] * time;
+
+	RenderColor col = spr->GetColor();
+	col.SetMul(mul);
+	col.SetAdd(add);
+	spr->SetColor(col);
+}
+
 void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	ResetTime();
@@ -252,8 +277,13 @@ void AnimCurr::SetTime(float time)
 
 void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
-	frame = frame % (m_copy->m_max_frame_idx + 1);
+	int frame_copy = frame;
 
+	frame = frame % (m_copy->m_max_frame_idx + 1);
+	if (frame == 0) {
+		frame = 1;
+	}
+	
 	if (frame < m_frame) {
 		ResetLayerCursor();
 	}
@@ -268,7 +298,7 @@ void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, in
 
 	LoadCurrSprites(up, spr);
 
-	SetChildrenFrame(up, spr, frame, fps);
+	SetChildrenFrame(up, spr, frame_copy, fps);
 }
 
 void AnimCurr::SetAnimCopy(const AnimCopy* copy)
@@ -502,11 +532,12 @@ bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* child = m_slots[m_curr[i]];
-		if (child->IsInheritUpdate()) {
-			up_child.SetActor(child->QueryActor(up.GetActor()));
-			if (child->Update(up_child)) {
-				dirty = true;
-			}
+		if (!child->IsInheritUpdate()) {
+			continue;
+		}
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(up_child)) {
+			dirty = true;
 		}
 	}
 	return dirty;
@@ -523,42 +554,30 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 		if (cursor == -1 || cursor == INT_MAX) {
 			continue;
 		}
-		const AnimCopy::Frame& frame = m_copy->m_layers[i].frames[cursor];
+		const AnimCopy::Layer& layer = m_copy->m_layers[i];
+		const AnimCopy::Frame& frame = layer.frames[cursor];
 		for (int j = 0, m = frame.items.size(); j < m; ++j)
 		{
 			const AnimCopy::Item& actor = frame.items[j];
 			Sprite* child = m_slots[actor.slot];
-			SetStaticFrameVisitor visitor(static_frame - frame.time);
+			if (!child->IsInheritUpdate()) {
+				continue;
+			}
+
+			// find first time
+			int first_time = frame.time;
+			int frame_idx = cursor, actor_idx = j;
+			while (frame_idx >= 0 && layer.frames[frame_idx].items[actor_idx].prev != -1) {
+				--frame_idx;
+				first_time = layer.frames[frame_idx].time;
+			}
+
+ 			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
 			SprVisitorParams vp;
 			vp.actor = child->QueryActor(up_child.GetActor());
 			child->Traverse(visitor, vp, false);
 		}
 	}
-}
-
-void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
-{
-	SprSRT srt;
-	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
-		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
-	}
-	srt.UpdateCenter();
-	spr->SetLocalSRT(srt);
-
-	Color mul(lerp.col_mul), add(lerp.col_add);
-	mul.r += lerp.dcol_mul[0] * time;
-	mul.g += lerp.dcol_mul[1] * time;
-	mul.b += lerp.dcol_mul[2] * time;
-	mul.a += lerp.dcol_mul[3] * time;
-	add.r += lerp.dcol_add[0] * time;
-	add.g += lerp.dcol_add[1] * time;
-	add.b += lerp.dcol_add[2] * time;
-	add.a += lerp.dcol_add[3] * time;
-
-	RenderColor col = spr->GetColor();
-	col.SetMul(mul);
-	col.SetAdd(add);
-	spr->SetColor(col);
 }
 
 }

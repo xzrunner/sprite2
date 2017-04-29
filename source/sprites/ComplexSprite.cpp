@@ -7,6 +7,8 @@
 #include "SymType.h"
 #include "ProxyHelper.h"
 
+#include <assert.h>
+
 namespace s2
 {
 
@@ -31,7 +33,7 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 	UpdateParams up_child(up);
 	up_child.Push(this);
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(m_action);
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(up.GetActor()));
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
 		up_child.SetActor(child->QueryActor(up.GetActor()));
@@ -42,18 +44,10 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 bool ComplexSprite::Update(const UpdateParams& up)
 {
 	bool dirty = false;
-
-	int action = m_action;
-	const Actor* actor = up.GetActor();
-	if (actor) {
-		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
-		action = comp_actor->GetAction();
-	}
-
 	UpdateParams up_child(up);
 	up_child.Push(this);
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(up.GetActor()));
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* child = children[i];
@@ -96,20 +90,14 @@ Sprite* ComplexSprite::FetchChild(int idx, const Actor* actor) const
 VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	int action = m_action;
-	const Actor* actor = params.actor;
-	if (actor) {
-		const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
-		action = comp_actor->GetAction();
-	}
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(action);
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(params.actor));
 	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) 
 		{
 			Sprite* child = children[i];
-			cp.actor = child->QueryActor(actor);
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -118,7 +106,7 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 		for (int i = children.size() - 1; i >= 0; --i) 
 		{
 			Sprite* child = children[i];
-			cp.actor = child->QueryActor(actor);
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -131,6 +119,16 @@ void ComplexSprite::SetAction(int action)
 { 
 	m_action = action; 
 	SetBoundingDirty(true);
+}
+
+int ComplexSprite::GetAction(const Actor* actor) const
+{
+	if (!actor) {
+		return -1;
+	}
+	assert(actor->GetSpr()->GetSymbol()->Type() == SYM_COMPLEX);
+	const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+	return comp_actor->GetAction();
 }
 
 }

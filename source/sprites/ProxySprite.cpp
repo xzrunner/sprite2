@@ -11,7 +11,7 @@ namespace s2
 {
 
 ProxySprite::ProxySprite(Symbol* sym)
-: Sprite(sym)
+	: Sprite(sym)
 {
 }
 

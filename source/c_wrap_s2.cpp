@@ -145,7 +145,7 @@ extern "C"
 void s2_spr_get_pos(const void* spr, float* x, float* y) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("no use, s2_spr_get_pos for proxy");
+		LOGW("%s", "no use, s2_spr_get_pos for proxy");
 	}
 	*x = s2_spr->GetPosition().x;
 	*y = s2_spr->GetPosition().y;
@@ -155,7 +155,7 @@ extern "C"
 float s2_spr_get_angle(const void* spr) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("no use, s2_spr_get_pos for proxy");
+		LOGW("%s", "no use, s2_spr_get_pos for proxy");
 	}
 	return s2_spr->GetAngle();
 }
@@ -164,7 +164,7 @@ extern "C"
 void s2_spr_get_scale(const void* spr, float* sx, float* sy) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("no use, s2_spr_get_pos for proxy");
+		LOGW("%s", "no use, s2_spr_get_pos for proxy");
 	}
 	*sx = s2_spr->GetScale().x;
 	*sy = s2_spr->GetScale().y;

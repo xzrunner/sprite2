@@ -9,7 +9,7 @@ namespace s2
 class ProxySprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
-	ProxySprite::ProxySprite(Symbol* sym);
+	ProxySprite(Symbol* sym);
 	
 	/**
 	 *  @interface

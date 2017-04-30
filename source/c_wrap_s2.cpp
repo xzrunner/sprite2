@@ -1532,6 +1532,37 @@ void s2_cam_get(const void* cam, float* x, float* y, float* scale)
 	*scale = o_cam->GetScale();
 }
 
+extern "C"
+void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, float* dst_y)
+{
+	const OrthoCamera* o_cam = static_cast<const OrthoCamera*>(cam);
+	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
+	sm::vec2 dst = o_cam->TransPosScreenToProject(src_x, src_y, sz.x, sz.y);
+	*dst_x = dst.x;
+	*dst_y = dst.y;
+}
+
+/************************************************************************/
+/* rvg                                                                  */
+/************************************************************************/
+
+extern "C"
+void s2_rvg_set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+	RVG::SetColor(Color(r, g, b, a));
+}
+
+extern "C"
+void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h)
+{
+	sm::rect r;
+	r.xmin = x;
+	r.xmax = x + w;
+	r.ymin = - y;
+	r.ymax = - (y + w);
+	RVG::Rect(r, filling);
+}
+
 /************************************************************************/
 /* other                                                                */
 /************************************************************************/

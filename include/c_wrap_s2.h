@@ -319,6 +319,14 @@ void  s2_cam_release(void* cam);
 void  s2_cam_bind(void* cam);
 void  s2_cam_set(void* cam, float x, float y, float scale);
 void  s2_cam_get(const void* cam, float* x, float* y, float* scale);
+void  s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, float* dst_y);
+
+/************************************************************************/
+/* rvg                                                                  */
+/************************************************************************/
+
+void s2_rvg_set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h);
 
 /************************************************************************/
 /* other                                                                */

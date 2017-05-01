@@ -153,6 +153,27 @@ void RVG::Polyline(const std::vector<sm::vec2>& vertices, bool loop)
 	}
 }
 
+void RVG::Polyline(const float* vertices, int count, bool loop)
+{
+	if (count < 2) {
+		return;
+	}
+
+	rvg_line_style(LS_DEFAULT);
+	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
+		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE2);
+		rvg_polyline(vertices, count, loop);
+	} else {
+		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
+		std::vector<sm::vec3> vertices3;
+		vertices3.reserve(count);
+		for (int i = 0; i < count; ++i) {
+			vertices3.push_back(sm::vec3(vertices[i * 2], vertices[i * 2 + 1], 0));
+		}
+		rvg_polyline3(&vertices3[0].x, vertices3.size(), loop);
+	}
+}
+
 void RVG::Triangles(const std::vector<sm::vec2>& triangles)
 {
 	if (triangles.size() < 3) return;

@@ -33,6 +33,7 @@ public:
 
 	static void Lines(const std::vector<sm::vec2>& vertices);
 	static void Polyline(const std::vector<sm::vec2>& vertices, bool loop);
+	static void Polyline(const float* vertices, int count, bool loop);
 
 	// face
 	static void Triangles(const std::vector<sm::vec2>& triangles);

@@ -1553,14 +1553,32 @@ void s2_rvg_set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 }
 
 extern "C"
+void s2_rvg_set_line_width(float width)
+{
+	RVG::LineWidth(width);
+}
+
+extern "C"
+void s2_rvg_draw_line(const float* vertices, int count)
+{
+	RVG::Polyline(vertices, count, false);
+}
+
+extern "C"
 void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h)
 {
 	sm::rect r;
 	r.xmin = x;
 	r.xmax = x + w;
-	r.ymin = - y;
-	r.ymax = - (y + w);
+	r.ymin = y;
+	r.ymax = y + h;
 	RVG::Rect(r, filling);
+}
+
+extern "C"
+void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segments)
+{
+	RVG::Circle(sm::vec2(cx, cy), radius, filling, segments);
 }
 
 /************************************************************************/

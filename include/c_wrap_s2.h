@@ -115,6 +115,16 @@ bool  s2_spr_p3d_is_finished(const void* spr);
 void  s2_spr_p3d_update(void* spr, float dt);
 void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 
+//////////////////////////////////////////////////////////////////////////
+// proxy
+//////////////////////////////////////////////////////////////////////////
+
+void  s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count);
+
+//////////////////////////////////////////////////////////////////////////
+// dtex
+//////////////////////////////////////////////////////////////////////////
+
 void  s2_spr_set_dtex_enable(void* spr, bool enable);
 void  s2_spr_set_dtex_force_cached(void* spr, bool cache);
 void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);

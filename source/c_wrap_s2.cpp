@@ -621,6 +621,35 @@ void s2_spr_p3d_buffer_draw(float x, float y, float scale)
 	Particle3d::Instance()->BufferDraw(x, y, scale);
 }
 
+static void _proxy_get_children(const Sprite* spr, void* children[], int children_cap, int* count)
+{
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) 
+		{
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
+			if (*count > children_cap) {
+				return;
+			} else if (child_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+				_proxy_get_children(child_actor->GetSpr(), children, children_cap, count);
+			} else {
+ 				children[*count] = const_cast<Actor*>(child_actor);
+ 				++(*count);
+			}
+		}
+	}
+}
+
+extern "C"
+void s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count)
+{
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	_proxy_get_children(s2_spr, children, children_cap, count);
+}
+
 extern "C"
 void s2_spr_set_dtex_enable(void* spr, bool enable)
 {
@@ -1141,19 +1170,24 @@ bool s2_actor_get_editable(void* actor) {
 	return s2_actor->IsEditable();
 }
 
-extern "C"
-void s2_actor_set_editable(void* actor, bool editable) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
+static void
+_set_editable(const Actor* actor, bool editable) {
+	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(actor->GetSpr()->GetSymbol());
 		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
 			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			child_actor->SetEditable(editable);
+			_set_editable(child_actor, editable);
 		}
 	} else {
-		s2_actor->SetEditable(editable);
+		actor->SetEditable(editable);
 	}	
+}
+
+extern "C"
+void s2_actor_set_editable(void* actor, bool editable) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	_set_editable(s2_actor, editable);
 }
 
 extern "C"

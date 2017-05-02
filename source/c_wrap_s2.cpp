@@ -200,12 +200,54 @@ const char* s2_spr_get_name(void* spr) {
 
 extern "C"
 int s2_spr_get_sym_id(void* spr) {
-	return static_cast<Sprite*>(spr)->GetSymbol()->GetID();
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	int type = s2_spr->GetSymbol()->Type();
+	if (type == SYM_PROXY)
+	{
+		int ret = -1;
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) 
+		{
+			int sym_id = items[i].second->GetSymbol()->GetID();
+			if (sym_id != ret && ret != -1) {
+				return s2_spr->GetID();
+			} else {
+				ret = sym_id;
+			}
+		}
+		return ret == -1 ? s2_spr->GetID() : ret;
+	}
+	else
+	{
+		return static_cast<Sprite*>(s2_spr)->GetSymbol()->GetID();
+	}
 }
 
 extern "C"
 int s2_spr_get_sym_type(void* spr) {
-	return static_cast<Sprite*>(spr)->GetSymbol()->Type();
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	int type = s2_spr->GetSymbol()->Type();
+	if (type == SYM_PROXY)
+	{
+		int ret = SYM_PROXY;
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) 
+		{
+			int type = items[i].second->GetSymbol()->Type();
+			if (type != ret && ret != SYM_PROXY) {
+				return s2_spr->GetSymbol()->Type();
+			} else {
+				ret = type;
+			}
+		}
+		return ret == SYM_PROXY ? s2_spr->GetSymbol()->Type() : ret;
+	}
+	else
+	{
+		return static_cast<Sprite*>(s2_spr)->GetSymbol()->Type();
+	}
 }
 
 static 

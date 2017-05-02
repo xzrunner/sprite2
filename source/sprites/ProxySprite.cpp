@@ -6,6 +6,7 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "UpdateParams.h"
+#include "SprVisitorParams.h"
 
 namespace s2
 {
@@ -163,8 +164,12 @@ VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisit
 {
 	const std::vector<std::pair<const Actor*, Sprite*> >& items 
 		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
-	for (int i = 0, n = items.size(); i < n; ++i) {
-		VisitResult ret = items[i].second->TraverseChildren(visitor, params);
+	SprVisitorParams cp = params;
+	for (int i = 0, n = items.size(); i < n; ++i) 
+	{
+		const Actor* real_actor = items[i].second->QueryActor(items[i].first);
+		cp.actor = real_actor;
+		VisitResult ret = items[i].second->TraverseChildren(visitor, cp);
 		if (ret == VISIT_STOP) {
 			return ret;
 		}

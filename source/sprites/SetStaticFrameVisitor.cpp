@@ -39,7 +39,7 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 			anim2_spr->SetStaticTime(m_static_frame);
 		}
 		break;
-	case SYM_ANCHOR: case SYM_COMPLEX: case SYM_MESH: case SYM_MASK:
+	case SYM_ANCHOR: case SYM_COMPLEX: case SYM_MESH: case SYM_MASK: case SYM_PROXY:
 		ret = VISIT_INTO;
 		break;
 	}

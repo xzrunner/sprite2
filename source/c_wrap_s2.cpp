@@ -1358,7 +1358,7 @@ void* s2_actor_get_anchor_real(void* actor) {
 
 static void
 _scale9_resize(const Actor* actor, int w, int h) {
-	if (actor->GetSpr()->GetSymbol()->Type() != SYM_SCALE9) {
+	if (actor->GetSpr()->GetSymbol()->Type() == SYM_SCALE9) {
 		const Scale9Actor* s9_actor = static_cast<const Scale9Actor*>(actor);
 		const_cast<Scale9Actor*>(s9_actor)->Resize(w, h);	
 	}

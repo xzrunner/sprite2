@@ -32,7 +32,7 @@ namespace s2
 AnimCurr::AnimCurr()
 	: m_copy(NULL)
 	, m_curr(NULL)
-	, m_frame(0)
+	, m_frame(-1)
 	, m_start_time(0)
 	, m_curr_time(0)
 	, m_stop_time(0)
@@ -262,7 +262,7 @@ void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	ResetTime();
 	ResetLayerCursor();
-	m_frame = 1;
+	m_frame = 0;
 	LoadCurrSprites(up, spr);
 }
 
@@ -278,11 +278,7 @@ void AnimCurr::SetTime(float time)
 void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
 	int frame_copy = frame;
-
-	frame = frame % (m_copy->m_max_frame_idx + 1);
-	if (frame == 0) {
-		frame = 1;
-	}
+	frame = frame % (m_copy->m_max_frame_idx);
 	
 	if (frame < m_frame) {
 		ResetLayerCursor();
@@ -342,7 +338,7 @@ void AnimCurr::SetActive(bool active)
 void AnimCurr::Clear()
 {
 	ResetTime();
-	m_frame = 1;
+	m_frame = -1;
 	m_curr_num = 0;
 }
 
@@ -367,8 +363,8 @@ bool AnimCurr::UpdateTime()
 
 int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
 {
-	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
-	int max_frame = m_copy->m_max_frame_idx;
+	int curr_frame = (m_curr_time - m_start_time) * fps;
+	int max_frame = m_copy->m_max_frame_idx - 1;
 	int loop_max_frame = max_frame + interval * fps;
 	if (loop) {
 		if (curr_frame <= max_frame) {
@@ -431,18 +427,18 @@ void AnimCurr::UpdateCursor()
 
 		int frame_num = layer.frames.size();
 		assert(cursor < frame_num);
-		if (cursor >= 0 && cursor < layer.frames.size() && layer.frames[cursor].time == m_frame) {
+		if (cursor >= 0 && cursor < layer.frames.size() && layer.frames[cursor].time == m_frame + 1) {
 			m_layer_cursor_update[i] = true;
 		} else {
-			while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame) {
+			while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= m_frame + 1) {
 				++cursor;
 				m_layer_cursor_update[i] = true;
 			}
 		}
-		if (cursor == 0 && m_frame < layer.frames[cursor].time) {
+		if (cursor == 0 && m_frame + 1 < layer.frames[cursor].time) {
 			cursor = -1;
 		}
-		if (cursor == frame_num - 1 && m_frame > layer.frames[cursor].time) {
+		if (cursor == frame_num - 1 && m_frame + 1 > layer.frames[cursor].time) {
 			cursor = INT_MAX;
 		}
 		m_layer_cursor[i] = cursor;
@@ -484,11 +480,11 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 
 				assert(actor.slot == next_frame.items[actor.next].slot);
 				Sprite* tween = m_slots[actor.slot];
-				int time = m_frame - frame.time;
+				int time = m_frame + 1 - frame.time;
 				const AnimCopy::Lerp& lerp = m_copy->m_lerps[actor.lerp];
 				LoadSprLerpData(tween, lerp, time);
 
-				float process = (float) (m_frame - frame.time) / (next_frame.time - frame.time);
+				float process = (float) (m_frame + 1 - frame.time) / (next_frame.time - frame.time);
 				const Sprite* begin = actor.spr;
 				const Sprite* end = next_frame.items[actor.next].spr;
 				AnimLerp::LerpSpecial(begin, end, tween, process);

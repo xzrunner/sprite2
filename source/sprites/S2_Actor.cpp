@@ -32,6 +32,10 @@ Actor::Actor(const Sprite* spr, const Actor* parent)
 	, m_geo(NULL)
 	, m_render(SprDefault::Instance()->Render())
 {
+	if (m_parent) {
+		m_parent->GetSpr()->AddReference();
+	}
+
 #ifdef S2_RES_LOG
 	++COUNT;
 	std::cout << "++ actor " << COUNT << "\n";
@@ -53,6 +57,9 @@ Actor::~Actor()
 	std::cout << "-- actor " << COUNT << "\n";
 #endif // S2_RES_LOG
 
+	if (m_parent) {
+		m_parent->GetSpr()->RemoveReference();
+	}
 	if (m_geo) {
 		delete m_geo;
 	}

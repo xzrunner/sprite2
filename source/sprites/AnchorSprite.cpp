@@ -24,7 +24,7 @@ bool AnchorSprite::Update(const UpdateParams& up)
 {
 	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
-	if (!actor) {
+	if (!anchor) {
 		return false;
 	}
 	if (!up.IsForce() && !anchor->GetSpr()->IsInheritUpdate()) {

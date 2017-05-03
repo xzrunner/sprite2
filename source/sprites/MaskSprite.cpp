@@ -41,6 +41,10 @@ void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool MaskSprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
+
 	bool dirty = false;
 
 	UpdateParams up_child(up);

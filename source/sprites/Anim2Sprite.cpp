@@ -1,5 +1,6 @@
 #include "Anim2Sprite.h"
 #include "Anim2Symbol.h"
+#include "UpdateParams.h"
 
 namespace s2
 {
@@ -23,6 +24,9 @@ Anim2Sprite* Anim2Sprite::Clone() const
 
 bool Anim2Sprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
 	bool ret = m_curr.Update();
 	if (ret) {
 		SetBoundingDirty(true);
@@ -30,12 +34,14 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 	return ret;
 }
 
-void Anim2Sprite::SetStaticTime(int static_time)
+void Anim2Sprite::SetStaticTime(const UpdateParams& up, int static_time)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
 	if (m_static_time == static_time) {
 		return;
 	}
-
 	m_static_time = static_time;
 	m_curr.SetStaticCurrFrame(static_time);
 }

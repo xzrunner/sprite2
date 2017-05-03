@@ -85,6 +85,10 @@ void TrailSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool TrailSprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
+
 	float time = Trail::Instance()->GetTime();
 	assert(m_et->time <= time);
 	if (m_et->time == time) {

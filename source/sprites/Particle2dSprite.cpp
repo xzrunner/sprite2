@@ -2,6 +2,7 @@
 #include "Particle2dSymbol.h"
 #include "S2_Symbol.h"
 #include "RenderParams.h"
+#include "UpdateParams.h"
 
 #include <ps_2d.h>
 
@@ -75,6 +76,9 @@ void Particle2dSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool Particle2dSprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
 	if (!m_et) {
 		return false;
 	}

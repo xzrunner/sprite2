@@ -13,6 +13,7 @@ inline
 UpdateParams::UpdateParams()
 	: m_prev_filter(FM_NULL)
 	, m_actor(NULL)
+	, m_force(false)
 {
 }
 
@@ -20,6 +21,7 @@ inline
 UpdateParams::UpdateParams(const Actor* actor)
 	: m_prev_filter(FM_NULL)
 	, m_actor(actor)
+	, m_force(false)
 {
 }
 
@@ -28,6 +30,7 @@ UpdateParams::UpdateParams(const UpdateParams& params)
 	: m_prev_mat(params.m_prev_mat)
 	, m_prev_filter(FM_NULL)
 	, m_actor(params.m_actor)
+	, m_force(params.m_force)
 {
 }
 
@@ -36,6 +39,7 @@ UpdateParams& UpdateParams::operator = (const UpdateParams& params)
 {
 	m_prev_mat = params.m_prev_mat;
 	m_actor    = params.m_actor;
+	m_force    = params.m_force;
 	return *this;
 }
 

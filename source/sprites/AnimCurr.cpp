@@ -532,9 +532,6 @@ bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* child = m_slots[m_curr[i]];
-		if (!child->IsInheritUpdate()) {
-			continue;
-		}
 		up_child.SetActor(child->QueryActor(up.GetActor()));
 		if (child->Update(up_child)) {
 			dirty = true;
@@ -558,12 +555,6 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 		const AnimCopy::Frame& frame = layer.frames[cursor];
 		for (int j = 0, m = frame.items.size(); j < m; ++j)
 		{
-			const AnimCopy::Item& actor = frame.items[j];
-			Sprite* child = m_slots[actor.slot];
-			if (!child->IsInheritUpdate()) {
-				continue;
-			}
-
 			// find first time
 			int first_time = frame.time;
 			int frame_idx = cursor, actor_idx = j;
@@ -571,6 +562,9 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 				--frame_idx;
 				first_time = layer.frames[frame_idx].time;
 			}
+
+			const AnimCopy::Item& actor = frame.items[j];
+			Sprite* child = m_slots[actor.slot];
 
  			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
 			SprVisitorParams vp;

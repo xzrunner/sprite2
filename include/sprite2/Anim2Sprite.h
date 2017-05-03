@@ -28,7 +28,7 @@ public:
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 
 	int GetStaticTime() const { return m_static_time; }
-	void SetStaticTime(int static_time);
+	void SetStaticTime(const UpdateParams& up, int static_time);
 
 protected:
 	int m_static_time;

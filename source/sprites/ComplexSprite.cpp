@@ -43,18 +43,20 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool ComplexSprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
+
 	bool dirty = false;
 	UpdateParams up_child(up);
 	up_child.Push(this);
+	const Actor* actor = up.GetActor();
 	const std::vector<Sprite*>& children 
-		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(up.GetActor()));
+		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(actor));
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* child = children[i];
-		if (!child->IsInheritUpdate()) {
-			continue;
-		}
-		up_child.SetActor(child->QueryActor(up.GetActor()));
+		up_child.SetActor(child->QueryActor(actor));
 		if (const_cast<Sprite*>(child)->Update(up_child)) {
 			dirty = true;
 		}

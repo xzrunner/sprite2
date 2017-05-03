@@ -79,8 +79,11 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool AnimSprite::Update(const UpdateParams& up)
 {
-	const Actor* actor = up.GetActor();
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
+
+	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
 	bool has_flatten = VI_DOWNCASTING<AnimSymbol*>(m_sym)->HasFlatten();
 	if (has_flatten) {
 		return curr.UpdateOnlyFrame(up, this, m_loop, m_interval, m_fps);
@@ -134,6 +137,9 @@ int AnimSprite::GetFrame(const Actor* actor) const
 
 void AnimSprite::SetFrame(const UpdateParams& up, int frame)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
 	curr.SetFrame(up, this, frame, m_fps);
 }

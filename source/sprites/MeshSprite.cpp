@@ -73,6 +73,9 @@ void MeshSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool MeshSprite::Update(const UpdateParams& up) 
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
 	UpdateParams up_child(up);
 	up_child.Push(this);
 	if (m_base) {

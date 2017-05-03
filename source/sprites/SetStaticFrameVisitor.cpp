@@ -17,10 +17,6 @@ SetStaticFrameVisitor::SetStaticFrameVisitor(int static_frame)
 
 VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
 {
-	if (!spr->IsInheritUpdate()) {
-		return VISIT_OVER;
-	}
-
 	VisitResult ret = VISIT_OVER;
 
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
@@ -36,7 +32,7 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	case SYM_ANIM2:
 		{
 			Anim2Sprite* anim2_spr = const_cast<Anim2Sprite*>(VI_DOWNCASTING<const Anim2Sprite*>(spr));
-			anim2_spr->SetStaticTime(m_static_frame);
+			anim2_spr->SetStaticTime(s2::UpdateParams(), m_static_frame);
 		}
 		break;
 	case SYM_ANCHOR: case SYM_COMPLEX: case SYM_MESH: case SYM_MASK: case SYM_PROXY:

@@ -24,14 +24,16 @@ bool AnchorSprite::Update(const UpdateParams& up)
 {
 	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
-	if (anchor) {
-		UpdateParams up_child(up);
-		up_child.Push(this);
-		up_child.SetActor(anchor->GetSpr()->QueryActor(actor));
-		return const_cast<Sprite*>(anchor->GetSpr())->Update(up_child);
-	} else {
+	if (!actor) {
 		return false;
 	}
+	if (!up.IsForce() && !anchor->GetSpr()->IsInheritUpdate()) {
+		return false;
+	}
+	UpdateParams up_child(up);
+	up_child.Push(this);
+	up_child.SetActor(anchor->GetSpr()->QueryActor(actor));
+	return const_cast<Sprite*>(anchor->GetSpr())->Update(up_child);
 }
 
 Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const

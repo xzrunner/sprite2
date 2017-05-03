@@ -535,7 +535,7 @@ _set_static_time(Sprite* spr, int time)
 	}
 
 	Anim2Sprite* a2_spr = static_cast<Anim2Sprite*>(spr);
-	a2_spr->SetStaticTime(time);
+	a2_spr->SetStaticTime(s2::UpdateParams(), time);
 
 	return true;
 }
@@ -799,11 +799,12 @@ get_actor_world_mat(const Actor* actor) {
 }
 
 extern "C"
-void s2_actor_update(void* actor) {
+void s2_actor_update(void* actor, bool force) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
+	up.SetForce(force);
 	const_cast<Sprite*>(s2_spr)->Update(up);
 }
 

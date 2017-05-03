@@ -130,6 +130,9 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool Particle3dSprite::Update(const UpdateParams& up)
 {
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
 	if (!m_et) {
 		return false;
 	}

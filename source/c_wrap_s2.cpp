@@ -240,7 +240,7 @@ int s2_spr_get_sym_id(const void* spr) {
 }
 
 extern "C"
-int s2_spr_get_sym_type(void* spr) {
+int s2_spr_get_sym_type(const void* spr) {
  	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	int type = SYM_UNKNOWN;
 	if (ProxyHelper::SprGetSymType(s2_spr, type)) {

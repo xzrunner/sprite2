@@ -370,13 +370,13 @@ int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_c
 		if (curr_frame <= max_frame) {
 			;
 		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
-			curr_frame = 1;
+			curr_frame = 0;
 			m_frame = 0;
 			if (reset_cursor) {
 				ResetLayerCursor();
 			}
 		} else {
-			curr_frame = 1;
+			curr_frame = 0;
 			m_frame = 0;
 			m_start_time = m_curr_time;
 			if (reset_cursor) {

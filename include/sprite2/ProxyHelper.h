@@ -5,6 +5,7 @@
 #include <SM_Rect.h>
 
 #include <vector>
+#include <string>
 
 namespace s2
 {

@@ -698,8 +698,8 @@ void s2_actor_set_pos(void* actor, float x, float y) {
 }
 
 extern "C"
-void s2_actor_get_pos(void* actor, float* x, float* y) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
+void s2_actor_get_pos(const void* actor, float* x, float* y) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	sm::vec2 pos;
 	if (ProxyHelper::ActorGetPos(s2_actor, pos)) {
 		*x = pos.x;
@@ -716,8 +716,8 @@ void s2_actor_set_angle(void* actor, float angle) {
 }
 
 extern "C"
-float s2_actor_get_angle(void* actor) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
+float s2_actor_get_angle(const void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	float angle = 0;
 	if (ProxyHelper::ActorGetAngle(s2_actor, angle)) {
 		return angle;
@@ -734,8 +734,8 @@ void s2_actor_set_scale(void* actor, float sx, float sy) {
 }
 
 extern "C"
-void s2_actor_get_scale(void* actor, float* sx, float* sy) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
+void s2_actor_get_scale(const void* actor, float* sx, float* sy) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	sm::vec2 scale;
 	if (ProxyHelper::ActorGetScale(s2_actor, scale)) {
 		*sx = scale.x;
@@ -946,11 +946,6 @@ void* s2_actor_get_anchor_real(void* actor) {
 extern "C"
 void s2_actor_scale9_resize(void* actor, int w, int h) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-
-	if (s2_actor->GetSpr()->GetSymbol()->GetID() == 1050141) {
-		int zz = 0;
-	}
-
 	ProxyHelper::ActorScale9Resize(s2_actor, w, h);
 }
 

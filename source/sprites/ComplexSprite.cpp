@@ -43,6 +43,10 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool ComplexSprite::Update(const UpdateParams& up)
 {
+	if (GetSymbol()->GetID() == 16) {
+		int zz = 0;
+	}
+
 	if (!up.IsForce() && !IsInheritUpdate()) {
 		return false;
 	}

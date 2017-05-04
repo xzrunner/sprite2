@@ -242,13 +242,7 @@ int s2_spr_get_sym_id(const void* spr) {
 extern "C"
 int s2_spr_get_sym_type(const void* spr) {
  	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	int type = SYM_UNKNOWN;
-	if (ProxyHelper::SprGetSymType(s2_spr, type)) {
-		;
-	} else {
-		LOGW("s2_spr_get_sym_type fail, sym_id %d", s2_spr->GetSymbol()->GetID());
-	}
-	return type;
+	return s2_spr->GetSymbol()->Type();
 }
 
 extern "C"

@@ -95,6 +95,17 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 	DrawNode::Draw(s2_spr->GetSymbol(), rp);
 }
 
+extern "C"
+void s2_symbol_draw2(const void* symbol, float x, float y)
+{
+	const Symbol* s2_sym = static_cast<const Symbol*>(symbol);
+
+	RenderParams rp;
+	rp.mt.SetTransformation(x, y, 0, 1, 1, 0, 0, 0, 0);
+
+	DrawNode::Draw(s2_sym, rp);
+}
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/

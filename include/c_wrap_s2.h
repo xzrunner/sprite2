@@ -22,6 +22,7 @@ void s2_get_screen_size(int* w, int* h);
 
 void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					 float xmin, float ymin, float xmax, float ymax);
+void  s2_symbol_draw2(const void* symbol, float x, float y);
 
 /************************************************************************/
 /* sprite                                                               */

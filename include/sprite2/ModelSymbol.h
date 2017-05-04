@@ -25,13 +25,16 @@ public:
 	 *    Symbol
 	 */
 	virtual int Type() const;
-	virtual void Draw(const RenderParams& params, const Sprite* spr = NULL) const;
-	virtual sm::rect GetBounding(const Sprite* spr = NULL) const;
+	virtual void Traverse(const SymbolVisitor& visitor) {}
+	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 
 	void SetModel(m3::Model* model);
 
 	void SetAABB(const m3::AABB& aabb) { m_aabb = aabb; }
 	const m3::AABB& GetAABB() const { return m_aabb; }
+
+protected:
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 protected:
 	m3::Model* m_model;

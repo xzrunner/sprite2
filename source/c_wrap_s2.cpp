@@ -37,7 +37,8 @@
 #include "Particle3dSprite.h"
 #include "Particle3dEmitter.h"
 #include "OrthoCamera.h"
-#include "ProxySymbol.h"
+#include "ProxySymbol.h"	// todo
+#include "ProxyHelper.h"
 
 #include <logger.h>
 #include <shaderlab/ShaderMgr.h>
@@ -49,6 +50,16 @@
 
 namespace s2
 {
+
+static std::string 
+_char2string(const char* c_str) 
+{
+	std::string str;
+	if (c_str) {
+		str.assign(c_str);
+	}
+	return str;
+}
 
 extern "C"
 void s2_init()
@@ -155,30 +166,37 @@ void s2_spr_set_scale(void* spr, float sx, float sy) {
 extern "C"
 void s2_spr_get_pos(const void* spr, float* x, float* y) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("%s", "no use, s2_spr_get_pos for proxy");
+	sm::vec2 pos;
+	if (ProxyHelper::SprGetPos(s2_spr, pos)) {
+		*x = pos.x;
+		*y = pos.y;
+	} else {
+		LOGW("s2_spr_get_pos fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
-	*x = s2_spr->GetPosition().x;
-	*y = s2_spr->GetPosition().y;
 }
 
 extern "C"
 float s2_spr_get_angle(const void* spr) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("%s", "no use, s2_spr_get_pos for proxy");
+	float angle = 0;
+	if (ProxyHelper::SprGetAngle(s2_spr, angle)) {
+		;
+	} else {
+		LOGW("s2_spr_get_angle fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
-	return s2_spr->GetAngle();
+	return angle;
 }
 
 extern "C"
 void s2_spr_get_scale(const void* spr, float* sx, float* sy) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		LOGW("%s", "no use, s2_spr_get_pos for proxy");
+	sm::vec2 scale;
+	if (ProxyHelper::SprGetScale(s2_spr, scale)) {
+		*sx = scale.x;
+		*sy = scale.y;
+	} else {
+		LOGW("s2_spr_get_scale fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
-	*sx = s2_spr->GetScale().x;
-	*sy = s2_spr->GetScale().y;
 }
 
 extern "C"
@@ -210,112 +228,27 @@ const char* s2_spr_get_name(void* spr) {
 }
 
 extern "C"
-int s2_spr_get_sym_id(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	int type = s2_spr->GetSymbol()->Type();
-	if (type == SYM_PROXY)
-	{
-		int ret = -1;
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) 
-		{
-			int sym_id = items[i].second->GetSymbol()->GetID();
-			if (sym_id != ret && ret != -1) {
-				return s2_spr->GetID();
-			} else {
-				ret = sym_id;
-			}
-		}
-		return ret == -1 ? s2_spr->GetID() : ret;
+int s2_spr_get_sym_id(const void* spr) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	int id = 0;
+	if (ProxyHelper::SprGetSymID(s2_spr, id)) {
+		;
+	} else {
+		LOGW("s2_spr_get_sym_id fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
-	else
-	{
-		return static_cast<Sprite*>(s2_spr)->GetSymbol()->GetID();
-	}
+	return id;
 }
 
 extern "C"
 int s2_spr_get_sym_type(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	int type = s2_spr->GetSymbol()->Type();
-	if (type == SYM_PROXY)
-	{
-		int ret = SYM_PROXY;
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) 
-		{
-			int type = items[i].second->GetSymbol()->Type();
-			if (type != ret && ret != SYM_PROXY) {
-				return s2_spr->GetSymbol()->Type();
-			} else {
-				ret = type;
-			}
-		}
-		return ret == SYM_PROXY ? s2_spr->GetSymbol()->Type() : ret;
-	}
-	else
-	{
-		return static_cast<Sprite*>(s2_spr)->GetSymbol()->Type();
-	}
-}
-
-static 
-bool _set_action(Actor* actor, const char* action) {
-	if (actor->GetSpr()->GetSymbol()->Type() != SYM_COMPLEX) {
-		return false;
-	}
-
-	const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(actor->GetSpr()->GetSymbol());
-	ComplexActor* actor_complex = static_cast<ComplexActor*>(actor);
-	int action_idx = -1;
-	if (action) {
-		action_idx = sym_complex->GetActionIdx(action);
-	}
-	actor_complex->SetAction(action_idx);
-
-	s2_actor_msg_start(actor);
-
-	return true;
-}
-
-extern "C"
-void s2_spr_set_action(void* actor, const char* action) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	bool succ = false;
-	int type = s2_actor->GetSpr()->GetSymbol()->Type();
-	if (type == SYM_PROXY)
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			if (_set_action(const_cast<Actor*>(child_actor), action)) {
-				succ = true;
-			}
-		}
-	}
-	else
-	{
-		succ = _set_action(s2_actor, action);
-	}
-	if (!succ) {
-		LOGW("s2_spr_set_action fail. spr %d, type %d\n", s2_actor->GetSpr()->GetSymbol()->GetID(), type);
-	}
-}
-
-extern "C"
-int s2_spr_get_frame_count(void* spr) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
-		AnimSprite* anim = VI_DOWNCASTING<AnimSprite*>(s2_spr);
-		const AnimSymbol* sym = VI_DOWNCASTING<const AnimSymbol*>(anim->GetSymbol());
-		return sym->GetMaxFrameIdx();
+ 	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	int type = SYM_UNKNOWN;
+	if (ProxyHelper::SprGetSymType(s2_spr, type)) {
+		;
 	} else {
-		LOGW("no use, s2_spr_get_frame_count: not animation spr %d", s2_spr->GetSymbol()->GetID());
-		return -1;
+		LOGW("s2_spr_get_sym_type fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
+	return type;
 }
 
 extern "C"
@@ -352,320 +285,120 @@ void s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, 
 extern "C"
 bool s2_spr_point_test(const void* spr, float x, float y) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	sm::vec2 pos(x, y);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			if (items[i].second->GetBounding()->IsContain(pos)) {
-				return true;
-			}
-		}
-		return false;
-	} else {
-		return s2_spr->GetBounding()->IsContain(pos);
-	}
-}
-
-static void*
-_point_query(const Sprite* spr, const sm::vec2& pos, float mat[6]) {
-	PointQueryVisitor visitor(pos);
-
-	SprVisitorParams params;
-	spr->Traverse(visitor, params);
-	const Actor* ret = visitor.GetSelectedActor();
-	if (!ret) {
-		return NULL;
-	}
-
-	const S2_MAT& selected_mat = visitor.GetSelectedMat();
-#ifdef S2_MATRIX_FIX
-	mat[0] = selected_mat.x[0] * sm::MatrixFix::SCALE_INV;
-	mat[1] = selected_mat.x[1] * sm::MatrixFix::SCALE_INV;
-	mat[2] = selected_mat.x[2] * sm::MatrixFix::SCALE_INV;
-	mat[3] = selected_mat.x[3] * sm::MatrixFix::SCALE_INV;
-	mat[4] = selected_mat.x[4] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-	mat[5] = selected_mat.x[5] * sm::MatrixFix::TRANSLATE_SCALE_INV;
-#else
-	memcpy(mat, selected_mat.x, sizeof(selected_mat.x));
-#endif // S2_MATRIX_FIX
-
-	return const_cast<Actor*>(ret);
+	return ProxyHelper::SprPointTest(s2_spr, sm::vec2(x, y));
 }
 
 extern "C"
 void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	sm::vec2 pos(x, y);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			void* ret = _point_query(items[i].second, pos, mat);
-			if (ret) {
-				return ret;
-			}
-		}
-		return NULL;
+	return const_cast<Actor*>(ProxyHelper::SprPointQuery(s2_spr, sm::vec2(x, y), mat));
+}
+
+extern "C"
+bool s2_spr_get_force_update(const void* spr) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	bool force = false;
+	if (ProxyHelper::SprGetForceUpdate(s2_spr, force)) {
+		return force;
 	} else {
-		return _point_query(s2_spr, pos, mat);
+		LOGW("s2_spr_get_force_update fail, sym_id %d", s2_spr->GetSymbol()->GetID());
+		return false;		
 	}
 }
 
-static bool
-_has_action(const Sprite* spr, const char* name) {
-	if (spr->GetSymbol()->Type() != SYM_COMPLEX) {
-		return false;
-	}
+extern "C"
+void s2_spr_set_force_update(void* spr, bool force) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	ProxyHelper::SprSetForceUpdate(s2_spr, force);
+}
 
-	const ComplexSymbol* sym = static_cast<const ComplexSymbol*>(spr->GetSymbol());
-	const std::vector<ComplexSymbol::Action>& actions = sym->GetActions();
-	for (int i = 0, n = actions.size(); i < n; ++i) {
-		if (name == actions[i].name) {
-			return true;
-		}
+extern "C"
+int s2_spr_get_frame_count(void* spr) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	int count = -1;
+	if (ProxyHelper::SprGetFrameCount(s2_spr, count)) {
+		;
+	} else {
+		LOGW("s2_spr_get_frame_count fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
-	return false;
+	return count;
 }
 
 extern "C"
 bool s2_spr_has_action(const void* spr, const char* name) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			if (_has_action(items[i].second, name)) {
-				return true;
-			}
-		}
-		return false;
-	} 
-	else 
-	{
-		return _has_action(s2_spr, name);
-	}
+	return ProxyHelper::SprHasAction(s2_spr, _char2string(name));
 }
 
 extern "C"
 bool s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax)
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	int type = s2_spr->GetSymbol()->Type();
-	if (type != SYM_COMPLEX) {
-		*xmin = *ymin = *xmax = *ymax = 0;
-		LOGW("no use, s2_spr_get_scissor for spr %d, type %d\n", s2_spr->GetSymbol()->GetID(), type);
+	sm::rect r;
+	if (ProxyHelper::SprGetScissor(s2_spr, r)) {
+		*xmin = r.xmin;
+		*ymin = r.ymin;
+		*xmax = r.xmax;
+		*ymax = r.ymax;
+		return true;
+	} else {
+		LOGW("s2_spr_get_scissor fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 		return false;
 	}
-
-	const ComplexSprite* complex_spr = static_cast<const ComplexSprite*>(s2_spr);
-	const ComplexSymbol* sym = static_cast<const ComplexSymbol*>(complex_spr->GetSymbol());
-	const sm::rect& scissor = sym->GetScissor();
-	*xmin = scissor.xmin;
-	*ymin = scissor.ymin;
-	*xmax = scissor.xmax;
-	*ymax = scissor.ymax;
-
-	return true;
-}
-
-static bool
-_set_scissor(Sprite* spr, float xmin, float ymin, float xmax, float ymax) {
-	if (spr->GetSymbol()->Type() != SYM_COMPLEX) {
-		return false;
-	}
-
-	const ComplexSprite* complex_spr = static_cast<const ComplexSprite*>(spr);
-	const ComplexSymbol* sym = static_cast<const ComplexSymbol*>(complex_spr->GetSymbol());
-	sm::rect scissor;
-	scissor.xmin = xmin;
-	scissor.ymin = ymin;
-	scissor.xmax = xmax;
-	scissor.ymax = ymax;
-	const_cast<ComplexSymbol*>(sym)->SetScissor(scissor);
-
-	return true;
 }
 
 extern "C"
-bool s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax)
+void s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		bool ret = false;
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			if (_set_scissor(items[i].second, xmin, ymin, xmax, ymax)) {
-				ret = true;
-			}
-		}
-		return ret;
-	} 
-	else
-	{
-		return _set_scissor(s2_spr, xmin, ymin, xmax, ymax);
-	}
-}
-
-static bool
-_textbox_reset_time(Sprite* spr)
-{
-	if (spr->GetSymbol()->Type() != SYM_TEXTBOX) {
-		return false;
-	}
-
-	TextboxSprite* tb_spr = static_cast<TextboxSprite*>(spr);
-	tb_spr->ResetTime();
-
-	return true;
+	sm::rect r;
+	r.xmin = xmin;
+	r.ymin = ymin;
+	r.xmax = xmax;
+	r.ymax = ymax;
+	ProxyHelper::SprSetScissor(s2_spr, r);
 }
 
 extern "C"
 void s2_spr_textbox_reset_time(void* spr)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			_textbox_reset_time(items[i].second);
-		}
-	} else {
-		_textbox_reset_time(s2_spr);
-	}
-}
-
-static bool
-_set_static_time(Sprite* spr, int time)
-{
-	if (spr->GetSymbol()->Type() != SYM_ANIM2) {
-		return false;
-	}
-
-	Anim2Sprite* a2_spr = static_cast<Anim2Sprite*>(spr);
-	a2_spr->SetStaticTime(s2::UpdateParams(), time);
-
-	return true;
+	ProxyHelper::SprTextboxResetTime(s2_spr);
 }
 
 extern "C"
 void s2_spr_anim2_set_static_time(void* spr, int time) 
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			_set_static_time(items[i].second, time);
-		}
-	} else {
-		_set_static_time(s2_spr, time);
-	}
-}
-
-static bool
-_p3d_set_local(Sprite* spr, bool local)
-{
-	if (spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
-		return false;
-	}
-
-	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
-	p3d_spr->SetLocal(local);
-
-	return true;
+	ProxyHelper::SprAnim2SetStaticTime(s2_spr, time);
 }
 
 extern "C"
 void s2_spr_p3d_set_local(void* spr, bool local) 
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			_p3d_set_local(items[i].second, local);
-		}
-	} else {
-		_p3d_set_local(s2_spr, local);
-	}
-}
-
-static bool
-_p3d_set_loop(Sprite* spr, bool loop)
-{
-	if (spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
-		return false;
-	}
-
-	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
-	p3d_spr->SetLoop(loop);
-
-	return true;
+	ProxyHelper::SprP3dSetLocal(s2_spr, local);
 }
 
 extern "C"
 void s2_spr_p3d_set_loop(void* spr, bool loop)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			_p3d_set_loop(items[i].second, loop);
-		}
-	} else {
-		_p3d_set_loop(s2_spr, loop);
-	}
+	ProxyHelper::SprP3dSetLoop(s2_spr, loop);
 }
 
 extern "C"
 bool s2_spr_p3d_is_finished(const void* spr) 
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
-		return true;
-	}
-
-	const Particle3dSprite* p3d_spr = static_cast<const Particle3dSprite*>(s2_spr);
-	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
-		return et->IsFinished();
-	} else {
-		return true;
-	}
-}
-
-static bool
-_p3d_update(Sprite* spr, float dt)
-{
-	if (spr->GetSymbol()->Type() != SYM_PARTICLE3D) {
-		return false;
-	}
-
-	Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
-	if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
-		const_cast<Particle3dEmitter*>(et)->Update(et->GetTime() + dt);
-	}
-
-	return true;
+	return ProxyHelper::SprP3dIsFinished(s2_spr);
 }
 
 extern "C"
 void s2_spr_p3d_update(void* spr, float dt)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			s2_spr_p3d_update(items[i].second, dt);
-		}
-	} else {
-		s2_spr_p3d_update(s2_spr, dt);
-	}
+	ProxyHelper::SprP3dUpdate(s2_spr, dt);
 }
 
 extern "C"
@@ -674,87 +407,39 @@ void s2_spr_p3d_buffer_draw(float x, float y, float scale)
 	Particle3d::Instance()->BufferDraw(x, y, scale);
 }
 
-static void _proxy_get_children(const Sprite* spr, void* children[], int children_cap, int* count)
-{
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) 
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) 
-		{
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			if (*count > children_cap) {
-				return;
-			} else if (child_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-				_proxy_get_children(child_actor->GetSpr(), children, children_cap, count);
-			} else {
- 				children[*count] = const_cast<Actor*>(child_actor);
- 				++(*count);
-			}
-		}
-	}
-}
-
 extern "C"
 void s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count)
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	_proxy_get_children(s2_spr, children, children_cap, count);
+
+	std::vector<const Actor*> actors;
+	ProxyHelper::SprGetProxyChildren(s2_spr, actors);
+	int n = std::min(children_cap, static_cast<int>(actors.size()));
+	for (int i = 0; i < n; ++i) {
+		children[i] = const_cast<Actor*>(actors[i]);
+	}
+	*count = n;
 }
 
 extern "C"
 void s2_spr_set_dtex_enable(void* spr, bool enable)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			static_cast<Sprite*>(items[i].second)->SetDTexDisable(!enable);
-		}
-	} else {
-		static_cast<Sprite*>(spr)->SetDTexDisable(!enable);
-	}
-}
-
-static void
-_set_dtex_force_cached(Sprite* spr, bool cache)
-{
-	spr->SetDTexForceCached(cache);
-	if (cache) {
-		spr->SetDTexForceCachedDirty(true);
-	}
+	ProxyHelper::SetDTexEnable(s2_spr, enable);
 }
 
 extern "C"
 void s2_spr_set_dtex_force_cached(void* spr, bool cache)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			_set_dtex_force_cached(items[i].second, cache);
-		}
-	} else {
-		_set_dtex_force_cached(s2_spr, cache);
-	}
+	ProxyHelper::SetDTexForceCached(s2_spr, cache);
 }
 
 extern "C"
 void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			static_cast<Sprite*>(items[i].second)->SetDTexForceCachedDirty(dirty);
-		}
-	} else {
-		static_cast<Sprite*>(spr)->SetDTexForceCachedDirty(dirty);
-	}	
+	ProxyHelper::SetDTexForceCachedDirty(s2_spr, dirty);
 }
 
 /************************************************************************/
@@ -862,37 +547,25 @@ void s2_actor_set_frame(void* actor, int frame) {
 extern "C"
 int s2_actor_get_frame(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	if (s2_spr->GetSymbol()->Type() == SYM_ANIMATION) {
-		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
-		return anim->GetFrame(s2_actor);
+	int frame = -1;
+	if (ProxyHelper::ActorGetFrame(s2_actor, frame)) {
+		return frame;
 	} else {
+		LOGW("s2_actor_get_frame fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 		return -1;
 	}
 }
 
 extern "C"
 int s2_actor_get_component_count(void* actor) {
-	int ret = -1;
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	switch (s2_spr->GetSymbol()->Type())
-	{
-	case SYM_COMPLEX:
-		{
-			const ComplexSprite* complex = VI_DOWNCASTING<const ComplexSprite*>(s2_spr);
-			const ComplexSymbol* sym = VI_DOWNCASTING<const ComplexSymbol*>(complex->GetSymbol());
-			ret = sym->GetActionChildren(complex->GetAction()).size();
-		}
-		break;
-	case SYM_ANIMATION:
-		{
-			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(s2_spr);
-			ret = anim->GetAnimCurr(s2_actor).GetSlotSize();
-		}
-		break;
+	int count = -1;
+	if (ProxyHelper::ActorGetComponentCount(s2_actor, count)) {
+		return count;
+	} else {
+		LOGW("s2_actor_get_component_count fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return -1;
 	}
-	return ret;
 }
 
 extern "C"
@@ -963,44 +636,6 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 }
 
 extern "C"
-bool s2_actor_get_force_update(void* actor) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
-		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
-		if (real) {
-			s2_spr = real->GetSpr();
-		} else {
-			return false;
-		}
-	}
-	return s2_spr->IsForceUpdate();
-}
-
-extern "C"
-void s2_actor_set_force_update(void* actor, bool force) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	if (s2_spr->GetSymbol()->Type() == SYM_ANCHOR) {
-		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(s2_spr);
-		const Actor* real = anchor_spr->QueryAnchor(s2_actor);
-		if (real) {
-			s2_spr = real->GetSpr();
-		}
-	}
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			items[i].second->SetForceUpdate(force);
-		}
-	} else {
-		s2_spr->SetForceUpdate(force);
-	}	
-}
-
-extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	const Actor* parent = static_cast<const Actor*>(parent_actor);
 
@@ -1042,146 +677,108 @@ void* s2_actor_get_spr(void* actor) {
 	return const_cast<Sprite*>(static_cast<Actor*>(actor)->GetSpr());
 }
 
-static sm::rect
-_get_actor_aabb(const Actor* actor) {
-	const sm::rect& src = actor->GetAABB().GetRect();
-
-	sm::vec2 min(src.xmin, src.ymin),
-		     max(src.xmax, src.ymax);
-	S2_MAT mat = actor->GetLocalMat() * actor->GetSpr()->GetLocalMat();
-	min = mat * min;
-	max = mat * max;
-
-	sm::rect ret;
-	ret.Combine(min);
-	ret.Combine(max);
-	return ret;
-}
-
 extern "C"
 void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
 	sm::rect rect;
-	if (s2_spr->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_spr->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			rect.Combine(_get_actor_aabb(child_actor));
-		}
+	if (ProxyHelper::ActorGetAABB(s2_actor, rect)) {
+		aabb[0] = rect.xmin;
+		aabb[1] = rect.ymin;
+		aabb[2] = rect.xmax;
+		aabb[3] = rect.ymax;
 	} else {
-		rect = _get_actor_aabb(s2_actor);
+		LOGW("s2_actor_get_aabb fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 	}
-	aabb[0] = rect.xmin;
-	aabb[1] = rect.ymin;
-	aabb[2] = rect.xmax;
-	aabb[3] = rect.ymax;
 }
 
 extern "C"
 void s2_actor_set_pos(void* actor, float x, float y) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			const_cast<Actor*>(child_actor)->SetPosition(sm::vec2(x, y));
-		}
-	} else {
-		s2_actor->SetPosition(sm::vec2(x, y));
-	}
+	ProxyHelper::ActorSetPos(s2_actor, sm::vec2(x, y));
 }
 
 extern "C"
 void s2_actor_get_pos(void* actor, float* x, float* y) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	sm::vec2 pos = s2_actor->GetPosition();
-	*x = pos.x;
-	*y = pos.y;
+	sm::vec2 pos;
+	if (ProxyHelper::ActorGetPos(s2_actor, pos)) {
+		*x = pos.x;
+		*y = pos.y;
+	} else {
+		LOGW("s2_actor_get_pos fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+	}
 }
 
 extern "C"
 void s2_actor_set_angle(void* actor, float angle) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			const_cast<Actor*>(child_actor)->SetAngle(angle);
-		}
-	} else {
-		s2_actor->SetAngle(angle);
-	}
+	ProxyHelper::ActorSetAngle(s2_actor, angle);
 }
 
 extern "C"
 float s2_actor_get_angle(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->GetAngle();
+	float angle = 0;
+	if (ProxyHelper::ActorGetAngle(s2_actor, angle)) {
+		return angle;
+	} else {
+		LOGW("s2_actor_get_angle fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return 0;
+	}
 }
 
 extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			const_cast<Actor*>(child_actor)->SetScale(sm::vec2(sx, sy));
-		}
-	} else {
-		s2_actor->SetScale(sm::vec2(sx, sy));
-	}
+	ProxyHelper::ActorSetScale(s2_actor, sm::vec2(sx, sy));
 }
 
 extern "C"
 void s2_actor_get_scale(void* actor, float* sx, float* sy) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	sm::vec2 scale = s2_actor->GetScale();
-	*sx = scale.x;
-	*sy = scale.y;
-}
-
-static S2_MAT _get_actor_world_mat(const void* actor) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	S2_MAT mat;
-	while (s2_actor) {
-		mat = mat * s2_actor->GetSpr()->GetLocalMat();
-		mat = s2_actor->GetLocalMat() * mat;
-		s2_actor = s2_actor->GetParent();
+	sm::vec2 scale;
+	if (ProxyHelper::ActorGetScale(s2_actor, scale)) {
+		*sx = scale.x;
+		*sy = scale.y;
+	} else {
+		LOGW("s2_actor_get_scale fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 	}
-	return mat;
 }
 
 extern "C"
 void s2_actor_get_world_pos(const void* actor, float* x, float* y) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	S2_MAT mat = _get_actor_world_mat(s2_actor);
- 	sm::vec2 pos = mat * sm::vec2(0, 0);
- 	*x = pos.x;
- 	*y = pos.y;
+	sm::vec2 pos;
+	if (ProxyHelper::ActorGetWorldPos(s2_actor, pos)) {
+		*x = pos.x;
+		*y = pos.y;
+	} else {
+		LOGW("s2_actor_get_world_pos fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+	}
 }
 
 extern "C"
 float s2_actor_get_world_angle(const void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	S2_MAT mat = _get_actor_world_mat(s2_actor);
- 	sm::vec2 pos = mat * sm::vec2(0, 0);
- 	sm::vec2 dir = mat * sm::vec2(1, 0);
- 	return sm::get_line_angle(pos, dir);
+	float angle = 0;
+	if (ProxyHelper::ActorGetWorldAngle(s2_actor, angle)) {
+		return angle;
+	} else {
+		LOGW("s2_actor_get_world_angle fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return 0;
+	}
 }
 
 extern "C"
 void s2_actor_get_world_scale(const void* actor, float* sx, float* sy) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	S2_MAT mat = _get_actor_world_mat(s2_actor);
- 	sm::vec2 scale = (mat * sm::vec2(1, 1)) - (mat * sm::vec2(0, 0));
- 	*sx = scale.x;
- 	*sy = scale.y;
+	sm::vec2 scale;
+	if (ProxyHelper::ActorGetWorldScale(s2_actor, scale)) {
+		*sx = scale.x;
+		*sy = scale.y;
+	} else {
+		LOGW("s2_actor_get_world_scale fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+	}
 }
 
 extern "C"
@@ -1193,185 +790,104 @@ void* s2_actor_get_parent(void* actor) {
 extern "C"
 bool s2_actor_get_visible(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->IsVisible();
-}
-
-static void _set_visible(const Actor* actor, bool visible) {
-	if (visible != actor->IsVisible()) {
-		actor->SetFlattenDirtyToRoot();
-		actor->SetVisible(visible);
+	bool visible = true;
+	if (ProxyHelper::ActorGetVisible(s2_actor, visible)) {
+		return visible;
+	} else {
+		LOGW("s2_actor_get_visible fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return true;
 	}
 }
 
 extern "C"
 void s2_actor_set_visible(void* actor, bool visible) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_visible(child_actor, visible);
-		}
-	} else {
-		_set_visible(s2_actor, visible);
-	}
+	ProxyHelper::ActorSetVisible(s2_actor, visible);
 }
 
 extern "C"
 bool s2_actor_get_editable(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->IsEditable();
-}
-
-static void
-_set_editable(const Actor* actor, bool editable) {
-	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_editable(child_actor, editable);
-		}
+	bool editable = true;
+	if (ProxyHelper::ActorGetEditable(s2_actor, editable)) {
+		return editable;
 	} else {
-		actor->SetEditable(editable);
-	}	
+		LOGW("s2_actor_get_editable fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return true;
+	}
 }
 
 extern "C"
 void s2_actor_set_editable(void* actor, bool editable) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	_set_editable(s2_actor, editable);
+	ProxyHelper::ActorSetEditable(s2_actor, editable);
 }
 
 extern "C"
 uint32_t s2_actor_get_col_mul(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->GetColor().GetMulABGR();
-}
-
-static void
-_set_col_mul(const Actor* actor, uint32_t abgr) {
-	if (actor->GetColor().GetMulABGR() != abgr) 
-	{
-		RenderColor rc = actor->GetColor();
-		rc.SetMulABGR(abgr);
-		const_cast<Actor*>(actor)->SetColor(rc);
+	uint32_t mul;
+	if (ProxyHelper::ActorGetColMul(s2_actor, mul)) {
+		return mul;
+	} else {
+		LOGW("s2_actor_get_col_mul fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return 0xffffffff;
 	}
 }
 
 extern "C"
 void s2_actor_set_col_mul(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_col_mul(child_actor, abgr);
-		}
-	} else {
-		_set_col_mul(s2_actor, abgr);
-	}
+	ProxyHelper::ActorSetColMul(s2_actor, abgr);
 }
 
 extern "C"
 uint32_t s2_actor_get_col_add(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	return s2_actor->GetColor().GetAddABGR();
-}
-
-static void
-_set_col_add(const Actor* actor, uint32_t abgr) {
-	if (actor->GetColor().GetAddABGR() != abgr) 
-	{
-		RenderColor rc = actor->GetColor();
-		rc.SetAddABGR(abgr);
-		const_cast<Actor*>(actor)->SetColor(rc);
+	uint32_t add;
+	if (ProxyHelper::ActorGetColAdd(s2_actor, add)) {
+		return add;
+	} else {
+		LOGW("s2_actor_get_col_add fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return 0;
 	}
 }
 
 extern "C"
 void s2_actor_set_col_add(void* actor, uint32_t abgr) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_col_add(child_actor, abgr);
-		}
-	} else {
-		_set_col_add(s2_actor, abgr);
-	}
+	ProxyHelper::ActorSetColAdd(s2_actor, abgr);
 }
 
 extern "C"
 void s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	*rmap = s2_actor->GetColor().GetRMapABGR();
-	*gmap = s2_actor->GetColor().GetGMapABGR();
-	*bmap = s2_actor->GetColor().GetBMapABGR();
-}
-
-static void
-_set_col_map(const Actor* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
-	if (actor->GetColor().GetRMapABGR() != rmap ||
-		actor->GetColor().GetGMapABGR() != gmap ||
-		actor->GetColor().GetBMapABGR() != bmap) 
-	{
-		RenderColor rc = actor->GetColor();
-		rc.SetRMapABGR(rmap);
-		rc.SetGMapABGR(gmap);
-		rc.SetBMapABGR(bmap);
-		const_cast<Actor*>(actor)->SetColor(rc);
+	uint32_t r, g, b;
+	if (ProxyHelper::ActorGetColMap(s2_actor, r, g, b)) {
+		*rmap = r;
+		*gmap = g;
+		*bmap = b;
+	} else {
+		LOGW("s2_actor_get_col_map fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 	}
 }
 
 extern "C"
 void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_col_map(child_actor, rmap, gmap, bmap);
-		}
-	} else {
-		_set_col_map(s2_actor, rmap, gmap, bmap);
-	}
-}
-
-static void 
-_set_filter(const Actor* actor, int mode) {
-	const RenderFilter* filter = actor->GetShader().GetFilter();
-	FilterMode ori = FM_NULL;
-	if (filter) {
-		ori = filter->GetMode();
-	}
-	if (ori == mode) {
-		return;
-	}
-
-	RenderShader shader = actor->GetShader();
-	shader.SetFilter(FilterMode(mode));
-	const_cast<Actor*>(actor)->SetShader(shader);	
+	ProxyHelper::ActorSetColMap(s2_actor, rmap, gmap, bmap);
 }
 
 extern "C"
 void s2_actor_set_filter(void* actor, int mode) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_filter(child_actor, mode);
-		}
-	} else {
-		_set_filter(s2_actor, mode);
-	}
+	ProxyHelper::ActorSetFilter(s2_actor, mode);
+}
+
+extern "C"
+void s2_actor_set_action(void* actor, const char* action) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	ProxyHelper::ActorSetAction(s2_actor, _char2string(action));
 }
 
 extern "C"
@@ -1385,27 +901,10 @@ const char* s2_actor_get_text(void* actor) {
 	return textbox->GetText().c_str();
 }
 
-static void
-_set_text(const Actor* actor, const char* text) {
-	if (actor->GetSpr()->GetSymbol()->Type() == SYM_TEXTBOX) {
-		const TextboxActor* textbox = static_cast<const TextboxActor*>(actor);
-		const_cast<TextboxActor*>(textbox)->SetText(text);	
-	}
-}
-
 extern "C"
 void s2_actor_set_text(void* actor, const char* text) {	
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_set_text(child_actor, text);
-		}
-	} else {
-		_set_text(s2_actor, text);
-	}
+	ProxyHelper::ActorSetText(s2_actor, _char2string(text));
 }
 
 extern "C"
@@ -1444,27 +943,15 @@ void* s2_actor_get_anchor_real(void* actor) {
 	}
 }
 
-static void
-_scale9_resize(const Actor* actor, int w, int h) {
-	if (actor->GetSpr()->GetSymbol()->Type() == SYM_SCALE9) {
-		const Scale9Actor* s9_actor = static_cast<const Scale9Actor*>(actor);
-		const_cast<Scale9Actor*>(s9_actor)->Resize(w, h);	
-	}
-}
-
 extern "C"
 void s2_actor_scale9_resize(void* actor, int w, int h) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(s2_actor->GetSpr()->GetSymbol());
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-			_scale9_resize(child_actor, w, h);
-		}
-	} else {
-		_scale9_resize(s2_actor, w, h);
+
+	if (s2_actor->GetSpr()->GetSymbol()->GetID() == 1050141) {
+		int zz = 0;
 	}
+
+	ProxyHelper::ActorScale9Resize(s2_actor, w, h);
 }
 
 extern "C"

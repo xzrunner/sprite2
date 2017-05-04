@@ -564,15 +564,21 @@ void ProxyHelper::SprGetProxyChildren(const Sprite* spr, std::vector<const Actor
 {
 	const Symbol* sym = spr->GetSymbol();
 	int type = sym->Type();
-	if (type != SYM_PROXY)  {
+	if (type != SYM_PROXY) {
 		return;
 	}
+
 	const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
 	const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
 	actors.reserve(actors.size() + items.size());
-	for (int i = 0, n = items.size(); i < n; ++i) {
+	for (int i = 0, n = items.size(); i < n; ++i) 
+	{
 		const Actor* child_actor = items[i].second->QueryActor(items[i].first);
-		actors.push_back(child_actor);
+		if (child_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+			SprGetProxyChildren(child_actor->GetSpr(), actors);
+		} else {
+			actors.push_back(child_actor);
+		}
 	}
 }
 

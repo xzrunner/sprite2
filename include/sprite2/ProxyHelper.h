@@ -35,6 +35,8 @@ public:
 	static bool SprGetForceUpdate(const Sprite* spr, bool& force);
 	static void SprSetForceUpdate(Sprite* spr, bool force);
 
+	static void SprSetInheritUpdate(const Sprite* spr, bool inherit);
+
 	// anim
 	static bool SprGetFrameCount(const Sprite* spr, int& count);
 

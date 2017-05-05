@@ -497,9 +497,9 @@ void s2_actor_update(void* actor, bool force) {
 	up.SetForce(force);
 
 	bool old_inherit_update = s2_spr->IsInheritUpdate();
-	s2_spr->SetInheritUpdate(true);
+	ProxyHelper::SprSetInheritUpdate(s2_spr, true);
 	const_cast<Sprite*>(s2_spr)->Update(up);
-	s2_spr->SetInheritUpdate(old_inherit_update);
+	ProxyHelper::SprSetInheritUpdate(s2_spr, old_inherit_update);
 }
 
 extern "C"

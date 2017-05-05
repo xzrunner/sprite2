@@ -96,6 +96,7 @@ public:
 
 	// anim
 	static bool ActorGetFrame(const Actor* actor, int& frame);
+	static void ActorSetFrame(Actor* actor, int frame);
 
 	static bool ActorGetComponentCount(const Actor* actor, int& count);
 

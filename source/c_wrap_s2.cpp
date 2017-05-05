@@ -21,7 +21,6 @@
 #include "RenderScissor.h"
 #include "Blackboard.h"
 #include "s2_trans_color.h"
-#include "SetStaticFrameVisitor.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -492,10 +491,15 @@ extern "C"
 void s2_actor_update(void* actor, bool force) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	const Sprite* s2_spr = s2_actor->GetSpr();
+
 	UpdateParams up(s2_actor);
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
 	up.SetForce(force);
+
+	bool old_inherit_update = s2_spr->IsInheritUpdate();
+	s2_spr->SetInheritUpdate(true);
 	const_cast<Sprite*>(s2_spr)->Update(up);
+	s2_spr->SetInheritUpdate(old_inherit_update);
 }
 
 extern "C"
@@ -527,15 +531,8 @@ void s2_actor_msg_clear(void* actor) {
 
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	SetStaticFrameVisitor visitor(frame);
-	SprVisitorParams vp;
-	vp.actor = s2_actor;
-	bool old_inherit_update = s2_spr->IsInheritUpdate();
-	s2_spr->SetInheritUpdate(true);
-	s2_spr->Traverse(visitor, vp);
-	s2_spr->SetInheritUpdate(old_inherit_update);
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	ProxyHelper::ActorSetFrame(s2_actor, frame);
 }
 
 extern "C"

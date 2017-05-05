@@ -8,6 +8,7 @@
 #include "BoundingBox.h"
 #include "UpdateParams.h"
 #include "RenderColor.h"
+#include "SetStaticFrameVisitor.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -1286,6 +1287,33 @@ bool ProxyHelper::ActorGetFrame(const Actor* actor, int& frame)
 	else
 	{
 		return false;
+	}
+}
+
+void ProxyHelper::ActorSetFrame(Actor* actor, int frame)
+{
+	const Symbol* sym = actor->GetSpr()->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
+			ActorSetFrame(const_cast<Actor*>(child_actor), frame);
+		}
+	} 
+	else
+	{
+		const Sprite* spr = actor->GetSpr();
+
+		SetStaticFrameVisitor visitor(frame);
+		SprVisitorParams vp;
+		vp.actor = actor;
+		bool old_inherit_update = spr->IsInheritUpdate();
+		spr->SetInheritUpdate(true);
+		spr->Traverse(visitor, vp);
+		spr->SetInheritUpdate(old_inherit_update);
 	}
 }
 

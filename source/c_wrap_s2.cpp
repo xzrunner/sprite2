@@ -612,7 +612,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 		int ret = 0;
 		for (int i = 0, n = items.size(); i < n; ++i) 
 		{
-			int _ret = _actor_mount(p_actor, items[i].second, new_actor);
+			int _ret = _actor_mount(items[i].first, items[i].second, new_actor);
 			if (_ret != 0) {
 				ret = _ret;
 			}

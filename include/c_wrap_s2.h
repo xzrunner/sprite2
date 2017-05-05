@@ -186,11 +186,8 @@ bool  s2_actor_get_text_size(const void* actor, float* w, float* h);
 // anchor
 //////////////////////////////////////////////////////////////////////////
 
-/**
- *  @note
- *    No use for proxy node.
- */
 void* s2_actor_get_anchor_real(void* actor);
+void  s2_actor_anchor_deconnect(void* actor);
 
 //////////////////////////////////////////////////////////////////////////
 // scale9

@@ -119,6 +119,7 @@ public:
 	int GetID() const { return m_id; }
 
 	void AddActor(Actor* actor) const;
+	void DelActor(Actor* actor) const;
 	const Actor* QueryActor(const Actor* prev) const;
 	bool HaveActor() const { return !m_actors.empty(); }
 	int ActorCount() const { return m_actors.size(); }

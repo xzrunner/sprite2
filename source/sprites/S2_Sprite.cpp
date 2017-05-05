@@ -617,6 +617,18 @@ void Sprite::AddActor(Actor* actor) const
 	m_actors.push_back(actor);
 }
 
+void Sprite::DelActor(Actor* actor) const
+{
+	std::vector<Actor*>::iterator itr = m_actors.begin();
+	for ( ; itr != m_actors.end(); ) {
+		if (*itr == actor) {
+			itr = m_actors.erase(itr);
+		} else {
+			++itr;
+		}
+	}
+}
+
 const Actor* Sprite::QueryActor(const Actor* prev) const
 {
 	for (int i = 0, n = m_actors.size(); i < n; ++i) {

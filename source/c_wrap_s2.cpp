@@ -935,6 +935,16 @@ void* s2_actor_get_anchor_real(void* actor) {
 }
 
 extern "C"
+void s2_actor_anchor_deconnect(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	const Actor* parent = s2_actor->GetParent();
+	if (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_ANCHOR) {
+		parent->GetSpr()->DelActor(s2_actor);
+		s2_actor->SetParent(NULL);
+	}
+}
+
+extern "C"
 void s2_actor_scale9_resize(void* actor, int w, int h) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	ProxyHelper::ActorScale9Resize(s2_actor, w, h);

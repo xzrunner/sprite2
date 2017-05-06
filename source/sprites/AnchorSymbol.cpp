@@ -61,7 +61,7 @@ sm::rect AnchorSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bo
 	if (real_actor) {
 		return real_actor->GetSpr()->GetBounding(real_actor)->GetSize();
 	} else {
-		return sm::rect(100, 100);
+		return sm::rect(); // empty
 	}
 }
 

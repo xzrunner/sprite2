@@ -691,7 +691,7 @@ bool ProxyHelper::ActorGetAABB(const Actor* actor, sm::rect& aabb)
 		const sm::rect& src = actor->GetAABB().GetRect();
 
 		sm::vec2 min(src.xmin, src.ymin),
-			max(src.xmax, src.ymax);
+			     max(src.xmax, src.ymax);
 		S2_MAT mat = actor->GetLocalMat() * actor->GetSpr()->GetLocalMat();
 		min = mat * min;
 		max = mat * max;

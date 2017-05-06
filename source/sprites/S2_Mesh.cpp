@@ -66,7 +66,7 @@ void Mesh::StoreToTransforom(pm::MeshTransform& transform) const
 sm::rect Mesh::GetRegion() const
 {
 	if (!m_mesh) {
-		return sm::rect(100, 100);
+		return sm::rect(); // empty
 	}
 
 	sm::rect ret;

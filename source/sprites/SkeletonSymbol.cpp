@@ -59,7 +59,7 @@ void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
 sm::rect SkeletonSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_skeleton) {
-		return sm::rect();
+		return sm::rect(); // empty
 	}
 	if (spr) {
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);

@@ -53,7 +53,7 @@ void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_anim) {
-		return sm::rect(200, 200);
+		return sm::rect(); // empty
 	}
 
 	sm::rect b;

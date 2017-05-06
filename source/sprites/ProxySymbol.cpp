@@ -49,7 +49,7 @@ void ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 sm::rect ProxySymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	return sm::rect();
+	return sm::rect(); // empty
 }
 
 }

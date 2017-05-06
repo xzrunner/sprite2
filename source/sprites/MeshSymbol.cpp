@@ -109,7 +109,7 @@ sm::rect MeshSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool
 	if (m_mesh) {
 		return m_mesh->GetRegion();
 	} else {
-		return sm::rect();
+		return sm::rect(); // empty
 	}
 }
 

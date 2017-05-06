@@ -73,8 +73,7 @@ void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)
 
 sm::rect TrailSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	// empty
-	return sm::rect();
+	return sm::rect(); // empty
 }
 
 }

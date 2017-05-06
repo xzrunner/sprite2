@@ -220,6 +220,8 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 		return;
 	}
 
+	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
+
 	std::vector<sm::vec2> vertices(4);
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
@@ -233,7 +235,6 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 	RVG::SetColor(col);
 	RVG::Polyline(vertices, true);
 
-	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);
 }
 

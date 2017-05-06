@@ -140,8 +140,7 @@ void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg)
 
 sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	// empty
-	return sm::rect();
+	return sm::rect(); // empty
 }
 
 void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const

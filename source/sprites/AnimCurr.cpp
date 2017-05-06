@@ -132,7 +132,7 @@ bool AnimCurr::Update(const UpdateParams& up, const Sprite* spr,
 					  bool loop, float interval, int fps)
 {
 	if (!m_active) {
-		return false;
+		return UpdateChildren(up, spr);
 	}
 
 	if (!UpdateTime()) {

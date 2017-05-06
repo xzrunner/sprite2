@@ -379,6 +379,10 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 	{
 		const Sprite* c_spr = sprs[i];
 		const Actor* c_actor = c_spr->QueryActor(actor);
+		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
+		if (!visible) {
+			continue;
+		}
 		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
 		if (!c_aabb.IsValid()) {
 			continue;

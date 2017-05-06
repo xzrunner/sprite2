@@ -67,20 +67,23 @@ private:
 	static const uint32_t FLAG_FLATTEN_DIRTY  = 0x00000010;
 
 public:
-	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
+//	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
+	bool IsVisible() const { return (m_flags & FLAG_VISIBLE) != 0; }
+	void SetVisible(bool flag, bool up_aabb = false) const;
+
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
 	S2_FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
 	S2_FLAG_METHOD(FlattenDirty, FLAG_FLATTEN_DIRTY)
 	
 private:
-	const Sprite*    m_spr;
-	const Actor*     m_parent;
+	const Sprite*     m_spr;
+	const Actor*      m_parent;
 
-	ActorGeo*        m_geo;
-	ActorAABB        m_aabb;
-	SprRender*       m_render;
-	mutable uint32_t m_flags;
+	ActorGeo*         m_geo;
+	mutable ActorAABB m_aabb;
+	SprRender*        m_render;
+	mutable uint32_t  m_flags;
 
 }; // Actor
 

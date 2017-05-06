@@ -227,4 +227,20 @@ void Actor::InitFlags()
 #endif // S2_SPR_DEFAULT_EDITABLE
 }
 
+void Actor::SetVisible(bool flag, bool up_aabb) const
+{
+	if (m_flags & FLAG_VISIBLE == flag) {
+		return;
+	}
+	if (flag) {
+		m_flags |= FLAG_VISIBLE;
+	} else {
+		m_flags &= ~FLAG_VISIBLE;
+	}
+	if (up_aabb) {
+		m_aabb.UpdateParent(this);
+		SetFlattenDirtyToRoot();
+	}
+}
+
 }

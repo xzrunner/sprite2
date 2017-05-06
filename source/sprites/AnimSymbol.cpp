@@ -222,6 +222,10 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
 				const Sprite* c_spr = frame->sprs[k];
 				const Actor* c_actor = c_spr->QueryActor(actor);
+				bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
+				if (!visible) {
+					continue;
+				}
 
 				// use spr's aabb
 //				frame->sprs[k]->GetBounding()->CombineTo(aabb);

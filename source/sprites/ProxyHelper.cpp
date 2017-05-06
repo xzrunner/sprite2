@@ -1013,7 +1013,7 @@ void ProxyHelper::ActorSetVisible(Actor* actor, bool visible)
 	{
 		if (visible != actor->IsVisible()) {
 			actor->SetFlattenDirtyToRoot();
-			actor->SetVisible(visible);
+			actor->SetVisible(visible, true);
 		}
 	}
 }

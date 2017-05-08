@@ -11,6 +11,7 @@
 #include "AnimActor.h"
 #include "AnimFlatten.h"
 #include "FlattenParams.h"
+#include "AABBHelper.h"
 
 #include <assert.h>
 
@@ -214,40 +215,27 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		return anim_actor->GetCurr()->CalcAABB(actor);
 	}
 
+	std::vector<Sprite*> children;
+	int num = 0;
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
+		Layer* layer = m_layers[i];
+		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
+			Frame* frame = layer->frames[j];
+			num += frame->sprs.size();
+		}
+	}
+	children.reserve(num);
 	sm::rect aabb;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		Layer* layer = m_layers[i];
 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
 			Frame* frame = layer->frames[j];
 			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
-				const Sprite* c_spr = frame->sprs[k];
-				const Actor* c_actor = c_spr->QueryActor(actor);
-				bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
-				if (!visible) {
-					continue;
-				}
-
-				// use spr's aabb
-//				frame->sprs[k]->GetBounding()->CombineTo(aabb);
-
-				// calc sym's aabb
-				sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
-				if (!c_aabb.IsValid()) {
-					continue;
-				}
-
-				S2_MAT mat = c_spr->GetLocalMat();
-				if (c_actor) {
-					mat = c_actor->GetLocalMat() * mat;
-				}
-				aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymin));
-				aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymin));
-				aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymax));
-				aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymax));
+				children.push_back(frame->sprs[k]);			
 			}
 		}
 	}
-	return aabb;
+	return AABBHelper::CalcAABB(children, actor);
 }
 
 /************************************************************************/

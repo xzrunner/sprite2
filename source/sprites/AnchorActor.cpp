@@ -43,15 +43,11 @@ void AnchorActor::SetAnchor(const Actor* anchor)
 	{
 		GetAABB().SetRect(anchor->GetAABB().GetRect());
 		anchor->GetSpr()->ConnectActors(this);
-
-		ActorAABB& aabb = const_cast<Actor*>(anchor)->GetAABB();
-		aabb.SetRect(sm::rect());	// make it empty
-		aabb.Update(this);
+		const_cast<Actor*>(anchor)->GetAABB().UpdateParent(anchor);
 	} 
 	else 
 	{
-		// make it empty
-		GetAABB().SetRect(sm::rect());
+		GetAABB().Update(this);
 	}
 }
 

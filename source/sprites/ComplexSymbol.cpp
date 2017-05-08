@@ -14,6 +14,7 @@
 #include "S2_Actor.h"
 #include "Flatten.h"
 #include "FlattenParams.h"
+#include "AABBHelper.h"
 
 #include <SM_Test.h>
 
@@ -370,35 +371,9 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		return m_scissor;
 	}
 
-	sm::rect aabb;
-
 	int action = GetAction(spr, actor);
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
-
-	for (int i = 0, n = sprs.size(); i < n; ++i) 
-	{
-		const Sprite* c_spr = sprs[i];
-		const Actor* c_actor = c_spr->QueryActor(actor);
-		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
-		if (!visible) {
-			continue;
-		}
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
-		if (!c_aabb.IsValid()) {
-			continue;
-		}
-
-		S2_MAT mat = c_spr->GetLocalMat();
-		if (c_actor) {
-			mat = c_actor->GetLocalMat() * mat;
-		}
-		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymin));
-		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymin));
-		aabb.Combine(mat * sm::vec2(c_aabb.xmax, c_aabb.ymax));
-		aabb.Combine(mat * sm::vec2(c_aabb.xmin, c_aabb.ymax));
-	}
-
-	return aabb;
+	return AABBHelper::CalcAABB(sprs, actor);
 }
 
 int ComplexSymbol::GetAction(const Sprite* spr, const Actor* actor) const

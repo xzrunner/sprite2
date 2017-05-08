@@ -673,10 +673,12 @@ void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	sm::rect rect;
 	if (ProxyHelper::ActorGetAABB(s2_actor, rect)) {
-		aabb[0] = rect.xmin;
-		aabb[1] = rect.ymin;
-		aabb[2] = rect.xmax;
-		aabb[3] = rect.ymax;
+		if (rect.IsValid()) {
+			aabb[0] = rect.xmin;
+			aabb[1] = rect.ymin;
+			aabb[2] = rect.xmax;
+			aabb[3] = rect.ymax;
+		}
 	} else {
 		LOGW("s2_actor_get_aabb fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 	}

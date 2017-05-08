@@ -33,7 +33,7 @@ bool ActorAABB::Update(const Actor* curr)
 	}
 
 	sm::rect new_rect = Build(curr);
-	if (new_rect == m_rect) {
+	if (new_rect == m_rect && m_rect.IsValid()) {
 		return false;
 	}
 	m_rect = new_rect;
@@ -103,6 +103,10 @@ void ActorAABB::SetStaticRect(const sm::rect& rect)
 
 sm::rect ActorAABB::UpdateTight(const Actor* curr)
 {
+	if (!m_rect.IsValid()) {
+		return m_rect;
+	}
+
 	sm::vec2 bounding[4] = {
 		sm::vec2(m_rect.xmin, m_rect.ymin),
 		sm::vec2(m_rect.xmax, m_rect.ymin),

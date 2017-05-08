@@ -41,12 +41,10 @@ Symbol::~Symbol()
 }
 
 sm::rect Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
-{
+{	
 	if (cache && actor) {
 		const sm::rect& rect = actor->GetAABB().GetRect();
-		if (rect.IsValid()) {
-			return rect;
-		}
+		return rect;
 	}
 	return GetBoundingImpl(spr, actor, cache);
 }

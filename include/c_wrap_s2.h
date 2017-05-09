@@ -24,6 +24,8 @@ void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx,
 					 float xmin, float ymin, float xmax, float ymax);
 void  s2_symbol_draw2(const void* symbol, float x, float y);
 
+void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, const char* child_name);
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
@@ -38,6 +40,9 @@ void  s2_spr_set_scale(void* spr, float sx, float sy);
 void  s2_spr_get_pos(const void* spr, float* x, float* y);
 float s2_spr_get_angle(const void* spr);
 void  s2_spr_get_scale(const void* spr, float* sx, float* sy);
+
+void  s2_spr_set_col_mul(void* spr, uint32_t abgr);
+void  s2_spr_set_col_add(void* spr, uint32_t abgr);
 
 void  s2_spr_retain(void* spr);
 void  s2_spr_release(void* spr);

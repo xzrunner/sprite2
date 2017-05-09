@@ -116,6 +116,32 @@ void s2_symbol_draw2(const void* symbol, float x, float y)
 	DrawNode::Draw(s2_sym, rp);
 }
 
+extern "C"
+void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, const char* child_name)
+{
+	const Symbol* s2_sym = static_cast<const Symbol*>(sym);
+	if (s2_sym->Type() != SYM_COMPLEX) {
+		return NULL;
+	}
+
+	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(s2_sym);
+	const std::vector<Sprite*>& children = comp_sym->GetAllChildren();
+	if (child_idx >= 0 && child_idx < children.size()) {
+		Sprite* child = children[child_idx];
+		assert(child->GetSymbol()->GetID() == child_id);
+		return child;
+	} else {
+		for (int i = 0, n = children.size(); i < n; ++i) {
+			Sprite* child = children[i];
+			if (child->GetSymbol()->GetID() == child_id &&
+				child->GetName() == child_name) {
+				return child;
+			}
+		}
+		return NULL;
+	}
+}
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
@@ -196,6 +222,22 @@ void s2_spr_get_scale(const void* spr, float* sx, float* sy) {
 	} else {
 		LOGW("s2_spr_get_scale fail, sym_id %d", s2_spr->GetSymbol()->GetID());
 	}
+}
+
+extern "C"
+void s2_spr_set_col_mul(void* spr, uint32_t abgr) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	RenderColor rc = s2_spr->GetColor();
+	rc.SetMulABGR(abgr);
+	s2_spr->SetColor(rc);
+}
+
+extern "C"
+void s2_spr_set_col_add(void* spr, uint32_t abgr) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	RenderColor rc = s2_spr->GetColor();
+	rc.SetAddABGR(abgr);
+	s2_spr->SetColor(rc);
 }
 
 extern "C"

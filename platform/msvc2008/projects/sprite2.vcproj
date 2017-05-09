@@ -1206,6 +1206,18 @@
 							>
 						</File>
 					</Filter>
+					<Filter
+						Name="set"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\SetStaticFrameVisitor.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\SetStaticFrameVisitor.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -1227,6 +1239,14 @@
 			<Filter
 				Name="actor"
 				>
+				<File
+					RelativePath="..\..\..\source\sprites\AABBHelper.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AABBHelper.h"
+					>
+				</File>
 				<File
 					RelativePath="..\..\..\source\sprites\ActorAABB.cpp"
 					>
@@ -1289,6 +1309,42 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\Flatten.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="99.proxy"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\ProxyActor.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ProxyActor.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\ProxyHelper.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ProxyHelper.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\ProxySprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ProxySprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\ProxySymbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ProxySymbol.h"
 					>
 				</File>
 			</Filter>

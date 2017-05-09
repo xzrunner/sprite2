@@ -466,7 +466,7 @@ void ProxyHelper::SprTextboxResetTime(Sprite* spr)
 	}
 	else if (type == SYM_TEXTBOX)
 	{
-		TextboxSprite* tb_spr = static_cast<TextboxSprite*>(spr);
+		TextboxSprite* tb_spr = VI_DOWNCASTING<TextboxSprite*>(spr);
 		tb_spr->ResetTime();
 	}
 }
@@ -485,7 +485,7 @@ void ProxyHelper::SprAnim2SetStaticTime(Sprite* spr, int time)
 	}
 	else if (type == SYM_ANIM2)
 	{
-		Anim2Sprite* a2_spr = static_cast<Anim2Sprite*>(spr);
+		Anim2Sprite* a2_spr = VI_DOWNCASTING<Anim2Sprite*>(spr);
 		a2_spr->SetStaticTime(s2::UpdateParams(), time);
 	}
 }
@@ -504,7 +504,7 @@ void ProxyHelper::SprP3dSetLocal(Sprite* spr, bool local)
 	}
 	else if (type == SYM_PARTICLE3D)
 	{
-		Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
+		Particle3dSprite* p3d_spr = VI_DOWNCASTING<Particle3dSprite*>(spr);
 		p3d_spr->SetLocal(local);
 	}
 }
@@ -523,7 +523,7 @@ void ProxyHelper::SprP3dSetLoop(Sprite* spr, bool loop)
 	}
 	else if (type == SYM_PARTICLE3D)
 	{
-		Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
+		Particle3dSprite* p3d_spr = VI_DOWNCASTING<Particle3dSprite*>(spr);
 		p3d_spr->SetLoop(loop);
 	}
 }
@@ -545,7 +545,7 @@ bool ProxyHelper::SprP3dIsFinished(const Sprite* spr)
 	} 
 	else if (type == SYM_PARTICLE3D)
 	{
-		const Particle3dSprite* p3d_spr = static_cast<const Particle3dSprite*>(spr);
+		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 		if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
 			return et->IsFinished();
 		} else {
@@ -572,7 +572,7 @@ void ProxyHelper::SprP3dUpdate(Sprite* spr, float dt)
 	}
 	else if (type == SYM_PARTICLE3D)
 	{
-		Particle3dSprite* p3d_spr = static_cast<Particle3dSprite*>(spr);
+		Particle3dSprite* p3d_spr = VI_DOWNCASTING<Particle3dSprite*>(spr);
 		if (const Particle3dEmitter* et = p3d_spr->GetEmitter()) {
 			const_cast<Particle3dEmitter*>(et)->Update(et->GetTime() + dt);
 		}
@@ -615,7 +615,7 @@ void ProxyHelper::SetDTexEnable(Sprite* spr, bool enable)
 	}
 	else
 	{
-		static_cast<Sprite*>(spr)->SetDTexDisable(!enable);
+		VI_DOWNCASTING<Sprite*>(spr)->SetDTexDisable(!enable);
 	}
 }
 

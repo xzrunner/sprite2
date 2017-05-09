@@ -44,6 +44,8 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	case SYM_COMPLEX: case SYM_MESH: case SYM_MASK: case SYM_PROXY:
 		ret = VISIT_INTO;
 		break;
+    default:
+        break;
 	}
 	return ret;
 }

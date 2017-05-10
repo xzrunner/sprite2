@@ -73,6 +73,10 @@ void ActorAABB::UpdateParent(const Actor* curr)
 	}
 
 	const ActorAABB& p_aabb = parent->GetAABB();
+	if (p_aabb.m_static) {
+		return;
+	}
+
 	if (curr->IsAABBTight()) 
 	{
 		const_cast<Actor*>(parent)->GetAABB().m_rect.MakeEmpty();

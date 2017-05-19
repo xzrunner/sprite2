@@ -76,9 +76,18 @@ void Particle2dSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool Particle2dSprite::Update(const UpdateParams& up)
 {
+	// update inherit
 	if (!up.IsForce() && !IsInheritUpdate()) {
 		return false;
 	}
+
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
+
 	if (!m_et) {
 		return false;
 	}

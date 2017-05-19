@@ -21,7 +21,16 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	if (type == SYM_ANCHOR) {
 		return VISIT_INTO;
 	}
+
+	// update inherit
 	if (!spr->IsInheritUpdate()) {
+		return VISIT_OVER;
+	}
+
+	// visible
+	const Actor* actor = params.actor;
+	bool visible = actor ? actor->IsVisible() : spr->IsVisible();
+	if (!visible) {
 		return VISIT_OVER;
 	}
 
@@ -31,8 +40,8 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	case SYM_ANIMATION:
 		{
 			AnimSprite* anim_spr = const_cast<AnimSprite*>(VI_DOWNCASTING<const AnimSprite*>(spr));
-			anim_spr->SetActive(m_static_frame == -1, params.actor);
-			anim_spr->SetFrame(UpdateParams(params.actor), m_static_frame);
+			anim_spr->SetActive(m_static_frame == -1, actor);
+			anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
 		}
 		break;
 	case SYM_ANIM2:

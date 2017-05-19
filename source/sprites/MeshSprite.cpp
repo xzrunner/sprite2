@@ -73,9 +73,18 @@ void MeshSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool MeshSprite::Update(const UpdateParams& up) 
 {
+	// update inherit
 	if (!up.IsForce() && !IsInheritUpdate()) {
 		return false;
 	}
+
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
+
 	UpdateParams up_child(up);
 	up_child.Push(this);
 	if (m_base) {

@@ -24,9 +24,18 @@ Anim2Sprite* Anim2Sprite::Clone() const
 
 bool Anim2Sprite::Update(const UpdateParams& up)
 {
+	// update inherit
 	if (!up.IsForce() && !IsInheritUpdate()) {
 		return false;
 	}
+
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
+
 	bool ret = m_curr.Update();
 	if (ret) {
 		SetBoundingDirty(true);

@@ -43,14 +43,21 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 
 bool ComplexSprite::Update(const UpdateParams& up)
 {
+	// update inherit
 	if (!up.IsForce() && !IsInheritUpdate()) {
+		return false;
+	}
+
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
 		return false;
 	}
 
 	bool dirty = false;
 	UpdateParams up_child(up);
 	up_child.Push(this);
-	const Actor* actor = up.GetActor();
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(actor));
 	for (int i = 0, n = children.size(); i < n; ++i) 

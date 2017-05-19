@@ -27,13 +27,27 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	if (!anchor) {
 		return false;
 	}
-	if (!up.IsForce() && !anchor->GetSpr()->IsInheritUpdate()) {
+
+	const Sprite* spr_real = anchor->GetSpr();
+
+	// update inherit
+	if (!up.IsForce() && !spr_real->IsInheritUpdate()) {
 		return false;
 	}
+
+	
+	const Actor* actor_real = spr_real->QueryActor(actor);
+	
+	// visible
+	bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
+	if (!visible) {
+		return false;
+	}
+
 	UpdateParams up_child(up);
 	up_child.Push(this);
-	up_child.SetActor(anchor->GetSpr()->QueryActor(actor));
-	return const_cast<Sprite*>(anchor->GetSpr())->Update(up_child);
+	up_child.SetActor(actor_real);
+	return const_cast<Sprite*>(spr_real)->Update(up_child);
 }
 
 Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const

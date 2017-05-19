@@ -530,28 +530,24 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 			continue;
 		}
 		const AnimCopy::Layer& layer = m_copy->m_layers[i];
-		if (0 <= cursor && cursor < layer.frames.size()) {
-			const AnimCopy::Frame& frame = layer.frames[cursor];
-			for (int j = 0, m = frame.items.size(); j < m; ++j)
-			{
-				// find first time
-				int first_time = frame.time;
-				int frame_idx = cursor, actor_idx = j;
-				while (frame_idx >= 0
-						&& actor_idx < layer.frames[frame_idx].items.size()
-						&& layer.frames[frame_idx].items[actor_idx].prev != -1) {
-					--frame_idx;
-					first_time = layer.frames[frame_idx].time;
-				}
-
-				const AnimCopy::Item& actor = frame.items[j];
-				Sprite* child = m_slots[actor.slot];
-
-				SetStaticFrameVisitor visitor(static_frame - first_time + 1);
-				SprVisitorParams vp;
-				vp.actor = child->QueryActor(up_child.GetActor());
-				child->Traverse(visitor, vp, false);
+		const AnimCopy::Frame& frame = layer.frames[cursor];
+		for (int j = 0, m = frame.items.size(); j < m; ++j)
+		{
+			// find first time
+			int first_time = frame.time;
+			int frame_idx = cursor, actor_idx = j;
+			while (frame_idx >= 0 && layer.frames[frame_idx].items[actor_idx].prev != -1) {
+				--frame_idx;
+				first_time = layer.frames[frame_idx].time;
 			}
+
+			const AnimCopy::Item& actor = frame.items[j];
+			Sprite* child = m_slots[actor.slot];
+
+ 			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
+			SprVisitorParams vp;
+			vp.actor = child->QueryActor(up_child.GetActor());
+			child->Traverse(visitor, vp, false);
 		}
 	}
 }

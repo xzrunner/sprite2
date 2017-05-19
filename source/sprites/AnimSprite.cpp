@@ -100,14 +100,14 @@ bool AnimSprite::Update(const UpdateParams& up)
 	}
 }
 
-Sprite* AnimSprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* AnimSprite::FetchChildByName(int name, const Actor* actor) const
 {
-	return GetAnimCurr(actor).FetchChild(name, actor);
+	return GetAnimCurr(actor).FetchChildByName(name, actor);
 }
 
-Sprite* AnimSprite::FetchChild(int idx, const Actor* actor) const
+Sprite* AnimSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
-	return GetAnimCurr(actor).FetchChild(idx);
+	return GetAnimCurr(actor).FetchChildByIdx(idx);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const

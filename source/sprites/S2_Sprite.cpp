@@ -37,6 +37,7 @@ static void (*INIT_FLAGS)(Sprite* spr);
 
 Sprite::Sprite()
 	: m_sym(NULL)
+	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
@@ -53,6 +54,7 @@ Sprite::Sprite()
 
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(NULL)
+	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(NULL)
 	, m_render(SprDefault::Instance()->Render())
@@ -75,6 +77,7 @@ Sprite& Sprite::operator = (const Sprite& spr)
 
 Sprite::Sprite(Symbol* sym, uint32_t id)
 	: m_sym(NULL)
+	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())

@@ -40,8 +40,8 @@ public:
 		bool loop = true, float interval = 0, int fps = 30);
 	void Draw(const RenderParams& rp) const;
 
-	Sprite* FetchChild(const std::string& name, const Actor* actor) const;
-	Sprite* FetchChild(int idx) const;
+	Sprite* FetchChildByName(int name, const Actor* actor) const;
+	Sprite* FetchChildByIdx(int idx) const;
 
 	void Start(const UpdateParams& up, const Sprite* spr);
 

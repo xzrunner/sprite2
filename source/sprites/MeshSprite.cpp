@@ -95,12 +95,12 @@ bool MeshSprite::Update(const UpdateParams& up)
 	}
 }
 
-Sprite* MeshSprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const
 {
 	class FetchVisitor : public SymbolVisitor
 	{
 	public:
-		FetchVisitor(const std::string& name) 
+		FetchVisitor(int name) 
 			: m_name(name)
 			, m_spr(NULL) 
 		{}
@@ -115,7 +115,7 @@ Sprite* MeshSprite::FetchChild(const std::string& name, const Actor* actor) cons
 		Sprite* GetResult() { return m_spr; }
 		
 	private:
-		std::string m_name;
+		int m_name;
 		mutable Sprite* m_spr;
 
 	}; // FetchVisitor

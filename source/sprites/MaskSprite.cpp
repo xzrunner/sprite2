@@ -74,11 +74,11 @@ bool MaskSprite::Update(const UpdateParams& up)
 	return dirty;
 }
 
-Sprite* MaskSprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* MaskSprite::FetchChildByName(int name, const Actor* actor) const
 {
-	if (name == "base") {
+	if (name == SprNameMap::BASE_ID) {
 		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
-	} else if (name == "mask") {
+	} else if (name == SprNameMap::MASK_ID) {
 		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
 	} else {
 		return NULL;

@@ -21,6 +21,7 @@
 #include "RenderScissor.h"
 #include "Blackboard.h"
 #include "s2_trans_color.h"
+#include "StringHelper.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -131,10 +132,11 @@ void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, c
 		assert(child->GetSymbol()->GetID() == child_id);
 		return child;
 	} else {
+		int child_name_id = SprNameMap::Instance()->QueryID(StringHelper::FromChar(child_name));
 		for (int i = 0, n = children.size(); i < n; ++i) {
 			Sprite* child = children[i];
 			if (child->GetSymbol()->GetID() == child_id &&
-				child->GetName() == child_name) {
+				child->GetName() == child_name_id) {
 				return child;
 			}
 		}
@@ -265,7 +267,9 @@ int s2_spr_get_ref_count(void* spr) {
 
 extern "C"
 const char* s2_spr_get_name(void* spr) {
-	return static_cast<Sprite*>(spr)->GetName().c_str();	
+	std::string name;
+	SprNameMap::Instance()->IDToStr(static_cast<Sprite*>(spr)->GetName(), name);
+	return name.c_str();
 }
 
 extern "C"
@@ -604,7 +608,8 @@ int s2_actor_get_component_count(void* actor) {
 extern "C"
 void* s2_actor_fetch_child(const void* actor, const char* name) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(name, s2_actor);
+	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
+	const Sprite* child = s2_actor->GetSpr()->FetchChildByName(name_id, s2_actor);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -615,7 +620,7 @@ void* s2_actor_fetch_child(const void* actor, const char* name) {
 extern "C"
 void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
-	const Sprite* child = s2_actor->GetSpr()->FetchChild(idx, s2_actor);
+	const Sprite* child = s2_actor->GetSpr()->FetchChildByIdx(idx, s2_actor);
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
@@ -642,7 +647,8 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	const Actor* p_actor = static_cast<const Actor*>(parent);
 	const Sprite* p_spr = p_actor->GetSpr();
 	const Actor* new_actor = static_cast<const Actor*>(child);
-	Sprite* old_spr = p_spr->FetchChild(name, p_actor);
+	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
+	Sprite* old_spr = p_spr->FetchChildByName(name_id, p_actor);
 	if (!old_spr) {
 		return -1;		
 	}

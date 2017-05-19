@@ -50,23 +50,23 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	return const_cast<Sprite*>(spr_real)->Update(up_child);
 }
 
-Sprite* AnchorSprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* AnchorSprite::FetchChildByName(int name, const Actor* actor) const
 {
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
 		const Sprite* anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChild(name, anchor_spr->QueryActor(actor));
+		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor));
 	} else {
 		return NULL;
 	}
 }
 
-Sprite* AnchorSprite::FetchChild(int idx, const Actor* actor) const
+Sprite* AnchorSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
 	const Actor* anchor = QueryAnchor(actor);
 	if (anchor) {
 		const Sprite* anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChild(idx, anchor_spr->QueryActor(actor));
+		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor));
 	} else {
 		return NULL;
 	}

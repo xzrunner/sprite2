@@ -49,7 +49,7 @@ bool ProxySprite::Update(const UpdateParams& up)
 	return ret;
 }
 
-Sprite* ProxySprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* ProxySprite::FetchChildByName(int name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;
 	const std::vector<std::pair<const Actor*, Sprite*> >& items 
@@ -57,14 +57,14 @@ Sprite* ProxySprite::FetchChild(const std::string& name, const Actor* actor) con
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (int i = 0, n = items.size(); i < n; ++i) {
 			const Actor* real_actor = items[i].second->QueryActor(items[i].first);
-			Sprite* child = items[i].second->FetchChild(name, real_actor);
+			Sprite* child = items[i].second->FetchChildByName(name, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
 			}
 		}
 	} else {
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			Sprite* child = items[i].second->FetchChild(name, actor);
+			Sprite* child = items[i].second->FetchChildByName(name, actor);
 			if (child) {
 				group.push_back(std::make_pair(actor, child));
 			}
@@ -73,7 +73,7 @@ Sprite* ProxySprite::FetchChild(const std::string& name, const Actor* actor) con
 	return ProxyHelper::BuildGroup(group);
 }
 
-Sprite* ProxySprite::FetchChild(int idx, const Actor* actor) const
+Sprite* ProxySprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;
 	const std::vector<std::pair<const Actor*, Sprite*> >& items 
@@ -81,14 +81,14 @@ Sprite* ProxySprite::FetchChild(int idx, const Actor* actor) const
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (int i = 0, n = items.size(); i < n; ++i) {
 			const Actor* real_actor = items[i].second->QueryActor(items[i].first);
-			Sprite* child = items[i].second->FetchChild(idx, real_actor);
+			Sprite* child = items[i].second->FetchChildByIdx(idx, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
 			}
 		}
 	} else {
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			Sprite* child = items[i].second->FetchChild(idx, actor);
+			Sprite* child = items[i].second->FetchChildByIdx(idx, actor);
 			if (child) {
 				group.push_back(std::make_pair(actor, child));
 			}

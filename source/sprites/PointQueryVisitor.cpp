@@ -53,7 +53,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	} else if (type == SYM_ANIM2) {
 		return VISIT_OVER;
 	} else if (type == SYM_MASK) {
-		Sprite* base_spr = spr->FetchChild("base", params.actor);
+		int name_id = SprNameMap::Instance()->QueryID("base");
+		Sprite* base_spr = spr->FetchChildByName(name_id, params.actor);
 		const Actor* c_actor = base_spr->QueryActor(params.actor);
 		bool visible = c_actor ? c_actor->IsVisible() : base_spr->IsVisible();
 		if (!visible) {

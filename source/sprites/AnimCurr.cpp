@@ -189,7 +189,7 @@ void AnimCurr::Draw(const RenderParams& rp) const
 	}
 }
 
-Sprite* AnimCurr::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* AnimCurr::FetchChildByName(int name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
@@ -201,7 +201,7 @@ Sprite* AnimCurr::FetchChild(const std::string& name, const Actor* actor) const
 	return ProxyHelper::BuildGroup(group);
 }
 
-Sprite* AnimCurr::FetchChild(int idx) const
+Sprite* AnimCurr::FetchChildByIdx(int idx) const
 {
 	if (idx < 0 || idx >= m_slots.size()) {
 		return NULL;

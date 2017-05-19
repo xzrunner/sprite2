@@ -71,7 +71,7 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	return dirty;
 }
 
-Sprite* ComplexSprite::FetchChild(const std::string& name, const Actor* actor) const
+Sprite* ComplexSprite::FetchChildByName(int name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;
 	const std::vector<Sprite*>& children 
@@ -85,7 +85,7 @@ Sprite* ComplexSprite::FetchChild(const std::string& name, const Actor* actor) c
 	return ProxyHelper::BuildGroup(group);
 }
 
-Sprite* ComplexSprite::FetchChild(int idx, const Actor* actor) const
+Sprite* ComplexSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();

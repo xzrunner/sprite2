@@ -160,17 +160,11 @@ void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween
 
 bool AnimLerp::IsMatched(const Sprite* s0, const Sprite* s1)
 {
-	const std::string& name0 = s0->GetName(),
-		               name1 = s1->GetName();
-
-	bool auto_named = false;
-	if (!name0.empty() && name0[0] == '_' && !name1.empty() && name1[0] == '_') {
-		auto_named = true;
-	}
-
+	int name0 = s0->GetName(), name1 = s1->GetName();
+	bool auto_named = SprNameMap::IsTmpName(name0) && SprNameMap::IsTmpName(name1);
 	if (auto_named && name0 == name1) {
 		return true;
-	} else if (name0.empty() && name1.empty()) {
+	} else if (name0 == -1 && name1 == -1) {
 //		return s0->getSymbol().getFilepath() == s1->getSymbol().getFilepath();
 		return false;
 	} else {

@@ -11,7 +11,6 @@
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
 
-#include <string>
 #include <vector>
 
 #include <stdint.h>
@@ -51,8 +50,8 @@ public:
 	virtual void OnMessage(const UpdateParams& up, Message msg) {}
 	
  	virtual bool Update(const UpdateParams& up) { return false; }
-	virtual Sprite* FetchChild(const std::string& name, const Actor* actor) const { return NULL; }
-	virtual Sprite* FetchChild(int idx, const Actor* actor) const { return NULL; }
+	virtual Sprite* FetchChildByName(int name, const Actor* actor) const { return NULL; }
+	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const { return NULL; }
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -82,7 +81,7 @@ public:
 	Symbol* GetSymbol() { return m_sym; }
 	const Symbol* GetSymbol() const { return m_sym; }
 
-	const std::string& GetName() const { return m_name; }
+	int  GetName() const { return m_name; }
 	void SetName(const std::string& name);
 
 	const BoundingBox* GetBounding(const Actor* actor = NULL) const; 
@@ -193,7 +192,7 @@ protected:
 	/************************************************************************/
 	/* info                                                                 */
 	/************************************************************************/
-	std::string				m_name;
+	int                     m_name;
 
 	/************************************************************************/
 	/* geometry                                                             */

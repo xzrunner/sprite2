@@ -537,6 +537,7 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 			int first_time = frame.time;
 			int frame_idx = cursor, actor_idx = j;
 			while (frame_idx >= 0 && layer.frames[frame_idx].items[actor_idx].prev != -1) {
+				actor_idx = layer.frames[frame_idx].items[actor_idx].prev;
 				--frame_idx;
 				first_time = layer.frames[frame_idx].time;
 			}

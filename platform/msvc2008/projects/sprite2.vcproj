@@ -1219,6 +1219,18 @@
 						</File>
 					</Filter>
 				</Filter>
+				<Filter
+					Name="utility"
+					>
+					<File
+						RelativePath="..\..\..\source\sprites\SprNameMap.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprNameMap.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="symbol"

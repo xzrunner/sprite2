@@ -15,6 +15,7 @@
 #include "RenderScissor.h"
 #include "S2_RenderTarget.h"
 #include "S2_RVG.h"
+#include "DrawDownsample.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -63,12 +64,11 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 		return false;
 	}
 
-	child.mt = spr->GetLocalMat() * rp.mt;
 	child.color = spr->GetColor() * rp.color;
 	if (actor) {
-		child.mt = actor->GetLocalMat() * child.mt;
 		child.color = actor->GetColor() * child.color;
-	}
+	}	
+ 	child.mt = PrepareMat(rp.mt, spr, actor);
 
 	if (PREPARE_REDNER_PARAMS) {
 		PREPARE_REDNER_PARAMS(rp, spr, child);
@@ -79,12 +79,17 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 
 S2_MAT DrawNode::PrepareMat(const RenderParams& rp, const Sprite* spr)
 {
-	S2_MAT mat = spr->GetLocalMat() * rp.mt;
-	if (!spr->HaveActor()) {
-		return mat;
-	}
-	if (rp.actor) {
-		mat = rp.actor->GetLocalMat() * mat;
+	return PrepareMat(rp.mt, spr, rp.actor);
+}
+
+S2_MAT DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor)
+{
+	S2_MAT mat = parent_mt;
+	if (!spr->IsMatDisable()) {
+		mat = spr->GetLocalMat() * parent_mt;
+		if (actor) {
+			mat = actor->GetLocalMat() * mat;
+		}
 	}
 	return mat;
 }
@@ -402,7 +407,11 @@ void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 // 		DrawAABB(spr, rp, Color(255, 0, 0));
 // 	}
 
-	spr->GetSymbol()->Draw(rp, spr);
+	if (spr->GetDownsample() != 1) {
+		DrawDownsample::Draw(spr, rp, spr->GetDownsample());
+	} else {
+		spr->GetSymbol()->Draw(rp, spr);
+	}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}

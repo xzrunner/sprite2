@@ -232,7 +232,7 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
 	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
 
-	if (p3d_spr->IsLocal()) {
+	if (!spr->IsMatDisable() && p3d_spr->IsLocal()) {
 		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
 		if (rp.actor) {
 			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;

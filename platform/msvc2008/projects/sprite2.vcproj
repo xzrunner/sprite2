@@ -1396,6 +1396,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\DrawDownsample.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\DrawDownsample.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\render\DrawGaussianBlur.cpp"
 					>
 				</File>

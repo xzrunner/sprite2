@@ -21,11 +21,13 @@ SprRender::SprRender()
 // 	m_state.shader.filter = FilterFactory::Instance()->Create(fm);
 }
 
-SprRender::SprRender(RenderColor* color, RenderShader* shader, RenderCamera* camera)
+SprRender::SprRender(RenderColor* color, RenderShader* shader, 
+					 RenderCamera* camera, float downsample)
 {
 	m_state.color = color;
 	m_state.shader = shader;
 	m_state.camera = camera;
+	m_state.downsample = downsample;
 }
 
 SprRender::~SprRender()
@@ -60,6 +62,11 @@ void SprRender::SetCamera(const RenderCamera& camera)
 	*m_state.camera = camera;
 }
 
+void SprRender::SetDownsample(float downsample)
+{
+	m_state.downsample = downsample;
+}
+
 void SprRender::Term()
 {
 	if (m_state.color) {
@@ -81,6 +88,7 @@ void SprRender::Init()
 	m_state.color  = NULL;
 	m_state.shader = NULL;
 	m_state.camera = NULL;
+	m_state.downsample = 1;
 }
 
 }

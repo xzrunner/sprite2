@@ -101,10 +101,12 @@ public:
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
 	const RenderCamera& GetCamera() const;
+	float GetDownsample() const;
 
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
+	void SetDownsample(float downsample);
 
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);
@@ -150,6 +152,8 @@ protected:
 	static const uint32_t FLAG_NEED_ACTOR           = 0x00000100;
 	static const uint32_t FLAG_NEED_ACTOR_FOR_CHILD = 0x00000200;
 
+	static const uint32_t FLAG_MAT_DISABLE    = 0x00000400;	
+
 	// dtex
 	static const uint32_t FLAG_DTEX_DISABLE            = 0x00001000;
 	static const uint32_t FLAG_DTEX_FORCE_CACHED       = 0x00002000;
@@ -173,6 +177,8 @@ public:
 	void SetForceUpdate(bool flag) const;
 
 	S2_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
+
+	S2_FLAG_METHOD(MatDisable, FLAG_MAT_DISABLE)
 
 	// actor
 	S2_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)

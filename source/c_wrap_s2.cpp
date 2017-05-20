@@ -144,6 +144,46 @@ void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, c
 	}
 }
 
+extern "C"
+int s2_symbol_get_type_id(const char* name)
+{
+	int ret = SYM_UNKNOWN;
+	if (strcmp(name, "IMAGE") == 0) {
+		ret = SYM_IMAGE;		
+	} else if (strcmp(name, "SCALE9") == 0) {
+		ret = SYM_SCALE9;
+	} else if (strcmp(name, "ICON") == 0) {
+		ret = SYM_ICON;
+	} else if (strcmp(name, "TEXTURE") == 0) {
+		ret = SYM_TEXTURE;
+	} else if (strcmp(name, "TEXTBOX") == 0) {
+		ret = SYM_TEXTBOX;
+	} else if (strcmp(name, "COMPLEX") == 0) {
+		ret = SYM_COMPLEX;
+	} else if (strcmp(name, "ANIM") == 0) {
+		ret = SYM_ANIMATION;
+	} else if (strcmp(name, "ANIM2") == 0) {
+		ret = SYM_ANIM2;
+	} else if (strcmp(name, "PARTICLE3D") == 0) {
+		ret = SYM_PARTICLE3D;
+	} else if (strcmp(name, "PARTICLE2D") == 0) {
+		ret = SYM_PARTICLE2D;
+	} else if (strcmp(name, "SHAPE") == 0) {
+		ret = SYM_SHAPE;
+	} else if (strcmp(name, "MESH") == 0) {
+		ret = SYM_MESH;
+	} else if (strcmp(name, "MASK") == 0) {
+		ret = SYM_MASK;
+	} else if (strcmp(name, "TRAIL") == 0) {
+		ret = SYM_TRAIL;
+	} else if (strcmp(name, "SKELETON") == 0) {
+		ret = SYM_SKELETON;
+	} else if (strcmp(name, "MODEL") == 0) {
+		ret = SYM_MODEL;
+	}
+	return ret;
+}
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
@@ -288,6 +328,12 @@ extern "C"
 int s2_spr_get_sym_type(const void* spr) {
  	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	return s2_spr->GetSymbol()->Type();
+}
+
+extern "C"
+void s2_spr_set_downsample(void* spr, float downsample) {
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	s2_spr->SetDownsample(downsample);
 }
 
 extern "C"

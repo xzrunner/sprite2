@@ -26,6 +26,8 @@ void  s2_symbol_draw2(const void* symbol, float x, float y);
 
 void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, const char* child_name);
 
+int   s2_symbol_get_type_id(const char* name);
+
 /************************************************************************/
 /* sprite                                                               */
 /************************************************************************/
@@ -52,6 +54,8 @@ const char* s2_spr_get_name(void* spr);
 
 int   s2_spr_get_sym_id(const void* spr);
 int   s2_spr_get_sym_type(const void* spr);
+
+void  s2_spr_set_downsample(void* spr, float downsample);
 
 void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
 bool  s2_spr_point_test(const void* spr, float x, float y);

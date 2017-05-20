@@ -12,6 +12,7 @@
 #include <CU_Cloneable.h>
 
 #include <vector>
+#include <string>
 
 #include <stdint.h>
 

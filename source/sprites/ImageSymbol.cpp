@@ -11,6 +11,9 @@
 #include "RenderCtxStack.h"
 #include "Flatten.h"
 #include "FlattenParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "Statistics.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
@@ -88,6 +91,12 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
 		return;
 	}
+
+#ifndef S2_DISABLE_STATISTICS
+	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
+	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
+	Statistics::Instance()->AddOverdrawArea(area);
+#endif // S2_DISABLE_STATISTICS
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
@@ -104,17 +113,15 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
-	Flatten::Quad quad;
-	QueryTexcoords(false, &quad.texcoords[0].x, quad.tex_id);
-
+	sm::vec2 vertices[4];
 	sm::rect sz = GetBounding();
 	const S2_MAT& mt = fp.GetMat();
-	quad.vertices[0] = mt * sm::vec2(sz.xmin, sz.ymin);
-	quad.vertices[1] = mt * sm::vec2(sz.xmax, sz.ymin);
-	quad.vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);
-	quad.vertices[3] = mt * sm::vec2(sz.xmin, sz.ymax);
+	vertices[0] = mt * sm::vec2(sz.xmin, sz.ymin);
+	vertices[1] = mt * sm::vec2(sz.xmax, sz.ymin);
+	vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);
+	vertices[3] = mt * sm::vec2(sz.xmin, sz.ymax);
 
-	ft.AddQuad(quad);
+	ft.AddQuad(this, vertices);
 }
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const

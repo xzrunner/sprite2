@@ -16,17 +16,25 @@ namespace s2
 class RenderParams;
 class Sprite;
 class Actor;
+class ImageSymbol;
 
 class Flatten
 {
 public:
+	Flatten();
+
 	void Combine(const Flatten& ft, const S2_MAT& mt);
 
 	void Clear();
 
 	void Draw(const RenderParams& rp) const;
 
-public:
+	void AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4]);
+	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
+
+	void UpdateTexcoords();
+
+private:
 	struct Quad
 	{
 		int tex_id;
@@ -41,15 +49,18 @@ public:
 		int idx;
 	}; // Node
 
-	void AddQuad(const Quad& quad) { m_quads.push_back(quad); }
-	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
-
 private:
 	void DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const;
 
+	void UpdateTexcoords(int begin, int end) const;
+
 private:
-	std::vector<Quad> m_quads;
+	std::vector<const ImageSymbol*> m_images;
+	mutable std::vector<Quad> m_quads;
+
 	std::vector<Node> m_nodes;
+
+	mutable bool m_texcoords_dirty;
 
 }; // Flatten
 

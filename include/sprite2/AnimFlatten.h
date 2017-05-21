@@ -1,14 +1,17 @@
 #ifndef _SPRITE2_ANIM_FLATTEN_H_
 #define _SPRITE2_ANIM_FLATTEN_H_
 
+#include "SymbolFlatten.h"
 #include "Flatten.h"
 
 namespace s2
 {
 
-class AnimFlatten
+class AnimFlatten : public SymbolFlatten
 {
 public:
+	virtual void UpdateTexcoords();
+
 	void Clear();
 
 	void Draw(const RenderParams& rp, int frame) const;

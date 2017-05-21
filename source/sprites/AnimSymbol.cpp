@@ -12,6 +12,7 @@
 #include "AnimFlatten.h"
 #include "FlattenParams.h"
 #include "AABBHelper.h"
+#include "FlattenMgr.h"
 
 #include <assert.h>
 
@@ -45,6 +46,7 @@ AnimSymbol::~AnimSymbol()
 
 	if (m_ft) {
 		delete m_ft;
+		FlattenMgr::Instance()->Delete(GetID());
 	}
 }
 
@@ -166,6 +168,7 @@ void AnimSymbol::BuildFlatten(const Actor* actor) const
 		m_ft->Clear();
 	} else {
 		m_ft = new AnimFlatten;
+		FlattenMgr::Instance()->Add(GetID(), m_ft);
 	}
 	
 	m_copy.StoreToFlatten(*m_ft, actor);

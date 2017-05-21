@@ -1,12 +1,19 @@
 #include "Flatten.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
+#include "ImageSymbol.h"
+#include "S2_Texture.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
 namespace s2
 {
+
+Flatten::Flatten()
+	: m_texcoords_dirty(true)
+{
+}
 
 void Flatten::Combine(const Flatten& ft, const S2_MAT& mt) 
 {
@@ -20,6 +27,7 @@ void Flatten::Combine(const Flatten& ft, const S2_MAT& mt)
 		q.vertices[1] = mt * q.vertices[1];
 		q.vertices[2] = mt * q.vertices[2];
 		q.vertices[3] = mt * q.vertices[3];
+		m_images.push_back(ft.m_images[i]);
 		m_quads.push_back(q);
 	}
 
@@ -35,6 +43,7 @@ void Flatten::Combine(const Flatten& ft, const S2_MAT& mt)
 
 void Flatten::Clear() 
 { 
+	m_images.clear();
 	m_quads.clear(); 
 	m_nodes.clear();
 }
@@ -69,6 +78,16 @@ void Flatten::Draw(const RenderParams& rp) const
 	}
 }
 
+void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
+{
+	m_images.push_back(img);
+
+	Quad q;
+	img->QueryTexcoords(false, &q.texcoords[0].x, q.tex_id);
+	memcpy(q.vertices, vertices, sizeof(q.vertices));
+	m_quads.push_back(q);
+}
+
 void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
 {
 	Node node;
@@ -79,12 +98,26 @@ void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
 	m_nodes.push_back(node);
 }
 
+void Flatten::UpdateTexcoords()
+{
+	m_texcoords_dirty = true;
+	for (int i = 0, n = m_quads.size(); i < n; ++i) {
+		const ImageSymbol* src = m_images[i];
+		Quad& dst = m_quads[i];
+		src->QueryTexcoords(true, &dst.texcoords[0].x, dst.tex_id);
+	}
+}
+
 void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
 {
+	if (m_texcoords_dirty && !rp.IsDisableDTexC2()) {
+		UpdateTexcoords(begin, end);
+	}
+
 	static sm::vec2 VERTEX_BUF[4];
 
 	float x, y;
-	const Quad* ptr_quad = &m_quads[0];
+	const Quad* ptr_quad = &m_quads[begin];;
 	const float* mt = rp.mt.x;
 	for (int i = begin; i < end; ++i, ++ptr_quad)
 	{
@@ -121,6 +154,20 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 
 		shader->DrawQuad(&VERTEX_BUF[0].x, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
 	}
+}
+
+void Flatten::UpdateTexcoords(int begin, int end) const
+{
+	bool dirty = false;
+	Quad* ptr_quad = &m_quads[begin];
+	const ImageSymbol*const* ptr_img = &m_images[begin];
+	for (int i = begin; i < end; ++i, ++ptr_quad, ++ptr_img)	{
+		if (ptr_quad->tex_id == (*ptr_img)->GetTexture()->GetTexID()) {
+			dirty = true;
+			(*ptr_img)->QueryTexcoords(true, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
+		}
+	}
+	m_texcoords_dirty = dirty;
 }
 
 }

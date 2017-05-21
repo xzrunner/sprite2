@@ -3,6 +3,13 @@
 namespace s2
 {
 
+void AnimFlatten::UpdateTexcoords()
+{
+	for (int i = 0, n = m_frames.size(); i < n; ++i) {
+		m_frames[i].UpdateTexcoords();
+	}
+}
+
 void AnimFlatten::Clear()
 {
 	m_frames.clear();

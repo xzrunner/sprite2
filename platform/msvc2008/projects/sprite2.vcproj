@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -1197,14 +1197,6 @@
 							RelativePath="..\..\..\include\sprite2\PointQueryVisitor.h"
 							>
 						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\QueryAABBVisitor.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\QueryAABBVisitor.h"
-							>
-						</File>
 					</Filter>
 					<Filter
 						Name="set"
@@ -1268,6 +1260,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\ActorDefault.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\ActorDefault.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\ActorFactory.cpp"
 					>
 				</File>
@@ -1323,6 +1323,18 @@
 					RelativePath="..\..\..\include\sprite2\Flatten.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\FlattenMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\FlattenMgr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\SymbolFlatten.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="99.proxy"
@@ -1373,11 +1385,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\sprite2\ObjectPool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\ObjectPool.inl"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\ObjectPool2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\ObjectPool2.inl"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\sprite2\pre_defined.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\sprite2\s2_config.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\utility\Statistics.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\sprite2\Statistics.h"
 				>
 			</File>
 		</Filter>

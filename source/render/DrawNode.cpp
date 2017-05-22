@@ -422,11 +422,11 @@ void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 // 		DrawAABB(spr, rp, Color(255, 0, 0));
 // 	}
 
-	if (spr->GetDownsample() != 1) {
-		DrawDownsample::Draw(spr, rp, spr->GetDownsample());
-	} else {
+	//if (spr->GetDownsample() != 1) {
+	//	DrawDownsample::Draw(spr, rp, spr->GetDownsample());
+	//} else {
 		spr->GetSymbol()->Draw(rp, spr);
-	}
+	//}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}

@@ -8,7 +8,7 @@ SINGLETON_DEFINITION(ActorDefault);
 
 ActorDefault::ActorDefault()
 {
-	m_geo = new ActorGeo();
+	m_geo = ActorGeoPool::Instance()->Pop();
 }
 
 }

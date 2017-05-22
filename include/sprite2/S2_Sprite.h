@@ -92,12 +92,12 @@ public:
 	void Rotate(float rot);
 	void Scale(const sm::vec2& scale);
 
-	sm::vec2 GetCenter() const;
-	sm::vec2 GetPosition() const;
+	const sm::vec2& GetCenter() const;
+	const sm::vec2& GetPosition() const;
 	float	 GetAngle() const;
-	sm::vec2 GetScale() const;
-	sm::vec2 GetShear() const;
-	sm::vec2 GetOffset() const;
+	const sm::vec2& GetScale() const;
+	const sm::vec2& GetShear() const;
+	const sm::vec2& GetOffset() const;
 
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
@@ -112,7 +112,7 @@ public:
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);
 
-	S2_MAT GetLocalMat() const;
+	const S2_MAT& GetLocalMat() const;
 	S2_MAT GetLocalInvMat() const;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void CacheLocalMat();
@@ -132,8 +132,6 @@ private:
 	void InitFlags();
 
 	void InitFromSpr(const Sprite& spr);
-
-	void UpdateCenter();
 
 	void UpdateInheritUpdate() const;
 

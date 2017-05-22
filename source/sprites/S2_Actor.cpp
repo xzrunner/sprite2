@@ -53,7 +53,7 @@ Actor::~Actor()
 #endif // S2_RES_LOG
 
 	if (m_geo != ActorDefault::Instance()->Geo()) {
-		delete m_geo;
+		ActorGeoPool::Instance()->Push(m_geo);
 	}
 	if (m_render != SprDefault::Instance()->Render()) {
 		SprRenderPool::Instance()->Push(m_render);
@@ -67,7 +67,7 @@ void Actor::SetPosition(const sm::vec2& pos)
 	}
 
 	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = new ActorGeo;
+		m_geo = ActorGeoPool::Instance()->Pop();
 	}
 	m_geo->SetPosition(pos);
 
@@ -82,7 +82,7 @@ void Actor::SetAngle(float angle)
 	}
 
 	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = new ActorGeo;
+		m_geo = ActorGeoPool::Instance()->Pop();
 	}
 	m_geo->SetAngle(angle);
 
@@ -97,7 +97,7 @@ void Actor::SetScale(const sm::vec2& scale)
 	}
 
 	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = new ActorGeo;
+		m_geo = ActorGeoPool::Instance()->Pop();
 	}
 	m_geo->SetScale(scale);
 

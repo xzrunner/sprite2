@@ -13,18 +13,18 @@ class ActorGeo
 {
 public:
 	const sm::vec2& GetPosition() const { return m_local.position; }
-	void SetPosition(const sm::vec2& pos) { m_local.position = pos; }
+	void SetPosition(const sm::vec2& pos);
 
 	float GetAngle() const { return m_local.angle; }
-	void SetAngle(float angle) { m_local.angle = angle; }
+	void SetAngle(float angle);
 
 	const sm::vec2& GetScale() const { return m_local.scale; }
-	void SetScale(const sm::vec2& scale) { m_local.scale = scale; }	
+	void SetScale(const sm::vec2& scale);
 
-#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-	void SetMatrix(const S2_MAT& mat) { m_local.mat = mat; } 
 	const S2_MAT& GetMatrix() const { return m_local.mat; }
-#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
+
+private:
+	void UpdateMatrix();
 
 private:
 	struct SRT

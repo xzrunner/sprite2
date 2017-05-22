@@ -1,6 +1,5 @@
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
-#include "ActorGeo.h"
 // #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
 #include "SprDefault.h"
@@ -20,7 +19,7 @@ static int COUNT = 0;
 Actor::Actor()
 	: m_spr(NULL)
 	, m_parent(NULL)
-	, m_geo(NULL)
+	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
 	InitFlags();
@@ -29,7 +28,7 @@ Actor::Actor()
 Actor::Actor(const Sprite* spr, const Actor* parent)
 	: m_spr(spr)
 	, m_parent(parent)
-	, m_geo(NULL)
+	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
 #ifdef S2_RES_LOG
@@ -53,7 +52,7 @@ Actor::~Actor()
 	std::cout << "-- actor " << COUNT << "\n";
 #endif // S2_RES_LOG
 
-	if (m_geo) {
+	if (m_geo != ActorDefault::Instance()->Geo()) {
 		delete m_geo;
 	}
 	if (m_render != SprDefault::Instance()->Render()) {
@@ -63,96 +62,47 @@ Actor::~Actor()
 
 void Actor::SetPosition(const sm::vec2& pos)
 {
-	if (!m_geo && pos != sm::vec2(0, 0)) {
+	if (GetPosition() == pos) {
+		return;
+	}
+
+	if (m_geo == ActorDefault::Instance()->Geo()) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) 
-	{
-		SetGeoDirty(true);
-		m_geo->SetPosition(pos);
-		m_aabb.SetRect(sm::rect()); // make it empty
-		m_aabb.Update(this);
-	}
-}
+	m_geo->SetPosition(pos);
 
-sm::vec2 Actor::GetPosition() const
-{
-	if (m_geo) {
-		return m_geo->GetPosition();
-	} else {
-		return sm::vec2(0, 0);
-	}
+	m_aabb.SetRect(sm::rect()); // make it empty
+	m_aabb.Update(this);
 }
 
 void Actor::SetAngle(float angle)
 {
-	if (!m_geo && angle != 0) {
+	if (GetAngle() == angle) {
+		return;
+	}
+
+	if (m_geo == ActorDefault::Instance()->Geo()) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) 
-	{
-		SetGeoDirty(true);
-		m_geo->SetAngle(angle);
-		m_aabb.SetRect(sm::rect()); // make it empty
-		m_aabb.Update(this);
-	}
-}
+	m_geo->SetAngle(angle);
 
-float Actor::GetAngle() const
-{
-	if (m_geo) {
-		return m_geo->GetAngle();
-	} else {
-		return 0;
-	}
+	m_aabb.SetRect(sm::rect()); // make it empty
+	m_aabb.Update(this);
 }
 
 void Actor::SetScale(const sm::vec2& scale)
 {
-	if (!m_geo && scale != sm::vec2(1, 1)) {
+	if (GetScale() == scale) {
+		return;
+	}
+
+	if (m_geo == ActorDefault::Instance()->Geo()) {
 		m_geo = new ActorGeo;
 	}
-	if (m_geo) 
-	{
-		SetGeoDirty(true);
-		m_geo->SetScale(scale);
-		m_aabb.SetRect(sm::rect()); // make it empty
-		m_aabb.Update(this);
-	}
-}
+	m_geo->SetScale(scale);
 
-sm::vec2 Actor::GetScale() const
-{
-	if (m_geo) {
-		return m_geo->GetScale();
-	} else {
-		return sm::vec2(1, 1);
-	}
-}
-
-S2_MAT Actor::GetLocalMat() const
-{
-	if (!m_geo) {
-		return S2_MAT();
-	}
-
-#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-	if (IsGeoDirty()) {
-		S2_MAT mt;
-		mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
-			m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
-		m_geo->SetMatrix(mt);
-		SetGeoDirty(false);
-		return mt;		
-	} else {
-		return m_geo->GetMatrix();
-	}
-#else
-	S2_MAT mt;
-	mt.SetTransformation(m_geo->GetPosition().x, m_geo->GetPosition().y, m_geo->GetAngle(), 
-		m_geo->GetScale().x, m_geo->GetScale().y, 0, 0, 0, 0);
-	return mt;
-#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
+	m_aabb.SetRect(sm::rect()); // make it empty
+	m_aabb.Update(this);
 }
 
 const RenderColor& Actor::GetColor() const

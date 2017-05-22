@@ -79,6 +79,7 @@ void SprGeo::SetOffset(const sm::vec2& offset)
 { 
 	if (offset != m_srt.offset) {
 		m_srt.offset = offset;
+		UpdateCenter();
 		UpdateMatrix();
 	}
 }

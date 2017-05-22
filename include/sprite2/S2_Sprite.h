@@ -140,7 +140,6 @@ protected:
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
 	static const uint32_t FLAG_DIRTY          = 0x00000004;
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
-	static const uint32_t FLAG_GEO_DIRTY      = 0x00000010;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -166,7 +165,6 @@ public:
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(Dirty, FLAG_DIRTY)
 	S2_FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
-	S2_FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE

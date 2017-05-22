@@ -197,7 +197,14 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
 	float* m = rp.mt.x;
-	float c = sm::cos_fast(angle), s = sm::sin_fast(angle);
+	float c, s;
+	if (angle == 0) {
+		c = 1;
+		s = 0;
+	} else {
+		c = sm::cos_fast(angle);
+		s = sm::sin_fast(angle);
+	}
 	m[0] = c * sx;
 	m[1] = s * sx;
 	m[2] = - s * sy;

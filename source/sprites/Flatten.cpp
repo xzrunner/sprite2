@@ -117,7 +117,7 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 	static sm::vec2 VERTEX_BUF[4];
 
 	float x, y;
-	const Quad* ptr_quad = &m_quads[begin];;
+	const Quad* ptr_quad = &m_quads[begin];
 	const float* mt = rp.mt.x;
 	for (int i = begin; i < end; ++i, ++ptr_quad)
 	{

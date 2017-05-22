@@ -27,6 +27,8 @@ SprGeo::~SprGeo()
 
 void SprGeo::Init()
 {
+	m_srt.Init();
+	m_mat.Identity();
 }
 
 void SprGeo::Term()

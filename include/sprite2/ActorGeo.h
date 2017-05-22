@@ -42,6 +42,9 @@ private:
 		sm::vec2 scale;
 
 		SRT();
+
+		void Init();
+
 	}; // SRT
 
 private:

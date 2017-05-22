@@ -90,6 +90,8 @@ private:
 
 		SRT();
 
+		void Init();
+
 	}; // SRT
 
 	SRT    m_srt;

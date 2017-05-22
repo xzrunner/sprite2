@@ -38,10 +38,16 @@ void ActorGeo::UpdateMatrix()
 
 inline
 ActorGeo::SRT::SRT()
-	: position(0, 0)
-	, angle(0)
-	, scale(1, 1)
 {
+	Init();
+}
+
+inline
+void ActorGeo::SRT::Init()
+{
+	position.Set(0, 0);
+	angle = 0;
+	scale.Set(1, 1);
 }
 
 }

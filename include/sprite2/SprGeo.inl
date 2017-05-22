@@ -171,13 +171,19 @@ void SprGeo::UpdateMatrix()
 
 inline
 SprGeo::SRT::SRT()
-	: position(0, 0)
-	, angle(0)
-	, scale(1, 1)
-	, shear(0, 0)
-	, offset(0, 0)
-	, center(0, 0)
 {
+	Init();
+}
+
+inline
+void SprGeo::SRT::Init()
+{
+	position.Set(0, 0);
+	angle = 0;
+	scale.Set(1, 1);
+	shear.Set(0, 0);
+	offset.Set(0, 0);
+	center.Set(0, 0);
 }
 
 }

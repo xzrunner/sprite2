@@ -94,6 +94,21 @@ S2_MAT DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Ac
 	return mat;
 }
 
+void DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor, S2_MAT& dst)
+{
+	if (spr->IsMatDisable()) {
+		dst = parent_mt;
+	} else {
+		if (actor && actor->IsGeoDirty()) {
+			static S2_MAT tmp;
+			sm::Matrix2D::Mul(spr->GetLocalMat(), parent_mt, tmp);
+			sm::Matrix2D::Mul(actor->GetLocalMat(), tmp, dst);
+		} else {
+			sm::Matrix2D::Mul(spr->GetLocalMat(), parent_mt, dst);
+		}
+	}
+}
+
 void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
 {
 	if (culling && IsOutsideView(spr, rp)) {

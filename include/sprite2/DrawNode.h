@@ -24,6 +24,7 @@ public:
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 	static S2_MAT PrepareMat(const RenderParams& rp, const Sprite* spr);
 	static S2_MAT PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor);
+	static void PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor, S2_MAT& dst);
 
 	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool culling = true);
 

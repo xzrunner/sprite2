@@ -72,7 +72,7 @@ void Flatten::Draw(const RenderParams& rp) const
 
 			RenderParams c_rp = rp;
 			c_rp.actor = node.actor;
-			c_rp.mt = node.mat;
+			sm::Matrix2D::Mul(node.mat, rp.mt, c_rp.mt);
 			DrawNode::Draw(node.spr, c_rp);
 		}
 	}
@@ -110,6 +110,10 @@ void Flatten::UpdateTexcoords()
 
 void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
 {
+	if (begin == end) {
+		return;
+	}
+
 	if (m_texcoords_dirty && !rp.IsDisableDTexC2()) {
 		UpdateTexcoords(begin, end);
 	}

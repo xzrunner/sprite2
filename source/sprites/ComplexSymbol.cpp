@@ -66,10 +66,10 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	if (m_ft) {
-		if (rp.actor && rp.actor->IsFlattenDirty()) {
-			BuildFlatten(rp.actor);
-		}
-		m_ft->Draw(rp);
+// 		if (rp.actor && rp.actor->IsFlattenDirty()) {
+// 			BuildFlatten(rp.actor);
+// 		}
+		m_ft->Draw(rp_child);
 		return;
 	}
 

@@ -16,6 +16,7 @@
 #include "S2_RenderTarget.h"
 #include "S2_RVG.h"
 #include "DrawDownsample.h"
+#include "Utility.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -68,45 +69,13 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	if (actor) {
 		child.color = actor->GetColor() * child.color;
 	}	
- 	child.mt = PrepareMat(rp.mt, spr, actor);
+	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
 
 	if (PREPARE_REDNER_PARAMS) {
 		PREPARE_REDNER_PARAMS(rp, spr, child);
 	}
 
 	return true;
-}
-
-S2_MAT DrawNode::PrepareMat(const RenderParams& rp, const Sprite* spr)
-{
-	return PrepareMat(rp.mt, spr, rp.actor);
-}
-
-S2_MAT DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor)
-{
-	S2_MAT mat = parent_mt;
-	if (!spr->IsMatDisable()) {
-		mat = spr->GetLocalMat() * parent_mt;
-		if (actor) {
-			mat = actor->GetLocalMat() * mat;
-		}
-	}
-	return mat;
-}
-
-void DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor, S2_MAT& dst)
-{
-	if (spr->IsMatDisable()) {
-		dst = parent_mt;
-	} else {
-		if (actor && actor->IsGeoDirty()) {
-			static S2_MAT tmp;
-			sm::Matrix2D::Mul(spr->GetLocalMat(), parent_mt, tmp);
-			sm::Matrix2D::Mul(actor->GetLocalMat(), tmp, dst);
-		} else {
-			sm::Matrix2D::Mul(spr->GetLocalMat(), parent_mt, dst);
-		}
-	}
 }
 
 void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
@@ -268,7 +237,8 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	r_min.Set(r.xmin, r.ymin);
 	r_max.Set(r.xmax, r.ymax);
-	S2_MAT mat = PrepareMat(rp, spr);
+	S2_MAT mat;
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
@@ -283,7 +253,8 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 	mgr->GetContext()->Clear(0);
 
 	RenderParams rp_child(rp);
-	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
+	S2_MAT mt;
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
 	rp_child.mt = mt.Inverted();
 	DrawSprImpl(spr, rp_child);
 
@@ -300,7 +271,8 @@ void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, cons
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);
 	vertices[3] = sm::vec2(r.xmin, r.ymax);
-	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
+	S2_MAT mt;
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}

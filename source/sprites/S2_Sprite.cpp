@@ -14,6 +14,7 @@
 #include "ClearActorsVisitor.h"
 #include "SymType.h"
 #include "SprVisitorParams.h"
+#include "Utility.h"
 
 #include <rigging.h>
 
@@ -296,11 +297,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 	p.actor = params.actor;
 	if (init_mat) {
-		p.mt = GetLocalMat() * params.mt;
-		const Actor* actor = params.actor;
-		if (actor) {
-			p.mt = actor->GetLocalMat() * p.mt;
-		}
+		Utility::PrepareMat(params.mt, this, params.actor, p.mt);
 	}
 
 	VisitResult ret = VISIT_OVER;

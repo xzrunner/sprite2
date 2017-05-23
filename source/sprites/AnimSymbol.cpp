@@ -13,6 +13,7 @@
 #include "FlattenParams.h"
 #include "AABBHelper.h"
 #include "FlattenMgr.h"
+#include "Utility.h"
 
 #include <assert.h>
 
@@ -82,7 +83,7 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		}
 
 		RenderParams rp_child(rp);
-		DrawNode::PrepareMat(rp.mt, spr, rp.actor, rp_child.mt);
+		Utility::PrepareMat(rp.mt, spr, rp.actor, rp_child.mt);
 
 		m_ft->Draw(rp_child, frame);
 	}

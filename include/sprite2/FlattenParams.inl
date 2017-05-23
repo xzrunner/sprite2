@@ -3,6 +3,7 @@
 
 #include "S2_Sprite.h"
 #include "S2_Actor.h"
+#include "Utility.h"
 
 namespace s2
 {
@@ -41,10 +42,7 @@ void FlattenParams::Push(const Sprite* spr, const Actor* actor)
 	m_spr = spr;
 	m_actor = actor;
 
-	m_mt = spr->GetLocalMat() * m_mt;
-	if (actor) {
-		m_mt = actor->GetLocalMat() * m_mt;
-	}
+	Utility::PrepareMat(m_mt, spr, actor, m_mt);
 }
 
 }

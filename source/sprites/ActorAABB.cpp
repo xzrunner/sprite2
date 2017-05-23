@@ -119,7 +119,8 @@ sm::rect ActorAABB::UpdateTight(const Actor* curr)
 	};
 
 	sm::rect trans_r;
-	S2_MAT mat = curr->GetSpr()->GetLocalMat() * curr->GetLocalMat();
+	S2_MAT mat;
+	sm::Matrix2D::Mul(curr->GetSpr()->GetLocalMat(), curr->GetLocalMat(), mat);
 	for (int i = 0; i < 4; ++i) {
 		trans_r.Combine(mat * bounding[i]);
 	}

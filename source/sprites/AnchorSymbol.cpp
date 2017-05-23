@@ -27,12 +27,14 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child(rp);
-	rp_child.actor = GetRealActor(spr, rp.actor);
-	if (rp_child.actor) {
-		rp_child.mt = spr->GetLocalMat() * rp_child.mt;
-		DrawNode::Draw(rp_child.actor->GetSpr(), rp_child, false);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	rp_child->actor = GetRealActor(spr, rp.actor);
+	if (rp_child->actor) {
+		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, rp_child->mt);
+		DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child, false);
 	}
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void AnchorSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

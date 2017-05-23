@@ -43,17 +43,21 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child(rp);
-	rp_child.mt.x[4] = rp_child.mt.x[5] = 0;
-	rp_child.color = spr->GetColor() * rp.color;
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+
+	rp_child->mt.x[4] = rp_child->mt.x[5] = 0;
+	rp_child->color = spr->GetColor() * rp.color;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
+	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
 	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
-	t2d_spr->Draw(rp_child);
+	t2d_spr->Draw(*rp_child);
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)

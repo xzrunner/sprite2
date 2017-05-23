@@ -70,10 +70,12 @@ void Flatten::Draw(const RenderParams& rp) const
 			end = node.idx;
 			DrawQuads(begin, end, rp, shader);
 
-			RenderParams c_rp = rp;
-			c_rp.actor = node.actor;
-			sm::Matrix2D::Mul(node.mat, rp.mt, c_rp.mt);
-			DrawNode::Draw(node.spr, c_rp);
+			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+			*rp_child = rp;
+			rp_child->actor = node.actor;
+			sm::Matrix2D::Mul(node.mat, rp.mt, rp_child->mt);
+			DrawNode::Draw(node.spr, *rp_child);
+			RenderParamsPool::Instance()->Push(rp_child); 
 		}
 	}
 }

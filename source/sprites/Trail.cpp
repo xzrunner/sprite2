@@ -38,17 +38,20 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
 
-	RenderParams rp_child;
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	rp_child->Reset();
 
-	rp_child.mt = rp->mat;
+	rp_child->mt = rp->mat;
 
 	Color mul, add;
 	memcpy(&mul.r, mul_col, sizeof(uint8_t) * 4);
 	memcpy(&add.r, add_col, sizeof(uint8_t) * 4);
-	rp_child.color.SetMul(mul * rp->ct.GetMul());
-	rp_child.color.SetAdd(add + rp->ct.GetAdd());
+	rp_child->color.SetMul(mul * rp->ct.GetMul());
+	rp_child->color.SetAdd(add + rp->ct.GetAdd());
 
-	DrawNode::Draw(s2_sym, rp_child, sm::vec2(x, y), angle - SM_PI * 0.5f, sm::vec2(scale, scale));
+	DrawNode::Draw(s2_sym, *rp_child, sm::vec2(x, y), angle - SM_PI * 0.5f, sm::vec2(scale, scale));
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 static void 

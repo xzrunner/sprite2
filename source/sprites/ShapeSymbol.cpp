@@ -38,10 +38,12 @@ void ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	if (spr) {
-		RenderParams rp_child(rp);
-		if (DrawNode::Prepare(rp, spr, rp_child)) {
-			m_shape->Draw(rp_child);
+		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+		*rp_child = rp;
+		if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			m_shape->Draw(*rp_child);
 		}
+		RenderParamsPool::Instance()->Push(rp_child); 
 	}
 }
 

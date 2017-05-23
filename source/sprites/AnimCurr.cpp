@@ -181,12 +181,14 @@ bool AnimCurr::UpdateOnlyFrame(const UpdateParams& up, const Sprite* spr,
 
 void AnimCurr::Draw(const RenderParams& rp) const
 {
-	RenderParams rp_child(rp);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* child = m_slots[m_curr[i]];
-		rp_child.actor = child->QueryActor(rp.actor);
-		DrawNode::Draw(child, rp_child);
+		rp_child->actor = child->QueryActor(rp.actor);
+		DrawNode::Draw(child, *rp_child);
 	}
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 Sprite* AnimCurr::FetchChildByName(int name, const Actor* actor) const

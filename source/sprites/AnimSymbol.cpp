@@ -82,20 +82,23 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			frame = m_curr.GetFrame();
 		}
 
-		RenderParams rp_child(rp);
-		Utility::PrepareMat(rp.mt, spr, rp.actor, rp_child.mt);
-
-		m_ft->Draw(rp_child, frame);
+		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+		*rp_child = rp;
+		Utility::PrepareMat(rp.mt, spr, rp.actor, rp_child->mt);
+		m_ft->Draw(*rp_child, frame);
+		RenderParamsPool::Instance()->Push(rp_child); 
 	}
 	else
 	{
 		if (spr) {
-			RenderParams rp_child(rp);
-			if (DrawNode::Prepare(rp, spr, rp_child)) {
+			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+			*rp_child = rp;
+			if (DrawNode::Prepare(rp, spr, *rp_child)) {
 				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
 				const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
-				curr.Draw(rp_child);
+				curr.Draw(*rp_child);
 			}
+			RenderParamsPool::Instance()->Push(rp_child); 
 		} else {
 			m_curr.Draw(rp);
 		}

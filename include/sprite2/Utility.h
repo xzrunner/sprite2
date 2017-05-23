@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_UTILITY_H_
 #define _SPRITE2_UTILITY_H_
 
+#include "RenderColor.h"
+
 namespace s2
 {
 
@@ -19,6 +21,17 @@ public:
 			} else {
 				sm::Matrix2D::Mul(spr->GetLocalMat(), parent_mt, dst);
 			}
+		}
+	}
+
+	static void PrepareColor(const RenderColor& parent_rc, const Sprite* spr, const Actor* actor, RenderColor& dst)
+	{
+		if (actor && actor->IsColorDirty()) {
+			static RenderColor tmp;
+			RenderColor::Mul(spr->GetColor(), parent_rc, tmp);
+			RenderColor::Mul(actor->GetColor(), tmp, dst);
+		} else {
+			RenderColor::Mul(spr->GetColor(), parent_rc, dst);
 		}
 	}
 

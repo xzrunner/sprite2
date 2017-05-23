@@ -138,6 +138,8 @@ void Actor::SetColor(const RenderColor& color)
 		m_render = SprRenderPool::Instance()->Pop();
 	}
 	m_render->SetColor(color);
+
+	SetColorDirty(true);
 }
 
 void Actor::SetShader(const RenderShader& shader)

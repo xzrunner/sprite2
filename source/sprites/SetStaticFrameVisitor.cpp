@@ -40,14 +40,18 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	case SYM_ANIMATION:
 		{
 			AnimSprite* anim_spr = const_cast<AnimSprite*>(VI_DOWNCASTING<const AnimSprite*>(spr));
-			anim_spr->SetActive(m_static_frame == -1, actor);
-			anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
+			if (anim_spr->GetFrame(actor) != m_static_frame) {
+				anim_spr->SetActive(m_static_frame == -1, actor);
+				anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
+			}
 		}
 		break;
 	case SYM_ANIM2:
 		{
 			Anim2Sprite* anim2_spr = const_cast<Anim2Sprite*>(VI_DOWNCASTING<const Anim2Sprite*>(spr));
-			anim2_spr->SetStaticTime(s2::UpdateParams(), m_static_frame);
+			if (anim2_spr->GetStaticTime() != m_static_frame) {
+				anim2_spr->SetStaticTime(s2::UpdateParams(), m_static_frame);
+			}
 		}
 		break;
 	case SYM_COMPLEX: case SYM_MESH: case SYM_MASK: case SYM_PROXY:

@@ -114,6 +114,7 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	ft.AddNode(fp.GetSpr(), fp.GetActor(), fp.GetMat());
+	BuildFlatten(fp.GetActor());
 }
 
 int AnimSymbol::GetMaxFrameIdx() const

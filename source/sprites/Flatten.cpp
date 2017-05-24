@@ -11,7 +11,6 @@ namespace s2
 {
 
 Flatten::Flatten()
-	: m_texcoords_dirty(true)
 {
 }
 
@@ -100,9 +99,8 @@ void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
 	m_nodes.push_back(node);
 }
 
-void Flatten::UpdateTexcoords()
+void Flatten::UpdateTexcoords() const
 {
-	m_texcoords_dirty = true;
 	for (int i = 0, n = m_quads.size(); i < n; ++i) {
 		const ImageSymbol* src = m_images[i];
 		Quad& dst = m_quads[i];
@@ -116,8 +114,8 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 		return;
 	}
 
-	if (m_texcoords_dirty && !rp.IsDisableDTexC2()) {
-		UpdateTexcoords(begin, end);
+	if (!rp.IsDisableDTexC2()) {
+		UpdateDTexC2(begin, end);
 	}
 
 	static sm::vec2 VERTEX_BUF[4];
@@ -162,18 +160,23 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 	}
 }
 
-void Flatten::UpdateTexcoords(int begin, int end) const
+void Flatten::UpdateDTexC2(int begin, int end) const
 {
-	bool dirty = false;
+	bool loaded = false;
+
 	Quad* ptr_quad = &m_quads[begin];
 	const ImageSymbol*const* ptr_img = &m_images[begin];
 	for (int i = begin; i < end; ++i, ++ptr_quad, ++ptr_img)	{
 		if (ptr_quad->tex_id == (*ptr_img)->GetTexture()->GetTexID()) {
-			dirty = true;
-			(*ptr_img)->QueryTexcoords(true, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
+			if ((*ptr_img)->OnQueryTexcoordsFail()) {
+				loaded = true;
+			}
 		}
 	}
-	m_texcoords_dirty = dirty;
+
+	if (loaded) {
+		UpdateTexcoords();
+	}
 }
 
 }

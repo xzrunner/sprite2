@@ -32,7 +32,7 @@ public:
 	void AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4]);
 	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
 
-	void UpdateTexcoords();
+	void UpdateTexcoords() const;
 
 private:
 	struct Quad
@@ -52,15 +52,13 @@ private:
 private:
 	void DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const;
 
-	void UpdateTexcoords(int begin, int end) const;
+	void UpdateDTexC2(int begin, int end) const;
 
 private:
 	std::vector<const ImageSymbol*> m_images;
 	mutable std::vector<Quad> m_quads;
 
 	std::vector<Node> m_nodes;
-
-	mutable bool m_texcoords_dirty;
 
 }; // Flatten
 

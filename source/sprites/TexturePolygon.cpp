@@ -74,7 +74,9 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 
 		float _texcoords[8];
 		int tex_id;
-		m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id);
+		if (!m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id)) {
+			m_img->OnQueryTexcoordsFail();
+		}
 
 		TexcoordsMap::Trans(_texcoords, texcoords);
 

@@ -12,7 +12,7 @@
 #include "Flatten.h"
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "Statistics.h"
+#include "sprite2/Statistics.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include S2_MAT_HEADER

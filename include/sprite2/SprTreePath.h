@@ -30,7 +30,7 @@ public:
 private:
 	int m_val;
 
-	static const int MAX_PATH_NUM = 16;
+	static const int MAX_PATH_NUM = 20;
 	int m_ids[MAX_PATH_NUM];
 	int m_num;
 

@@ -1,4 +1,6 @@
 #include "AnimSymbol.h"
+#include "AnimCurr.h"
+#include "AnimCopy.h"
 #include "SymType.h"
 #include "AnimSprite.h"
 #include "S2_Sprite.h"
@@ -22,6 +24,8 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
+	, m_copy(NULL)
+	, m_curr(NULL)
 	, m_ft(NULL)
 {
 }
@@ -29,6 +33,8 @@ AnimSymbol::AnimSymbol()
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
+	, m_copy(NULL)
+	, m_curr(NULL)
 	, m_ft(NULL)
 {
 }
@@ -43,6 +49,13 @@ AnimSymbol::~AnimSymbol()
 			delete frame;
 		}
 		delete layer;
+	}
+
+	if (m_copy) {
+		delete m_copy;
+	}
+	if (m_curr) {
+		delete m_curr;
 	}
 
 	if (m_ft) {
@@ -83,7 +96,7 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 				const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
 				frame = curr.GetFrame();
 			} else {
-				frame = m_curr.GetFrame();
+				frame = m_curr->GetFrame();
 			}
 
 			m_ft->Draw(*rp_child, frame);
@@ -102,18 +115,18 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			}
 			RenderParamsPool::Instance()->Push(rp_child); 
 		} else {
-			m_curr.Draw(rp);
+			m_curr->Draw(rp);
 		}
 	}
 }
 
 bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
-	m_curr.SetTime(time);
+	m_curr->SetTime(time);
 	if (m_ft) {
-		return m_curr.UpdateOnlyFrame(up, NULL);
+		return m_curr->UpdateOnlyFrame(up, NULL);
 	} else {
-		return m_curr.Update(up, NULL);
+		return m_curr->Update(up, NULL);
 	}
 }
 
@@ -163,8 +176,15 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 
 void AnimSymbol::LoadCopy()
 {
-	m_copy.LoadFromSym(*this);
-	m_curr.SetAnimCopy(&m_copy);
+	if (!m_copy) {
+		m_copy = new AnimCopy;
+	}
+	m_copy->LoadFromSym(*this);
+
+	if (!m_curr) {
+		m_curr = new AnimCurr;
+	}
+	m_curr->SetAnimCopy(m_copy);
 }
 
 void AnimSymbol::BuildFlatten(const Actor* actor) const
@@ -176,7 +196,7 @@ void AnimSymbol::BuildFlatten(const Actor* actor) const
 		FlattenMgr::Instance()->Add(GetID(), m_ft);
 	}
 	
-	m_copy.StoreToFlatten(*m_ft, actor);
+	m_copy->StoreToFlatten(*m_ft, actor);
 }
 
 void AnimSymbol::AddLayer(Layer* layer)
@@ -199,7 +219,7 @@ bool AnimSymbol::Clear()
 		delete layer;
  	}
 	m_layers.clear();
-	m_curr.Clear();
+	m_curr->Clear();
 	m_aabb.MakeEmpty();
 	return dirty;	
 }

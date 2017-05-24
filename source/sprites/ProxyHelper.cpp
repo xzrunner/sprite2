@@ -15,12 +15,15 @@
 #include "ComplexActor.h"
 #include "AnimSymbol.h"
 #include "AnimSprite.h"
+#include "AnimCurr.h"
 #include "Anim2Sprite.h"
 #include "Particle3dSprite.h"
 #include "Particle3dEmitter.h"
 #include "TextboxSprite.h"
 #include "TextboxActor.h"
 #include "Scale9Actor.h"
+
+#include <SM_Calc.h>
 
 #include <assert.h>
 

@@ -41,6 +41,7 @@
 #include "ProxyHelper.h"
 
 #include <logger.h>
+#include <SM_Math.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>

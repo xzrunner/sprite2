@@ -13,7 +13,6 @@
 #include "FlattenParams.h"
 #include "AABBHelper.h"
 #include "FlattenMgr.h"
-#include "Utility.h"
 
 #include <assert.h>
 
@@ -82,23 +81,22 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			frame = m_curr.GetFrame();
 		}
 
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
-		Utility::PrepareMat(rp.mt, spr, rp.actor, rp_child->mt);
-		m_ft->Draw(*rp_child, frame);
-		RenderParamsPool::Instance()->Push(rp_child); 
-	}
+		RenderParams rp_child(rp);
+		rp_child.mt = spr->GetLocalMat() * rp.mt;
+		if (rp.actor) {
+			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+		}
+		m_ft->Draw(rp_child, frame - 1);
+	} 
 	else
 	{
 		if (spr) {
-			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-			*rp_child = rp;
-			if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			RenderParams rp_child(rp);
+			if (DrawNode::Prepare(rp, spr, rp_child)) {
 				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
 				const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
-				curr.Draw(*rp_child);
+				curr.Draw(rp_child);
 			}
-			RenderParamsPool::Instance()->Push(rp_child); 
 		} else {
 			m_curr.Draw(rp);
 		}
@@ -118,7 +116,6 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	ft.AddNode(fp.GetSpr(), fp.GetActor(), fp.GetMat());
-	BuildFlatten(fp.GetActor());
 }
 
 int AnimSymbol::GetMaxFrameIdx() const

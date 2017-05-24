@@ -47,7 +47,6 @@ public:
 
 	void SetTime(float time);
 	void SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
-	void SetOnlyFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 
 	int GetFrame() const { return m_frame; }
 

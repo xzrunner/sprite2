@@ -58,10 +58,8 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -74,7 +72,7 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
 	for (int i = 0; i < 4; ++i) 
 	{
-		sm::vec2 pos = rp_child->mt * vertices[i];
+		sm::vec2 pos = rp_child.mt * vertices[i];
 		if (pos.x < xmin) xmin = pos.x;
 		if (pos.x > xmax) xmax = pos.x;
 		if (pos.y < ymin) ymin = pos.y;
@@ -85,14 +83,12 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (rp.view_region.IsValid() && 
 		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
 		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
 	float texcoords[8];
 	int tex_id;
 	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
@@ -104,17 +100,15 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
-		DrawBlend(*rp_child, vertices, texcoords, tex_id);
+		DrawBlend(rp_child, vertices, texcoords, tex_id);
 	} else {
 		const Camera* cam = Blackboard::Instance()->GetCamera();
 		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
+			DrawPseudo3D(rp_child, vertices, texcoords, tex_id);
 		} else {
-			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+			DrawOrtho(rp_child, vertices, texcoords, tex_id);
 		}
 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

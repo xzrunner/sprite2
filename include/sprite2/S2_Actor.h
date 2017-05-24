@@ -4,8 +4,6 @@
 #include "pre_defined.h"
 #include "s2_macro.h"
 #include "ActorAABB.h"
-#include "ActorGeo.h"
-#include "ActorDefault.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
@@ -36,14 +34,13 @@ public:
 	void SetParent(const Actor* parent) { m_parent = parent; }
 
 	void SetPosition(const sm::vec2& pos);
-	const sm::vec2& GetPosition() const { return m_geo->GetPosition(); }
+	sm::vec2 GetPosition() const;
 	void SetAngle(float angle);
-	float GetAngle() const { return m_geo->GetAngle(); }
+	float GetAngle() const;
 	void SetScale(const sm::vec2& scale);
-	const sm::vec2& GetScale() const { return m_geo->GetScale(); }
+	sm::vec2 GetScale() const;
 	
-	const S2_MAT& GetLocalMat() const { return m_geo->GetMatrix(); }
-	bool IsGeoDirty() const { return m_geo != ActorDefault::Instance()->Geo(); }
+	S2_MAT GetLocalMat() const;
 
 	ActorAABB& GetAABB() { return m_aabb; }
 	const ActorAABB& GetAABB() const { return m_aabb; }
@@ -64,11 +61,10 @@ private:
 private:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
-	static const uint32_t FLAG_AABB_TIGHT     = 0x00000004;
+	static const uint32_t FLAG_GEO_DIRTY      = 0x00000004;
+	static const uint32_t FLAG_AABB_TIGHT     = 0x00000008;
 
-	static const uint32_t FLAG_FLATTEN_DIRTY  = 0x00000008;
-
-	static const uint32_t FLAG_COLOR_DIRTY    = 0x00000010;
+	static const uint32_t FLAG_FLATTEN_DIRTY  = 0x00000010;
 
 public:
 //	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
@@ -77,8 +73,8 @@ public:
 
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
+	S2_FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
 	S2_FLAG_METHOD(FlattenDirty, FLAG_FLATTEN_DIRTY)
-	S2_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
 private:
 	const Sprite*     m_spr;

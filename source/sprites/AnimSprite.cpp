@@ -149,12 +149,7 @@ void AnimSprite::SetFrame(const UpdateParams& up, int frame)
 		return;
 	}
 	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
-	bool has_flatten = VI_DOWNCASTING<AnimSymbol*>(GetSymbol())->HasFlatten();
-	if (has_flatten) {
-		return curr.SetOnlyFrame(up, this, frame, m_fps);
-	} else {
-		return curr.SetFrame(up, this, frame, m_fps);
-	}
+	curr.SetFrame(up, this, frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const Actor* actor)

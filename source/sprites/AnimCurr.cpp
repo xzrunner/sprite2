@@ -181,14 +181,12 @@ bool AnimCurr::UpdateOnlyFrame(const UpdateParams& up, const Sprite* spr,
 
 void AnimCurr::Draw(const RenderParams& rp) const
 {
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParams rp_child(rp);
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* child = m_slots[m_curr[i]];
-		rp_child->actor = child->QueryActor(rp.actor);
-		DrawNode::Draw(child, *rp_child);
+		rp_child.actor = child->QueryActor(rp.actor);
+		DrawNode::Draw(child, rp_child);
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 Sprite* AnimCurr::FetchChildByName(int name, const Actor* actor) const
@@ -279,20 +277,6 @@ void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, in
 	LoadCurrSprites(up, spr);
 
 	SetChildrenFrame(up, spr, frame_copy, fps);
-}
-
-void AnimCurr::SetOnlyFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
-{
-	int frame_copy = frame;
-	frame = frame % (m_copy->m_max_frame_idx);
-
-	m_frame = frame;
-
-	m_curr_time = Animation::Instance()->GetTime();
-	m_start_time = m_curr_time - static_cast<float>(m_frame) / fps;
-
-	m_stop_time = 0;
-	m_stop_during = 0;
 }
 
 void AnimCurr::SetAnimCopy(const AnimCopy* copy)

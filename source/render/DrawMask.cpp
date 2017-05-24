@@ -7,10 +7,6 @@
 #include "RenderScissor.h"
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
-#ifndef S2_DISABLE_STATISTICS
-#include "Statistics.h"
-#include "Blackboard.h"
-#endif // S2_DISABLE_STATISTICS
 
 #include <SM_Rect.h>
 #include <unirender/UR_RenderContext.h>
@@ -131,21 +127,6 @@ void DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, cons
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}
-
-#ifndef S2_DISABLE_STATISTICS
-	float xmin = FLT_MAX, ymin = FLT_MAX,
-		  xmax =-FLT_MAX, ymax =-FLT_MAX;
-	for (int i = 0; i < 4; ++i) {
-		const sm::vec2& pos = vertices[i];
-		if (pos.x < xmin) xmin = pos.x;
-		if (pos.x > xmax) xmax = pos.x;
-		if (pos.y < ymin) ymin = pos.y;
-		if (pos.y > ymax) ymax = pos.y;
-	}
-	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
-	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	Statistics::Instance()->AddOverdrawArea(area);
-#endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::MASK);

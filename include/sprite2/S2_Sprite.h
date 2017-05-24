@@ -92,12 +92,12 @@ public:
 	void Rotate(float rot);
 	void Scale(const sm::vec2& scale);
 
-	const sm::vec2& GetCenter() const;
-	const sm::vec2& GetPosition() const;
+	sm::vec2 GetCenter() const;
+	sm::vec2 GetPosition() const;
 	float	 GetAngle() const;
-	const sm::vec2& GetScale() const;
-	const sm::vec2& GetShear() const;
-	const sm::vec2& GetOffset() const;
+	sm::vec2 GetScale() const;
+	sm::vec2 GetShear() const;
+	sm::vec2 GetOffset() const;
 
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
@@ -112,7 +112,7 @@ public:
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);
 
-	const S2_MAT& GetLocalMat() const;
+	S2_MAT GetLocalMat() const;
 	S2_MAT GetLocalInvMat() const;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void CacheLocalMat();
@@ -133,6 +133,8 @@ private:
 
 	void InitFromSpr(const Sprite& spr);
 
+	void UpdateCenter();
+
 	void UpdateInheritUpdate() const;
 
 protected:
@@ -140,6 +142,7 @@ protected:
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
 	static const uint32_t FLAG_DIRTY          = 0x00000004;
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
+	static const uint32_t FLAG_GEO_DIRTY      = 0x00000010;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -165,6 +168,7 @@ public:
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(Dirty, FLAG_DIRTY)
 	S2_FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
+	S2_FLAG_METHOD(GeoDirty, FLAG_GEO_DIRTY)
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE

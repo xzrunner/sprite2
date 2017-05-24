@@ -2,7 +2,7 @@
 #define _SPRITE2_SPR_GEO_H_
 
 #include "pre_defined.h"
-#include "ObjectPool2.h"
+#include "ObjectPool.h"
 #include "SprSRT.h"
 
 #include <SM_Vector.h>
@@ -19,22 +19,23 @@ public:
 	SprGeo& operator = (const SprGeo& geo);
 	~SprGeo();
 
-	const sm::vec2& GetPosition() const;
+	sm::vec2 GetPosition() const;
 	void SetPosition(const sm::vec2& pos);
 
 	float GetAngle() const;
 	void SetAngle(float angle);
 
-	const sm::vec2& GetScale() const;
+	sm::vec2 GetScale() const;
 	void SetScale(const sm::vec2& scale);
 
-	const sm::vec2& GetShear() const;
+	sm::vec2 GetShear() const;
 	void SetShear(const sm::vec2& shear);
 
-	const sm::vec2& GetOffset() const;
+	sm::vec2 GetOffset() const;
 	void SetOffset(const sm::vec2& offset);
 
- 	const sm::vec2& GetCenter() const;
+	sm::vec2 GetCenter() const;
+	void UpdateCenter();	
 
 	void GetSRT(SprSRT& srt) const;
 	void SetSRT(const SprSRT& srt);
@@ -44,7 +45,10 @@ public:
 	S2_MAT GetMatrix() const;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	const S2_MAT& GetMatrix() const { return m_mat; }
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	void SetMatrix(const S2_MAT& mat);
+	S2_MAT GetMatrix() const;
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 	/**
 	 *  @interface
@@ -52,54 +56,32 @@ public:
 	 */
 	void Init();
 	void Term();
+ 	SprGeo* GetNext() const { return m_state.next; }
+ 	void SetNext(SprGeo* next) { m_state.next = next; }
 
 private:
-	void UpdateCenter();
-	void UpdateMatrix();
-
-private:
-// 	union
-// 	{
-// 		struct {
-// 			float srt[SprSRT::SRT_MAX];
-// 
-// #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-// 			float mat[6];
-// #endif // S2_SPR_CACHE_LOCAL_MAT_COPY
-// 		};
-// 
-//  #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-//  		struct {
-//  			float mat[6];
-//  		};
-//  #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-// 
-// 		SprGeo* next;
-// 	} m_state;
-
-	//////////////////////////////////////////////////////////////////////////
-
-	struct SRT
+	union
 	{
-		sm::vec2 position;
-		float angle;
-		sm::vec2 scale;
-		sm::vec2 shear;
-		sm::vec2 offset;
-		sm::vec2 center;
+		struct {
+			float srt[SprSRT::SRT_MAX];
 
-		SRT();
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+			float mat[6];
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
+		};
 
-		void Init();
+ #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
+ 		struct {
+ 			float mat[6];
+ 		};
+ #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	}; // SRT
-
-	SRT    m_srt;
-	S2_MAT m_mat;
+		SprGeo* next;
+	} m_state;
 
 }; // SprGeo
 
-typedef ObjectPool2<SprGeo> SprGeoPool;
+typedef ObjectPool<SprGeo> SprGeoPool;
 
 }
 

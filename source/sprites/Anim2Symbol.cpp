@@ -40,18 +40,14 @@ void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
-	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
+	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp_child);
 }
 
 sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

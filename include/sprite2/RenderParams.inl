@@ -4,14 +4,11 @@
 namespace s2
 {
 
-//static RenderParams IDENTITY;
-
 inline
 RenderParams::RenderParams()
 	: vertex_offset(0, 0)
 	, actor(NULL)
 	, m_flags(0)
-	, m_next(NULL)
 {
 	SetChangeShader(true);
 }
@@ -26,7 +23,6 @@ RenderParams::RenderParams(const RenderParams& params)
 	, camera(params.camera)
 	, actor(params.actor)
 	, m_flags(params.m_flags)
-	, m_next(NULL)
 {
 }
 
@@ -42,26 +38,6 @@ RenderParams& RenderParams::operator = (const RenderParams& params)
 	actor         = params.actor;
 	m_flags       = params.m_flags;
 	return *this;
-}
-
-inline
-void RenderParams::Reset()
-{
-	vertex_offset.Set(0, 0);
-
-	view_region.MakeEmpty();
-
-	mt.Identity();
-
-	color.Init();
-	shader.Init();
-	camera.Init();
-
-	actor = NULL;
-
-	m_flags = 0;
-
-	SetChangeShader(true);
 }
 
 }

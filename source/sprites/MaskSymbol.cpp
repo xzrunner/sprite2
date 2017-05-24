@@ -50,24 +50,21 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 
 void MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 	if (m_base && m_mask) {
-		DrawMask::Draw(m_base, m_mask, *rp_child);
+		DrawMask::Draw(m_base, m_mask, rp_child);
 	} else {
 		if (m_base) {
-			rp_child->actor = m_base->QueryActor(rp.actor);
-			DrawNode::Draw(m_base, *rp_child);
+			rp_child.actor = m_base->QueryActor(rp.actor);
+			DrawNode::Draw(m_base, rp_child);
 		} else if (m_mask) {
-			rp_child->actor = m_mask->QueryActor(rp.actor);
-			DrawNode::Draw(m_mask, *rp_child);
+			rp_child.actor = m_mask->QueryActor(rp.actor);
+			DrawNode::Draw(m_mask, rp_child);
 		}
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void MaskSymbol::SetBase(Sprite* base)

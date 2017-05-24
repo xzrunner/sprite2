@@ -87,21 +87,20 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	memcpy(&mul, mul_col, sizeof(mul));
 	memcpy(&add, add_col, sizeof(add));
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	rp_child->Reset();
+	RenderParams rp_child;
 
-	rp_child->color.SetMul(mul * rp->rc.GetMul());
-	rp_child->color.SetAdd(add + rp->rc.GetAdd());
+	rp_child.color.SetMul(mul * rp->rc.GetMul());
+	rp_child.color.SetAdd(add + rp->rc.GetAdd());
 
-	rp_child->shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
+	rp_child.shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 
-	rp_child->view_region = rp->view_region;
+	rp_child.view_region = rp->view_region;
 
 	// todo color trans
 
 	if (rp->local) {
 		// local mode, use node's mat
-		rp_child->mt = rp->mt;
+		rp_child.mt = rp->mt;
 	} else {
 		// no local mode, use particle's mat
 #ifdef S2_MATRIX_FIX
@@ -116,15 +115,15 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		sm::Matrix2D _mat;
 		memcpy(_mat.x, mat, sizeof(_mat.x));
 #endif // S2_MATRIX_FIX
-		rp_child->mt = _mat;
+		rp_child.mt = _mat;
 	}
 
 	if (spr) {
 		Sprite* s2_spr = static_cast<Sprite*>(spr);
-		DrawNode::Draw(s2_spr, *rp_child);
+		DrawNode::Draw(s2_spr, rp_child);
 	} else if (sym) {
 		Symbol* s2_sym = static_cast<Symbol*>(sym);
-		DrawNode::Draw(s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+		DrawNode::Draw(s2_sym, rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 		s2_sym->Update(UpdateParams(), time);
 	}
 
@@ -134,8 +133,6 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	// 		sm::vec2 fixed = _mt * pos;
 	// 		curr_record->AddItem(sym->GetFilepath(), fixed.x, fixed.y, p->angle, s, mul_col, add_col);
 	// 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 static void

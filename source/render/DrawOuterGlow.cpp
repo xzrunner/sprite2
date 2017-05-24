@@ -21,16 +21,13 @@ void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iteratio
 	DrawGaussianBlur::DrawFromRT(rt, spr->GetPosition());
 	RT->Return(rt);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	rp_child->SetChangeShader(false);
-	rp_child->SetDisableRenderDraw(true);
+	RenderParams rp_child(rp);
+	rp_child.SetChangeShader(false);
+	rp_child.SetDisableRenderDraw(true);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
-	DrawNode::Draw(spr, *rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
+	DrawNode::Draw(spr, rp_child);
 }
 
 }

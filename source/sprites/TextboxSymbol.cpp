@@ -38,10 +38,8 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -58,12 +56,11 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		text = &tb_spr->GetText(UpdateParams());
 	}
  	if (!text || text->empty()) {
-		RenderParamsPool::Instance()->Push(rp_child); 
  		return;
  	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (rp_child->shader.GetFilter() && sl::FILTER_MODE(rp_child->shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
+	if (rp_child.shader.GetFilter() && sl::FILTER_MODE(rp_child.shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);
@@ -94,11 +91,9 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 	s.overflow				= tb.overflow;
 
-	DrawText(s, rp_child->mt, rp_child->color.GetMul(), rp_child->color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
+	DrawText(s, rp_child.mt, rp_child.color.GetMul(), rp_child.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

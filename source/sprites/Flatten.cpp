@@ -70,12 +70,10 @@ void Flatten::Draw(const RenderParams& rp) const
 			end = node.idx;
 			DrawQuads(begin, end, rp, shader);
 
-			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-			*rp_child = rp;
-			rp_child->actor = node.actor;
-			sm::Matrix2D::Mul(node.mat, rp.mt, rp_child->mt);
-			DrawNode::Draw(node.spr, *rp_child);
-			RenderParamsPool::Instance()->Push(rp_child); 
+			RenderParams c_rp = rp;
+			c_rp.actor = node.actor;
+			c_rp.mt = node.mat;
+			DrawNode::Draw(node.spr, c_rp);
 		}
 	}
 }
@@ -112,10 +110,6 @@ void Flatten::UpdateTexcoords()
 
 void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
 {
-	if (begin == end) {
-		return;
-	}
-
 	if (m_texcoords_dirty && !rp.IsDisableDTexC2()) {
 		UpdateTexcoords(begin, end);
 	}
@@ -123,7 +117,7 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 	static sm::vec2 VERTEX_BUF[4];
 
 	float x, y;
-	const Quad* ptr_quad = &m_quads[begin];
+	const Quad* ptr_quad = &m_quads[begin];;
 	const float* mt = rp.mt.x;
 	for (int i = begin; i < end; ++i, ++ptr_quad)
 	{

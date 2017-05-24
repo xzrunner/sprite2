@@ -2,7 +2,6 @@
 #define _SPRITE2_ACTOR_GEO_H_
 
 #include "pre_defined.h"
-#include "ObjectPool2.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -13,26 +12,19 @@ namespace s2
 class ActorGeo
 {
 public:
-	const sm::vec2& GetPosition() const { return m_srt.position; }
-	void SetPosition(const sm::vec2& pos);
+	const sm::vec2& GetPosition() const { return m_local.position; }
+	void SetPosition(const sm::vec2& pos) { m_local.position = pos; }
 
-	float GetAngle() const { return m_srt.angle; }
-	void SetAngle(float angle);
+	float GetAngle() const { return m_local.angle; }
+	void SetAngle(float angle) { m_local.angle = angle; }
 
-	const sm::vec2& GetScale() const { return m_srt.scale; }
-	void SetScale(const sm::vec2& scale);
+	const sm::vec2& GetScale() const { return m_local.scale; }
+	void SetScale(const sm::vec2& scale) { m_local.scale = scale; }	
 
-	const S2_MAT& GetMatrix() const { return m_mat; }
-
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term();
-
-private:
-	void UpdateMatrix();
+#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
+	void SetMatrix(const S2_MAT& mat) { m_local.mat = mat; } 
+	const S2_MAT& GetMatrix() const { return m_local.mat; }
+#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
 
 private:
 	struct SRT
@@ -41,22 +33,16 @@ private:
 		float    angle;
 		sm::vec2 scale;
 
+		S2_MAT mat;
+
 		SRT();
-
-		void Init();
-
-	}; // SRT
+	};
 
 private:
-	SRT    m_srt;
-	S2_MAT m_mat;
+	SRT m_local;
 
 }; // ActorGeo
 
-typedef ObjectPool2<ActorGeo> ActorGeoPool;
-
 }
-
-#include "ActorGeo.inl"
 
 #endif // _SPRITE2_ACTOR_GEO_H_

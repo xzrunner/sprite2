@@ -51,8 +51,6 @@ public:
 	RenderColor* GetNext() const { return m_state.next; }
 	void SetNext(RenderColor* next) { m_state.next = next; }
 
-	static void Mul(const RenderColor& c0, const RenderColor& c1, RenderColor& c);
-
 private:
 	enum COLOR_IDX
 	{

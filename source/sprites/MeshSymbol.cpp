@@ -44,10 +44,8 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -64,9 +62,9 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
  	}
 
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
- 		DrawMesh::DrawInfoXY(m_mesh, &rp_child->mt);
+ 		DrawMesh::DrawInfoXY(m_mesh, &rp_child.mt);
  	} else {
- 		DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+ 		DrawMesh::DrawTexture(m_mesh, rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
  	}
  
 //  	if (!m_pause && mesh_spr)
@@ -76,8 +74,6 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 //  			m_mesh->OffsetUV(spd.x, spd.y);
 //  		}
 //  	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 bool MeshSymbol::Update(const UpdateParams& up, float time)

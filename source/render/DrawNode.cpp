@@ -16,7 +16,6 @@
 #include "S2_RenderTarget.h"
 #include "S2_RVG.h"
 #include "DrawDownsample.h"
-#include "Utility.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -65,14 +64,34 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 		return false;
 	}
 
-	Utility::PrepareColor(rp.color, spr, actor, child.color);
-	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
+	child.color = spr->GetColor() * rp.color;
+	if (actor) {
+		child.color = actor->GetColor() * child.color;
+	}	
+ 	child.mt = PrepareMat(rp.mt, spr, actor);
 
 	if (PREPARE_REDNER_PARAMS) {
 		PREPARE_REDNER_PARAMS(rp, spr, child);
 	}
 
 	return true;
+}
+
+S2_MAT DrawNode::PrepareMat(const RenderParams& rp, const Sprite* spr)
+{
+	return PrepareMat(rp.mt, spr, rp.actor);
+}
+
+S2_MAT DrawNode::PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor)
+{
+	S2_MAT mat = parent_mt;
+	if (!spr->IsMatDisable()) {
+		mat = spr->GetLocalMat() * parent_mt;
+		if (actor) {
+			mat = actor->GetLocalMat() * mat;
+		}
+	}
+	return mat;
 }
 
 void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
@@ -133,10 +152,8 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
 	mt = mt * rp.mt;
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-
- 	rp_child->mt = mt;
+ 	RenderParams rp_child(rp);
+ 	rp_child.mt = mt;
  
 	BlendMode blend = BM_NULL;
 	if (!rp.IsDisableBlend()) {
@@ -152,30 +169,26 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
  	if (blend != BM_NULL) {
  		;
  	} else if (filter != FM_NULL) {
- 		if (rp_child->IsChangeShader()) {
+ 		if (rp_child.IsChangeShader()) {
  			mgr->SetShader(sl::FILTER);
  			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
  			shader->SetMode(sl::FILTER_MODE(filter));
  		}
  	} else {
- 		if (rp_child->IsChangeShader()) {
+ 		if (rp_child.IsChangeShader()) {
  			mgr->SetShader(sl::SPRITE2);
  		}
  	}
  
- 	sym->Draw(*rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
+ 	sym->Draw(rp_child);
 }
 
 void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt)
 {
 	S2_MAT mt = _mt * rp.mt;
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-
-	rp_child->mt = mt;
+	RenderParams rp_child(rp);
+	rp_child.mt = mt;
 
 	BlendMode blend = BM_NULL;
 	if (!rp.IsDisableBlend()) {
@@ -191,28 +204,24 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 	if (blend != BM_NULL) {
 		;
 	} else if (filter != FM_NULL) {
-		if (rp_child->IsChangeShader()) {
+		if (rp_child.IsChangeShader()) {
 			mgr->SetShader(sl::FILTER);
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 			shader->SetMode(sl::FILTER_MODE(filter));
 		}
 	} else {
-		if (rp_child->IsChangeShader()) {
+		if (rp_child.IsChangeShader()) {
 			mgr->SetShader(sl::SPRITE2);
 		}
 	}
 
-	sym->Draw(*rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
+	sym->Draw(rp_child);
 }
 
 void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
 {
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child);
+	RenderParams rp_child(rp);
+	if (!DrawNode::Prepare(rp, spr, rp_child)) {
 		return;
 	}
 
@@ -225,15 +234,13 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 	vertices[2] = sm::vec2(rect.xmax, rect.ymax);
 	vertices[3] = sm::vec2(rect.xmax, rect.ymin);
 	for (int i = 0; i < 4; ++i) {
-		vertices[i] = rp_child->mt * vertices[i];
+		vertices[i] = rp_child.mt * vertices[i];
 	}
 
 	RVG::SetColor(col);
 	RVG::Polyline(vertices, true);
 
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
@@ -246,8 +253,7 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	r_min.Set(r.xmin, r.ymin);
 	r_max.Set(r.xmax, r.ymax);
-	S2_MAT mat;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
+	S2_MAT mat = PrepareMat(rp, spr);
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
@@ -261,19 +267,14 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-
-	S2_MAT mt;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
-	rp_child->mt = mt.Inverted();
-	DrawSprImpl(spr, *rp_child);
+	RenderParams rp_child(rp);
+	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
+	rp_child.mt = mt.Inverted();
+	DrawSprImpl(spr, rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
 	rt->Unbind();
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
@@ -284,8 +285,7 @@ void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, cons
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);
 	vertices[3] = sm::vec2(r.xmin, r.ymax);
-	S2_MAT mt;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
+	S2_MAT mt = DrawNode::PrepareMat(rp, spr);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}
@@ -356,20 +356,18 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	{
 		const RenderFilter* rf = rs.GetFilter();
 
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
-
-		rp_child->shader.SetFilter(rf);
-		rp_child->camera = rc;
+		RenderParams rp_child(rp);
+		rp_child.shader.SetFilter(rf);
+		rp_child.camera = rc;
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
 			int itrs = static_cast<const RFGaussianBlur*>(rf)->GetIterations();
-			DrawGaussianBlur::Draw(spr, *rp_child, itrs);
+			DrawGaussianBlur::Draw(spr, rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
 			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
-			DrawOuterGlow::Draw(spr, *rp_child, itrs);
+			DrawOuterGlow::Draw(spr, rp_child, itrs);
 		} 
 		else 
 		{
@@ -388,22 +386,17 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 				}
 				break;
 			}
-			DrawSprImplFinal(spr, *rp_child);
+			DrawSprImplFinal(spr, rp_child);
 		}
-
-		RenderParamsPool::Instance()->Push(rp_child); 
 	} 
 	else 
 	{
 		if (rp.IsChangeShader()) {
 			mgr->SetShader(sl::SPRITE2);
 		}
-
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
-		rp_child->camera = rc;
-		DrawSprImplFinal(spr, *rp_child);
-		RenderParamsPool::Instance()->Push(rp_child); 
+		RenderParams rp_child(rp);
+		rp_child.camera = rc;
+		DrawSprImplFinal(spr, rp_child);
 	}
 }
 
@@ -414,11 +407,11 @@ void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 // 		DrawAABB(spr, rp, Color(255, 0, 0));
 // 	}
 
-	//if (spr->GetDownsample() != 1) {
-	//	DrawDownsample::Draw(spr, rp, spr->GetDownsample());
-	//} else {
+	if (spr->GetDownsample() != 1) {
+		DrawDownsample::Draw(spr, rp, spr->GetDownsample());
+	} else {
 		spr->GetSymbol()->Draw(rp, spr);
-	//}
+	}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}

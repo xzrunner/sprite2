@@ -81,7 +81,7 @@ private:
 	int m_max_frame_idx;
 	int m_max_item_num;
 
-	friend class AnimCurr;
+	friend class AnimTreeCurr;
 
 }; // AnimCopy
 

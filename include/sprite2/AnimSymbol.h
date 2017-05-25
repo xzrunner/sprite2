@@ -65,7 +65,7 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
-	const AnimCopy* GetCopy() const { return m_copy; }
+	const AnimCopy* GetCopy() const;
 	void LoadCopy();
 
 	void BuildFlatten(const Actor* actor) const;
@@ -88,12 +88,11 @@ protected:
 
 	int m_fps;
 
-	AnimCopy* m_copy;
-	AnimCurr* m_curr;
-
 	mutable sm::rect m_aabb;
 
 	mutable AnimFlatten* m_ft;
+	AnimCurr* m_curr;
+	mutable AnimCopy* m_copy;
 
 }; // AnimSymbol
 

@@ -1,6 +1,6 @@
 #include "AnimCopy.h"
 #include "AnimSymbol.h"
-#include "AnimCurr.h"
+#include "AnimTreeCurr.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
 #include "Flatten.h"
@@ -87,7 +87,7 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 					const Frame& next_frame = layer.frames[curr_frame + 1];
 					assert(item.slot == next_frame.items[item.next].slot);
 					Sprite* tween = slots[item.slot];
-					AnimCurr::LoadSprLerpData(tween, m_lerps[item.lerp], time - curr->time);
+					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[item.lerp], time - curr->time);
 					// todo AnimLerp::LerpSpecial
 					spr = tween;
 				}
@@ -98,7 +98,7 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 					const Item& pre_item = pre_frame.items[item.prev];
 					assert(item.slot == pre_item.slot);
 					Sprite* tween = slots[pre_item.slot];
-					AnimCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - curr->time);
+					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - curr->time);
 					// todo AnimLerp::LerpSpecial
 					spr = tween;
 				}
@@ -124,6 +124,8 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 
 void AnimCopy::SetCountNum(const AnimSymbol& sym)
 {
+	m_max_frame_idx = sym.GetMaxFrameIdx();
+
 	const std::vector<AnimSymbol::Layer*>& layers 
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	for (int i = 0, n = layers.size(); i < n; ++i) 
@@ -132,9 +134,6 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 		for (int j = 0, m = layers[i]->frames.size(); j < m; ++j) 
 		{
 			const AnimSymbol::Frame* frame = layers[i]->frames[j];
-			if (frame->index > m_max_frame_idx) {
-				m_max_frame_idx = frame->index;
-			}
 			int count = frame->sprs.size();
 			if (count > max_count) {
 				max_count = count;

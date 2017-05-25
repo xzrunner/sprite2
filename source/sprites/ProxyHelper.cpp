@@ -9,13 +9,13 @@
 #include "UpdateParams.h"
 #include "RenderColor.h"
 #include "SetStaticFrameVisitor.h"
+#include "AnimCurr.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
 #include "ComplexActor.h"
 #include "AnimSymbol.h"
 #include "AnimSprite.h"
-#include "AnimCurr.h"
 #include "Anim2Sprite.h"
 #include "Particle3dSprite.h"
 #include "Particle3dEmitter.h"
@@ -1372,8 +1372,13 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(actor->GetSpr());
-		count = anim->GetAnimCurr(actor).GetSlotSize();
-		return true;
+		const AnimCurr* curr = anim->GetAnimCurr(actor);
+		if (curr) {
+			count = curr->GetSlotSize();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	else
 	{

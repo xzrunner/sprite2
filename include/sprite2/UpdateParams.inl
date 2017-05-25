@@ -15,6 +15,7 @@ UpdateParams::UpdateParams()
 	: m_prev_filter(FM_NULL)
 	, m_actor(NULL)
 	, m_force(false)
+	, m_next(NULL)
 {
 }
 
@@ -23,6 +24,7 @@ UpdateParams::UpdateParams(const Actor* actor)
 	: m_prev_filter(FM_NULL)
 	, m_actor(actor)
 	, m_force(false)
+	, m_next(NULL)
 {
 }
 
@@ -32,6 +34,7 @@ UpdateParams::UpdateParams(const UpdateParams& params)
 	, m_prev_filter(FM_NULL)
 	, m_actor(params.m_actor)
 	, m_force(params.m_force)
+	, m_next(NULL)
 {
 }
 

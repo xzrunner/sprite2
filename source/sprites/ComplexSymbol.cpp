@@ -122,15 +122,19 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 bool ComplexSymbol::Update(const UpdateParams& up, float time)
 {
 	bool ret = false;
-	UpdateParams up_child(up);
+
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
 	for (int i = 0, n = m_children.size(); i < n; ++i) 
 	{
 		Sprite* child = m_children[i];
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		if (child->Update(up_child)) {
+		up_child->SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(*up_child)) {
 			ret = true;
 		}
 	}
+	UpdateParamsPool::Instance()->Push(up_child); 
+
 	return ret;
 }
 

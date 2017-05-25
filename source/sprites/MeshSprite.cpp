@@ -85,14 +85,18 @@ bool MeshSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	UpdateParams up_child(up);
-	up_child.Push(this);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(this);
+	bool ret;
 	if (m_base) {
-		return const_cast<Symbol*>(m_base)->Update(up_child, 0);
+		ret = const_cast<Symbol*>(m_base)->Update(*up_child, 0);
 	} else {
 		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		return const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(up_child, 0);
+		ret = const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(*up_child, 0);
 	}
+	UpdateParamsPool::Instance()->Push(up_child); 
+	return ret;
 }
 
 Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const

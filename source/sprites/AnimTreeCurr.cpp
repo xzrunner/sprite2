@@ -132,14 +132,16 @@ void AnimTreeCurr::Start(const UpdateParams& up, const Sprite* spr)
 
 void AnimTreeCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 {
-	UpdateParams up_child(up);
-	up_child.Push(spr);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(spr);
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* child = m_slots[m_curr[i]];
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		child->OnMessage(up_child, msg);
+		up_child->SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(*up_child, msg);
 	}
+	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 Sprite* AnimTreeCurr::FetchChildByName(int name, const Actor* actor) const
@@ -353,8 +355,9 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 {
 	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
 
-	UpdateParams up_child(up);
-	up_child.Push(spr);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(spr);
 
 	int ctrl_frame = m_ctrl.GetFrame();
 
@@ -419,33 +422,38 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 			if (!last_frame && m_layer_cursor_update[i] && actor.prev == -1) 
 			{
 				Sprite* child = m_slots[actor.slot];
-				up_child.SetActor(child->QueryActor(up.GetActor()));
-				child->OnMessage(up_child, MSG_TRIGGER);
+				up_child->SetActor(child->QueryActor(up.GetActor()));
+				child->OnMessage(*up_child, MSG_TRIGGER);
 			}
 		}
 	}
+
+	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool AnimTreeCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 {
 	bool dirty = false;
-	UpdateParams up_child(up);
-	up_child.Push(spr);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(spr);
 	for (int i = 0; i < m_curr_num; ++i) 
 	{
 		Sprite* child = m_slots[m_curr[i]];
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		if (child->Update(up_child)) {
+		up_child->SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(*up_child)) {
 			dirty = true;
 		}
 	}
+	UpdateParamsPool::Instance()->Push(up_child); 
 	return dirty;
 }
 
 void AnimTreeCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int static_frame, int fps)
 {
-	UpdateParams up_child(up);
-	up_child.Push(spr);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(spr);
 	
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
@@ -471,10 +479,12 @@ void AnimTreeCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, i
 
  			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
 			SprVisitorParams vp;
-			vp.actor = child->QueryActor(up_child.GetActor());
+			vp.actor = child->QueryActor(up_child->GetActor());
 			child->Traverse(visitor, vp, false);
 		}
 	}
+
+	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 }

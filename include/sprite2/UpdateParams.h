@@ -4,6 +4,7 @@
 #include S2_MAT_HEADER
 
 #include "FilterMode.h"
+#include "ObjectPool3.h"
 
 namespace s2
 {
@@ -32,15 +33,26 @@ public:
 	void SetForce(bool force) { m_force = force; }
 	bool IsForce() const { return m_force; }
 
+	/**
+	 *  @interface
+	 *    ObjectPool3
+	 */
+	UpdateParams* GetNext() const { return m_next; }
+	void SetNext(UpdateParams* next) { m_next = next; }
+
 private:
-	S2_MAT       m_prev_mat;
-	FilterMode   m_prev_filter;
+	S2_MAT        m_prev_mat;
+	FilterMode    m_prev_filter;
 
-	const Actor* m_actor;
+	const Actor*  m_actor;
 
-	bool         m_force;
+	bool          m_force;
+
+	UpdateParams* m_next;
 
 }; // UpdateParams
+
+typedef ObjectPool3<UpdateParams> UpdateParamsPool;
 
 }
 

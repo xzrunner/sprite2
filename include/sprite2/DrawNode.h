@@ -23,7 +23,7 @@ public:
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 
-	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool culling = true);
+	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams());
 
 	static void Draw(const Symbol* sym, 
 		             const RenderParams& rp = RenderParams(),
@@ -37,8 +37,12 @@ public:
 					 const S2_MAT& mt);
 
 	static void DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
-
-	static bool IsOutsideView(const Sprite* spr, const RenderParams& rp);
+	
+	/**
+	 *  @return
+	 *    bool, if is outside
+	 */
+	static bool CullingTestOutside(const Sprite* spr, const RenderParams& rp);
 
 private:
 	static void DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt);

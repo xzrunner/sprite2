@@ -75,11 +75,11 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	return true;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
+void DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 {
-	if (culling && IsOutsideView(spr, rp)) {
+	if (CullingTestOutside(spr, rp)) {
 		return;
-	}
+	} 
 
 	if (spr->IsDTexForceCached())
 	{
@@ -236,9 +236,15 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
-bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
-{	
-	if (!rp.view_region.IsValid()) {
+bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
+{
+	if (rp.IsDisableCulling()) {
+		return false;
+	}
+
+	RenderScissor* rs = RenderScissor::Instance();
+	if (rs->Empty() && !rp.view_region.IsValid()) {
+		rp.SetDisableCulling(true);
 		return false;
 	}
 
@@ -251,7 +257,30 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
-	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));
+	sm::rect sr(r_min, r_max);
+
+	if (!rs->Empty() && rs->IsOutside(sr)) {
+		rp.SetDisableCulling(true);
+		return true;
+	}
+	if (rp.view_region.IsValid())
+	{
+		if (sm::is_rect_contain_rect(rp.view_region, sr)) {
+			rp.SetDisableCulling(true);
+			return false;
+		} else if (sm::is_rect_intersect_rect(rp.view_region, sr)) {
+			rp.SetDisableCulling(false);
+			return false;
+		} else {
+			rp.SetDisableCulling(true);
+			return false;
+		}
+	}
+	else
+	{
+		rp.SetDisableCulling(true);
+		return false;
+	}
 }
 
 void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)

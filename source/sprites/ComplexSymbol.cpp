@@ -93,14 +93,23 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 	int action = GetAction(spr, rp.actor);
 	const std::vector<Sprite*>& sprs = GetActionChildren(action);
-	for (int i = 0, n = sprs.size(); i < n; ++i) 
-	{
-		const Sprite* spr = sprs[i];
-		rp_child->actor = spr->QueryActor(rp.actor);
-		if (IsChildOutside(spr, *rp_child)) {
-			continue;
+	if (rp.IsDisableCulling()) {
+		for (int i = 0, n = sprs.size(); i < n; ++i) 
+		{
+			const Sprite* spr = sprs[i];
+			rp_child->actor = spr->QueryActor(rp.actor);
+			DrawNode::Draw(spr, *rp_child);
 		}
-		DrawNode::Draw(spr, *rp_child, false);
+	} else {
+		for (int i = 0, n = sprs.size(); i < n; ++i) 
+		{
+			const Sprite* spr = sprs[i];
+			rp_child->actor = spr->QueryActor(rp.actor);
+			if (DrawNode::CullingTestOutside(spr, *rp_child)) {
+				continue;
+			}
+			DrawNode::Draw(spr, *rp_child);
+		}
 	}
 
 	if (scissor) {
@@ -341,33 +350,6 @@ sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 		m_aabb = CalcAABB(spr, actor);
 	}
 	return m_aabb;
-}
-
-bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) const
-{
-	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->Empty() && !rp.view_region.IsValid()) {
-		return false;
-	}
-
-	sm::vec2 r_min, r_max;
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
-	r_min.Set(r.xmin, r.ymin);
-	r_max.Set(r.xmax, r.ymax);
-	S2_MAT mat;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
-	r_min = mat * r_min;
-	r_max = mat * r_max;
-
-	sm::rect sr(r_min, r_max);
-
-	if (!rs->Empty() && rs->IsOutside(sr)) {
-		return true;
-	}
-	if (rp.view_region.IsValid() && !sm::is_rect_intersect_rect(rp.view_region, sr)) {
-		return true;
-	}
-	return false;
 }
 
 sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const

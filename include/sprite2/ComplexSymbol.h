@@ -64,8 +64,6 @@ public:
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
-	virtual bool IsChildOutside(const Sprite* spr, const RenderParams& rp) const;
-
 private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 

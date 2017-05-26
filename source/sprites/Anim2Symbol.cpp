@@ -10,6 +10,16 @@
 #include <assert.h>
 #include <string.h>
 
+static void release_anim(rg_animation* anim)
+{
+	int i;
+	rg_skeleton* sk = anim->sk;
+	for (i = 0; i < sk->skin_count; ++i) {
+		rg_skin* skin = &sk->skins[i];
+		static_cast<s2::Symbol*>(skin->ud)->RemoveReference();
+	}
+}
+
 namespace s2
 {
 
@@ -26,6 +36,11 @@ Anim2Symbol::Anim2Symbol(uint32_t id)
 
 Anim2Symbol::~Anim2Symbol()
 {
+	if(m_anim) {
+		release_anim(m_anim);
+		m_anim = NULL;
+	}
+
 	// todo release sk
 }
 	
@@ -48,6 +63,15 @@ void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp_child);
+}
+
+void Anim2Symbol::SetAnim(rg_animation* anim)
+{
+	if(m_anim) {
+		release_anim(m_anim);
+		m_anim = NULL;
+	}
+	m_anim = anim;
 }
 
 sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

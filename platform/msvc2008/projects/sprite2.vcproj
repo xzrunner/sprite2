@@ -947,6 +947,26 @@
 					RelativePath="..\..\..\include\sprite2\TrailSymbol.h"
 					>
 				</File>
+				<Filter
+					Name="wrap"
+					>
+					<File
+						RelativePath="..\..\..\source\sprites\TrailEmitter.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\TrailEmitter.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\TrailEmitterCfg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\TrailEmitterCfg.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="03.icon"
@@ -1195,14 +1215,6 @@
 						</File>
 						<File
 							RelativePath="..\..\..\include\sprite2\PointQueryVisitor.h"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\source\sprites\QueryAABBVisitor.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\include\sprite2\QueryAABBVisitor.h"
 							>
 						</File>
 					</Filter>

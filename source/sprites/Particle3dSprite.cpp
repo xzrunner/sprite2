@@ -52,6 +52,8 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	m_reuse          = spr.m_reuse;
 	m_start_radius   = spr.m_start_radius;
 
+	CreateSpr();
+
 	return *this;
 }
 

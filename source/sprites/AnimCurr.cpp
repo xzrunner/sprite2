@@ -259,6 +259,12 @@ void AnimCurr::SetTime(float time)
 
 void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
+	if (frame == m_frame) {
+		return;
+	}
+
+	SetActive(frame == -1);
+
 	int frame_copy = frame;
 	frame = frame % (m_copy->m_max_frame_idx);
 	
@@ -274,9 +280,9 @@ void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, in
 	m_stop_time = 0;
 	m_stop_during = 0;
 
-	LoadCurrSprites(up, spr);
-
 	SetChildrenFrame(up, spr, frame_copy, fps);
+
+	LoadCurrSprites(up, spr);
 }
 
 void AnimCurr::SetAnimCopy(const AnimCopy* copy)

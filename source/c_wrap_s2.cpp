@@ -221,7 +221,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 
 	rp->actor = s2_actor;
 
-	rp->SetDisableCulling(true);
+//	rp->SetDisableCulling(true);
 
 	DrawNode::Draw(s2_actor->GetSpr(), *rp);
 

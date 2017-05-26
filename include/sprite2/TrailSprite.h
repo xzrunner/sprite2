@@ -3,12 +3,11 @@
 
 #include "S2_Sprite.h"
 
-struct t2d_emitter;
-
 namespace s2
 {
 
 class RenderParams;
+class TrailEmitter;
 
 class TrailSprite : public VIRTUAL_INHERITANCE Sprite
 {
@@ -40,7 +39,10 @@ public:
 	void SetInP3d() { m_in_p3d = true; }
 	
 protected:
-	t2d_emitter* m_et;
+	void CreateSpr();
+
+protected:
+	TrailEmitter* m_et;
 
 	bool m_local;
 	bool m_in_p3d;

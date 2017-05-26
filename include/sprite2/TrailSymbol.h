@@ -3,11 +3,11 @@
 
 #include "S2_Symbol.h"
 
-struct t2d_emitter_cfg;
-struct t2d_emitter;
-
 namespace s2
 {
+
+class TrailEmitter;
+class TrailEmitterCfg;
 
 class TrailSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -24,19 +24,18 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 
-	void SetEmitterCfg(t2d_emitter_cfg* cfg);
-	const t2d_emitter_cfg* GetEmitterCfg() const { return m_et_cfg; }
+	void SetEmitterCfg(const TrailEmitterCfg* cfg);
+	const TrailEmitterCfg* GetEmitterCfg() const { return m_et_cfg; }
 
-	const t2d_emitter* GetEmitter() const { return m_et; }
+	TrailEmitter* GetEmitter() const { return m_et; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 protected:
-	t2d_emitter_cfg* m_et_cfg;
+	const TrailEmitterCfg* m_et_cfg;
 
-	t2d_emitter* m_et;
-
+	TrailEmitter* m_et;
 }; // TrailSymbol
 
 }

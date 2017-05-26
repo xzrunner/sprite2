@@ -4,6 +4,8 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#include "TrailEmitter.h"
+#include "TrailEmitterCfg.h"
 
 #include <mt_2d.h>
 #include <shaderlab/ShaderMgr.h>
@@ -27,8 +29,11 @@ TrailSymbol::TrailSymbol(uint32_t id)
 
 TrailSymbol::~TrailSymbol()
 {
+	if (m_et_cfg) {
+		m_et_cfg->RemoveReference();
+	}
 	if (m_et) {
-		t2d_emitter_release(m_et);
+		m_et->RemoveReference();
 	}
 }
 
@@ -56,19 +61,24 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	t2d_spr->Draw(rp_child);
 }
 
-void TrailSymbol::SetEmitterCfg(t2d_emitter_cfg* cfg)
+void TrailSymbol::SetEmitterCfg(const TrailEmitterCfg* cfg)
 {
 	if (m_et_cfg == cfg) {
 		return;
 	}
 
-	m_et_cfg = cfg;
+	cu::RefCountObjAssign(m_et_cfg, cfg);
+	if(!cfg) {
+		return;
+	}
 
 	if (m_et) {
-		t2d_emitter_release(m_et);
+		m_et->RemoveReference();
 	}
-	m_et = t2d_emitter_create(m_et_cfg);
-	t2d_emitter_start(m_et);
+
+	m_et = TrailEmitterPool::Instance()->Pop();
+	m_et->CreateEmitter(m_et_cfg);
+	m_et->Start();
 }
 
 sm::rect TrailSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

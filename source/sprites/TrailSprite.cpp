@@ -4,6 +4,7 @@
 #include "RenderParams.h"
 #include "Trail.h"
 #include "S2_Actor.h"
+#include "TrailEmitter.h"
 
 #include <mt_2d.h>
 
@@ -25,22 +26,18 @@ TrailSprite::TrailSprite(const TrailSprite& spr)
 	, m_local(spr.m_local)
 	, m_in_p3d(spr.m_in_p3d)
 {
-	if (spr.m_et) {
-		m_et = t2d_emitter_create(spr.m_et->cfg);
-		t2d_emitter_start(m_et);
-	}
+	CreateSpr();
 }
 
 TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_et = NULL;
-	if (spr.m_et) {
-		m_et = t2d_emitter_create(spr.m_et->cfg);
-		t2d_emitter_start(m_et);
-	}
-	m_local = spr.m_local;
-	m_in_p3d = spr.m_in_p3d;
+	m_et             = NULL;
+	m_local          = spr.m_local;
+	m_in_p3d         = spr.m_in_p3d;
+
+	CreateSpr();
+
 	return *this;
 }
 
@@ -50,18 +47,28 @@ TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
 	, m_local(false)
 	, m_in_p3d(false)
 {
-	const t2d_emitter_cfg* cfg = VI_DOWNCASTING<TrailSymbol*>(sym)->GetEmitterCfg();
-	if (cfg) {
-		m_et = t2d_emitter_create(cfg);
-		t2d_emitter_start(m_et);
-	}
+	CreateSpr();
 }
 
 TrailSprite::~TrailSprite()
 {
 	if (m_et) {
-		t2d_emitter_release(m_et);
+		m_et->RemoveReference();
 	}
+}
+
+void TrailSprite::CreateSpr()
+{
+	assert(!m_et);
+
+	const TrailEmitterCfg* cfg = VI_DOWNCASTING<TrailSymbol*>(m_sym)->GetEmitterCfg();
+	if (!cfg) {
+		return;
+	}
+
+	m_et = TrailEmitterPool::Instance()->Pop();
+	m_et->CreateEmitter(cfg);
+	m_et->Start();
 }
 
 TrailSprite* TrailSprite::Clone() const
@@ -75,7 +82,7 @@ void TrailSprite::OnMessage(const UpdateParams& up, Message msg)
 	{
 	case MSG_START: case MSG_TRIGGER:
 		if (m_et) {
-			t2d_emitter_start(m_et);
+			m_et->Start();
 		}
 		break;
 	default:
@@ -98,20 +105,19 @@ bool TrailSprite::Update(const UpdateParams& up)
 	}
 
 	float time = Trail::Instance()->GetTime();
-	assert(m_et->time <= time);
-	if (m_et->time == time) {
+	float et_time = m_et->GetTime();
+	assert(et_time <= time);
+	if (et_time == time) {
 		return false;
 	}
 
-	float dt = time - m_et->time;
 	sm::vec2 pos;
 	if (m_local && !m_in_p3d) {
 		pos = GetPosition();
 	} else {
 		pos = up.GetPrevMat() * GetPosition();
 	}
-	t2d_emitter_update(m_et, dt, (sm_vec2*)(&pos));
-	m_et->time = time;
+	m_et->Update(time, &pos);
 
 	return true;
 }
@@ -127,7 +133,7 @@ void TrailSprite::Draw(const RenderParams& rp) const
 	if (m_local || m_in_p3d) {
 		trp.mat = rp.mt;
 	}
-	t2d_emitter_draw(m_et, &trp);
+	m_et->Draw(trp);
 }
 
 }

@@ -683,12 +683,26 @@ _actor_mount(const Actor* parent, Sprite* old_child, const Actor* new_child) {
 	if (!old_child) {
 		return -1;		
 	}
-	if (old_child->GetSymbol()->Type() != SYM_ANCHOR) {
+	int sym_type = old_child->GetSymbol()->Type();
+	if (sym_type == SYM_PROXY) {
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(old_child->GetSymbol());
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		int ret = 0;
+		for (int i = 0, n = items.size(); i < n; ++i) 
+		{
+			int _ret = _actor_mount(items[i].first, items[i].second, new_child);
+			if (_ret != 0) {
+				ret = _ret;
+			}
+		}
+		return ret;
+	} else if (sym_type == SYM_ANCHOR) {
+		AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(old_child);
+		anchor_spr->AddAnchor(new_child, parent);
+		return 0;
+	} else {
 		return -2;
 	}
-	AnchorSprite* anchor_spr = VI_DOWNCASTING<AnchorSprite*>(old_child);
-	anchor_spr->AddAnchor(new_child, parent);
-	return 0;
 }
 
 // ret: 0 ok, -1 no child with name, -2 child isn't anchor

@@ -25,7 +25,9 @@ TrailEmitterCfg::~TrailEmitterCfg()
 	}
 
 	if (m_impl->mode_type == T2D_MODE_IMAGE) {
-		static_cast<s2::Symbol*>(m_impl->syms->mode.A.ud)->RemoveReference();
+		for (int i = 0; i < m_impl->sym_count; ++i) {
+			static_cast<s2::Symbol*>(m_impl->syms[i].mode.A.ud)->RemoveReference();
+		}
 	}
 
 	delete m_impl;

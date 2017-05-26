@@ -12,8 +12,8 @@ struct t2d_emitter;
 namespace s2
 {
 
-class TrailRenderParams;
 class TrailEmitterCfg;
+class TrailRenderParams;
 
 class TrailEmitter : public cu::RefCountObj, private cu::Uncopyable
 {
@@ -23,7 +23,7 @@ public:
 
 	virtual void RemoveReference() const;
 
-	bool Update(float time, sm::vec2* pos);
+	bool Update(float time, const sm::vec2& pos);
 	void Draw(const TrailRenderParams& rp) const;
 
 	void Start();

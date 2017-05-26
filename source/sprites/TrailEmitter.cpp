@@ -27,7 +27,7 @@ void TrailEmitter::RemoveReference() const
 	}
 }
 
-bool TrailEmitter::Update(float time, sm::vec2* pos)
+bool TrailEmitter::Update(float time, const sm::vec2& pos)
 {
 	if (!m_state.et) {
 		return false;
@@ -46,7 +46,7 @@ bool TrailEmitter::Update(float time, sm::vec2* pos)
 		{
 			dirty = true;
 			float dt = time - m_state.et->time;
-			t2d_emitter_update(m_state.et, dt, (sm_vec2*)(&pos));
+			t2d_emitter_update(m_state.et, dt, (sm_vec2*)&pos);
 
 			float tot_time = Trail::Instance()->GetTime();
 			m_state.et->time = std::min(time, tot_time);

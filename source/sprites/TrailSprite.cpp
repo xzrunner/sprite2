@@ -117,7 +117,7 @@ bool TrailSprite::Update(const UpdateParams& up)
 	} else {
 		pos = up.GetPrevMat() * GetPosition();
 	}
-	m_et->Update(time, &pos);
+	m_et->Update(time, pos);
 
 	return true;
 }

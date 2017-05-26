@@ -588,10 +588,14 @@ void s2_actor_update(void* actor, bool force) {
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
 	up.SetForce(force);
 
-	bool old_inherit_update = s2_spr->IsInheritUpdate();
-	ProxyHelper::SprSetInheritUpdate(s2_spr, true);
-	const_cast<Sprite*>(s2_spr)->Update(up);
-	ProxyHelper::SprSetInheritUpdate(s2_spr, old_inherit_update);
+	int old_inherit_update = ProxyHelper::SprGetInheritUpdate(s2_spr);
+	if (old_inherit_update != -1) {
+		ProxyHelper::SprSetInheritUpdate(s2_spr, true);
+		const_cast<Sprite*>(s2_spr)->Update(up);
+		ProxyHelper::SprSetInheritUpdate(s2_spr, old_inherit_update == 1);
+	} else {
+		const_cast<Sprite*>(s2_spr)->Update(up);
+	}
 }
 
 extern "C"

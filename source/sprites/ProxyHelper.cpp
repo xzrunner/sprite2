@@ -334,6 +334,38 @@ void ProxyHelper::SprSetInheritUpdate(const Sprite* spr, bool inherit)
 	}
 }
 
+int ProxyHelper::SprGetInheritUpdate(const Sprite* spr)
+{
+	const Symbol* sym = spr->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		if (items.empty()) {
+			return -1;
+		} else {
+			int ret = -1;
+			for (int i = 0, n = items.size(); i < n; ++i) {
+				if (ret == -1) {
+					ret = items[i].second->IsInheritUpdate() ? 1 : 0;
+				} else {
+					int _ret = items[i].second->IsInheritUpdate() ? 1 : 0;
+					if (_ret != ret) {
+						ret = -1;
+						break;
+					}
+				}
+			} 
+			return ret;
+		}
+	}
+	else
+	{
+		return spr->IsInheritUpdate() ? 1 : 0;
+	}
+}
+
 bool ProxyHelper::SprGetFrameCount(const Sprite* spr, int& count)
 {
 	const Symbol* sym = spr->GetSymbol();

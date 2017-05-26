@@ -1335,6 +1335,14 @@
 					RelativePath="..\..\..\include\sprite2\Flatten.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\FlattenMgr.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\FlattenMgr.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="99.proxy"

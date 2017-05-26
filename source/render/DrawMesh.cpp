@@ -105,10 +105,30 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbol* base_sym)
 {
 	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
-	if (sym->Type() == SYM_IMAGE) {
-		DrawOnePass(mesh, rp, sym);
-	} else {
+	if (sym->Type() == SYM_IMAGE) 
+	{
+	 	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
+	 	float texcoords[8];
+	 	int tex_id;
+	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
+	 		img_sym->OnQueryTexcoordsFail();
+	 	}
+		DrawOnePass(mesh, rp, texcoords, tex_id);
+	} 
+	else 
+	{
 		DrawTwoPass(mesh, rp, sym);
+
+		//////////////////////////////////////////////////////////////////////////
+
+//  		int tex_id;
+//  		const float* texcoords = DrawNode::DTexQuerySym(sym, tex_id);
+//  		if (texcoords) {
+//  			DrawOnePass(mesh, rp, texcoords, tex_id);
+//  		} else {
+//  			DrawNode::DTexCacheSym(sym);
+// 			DrawTwoPass(mesh, rp, sym);
+// 		}
 	}
 }
 
@@ -164,7 +184,7 @@ static void draw_filter(const float* positions, const float* texcoords, int tex_
 	shader->Draw(positions, texcoords, tex_id);
 }
 
-void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
+void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
@@ -177,14 +197,6 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return;
-	}
-
-	assert(sym->Type() == SYM_IMAGE);
-	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
-	float src_texcoords[8];
-	int tex_id;
-	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), src_texcoords, tex_id)) {
-		img_sym->OnQueryTexcoordsFail();
 	}
 
 	float x = src_texcoords[0], y = src_texcoords[1];

@@ -77,7 +77,8 @@ private:
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
 	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
-		
+	void SetChildrenFrameAll(const UpdateParams& up, const Sprite* spr, int frame);
+
 private:
 	const AnimCopy* m_copy;
 

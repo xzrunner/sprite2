@@ -280,9 +280,13 @@ void AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, in
 	m_stop_time = 0;
 	m_stop_during = 0;
 
-	SetChildrenFrame(up, spr, frame_copy, fps);
-
 	LoadCurrSprites(up, spr);
+
+	if (frame == -1) {
+		SetChildrenFrameAll(up, spr, frame);
+	} else {
+		SetChildrenFrame(up, spr, frame_copy, fps);
+	}
 }
 
 void AnimCurr::SetAnimCopy(const AnimCopy* copy)
@@ -556,6 +560,21 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 			vp.actor = child->QueryActor(up_child.GetActor());
 			child->Traverse(visitor, vp, false);
 		}
+	}
+}
+
+void AnimCurr::SetChildrenFrameAll(const UpdateParams& up, const Sprite* spr, int frame)
+{
+	UpdateParams up_child(up);
+	up_child.Push(spr);
+	for (int i = 0, n = m_slots.size(); i < n; ++i)
+	{
+		Sprite* child = m_slots[i];
+
+		SetStaticFrameVisitor visitor(frame);
+		SprVisitorParams vp;
+		vp.actor = child->QueryActor(up_child.GetActor());
+		child->Traverse(visitor, vp, false);
 	}
 }
 

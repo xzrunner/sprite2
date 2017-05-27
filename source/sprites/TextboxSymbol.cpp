@@ -107,10 +107,17 @@ sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 		return sm::rect(m_tb.width, m_tb.height);
 	}
 
+	sm::rect rect = GetBounding();
+
 	const sm::rect& r = actor->GetAABB().GetRect();
+	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+	if (!r.IsValid()) {
+		const TextboxActor* tb_actor = VI_DOWNCASTING<const TextboxActor*>(actor);
+		return TextboxActor::CalcAABB(tb_spr->GetTextbox(), GetBounding(), tb_actor->GetText());
+	}
+
 	sm::rect ret(r.Width(), r.Height());
 
-	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
 	float offy = - (r.Height() - tb_spr->GetTextbox().height) * 0.5f;
 	ret.ymin += offy;
 	ret.ymax += offy;

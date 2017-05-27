@@ -8,6 +8,8 @@
 namespace s2
 {
 
+class Textbox;
+
 class TextboxActor : public Actor
 {
 public:
@@ -17,6 +19,8 @@ public:
 	void SetText(const std::string& text);
 	const std::string& GetText() const { return m_text; }
 
+	static sm::rect CalcAABB(const Textbox& tb, const sm::rect& rect, const std::string& text);
+	
 private:
 	std::string m_text;
 

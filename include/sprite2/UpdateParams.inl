@@ -54,7 +54,9 @@ void UpdateParams::Push(const Sprite* spr)
 		return;
 	}
 
-	Utility::PrepareMat(m_prev_mat, spr, m_actor, m_prev_mat);
+	S2_MAT mt;
+	Utility::PrepareMat(m_prev_mat, spr, m_actor, mt);
+	m_prev_mat = mt;
 
 	const RenderFilter* filter = spr->GetShader().GetFilter();
 	if (filter && filter->GetMode() != FM_NULL) {

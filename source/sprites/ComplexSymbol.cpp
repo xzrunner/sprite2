@@ -92,23 +92,23 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	int action = GetAction(spr, rp.actor);
-	const std::vector<Sprite*>& sprs = GetActionChildren(action);
+	const std::vector<Sprite*>& children = GetActionChildren(action);
 	if (rp.IsDisableCulling()) {
-		for (int i = 0, n = sprs.size(); i < n; ++i) 
+		for (int i = 0, n = children.size(); i < n; ++i) 
 		{
-			const Sprite* spr = sprs[i];
-			rp_child->actor = spr->QueryActor(rp.actor);
-			DrawNode::Draw(spr, *rp_child);
+			const Sprite* child = children[i];
+			rp_child->actor = child->QueryActor(rp.actor);
+			DrawNode::Draw(child, *rp_child);
 		}
 	} else {
-		for (int i = 0, n = sprs.size(); i < n; ++i) 
+		for (int i = 0, n = children.size(); i < n; ++i) 
 		{
-			const Sprite* spr = sprs[i];
-			rp_child->actor = spr->QueryActor(rp.actor);
-			if (DrawNode::CullingTestOutside(spr, *rp_child)) {
+			const Sprite* child = children[i];
+			rp_child->actor = child->QueryActor(rp.actor);
+			if (DrawNode::CullingTestOutside(child, *rp_child)) {
 				continue;
 			}
-			DrawNode::Draw(spr, *rp_child);
+			DrawNode::Draw(child, *rp_child);
 		}
 	}
 

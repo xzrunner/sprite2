@@ -260,6 +260,18 @@ enum S2_PIXEL_TYPE
 
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type);
 
+struct s2_stat_pingpong_count {
+	int mesh;
+	int mask;
+	int blend;
+	int gaussian_blur;
+	int outer_glow;
+	int down_sample;
+	int rt_outside;
+};
+void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count*);
+void s2_stat_reset();
+
 #endif // _sprite2_wrap_c_h_
 
 #ifdef __cplusplus

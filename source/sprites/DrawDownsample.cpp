@@ -7,6 +7,7 @@
 #include "S2_Symbol.h"
 #include "RenderParams.h"
 #include "SymType.h"
+#include "sprite2/Statistics.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -26,6 +27,8 @@ void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downs
 	if (!rt) {
 		return;
 	}
+
+	Statistics::Instance()->AddDownSample();
 
 	sl::ShaderMgr::Instance()->FlushShader();
 

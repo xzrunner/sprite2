@@ -35,6 +35,8 @@ void DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& rp, int itera
 
 void DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations)
 {	
+	Statistics::Instance()->AddGaussianBlur();
+
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* tmp_rt = RT->Fetch();
 

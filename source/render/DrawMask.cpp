@@ -23,6 +23,8 @@ namespace s2
 
 void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
+	Statistics::Instance()->AddMask();
+
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

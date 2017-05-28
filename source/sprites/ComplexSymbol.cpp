@@ -15,6 +15,7 @@
 #include "Flatten.h"
 #include "FlattenParams.h"
 #include "AABBHelper.h"
+#include "sprite2/Statistics.h"
 
 #include <SM_Test.h>
 
@@ -80,6 +81,8 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
 	if (scissor) 
 	{
+		Statistics::Instance()->AddScissor();
+
 		sm::vec2 min = rp_child->mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
 			     max = rp_child->mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
 		if (min.x > max.x) {

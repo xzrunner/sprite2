@@ -12,6 +12,7 @@
 #include "SymType.h"
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
+#include "sprite2/Statistics.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -272,7 +273,9 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	if (!rt) {
 		return;
 	}
-	
+
+	Statistics::Instance()->AddMesh();
+		
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();

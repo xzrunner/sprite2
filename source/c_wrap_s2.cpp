@@ -22,6 +22,7 @@
 #include "Blackboard.h"
 #include "s2_trans_color.h"
 #include "StringHelper.h"
+#include "sprite2/Statistics.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -1154,6 +1155,8 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 extern "C"
 void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
+	Statistics::Instance()->AddRTOutside();
+
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
 	RenderScissor::Instance()->Disable();
@@ -1173,6 +1176,8 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 extern "C"
 void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
+	Statistics::Instance()->AddRTOutside();
+
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
 
@@ -1290,6 +1295,19 @@ extern "C"
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
 {
 	return trans_color(src, PIXEL_TYPE(src_type), PIXEL_TYPE(dst_type));
+}
+
+extern "C"
+void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count* dst)
+{
+	const Statistics::PingPongCount& src = Statistics::Instance()->GetPingPongCount();
+	memcpy(dst, &src, sizeof(*dst));
+}
+
+extern "C"
+void s2_stat_reset()
+{
+	Statistics::Instance()->Reset();
 }
 
 }

@@ -7,6 +7,7 @@
 #include "RenderScissor.h"
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
+#include "sprite2/Statistics.h"
 
 #include <SM_Rect.h>
 #include <unirender/UR_RenderTarget.h>
@@ -28,6 +29,8 @@ void DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 	if (!rt) {
 		return;
 	}
+
+	Statistics::Instance()->AddBlend();
 
 	assert(spr->GetShader().GetBlend() != BM_NULL);
 

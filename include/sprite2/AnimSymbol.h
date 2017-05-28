@@ -1,15 +1,17 @@
 #ifndef _SPRITE2_ANIM_SYMBOL_H_
 #define _SPRITE2_ANIM_SYMBOL_H_
 
-#include "AnimLerp.h"
 #include "S2_Symbol.h"
-#include "AnimCurr.h"
-#include "AnimCopy.h"
+#include "AnimLerp.h"
 
 #include <vector>
 
 namespace s2
 {
+
+class AnimCopy;
+class AnimCurr;
+class AnimFlatten;
 
 class AnimSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -63,7 +65,7 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
-	const AnimCopy& GetCopy() const { return m_copy; }
+	const AnimCopy* GetCopy() const;
 	void LoadCopy();
 
 	void BuildFlatten(const Actor* actor) const;
@@ -86,12 +88,11 @@ protected:
 
 	int m_fps;
 
-	AnimCopy m_copy;
-	AnimCurr m_curr;
-
 	mutable sm::rect m_aabb;
 
 	mutable AnimFlatten* m_ft;
+	AnimCurr* m_curr;
+	mutable AnimCopy* m_copy;
 
 }; // AnimSymbol
 

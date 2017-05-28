@@ -30,15 +30,19 @@ ComplexSprite* ComplexSprite::Clone() const
 
 void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	UpdateParams up_child(up);
-	up_child.Push(this);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+
+	up_child->Push(this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(up.GetActor()));
 	for (int i = 0, n = children.size(); i < n; ++i) {
 		Sprite* child = children[i];
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		child->OnMessage(up_child, msg);
+		up_child->SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(*up_child, msg);
 	}
+
+	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool ComplexSprite::Update(const UpdateParams& up)
@@ -56,18 +60,24 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	}
 
 	bool dirty = false;
-	UpdateParams up_child(up);
-	up_child.Push(this);
+
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+
+	up_child->Push(this);
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetActionChildren(GetAction(actor));
 	for (int i = 0, n = children.size(); i < n; ++i) 
 	{
 		const Sprite* child = children[i];
-		up_child.SetActor(child->QueryActor(actor));
-		if (const_cast<Sprite*>(child)->Update(up_child)) {
+		up_child->SetActor(child->QueryActor(actor));
+		if (const_cast<Sprite*>(child)->Update(*up_child)) {
 			dirty = true;
 		}
 	}
+
+	UpdateParamsPool::Instance()->Push(up_child); 
+
 	return dirty;
 }
 

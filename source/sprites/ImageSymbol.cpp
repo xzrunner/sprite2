@@ -92,8 +92,7 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	float texcoords[8];
 	int tex_id;
 	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		OnQueryTexcoordsFail();
 	}
 
 #ifndef S2_DISABLE_STATISTICS

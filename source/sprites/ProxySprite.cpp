@@ -27,9 +27,11 @@ void ProxySprite::OnMessage(const UpdateParams& up, Message msg)
 		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
 	for (int i = 0, n = items.size(); i < n; ++i) 
 	{
-		UpdateParams up_child(up);
-		up_child.SetActor(items[i].second->QueryActor(items[i].first));
-		items[i].second->OnMessage(up_child, msg);
+		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+		*up_child = up;
+		up_child->SetActor(items[i].second->QueryActor(items[i].first));
+		items[i].second->OnMessage(*up_child, msg);
+		UpdateParamsPool::Instance()->Push(up_child); 
 	}
 }
 
@@ -40,11 +42,13 @@ bool ProxySprite::Update(const UpdateParams& up)
 		= VI_DOWNCASTING<ProxySymbol*>(m_sym)->GetItems();
 	for (int i = 0, n = items.size(); i < n; ++i) 
 	{
-		UpdateParams up_child(up);
-		up_child.SetActor(items[i].second->QueryActor(items[i].first));
-		if (items[i].second->Update(up_child)) {
+		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+		*up_child = up;
+		up_child->SetActor(items[i].second->QueryActor(items[i].first));
+		if (items[i].second->Update(*up_child)) {
 			ret = true;
 		}
+		UpdateParamsPool::Instance()->Push(up_child); 
 	}
 	return ret;
 }

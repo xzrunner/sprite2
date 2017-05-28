@@ -41,6 +41,7 @@
 #include "ProxyHelper.h"
 
 #include <logger.h>
+#include <SM_Math.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
@@ -220,7 +221,9 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 
 	rp->actor = s2_actor;
 
-	DrawNode::Draw(s2_actor->GetSpr(), *rp, false);
+//	rp->SetDisableCulling(true);
+
+	DrawNode::Draw(s2_actor->GetSpr(), *rp);
 
 	RenderParamsPool::Instance()->Push(rp); 
 }

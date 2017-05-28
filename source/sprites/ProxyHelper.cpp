@@ -9,6 +9,7 @@
 #include "UpdateParams.h"
 #include "RenderColor.h"
 #include "SetStaticFrameVisitor.h"
+#include "AnimCurr.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -21,6 +22,8 @@
 #include "TextboxSprite.h"
 #include "TextboxActor.h"
 #include "Scale9Actor.h"
+
+#include <SM_Calc.h>
 
 #include <assert.h>
 
@@ -1401,8 +1404,13 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(actor->GetSpr());
-		count = anim->GetAnimCurr(actor).GetSlotSize();
-		return true;
+		const AnimCurr* curr = anim->GetAnimCurr(actor);
+		if (curr) {
+			count = curr->GetSlotSize();
+			return true;
+		} else {
+			return false;
+		}
 	}
 	else
 	{

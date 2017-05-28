@@ -19,11 +19,13 @@ public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
 	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
 		                   void (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
-						   const float* c2_query_spr(const Sprite* spr, int* tex_id));
+						   const float* c2_query_spr(const Sprite*, int* tex_id),
+						   void (*c2_insert_sym)(const Symbol*, int tex_id, int tex_w, int tex_h),
+						   const float* c2_query_sym(const Symbol*, int* tex_id));
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 
-	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool culling = true);
+	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams());
 
 	static void Draw(const Symbol* sym, 
 		             const RenderParams& rp = RenderParams(),
@@ -37,12 +39,23 @@ public:
 					 const S2_MAT& mt);
 
 	static void DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
+	
+	/**
+	 *  @return
+	 *    bool, if is outside
+	 */
+	static bool CullingTestOutside(const Sprite* spr, const RenderParams& rp);
 
-	static bool IsOutsideView(const Sprite* spr, const RenderParams& rp);
+	static void DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt);
+	static void DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
+	static void DrawSymToRT(const Symbol* sym, RenderTarget* rt);
+
+	static void DTexCacheSym(const Symbol* sym);
+	static const float* DTexQuerySym(const Symbol* sym, int& tex_id);
 
 private:
-	static void DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt);
-	static void DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
+	static void DTexCacheSpr(const Sprite* spr, const RenderParams& rp);
+	static void DTexQuerySpr(const Sprite* spr, const RenderParams& rp);
 
 	static void DrawSprImpl(const Sprite* spr, const RenderParams& rp);
 

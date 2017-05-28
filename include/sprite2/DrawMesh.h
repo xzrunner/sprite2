@@ -27,7 +27,7 @@ public:
 	static void DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id);
 
 private:
-	static void DrawOnePass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym);
+	static void DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
 	static void DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym);
 	static void DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym);

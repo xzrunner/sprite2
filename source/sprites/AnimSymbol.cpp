@@ -1,4 +1,6 @@
 #include "AnimSymbol.h"
+#include "AnimCopy.h"
+#include "AnimFlattenCurr.h"
 #include "SymType.h"
 #include "AnimSprite.h"
 #include "S2_Sprite.h"
@@ -14,6 +16,7 @@
 #include "AABBHelper.h"
 #include "FlattenMgr.h"
 #include "Utility.h"
+#include "AnimTreeCurr.h"
 
 #include <assert.h>
 
@@ -23,6 +26,8 @@ namespace s2
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
 	, m_ft(NULL)
+	, m_curr(NULL)
+	, m_copy(NULL)
 {
 }
 
@@ -30,6 +35,8 @@ AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
 	, m_ft(NULL)
+	, m_curr(NULL)
+	, m_copy(NULL)
 {
 }
 
@@ -48,6 +55,12 @@ AnimSymbol::~AnimSymbol()
 	if (m_ft) {
 		delete m_ft;
 		FlattenMgr::Instance()->Delete(GetID());
+	} 
+	if (m_curr) {
+		m_curr->RemoveReference();
+	}
+	if (m_copy) {
+		delete m_copy;
 	}
 }
 
@@ -73,19 +86,22 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
 	if (m_ft) 
 	{
-		int frame = -1;
-		if (spr) {
-			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
-			frame = curr.GetFrame();
-		} else {
-			frame = m_curr.GetFrame();
-		}
-
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
-		Utility::PrepareMat(rp.mt, spr, rp.actor, rp_child->mt);
-		m_ft->Draw(*rp_child, frame);
+		if (DrawNode::Prepare(rp, spr, *rp_child)) 
+		{
+			int frame = -1;
+			if (spr) {
+				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
+				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
+				assert(curr);
+				frame = curr->GetFrame();
+			} else {
+				frame = m_curr->GetFrame();
+			}
+
+			m_ft->Draw(*rp_child, frame);
+		}
 		RenderParamsPool::Instance()->Push(rp_child); 
 	}
 	else
@@ -95,24 +111,21 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			*rp_child = rp;
 			if (DrawNode::Prepare(rp, spr, *rp_child)) {
 				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-				const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
-				curr.Draw(*rp_child);
+				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
+				assert(curr);
+				curr->Draw(*rp_child);
 			}
 			RenderParamsPool::Instance()->Push(rp_child); 
 		} else {
-			m_curr.Draw(rp);
+			m_curr->Draw(rp);
 		}
 	}
 }
 
 bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
-	m_curr.SetTime(time);
-	if (m_ft) {
-		return m_curr.UpdateOnlyFrame(up, NULL);
-	} else {
-		return m_curr.Update(up, NULL);
-	}
+	m_curr->SetTime(time);
+	return m_curr->Update(up, NULL);
 }
 
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
@@ -124,11 +137,10 @@ void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 int AnimSymbol::GetMaxFrameIdx() const
 {
 	int index = 0;
-	for (int i = 0, n = m_layers.size(); i < n; ++i)
-	{
+	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		AnimSymbol::Layer* layer = m_layers[i];
-		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			index = std::max(index, layer->frames[j]->index);
+		if (!layer->frames.empty()) {
+			index = std::max(index, layer->frames.back()->index);
 		}
 	}
 	return index;
@@ -159,22 +171,61 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 	}
 }
 
+const AnimCopy* AnimSymbol::GetCopy() const
+{
+	if (m_ft) {
+		return NULL;
+	} 
+
+	if (!m_copy) {
+		m_copy = new AnimCopy;
+		m_copy->LoadFromSym(*this);
+	}
+	return m_copy;
+}
+
 void AnimSymbol::LoadCopy()
 {
-	m_copy.LoadFromSym(*this);
-	m_curr.SetAnimCopy(&m_copy);
+	if (m_ft) {
+		return;
+	}
+
+	if (!m_copy) {
+		m_copy = new AnimCopy;
+	}
+	m_copy->LoadFromSym(*this);
+
+	assert(!m_curr);
+	AnimTreeCurr* curr = new AnimTreeCurr;
+	curr->SetAnimCopy(m_copy);
+	m_curr = curr;
 }
 
 void AnimSymbol::BuildFlatten(const Actor* actor) const
 {
+// 	if (m_ft) {
+// 		m_ft->Clear();
+// 	} else {
+// 		m_ft = new AnimFlatten;
+// 		FlattenMgr::Instance()->Add(GetID(), m_ft);
+// 	}
+
+	//////////////////////////////////////////////////////////////////////////
+
 	if (m_ft) {
-		m_ft->Clear();
-	} else {
-		m_ft = new AnimFlatten;
-		FlattenMgr::Instance()->Add(GetID(), m_ft);
+		return;
 	}
-	
-	m_copy.StoreToFlatten(*m_ft, actor);
+	m_ft = new AnimFlatten;
+	FlattenMgr::Instance()->Add(GetID(), m_ft);
+
+	if (m_copy) {
+		m_copy->StoreToFlatten(*m_ft, actor);
+	} else {
+		AnimCopy* copy = new AnimCopy;
+		copy->LoadFromSym(*this);
+		copy->StoreToFlatten(*m_ft, actor);
+		delete copy;
+	}	
 }
 
 void AnimSymbol::AddLayer(Layer* layer)
@@ -197,7 +248,7 @@ bool AnimSymbol::Clear()
 		delete layer;
  	}
 	m_layers.clear();
-	m_curr.Clear();
+	m_curr->Clear();
 	m_aabb.MakeEmpty();
 	return dirty;	
 }

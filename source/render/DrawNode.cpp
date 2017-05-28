@@ -32,7 +32,9 @@ static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
 static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 static void (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
-static const float* (*C2_QUERY_SPR)(const Sprite* spr, int* tex_id);
+static const float* (*C2_QUERY_SPR)(const Sprite*, int* tex_id);
+static void (*C2_INSERT_SYM)(const Symbol*, int tex_id, int tex_w, int tex_h);
+static const float* (*C2_QUERY_SYM)(const Symbol*, int* tex_id);
 
 void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
@@ -41,11 +43,15 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 
 void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
 						  void (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
-						  const float* c2_query_spr(const Sprite* spr, int* tex_id))
+						  const float* c2_query_spr(const Sprite*, int* tex_id),
+						  void (*c2_insert_sym)(const Symbol*, int tex_id, int tex_w, int tex_h),
+						  const float* c2_query_sym(const Symbol*, int* tex_id))
 {
 	PREPARE_REDNER_PARAMS = prepare_render_params;
 	C2_INSERT_SPR = c2_insert_spr;
-	C2_QUERY_SPR = c2_query_spr;
+	C2_QUERY_SPR  = c2_query_spr;
+	C2_INSERT_SYM = c2_insert_sym;
+	C2_QUERY_SYM  = c2_query_sym;
 }
 
 bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child)
@@ -75,52 +81,19 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	return true;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& rp, bool culling)
+void DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 {
-	if (culling && IsOutsideView(spr, rp)) {
+	if (CullingTestOutside(spr, rp)) {
 		return;
-	}
+	} 
 
-	if (spr->IsDTexForceCached())
-	{
-		if (spr->IsDTexForceCachedDirty())
-		{
-			RenderTargetMgr* RT = RenderTargetMgr::Instance();
-			RenderTarget* rt = RT->Fetch();
-			if (!rt) {
-				return;
-			}
-
-			sl::ShaderMgr::Instance()->FlushShader();
-
-			RenderScissor::Instance()->Close();
-			RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
-
-			DTexDrawSprToRT(spr, rp, rt);
-
-			RenderCtxStack::Instance()->Pop();
-			RenderScissor::Instance()->Open();
-
-			C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height());
-
-			RT->Return(rt);
-
-			spr->SetDTexForceCachedDirty(false);
+	if (spr->IsDTexForceCached()) {
+		if (spr->IsDTexForceCachedDirty()) {
+			DTexCacheSpr(spr, rp);
+		} else {
+			DTexQuerySpr(spr, rp);
 		}
-		else
-		{
-			int tex_id;
-			const float* texcoords = C2_QUERY_SPR(spr, &tex_id);
-			if (!texcoords) {
-				DrawSprImpl(spr, rp);
-				spr->SetDTexForceCachedDirty(true);
-			} else {
-				DTexDrawSprFromRT(spr, rp, texcoords, tex_id);
-			}
-		}
-	}
-	else
-	{
+	} else {
 		DrawSprImpl(spr, rp);
 	}
 }
@@ -236,9 +209,15 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
-bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
-{	
-	if (!rp.view_region.IsValid()) {
+bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
+{
+	if (rp.IsDisableCulling()) {
+		return false;
+	}
+
+	RenderScissor* rs = RenderScissor::Instance();
+	if (rs->Empty() && !rp.view_region.IsValid()) {
+		rp.SetDisableCulling(true);
 		return false;
 	}
 
@@ -251,10 +230,33 @@ bool DrawNode::IsOutsideView(const Sprite* spr, const RenderParams& rp)
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
-	return !is_rect_intersect_rect(rp.view_region, sm::rect(r_min, r_max));
+	sm::rect sr(r_min, r_max);
+
+	if (!rs->Empty() && rs->IsOutside(sr)) {
+		rp.SetDisableCulling(true);
+		return true;
+	}
+	if (rp.view_region.IsValid())
+	{
+		if (sm::is_rect_contain_rect(rp.view_region, sr)) {
+			rp.SetDisableCulling(true);
+			return false;
+		} else if (sm::is_rect_intersect_rect(rp.view_region, sr)) {
+			rp.SetDisableCulling(false);
+			return false;
+		} else {
+			rp.SetDisableCulling(true);
+			return false;
+		}
+	}
+	else
+	{
+		rp.SetDisableCulling(true);
+		return false;
+	}
 }
 
-void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
+void DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -276,7 +278,7 @@ void DrawNode::DTexDrawSprToRT(const Sprite* spr, const RenderParams& rp, Render
 	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
-void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
+void DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
@@ -296,6 +298,90 @@ void DrawNode::DTexDrawSprFromRT(const Sprite* spr, const RenderParams& rp, cons
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
+}
+
+void DrawNode::DrawSymToRT(const Symbol* sym, RenderTarget* rt)
+{
+	rt->Bind();
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	mgr->GetContext()->Clear(0);
+
+	RenderParams* rp = RenderParamsPool::Instance()->Pop();
+	rp->Reset();
+
+	Draw(sym, *rp, S2_MAT());
+
+	sl::ShaderMgr::Instance()->GetShader()->Commit();
+
+	rt->Unbind();
+
+	RenderParamsPool::Instance()->Push(rp); 
+}
+
+void DrawNode::DTexCacheSym(const Symbol* sym)
+{
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* rt = RT->Fetch();
+	if (!rt) {
+		return;
+	}
+
+	sl::ShaderMgr::Instance()->FlushShader();
+
+	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+
+	DrawSymToRT(sym, rt);
+
+	RenderCtxStack::Instance()->Pop();
+	RenderScissor::Instance()->Open();
+
+	C2_INSERT_SYM(sym, rt->GetTexID(), rt->Width(), rt->Height());
+
+	RT->Return(rt);
+}
+
+const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id)
+{
+	return C2_QUERY_SYM(sym, &tex_id);
+}
+
+void DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
+{
+	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	RenderTarget* rt = RT->Fetch();
+	if (!rt) {
+		return;
+	}
+
+	sl::ShaderMgr::Instance()->FlushShader();
+
+	RenderScissor::Instance()->Close();
+	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+
+	DrawSprToRT(spr, rp, rt);
+
+	RenderCtxStack::Instance()->Pop();
+	RenderScissor::Instance()->Open();
+
+	C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height());
+
+	RT->Return(rt);
+
+	spr->SetDTexForceCachedDirty(false);
+}
+
+void DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
+{
+	int tex_id;
+	const float* texcoords = C2_QUERY_SPR(spr, &tex_id);
+	if (!texcoords) {
+		DrawSprImpl(spr, rp);
+		spr->SetDTexForceCachedDirty(true);
+	} else {
+		DrawSprFromRT(spr, rp, texcoords, tex_id);
+	}
 }
 
 void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)

@@ -11,13 +11,19 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	const Actor* actor = up.GetActor();
 	const Actor* anchor = QueryAnchor(actor);
-	if (anchor) {
-		UpdateParams up_child(up);
-		up_child.Push(this);
-		const Sprite* anchor_spr = anchor->GetSpr();
-		up_child.SetActor(anchor_spr->QueryActor(actor));
-		const_cast<Sprite*>(anchor_spr)->OnMessage(up_child, msg);
+	if (!anchor) {
+		return;
 	}
+
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+
+	up_child->Push(this);
+	const Sprite* anchor_spr = anchor->GetSpr();
+	up_child->SetActor(anchor_spr->QueryActor(actor));
+	const_cast<Sprite*>(anchor_spr)->OnMessage(*up_child, msg);
+
+	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool AnchorSprite::Update(const UpdateParams& up)
@@ -44,10 +50,16 @@ bool AnchorSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	UpdateParams up_child(up);
-	up_child.Push(this);
-	up_child.SetActor(actor_real);
-	return const_cast<Sprite*>(spr_real)->Update(up_child);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+
+	up_child->Push(this);
+	up_child->SetActor(actor_real);
+	bool ret = const_cast<Sprite*>(spr_real)->Update(*up_child);
+
+	UpdateParamsPool::Instance()->Push(up_child); 
+
+	return ret;
 }
 
 Sprite* AnchorSprite::FetchChildByName(int name, const Actor* actor) const

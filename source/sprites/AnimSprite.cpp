@@ -1,11 +1,13 @@
 #include "AnimSprite.h"
 #include "AnimSymbol.h"
-#include "AnimCurr.h"
+#include "AnimFlattenCurr.h"
 #include "AnimActor.h"
 #include "UpdateParams.h"
 #include "SprVisitorParams.h"
+#include "AnimCurrCreator.h"
 
 #include <stdlib.h>
+#include <assert.h>
 
 namespace s2
 {
@@ -15,7 +17,7 @@ AnimSprite::AnimSprite()
 	, m_interval(0)
 	, m_fps(30)
 	, m_start_random(false)
-	, m_curr(new AnimCurr)
+	, m_curr(NULL)
 {
 }
 
@@ -25,10 +27,9 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 	, m_interval(0)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 	, m_start_random(false)
-	, m_curr(new AnimCurr)
 {
-	m_curr->SetAnimCopy(&VI_DOWNCASTING<AnimSymbol*>(m_sym)->GetCopy());
-	m_curr->Start(UpdateParams(), this);
+	AnimSymbol* anim_sym = VI_DOWNCASTING<AnimSymbol*>(m_sym);
+	m_curr = AnimCurrCreator::Create(anim_sym, this);
 }
 
 AnimSprite::AnimSprite(const AnimSprite& spr)
@@ -43,8 +44,12 @@ AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
 	m_interval = spr.m_interval;
 	m_fps = spr.m_fps;
 	m_start_random = spr.m_start_random;
-	m_curr = new AnimCurr(*spr.m_curr);
-	m_curr->Start(UpdateParams(), this);
+	if (spr.m_curr) {
+		m_curr = spr.m_curr->Clone();
+		m_curr->Start(UpdateParams(), this);
+	} else {
+		m_curr = NULL;
+	}
 	return *this;
 }
 
@@ -62,12 +67,13 @@ AnimSprite* AnimSprite::Clone() const
 
 void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
-	curr.OnMessage(up, this, msg);
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
+	assert(curr);
+	curr->OnMessage(up, this, msg);
 	switch (msg)
 	{
 	case MSG_START:
-		curr.Start(up, this);
+		curr->Start(up, this);
 		if (m_start_random) {
 			RandomStartTime(up);
 		}
@@ -91,33 +97,34 @@ bool AnimSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
-	bool has_flatten = VI_DOWNCASTING<AnimSymbol*>(m_sym)->HasFlatten();
-	if (has_flatten) {
-		return curr.UpdateOnlyFrame(up, this, m_loop, m_interval, m_fps);
-	} else {
-		return curr.Update(up, this, m_loop, m_interval, m_fps);
-	}
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
+	assert(curr);
+	return curr->Update(up, this, m_loop, m_interval, m_fps);
 }
 
 Sprite* AnimSprite::FetchChildByName(int name, const Actor* actor) const
 {
-	return GetAnimCurr(actor).FetchChildByName(name, actor);
+	const AnimCurr* curr = GetAnimCurr(actor);
+	assert(curr);
+	return curr->FetchChildByName(name, actor);
 }
 
 Sprite* AnimSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
-	return GetAnimCurr(actor).FetchChildByIdx(idx);
+	const AnimCurr* curr = GetAnimCurr(actor);
+	assert(curr);
+	return curr->FetchChildByIdx(idx);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
-	return curr.Traverse(visitor, params);
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
+	assert(curr);
+	return curr->Traverse(visitor, params);
 }
 
-const AnimCurr& AnimSprite::GetAnimCurr(const Actor* actor) const 
+const AnimCurr* AnimSprite::GetAnimCurr(const Actor* actor) const 
 { 
 	const AnimCurr* curr = m_curr;
 // 	if (ActorCount() > 1)
@@ -127,7 +134,7 @@ const AnimCurr& AnimSprite::GetAnimCurr(const Actor* actor) const
 			curr = anim_actor->GetCurr();
 		}
 //	}
-	return *curr;
+	return curr;
 }
 
 void AnimSprite::SetStartRandom(const UpdateParams& up, bool random) 
@@ -140,7 +147,9 @@ void AnimSprite::SetStartRandom(const UpdateParams& up, bool random)
 
 int AnimSprite::GetFrame(const Actor* actor) const 
 { 
-	return GetAnimCurr(actor).GetFrame(); 
+	const AnimCurr* curr = GetAnimCurr(actor);
+	assert(curr);
+	return curr->GetFrame();
 }
 
 void AnimSprite::SetFrame(const UpdateParams& up, int frame)
@@ -148,19 +157,17 @@ void AnimSprite::SetFrame(const UpdateParams& up, int frame)
 	if (!up.IsForce() && !IsInheritUpdate()) {
 		return;
 	}
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
-	bool has_flatten = VI_DOWNCASTING<AnimSymbol*>(GetSymbol())->HasFlatten();
-	if (has_flatten) {
-		return curr.SetOnlyFrame(up, this, frame, m_fps);
-	} else {
-		return curr.SetFrame(up, this, frame, m_fps);
-	}
+
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
+	assert(curr);
+	return curr->SetFrame(up, this, frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const Actor* actor)
 {
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(actor));
-	curr.SetActive(active);
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
+	assert(curr);
+	curr->SetActive(active);
 }
 
 void AnimSprite::RandomStartTime(const UpdateParams& up)
@@ -168,9 +175,11 @@ void AnimSprite::RandomStartTime(const UpdateParams& up)
 	int start = VI_DOWNCASTING<const AnimSymbol*>(m_sym)->GetMaxFrameIdx();
 	float p = (rand() / static_cast<float>(RAND_MAX));
 	start *= p;
-	AnimCurr& curr = const_cast<AnimCurr&>(GetAnimCurr(up.GetActor()));
+
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
+	assert(curr);
 //	curr.SetTime(start / m_fps);
-	curr.SetFrame(up, this, start, m_fps);
+	curr->SetFrame(up, this, start, m_fps);
 }
 
 }

@@ -335,11 +335,12 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* 
 
 	const_cast<P3dEmitterCfg*>(cfg)->SetStartRadius(m_start_radius);
 
-	UpdateParams up_child(up);
-	up_child.Push(this);
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(this);
 
 	float mt[6];
-	const S2_MAT& world_mat = up_child.GetPrevMat();
+	const S2_MAT& world_mat = up_child->GetPrevMat();
 #ifdef S2_MATRIX_FIX
 	mt[0] = world_mat.x[0] * sm::MatrixFix::SCALE_INV;
 	mt[1] = world_mat.x[1] * sm::MatrixFix::SCALE_INV;
@@ -350,6 +351,8 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* 
 #else
 	memcpy(mt, world_mat.x, sizeof(mt));
 #endif // S2_MATRIX_FIX
+
+	UpdateParamsPool::Instance()->Push(up_child); 
 
 	et->SetMat(mt);
 	if (m_alone) {

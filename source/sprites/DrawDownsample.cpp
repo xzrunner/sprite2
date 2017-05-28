@@ -29,7 +29,7 @@ void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downs
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Close();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	rt->Bind();
@@ -37,7 +37,7 @@ void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downs
 	rt->Unbind();
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 
 	DrawRT2Screen(rt->GetTexID(), spr, rp, downsample);
 

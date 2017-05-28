@@ -28,15 +28,13 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
 
-	RenderScissor::Instance()->Close();
-	RenderScissor::Instance()->SaveAndClearStack();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	RenderTarget* rt_base = RT->Fetch();
 	if (!rt_base) {
 		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->RecoverStack();
-		RenderScissor::Instance()->Open();
+		RenderScissor::Instance()->Enable();
 		return;
 	}
 	DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
@@ -45,15 +43,13 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	if (!rt_mask) {
 		RT->Return(rt_base);
 		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->RecoverStack();
-		RenderScissor::Instance()->Open();
+		RenderScissor::Instance()->Enable();
 		return;
 	}
 	DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->RecoverStack();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 
 	DrawMaskFromRT(rt_base, rt_mask, mask, rp.mt);
 

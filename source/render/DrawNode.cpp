@@ -216,7 +216,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 
 	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->Empty() && !rp.view_region.IsValid()) {
+	if (rs->IsEmpty() && !rp.view_region.IsValid()) {
 		rp.SetDisableCulling(true);
 		return false;
 	}
@@ -232,7 +232,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 
 	sm::rect sr(r_min, r_max);
 
-	if (!rs->Empty() && rs->IsOutside(sr)) {
+	if (!rs->IsEmpty() && rs->CullingTestOutside(sr)) {
 		rp.SetDisableCulling(true);
 		return true;
 	}
@@ -329,13 +329,13 @@ void DrawNode::DTexCacheSym(const Symbol* sym)
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Close();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawSymToRT(sym, rt);
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 
 	C2_INSERT_SYM(sym, rt->GetTexID(), rt->Width(), rt->Height());
 
@@ -357,13 +357,13 @@ void DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Close();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawSprToRT(spr, rp, rt);
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 
 	C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height());
 

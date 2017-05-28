@@ -20,24 +20,11 @@ RenderScissor::~RenderScissor()
 {
 }
 
-
-void RenderScissor::SaveAndClearStack() {
-	m_save_stack = m_stack;
-	m_stack.clear();
-}
-
-void RenderScissor::RecoverStack() {
-	m_stack = m_save_stack;
-	m_save_stack.clear();
-}
-
 void RenderScissor::Push(float x, float y, float w, float h, bool use_render_screen, bool no_intersect)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
-	if (m_stack.empty()) {
-		mgr->GetContext()->EnableScissor(true);
-	}
+	mgr->GetContext()->EnableScissor(true);
 
 	if (!no_intersect && !m_stack.empty()) {
 		Intersection(m_stack.back(), x, y, w, h);
@@ -48,6 +35,7 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 	r.y = y;
 	r.w = w;
 	r.h = h;
+	r.use_render_screen = use_render_screen;
 	m_stack.push_back(r);
 
 	if (use_render_screen) {
@@ -57,7 +45,7 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 	}
 }
 
-void RenderScissor::Pop(bool use_render_screen)
+void RenderScissor::Pop()
 {
 	assert(!m_stack.empty());
 
@@ -67,45 +55,51 @@ void RenderScissor::Pop(bool use_render_screen)
 	if (m_stack.empty()) {
 		mgr->GetContext()->EnableScissor(false);
 		return;
+	} else {
+		mgr->GetContext()->EnableScissor(true);
 	}
 
 	const Rect& r = m_stack.back();
-	if (use_render_screen) {
+	if (r.IsInvalid()) {
+		mgr->GetContext()->EnableScissor(false);
+		return;
+	}
+	if (r.use_render_screen) {
 		RenderScreen::Scissor(r.x, r.y, r.w, r.h);
 	} else {
 		sl::ShaderMgr::Instance()->GetContext()->SetScissor(r.x, r.y, r.w, r.h);
 	}
 }
 
-void RenderScissor::Close()
-{
-	if (m_stack.empty()) {
-		return;
-	}
+bool RenderScissor::IsEmpty() const 
+{ 
+	return m_stack.empty() || m_stack.back().IsInvalid();
+}
 
+void RenderScissor::Disable()
+{
 	sl::ShaderMgr::Instance()->GetContext()->EnableScissor(false);
+	Rect r;
+	r.MakeInvalid();
+	m_stack.push_back(r);
 }
 
-void RenderScissor::Open()
+void RenderScissor::Enable()
+{
+	Pop();
+}
+
+bool RenderScissor::CullingTestOutside(const sm::rect& r) const
 {
 	if (m_stack.empty()) {
-		return;
+		return false;
 	}
-
-	sl::ShaderMgr::Instance()->GetContext()->EnableScissor(true);
-	const Rect& r = m_stack.back();
-	RenderScreen::Scissor(r.x, r.y, r.w, r.h);
-}
-
-bool RenderScissor::IsOutside(const sm::rect& r) const
-{
-	for (int i = 0, n = m_stack.size(); i < n; ++i) {
-		const Rect& rr = m_stack[i];
-		if (!sm::is_rect_intersect_rect(sm::rect(rr.x, rr.y, rr.x + rr.w, rr.y + rr.h), r)) {
-			return true;
-		}
+	const Rect& rr = m_stack.back();
+	if (rr.IsInvalid()) {
+		return true;
+	} else {
+		return !sm::is_rect_intersect_rect(sm::rect(rr.x, rr.y, rr.x + rr.w, rr.y + rr.h), r);
 	}
-	return false;
 }
 
 void RenderScissor::Intersection(const Rect& r, float& x, float& y, float& w, float& h)

@@ -1156,7 +1156,7 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
-	RenderScissor::Instance()->Close();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, RT->WIDTH, RT->HEIGHT));
 
 	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
@@ -1167,13 +1167,13 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	s2_rt->Unbind();
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 }
 
 extern "C"
 void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
-	RenderScissor::Instance()->Close();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
 
 	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
@@ -1181,7 +1181,7 @@ void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region
 	_draw(dst, src, src_tex_id);
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 }
 
 extern "C"

@@ -13,30 +13,39 @@ class RenderScissor
 {
 public:
 	void Push(float x, float y, float w, float h, bool use_render_screen, bool no_intersect);
-	void Pop(bool use_render_screen = true);
+	void Pop();
 
-	bool Empty() const { return m_stack.empty(); }
+	bool IsEmpty() const;
 
-	void Close();
-	void Open();
+	void Disable();
+	void Enable();
 
-	bool IsOutside(const sm::rect& r) const;
-
-	void SaveAndClearStack();
-	void RecoverStack();
+	bool CullingTestOutside(const sm::rect& r) const;
 
 public:
-	struct Rect
+	class Rect
 	{
+	public:
 		float x, y, w, h;
-	};
+		bool use_render_screen;
+
+	public:
+		Rect() : x(0), y(0), w(0), h(0), use_render_screen(false) {}
+
+		void MakeInvalid() {
+			x = y = w = h = FLT_MAX;
+		}
+		bool IsInvalid() const {
+			return x == FLT_MAX && y == FLT_MAX
+				&& w == FLT_MAX && h == FLT_MAX;
+		}
+	}; // Rect
 
 private:
 	static void Intersection(const Rect& r, float& x, float& y, float& w, float& h);
 
 private:
 	std::vector<Rect> m_stack;
-	std::vector<Rect> m_save_stack;
 	
 	SINGLETON_DECLARATION(RenderScissor)
 

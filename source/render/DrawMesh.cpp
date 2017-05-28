@@ -275,15 +275,13 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Close();
-	RenderScissor::Instance()->SaveAndClearStack();
+	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	DrawMesh2RT(rt, rp, sym);
 
 	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->RecoverStack();
-	RenderScissor::Instance()->Open();
+	RenderScissor::Instance()->Enable();
 
 	DrawRT2Screen(rt, mesh, rp.mt);
 

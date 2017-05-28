@@ -155,18 +155,20 @@ void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) con
 		}
 	}
 
-	RenderParams rp_child(rp);
-	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
+	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 	P3dRenderParams p3d_rp;
-	p3d_rp.mt    = rp_child.mt;
-	p3d_rp.rc    = rp_child.color;
+	p3d_rp.mt    = rp_child->mt;
+	p3d_rp.rc    = rp_child->color;
 	if (spr) {
 		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 		p3d_rp.local = p3d_spr->IsLocal();
@@ -174,6 +176,8 @@ void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) con
 		p3d_rp.local = m_local;
 	}
 	m_et->Draw(p3d_rp, false);
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr, 
@@ -185,12 +189,14 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 		return;
 	}
 
-	RenderParams rp_child(rp);
-	rp_child.color = p3d_spr->GetColor() * rp.color;
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+
+	rp_child->color = p3d_spr->GetColor() * rp.color;
 
 	if (p3d_spr->IsAlone()) 
 	{
-// 		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
+// 		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child->mt;
 // 		if (rp.actor) {
 // 			mt = rp.actor->GetLocalMat() * mt;
 // 		}	
@@ -202,10 +208,10 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 //			return;
 //		}
 //		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
-//		p3d_rp->mt    = rp_child.mt;
-//		p3d_rp->rc    = rp_child.color;
+//		p3d_rp->mt    = rp_child->mt;
+//		p3d_rp->rc    = rp_child->color;
 //		p3d_rp->local = m_local;
-//		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child.mt;
+//		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child->mt;
 //		if (rp.actor) {
 //			mt = rp.actor->GetLocalMat() * mt;
 //		}
@@ -224,27 +230,33 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 //		p3d->mat[4] = mt.x[12];
 //		p3d->mat[5] = mt.x[13];
 //#endif // S2_MATRIX_FIX
+
+		RenderParamsPool::Instance()->Push(rp_child); 
+
 		return;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
+	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
 	if (!spr->IsMatDisable() && p3d_spr->IsLocal()) {
-		rp_child.mt = p3d_spr->GetLocalMat() * rp_child.mt;
+		rp_child->mt = p3d_spr->GetLocalMat() * rp_child->mt;
 		if (rp.actor) {
-			rp_child.mt = rp.actor->GetLocalMat() * rp_child.mt;
+			rp_child->mt = rp.actor->GetLocalMat() * rp_child->mt;
 		}
 	}
 
 	P3dRenderParams p3d_rp;
-	p3d_rp.mt          = rp_child.mt;
-	p3d_rp.rc          = rp_child.color;
+	p3d_rp.mt          = rp_child->mt;
+	p3d_rp.rc          = rp_child->color;
 	p3d_rp.local       = p3d_spr->IsLocal();
 	p3d_rp.view_region = rp.view_region;
+
 	et->Draw(p3d_rp, false);
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 bool Particle3dSymbol::IsVisible(const RenderParams& rp, const Sprite* spr)

@@ -22,8 +22,6 @@ public:
 						   const float* c2_query_spr(const Sprite* spr, int* tex_id));
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
-	static S2_MAT PrepareMat(const RenderParams& rp, const Sprite* spr);
-	static S2_MAT PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor);
 
 	static void Draw(const Sprite* spr, const RenderParams& rp = RenderParams(), bool culling = true);
 

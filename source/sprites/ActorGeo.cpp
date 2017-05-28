@@ -3,14 +3,13 @@
 namespace s2
 {
 
-/************************************************************************/
-/* class ActorGeo::SRT                                                    */
-/************************************************************************/
+void ActorGeo::Init()
+{
+	m_srt.Init();
+	m_mat.Identity();
+}
 
-ActorGeo::SRT::SRT()
-	: position(0, 0)
-	, angle(0)
-	, scale(1, 1)
+void ActorGeo::Term()
 {
 }
 

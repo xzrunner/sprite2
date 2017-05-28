@@ -5,6 +5,7 @@
 #include "S2_Actor.h"
 #include "RenderShader.h"
 #include "RenderFilter.h"
+#include "Utility.h"
 
 namespace s2
 {
@@ -50,10 +51,7 @@ void UpdateParams::Push(const Sprite* spr)
 		return;
 	}
 
-	m_prev_mat = spr->GetLocalMat() * m_prev_mat;
-	if (m_actor) {
-		m_prev_mat = m_actor->GetLocalMat() * m_prev_mat;
-	}
+	Utility::PrepareMat(m_prev_mat, spr, m_actor, m_prev_mat);
 
 	const RenderFilter* filter = spr->GetShader().GetFilter();
 	if (filter && filter->GetMode() != FM_NULL) {

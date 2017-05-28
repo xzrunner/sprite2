@@ -7,96 +7,131 @@ namespace s2
 {
 
 inline
-sm::vec2 SprGeo::GetPosition() const 
+const sm::vec2& SprGeo::GetPosition() const 
 { 
-	return sm::vec2(m_state.srt[SprSRT::IDX_POS_X], m_state.srt[SprSRT::IDX_POS_Y]);
+	return m_srt.position;
 }
 
 inline
 void SprGeo::SetPosition(const sm::vec2& pos) 
-{ 
-	m_state.srt[SprSRT::IDX_POS_X] = pos.x;
-	m_state.srt[SprSRT::IDX_POS_Y] = pos.y;
+{
+	if (pos != m_srt.position) {
+		m_srt.position = pos;
+		UpdateCenter();
+		UpdateMatrix();
+	}
 }
 
 inline
 float SprGeo::GetAngle() const 
-{ 
-	return m_state.srt[SprSRT::IDX_ANGLE]; 
+{
+	return m_srt.angle;
 }
 
 inline
 void SprGeo::SetAngle(float angle) 
-{ 
-	m_state.srt[SprSRT::IDX_ANGLE] = angle; 
+{
+	if (angle != m_srt.angle) {
+		m_srt.angle = angle;
+		UpdateCenter();
+		UpdateMatrix();
+	}
 }
 
 inline
-sm::vec2 SprGeo::GetScale() const 
+const sm::vec2& SprGeo::GetScale() const 
 {
-	return sm::vec2(m_state.srt[SprSRT::IDX_SCALE_X], m_state.srt[SprSRT::IDX_SCALE_Y]);
+	return m_srt.scale;
 }
 
 inline
 void SprGeo::SetScale(const sm::vec2& scale) 
 { 
-	m_state.srt[SprSRT::IDX_SCALE_X] = scale.x;
-	m_state.srt[SprSRT::IDX_SCALE_Y] = scale.y;
+	if (scale != m_srt.scale) {
+		m_srt.scale = scale;
+		UpdateMatrix();
+	}
 }
 
 inline
-sm::vec2 SprGeo::GetShear() const 
-{ 
-	return sm::vec2(m_state.srt[SprSRT::IDX_SHEAR_X], m_state.srt[SprSRT::IDX_SHEAR_Y]);
+const sm::vec2& SprGeo::GetShear() const 
+{
+	return m_srt.shear;
 }
 
 inline
 void SprGeo::SetShear(const sm::vec2& shear) 
-{ 
-	m_state.srt[SprSRT::IDX_SHEAR_X] = shear.x;
-	m_state.srt[SprSRT::IDX_SHEAR_Y] = shear.y;
+{
+	if (shear != m_srt.shear) {
+		m_srt.shear = shear;
+		UpdateMatrix();
+	}
 }
 
 inline
-sm::vec2 SprGeo::GetOffset() const 
+const sm::vec2& SprGeo::GetOffset() const 
 { 
-	return sm::vec2(m_state.srt[SprSRT::IDX_OFFSET_X], m_state.srt[SprSRT::IDX_OFFSET_Y]);
+	return m_srt.offset;
 }
 
 inline
 void SprGeo::SetOffset(const sm::vec2& offset) 
 { 
-	m_state.srt[SprSRT::IDX_OFFSET_X] = offset.x;
-	m_state.srt[SprSRT::IDX_OFFSET_Y] = offset.y;
+	if (offset != m_srt.offset) {
+		m_srt.offset = offset;
+		UpdateCenter();
+		UpdateMatrix();
+	}
 }
 
 inline
-sm::vec2 SprGeo::GetCenter() const
+const sm::vec2& SprGeo::GetCenter() const
 {
-	return sm::vec2(m_state.srt[SprSRT::IDX_CENTER_X], m_state.srt[SprSRT::IDX_CENTER_Y]);
-}
-
-inline
-void SprGeo::UpdateCenter()
-{
-	sm::vec2 position(m_state.srt[SprSRT::IDX_POS_X], m_state.srt[SprSRT::IDX_POS_Y]);
-	sm::vec2 offset(m_state.srt[SprSRT::IDX_OFFSET_X], m_state.srt[SprSRT::IDX_OFFSET_Y]);
-	float angle = m_state.srt[SprSRT::IDX_ANGLE];
-	sm::vec2 center = position + sm::rotate_vector(-offset, angle) + offset;
-	m_state.srt[SprSRT::IDX_CENTER_X] = center.x;
-	m_state.srt[SprSRT::IDX_CENTER_Y] = center.y;
+	return m_srt.center;
 }
 
 inline
 void SprGeo::GetSRT(SprSRT& srt) const
 {
-	memcpy(srt.srt, m_state.srt, sizeof(srt));
+	srt.srt[SprSRT::IDX_POS_X] = m_srt.position.x;
+	srt.srt[SprSRT::IDX_POS_Y] = m_srt.position.y;
+
+	srt.srt[SprSRT::IDX_ANGLE] = m_srt.angle;
+
+	srt.srt[SprSRT::IDX_SCALE_X] = m_srt.scale.x;
+	srt.srt[SprSRT::IDX_SCALE_Y] = m_srt.scale.y;
+
+	srt.srt[SprSRT::IDX_SHEAR_X] = m_srt.shear.x;
+	srt.srt[SprSRT::IDX_SHEAR_Y] = m_srt.shear.y;
+
+	srt.srt[SprSRT::IDX_OFFSET_X] = m_srt.offset.x;
+	srt.srt[SprSRT::IDX_OFFSET_Y] = m_srt.offset.y;
+
+	srt.srt[SprSRT::IDX_CENTER_X] = m_srt.center.x;
+	srt.srt[SprSRT::IDX_CENTER_Y] = m_srt.center.y;
 }
 
 inline
 void SprGeo::SetSRT(const SprSRT& srt)
 {
-	memcpy(m_state.srt, srt.srt, sizeof(srt));
+	m_srt.position.x = srt.srt[SprSRT::IDX_POS_X];
+	m_srt.position.y = srt.srt[SprSRT::IDX_POS_Y];
+
+	m_srt.angle = srt.srt[SprSRT::IDX_ANGLE];
+	
+	m_srt.scale.x = srt.srt[SprSRT::IDX_SCALE_X];
+	m_srt.scale.y = srt.srt[SprSRT::IDX_SCALE_Y];
+
+	m_srt.shear.x = srt.srt[SprSRT::IDX_SHEAR_X];
+	m_srt.shear.y = srt.srt[SprSRT::IDX_SHEAR_Y];
+
+	m_srt.offset.x = srt.srt[SprSRT::IDX_OFFSET_X];
+	m_srt.offset.y = srt.srt[SprSRT::IDX_OFFSET_Y];
+
+	m_srt.center.x = srt.srt[SprSRT::IDX_CENTER_X];
+	m_srt.center.y = srt.srt[SprSRT::IDX_CENTER_Y];
+
+	UpdateMatrix();
 }
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -117,23 +152,39 @@ S2_MAT SprGeo::GetMatrix() const
 
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-#ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-
 inline
-void SprGeo::SetMatrix(const S2_MAT& mat)
+void SprGeo::UpdateCenter()
 {
-	memcpy(m_state.mat, mat.x, sizeof(m_state.mat));
+	m_srt.center = m_srt.position + sm::rotate_vector(-m_srt.offset, m_srt.angle) + m_srt.offset;
 }
 
 inline
-S2_MAT SprGeo::GetMatrix() const
+void SprGeo::UpdateMatrix()
 {
-	S2_MAT mat;
-	memcpy(mat.x, m_state.mat, sizeof(m_state.mat));
-	return mat;
+	m_mat.SetTransformation(m_srt.center.x, m_srt.center.y, m_srt.angle, m_srt.scale.x, 
+		m_srt.scale.y, 0, 0, m_srt.shear.x, m_srt.shear.y);
 }
 
-#endif // S2_SPR_CACHE_LOCAL_MAT_COPY
+/************************************************************************/
+/* class SprGeo::SRT                                                    */
+/************************************************************************/
+
+inline
+SprGeo::SRT::SRT()
+{
+	Init();
+}
+
+inline
+void SprGeo::SRT::Init()
+{
+	position.Set(0, 0);
+	angle = 0;
+	scale.Set(1, 1);
+	shear.Set(0, 0);
+	offset.Set(0, 0);
+	center.Set(0, 0);
+}
 
 }
 

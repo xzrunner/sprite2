@@ -188,16 +188,24 @@ int s2_symbol_get_type_id(const char* name)
 /* sprite                                                               */
 /************************************************************************/
 
-static RenderParams rp;
-
 extern "C"
 void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				 float xmin, float ymin, float xmax, float ymax)
 {
+	RenderParams* rp = RenderParamsPool::Instance()->Pop();
+	rp->Reset();
+
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
-	float* m = rp.mt.x;
-	float c = sm::cos(angle), s = sm::sin(angle);
+	float* m = rp->mt.x;
+	float c, s;
+	if (angle == 0) {
+		c = 1;
+		s = 0;
+	} else {
+		c = sm::cos_fast(angle);
+		s = sm::sin_fast(angle);
+	}
 	m[0] = c * sx;
 	m[1] = s * sx;
 	m[2] = - s * sy;
@@ -205,14 +213,16 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	m[4] = x;
 	m[5] = y;
 
-	rp.view_region.xmin = xmin;
-	rp.view_region.ymin = ymin;
-	rp.view_region.xmax = xmax;
-	rp.view_region.ymax = ymax;
+	rp->view_region.xmin = xmin;
+	rp->view_region.ymin = ymin;
+	rp->view_region.xmax = xmax;
+	rp->view_region.ymax = ymax;
 
-	rp.actor = s2_actor;
+	rp->actor = s2_actor;
 
-	DrawNode::Draw(s2_actor->GetSpr(), rp, false);
+	DrawNode::Draw(s2_actor->GetSpr(), *rp, false);
+
+	RenderParamsPool::Instance()->Push(rp); 
 }
 
 extern "C"
@@ -551,13 +561,14 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		curr = curr->GetParent();
 	}
 
-	RenderParams rp_child(rp);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
 	while (path.size() > 1) {
 		const Actor* curr = path.top();
 		path.pop();
 		rp.actor = curr;
-		DrawNode::Prepare(rp, curr->GetSpr(), rp_child);
-		rp = rp_child;
+		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		rp = *rp_child;
 	}
 
 	S2_MAT mt;
@@ -566,6 +577,8 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	rp.actor = s2_actor;
 	rp.mt = mt * rp.mt;
 	DrawNode::Draw(s2_spr, rp);
+
+	RenderParamsPool::Instance()->Push(rp_child);
 }
 
 static S2_MAT 

@@ -6,6 +6,7 @@
 #include "RenderCamera.h"
 #include "pre_defined.h"
 #include "s2_macro.h"
+#include "ObjectPool3.h"
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
@@ -38,6 +39,15 @@ public:
 	RenderParams(const RenderParams& params);
 	RenderParams& operator = (const RenderParams& params);
 
+	void Reset();
+
+	/**
+	 *  @interface
+	 *    ObjectPool3
+	 */
+	RenderParams* GetNext() const { return m_next; }
+	void SetNext(RenderParams* next) { m_next = next; }
+
 private:
 	static const uint32_t FLAG_CHANGE_SHADER        = 0x00000001;
 	static const uint32_t FLAG_DISABLE_RENDER_DRAW  = 0x00000002;
@@ -55,7 +65,11 @@ public:
 private:
 	mutable uint32_t m_flags;
 
-}; // RenderStyle
+	RenderParams* m_next;
+
+}; // RenderParams
+
+typedef ObjectPool3<RenderParams> RenderParamsPool;
 
 }
 

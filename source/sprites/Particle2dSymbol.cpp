@@ -39,20 +39,24 @@ void Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return;
 	}
 
-	RenderParams rp_child(rp);
-	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
 	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
-	p2d_spr->SetMatrix(rp_child.mt);
+	p2d_spr->SetMatrix(rp_child->mt);
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child.color.GetMulABGR(), rp_child.color.GetAddABGR());
-	shader->SetColorMap(rp_child.color.GetRMapABGR(), rp_child.color.GetGMapABGR(), rp_child.color.GetBMapABGR());
+	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
+	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
-	p2d_spr->Draw(rp_child);
+	p2d_spr->Draw(*rp_child);
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

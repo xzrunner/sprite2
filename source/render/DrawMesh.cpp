@@ -283,13 +283,17 @@ void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbo
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams rp_child(rp);
-	rp_child.mt.Identity();
-	DrawNode::Draw(sym, rp_child);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	rp_child->mt.Identity();
+
+	DrawNode::Draw(sym, *rp_child);
 
 	mgr->FlushShader();
 
 	rt->Unbind();
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt)

@@ -60,16 +60,19 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 
 void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	RenderParams rp_child(rp);
-	if (!DrawNode::Prepare(rp, spr, rp_child)) {
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
 	if (m_ft) {
-		if (rp.actor && rp.actor->IsFlattenDirty()) {
-			BuildFlatten(rp.actor);
-		}
-		m_ft->Draw(rp);
+// 		if (rp.actor && rp.actor->IsFlattenDirty()) {
+// 			BuildFlatten(rp.actor);
+// 		}
+		m_ft->Draw(*rp_child);
+		RenderParamsPool::Instance()->Push(rp_child); 
 		return;
 	}
 
@@ -77,8 +80,8 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
 	if (scissor) 
 	{
-		sm::vec2 min = rp_child.mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
-			     max = rp_child.mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
+		sm::vec2 min = rp_child->mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
+			     max = rp_child->mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
 		if (min.x > max.x) {
 			std::swap(min.x, max.x);
 		}
@@ -93,16 +96,18 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	for (int i = 0, n = sprs.size(); i < n; ++i) 
 	{
 		const Sprite* spr = sprs[i];
-		rp_child.actor = spr->QueryActor(rp.actor);
-		if (IsChildOutside(spr, rp_child)) {
+		rp_child->actor = spr->QueryActor(rp.actor);
+		if (IsChildOutside(spr, *rp_child)) {
 			continue;
 		}
-		DrawNode::Draw(spr, rp_child, false);
+		DrawNode::Draw(spr, *rp_child, false);
 	}
 
 	if (scissor) {
 		RenderScissor::Instance()->Pop();
 	}
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 bool ComplexSymbol::Update(const UpdateParams& up, float time)
@@ -349,7 +354,8 @@ bool ComplexSymbol::IsChildOutside(const Sprite* spr, const RenderParams& rp) co
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	r_min.Set(r.xmin, r.ymin);
 	r_max.Set(r.xmax, r.ymax);
-	S2_MAT mat = DrawNode::PrepareMat(rp, spr);
+	S2_MAT mat;
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 

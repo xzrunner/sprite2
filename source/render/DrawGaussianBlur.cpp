@@ -8,6 +8,9 @@
 #include "RenderScissor.h"
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "Statistics.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -90,17 +93,21 @@ void DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const Rende
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams rp_child(rp);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+
 	const sm::vec2& offset = spr->GetPosition();
-	rp_child.mt.Translate(-offset.x, -offset.y);
-	rp_child.SetChangeShader(false);
-	rp_child.shader.SetFilter(FM_NULL);
-	rp_child.SetDisableFilter(true);
+	rp_child->mt.Translate(-offset.x, -offset.y);
+	rp_child->SetChangeShader(false);
+	rp_child->shader.SetFilter(FM_NULL);
+	rp_child->SetDisableFilter(true);
 
 	mgr->SetShader(sl::SPRITE2);
-	DrawNode::Draw(spr, rp_child);
+	DrawNode::Draw(spr, *rp_child);
 
 	rt->Unbind();
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 void DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const RenderColor& col, float tex_size)
@@ -133,6 +140,10 @@ void DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool 
 	texcoords[1].Set(1, 0);
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
+
+#ifndef S2_DISABLE_STATISTICS
+	Statistics::Instance()->AddOverdrawArea(1);
+#endif // S2_DISABLE_STATISTICS
 
 	shader->Draw(&vertices[0].x, &texcoords[0].x, src->GetTexID());
 

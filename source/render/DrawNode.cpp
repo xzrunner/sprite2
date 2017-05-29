@@ -274,7 +274,11 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, Re
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 
-	rp_child->mt = spr->GetLocalInvMat();
+	if (rp.actor) {
+		rp_child->mt = rp.actor->GetLocalMat().Inverted() * spr->GetLocalMat().Inverted();
+	} else {
+		rp_child->mt = spr->GetLocalMat().Inverted();
+	}
 	RenderReturn ret = DrawSprImpl(spr, *rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();

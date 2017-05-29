@@ -76,6 +76,7 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 			if (!curr) {
 				continue;
 			}
+
 			// filling
 			for (int iitem = 0, nitem = curr->items.size(); iitem < nitem; ++iitem) 
 			{
@@ -98,7 +99,7 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 					const Item& pre_item = pre_frame.items[item.prev];
 					assert(item.slot == pre_item.slot);
 					Sprite* tween = slots[pre_item.slot];
-					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - curr->time);
+					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - pre_frame.time);
 					// todo AnimLerp::LerpSpecial
 					spr = tween;
 				}

@@ -266,9 +266,7 @@ void DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarg
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 
-	S2_MAT mt;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
-	rp_child->mt = mt.Inverted();
+	rp_child->mt = spr->GetLocalInvMat();
 	DrawSprImpl(spr, *rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();

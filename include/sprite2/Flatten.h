@@ -37,18 +37,32 @@ public:
 	void UpdateTexcoords() const;
 
 private:
-	struct Quad
+	class Quad
 	{
+	public:
 		int tex_id;
 		sm::vec2 vertices[4], texcoords[4];
+
+	public:
+		Quad() {}
+ 		Quad(const Quad& quad);
+ 		Quad& operator = (const Quad& quad);
+
 	}; // Quad
 
-	struct Node
+	class Node
 	{
+	public:
 		const Sprite* spr;
 		const Actor*  actor;
 		S2_MAT mat;
 		int idx;
+
+	public:
+		Node();
+		Node(const Node& node);
+		Node& operator = (const Node& node);		
+
 	}; // Node
 
 private:
@@ -64,7 +78,7 @@ private:
 	S2_FLAG_METHOD(TexcoordsNeedUpdate, FLAG_TEXCOORDS_NEED_UPDATE)
 
 private:
-	std::vector<const ImageSymbol*> m_images;
+	std::vector<const ImageSymbol*> m_images;	// todo weak ptr
 	mutable std::vector<Quad> m_quads;
 
 	std::vector<Node> m_nodes;

@@ -4,6 +4,7 @@
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
 #include "FlattenMgr.h"
+#include "S2_Sprite.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -98,6 +99,9 @@ void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
 void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
 {
 	Node node;
+	if (spr) {
+		spr->AddReference();
+	}
 	node.spr = spr;
 	node.actor = actor;
 	node.mat = mat;
@@ -196,6 +200,55 @@ void Flatten::UpdateDTexC2(int begin, int end) const
 void Flatten::InitFlags()
 {
 	SetTexcoordsNeedUpdate(true);
+}
+
+/************************************************************************/
+/* class Flatten::Quad                                                  */
+/************************************************************************/
+
+Flatten::Quad::Quad(const Quad& quad)
+{
+	this->operator = (quad);
+}
+
+Flatten::Quad& Flatten::Quad::operator = (const Quad& quad)
+{
+	tex_id = quad.tex_id;
+	memcpy(vertices, quad.vertices, sizeof(vertices));
+	memcpy(texcoords, quad.texcoords, sizeof(texcoords));
+	return *this;
+}
+
+/************************************************************************/
+/* class Flatten::Node                                                  */
+/************************************************************************/
+
+Flatten::Node::Node()
+	: spr(NULL)
+	, actor(NULL)
+	, idx(-1)
+{
+}
+
+Flatten::Node::Node(const Node& node)
+{
+	this->operator = (node);
+}
+
+Flatten::Node& Flatten::Node::operator = (const Node& node)
+{
+	spr = node.spr;
+	if (spr) {
+		spr->AddReference();
+	}
+
+	actor = node.actor;
+
+	mat = node.mat;
+
+	idx = node.idx;
+
+	return *this;
 }
 
 }

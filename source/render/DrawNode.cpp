@@ -16,7 +16,7 @@
 #include "S2_RenderTarget.h"
 #include "S2_RVG.h"
 #include "DrawDownsample.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>

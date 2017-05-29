@@ -8,7 +8,7 @@
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "Statistics.h"
+#include "sprite2/Statistics.h"
 #include "Blackboard.h"
 #endif // S2_DISABLE_STATISTICS
 

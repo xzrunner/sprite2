@@ -7,6 +7,7 @@
 #include <SM_Vector.h>
 
 #include <vector>
+#include <string>
 
 #include <stdint.h>
 

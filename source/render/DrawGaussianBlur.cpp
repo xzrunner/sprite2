@@ -9,7 +9,7 @@
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "Statistics.h"
+#include "sprite2/Statistics.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <unirender/UR_RenderContext.h>

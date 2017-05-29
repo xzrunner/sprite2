@@ -14,7 +14,7 @@
 #include "ClearActorsVisitor.h"
 #include "SymType.h"
 #include "SprVisitorParams.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 
 #include <rigging.h>
 

@@ -15,6 +15,7 @@ void Statistics::Reset()
 {
 	m_overdraw_area = 0;
 	m_pp_count.Reset();
+	m_dc_count.Reset();
 }
 
 /************************************************************************/

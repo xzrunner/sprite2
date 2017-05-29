@@ -247,6 +247,28 @@ void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h);
 void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segments);
 
 /************************************************************************/
+/* stat                                                                 */
+/************************************************************************/
+
+struct s2_stat_pingpong_count {
+	int mesh;
+	int mask;
+	int blend;
+	int gaussian_blur;
+	int outer_glow;
+	int down_sample;
+	int rt_outside;
+};
+void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count*);
+
+struct s2_stat_dc_count {
+	int scissor;
+};
+void s2_stat_get_dc_count(struct s2_stat_dc_count*);
+
+void s2_stat_reset();
+
+/************************************************************************/
 /* other                                                                */
 /************************************************************************/
 
@@ -259,18 +281,6 @@ enum S2_PIXEL_TYPE
 };
 
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type);
-
-struct s2_stat_pingpong_count {
-	int mesh;
-	int mask;
-	int blend;
-	int gaussian_blur;
-	int outer_glow;
-	int down_sample;
-	int rt_outside;
-};
-void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count*);
-void s2_stat_reset();
 
 #endif // _sprite2_wrap_c_h_
 

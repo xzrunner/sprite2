@@ -1288,14 +1288,8 @@ void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segm
 }
 
 /************************************************************************/
-/* other                                                                */
+/* stat                                                                 */
 /************************************************************************/
-
-extern "C"
-uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
-{
-	return trans_color(src, PIXEL_TYPE(src_type), PIXEL_TYPE(dst_type));
-}
 
 extern "C"
 void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count* dst)
@@ -1305,9 +1299,26 @@ void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count* dst)
 }
 
 extern "C"
+void s2_stat_get_dc_count(struct s2_stat_dc_count* dst)
+{
+	const Statistics::DrawCallCount& src = Statistics::Instance()->GetDrawCallCount();
+	memcpy(dst, &src, sizeof(*dst));
+}
+
+extern "C"
 void s2_stat_reset()
 {
 	Statistics::Instance()->Reset();
+}
+
+/************************************************************************/
+/* other                                                                */
+/************************************************************************/
+
+extern "C"
+uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
+{
+	return trans_color(src, PIXEL_TYPE(src_type), PIXEL_TYPE(dst_type));
 }
 
 }

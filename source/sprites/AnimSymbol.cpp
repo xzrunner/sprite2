@@ -207,15 +207,6 @@ void AnimSymbol::LoadCopy()
 
 void AnimSymbol::BuildFlatten(const Actor* actor) const
 {
-// 	if (m_ft) {
-// 		m_ft->Clear();
-// 	} else {
-// 		m_ft = new AnimFlatten;
-// 		FlattenMgr::Instance()->Add(GetID(), m_ft);
-// 	}
-
-	//////////////////////////////////////////////////////////////////////////
-
 	if (m_ft) {
 		return;
 	}

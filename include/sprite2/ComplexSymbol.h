@@ -9,8 +9,7 @@
 namespace s2
 {
 
-class FlattenParams;
-class Flatten;
+class ComplexFlatten;
 
 class ComplexSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -78,7 +77,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	mutable Flatten* m_ft;
+	mutable ComplexFlatten* m_ft;
 
 }; // ComplexSymbol
 

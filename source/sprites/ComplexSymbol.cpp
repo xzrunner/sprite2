@@ -1,5 +1,6 @@
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
+#include "ComplexFlatten.h"
 #include "SymType.h"
 #include "ComplexSprite.h"
 #include "S2_Sprite.h"
@@ -68,11 +69,10 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 		return RENDER_INVISIBLE;
 	}
 
+	int action = GetAction(spr, rp.actor);
+
 	if (m_ft) {
-// 		if (rp.actor && rp.actor->IsFlattenDirty()) {
-// 			BuildFlatten(rp.actor);
-// 		}
-		RenderReturn ret = m_ft->Draw(*rp_child);
+		RenderReturn ret = m_ft->Draw(*rp_child, action);
 		RenderParamsPool::Instance()->Push(rp_child); 
 		return ret;
 	}
@@ -96,7 +96,6 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 
 	RenderReturn ret = RENDER_OK;
 
-	int action = GetAction(spr, rp.actor);
 	const std::vector<Sprite*>& children = GetActionChildren(action);
 	if (rp.IsDisableCulling()) {
 		for (int i = 0, n = children.size(); i < n; ++i) 
@@ -147,10 +146,13 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 
 void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
-	if (!m_ft || (fp.GetActor() && fp.GetActor()->IsFlattenDirty())) {
-		BuildFlatten(fp.GetActor());
+	BuildFlatten(fp.GetActor());
+
+	int action = GetAction(fp.GetSpr(), fp.GetActor());
+	const Flatten* curr_ft = m_ft->GetFlatten(action);
+	if (curr_ft) {
+		ft.Combine(*curr_ft, fp.GetMat());
 	}
-	ft.Combine(*m_ft, fp.GetMat());
 }
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
@@ -180,23 +182,34 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 
 void ComplexSymbol::BuildFlatten(const Actor* actor) const
 {
+	// todo: flatten dirty
+	// fp.GetActor() && fp.GetActor()->IsFlattenDirty())
 	if (m_ft) {
-		m_ft->Clear();
-	} else {
-		m_ft = new Flatten;
+		return;
 	}
-	for (int i = 0, n = m_children.size(); i < n; ++i) 
+
+	std::vector<Flatten> actions;
+	actions.resize(m_actions.size());
+	for (int i = 0, n = m_actions.size(); i < n; ++i)
 	{
-		const Sprite* c_spr = m_children[i];
-		const Actor* c_actor = c_spr->QueryActor(actor);
-		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
-		if (!visible) {
-			continue;
+		const Action& action = m_actions[i];
+		for (int j = 0, m = action.sprs.size(); j < m; ++j) 
+		{
+			const Sprite* c_spr = action.sprs[j];
+			const Actor* c_actor = c_spr->QueryActor(actor);
+			bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
+			if (!visible) {
+				continue;
+			}
+			FlattenParams fp;
+			fp.Push(c_spr, c_actor);
+			c_spr->GetSymbol()->Flattening(fp, actions[i]);
 		}
-		FlattenParams fp;
-		fp.Push(c_spr, c_actor);
-		c_spr->GetSymbol()->Flattening(fp, *m_ft);		
 	}
+
+	m_ft = new ComplexFlatten;
+	m_ft->SetData(actions);
+
 	if (actor) {
 		actor->SetFlattenDirty(false);
 	}

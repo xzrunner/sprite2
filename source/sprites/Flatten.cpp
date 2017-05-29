@@ -3,6 +3,7 @@
 #include "DrawNode.h"
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
+#include "FlattenMgr.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -12,6 +13,7 @@ namespace s2
 
 Flatten::Flatten()
 {
+	InitFlags();
 }
 
 void Flatten::Combine(const Flatten& ft, const S2_MAT& mt) 
@@ -118,7 +120,7 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 		return RENDER_NO_DATA;
 	}
 
-	if (!rp.IsDisableDTexC2()) {
+	if (!rp.IsDisableDTexC2() && IsTexcoordsNeedUpdate()) {
 		UpdateDTexC2(begin, end);
 	}
 
@@ -170,19 +172,30 @@ void Flatten::UpdateDTexC2(int begin, int end) const
 {
 	bool loaded = false;
 
+	bool need_update = false;
+
 	Quad* ptr_quad = &m_quads[begin];
 	const ImageSymbol*const* ptr_img = &m_images[begin];
 	for (int i = begin; i < end; ++i, ++ptr_quad, ++ptr_img)	{
-		if (ptr_quad->tex_id == (*ptr_img)->GetTexture()->GetTexID()) {
+		if (ptr_quad->tex_id == (*ptr_img)->GetTexture()->GetTexID()) 
+		{
+			need_update = true;
 			if ((*ptr_img)->OnQueryTexcoordsFail()) {
 				loaded = true;
 			}
 		}
 	}
 
+	SetTexcoordsNeedUpdate(need_update);
+
 	if (loaded) {
-		UpdateTexcoords();
+		FlattenMgr::Instance()->UpdateTexcoords();
 	}
+}
+
+void Flatten::InitFlags()
+{
+	SetTexcoordsNeedUpdate(true);
 }
 
 }

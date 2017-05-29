@@ -4,6 +4,7 @@
 #include "pre_defined.h"
 #include S2_MAT_HEADER
 #include "RenderReturn.h"
+#include "s2_macro.h"
 
 #include <SM_Vector.h>
 
@@ -56,10 +57,19 @@ private:
 	void UpdateDTexC2(int begin, int end) const;
 
 private:
+	void InitFlags();
+
+	static const uint32_t FLAG_TEXCOORDS_NEED_UPDATE = 0x00000001;
+
+	S2_FLAG_METHOD(TexcoordsNeedUpdate, FLAG_TEXCOORDS_NEED_UPDATE)
+
+private:
 	std::vector<const ImageSymbol*> m_images;
 	mutable std::vector<Quad> m_quads;
 
 	std::vector<Node> m_nodes;
+
+	mutable uint32_t  m_flags;
 
 }; // Flatten
 

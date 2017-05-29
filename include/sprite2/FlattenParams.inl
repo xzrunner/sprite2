@@ -42,7 +42,9 @@ void FlattenParams::Push(const Sprite* spr, const Actor* actor)
 	m_spr = spr;
 	m_actor = actor;
 
-	Utility::PrepareMat(m_mt, spr, actor, m_mt);
+	S2_MAT dst;
+	Utility::PrepareMat(m_mt, spr, actor, dst);
+	m_mt = dst;
 }
 
 }

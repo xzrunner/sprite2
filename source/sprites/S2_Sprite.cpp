@@ -590,11 +590,6 @@ const S2_MAT& Sprite::GetLocalMat() const
 	return m_geo->GetMatrix();
 }
 
-S2_MAT Sprite::GetLocalInvMat() const
-{
-	return m_geo->GetMatrix().Inverted();
-}
-
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 void Sprite::CacheLocalMat()
 {

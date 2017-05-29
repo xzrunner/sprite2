@@ -113,7 +113,6 @@ public:
 	void SetLocalSRT(const SprSRT& srt);
 
 	const S2_MAT& GetLocalMat() const;
-	S2_MAT GetLocalInvMat() const;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void CacheLocalMat();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE

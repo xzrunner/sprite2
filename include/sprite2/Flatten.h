@@ -16,6 +16,7 @@ namespace s2
 {
 
 class RenderParams;
+class UpdateParams;
 class Sprite;
 class Actor;
 class ImageSymbol;
@@ -30,9 +31,11 @@ public:
 	void Clear();
 
 	RenderReturn Draw(const RenderParams& rp) const;
+	bool Update(const UpdateParams& up, const Sprite* spr);
+	void SetFrame(const UpdateParams& up, int frame);
 
 	void AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4]);
-	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
+	void AddNode(Sprite* spr, Actor* actor, const S2_MAT& mat);
 
 	void UpdateTexcoords() const;
 
@@ -53,10 +56,10 @@ private:
 	class Node
 	{
 	public:
-		const Sprite* spr;
-		const Actor*  actor;
-		S2_MAT mat;
-		int idx;
+		Sprite* spr;
+		Actor*  actor;
+		S2_MAT  mat;
+		int     idx;
 
 	public:
 		Node();

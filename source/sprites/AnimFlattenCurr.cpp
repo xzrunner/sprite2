@@ -1,4 +1,9 @@
 #include "AnimFlattenCurr.h"
+#include "AnimSymbol.h"
+#include "AnimFlatten.h"
+#include "S2_Sprite.h"
+
+#include <assert.h>
 
 namespace s2
 {
@@ -24,19 +29,33 @@ bool AnimFlattenCurr::Update(const UpdateParams& up, const Sprite* spr,
 		return false;
 	}
 
+	bool dirty = false;
+
 	int curr_frame = UpdateFrameCursor(loop, interval, fps);
 	if (curr_frame != m_ctrl.GetFrame()) {
 		m_ctrl.SetFrame(curr_frame);
-		return true;
-	} else {
-		return false;
+		dirty = true;
 	}
+
+	const AnimSymbol* sym = static_cast<const AnimSymbol*>(spr->GetSymbol());
+	AnimFlatten* flatten = const_cast<AnimSymbol*>(sym)->GetFlatten();
+	assert(flatten);
+	if (flatten->Update(up, curr_frame)) {
+		dirty = true;
+	}
+
+	return dirty;
 }
 
 void AnimFlattenCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
 	frame = frame % m_max_frame_idx;
 	m_ctrl.SetFrame(frame, fps);
+
+	const AnimSymbol* sym = static_cast<const AnimSymbol*>(spr->GetSymbol());
+	AnimFlatten* flatten = const_cast<AnimSymbol*>(sym)->GetFlatten();
+	assert(flatten);
+	flatten->SetFrame(up, frame);
 }
 
 void AnimFlattenCurr::Start(const UpdateParams& up, const Sprite* spr)

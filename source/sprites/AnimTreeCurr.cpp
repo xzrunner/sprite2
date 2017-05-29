@@ -453,10 +453,6 @@ bool AnimTreeCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 
 void AnimTreeCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int static_frame, int fps)
 {
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(spr);
-	
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{
 		int cursor = m_layer_cursor[i];
@@ -481,12 +477,10 @@ void AnimTreeCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, i
 
  			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
 			SprVisitorParams vp;
-			vp.actor = child->QueryActor(up_child->GetActor());
+			vp.actor = child->QueryActor(up.GetActor());
 			child->Traverse(visitor, vp, false);
 		}
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 }

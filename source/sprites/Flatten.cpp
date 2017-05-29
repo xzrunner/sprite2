@@ -5,6 +5,9 @@
 #include "S2_Texture.h"
 #include "FlattenMgr.h"
 #include "S2_Sprite.h"
+#include "UpdateParams.h"
+#include "SetStaticFrameVisitor.h"
+#include "SprVisitorParams.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -86,6 +89,47 @@ RenderReturn Flatten::Draw(const RenderParams& rp) const
 	return ret;
 }
 
+bool Flatten::Update(const UpdateParams& up, const Sprite* spr)
+{
+	if (m_nodes.empty()) {
+		return false;
+	}
+
+	bool dirty = false;
+
+	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
+	*up_child = up;
+	up_child->Push(spr);
+	for (int i = 0, n = m_nodes.size(); i < n; ++i) 
+	{
+		Sprite* child = m_nodes[i].spr;
+		up_child->SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(*up_child)) {
+			dirty = true;
+		}
+	}
+	UpdateParamsPool::Instance()->Push(up_child);
+
+	return dirty;
+}
+
+void Flatten::SetFrame(const UpdateParams& up, int frame)
+{
+	if (m_nodes.empty()) {
+		return;
+	}
+
+	for (int i = 0, n = m_nodes.size(); i < n; ++i) 
+	{
+		Sprite* child = m_nodes[i].spr;
+		
+		SetStaticFrameVisitor visitor(frame);
+		SprVisitorParams vp;
+		vp.actor = child->QueryActor(up.GetActor());
+		child->Traverse(visitor, vp, false);
+	}
+}
+
 void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
 {
 	m_images.push_back(img);
@@ -96,7 +140,7 @@ void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
 	m_quads.push_back(q);
 }
 
-void Flatten::AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat)
+void Flatten::AddNode(Sprite* spr, Actor* actor, const S2_MAT& mat)
 {
 	Node node;
 	if (spr) {

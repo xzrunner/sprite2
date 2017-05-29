@@ -72,6 +72,8 @@ public:
 	void BuildFlatten(const Actor* actor) const;
 	bool HasFlatten() const { return m_ft != NULL; }
 
+	AnimFlatten* GetFlatten() { return m_ft; }
+	
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/

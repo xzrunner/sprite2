@@ -14,7 +14,7 @@ AnimFlattenCurr* AnimFlattenCurr::Clone() const
 }
 
 bool AnimFlattenCurr::Update(const UpdateParams& up, const Sprite* spr, 
-					   bool loop, float interval, int fps)
+							 bool loop, float interval, int fps)
 {
 	if (!m_ctrl.IsActive()) {
 		return false;

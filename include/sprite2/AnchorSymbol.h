@@ -19,7 +19,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 protected:

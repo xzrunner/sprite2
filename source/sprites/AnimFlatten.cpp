@@ -15,12 +15,12 @@ void AnimFlatten::Clear()
 	m_frames.clear();
 }
 
-void AnimFlatten::Draw(const RenderParams& rp, int frame) const
+RenderReturn AnimFlatten::Draw(const RenderParams& rp, int frame) const
 {
 	if (frame < 0 || frame >= m_frames.size()) {
-		return;
+		return RENDER_NO_DATA;
 	}
-	m_frames[frame].Draw(rp);
+	return m_frames[frame].Draw(rp);
 }
 
 }

@@ -48,7 +48,7 @@ public:
 	virtual Sprite* FetchChildByIdx(int idx) const;
 	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 	virtual int GetSlotSize() const { return m_slots.size(); }
-	virtual void Draw(const RenderParams& rp) const;
+	virtual RenderReturn Draw(const RenderParams& rp) const;
 	virtual void Clear();
 	virtual sm::rect CalcAABB(const Actor* actor) const;
 

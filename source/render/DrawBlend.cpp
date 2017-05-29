@@ -22,13 +22,15 @@
 namespace s2
 {
 
-void DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return;
+		return RENDER_NO_RT;
 	}
+
+	RenderReturn ret = RENDER_OK;
 
 	Statistics::Instance()->AddBlend();
 
@@ -40,18 +42,20 @@ void DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	rt->Bind();
-	DrawSpr2RT(spr, mt);
+	ret |= DrawSpr2RT(spr, mt);
 	rt->Unbind();
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	DrawRT2Screen(rt->GetTexID(), spr, mt);
+	ret |= DrawRT2Screen(rt->GetTexID(), spr, mt);
 
 	RT->Return(rt);
+
+	return ret;
 }
 
-void DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
@@ -67,12 +71,14 @@ void DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
 	rp.SetChangeShader(false);
 	rp.SetDisableBlend(true);
 	rp.vertex_offset = - (mt * spr->GetPosition());
-	DrawNode::Draw(spr, rp);
+	RenderReturn ret = DrawNode::Draw(spr, rp);
 
 	shader->Commit();
+
+	return ret;
 }
 
-void DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -103,6 +109,8 @@ void DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt)
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+
+	return RENDER_OK;
 }
 
 }

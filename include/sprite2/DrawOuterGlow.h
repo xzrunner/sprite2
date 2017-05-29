@@ -2,6 +2,7 @@
 #define _SPRITE2_DRAW_OUTER_GLOW_H_
 
 #include "pre_defined.h"
+#include "RenderReturn.h"
 
 #include S2_MAT_HEADER
 
@@ -14,7 +15,7 @@ class RenderParams;
 class DrawOuterGlow
 {
 public:
-	static void Draw(const Sprite* spr, const RenderParams& rp, int iterations);
+	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, int iterations);
 
 }; // DrawOuterGlow
 

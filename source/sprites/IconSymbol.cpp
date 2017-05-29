@@ -34,17 +34,17 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-void IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_icon) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -56,9 +56,11 @@ void IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (spr) {
 		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
 	}
-	m_icon->Draw(*rp_child, process);
+	RenderReturn ret = m_icon->Draw(*rp_child, process);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 void IconSymbol::SetIcon(Icon* icon)

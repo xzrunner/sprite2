@@ -14,7 +14,7 @@ public:
 
 	void Clear();
 
-	void Draw(const RenderParams& rp, int frame) const;
+	RenderReturn Draw(const RenderParams& rp, int frame) const;
 
 	void SetFrames(const std::vector<Flatten>& frames) { m_frames = frames; }
 	

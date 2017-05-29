@@ -53,10 +53,10 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!IsVisible(rp, spr)) {
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	Particle3dSprite::ReuseType reuse;
@@ -66,28 +66,32 @@ void Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	} else {
 		reuse = Particle3dSprite::REUSE_ALL;
 	}
+	RenderReturn ret = RENDER_OK;
 	switch (reuse)
 	{
 	case Particle3dSprite::REUSE_ALL:
-		DrawSymbol(rp, spr);
+		ret = DrawSymbol(rp, spr);
 		break;
 	case Particle3dSprite::REUSE_COMMON:
 		{
 			const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-			DrawEmitter(rp, spr, p3d_spr->GetEmitter());
+			ret = DrawEmitter(rp, spr, p3d_spr->GetEmitter());
 		}
 		break;
 	case Particle3dSprite::REUSE_NONE:
 		{
 			if (rp.actor) {
 				const Particle3dActor* actor = static_cast<const Particle3dActor*>(rp.actor);
-				DrawEmitter(rp, spr, actor->GetEmitter());
+				ret = DrawEmitter(rp, spr, actor->GetEmitter());
+			} else {
+				ret = RENDER_NO_DATA;
 			}
 		}
 		break;
 	default:
 		break;
 	}
+	return ret;
 }
 
 bool Particle3dSymbol::Update(const UpdateParams& up, float time)
@@ -143,15 +147,15 @@ sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor
 	return sm::rect(); // empty
 }
 
-void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_et) {
-		return;
+		return RENDER_NO_DATA;
 	}
 	if (spr) {
 		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 		if (p3d_spr->IsAlone()) {
-			return;
+			return RENDER_NO_DATA;
 		}
 	}
 
@@ -159,7 +163,7 @@ void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) con
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -175,18 +179,20 @@ void Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) con
 	} else {
 		p3d_rp.local = m_local;
 	}
-	m_et->Draw(p3d_rp, false);
+	RenderReturn ret = m_et->Draw(p3d_rp, false);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
-void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr, 
+RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr, 
 								   const Particle3dEmitter* et) const
 {
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 
 	if (p3d_spr->IsAlone() || !et) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
@@ -233,7 +239,7 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 
 		RenderParamsPool::Instance()->Push(rp_child); 
 
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -254,9 +260,11 @@ void Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 	p3d_rp.local       = p3d_spr->IsLocal();
 	p3d_rp.view_region = rp.view_region;
 
-	et->Draw(p3d_rp, false);
+	RenderReturn ret = et->Draw(p3d_rp, false);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 bool Particle3dSymbol::IsVisible(const RenderParams& rp, const Sprite* spr)

@@ -2,6 +2,7 @@
 #define _SPRITE2_SYMBOL_H_
 
 #include "pre_defined.h"
+#include "RenderReturn.h"
 
 #include <SM_Rect.h>
 #include <CU_RefCountObj.h>
@@ -29,7 +30,7 @@ public:
 	virtual ~Symbol();
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
-	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
+	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const {}
 

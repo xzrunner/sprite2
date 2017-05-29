@@ -59,22 +59,22 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	if (m_ft) {
 // 		if (rp.actor && rp.actor->IsFlattenDirty()) {
 // 			BuildFlatten(rp.actor);
 // 		}
-		m_ft->Draw(*rp_child);
+		RenderReturn ret = m_ft->Draw(*rp_child);
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return ret;
 	}
 
 	sm::vec2 scissor_sz = m_scissor.Size();
@@ -94,6 +94,8 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
+	RenderReturn ret = RENDER_OK;
+
 	int action = GetAction(spr, rp.actor);
 	const std::vector<Sprite*>& children = GetActionChildren(action);
 	if (rp.IsDisableCulling()) {
@@ -101,7 +103,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		{
 			const Sprite* child = children[i];
 			rp_child->actor = child->QueryActor(rp.actor);
-			DrawNode::Draw(child, *rp_child);
+			ret |= DrawNode::Draw(child, *rp_child);
 		}
 	} else {
 		for (int i = 0, n = children.size(); i < n; ++i) 
@@ -111,7 +113,7 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			if (DrawNode::CullingTestOutside(child, *rp_child)) {
 				continue;
 			}
-			DrawNode::Draw(child, *rp_child);
+			ret |= DrawNode::Draw(child, *rp_child);
 		}
 	}
 
@@ -120,6 +122,8 @@ void ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 bool ComplexSymbol::Update(const UpdateParams& up, float time)

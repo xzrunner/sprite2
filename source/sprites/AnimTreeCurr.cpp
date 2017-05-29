@@ -195,16 +195,18 @@ VisitResult AnimTreeCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParam
 	return ret;
 }
 
-void AnimTreeCurr::Draw(const RenderParams& rp) const
+RenderReturn AnimTreeCurr::Draw(const RenderParams& rp) const
 {
+	RenderReturn ret = RENDER_OK;
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	for (int i = 0; i < m_curr_num; ++i) {
 		Sprite* child = m_slots[m_curr[i]];
 		rp_child->actor = child->QueryActor(rp.actor);
-		DrawNode::Draw(child, *rp_child);
+		ret |= DrawNode::Draw(child, *rp_child);
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
+	return ret;
 }
 
 void AnimTreeCurr::Clear()

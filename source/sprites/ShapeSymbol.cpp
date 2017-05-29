@@ -31,20 +31,24 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-void ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	if (!m_shape) {
-		return;
+	if (!m_shape || !spr) {
+		return RENDER_NO_DATA;
 	}
 
-	if (spr) {
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
-		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			m_shape->Draw(*rp_child);
-		}
-		RenderParamsPool::Instance()->Push(rp_child); 
+	RenderReturn ret = RENDER_OK;
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (DrawNode::Prepare(rp, spr, *rp_child)) {
+		// todo: shape's render ret
+		m_shape->Draw(*rp_child);
+		ret = RENDER_OK;
+	} else {
+		ret = RENDER_INVISIBLE;
 	}
+	RenderParamsPool::Instance()->Push(rp_child); 
+	return ret;
 }
 
 void ShapeSymbol::SetShape(Shape* shape)

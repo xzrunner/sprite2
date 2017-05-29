@@ -49,24 +49,27 @@ int Anim2Symbol::Type() const
 	return SYM_ANIM2;
 }
 
-void Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_anim || !spr) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
+	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
 }
 
 void Anim2Symbol::SetAnim(rg_animation* anim)

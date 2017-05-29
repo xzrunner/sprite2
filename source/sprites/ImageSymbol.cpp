@@ -52,17 +52,17 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_tex->IsLoadFinished()) {
-		return;
+		return RENDER_ON_LOADING;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	float xmin = FLT_MAX, ymin = FLT_MAX,
@@ -86,7 +86,7 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
 		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_OUTSIDE;
 	}
 
 	float texcoords[8];
@@ -114,6 +114,8 @@ void ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
 }
 
 void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

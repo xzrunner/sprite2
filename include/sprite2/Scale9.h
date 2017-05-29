@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SCALE9_H_
 #define _SPRITE2_SCALE9_H_
 
+#include "RenderReturn.h"
+
 #include <SM_Vector.h>
 
 #include <vector>
@@ -46,7 +48,7 @@ public:
 	Scale9& operator = (const Scale9& s9);
 	~Scale9();
 
-	void Draw(const RenderParams& rp) const;
+	RenderReturn Draw(const RenderParams& rp) const;
 
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }

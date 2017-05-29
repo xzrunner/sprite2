@@ -59,13 +59,15 @@ Scale9::~Scale9()
 	}
 }
 
-void Scale9::Draw(const RenderParams& rp) const
+RenderReturn Scale9::Draw(const RenderParams& rp) const
 {
+	RenderReturn ret = RENDER_OK;
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
-			DrawNode::Draw(m_grids[i], rp);
+			ret |= DrawNode::Draw(m_grids[i], rp);
 		}
 	}
+	return ret;
 }
 
 void Scale9::SetSize(float width, float height)

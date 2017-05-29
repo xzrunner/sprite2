@@ -2,6 +2,7 @@
 #define _SPRITE2_ICON_H_
 
 #include "pre_defined.h"
+#include "RenderReturn.h"
 
 #include <CU_RefCountObj.h>
 #include <SM_Vector.h>
@@ -21,7 +22,7 @@ public:
 	Icon& operator = (const Icon& icon);
 	virtual ~Icon() {}
 
-	virtual void Draw(const RenderParams& rp, float process) const;
+	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

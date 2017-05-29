@@ -31,7 +31,7 @@ namespace s2
 static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
 static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
-static void (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
+static bool (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
 static const float* (*C2_QUERY_SPR)(const Sprite*, int* tex_id);
 static void (*C2_INSERT_SYM)(const Symbol*, int tex_id, int tex_w, int tex_h);
 static const float* (*C2_QUERY_SYM)(const Symbol*, int* tex_id);
@@ -42,7 +42,7 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 }
 
 void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
-						  void (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
+						  bool (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
 						  const float* c2_query_spr(const Sprite*, int* tex_id),
 						  void (*c2_insert_sym)(const Symbol*, int tex_id, int tex_w, int tex_h),
 						  const float* c2_query_sym(const Symbol*, int* tex_id))
@@ -81,26 +81,28 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	return true;
 }
 
-void DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 {
 	if (CullingTestOutside(spr, rp)) {
-		return;
-	} 
+		return RENDER_OUTSIDE;
+	}
 
+	RenderReturn ret = RENDER_OK;
 	if (spr->IsDTexForceCached()) {
 		if (spr->IsDTexForceCachedDirty()) {
-			DTexCacheSpr(spr, rp);
+			ret = DTexCacheSpr(spr, rp);
 		} else {
-			DTexQuerySpr(spr, rp);
+			ret = DTexQuerySpr(spr, rp);
 		}
 	} else {
-		DrawSprImpl(spr, rp);
+		ret = DrawSprImpl(spr, rp);
 	}
+	return ret;
 }
 
-void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, 
-					const sm::vec2& pos, float angle, 
-					const sm::vec2& scale, const sm::vec2& shear)
+RenderReturn DrawNode::Draw(const Symbol* sym, const RenderParams& rp, 
+							const sm::vec2& pos, float angle, 
+							const sm::vec2& scale, const sm::vec2& shear)
 {
 	S2_MAT mt;
 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
@@ -136,12 +138,14 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
  		}
  	}
  
- 	sym->Draw(*rp_child);
+ 	RenderReturn ret = sym->Draw(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
-void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt)
+RenderReturn DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt)
 {
 	S2_MAT mt = _mt * rp.mt;
 
@@ -175,18 +179,20 @@ void DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_MAT& _mt
 		}
 	}
 
-	sym->Draw(*rp_child);
+	RenderReturn ret = sym->Draw(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
-void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
+RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
 {
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child);
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
@@ -207,6 +213,8 @@ void DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& 
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
 }
 
 bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
@@ -256,7 +264,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 }
 
-void DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
+RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -267,16 +275,18 @@ void DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarg
 	*rp_child = rp;
 
 	rp_child->mt = spr->GetLocalInvMat();
-	DrawSprImpl(spr, *rp_child);
+	RenderReturn ret = DrawSprImpl(spr, *rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
 	rt->Unbind();
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
-void DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
+RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
@@ -296,9 +306,11 @@ void DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const fl
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
+
+	return RENDER_OK;
 }
 
-void DrawNode::DrawSymToRT(const Symbol* sym, RenderTarget* rt)
+RenderReturn DrawNode::DrawSymToRT(const Symbol* sym, RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -308,29 +320,36 @@ void DrawNode::DrawSymToRT(const Symbol* sym, RenderTarget* rt)
 	RenderParams* rp = RenderParamsPool::Instance()->Pop();
 	rp->Reset();
 
-	Draw(sym, *rp, S2_MAT());
+	RenderReturn ret = Draw(sym, *rp, S2_MAT());
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
 	rt->Unbind();
 
 	RenderParamsPool::Instance()->Push(rp); 
+
+	return ret;
 }
 
-void DrawNode::DTexCacheSym(const Symbol* sym)
+RenderReturn DrawNode::DTexCacheSym(const Symbol* sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return;
+		return RENDER_NO_RT;
 	}
+
+	RenderReturn ret = RENDER_OK;
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawSymToRT(sym, rt);
+	RenderReturn r = DrawSymToRT(sym, rt);
+	if (r != RENDER_OK) {
+		ret = r;
+	}
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
@@ -338,6 +357,8 @@ void DrawNode::DTexCacheSym(const Symbol* sym)
 	C2_INSERT_SYM(sym, rt->GetTexID(), rt->Width(), rt->Height());
 
 	RT->Return(rt);
+
+	return ret;
 }
 
 const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id)
@@ -345,44 +366,55 @@ const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id)
 	return C2_QUERY_SYM(sym, &tex_id);
 }
 
-void DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return;
+		return RENDER_NO_RT;
 	}
+
+	RenderReturn ret = RENDER_OK;
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawSprToRT(spr, rp, rt);
+	ret |= DrawSprToRT(spr, rp, rt);
+	bool loading_finished = (ret & RENDER_ON_LOADING) == 0;
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height());
+	if (loading_finished && !C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height())) {
+		ret |= RENDER_UNKNOWN;
+	}
 
 	RT->Return(rt);
 
-	spr->SetDTexForceCachedDirty(false);
+	if (loading_finished) {
+		spr->SetDTexForceCachedDirty(false);
+	}
+
+	return ret;
 }
 
-void DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
 	int tex_id;
 	const float* texcoords = C2_QUERY_SPR(spr, &tex_id);
+	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {
-		DrawSprImpl(spr, rp);
+		ret = DrawSprImpl(spr, rp);
 		spr->SetDTexForceCachedDirty(true);
 	} else {
-		DrawSprFromRT(spr, rp, texcoords, tex_id);
+		ret = DrawSprFromRT(spr, rp, texcoords, tex_id);
 	}
+	return ret;
 }
 
-void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 {
 	RenderShader rs;
 	RenderCamera rc;
@@ -428,12 +460,14 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		filter = rs.GetFilter()->GetMode();
 	}
 
+	RenderReturn ret = RENDER_OK;
+
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (blend != BM_NULL) 
 	{
 		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
-		DrawBlend::Draw(spr, rp.mt);
+		ret = DrawBlend::Draw(spr, rp.mt);
 		//		}
 	} 
 	else if (filter != FM_NULL) 
@@ -448,12 +482,12 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
 			int itrs = static_cast<const RFGaussianBlur*>(rf)->GetIterations();
-			DrawGaussianBlur::Draw(spr, *rp_child, itrs);
+			ret = DrawGaussianBlur::Draw(spr, *rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
 			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
-			DrawOuterGlow::Draw(spr, *rp_child, itrs);
+			ret = DrawOuterGlow::Draw(spr, *rp_child, itrs);
 		} 
 		else 
 		{
@@ -472,7 +506,7 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 				}
 				break;
 			}
-			DrawSprImplFinal(spr, *rp_child);
+			ret = DrawSprImplFinal(spr, *rp_child);
 		}
 
 		RenderParamsPool::Instance()->Push(rp_child); 
@@ -486,12 +520,14 @@ void DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
 		rp_child->camera = rc;
-		DrawSprImplFinal(spr, *rp_child);
+		ret = DrawSprImplFinal(spr, *rp_child);
 		RenderParamsPool::Instance()->Push(rp_child); 
 	}
+
+	return ret;
 }
 
-void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 {
 // 	// for debug
 // 	if (spr->GetSymbol()->GetID() == 1079524) {
@@ -501,11 +537,13 @@ void DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 	//if (spr->GetDownsample() != 1) {
 	//	DrawDownsample::Draw(spr, rp, spr->GetDownsample());
 	//} else {
-		spr->GetSymbol()->Draw(rp, spr);
+	RenderReturn ret = spr->GetSymbol()->Draw(rp, spr);
 	//}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}
+
+	return ret;
 }
 
 }

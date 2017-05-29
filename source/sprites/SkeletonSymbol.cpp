@@ -33,26 +33,28 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-void SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_skeleton) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	if (spr) {
 		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
 		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
 	}
-	m_skeleton->Draw(*rp_child);
+	RenderReturn ret = m_skeleton->Draw(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)

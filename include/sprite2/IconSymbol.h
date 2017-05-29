@@ -23,7 +23,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 
 	void SetIcon(Icon* icon);
 	const Icon* GetIcon() const { return m_icon; }

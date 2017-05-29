@@ -14,7 +14,7 @@
 namespace s2
 {
 
-void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
+RenderReturn DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
 	Statistics::Instance()->AddOuterGlow();
 
@@ -31,9 +31,11 @@ void DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iteratio
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
-	DrawNode::Draw(spr, *rp_child);
+	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 }

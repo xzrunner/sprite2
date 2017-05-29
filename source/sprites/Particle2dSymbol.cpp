@@ -33,17 +33,17 @@ int Particle2dSymbol::Type() const
 	return SYM_PARTICLE2D; 
 }
 
-void Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
@@ -54,9 +54,11 @@ void Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
-	p2d_spr->Draw(*rp_child);
+	RenderReturn ret = p2d_spr->Draw(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

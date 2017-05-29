@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include S2_MAT_HEADER
+#include "RenderReturn.h"
 
 #include <SM_Vector.h>
 
@@ -27,7 +28,7 @@ public:
 
 	void Clear();
 
-	void Draw(const RenderParams& rp) const;
+	RenderReturn Draw(const RenderParams& rp) const;
 
 	void AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4]);
 	void AddNode(const Sprite* spr, const Actor* actor, const S2_MAT& mat);
@@ -50,7 +51,7 @@ private:
 	}; // Node
 
 private:
-	void DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const;
+	RenderReturn DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const;
 
 	void UpdateDTexC2(int begin, int end) const;
 

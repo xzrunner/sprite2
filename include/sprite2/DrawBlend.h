@@ -2,6 +2,7 @@
 #define _SPRITE2_DRAW_BLEND_H_
 
 #include "pre_defined.h"
+#include "RenderReturn.h"
 
 #include S2_MAT_HEADER
 
@@ -13,11 +14,11 @@ class Sprite;
 class DrawBlend
 {
 public:
-	static void Draw(const Sprite* spr, const S2_MAT& mt);
+	static RenderReturn Draw(const Sprite* spr, const S2_MAT& mt);
 
 private:
-	static void DrawSpr2RT(const Sprite* spr, const S2_MAT& mt);
-	static void DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt);
+	static RenderReturn DrawSpr2RT(const Sprite* spr, const S2_MAT& mt);
+	static RenderReturn DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt);
 
 }; // DrawBlend
 

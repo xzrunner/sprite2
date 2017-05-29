@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SKELETON_H_
 #define _SPRITE2_SKELETON_H_
 
+#include "RenderReturn.h"
+
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
@@ -20,7 +22,7 @@ public:
 	Skeleton(const Joint* root, const std::vector<Joint*>& all_joints);
 	~Skeleton();
 
-	void Draw(const RenderParams& rp) const;
+	RenderReturn Draw(const RenderParams& rp) const;
 	sm::rect GetBounding() const;
 
 	const Joint* QueryByPos(const sm::vec2& pos) const;

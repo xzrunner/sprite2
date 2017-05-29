@@ -42,10 +42,10 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
@@ -60,9 +60,12 @@ void TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
 	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
+	// todo: return trail's render ret
 	t2d_spr->Draw(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
 }
 
 void TrailSymbol::SetEmitterCfg(const TrailEmitterCfg* cfg)

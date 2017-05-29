@@ -117,16 +117,18 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 	return true;
 }
 
-void Particle2dSprite::Draw(const RenderParams& rp) const
+RenderReturn Particle2dSprite::Draw(const RenderParams& rp) const
 {
 	if (!m_et) {
-		return;
+		return RENDER_NO_DATA;
 	}
+	// todo: return emitter's render ret
 	if (m_et->local_mode_draw) {
 		p2d_emitter_draw(m_et, &rp.mt);
 	} else {
 		p2d_emitter_draw(m_et, NULL);
 	}
+	return RENDER_OK;
 }
 
 bool Particle2dSprite::IsLoop() const

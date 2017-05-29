@@ -38,17 +38,17 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_mesh) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 // 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -63,10 +63,11 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		m_mesh->LoadFromTransform(mtrans);
  	}
 
+	RenderReturn ret = RENDER_OK;
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
- 		DrawMesh::DrawInfoXY(m_mesh, &rp_child->mt);
+ 		ret = DrawMesh::DrawInfoXY(m_mesh, &rp_child->mt);
  	} else {
- 		DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+ 		ret = DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
  	}
  
 //  	if (!m_pause && mesh_spr)
@@ -78,6 +79,8 @@ void MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 //  	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 bool MeshSymbol::Update(const UpdateParams& up, float time)

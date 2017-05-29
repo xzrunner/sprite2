@@ -30,7 +30,7 @@ public:
 	virtual Sprite* FetchChildByIdx(int idx) const { return NULL; }
 	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
 	virtual int GetSlotSize() const { return 0; }
-	virtual void Draw(const RenderParams& rp) const {}
+	virtual RenderReturn Draw(const RenderParams& rp) const { return RENDER_OK; }
 	virtual void Clear() {}
 	virtual sm::rect CalcAABB(const Actor* actor) const { return sm::rect(); }
 

@@ -40,11 +40,13 @@ int ProxySymbol::Type() const
 	return SYM_PROXY;
 }
 
-void ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_items.size(); i < n; ++i) {
-		DrawNode::Draw(m_items[i].second, rp);
+		ret |= DrawNode::Draw(m_items[i].second, rp);
 	}
+	return ret;
 }
 
 sm::rect ProxySymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

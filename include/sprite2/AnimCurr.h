@@ -5,6 +5,7 @@
 #include "S2_Message.h"
 #include "VisitResult.h"
 #include "SpriteVisitor.h"
+#include "RenderReturn.h"
 
 #include <SM_Rect.h>
 
@@ -35,7 +36,7 @@ public:
 	virtual Sprite* FetchChildByIdx(int idx) const = 0;
 	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const = 0;
 	virtual int GetSlotSize() const = 0;
-	virtual void Draw(const RenderParams& rp) const = 0;
+	virtual RenderReturn Draw(const RenderParams& rp) const = 0;
 	virtual void Clear() = 0;
 	virtual sm::rect CalcAABB(const Actor* actor) const = 0;
 

@@ -32,17 +32,17 @@ int TextboxSymbol::Type() const
 	return SYM_TEXTBOX; 
 }
 
-void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	const std::string* text = NULL;
@@ -59,7 +59,7 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
  	if (!text || text->empty()) {
 		RenderParamsPool::Instance()->Push(rp_child); 
- 		return;
+ 		return RENDER_NO_DATA;
  	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -99,6 +99,8 @@ void TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	tb_spr->UpdateTime();
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
 }
 
 void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

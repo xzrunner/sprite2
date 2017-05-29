@@ -29,11 +29,13 @@ Skeleton::~Skeleton()
 	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFunctor<Joint>());
 }
 
-void Skeleton::Draw(const RenderParams& rp) const
+RenderReturn Skeleton::Draw(const RenderParams& rp) const
 {
+	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
-		m_all_joints[i]->Draw(rp);
+		ret |= m_all_joints[i]->Draw(rp);
 	}
+	return ret;
 }
 
 sm::rect Skeleton::GetBounding() const

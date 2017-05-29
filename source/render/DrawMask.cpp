@@ -21,8 +21,10 @@
 namespace s2
 {
 
-void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
+RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
+	RenderReturn ret = RENDER_OK;
+
 	Statistics::Instance()->AddMask();
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -37,29 +39,31 @@ void DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& 
 	if (!rt_base) {
 		RenderCtxStack::Instance()->Pop();
 		RenderScissor::Instance()->Enable();
-		return;
+		return RENDER_NO_RT;
 	}
-	DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
+	ret |= DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
 		RT->Return(rt_base);
 		RenderCtxStack::Instance()->Pop();
 		RenderScissor::Instance()->Enable();
-		return;
+		return RENDER_NO_RT;
 	}
-	DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
+	ret |= DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	DrawMaskFromRT(rt_base, rt_mask, mask, rp.mt);
+	ret |= DrawMaskFromRT(rt_base, rt_mask, mask, rp.mt);
 
 	RT->Return(rt_base);
 	RT->Return(rt_mask);
+
+	return ret;
 }
 
-void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
+RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
 							const RenderColor& rc, const Actor* actor)
 {
 	rt->Bind();
@@ -74,14 +78,16 @@ void DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	rp.SetChangeShader(false);
 	rp.color = rc;
 	rp.actor = actor;
-	DrawNode::Draw(base, rp);
+	RenderReturn ret = DrawNode::Draw(base, rp);
 
 	shader->Commit();
 
 	rt->Unbind();
+
+	return ret;
 }
 
-void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor)
+RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor)
 {
 	rt->Bind();
 
@@ -94,14 +100,16 @@ void DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* a
 	RenderParams rp;
 	rp.SetChangeShader(false);
 	rp.actor = actor;
-	DrawNode::Draw(mask, rp);
+	RenderReturn ret = DrawNode::Draw(mask, rp);
 
 	shader->Commit();
 
 	rt->Unbind();
+
+	return ret;
 }
 
-void DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt)
+RenderReturn DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -149,6 +157,8 @@ void DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, cons
 	mgr->SetShader(sl::MASK);
 	sl::MaskShader* shader = static_cast<sl::MaskShader*>(mgr->GetShader());
 	shader->Draw(&vertices[0].x, &texcoords[0].x, &texcoords_mask[0].x, rt_base->GetTexID(), rt_mask->GetTexID());
+
+	return RENDER_OK;
 }
 
 }

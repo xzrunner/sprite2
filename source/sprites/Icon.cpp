@@ -31,10 +31,10 @@ Icon& Icon::operator = (const Icon& icon)
 	return *this;
 }
 
-void Icon::Draw(const RenderParams& rp, float process) const
+RenderReturn Icon::Draw(const RenderParams& rp, float process) const
 {
 	if (!m_img) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 //	process = 0.5;
@@ -64,6 +64,8 @@ void Icon::Draw(const RenderParams& rp, float process) const
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+
+	return RENDER_OK;
 }
 
 sm::rect Icon::GetRegion(float process) const

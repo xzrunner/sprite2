@@ -30,13 +30,13 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
-		return;
+		return RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -44,11 +44,16 @@ void TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
+	RenderReturn ret = RENDER_OK;
+
+	// todo shape's draw return
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
 		m_polygons[i]->Draw(*rp_child);
 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 void TextureSymbol::AddPolygon(PolygonShape* poly)

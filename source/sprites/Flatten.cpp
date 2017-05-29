@@ -47,7 +47,7 @@ void Flatten::Clear()
 	m_nodes.clear();
 }
 
-void Flatten::Draw(const RenderParams& rp) const
+RenderReturn Flatten::Draw(const RenderParams& rp) const
 {
 	// todo: should use quad's color
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -55,9 +55,11 @@ void Flatten::Draw(const RenderParams& rp) const
 	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 	shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 
+	RenderReturn ret = RENDER_OK;
+
 	if (m_nodes.empty())
 	{
-		DrawQuads(0, m_quads.size(), rp, shader);
+		ret = DrawQuads(0, m_quads.size(), rp, shader);
 	} 
 	else
 	{
@@ -67,7 +69,7 @@ void Flatten::Draw(const RenderParams& rp) const
 			const Node& node = m_nodes[i];
 			begin = end;
 			end = node.idx;
-			DrawQuads(begin, end, rp, shader);
+			ret |= DrawQuads(begin, end, rp, shader);
 
 			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 			*rp_child = rp;
@@ -77,6 +79,8 @@ void Flatten::Draw(const RenderParams& rp) const
 			RenderParamsPool::Instance()->Push(rp_child); 
 		}
 	}
+
+	return ret;
 }
 
 void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
@@ -108,10 +112,10 @@ void Flatten::UpdateTexcoords() const
 	}
 }
 
-void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
+RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
 {
 	if (begin == end) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	if (!rp.IsDisableDTexC2()) {
@@ -158,6 +162,8 @@ void Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2S
 
 		shader->DrawQuad(&VERTEX_BUF[0].x, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
 	}
+
+	return RENDER_OK;
 }
 
 void Flatten::UpdateDTexC2(int begin, int end) const

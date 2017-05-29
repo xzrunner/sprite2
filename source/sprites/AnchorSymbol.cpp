@@ -19,13 +19,15 @@ int AnchorSymbol::Type() const
 	return SYM_ANCHOR; 
 }
 
-void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 	assert(spr);
 	const Actor* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
 	if (!anchor) {
-		return;
+		return RENDER_NO_DATA;
 	}
+
+	RenderReturn ret = RENDER_OK;
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
@@ -33,9 +35,13 @@ void AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (rp_child->actor) {
 		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, rp_child->mt);
 //		rp_child->SetDisableCulling(true);
-		DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
+		ret = DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
+	} else {
+		ret = RENDER_NO_DATA;
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
 void AnchorSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const

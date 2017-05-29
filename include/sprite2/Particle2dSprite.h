@@ -3,6 +3,7 @@
 
 #include "S2_Sprite.h"
 #include "Particle2d.h"
+#include "RenderReturn.h"
 
 struct p2d_emitter;
 
@@ -33,7 +34,7 @@ public:
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
 
-	void Draw(const RenderParams& rp) const;
+	RenderReturn Draw(const RenderParams& rp) const;
 
 	void SetMatrix(const S2_MAT& mat) const { m_mat = mat; }
 

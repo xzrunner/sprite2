@@ -24,7 +24,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual void Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
 	void SetEmitterCfg(const P3dEmitterCfg* cfg);
@@ -42,8 +42,8 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
-	void DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
-	void DrawEmitter(const RenderParams& rp, const Sprite* spr, 
+	RenderReturn DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
+	RenderReturn DrawEmitter(const RenderParams& rp, const Sprite* spr, 
 		const Particle3dEmitter* et) const;
 
 	static bool IsVisible(const RenderParams& rp, const Sprite* spr);

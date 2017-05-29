@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "JointPose.h"
+#include "RenderReturn.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
@@ -30,7 +31,7 @@ public:
 	VIRTUAL_INHERITANCE void Rotate(float rot);
 	VIRTUAL_INHERITANCE void Scale(const sm::vec2& scale);
 
-	void Draw(const RenderParams& rp) const;
+	RenderReturn Draw(const RenderParams& rp) const;
 	void Update();
 
 	bool ConnectChild(Joint* child);

@@ -2,6 +2,7 @@
 #define _SPRITE2_DRAW_MESH_H_
 
 #include "pre_defined.h"
+#include "RenderReturn.h"
 
 #include S2_MAT_HEADER
 
@@ -18,20 +19,20 @@ class RenderTarget;
 class DrawMesh
 {
 public:
-	static void DrawInfoUV(const Mesh* mesh, const S2_MAT* mt = NULL);
-	static void DrawInfoXY(const Mesh* mesh, const S2_MAT* mt = NULL);
+	static RenderReturn DrawInfoUV(const Mesh* mesh, const S2_MAT* mt = NULL);
+	static RenderReturn DrawInfoXY(const Mesh* mesh, const S2_MAT* mt = NULL);
 
-	static void DrawTexture(const Mesh* mesh, const RenderParams& rp, 
+	static RenderReturn DrawTexture(const Mesh* mesh, const RenderParams& rp, 
 		const Symbol* base_sym = NULL);
 
-	static void DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id);
+	static RenderReturn DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id);
 
 private:
-	static void DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* texcoords, int tex_id);
+	static RenderReturn DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
-	static void DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym);
-	static void DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym);
-	static void DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt);
+	static RenderReturn DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym);
+	static RenderReturn DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym);
+	static RenderReturn DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt);
 
 }; // DrawMesh
 

@@ -59,10 +59,10 @@ bool Particle3dEmitter::Update(float time)
 	return dirty;
 }
 
-void Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
+RenderReturn Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
 {
 	if (!m_state.et) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	P3dRenderParams rp_child(rp);
@@ -84,7 +84,10 @@ void Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
 	}	
 	rp_child.local = m_state.local;
 
+	// todo: return emitter's render ret
 	p3d_emitter_draw(m_state.et, &rp_child);
+
+	return RENDER_OK;
 }
 
 bool Particle3dEmitter::IsLoop() const

@@ -82,8 +82,9 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
+	RenderReturn ret = RENDER_OK;
 	if (m_ft) 
 	{
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
@@ -100,7 +101,9 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 				frame = m_curr->GetFrame();
 			}
 
-			m_ft->Draw(*rp_child, frame);
+			ret = m_ft->Draw(*rp_child, frame);
+		} else {
+			ret = RENDER_INVISIBLE;
 		}
 		RenderParamsPool::Instance()->Push(rp_child); 
 	}
@@ -113,13 +116,14 @@ void AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
 				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
 				assert(curr);
-				curr->Draw(*rp_child);
+				ret = curr->Draw(*rp_child);
 			}
 			RenderParamsPool::Instance()->Push(rp_child); 
 		} else {
-			m_curr->Draw(rp);
+			ret = m_curr->Draw(rp);
 		}
 	}
+	return ret;
 }
 
 bool AnimSymbol::Update(const UpdateParams& up, float time)

@@ -2,6 +2,7 @@
 #define _SPRITE2_PARTICLE3D_EMITTER_H_
 
 #include "ObjectPool.h"
+#include "RenderReturn.h"
 
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
@@ -23,7 +24,7 @@ public:
 	virtual void RemoveReference() const;
 
 	bool Update(float time);
-	void Draw(const P3dRenderParams& rp, bool alone) const;
+	RenderReturn Draw(const P3dRenderParams& rp, bool alone) const;
 
 	bool IsLoop() const;
 	void SetLoop(bool loop);

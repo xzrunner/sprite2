@@ -31,13 +31,13 @@ static Color RED	(204, 51, 102, 128);
 static Color GREEN	(102, 204, 51, 128);
 static Color BLUE	(102, 51, 204, 128);
 
-void DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return;
+		return RENDER_NO_DATA;
 	}
 	
 	float w = mesh->GetWidth(),
@@ -68,15 +68,17 @@ void DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
 		}
 		RVG::Circle(p, mesh->GetNodeRadius(), true);
 	}
+
+	return RENDER_OK;
 }
 
-void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	// lines
@@ -101,10 +103,13 @@ void DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 		}
 		RVG::Circle(p, mesh->GetNodeRadius(), true);
 	}
+
+	return RENDER_OK;
 }
 
-void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbol* base_sym)
+RenderReturn DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbol* base_sym)
 {
+	RenderReturn ret = RENDER_OK;
 	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) 
 	{
@@ -114,11 +119,11 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbo
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
 	 		img_sym->OnQueryTexcoordsFail();
 	 	}
-		DrawOnePass(mesh, rp, texcoords, tex_id);
+		ret = DrawOnePass(mesh, rp, texcoords, tex_id);
 	} 
 	else 
 	{
-		DrawTwoPass(mesh, rp, sym);
+		ret = DrawTwoPass(mesh, rp, sym);
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -131,15 +136,16 @@ void DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbo
 // 			DrawTwoPass(mesh, rp, sym);
 // 		}
 	}
+	return ret;
 }
 
-void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
+RenderReturn DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -167,6 +173,8 @@ void DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
 
 		shader->DrawQuad(&_vertices[0].x, &_texcoords[0].x, tex_id);
 	}
+
+	return RENDER_OK;
 }
 
 static void draw_sprite2(const float* positions, const float* texcoords, int tex_id)
@@ -185,19 +193,19 @@ static void draw_filter(const float* positions, const float* texcoords, int tex_
 	shader->Draw(positions, texcoords, tex_id);
 }
 
-void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+RenderReturn DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
 	if (type != sl::SPRITE2 && type != sl::FILTER) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	float x = src_texcoords[0], y = src_texcoords[1];
@@ -264,15 +272,19 @@ void DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float
 	{
 		assert(0);
 	}
+
+	return RENDER_OK;
 }
 
-void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
+RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return;
+		return RENDER_NO_RT;
 	}
+
+	RenderReturn ret = RENDER_OK;
 
 	Statistics::Instance()->AddMesh();
 		
@@ -281,17 +293,19 @@ void DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbo
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
-	DrawMesh2RT(rt, rp, sym);
+	ret |= DrawMesh2RT(rt, rp, sym);
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	DrawRT2Screen(rt, mesh, rp.mt);
+	ret |= DrawRT2Screen(rt, mesh, rp.mt);
 
 	RT->Return(rt);
+
+	return ret;
 }
 
-void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym)
+RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym)
 {
 	rt->Bind();
 
@@ -302,18 +316,20 @@ void DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbo
 	*rp_child = rp;
 	rp_child->mt.Identity();
 
-	DrawNode::Draw(sym, *rp_child);
+	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
 
 	mgr->FlushShader();
 
 	rt->Unbind();
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
 }
 
-void DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt)
+RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt)
 {
-	DrawOnlyMesh(mesh, mt, rt->GetTexID());
+	return DrawOnlyMesh(mesh, mt, rt->GetTexID());
 }
 
 }

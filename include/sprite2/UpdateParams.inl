@@ -5,7 +5,7 @@
 #include "S2_Actor.h"
 #include "RenderShader.h"
 #include "RenderFilter.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 
 namespace s2
 {

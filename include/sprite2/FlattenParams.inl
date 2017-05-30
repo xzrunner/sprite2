@@ -3,7 +3,7 @@
 
 #include "S2_Sprite.h"
 #include "S2_Actor.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 
 namespace s2
 {

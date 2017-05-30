@@ -15,7 +15,7 @@
 #include "FlattenParams.h"
 #include "AABBHelper.h"
 #include "FlattenMgr.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 #include "AnimTreeCurr.h"
 
 #include <assert.h>

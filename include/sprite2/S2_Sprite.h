@@ -155,6 +155,7 @@ protected:
 	static const uint32_t FLAG_DTEX_DISABLE            = 0x00001000;
 	static const uint32_t FLAG_DTEX_FORCE_CACHED       = 0x00002000;
 	static const uint32_t FLAG_DTEX_FORCE_CACHED_DIRTY = 0x00004000;
+	static const uint32_t FLAG_DTEX_CACHE_BEGIN        = 0x00008000;
 	// 0x00008000
 
 	static const uint32_t FLAG_MAX            = 0x00008000;
@@ -184,6 +185,7 @@ public:
 	S2_FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)
 	S2_FLAG_METHOD(DTexForceCached, FLAG_DTEX_FORCE_CACHED)
 	S2_FLAG_METHOD(DTexForceCachedDirty, FLAG_DTEX_FORCE_CACHED_DIRTY)
+	S2_FLAG_METHOD(DTexCacheBegin, FLAG_DTEX_CACHE_BEGIN)
 	
 	bool GetUserFlag(uint32_t key) const;
 	void SetUserFlag(uint32_t key, bool val) const;

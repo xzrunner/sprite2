@@ -90,7 +90,14 @@ RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 	RenderReturn ret = RENDER_OK;
 	if (spr->IsDTexForceCached()) {
 		if (spr->IsDTexForceCachedDirty()) {
-			ret = DTexCacheSpr(spr, rp);
+			// todo: not draw to cache at the first time
+			// i don't know why, but it works
+			if (spr->IsDTexCacheBegin()) {
+				ret = DTexCacheSpr(spr, rp);
+			} else {
+				ret = DrawSprImpl(spr, rp);
+				spr->SetDTexCacheBegin(true);
+			}
 		} else {
 			ret = DTexQuerySpr(spr, rp);
 		}

@@ -1,4 +1,5 @@
 #include "DrawMask.h"
+#include "S2_Actor.h"
 #include "RenderCtxStack.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
@@ -23,6 +24,17 @@ namespace s2
 
 RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
+	const Actor* base_actor = base->QueryActor(rp.actor);
+	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
+	if (!visible) {
+		return RENDER_INVISIBLE;
+	}
+	const Actor* mask_actor = mask->QueryActor(rp.actor);
+	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
+	if (!visible) {
+		return RENDER_INVISIBLE;
+	}
+
 	RenderReturn ret = RENDER_OK;
 
 	Statistics::Instance()->AddMask();
@@ -41,7 +53,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawBaseToRT(rt_base, base, rp.color, base->QueryActor(rp.actor));
+	ret |= DrawBaseToRT(rt_base, base, rp.color, base_actor);
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -50,7 +62,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawMaskToRT(rt_mask, mask, mask->QueryActor(rp.actor));
+	ret |= DrawMaskToRT(rt_mask, mask, mask_actor);
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();

@@ -35,10 +35,14 @@ bool ComplexFlatten::Update(const UpdateParams& up, int action)
 
 const Flatten* ComplexFlatten::GetFlatten(int action) const
 {
-	if (action >= 0 && action < m_actions.size()) {
-		return &m_actions[action];
+	if (action == -1 && !m_actions.empty()) {
+		return &m_actions[0];
 	} else {
-		return NULL;
+		if (action >= 0 && action < m_actions.size()) {
+			return &m_actions[action];
+		} else {
+			return NULL;
+		}
 	}
 }
 

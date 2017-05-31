@@ -180,6 +180,22 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 	return idx;
 }
 
+static void build_flatten(const Actor* actor, const std::vector<Sprite*>& src, Flatten& dst)
+{
+	for (int i = 0, n = src.size(); i < n; ++i)
+	{
+		const Sprite* c_spr = src[i];
+		const Actor* c_actor = c_spr->QueryActor(actor);
+		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
+		if (!visible) {
+			continue;
+		}
+		FlattenParams fp;
+		fp.Push(c_spr, c_actor);
+		c_spr->GetSymbol()->Flattening(fp, dst);
+	}
+}
+
 void ComplexSymbol::BuildFlatten(const Actor* actor) const
 {
 	// todo: flatten dirty
@@ -189,21 +205,17 @@ void ComplexSymbol::BuildFlatten(const Actor* actor) const
 	}
 
 	std::vector<Flatten> actions;
-	actions.resize(m_actions.size());
-	for (int i = 0, n = m_actions.size(); i < n; ++i)
+	if (m_actions.empty())
 	{
-		const Action& action = m_actions[i];
-		for (int j = 0, m = action.sprs.size(); j < m; ++j) 
-		{
-			const Sprite* c_spr = action.sprs[j];
-			const Actor* c_actor = c_spr->QueryActor(actor);
-			bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
-			if (!visible) {
-				continue;
-			}
-			FlattenParams fp;
-			fp.Push(c_spr, c_actor);
-			c_spr->GetSymbol()->Flattening(fp, actions[i]);
+		actions.resize(1);
+		build_flatten(actor, m_children, actions[0]);
+	}
+	else
+	{
+		actions.resize(m_actions.size());
+		for (int i = 0, n = m_actions.size(); i < n; ++i) {
+			const Action& action = m_actions[i];
+			build_flatten(actor, action.sprs, actions[i]);
 		}
 	}
 

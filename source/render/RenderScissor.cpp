@@ -26,7 +26,7 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 	mgr->FlushShader();
 	mgr->GetContext()->EnableScissor(true);
 
-	if (!no_intersect && !m_stack.empty()) {
+	if (!no_intersect && !m_stack.empty() && !m_stack.back().IsInvalid()) {
 		Intersection(m_stack.back(), x, y, w, h);
 	}
 

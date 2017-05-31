@@ -31,10 +31,12 @@ namespace s2
 static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
 static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
-static bool (*C2_INSERT_SPR)(const Sprite*, int tex_id, int tex_w, int tex_h);
-static const float* (*C2_QUERY_SPR)(const Sprite*, int* tex_id);
-static void (*C2_INSERT_SYM)(const Symbol*, int tex_id, int tex_w, int tex_h);
-static const float* (*C2_QUERY_SYM)(const Symbol*, int* tex_id);
+static void (*DTEX_SYM_INSERT)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h);
+static const float* (*DTEX_SYM_QUERY)(uint64_t uid, int* tex_id);
+
+static uint64_t (*GET_SYM_UID)(const Symbol*);
+static uint64_t (*GET_SPR_UID)(const Sprite*);
+static uint64_t (*GET_ACTOR_UID)(const Actor*);
 
 void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
@@ -42,16 +44,21 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 }
 
 void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
-						  bool (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
-						  const float* c2_query_spr(const Sprite*, int* tex_id),
-						  void (*c2_insert_sym)(const Symbol*, int tex_id, int tex_w, int tex_h),
-						  const float* c2_query_sym(const Symbol*, int* tex_id))
+						  void (*dtex_sym_insert)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h),
+						  const float* dtex_sym_query(uint64_t uid, int* tex_id))
 {
 	PREPARE_REDNER_PARAMS = prepare_render_params;
-	C2_INSERT_SPR = c2_insert_spr;
-	C2_QUERY_SPR  = c2_query_spr;
-	C2_INSERT_SYM = c2_insert_sym;
-	C2_QUERY_SYM  = c2_query_sym;
+	DTEX_SYM_INSERT = dtex_sym_insert;
+	DTEX_SYM_QUERY  = dtex_sym_query;
+}
+
+void DrawNode::InitUIDCB(uint64_t (*get_sym_uid)(const Symbol*),
+						 uint64_t (*get_spr_uid)(const Sprite*),
+						 uint64_t (*get_actor_uid)(const Actor*))
+{
+	GET_SYM_UID = get_sym_uid;
+	GET_SPR_UID = get_spr_uid;
+	GET_ACTOR_UID = get_actor_uid;
 }
 
 bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child)
@@ -86,23 +93,25 @@ RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 	if (CullingTestOutside(spr, rp)) {
 		return RENDER_OUTSIDE;
 	}
+	if (!spr->IsDTexForceCached()) {
+		return DrawSprImpl(spr, rp);
+	}
 
 	RenderReturn ret = RENDER_OK;
-	if (spr->IsDTexForceCached()) {
-		if (spr->IsDTexForceCachedDirty()) {
-			// todo: not draw to cache at the first time
-			// i don't know why, but it works
-			if (spr->IsDTexCacheBegin()) {
-				ret = DTexCacheSpr(spr, rp);
-			} else {
-				ret = DrawSprImpl(spr, rp);
-				spr->SetDTexCacheBegin(true);
-			}
+	if (spr->IsDTexForceCachedDirty()) {
+		// todo: not draw to cache at the first time
+		// i don't know why, but it works
+		if (spr->IsDTexCacheBegin()) {
+			ret = DTexCacheSpr(spr, rp);
 		} else {
-			ret = DTexQuerySpr(spr, rp);
+			ret = DrawSprImpl(spr, rp);
+			spr->SetDTexCacheBegin(true);
 		}
 	} else {
-		ret = DrawSprImpl(spr, rp);
+		bool visible = rp.actor ? rp.actor->IsVisible() : spr->IsVisible();
+		if (visible) {
+			ret = DTexQuerySpr(spr, rp);
+		}
 	}
 	return ret;
 }
@@ -365,7 +374,7 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol* sym)
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	C2_INSERT_SYM(sym, rt->GetTexID(), rt->Width(), rt->Height());
+	DTEX_SYM_INSERT(GET_SYM_UID(sym), sym->GetBounding(), rt->GetTexID(), rt->Width(), rt->Height());
 
 	RT->Return(rt);
 
@@ -374,7 +383,7 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol* sym)
 
 const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id)
 {
-	return C2_QUERY_SYM(sym, &tex_id);
+	return DTEX_SYM_QUERY(GET_SYM_UID(sym), &tex_id);
 }
 
 RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
@@ -398,7 +407,11 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	if (loading_finished && !C2_INSERT_SPR(spr, rt->GetTexID(), rt->Width(), rt->Height())) {
+	if (loading_finished) 
+	{
+		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
+		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor);		
+		DTEX_SYM_INSERT(uid, bounding, rt->GetTexID(), rt->Width(), rt->Height());
 		ret |= RENDER_UNKNOWN;
 	}
 
@@ -414,7 +427,8 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
 	int tex_id;
-	const float* texcoords = C2_QUERY_SPR(spr, &tex_id);
+	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
+	const float* texcoords = DTEX_SYM_QUERY(uid, &tex_id);
 	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {
 		ret = DrawSprImpl(spr, rp);

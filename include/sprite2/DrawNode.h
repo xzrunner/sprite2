@@ -19,10 +19,11 @@ class DrawNode
 public:
 	static void InitCB(void (*after_spr)(const Sprite*, const RenderParams&));
 	static void InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
-		                   bool (*c2_insert_spr)(const Sprite*, int tex_id, int tex_w, int tex_h),
-						   const float* c2_query_spr(const Sprite*, int* tex_id),
-						   void (*c2_insert_sym)(const Symbol*, int tex_id, int tex_w, int tex_h),
-						   const float* c2_query_sym(const Symbol*, int* tex_id));
+		                   void (*dtex_sym_insert)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h),
+						   const float* dtex_sym_query(uint64_t uid, int* tex_id));
+	static void InitUIDCB(uint64_t (*get_sym_uid)(const Symbol*),
+		                  uint64_t (*get_spr_uid)(const Sprite*),
+						  uint64_t (*get_actor_uid)(const Actor*));
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 

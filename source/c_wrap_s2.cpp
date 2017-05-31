@@ -1081,17 +1081,6 @@ void s2_actor_scale9_resize(void* actor, int w, int h) {
 	ProxyHelper::ActorScale9Resize(s2_actor, w, h);
 }
 
-extern "C"
-void s2_actor_build_flatten(void* actor) {
-	Actor* s2_actor = static_cast<Actor*>(actor);
-	const Symbol* s2_sym = s2_actor->GetSpr()->GetSymbol();
-	if (s2_sym->Type() == SYM_COMPLEX) {
-		VI_DOWNCASTING<const ComplexSymbol*>(s2_sym)->BuildFlatten(s2_actor);
-	} else if (s2_sym->Type() == SYM_ANIMATION) {
-		VI_DOWNCASTING<const AnimSymbol*>(s2_sym)->BuildFlatten(s2_actor);
-	}
-}
-
 /************************************************************************/
 /* rt                                                                   */
 /************************************************************************/

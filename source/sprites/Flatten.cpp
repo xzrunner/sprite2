@@ -190,11 +190,18 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 	const float* mt = rp.mt.x;
 	for (int i = begin; i < end; ++i, ++ptr_quad)
 	{
+		float xmin = FLT_MAX, ymin = FLT_MAX,
+			  xmax =-FLT_MAX, ymax =-FLT_MAX;
+
 		const sm::vec2* ptr_src = ptr_quad->vertices;
 		sm::vec2* ptr_dst = &VERTEX_BUF[0];
 
 		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
 		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		if (x < xmin) xmin = x;
+		if (x > xmax) xmax = x;
+		if (y < ymin) ymin = y;
+		if (y > ymax) ymax = y;
 		ptr_dst->x = x;
 		ptr_dst->y = y;
 		++ptr_dst;
@@ -202,6 +209,10 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 
 		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
 		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		if (x < xmin) xmin = x;
+		if (x > xmax) xmax = x;
+		if (y < ymin) ymin = y;
+		if (y > ymax) ymax = y;
 		ptr_dst->x = x;
 		ptr_dst->y = y;
 		++ptr_dst;
@@ -209,6 +220,10 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 
 		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
 		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		if (x < xmin) xmin = x;
+		if (x > xmax) xmax = x;
+		if (y < ymin) ymin = y;
+		if (y > ymax) ymax = y;
 		ptr_dst->x = x;
 		ptr_dst->y = y;
 		++ptr_dst;
@@ -216,10 +231,20 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 
 		x = (ptr_src->x * mt[0] + ptr_src->y * mt[2]) + mt[4];
 		y = (ptr_src->x * mt[1] + ptr_src->y * mt[3]) + mt[5];
+		if (x < xmin) xmin = x;
+		if (x > xmax) xmax = x;
+		if (y < ymin) ymin = y;
+		if (y > ymax) ymax = y;
 		ptr_dst->x = x;
 		ptr_dst->y = y;
 		++ptr_dst;
 		++ptr_src;
+
+		if (rp.view_region.IsValid() && 
+			(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
+			 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
+			continue;
+		}
 
 		shader->DrawQuad(&VERTEX_BUF[0].x, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);
 	}

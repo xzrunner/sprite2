@@ -18,6 +18,7 @@ static void release_anim(rg_animation* anim)
 		rg_skin* skin = &sk->skins[i];
 		static_cast<s2::Symbol*>(skin->ud)->RemoveReference();
 	}
+	free(anim);
 }
 
 namespace s2

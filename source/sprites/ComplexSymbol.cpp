@@ -45,6 +45,7 @@ ComplexSymbol::~ComplexSymbol()
 {
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 	if (m_ft) {
+		FlattenMgr::Instance()->Delete(GetID());
 		delete m_ft;
 	}
 }

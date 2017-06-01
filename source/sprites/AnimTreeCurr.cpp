@@ -75,7 +75,7 @@ AnimTreeCurr* AnimTreeCurr::Clone() const
 	return new AnimTreeCurr(*this);
 }
 
-bool AnimTreeCurr::Update(const UpdateParams& up, const Sprite* spr, 
+bool AnimTreeCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
 						  bool loop, float interval, int fps)
 {
 	if (!m_ctrl.IsActive()) {

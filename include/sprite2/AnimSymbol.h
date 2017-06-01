@@ -66,13 +66,16 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
+	// tree
 	const AnimCopy* GetCopy() const;
 	void LoadCopy();
 
+	// flatten
 	void BuildFlatten(const Actor* actor) const;
 	bool HasFlatten() const { return m_ft != NULL; }
-
 	AnimFlatten* GetFlatten() { return m_ft; }
+
+	void BuildCurr();
 	
 	/************************************************************************/
 	/* api for dynamic change                                               */

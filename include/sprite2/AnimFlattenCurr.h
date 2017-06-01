@@ -21,7 +21,7 @@ public:
 	 *  @interface
 	 *    AnimCurr
 	 */
-	virtual bool Update(const UpdateParams& up, const Sprite* spr,
+	virtual bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);	
 	virtual void SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 	virtual void Start(const UpdateParams& up, const Sprite* spr);

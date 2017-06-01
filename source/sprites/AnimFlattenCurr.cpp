@@ -18,7 +18,7 @@ AnimFlattenCurr* AnimFlattenCurr::Clone() const
 	return new AnimFlattenCurr(m_max_frame_idx);
 }
 
-bool AnimFlattenCurr::Update(const UpdateParams& up, const Sprite* spr, 
+bool AnimFlattenCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
 							 bool loop, float interval, int fps)
 {
 	if (!m_ctrl.IsActive()) {
@@ -37,8 +37,8 @@ bool AnimFlattenCurr::Update(const UpdateParams& up, const Sprite* spr,
 		dirty = true;
 	}
 
-	const AnimSymbol* sym = static_cast<const AnimSymbol*>(spr->GetSymbol());
-	AnimFlatten* flatten = const_cast<AnimSymbol*>(sym)->GetFlatten();
+	const AnimSymbol* anim_sym = static_cast<const AnimSymbol*>(sym);
+	AnimFlatten* flatten = const_cast<AnimSymbol*>(anim_sym)->GetFlatten();
 	assert(flatten);
 	if (flatten->Update(up, curr_frame)) {
 		dirty = true;

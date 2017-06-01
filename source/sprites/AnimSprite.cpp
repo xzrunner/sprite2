@@ -99,7 +99,7 @@ bool AnimSprite::Update(const UpdateParams& up)
 
 	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
 	assert(curr);
-	return curr->Update(up, this, m_loop, m_interval, m_fps);
+	return curr->Update(up, GetSymbol(), this, m_loop, m_interval, m_fps);
 }
 
 Sprite* AnimSprite::FetchChildByName(int name, const Actor* actor) const

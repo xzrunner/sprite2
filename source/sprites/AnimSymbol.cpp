@@ -16,7 +16,7 @@
 #include "AABBHelper.h"
 #include "FlattenMgr.h"
 #include "sprite2/Utility.h"
-#include "AnimTreeCurr.h"
+#include "AnimCurrCreator.h"
 
 #include <assert.h>
 
@@ -98,6 +98,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 				assert(curr);
 				frame = curr->GetFrame();
 			} else {
+				assert(m_curr);
 				frame = m_curr->GetFrame();
 			}
 
@@ -129,7 +130,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
 	m_curr->SetTime(time);
-	return m_curr->Update(up, NULL);
+	return m_curr->Update(up, this, NULL);
 }
 
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
@@ -198,11 +199,6 @@ void AnimSymbol::LoadCopy()
 		m_copy = new AnimCopy;
 	}
 	m_copy->LoadFromSym(*this);
-
-	assert(!m_curr);
-	AnimTreeCurr* curr = new AnimTreeCurr;
-	curr->SetAnimCopy(m_copy);
-	m_curr = curr;
 }
 
 void AnimSymbol::BuildFlatten(const Actor* actor) const
@@ -220,7 +216,14 @@ void AnimSymbol::BuildFlatten(const Actor* actor) const
 		copy->LoadFromSym(*this);
 		copy->StoreToFlatten(*m_ft, actor);
 		delete copy;
-	}	
+	}
+}
+
+void AnimSymbol::BuildCurr()
+{
+	if (!m_curr) {
+		m_curr = AnimCurrCreator::Create(this, NULL);
+	}
 }
 
 void AnimSymbol::AddLayer(Layer* layer)

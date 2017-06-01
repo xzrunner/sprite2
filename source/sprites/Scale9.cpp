@@ -202,7 +202,7 @@ void Scale9::Flattening(const FlattenParams& fp, Flatten& ft) const
 		}
 		Sprite* spr = m_grids[i];
 		FlattenParams c_fp = fp;
-		c_fp.Push(spr);
+		c_fp.SetSpr(spr);
 		spr->GetSymbol()->Flattening(c_fp, ft);
 	}
 }

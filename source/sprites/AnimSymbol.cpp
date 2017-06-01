@@ -134,7 +134,7 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 
 void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
-	ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetMat());
+	ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());
 	BuildFlatten(fp.GetActor());
 }
 

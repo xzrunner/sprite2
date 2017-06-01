@@ -27,6 +27,7 @@ public:
 	int QueryID(const std::string& str);
 
 	static bool IsTmpName(int id);
+	static bool IsNormalName(int id);
 
 private:
 	enum NameType

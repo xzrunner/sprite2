@@ -17,8 +17,9 @@ void ComplexFlatten::Clear()
 
 RenderReturn ComplexFlatten::Draw(const RenderParams& rp, int action) const
 {
-	if (action >= 0 && action < m_actions.size()) {
-		return m_actions[action].Draw(rp);
+	const Flatten* flatten = GetFlatten(action);
+	if (flatten) {
+		return flatten->Draw(rp);
 	} else {
 		return RENDER_NO_DATA;
 	}
@@ -26,8 +27,9 @@ RenderReturn ComplexFlatten::Draw(const RenderParams& rp, int action) const
 
 bool ComplexFlatten::Update(const UpdateParams& up, int action)
 {
-	if (action >= 0 && action < m_actions.size()) {
-		return m_actions[action].Update(up, NULL);
+	const Flatten* flatten = GetFlatten(action);
+	if (flatten) {
+		return const_cast<Flatten*>(flatten)->Update(up, NULL);
 	} else {
 		return false;
 	}

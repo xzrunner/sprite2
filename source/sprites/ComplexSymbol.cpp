@@ -17,6 +17,7 @@
 #include "FlattenParams.h"
 #include "AABBHelper.h"
 #include "sprite2/Statistics.h"
+#include "FlattenMgr.h"
 
 #include <SM_Test.h>
 
@@ -148,10 +149,19 @@ void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	BuildFlatten(fp.GetActor());
 
-	int action = GetAction(fp.GetSpr(), fp.GetActor());
-	const Flatten* curr_ft = m_ft->GetFlatten(action);
-	if (curr_ft) {
-		ft.Combine(*curr_ft, fp.GetMat());
+	if (SprNameMap::IsNormalName(fp.GetSpr()->GetName())) 
+	{
+		ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());
+	} 
+	else 
+	{
+		int action = GetAction(fp.GetSpr(), fp.GetActor());
+		const Flatten* curr_ft = m_ft->GetFlatten(action);
+		if (curr_ft) {
+			S2_MAT mat;
+			Utility::PrepareMat(fp.GetPrevMat(), fp.GetSpr(), fp.GetActor(), mat);
+			ft.Combine(*curr_ft, mat);
+		}
 	}
 }
 
@@ -191,7 +201,8 @@ static void build_flatten(const Actor* actor, const std::vector<Sprite*>& src, F
 			continue;
 		}
 		FlattenParams fp;
-		fp.Push(c_spr, c_actor);
+		fp.SetSpr(c_spr);
+		fp.SetActor(c_actor);		
 		c_spr->GetSymbol()->Flattening(fp, dst);
 	}
 }
@@ -221,6 +232,7 @@ void ComplexSymbol::BuildFlatten(const Actor* actor) const
 
 	m_ft = new ComplexFlatten;
 	m_ft->SetData(actions);
+	FlattenMgr::Instance()->Add(GetID(), m_ft);
 
 	if (actor) {
 		actor->SetFlattenDirty(false);

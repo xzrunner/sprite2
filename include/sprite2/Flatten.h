@@ -26,7 +26,7 @@ class Flatten
 public:
 	Flatten();
 
-	void Combine(const Flatten& ft, const S2_MAT& mt);
+	void Combine(const Flatten& ft, const S2_MAT& prev_mt);
 
 	void Clear();
 
@@ -35,7 +35,7 @@ public:
 	void SetFrame(const UpdateParams& up, int frame);
 
 	void AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4]);
-	void AddNode(Sprite* spr, Actor* actor, const S2_MAT& mat);
+	void AddNode(Sprite* spr, Actor* actor, const S2_MAT& prev_mat);
 
 	void UpdateTexcoords() const;
 
@@ -58,7 +58,7 @@ private:
 	public:
 		Sprite* spr;
 		Actor*  actor;
-		S2_MAT  mat;
+		S2_MAT  prev_mat;
 		int     idx;
 
 	public:

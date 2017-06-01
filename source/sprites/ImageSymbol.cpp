@@ -122,7 +122,9 @@ void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	sm::vec2 vertices[4];
 	sm::rect sz = GetBounding();
-	const S2_MAT& mt = fp.GetMat();
+	
+	S2_MAT mt;
+	Utility::PrepareMat(fp.GetPrevMat(), fp.GetSpr(), fp.GetActor(), mt);
 	vertices[0] = mt * sm::vec2(sz.xmin, sz.ymin);
 	vertices[1] = mt * sm::vec2(sz.xmax, sz.ymin);
 	vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);

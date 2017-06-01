@@ -13,16 +13,17 @@ public:
 	FlattenParams(const FlattenParams& params);
 	FlattenParams& operator = (const FlattenParams& params);
 
-	void Push(const Sprite* spr, const Actor* actor = NULL);
-
-	const S2_MAT& GetMat() const { return m_mt; }
-	void SetMat(const S2_MAT& mt) { m_mt = mt; }
+ 	const S2_MAT& GetPrevMat() const { return m_prev_mt; }
+ 	void SetPrevMat(const S2_MAT& mt) { m_prev_mt = mt; }
 
 	const Sprite* GetSpr() const { return m_spr; }
+	void SetSpr(const Sprite* spr) { m_spr = spr; }
+
 	const Actor* GetActor() const { return m_actor; }
+	void SetActor(const Actor* actor) { m_actor = actor; }
 
 private:
-	S2_MAT m_mt;
+	S2_MAT m_prev_mt;
 
 	const Sprite* m_spr;
 	const Actor*  m_actor;

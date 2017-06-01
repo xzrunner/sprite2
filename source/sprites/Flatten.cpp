@@ -16,11 +16,12 @@ namespace s2
 {
 
 Flatten::Flatten()
+	: m_flags(0)
 {
 	InitFlags();
 }
 
-void Flatten::Combine(const Flatten& ft, const S2_MAT& mt) 
+void Flatten::Combine(const Flatten& ft, const S2_MAT& prev_mt) 
 {
 	int base = m_quads.size();
 
@@ -28,11 +29,12 @@ void Flatten::Combine(const Flatten& ft, const S2_MAT& mt)
 	for (int i = 0, n = ft.m_quads.size(); i < n; ++i) 
 	{
 		Quad q = ft.m_quads[i];
-		q.vertices[0] = mt * q.vertices[0];
-		q.vertices[1] = mt * q.vertices[1];
-		q.vertices[2] = mt * q.vertices[2];
-		q.vertices[3] = mt * q.vertices[3];
+		q.vertices[0] = prev_mt * q.vertices[0];
+		q.vertices[1] = prev_mt * q.vertices[1];
+		q.vertices[2] = prev_mt * q.vertices[2];
+		q.vertices[3] = prev_mt * q.vertices[3];
 		m_images.push_back(ft.m_images[i]);
+		SetTexcoordsNeedUpdate(true);
 		m_quads.push_back(q);
 	}
 
@@ -41,13 +43,14 @@ void Flatten::Combine(const Flatten& ft, const S2_MAT& mt)
 	{
 		m_nodes.push_back(ft.m_nodes[i]);
 		Node& node = m_nodes.back();
-		node.mat = mt * node.mat;
+		node.prev_mat = prev_mt * node.prev_mat;
 		node.idx = base + node.idx;
 	}
 }
 
 void Flatten::Clear() 
 { 
+	SetTexcoordsNeedUpdate(true);
 	m_images.clear();
 	m_quads.clear(); 
 	m_nodes.clear();
@@ -55,17 +58,21 @@ void Flatten::Clear()
 
 RenderReturn Flatten::Draw(const RenderParams& rp) const
 {
-	// todo: should use quad's color
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-	shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-
 	RenderReturn ret = RENDER_OK;
 
+	if (!rp.IsDisableDTexC2() && IsTexcoordsNeedUpdate()) {
+		UpdateDTexC2(0, m_quads.size());
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	if (m_nodes.empty())
 	{
-		ret = DrawQuads(0, m_quads.size(), rp, shader);
+		if (m_quads.empty()) {
+			ret = RENDER_NO_DATA;
+		} else {
+			ret = DrawQuads(0, m_quads.size(), rp, shader);
+		}
 	} 
 	else
 	{
@@ -73,14 +80,19 @@ RenderReturn Flatten::Draw(const RenderParams& rp) const
 		for (int i = 0, n = m_nodes.size(); i < n; ++i)
 		{
 			const Node& node = m_nodes[i];
+
 			begin = end;
 			end = node.idx;
-			ret |= DrawQuads(begin, end, rp, shader);
+			if (begin == end) {
+				ret |= RENDER_NO_DATA;
+			} else {
+				ret |= DrawQuads(begin, end, rp, shader);
+			}
 
 			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 			*rp_child = rp;
 			rp_child->actor = node.actor;
-			sm::Matrix2D::Mul(node.mat, rp.mt, rp_child->mt);
+			sm::Matrix2D::Mul(node.prev_mat, rp.mt, rp_child->mt);
 			DrawNode::Draw(node.spr, *rp_child);
 			RenderParamsPool::Instance()->Push(rp_child); 
 		}
@@ -138,23 +150,26 @@ void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
 	img->QueryTexcoords(false, &q.texcoords[0].x, q.tex_id);
 	memcpy(q.vertices, vertices, sizeof(q.vertices));
 	m_quads.push_back(q);
+
+	SetTexcoordsNeedUpdate(true);
 }
 
-void Flatten::AddNode(Sprite* spr, Actor* actor, const S2_MAT& mat)
+void Flatten::AddNode(Sprite* spr, Actor* actor, const S2_MAT& prev_mat)
 {
 	Node node;
 	if (spr) {
 		spr->AddReference();
 	}
-	node.spr = spr;
-	node.actor = actor;
-	node.mat = mat;
-	node.idx = m_quads.size();
+	node.spr      = spr;
+	node.actor    = actor;
+	node.prev_mat = prev_mat;
+	node.idx      = m_quads.size();
 	m_nodes.push_back(node);
 }
 
 void Flatten::UpdateTexcoords() const
 {
+	SetTexcoordsNeedUpdate(true);
 	for (int i = 0, n = m_quads.size(); i < n; ++i) {
 		const ImageSymbol* src = m_images[i];
 		Quad& dst = m_quads[i];
@@ -164,13 +179,9 @@ void Flatten::UpdateTexcoords() const
 
 RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::Sprite2Shader* shader) const
 {
-	if (begin == end) {
-		return RENDER_NO_DATA;
-	}
-
-	if (!rp.IsDisableDTexC2() && IsTexcoordsNeedUpdate()) {
-		UpdateDTexC2(begin, end);
-	}
+	// todo: should use quad's color
+	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+	shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 
 	static sm::vec2 VERTEX_BUF[4];
 
@@ -218,6 +229,11 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 
 void Flatten::UpdateDTexC2(int begin, int end) const
 {
+	if (m_quads.empty()) {
+		SetTexcoordsNeedUpdate(false);
+		return;
+	}
+
 	bool loaded = false;
 
 	bool need_update = false;
@@ -288,7 +304,7 @@ Flatten::Node& Flatten::Node::operator = (const Node& node)
 
 	actor = node.actor;
 
-	mat = node.mat;
+	prev_mat = node.prev_mat;
 
 	idx = node.idx;
 

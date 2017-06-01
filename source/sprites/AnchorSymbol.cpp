@@ -59,7 +59,8 @@ void AnchorSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 	{
 		const Sprite* real_spr = real_actor->GetSpr();
 		FlattenParams c_fp = fp;
-		c_fp.Push(real_spr, real_actor);
+		c_fp.SetSpr(real_spr);
+		c_fp.SetActor(real_actor);
 		real_spr->GetSymbol()->Flattening(c_fp, ft);
 	}
 }

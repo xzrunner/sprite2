@@ -34,6 +34,11 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 
 void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 {
+	S2_MAT prev_mat;
+	if (actor) {
+		Utility::PrepareMat(S2_MAT(), actor->GetSpr(), actor, prev_mat);
+	}
+
 	// prepare slots
 	std::vector<Sprite*> slots;
 	slots.resize(m_slots.size());
@@ -92,26 +97,15 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 					// todo AnimLerp::LerpSpecial
 					spr = tween;
 				}
-				else if (item.prev != -1)
-				{
-					assert(item.lerp == -1);
-					const Frame& pre_frame = layer.frames[curr_frame - 1];
-					const Item& pre_item = pre_frame.items[item.prev];
-					assert(item.slot == pre_item.slot);
-					Sprite* tween = slots[pre_item.slot];
-					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[pre_item.lerp], time - pre_frame.time);
-					// todo AnimLerp::LerpSpecial
-					spr = tween;
-				}
 				else
 				{
-					spr = m_slots[item.slot];
+					spr = item.spr;
 				}
+
 				FlattenParams fp;
-				if (actor) {
-					fp.SetMat(actor->GetLocalMat() * actor->GetSpr()->GetLocalMat());	
-				}
-				fp.Push(spr, spr->QueryActor(actor));
+				fp.SetPrevMat(prev_mat);
+				fp.SetSpr(spr);
+				fp.SetActor(spr->QueryActor(actor));
 				spr->GetSymbol()->Flattening(fp, frame);	
 			}
 		}

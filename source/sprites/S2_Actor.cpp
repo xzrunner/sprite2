@@ -181,7 +181,7 @@ void Actor::InitFlags()
 
 void Actor::SetVisible(bool flag, bool up_aabb) const
 {
-	if (m_flags & FLAG_VISIBLE == flag) {
+	if ((m_flags & FLAG_VISIBLE) == flag) {
 		return;
 	}
 	if (flag) {

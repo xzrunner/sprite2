@@ -11,6 +11,32 @@ extern "C"
 #include <stdbool.h>
 #endif // __cplusplus
 
+enum S2_SYM_TYPE
+{
+	S2_SYM_INVALID = 0,
+	S2_SYM_UNKNOWN,
+
+	S2_SYM_IMAGE = 10,
+	S2_SYM_SCALE9,
+	S2_SYM_ICON,
+	S2_SYM_TEXTURE,
+	S2_SYM_TEXTBOX,
+	S2_SYM_COMPLEX,
+	S2_SYM_ANIMATION,
+	S2_SYM_ANIM2,
+	S2_SYM_PARTICLE3D,
+	S2_SYM_PARTICLE2D,
+	S2_SYM_SHAPE,
+	S2_SYM_MESH,
+	S2_SYM_MASK,
+	S2_SYM_TRAIL,
+	S2_SYM_SKELETON,
+	S2_SYM_MODEL,
+
+	S2_SYM_PROXY = 99,
+	S2_SYM_ANCHOR = 100,
+};
+
 void s2_init();
 
 void s2_on_size(int w, int h);

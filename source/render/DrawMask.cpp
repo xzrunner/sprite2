@@ -75,8 +75,111 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 	return ret;
 }
 
+//RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
+//{
+//	const Actor* base_actor = base->QueryActor(rp.actor);
+//	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
+//	if (!visible) {
+//		return RENDER_INVISIBLE;
+//	}
+//	const Actor* mask_actor = mask->QueryActor(rp.actor);
+//	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
+//	if (!visible) {
+//		return RENDER_INVISIBLE;
+//	}
+//
+//	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+//
+//	rc->ClearAll();
+//
+//	rc->ColorMask(false, false, false, true);
+//
+//	rc->EnableStencil(true);
+//	rc->EnableAlpha(true);
+//
+//	rc->StencilFunc(ur::RenderContext::ST_ALWAYS, 0, 0);
+//	rc->StencilOp(ur::RenderContext::ST_KEEP, ur::RenderContext::ST_KEEP, ur::RenderContext::ST_INCR);	
+//	rc->AlphaFunc();
+//
+//	RenderParams rp_child = rp;
+//	rp_child.actor = mask_actor;
+//	DrawNode::Draw(mask, rp_child);
+//	sl::ShaderMgr::Instance()->FlushShader();
+//
+//	rc->EnableAlpha(false);
+//	
+//	rc->ColorMask(true, true, true, true);
+//	
+//// 	rc->StencilFunc(ur::RenderContext::ST_LESS, 1, -1);
+//	rc->StencilFunc(ur::RenderContext::ST_NEVER, 0, 0);
+//
+// 	rp_child.actor = base_actor;
+// 	DrawNode::Draw(base, rp_child);
+// 	sl::ShaderMgr::Instance()->FlushShader();
+//
+//	rc->EnableStencil(false);
+//
+//	return RENDER_OK;
+//}
+
+RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
+{
+	const Actor* base_actor = base->QueryActor(rp.actor);
+	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
+	if (!visible) {
+		return RENDER_INVISIBLE;
+	}
+	const Actor* mask_actor = mask->QueryActor(rp.actor);
+	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
+	if (!visible) {
+		return RENDER_INVISIBLE;
+	}
+
+	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+
+	rc->EnableStencil(true);
+	rc->ClearStencil(0);
+
+	rc->ClearAll();
+	{
+		rc->ColorMask(false, false, false, true);
+
+		rc->StencilFunc(ur::RenderContext::ST_NEVER, 0, 0);
+		rc->StencilOp(ur::RenderContext::ST_INCR, ur::RenderContext::ST_INCR, ur::RenderContext::ST_INCR);
+
+		rc->EnableAlpha(true);
+		rc->AlphaFunc();
+
+		RenderParams rp_child = rp;
+		rp_child.actor = mask_actor;
+		DrawNode::Draw(mask, rp_child);
+		sl::ShaderMgr::Instance()->FlushShader();
+
+		sl::ShaderMgr::Instance()->FlushShader();
+
+		rc->EnableAlpha(false);
+		rc->ColorMask(true, true, true, true);
+	}
+
+	{
+		rc->StencilFunc(ur::RenderContext::ST_NOTEQUAL, 0, 1);
+		rc->StencilOp(ur::RenderContext::ST_KEEP, ur::RenderContext::ST_KEEP, ur::RenderContext::ST_KEEP);
+
+		RenderParams rp_child = rp;
+		rp_child.actor = base_actor;
+		DrawNode::Draw(base, rp_child);
+		sl::ShaderMgr::Instance()->FlushShader();
+
+		sl::ShaderMgr::Instance()->FlushShader();
+	}
+
+	rc->EnableStencil(false);
+
+	return RENDER_OK;
+}
+
 RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
-							const RenderColor& rc, const Actor* actor)
+									const RenderColor& rc, const Actor* actor)
 {
 	rt->Bind();
 

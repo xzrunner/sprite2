@@ -59,6 +59,7 @@ RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	RenderReturn ret = RENDER_OK;
 	if (m_base && m_mask) {
 		ret = DrawMask::Draw(m_base, m_mask, *rp_child);
+//		ret = DrawMask::DrawByStencil(m_base, m_mask, *rp_child);
 	} else {
 		if (m_base) {
 			rp_child->actor = m_base->QueryActor(rp.actor);

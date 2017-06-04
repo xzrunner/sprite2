@@ -17,6 +17,7 @@
 #include "S2_RVG.h"
 #include "DrawDownsample.h"
 #include "sprite2/Utility.h"
+#include "BoundingBox.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -76,6 +77,12 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	if (actor && !actor->IsVisible()) {
 		child = rp;
 		return false;
+	}
+
+	if (rp.min_edge > 0) {
+		if (IsSmall(spr, actor, rp.min_edge)) {
+			return false;
+		}
 	}
 
 	Utility::PrepareColor(rp.color, spr, actor, child.color);
@@ -569,6 +576,24 @@ RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& r
 	}
 
 	return ret;
+}
+
+bool DrawNode::IsSmall(const Sprite* spr, const Actor* actor, int min_edge)
+{
+	if (actor) {
+		const sm::rect& rect = actor->GetAABB().GetRect();
+		if (rect.xmax - rect.xmin < min_edge &&
+			rect.ymax - rect.ymin < min_edge) {
+			return true;
+		}
+	}
+	if (spr) {
+		sm::vec2 sz = spr->GetBounding(actor)->GetSize().Size();
+		if (sz.x < min_edge && sz.y < min_edge) {
+			return true;
+		}
+	}
+	return false;
 }
 
 }

@@ -55,6 +55,10 @@ int Particle3dSymbol::Type() const
 
 RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+	if (rp.IsDisableParticle3d()) {
+		return RENDER_SKIP;
+	}
+
 	if (!IsVisible(rp, spr)) {
 		return RENDER_INVISIBLE;
 	}

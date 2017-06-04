@@ -63,6 +63,8 @@ private:
 
 	static RenderReturn DrawSprImplFinal(const Sprite* spr, const RenderParams& rp);
 
+	static bool IsSmall(const Sprite* spr, const Actor* actor, int min_edge);
+
 }; // DrawNode
 
 }

@@ -15,6 +15,7 @@ static const RenderReturn RENDER_INVISIBLE  = 0x00000004;
 static const RenderReturn RENDER_NO_RT      = 0x00000008;
 static const RenderReturn RENDER_NO_DATA    = 0x00000010;
 static const RenderReturn RENDER_ON_LOADING = 0x00000020;
+static const RenderReturn RENDER_SKIP       = 0x00000040;
 
 }
 

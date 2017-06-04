@@ -192,7 +192,7 @@ int s2_symbol_get_type_id(const char* name)
 
 extern "C"
 void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
-				 float xmin, float ymin, float xmax, float ymax)
+				 float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
 {
 	RenderParams* rp = RenderParamsPool::Instance()->Pop();
 	rp->Reset();
@@ -223,6 +223,11 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	rp->actor = s2_actor;
 
 //	rp->SetDisableCulling(true);
+
+	if (flag & S2_DISABLE_DRAW_PARTICLE3D == 1) {
+		rp->SetDisableParticle3d(true);
+	}
+	rp->min_edge = min_edge;
 
 	DrawNode::Draw(s2_actor->GetSpr(), *rp);
 

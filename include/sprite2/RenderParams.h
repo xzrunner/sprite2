@@ -34,6 +34,8 @@ public:
 	
 	const Actor* actor;
 
+	int min_edge;
+
 public:
 	RenderParams();
 	RenderParams(const RenderParams& params);
@@ -56,6 +58,8 @@ private:
 	static const uint32_t FLAG_DISABLE_DTEX_C2      = 0x00000010;
 	static const uint32_t FLAG_DISABLE_CULLING      = 0x00000020;
 
+	static const uint32_t FLAG_DISABLE_PARTICLE3D   = 0x00000040;
+
 public:
 	S2_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
 	S2_FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
@@ -63,6 +67,8 @@ public:
 	S2_FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
 	S2_FLAG_METHOD(DisableDTexC2, FLAG_DISABLE_DTEX_C2)
 	S2_FLAG_METHOD(DisableCulling, FLAG_DISABLE_CULLING)
+
+	S2_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
 
 private:
 	mutable uint32_t m_flags;

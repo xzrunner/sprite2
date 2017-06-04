@@ -563,6 +563,16 @@ void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 /************************************************************************/
 
 extern "C"
+void s2_actor_retain(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+}
+
+extern "C"
+void s2_actor_release(void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+}
+
+extern "C"
 void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				   float xmin, float ymin, float xmax, float ymax) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
@@ -748,7 +758,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
 	Sprite* old_spr = p_spr->FetchChildByName(name_id, p_actor);
 	if (!old_spr) {
-		return -1;		
+		return -1;
 	}
 
 	int sym_type = old_spr->GetSymbol()->Type();
@@ -766,7 +776,9 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 		old_spr->RemoveReference();
 		return ret;
 	} else if (sym_type == SYM_ANCHOR) {
-		return _actor_mount(p_actor, old_spr, new_actor);
+		int ret = _actor_mount(p_actor, old_spr, new_actor);
+		old_spr->RemoveReference();
+		return ret;
 	} else {
 		return -2;
 	}

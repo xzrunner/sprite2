@@ -158,11 +158,14 @@ Sprite* AnimTreeCurr::FetchChildByName(int name, const Actor* actor) const
 
 Sprite* AnimTreeCurr::FetchChildByIdx(int idx) const
 {
-	if (idx < 0 || idx >= m_slots.size()) {
-		return NULL;
-	} else {
-		return m_slots[idx];
+	Sprite* ret = NULL;
+	if (idx >= 0 && idx < m_slots.size()) {
+		ret = m_slots[idx];
 	}
+	if (ret) {
+		ret->AddReference();
+	}
+	return ret;
 }
 
 VisitResult AnimTreeCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const

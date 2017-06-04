@@ -83,13 +83,16 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 Sprite* MaskSprite::FetchChildByName(int name, const Actor* actor) const
 {
+	Sprite* ret = NULL;
 	if (name == SprNameMap::BASE_ID) {
-		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
+		ret = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
 	} else if (name == SprNameMap::MASK_ID) {
-		return const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
-	} else {
-		return NULL;
+		ret = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
 	}
+	if (ret) {
+		ret->AddReference();
+	}
+	return ret;
 }
 
 VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const

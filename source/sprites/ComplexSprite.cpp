@@ -97,13 +97,16 @@ Sprite* ComplexSprite::FetchChildByName(int name, const Actor* actor) const
 
 Sprite* ComplexSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
+	Sprite* ret = NULL;
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
 	if (idx >= 0 && idx < children.size()) {
-		return children[idx];
-	} else {
-		return NULL;
+		ret = children[idx];
 	}
+	if (ret) {
+		ret->AddReference();
+	}
+	return ret;
 }
 
 VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const

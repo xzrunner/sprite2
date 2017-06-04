@@ -57,6 +57,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		Sprite* base_spr = spr->FetchChildByName(name_id, params.actor);
 		const Actor* c_actor = base_spr->QueryActor(params.actor);
 		bool visible = c_actor ? c_actor->IsVisible() : base_spr->IsVisible();
+		base_spr->RemoveReference();
 		if (!visible) {
 			return VISIT_OVER;
 		}

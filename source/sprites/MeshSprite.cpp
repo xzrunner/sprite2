@@ -131,7 +131,11 @@ Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const
 		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
 		const_cast<Symbol*>(mesh->GetBaseSymbol())->Traverse(visitor);
 	}
-	return visitor.GetResult();
+	Sprite* ret = visitor.GetResult();
+	if (ret) {
+		ret->AddReference();
+	}
+	return ret;
 }
 
 void MeshSprite::Lerp(const MeshSprite* begin, const MeshSprite* end, float process)

@@ -21,6 +21,16 @@ ProxySprite* ProxySprite::Clone() const
 	return new ProxySprite(*this);
 }
 
+void ProxySprite::Retain(const Actor* actor)
+{
+	AddParentProxyRef(actor);
+}
+
+void ProxySprite::Release(const Actor* actor)
+{
+	DelParentProxyRef(actor);	
+}
+
 void ProxySprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	const std::vector<std::pair<const Actor*, Sprite*> >& items 
@@ -74,7 +84,15 @@ Sprite* ProxySprite::FetchChildByName(int name, const Actor* actor) const
 			}
 		}
 	}
-	return ProxyHelper::BuildGroup(group);
+
+	Sprite* ret = ProxyHelper::BuildGroup(group, true);
+	if (ret) {
+		AddParentProxyRef(actor);
+	}
+	for (int i = 0, n = group.size(); i < n; ++i) {
+		group[i].second->RemoveReference();
+	}
+	return ret;
 }
 
 Sprite* ProxySprite::FetchChildByIdx(int idx, const Actor* actor) const
@@ -94,11 +112,20 @@ Sprite* ProxySprite::FetchChildByIdx(int idx, const Actor* actor) const
 		for (int i = 0, n = items.size(); i < n; ++i) {
 			Sprite* child = items[i].second->FetchChildByIdx(idx, actor);
 			if (child) {
+
 				group.push_back(std::make_pair(actor, child));
 			}
 		}
 	}
-	return ProxyHelper::BuildGroup(group);
+
+	Sprite* ret = ProxyHelper::BuildGroup(group, true);
+	if (ret) {
+		AddParentProxyRef(actor);
+	}
+	for (int i = 0, n = group.size(); i < n; ++i) {
+		group[i].second->RemoveReference();
+	}
+	return ret;
 }
 
 void ProxySprite::SetSymbol(Symbol* sym)
@@ -179,6 +206,22 @@ VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisit
 		}
 	}
 	return VISIT_OVER;
+}
+
+void ProxySprite::AddParentProxyRef(const Actor* parent) const
+{
+	while (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+		parent->GetSpr()->AddReference();
+		parent = parent->GetParent();
+	}
+}
+
+void ProxySprite::DelParentProxyRef(const Actor* parent) const
+{
+	while (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
+		parent->GetSpr()->RemoveReference();
+		parent = parent->GetParent();
+	}
 }
 
 } 

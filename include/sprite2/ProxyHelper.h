@@ -16,7 +16,8 @@ class Actor;
 class ProxyHelper
 {
 public:
-	static Sprite* BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items);
+	// should be release outside
+	static Sprite* BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items, bool force_group = false);
 
 	/************************************************************************/
 	/* sprite                                                               */

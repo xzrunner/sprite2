@@ -30,12 +30,15 @@
 namespace s2
 {
 
-Sprite* ProxyHelper::BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items)
+Sprite* ProxyHelper::BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items, bool force_group)
 {
 	Sprite* ret = NULL;
-	if (items.size() == 1) 
+	if (!force_group && items.size() == 1) 
 	{
 		ret = items[0].second;
+		if (ret) {
+			ret->AddReference();
+		}
 	} 
 	else if (items.size() > 1) 
 	{

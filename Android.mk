@@ -23,6 +23,7 @@ LOCAL_C_INCLUDES := \
 	${POLYMESH_SRC_PATH}/include \
 	${PS_SRC_PATH} \
 	${MTRAIL_SRC_PATH} \
+	${GLP_SRC_PATH} \
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH) -name "*.cpp" -print)) \

@@ -33,7 +33,9 @@ RenderReturn AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	*rp_child = rp;
 	rp_child->actor = GetRealActor(spr, rp.actor);
 	if (rp_child->actor) {
-		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, rp_child->mt);
+		S2_MAT m;
+		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, m);
+		rp_child->mt = m;
 //		rp_child->SetDisableCulling(true);
 		ret = DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
 	} else {

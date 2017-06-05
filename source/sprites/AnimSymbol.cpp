@@ -18,7 +18,7 @@
 #include "sprite2/Utility.h"
 #include "AnimCurrCreator.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "Statistics.h"
+#include "sprite2/Statistics.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>

@@ -36,6 +36,10 @@ public:
 
 	int min_edge;
 
+	int level;
+
+	uint32_t parent_id;
+
 public:
 	RenderParams();
 	RenderParams(const RenderParams& params);

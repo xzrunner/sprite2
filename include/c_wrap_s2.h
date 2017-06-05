@@ -283,6 +283,14 @@ struct s2_stat_pingpong_count {
 };
 void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count*);
 
+struct s2_top_node {
+	uint32_t id;
+	uint32_t parent_id;
+	int      level;
+	uint32_t cost;
+};
+void s2_stat_get_top_nodes(struct s2_top_node*, int n);
+
 struct s2_stat_dc_count {
 	int scissor;
 };

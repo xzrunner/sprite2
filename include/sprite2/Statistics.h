@@ -3,6 +3,10 @@
 
 #include <CU_Singleton.h>
 
+#include <list>
+
+#include <stdint.h>
+
 namespace s2
 {
 
@@ -39,6 +43,34 @@ public:
 
 	}; // DrawCallCount
 
+	class Checkpoint
+	{
+	public:
+		Checkpoint(uint32_t id, uint32_t parent_id, int level);
+		~Checkpoint();
+
+	private:
+		uint32_t m_begin;
+
+		uint32_t m_id;
+		uint32_t m_parent_id;
+		int      m_level;
+
+		friend class Statistics;
+
+	}; // Checkpoint
+
+	struct DrawNode
+	{
+		uint32_t id;
+		uint32_t parent_id;
+		int      level;
+		uint32_t cost;
+
+		DrawNode(uint32_t id, uint32_t parent_id, int level, uint32_t cost) 
+			: id(id), parent_id(parent_id), level(level), cost(cost) {}
+	};
+
 public:
 	void AddOverdrawArea(float area) { m_overdraw_area += area; }
 
@@ -58,13 +90,25 @@ public:
 	void AddScissor() { ++m_dc_count.scissor; }
 	const DrawCallCount& GetDrawCallCount() const { return m_dc_count; }
 
+	const std::list<DrawNode>& GetTopNodes() const { return m_top_nodes; }
+
 	void Reset();
+
+private:
+	static const int TOP_NODE_NUM = 10;
+
+private:
+	void TopNodeInsert(const DrawNode& node);
 
 private:
 	float m_overdraw_area;
 
 	PingPongCount m_pp_count;
 	DrawCallCount m_dc_count;
+
+	// node's draw time
+	std::list<DrawNode> m_top_nodes;
+	uint32_t m_top_min_time;
 
 	SINGLETON_DECLARATION(Statistics);
 

@@ -1293,6 +1293,21 @@ void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count* dst)
 }
 
 extern "C"
+void s2_stat_get_top_nodes(struct s2_top_node* dst, int n)
+{
+	const std::list<Statistics::DrawNode>& src = Statistics::Instance()->GetTopNodes();
+	std::list<Statistics::DrawNode>::const_iterator itr = src.begin();
+	for (int i = 0; itr != src.end() && i < n; ++itr, ++i) 
+	{
+		s2_top_node* d = &dst[i];
+		d->id = itr->id;
+		d->parent_id = itr->parent_id;
+		d->level = itr->level;
+		d->cost = itr->cost;
+	}
+}
+
+extern "C"
 void s2_stat_get_dc_count(struct s2_stat_dc_count* dst)
 {
 	const Statistics::DrawCallCount& src = Statistics::Instance()->GetDrawCallCount();

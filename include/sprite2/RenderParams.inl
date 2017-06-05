@@ -13,6 +13,8 @@ RenderParams::RenderParams()
 	, m_flags(0)
 	, m_next(NULL)
 	, min_edge(0)
+	, level(0)
+	, parent_id(0)
 {
 	SetChangeShader(true);
 }
@@ -29,6 +31,8 @@ RenderParams::RenderParams(const RenderParams& params)
 	, m_flags(params.m_flags)
 	, m_next(NULL)
 	, min_edge(params.min_edge)
+	, level(params.level)
+	, parent_id(params.parent_id)
 {
 }
 
@@ -44,6 +48,8 @@ RenderParams& RenderParams::operator = (const RenderParams& params)
 	actor         = params.actor;
 	m_flags       = params.m_flags;
 	min_edge      = params.min_edge;
+	level         = params.level;
+	parent_id     = params.parent_id;
 	return *this;
 }
 
@@ -67,6 +73,9 @@ void RenderParams::Reset()
 	SetChangeShader(true);
 
 	min_edge = 0;
+
+	level = 0;
+	parent_id = 0;
 }
 
 }

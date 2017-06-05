@@ -1,6 +1,7 @@
 #ifndef _SPRITE2_RENDER_PARAMS_H_
 #define _SPRITE2_RENDER_PARAMS_H_
 
+#include "s2_config.h"
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
@@ -36,9 +37,10 @@ public:
 
 	int min_edge;
 
+#ifndef S2_DISABLE_STATISTICS
 	int level;
-
 	uint32_t parent_id;
+#endif // S2_DISABLE_STATISTICS
 
 public:
 	RenderParams();

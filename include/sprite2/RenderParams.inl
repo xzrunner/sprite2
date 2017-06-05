@@ -13,8 +13,10 @@ RenderParams::RenderParams()
 	, m_flags(0)
 	, m_next(NULL)
 	, min_edge(0)
+#ifndef S2_DISABLE_STATISTICS
 	, level(0)
 	, parent_id(0)
+#endif // S2_DISABLE_STATISTICS
 {
 	SetChangeShader(true);
 }
@@ -31,8 +33,10 @@ RenderParams::RenderParams(const RenderParams& params)
 	, m_flags(params.m_flags)
 	, m_next(NULL)
 	, min_edge(params.min_edge)
+#ifndef S2_DISABLE_STATISTICS
 	, level(params.level)
 	, parent_id(params.parent_id)
+#endif // S2_DISABLE_STATISTICS
 {
 }
 
@@ -48,8 +52,10 @@ RenderParams& RenderParams::operator = (const RenderParams& params)
 	actor         = params.actor;
 	m_flags       = params.m_flags;
 	min_edge      = params.min_edge;
+#ifndef S2_DISABLE_STATISTICS
 	level         = params.level;
 	parent_id     = params.parent_id;
+#endif // S2_DISABLE_STATISTICS
 	return *this;
 }
 
@@ -74,8 +80,10 @@ void RenderParams::Reset()
 
 	min_edge = 0;
 
+#ifndef S2_DISABLE_STATISTICS
 	level = 0;
 	parent_id = 0;
+#endif // S2_DISABLE_STATISTICS
 }
 
 }

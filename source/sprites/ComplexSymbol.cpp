@@ -64,8 +64,13 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	int id = spr->GetSymbol()->GetID();
+#ifndef S2_DISABLE_STATISTICS
+	int id = -1;
+	if (spr) {
+		id = spr->GetSymbol()->GetID();
+	}
 	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+#endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
@@ -107,8 +112,10 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 		{
 			const Sprite* child = children[i];
 			rp_child->actor = child->QueryActor(rp.actor);
+#ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 			ret |= DrawNode::Draw(child, *rp_child);
 		}
 	} else {
@@ -116,8 +123,10 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 		{
 			const Sprite* child = children[i];
 			rp_child->actor = child->QueryActor(rp.actor);
+#ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 			if (DrawNode::CullingTestOutside(child, *rp_child)) {
 				continue;
 			}

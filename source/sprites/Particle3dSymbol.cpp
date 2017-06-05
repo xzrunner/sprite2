@@ -9,6 +9,9 @@
 #include "Particle3dEmitter.h"
 #include "P3dEmitterCfg.h"
 #include "Particle3dActor.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "Statistics.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <ps_3d.h>
 #include <shaderlab/ShaderMgr.h>
@@ -55,6 +58,14 @@ int Particle3dSymbol::Type() const
 
 RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	int id = -1;
+	if (spr) {
+		id = spr->GetSymbol()->GetID();
+	}
+	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+#endif // S2_DISABLE_STATISTICS
+
 	if (rp.IsDisableParticle3d()) {
 		return RENDER_SKIP;
 	}
@@ -165,6 +176,10 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
+#ifndef S2_DISABLE_STATISTICS
+	rp_child->parent_id = spr ? spr->GetSymbol()->GetID() : -1;
+	rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
 		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
@@ -191,7 +206,7 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 }
 
 RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr, 
-								   const Particle3dEmitter* et) const
+										   const Particle3dEmitter* et) const
 {
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 
@@ -201,6 +216,10 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
+#ifndef S2_DISABLE_STATISTICS
+	rp_child->parent_id = spr ? spr->GetSymbol()->GetID() : -1;
+	rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 
 	rp_child->color = p3d_spr->GetColor() * rp.color;
 

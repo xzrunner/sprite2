@@ -17,6 +17,9 @@
 #include "FlattenMgr.h"
 #include "sprite2/Utility.h"
 #include "AnimCurrCreator.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "Statistics.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
 
@@ -84,11 +87,23 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
+#ifndef S2_DISABLE_STATISTICS
+	int id = -1;
+	if (spr) {
+		id = spr->GetSymbol()->GetID();
+	}
+	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+#endif // S2_DISABLE_STATISTICS
+
 	RenderReturn ret = RENDER_OK;
 	if (m_ft) 
 	{
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
+#ifndef S2_DISABLE_STATISTICS
+		rp_child->parent_id = id;
+		rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 		if (DrawNode::Prepare(rp, spr, *rp_child)) 
 		{
 			int frame = -1;
@@ -113,6 +128,10 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		if (spr) {
 			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 			*rp_child = rp;
+#ifndef S2_DISABLE_STATISTICS
+			rp_child->parent_id = id;
+			rp_child->level = rp.level + 1;
+#endif // S2_DISABLE_STATISTICS
 			if (DrawNode::Prepare(rp, spr, *rp_child)) {
 				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
 				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);

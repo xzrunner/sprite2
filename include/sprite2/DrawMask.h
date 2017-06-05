@@ -19,7 +19,7 @@ class DrawMask
 {
 public:
 	static RenderReturn Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp);
-	static RenderReturn DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp);
+//	static RenderReturn DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 
 private:
 	static RenderReturn DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc, const Actor* actor);

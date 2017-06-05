@@ -190,7 +190,6 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	sl::Shader* shader = mgr->GetShader();
 
 	RenderParams rp;
-	rp.SetChangeShader(false);
 	rp.color = rc;
 	rp.actor = actor;
 	RenderReturn ret = DrawNode::Draw(base, rp);

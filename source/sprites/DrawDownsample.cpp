@@ -7,7 +7,9 @@
 #include "S2_Symbol.h"
 #include "RenderParams.h"
 #include "SymType.h"
-#include "sprite2/Statistics.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatPingPong.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -28,7 +30,9 @@ void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downs
 		return;
 	}
 
-	Statistics::Instance()->AddDownSample();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddDownSample();
+#endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();
 

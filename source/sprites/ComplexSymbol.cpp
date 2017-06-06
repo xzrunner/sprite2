@@ -16,8 +16,11 @@
 #include "Flatten.h"
 #include "FlattenParams.h"
 #include "AABBHelper.h"
-#include "sprite2/Statistics.h"
 #include "FlattenMgr.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatDrawCall.h"
+#include "sprite2/StatTopNodes.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <SM_Test.h>
 
@@ -69,7 +72,7 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	if (spr) {
 		id = spr->GetSymbol()->GetID();
 	}
-	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
@@ -91,7 +94,9 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
 	if (scissor) 
 	{
-		Statistics::Instance()->AddScissor();
+#ifndef S2_DISABLE_STATISTICS
+		StatDrawCall::Instance()->AddScissor();
+#endif // S2_DISABLE_STATISTICS
 
 		sm::vec2 min = rp_child->mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
 			     max = rp_child->mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);

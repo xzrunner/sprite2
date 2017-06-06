@@ -9,8 +9,9 @@
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/Statistics.h"
-#include "Blackboard.h"
+#include "sprite2/StatPingPong.h"
+#include "sprite2/StatOverdraw.h"
+#include "sprite2/Blackboard.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <SM_Rect.h>
@@ -37,7 +38,9 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 
 	RenderReturn ret = RENDER_OK;
 
-	Statistics::Instance()->AddMask();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddMask();
+#endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -264,7 +267,7 @@ RenderReturn DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_ma
 	}
 	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
 	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	Statistics::Instance()->AddOverdrawArea(area);
+	StatOverdraw::Instance()->AddArea(area);
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

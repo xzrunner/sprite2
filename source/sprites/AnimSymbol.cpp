@@ -18,7 +18,7 @@
 #include "sprite2/Utility.h"
 #include "AnimCurrCreator.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/Statistics.h"
+#include "sprite2/StatTopNodes.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
@@ -92,7 +92,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (spr) {
 		id = spr->GetSymbol()->GetID();
 	}
-	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;

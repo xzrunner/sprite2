@@ -10,7 +10,7 @@
 #include "P3dEmitterCfg.h"
 #include "Particle3dActor.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/Statistics.h"
+#include "sprite2/StatTopNodes.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <ps_3d.h>
@@ -63,7 +63,7 @@ RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 	if (spr) {
 		id = spr->GetSymbol()->GetID();
 	}
-	Statistics::Checkpoint cp(id, rp.parent_id, rp.level);
+	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 #endif // S2_DISABLE_STATISTICS
 
 	if (rp.IsDisableParticle3d()) {

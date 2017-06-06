@@ -12,7 +12,9 @@
 #include "SymType.h"
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
-#include "sprite2/Statistics.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatPingPong.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -286,8 +288,10 @@ RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, con
 
 	RenderReturn ret = RENDER_OK;
 
-	Statistics::Instance()->AddMesh();
-		
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddMesh();
+#endif // S2_DISABLE_STATISTICS
+
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();

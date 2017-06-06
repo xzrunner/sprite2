@@ -12,7 +12,7 @@
 #include "Flatten.h"
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/Statistics.h"
+#include "sprite2/StatOverdraw.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include S2_MAT_HEADER
@@ -98,7 +98,7 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 #ifndef S2_DISABLE_STATISTICS
 	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
 	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	Statistics::Instance()->AddOverdrawArea(area);
+	StatOverdraw::Instance()->AddArea(area);
 #endif // S2_DISABLE_STATISTICS
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

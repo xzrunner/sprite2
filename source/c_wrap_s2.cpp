@@ -22,7 +22,9 @@
 #include "Blackboard.h"
 #include "s2_trans_color.h"
 #include "StringHelper.h"
-#include "sprite2/Statistics.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatPingPong.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -1149,7 +1151,9 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 extern "C"
 void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
-	Statistics::Instance()->AddRTOutside();
+#ifdef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddRTOutside();
+#endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -1170,7 +1174,9 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 extern "C"
 void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
-	Statistics::Instance()->AddRTOutside();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddRTOutside();
+#endif // S2_DISABLE_STATISTICS
 
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
@@ -1279,45 +1285,6 @@ extern "C"
 void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segments)
 {
 	RVG::Circle(sm::vec2(cx, cy), radius, filling, segments);
-}
-
-/************************************************************************/
-/* stat                                                                 */
-/************************************************************************/
-
-extern "C"
-void s2_stat_get_pingpong_count(struct s2_stat_pingpong_count* dst)
-{
-	const Statistics::PingPongCount& src = Statistics::Instance()->GetPingPongCount();
-	memcpy(dst, &src, sizeof(*dst));
-}
-
-extern "C"
-void s2_stat_get_top_nodes(struct s2_top_node* dst, int n)
-{
-	const std::list<Statistics::DrawNode>& src = Statistics::Instance()->GetTopNodes();
-	std::list<Statistics::DrawNode>::const_iterator itr = src.begin();
-	for (int i = 0; itr != src.end() && i < n; ++itr, ++i) 
-	{
-		s2_top_node* d = &dst[i];
-		d->id = itr->id;
-		d->parent_id = itr->parent_id;
-		d->level = itr->level;
-		d->cost = itr->cost;
-	}
-}
-
-extern "C"
-void s2_stat_get_dc_count(struct s2_stat_dc_count* dst)
-{
-	const Statistics::DrawCallCount& src = Statistics::Instance()->GetDrawCallCount();
-	memcpy(dst, &src, sizeof(*dst));
-}
-
-extern "C"
-void s2_stat_reset()
-{
-	Statistics::Instance()->Reset();
 }
 
 /************************************************************************/

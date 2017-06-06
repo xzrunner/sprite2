@@ -7,7 +7,9 @@
 #include "RenderScissor.h"
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
-#include "sprite2/Statistics.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatPingPong.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <SM_Rect.h>
 #include <unirender/UR_RenderTarget.h>
@@ -32,7 +34,9 @@ RenderReturn DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 
 	RenderReturn ret = RENDER_OK;
 
-	Statistics::Instance()->AddBlend();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddBlend();
+#endif // S2_DISABLE_STATISTICS
 
 	assert(spr->GetShader().GetBlend() != BM_NULL);
 

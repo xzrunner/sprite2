@@ -9,7 +9,8 @@
 #include "S2_RenderTargetMgr.h"
 #include "S2_RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/Statistics.h"
+#include "sprite2/StatPingPong.h"
+#include "sprite2/StatOverdraw.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <unirender/UR_RenderContext.h>
@@ -41,7 +42,9 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 {	
 	RenderReturn ret = RENDER_OK;
 
-	Statistics::Instance()->AddGaussianBlur();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddGaussianBlur();
+#endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* tmp_rt = RT->Fetch();
@@ -157,7 +160,7 @@ RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* ds
 	texcoords[3].Set(0, 1);
 
 #ifndef S2_DISABLE_STATISTICS
-	Statistics::Instance()->AddOverdrawArea(1);
+	StatOverdraw::Instance()->AddArea(1);
 #endif // S2_DISABLE_STATISTICS
 
 	shader->Draw(&vertices[0].x, &texcoords[0].x, src->GetTexID());

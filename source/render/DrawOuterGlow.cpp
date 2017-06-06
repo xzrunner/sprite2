@@ -7,7 +7,9 @@
 #include "SprDefault.h"
 #include "SprRender.h"
 #include "S2_RenderTargetMgr.h"
-#include "sprite2/Statistics.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatPingPong.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
 
@@ -16,7 +18,9 @@ namespace s2
 
 RenderReturn DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
-	Statistics::Instance()->AddOuterGlow();
+#ifndef S2_DISABLE_STATISTICS
+	StatPingPong::Instance()->AddOuterGlow();
+#endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();

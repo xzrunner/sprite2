@@ -7,6 +7,9 @@
 #include "DrawNode.h"
 #include "SymbolVisitor.h"
 #include "FlattenParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
 
@@ -40,6 +43,10 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
+
 	RenderReturn ret = RENDER_OK;
 	if (rp.actor) {
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

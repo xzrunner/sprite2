@@ -6,6 +6,9 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 namespace s2
 {
@@ -35,6 +38,10 @@ int SkeletonSymbol::Type() const
 
 RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!m_skeleton) {
 		return RENDER_NO_DATA;
 	}

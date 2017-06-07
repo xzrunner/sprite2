@@ -13,6 +13,7 @@
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatOverdraw.h"
+#include "sprite2/StatSymbol.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include S2_MAT_HEADER
@@ -54,6 +55,10 @@ int ImageSymbol::Type() const
 
 RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!m_tex->IsLoadFinished()) {
 		return RENDER_ON_LOADING;
 	}

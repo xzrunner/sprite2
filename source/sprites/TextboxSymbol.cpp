@@ -8,6 +8,9 @@
 #include "UpdateParams.h"
 #include "FlattenParams.h"
 #include "Flatten.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
@@ -34,6 +37,10 @@ int TextboxSymbol::Type() const
 
 RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TEXTBOX);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!spr) {
 		return RENDER_NO_DATA;
 	}

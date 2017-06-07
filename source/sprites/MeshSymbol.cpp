@@ -6,6 +6,9 @@
 #include "DrawMesh.h"
 #include "DrawNode.h"
 #include "S2_Mesh.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -40,6 +43,10 @@ int MeshSymbol::Type() const
 
 RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!m_mesh) {
 		return RENDER_NO_DATA;
 	}

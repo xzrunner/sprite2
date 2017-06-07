@@ -4,6 +4,9 @@
 #include "S2_Sprite.h"
 #include "PolygonShape.h"
 #include "DrawNode.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -32,6 +35,10 @@ int TextureSymbol::Type() const
 
 RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TEXTURE);
+#endif // S2_DISABLE_STATISTICS
+
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {

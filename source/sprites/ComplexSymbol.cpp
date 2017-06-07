@@ -20,6 +20,7 @@
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatDrawCall.h"
 #include "sprite2/StatTopNodes.h"
+#include "sprite2/StatSymbol.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <SM_Test.h>
@@ -73,6 +74,7 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 		id = spr->GetSymbol()->GetID();
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

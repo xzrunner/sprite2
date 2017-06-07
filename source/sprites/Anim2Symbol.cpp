@@ -4,6 +4,9 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <rigging.h>
 
@@ -52,6 +55,10 @@ int Anim2Symbol::Type() const
 
 RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!m_anim || !spr) {
 		return RENDER_NO_DATA;
 	}

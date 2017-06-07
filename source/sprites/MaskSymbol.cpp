@@ -6,6 +6,9 @@
 #include "DrawNode.h"
 #include "BoundingBox.h"
 #include "SymbolVisitor.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 namespace s2
 {
@@ -50,6 +53,10 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
+
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {

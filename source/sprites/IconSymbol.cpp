@@ -4,6 +4,9 @@
 #include "Icon.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSymbol.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -36,6 +39,10 @@ int IconSymbol::Type() const
 
 RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ICON);
+#endif // S2_DISABLE_STATISTICS
+
 	if (!m_icon) {
 		return RENDER_NO_DATA;
 	}

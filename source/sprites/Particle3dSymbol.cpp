@@ -11,6 +11,7 @@
 #include "Particle3dActor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatTopNodes.h"
+#include "sprite2/StatSymbol.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <ps_3d.h>
@@ -64,6 +65,7 @@ RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 		id = spr->GetSymbol()->GetID();
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
 
 	if (rp.IsDisableParticle3d()) {

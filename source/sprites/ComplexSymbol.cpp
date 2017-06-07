@@ -75,6 +75,7 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_COMPLEX);
+	StatSymbol::DrawCostCP cp2(StatSymbol::SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

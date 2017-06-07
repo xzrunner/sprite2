@@ -76,7 +76,7 @@ StatSymbol::Item::Item()
 void StatSymbol::Item::Print(std::string& str, const std::string& tag) const
 {
 	static char buf[512];
-	sprintf(buf, "%s: count %d\n", tag.c_str(), m_draw_count);
+	sprintf(buf, "%s: count %d, cost %d\n", tag.c_str(), m_draw_count, m_draw_cost);
 	str += buf;
 }
 

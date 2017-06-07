@@ -41,6 +41,7 @@ RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ICON);
+	StatSymbol::DrawCostCP cp(StatSymbol::SYM_ICON);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_icon) {

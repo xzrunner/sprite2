@@ -39,6 +39,7 @@ RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TEXTBOX);
+	StatSymbol::DrawCostCP cp(StatSymbol::SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {

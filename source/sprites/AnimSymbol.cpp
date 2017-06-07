@@ -95,6 +95,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ANIMATION);
+	StatSymbol::DrawCostCP cp2(StatSymbol::SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;

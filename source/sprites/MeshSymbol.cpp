@@ -45,6 +45,7 @@ RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_MESH);
+	StatSymbol::DrawCostCP cp(StatSymbol::SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_mesh) {

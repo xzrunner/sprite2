@@ -57,6 +57,7 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_IMAGE);
+	StatSymbol::DrawCostCP cp(StatSymbol::SYM_IMAGE);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {

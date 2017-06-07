@@ -39,7 +39,8 @@ int SkeletonSymbol::Type() const
 RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TRAIL);
+	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_SKELETON);
+	StatSymbol::DrawCostCP cp(StatSymbol::SYM_SKELETON);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_skeleton) {

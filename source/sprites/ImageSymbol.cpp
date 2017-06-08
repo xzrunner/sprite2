@@ -232,7 +232,6 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* t
 			int pkg_id = (GetID() >> 20);
 			if (pkg_id > 128 && pkg_id < 384) {
 				shader->SetColor(0x88000088, 0);
-				LOGI("not preloaded char, pkg %d", pkg_id);
 			} else {
 				shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 			}

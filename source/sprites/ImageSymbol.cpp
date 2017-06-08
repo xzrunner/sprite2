@@ -16,6 +16,9 @@
 #include "sprite2/StatSymbol.h"
 #endif // S2_DISABLE_STATISTICS
 
+#ifdef S2_DEBUG
+#include <logger.h>
+#endif // S2_DEBUG
 #include S2_MAT_HEADER
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
@@ -224,7 +227,21 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* t
 		shader->Draw(&vertices[0].x, texcoords, tex_id);
 	} else if (mgr->GetShaderType() == sl::SPRITE2) {
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+#ifdef S2_DEBUG
+		if (!IsProxyImg()) {
+			int pkg_id = (GetID() >> 20);
+			if (pkg_id > 128 && pkg_id < 384) {
+				shader->SetColor(0x88000088, 0);
+				LOGI("not preloaded char, pkg %d", pkg_id);
+			} else {
+				shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+			}
+		} else {
+			shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+		}
+#else
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+#endif // S2_DEBUG
 		shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 		shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
 	}

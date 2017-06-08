@@ -11,3 +11,5 @@
 #define S2_DISABLE_MODEL
 
 //#define S2_DISABLE_STATISTICS
+
+#define	S2_DEBUG

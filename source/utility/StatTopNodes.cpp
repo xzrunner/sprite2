@@ -20,7 +20,7 @@ void StatTopNodes::Print(std::string& str) const
 	std::list<DrawNode>::const_iterator itr = m_nodes.begin();
 	for ( ; itr != m_nodes.end(); ++itr) {
 		const DrawNode& n = *itr;
-		sprintf(buf, "cost: %d, id: %d, pid: %d, level %d\n", n.cost, n.id, n.parent_id, n.level);
+		sprintf(buf, "cost: %d, id: %u, pid: %u, level %d\n", n.cost, n.id, n.parent_id, n.level);
 		str += buf;
 	}
 }

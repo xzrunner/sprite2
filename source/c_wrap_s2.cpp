@@ -674,7 +674,7 @@ int s2_actor_get_component_count(void* actor) {
 	if (ProxyHelper::ActorGetComponentCount(s2_actor, count)) {
 		return count;
 	} else {
-		LOGW("s2_actor_get_component_count fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		// LOGW("s2_actor_get_component_count fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 		return -1;
 	}
 }

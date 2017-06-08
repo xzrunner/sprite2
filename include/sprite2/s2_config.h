@@ -12,4 +12,6 @@
 
 //#define S2_DISABLE_STATISTICS
 
+#ifdef _WIN32
 #define	S2_DEBUG
+#endif // _WIN32

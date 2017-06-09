@@ -21,7 +21,7 @@
 #include "RenderScissor.h"
 #include "Blackboard.h"
 #include "s2_trans_color.h"
-#include "StringHelper.h"
+#include "sprite2/StringHelper.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS

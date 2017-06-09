@@ -1,4 +1,4 @@
-#include "StringHelper.h"
+#include "sprite2/StringHelper.h"
 
 namespace s2
 {

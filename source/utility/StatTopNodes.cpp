@@ -9,6 +9,8 @@ namespace s2
 
 SINGLETON_DEFINITION(StatTopNodes);
 
+static const int TOP_NODE_NUM = 20;
+
 StatTopNodes::StatTopNodes()
 	: m_min_time(0)
 {

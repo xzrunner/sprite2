@@ -48,9 +48,6 @@ public:
 	}; // Checkpoint
 
 private:
-	static const int TOP_NODE_NUM = 10;
-
-private:
 	std::list<DrawNode> m_nodes;
 	uint32_t m_min_time;
 

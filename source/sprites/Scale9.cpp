@@ -38,7 +38,7 @@ Scale9& Scale9::operator = (const Scale9& s9)
 	for (int i = 0; i < 9; ++i) {
 		Sprite* spr = s9.m_grids[i];
 		if (spr) {
-			m_grids[i] = VI_CLONE(Sprite, spr);
+			m_grids[i] = spr->Clone();
 		} else {
 			m_grids[i] = NULL;
 		}
@@ -180,11 +180,7 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 			dst->RemoveReference();
 		}	
 		Sprite* src = grids[i];
-		if (src) {
-			m_grids[i] = VI_CLONE(Sprite, src);
-		} else {
-			m_grids[i] = NULL;
-		}
+		m_grids[i] = src ? src->Clone() : NULL;
 	}
 	m_sz_left  = sz_left;
 	m_sz_right = sz_right;

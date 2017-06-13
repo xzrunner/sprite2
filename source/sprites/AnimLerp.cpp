@@ -35,7 +35,7 @@ void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*
 				break;
 			}
 		}
-		Sprite* tween_spr = VI_CLONE(Sprite, start_spr);
+		Sprite* tween_spr = start_spr->Clone();
 		if (end_spr) {
 			Lerp(start_spr, end_spr, tween_spr, process, lerps);
 		}

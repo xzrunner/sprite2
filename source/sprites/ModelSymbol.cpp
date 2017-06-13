@@ -30,7 +30,7 @@ int ModelSymbol::Type() const
 	return SYM_MODEL;
 }
 
-void ModelSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ModelSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 // 	if (!spr) {
 // 		return;
@@ -59,6 +59,8 @@ void ModelSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		bool texcoords = vertex_type & m3::VERTEX_FLAG_TEXCOORDS;
 		shader->Draw(mesh->GetVertices(), mesh->GetIndices(), normal, texcoords);
 	}
+
+	return s2::RENDER_OK;
 }
 
 void ModelSymbol::SetModel(m3::Model* model)

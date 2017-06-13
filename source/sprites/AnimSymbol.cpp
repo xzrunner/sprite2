@@ -185,7 +185,7 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 		if (!curr_f->tween || !next_f)
 		{
 			for (int i = 0, n = curr_f->sprs.size(); i < n; ++i) {
-				Sprite* spr = curr_f->sprs[i]->Clone();
+				Sprite* spr = VI_CLONE(Sprite, curr_f->sprs[i]);
 				sprs.push_back(spr);	
 			}
 		}

@@ -43,7 +43,7 @@ void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
 	std::vector<Sprite*> slots;
 	slots.resize(m_slots.size());
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		slots[i] = m_slots[i]->Clone();
+		slots[i] = VI_CLONE(Sprite, m_slots[i]);
 	}
 	
 	// filling frames
@@ -263,7 +263,7 @@ void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 					continue;
 				}
 				int slot = m_slots.size();
-				const Sprite* spr = layers[ilayer]->frames[iframe]->sprs[iitem]->Clone();
+				const Sprite* spr = VI_CLONE(Sprite, layers[ilayer]->frames[iframe]->sprs[iitem]);
 				m_slots.push_back(spr);
 				item.slot = slot;
 

@@ -19,6 +19,14 @@ namespace s2
 	#define VI_DUMMY_FUNC
 #endif // S2_VIRTUAL_INHERITANCE
 
+#ifdef S2_VIRTUAL_INHERITANCE
+	#define VI_CLONE(type, src) \
+		dynamic_cast<type*>(static_cast<const cu::Cloneable*>(src)->Clone());
+#else
+	#define VI_CLONE(type, src) \
+		src->Clone();
+#endif // S2_VIRTUAL_INHERITANCE
+
 #ifdef S2_MATRIX_FIX
 	#define S2_MAT sm::MatrixFix
 	#define S2_MAT_HEADER <SM_MatrixFix.h>

@@ -238,7 +238,8 @@ void AnimTreeCurr::SetAnimCopy(const AnimCopy* copy)
 	for (int i = 0, n = m_copy->m_slots.size(); i < n; ++i) 
 	{
 		Sprite* src = const_cast<Sprite*>(m_copy->m_slots[i]);
-		m_slots[i] = src->Clone();
+		Sprite* dst = VI_CLONE(Sprite, src);
+		m_slots[i] = dst;
 	}
 }
 

@@ -499,7 +499,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	{
 		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
-		ret = DrawBlend::Draw(spr, rp.mt);
+		ret = DrawBlend::Draw(spr, rp);
 		//		}
 	} 
 	else if (filter != FM_NULL) 

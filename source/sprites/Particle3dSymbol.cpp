@@ -285,6 +285,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	p3d_rp.rc          = rp_child->color;
 	p3d_rp.local       = p3d_spr->IsLocal();
 	p3d_rp.view_region = rp.view_region;
+	p3d_rp.flags       = rp.GetFlags();
 
 	RenderReturn ret = et->Draw(p3d_rp, false);
 

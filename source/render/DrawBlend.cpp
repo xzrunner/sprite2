@@ -24,7 +24,7 @@
 namespace s2
 {
 
-RenderReturn DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::Draw(const Sprite* spr, const RenderParams& rp)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -46,20 +46,20 @@ RenderReturn DrawBlend::Draw(const Sprite* spr, const S2_MAT& mt)
 	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
 
 	rt->Bind();
-	ret |= DrawSpr2RT(spr, mt);
+	ret |= DrawSpr2RT(spr, rp);
 	rt->Unbind();
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	ret |= DrawRT2Screen(rt->GetTexID(), spr, mt);
+	ret |= DrawRT2Screen(rt->GetTexID(), spr, rp);
 
 	RT->Return(rt);
 
 	return ret;
 }
 
-RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
@@ -70,23 +70,26 @@ RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const S2_MAT& mt)
 	BlendMode mode = spr->GetShader().GetBlend();
 	shader->SetMode(mode);
 
-	RenderParams rp;
-	rp.mt = mt;
-	rp.SetChangeShader(false);
-	rp.SetDisableBlend(true);
-	rp.vertex_offset = - (mt * spr->GetPosition());
-	RenderReturn ret = DrawNode::Draw(spr, rp);
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+
+	rp_child->SetChangeShader(false);
+	rp_child->SetDisableBlend(true);
+	rp_child->vertex_offset = - (rp_child->mt * spr->GetPosition());
+	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
+
+	RenderParamsPool::Instance()->Push(rp_child); 
 
 	shader->Commit();
 
 	return ret;
 }
 
-RenderReturn DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MAT& mt)
+RenderReturn DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
-	S2_MAT t = spr->GetLocalMat() * mt;
+	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
 
 	sm::vec2 vertices[4];
@@ -98,7 +101,7 @@ RenderReturn DrawBlend::DrawRT2Screen(int tex_id, const Sprite* spr, const S2_MA
 		vertices[i] = t * vertices[i];
 	}
 
-	sm::vec2 vertex_offset = - (mt * spr->GetPosition());
+	sm::vec2 vertex_offset = - (rp.mt * spr->GetPosition());
 
 	sm::vec2 texcoords[4];
 	for (int i = 0; i < 4; ++i) {

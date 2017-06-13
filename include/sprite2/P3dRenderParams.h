@@ -18,9 +18,10 @@ public:
 	RenderColor rc;
 	bool        local;
 	sm::rect    view_region;
+	uint32_t    flags;
 
 public:
-	P3dRenderParams() : local(true) {}
+	P3dRenderParams() : local(true), flags(0) {}
 
 }; // P3dRenderParams
 

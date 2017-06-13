@@ -49,6 +49,9 @@ public:
 
 	void Reset();
 
+	uint32_t GetFlags() const { return m_flags; }
+	void SetFlags(uint32_t flags) { m_flags = flags; }
+
 	/**
 	 *  @interface
 	 *    ObjectPool3

@@ -78,7 +78,8 @@ blend_end_func()
 
 static void 
 render_func(void* spr, void* sym, float* mat, float x, float y, float angle, float scale, 
-            struct ps_color* mul_col, struct ps_color* add_col, int fast_blend, const void* ud, float time)
+            struct ps_color* mul_col, struct ps_color* add_col, int fast_blend, const void* ud, 
+		    float time)
 {
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
@@ -89,6 +90,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	rp_child->Reset();
+
+	rp_child->SetFlags(rp->flags);
 
 	rp_child->color.SetMul(mul * rp->rc.GetMul());
 	rp_child->color.SetAdd(add + rp->rc.GetAdd());

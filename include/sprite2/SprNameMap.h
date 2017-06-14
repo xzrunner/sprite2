@@ -29,6 +29,8 @@ public:
 	static bool IsTmpName(int id);
 	static bool IsNormalName(int id);
 
+	static bool IsEmptyName(int id);
+
 private:
 	enum NameType
 	{

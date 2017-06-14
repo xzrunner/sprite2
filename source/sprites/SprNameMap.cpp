@@ -59,6 +59,11 @@ bool SprNameMap::IsNormalName(int id)
 	return id >= MAX_TMP_ID;
 }
 
+bool SprNameMap::IsEmptyName(int id)
+{
+	return id < 0;
+}
+
 int SprNameMap::Insert(const std::string& str)
 {
 	if (str.empty()) {

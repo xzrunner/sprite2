@@ -56,7 +56,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawBaseToRT(rt_base, base, rp.color, base_actor);
+	ret |= DrawBaseToRT(rt_base, base, rp.color, base_actor, rp.IsDisableDTexC2());
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -65,7 +65,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawMaskToRT(rt_mask, mask, mask_actor);
+	ret |= DrawMaskToRT(rt_mask, mask, mask_actor, rp.IsDisableDTexC2());
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
@@ -182,7 +182,8 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 //}
 
 RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
-									const RenderColor& rc, const Actor* actor)
+									const RenderColor& rc, const Actor* actor,
+									bool disable_dtex)
 {
 	rt->Bind();
 
@@ -195,6 +196,7 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	RenderParams rp;
 	rp.color = rc;
 	rp.actor = actor;
+	rp.SetDisableDTexC2(disable_dtex);
 	RenderReturn ret = DrawNode::Draw(base, rp);
 
 	shader->Commit();
@@ -204,7 +206,7 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	return ret;
 }
 
-RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor)
+RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor, bool disable_dtex)
 {
 	rt->Bind();
 
@@ -217,6 +219,7 @@ RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const 
 	RenderParams rp;
 	rp.SetChangeShader(false);
 	rp.actor = actor;
+	rp.SetDisableDTexC2(disable_dtex);
 	RenderReturn ret = DrawNode::Draw(mask, rp);
 
 	shader->Commit();

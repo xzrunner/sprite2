@@ -231,6 +231,10 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	}
 	rp->min_edge = min_edge;
 
+	if (s2_actor->GetSpr()->IsDTexDisable()) {
+		rp->SetDisableDTexC2(true);
+	}
+
 	DrawNode::Draw(s2_actor->GetSpr(), *rp);
 
 	RenderParamsPool::Instance()->Push(rp); 

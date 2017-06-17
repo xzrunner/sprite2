@@ -22,8 +22,8 @@ public:
 //	static RenderReturn DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 
 private:
-	static RenderReturn DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc, const Actor* actor);
-	static RenderReturn DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor);
+	static RenderReturn DrawBaseToRT(RenderTarget* rt, const Sprite* base, const RenderColor& rc, const Actor* actor, bool disable_dtex);
+	static RenderReturn DrawMaskToRT(RenderTarget* rt, const Sprite* mask, const Actor* actor, bool disable_dtex);
 
 	static RenderReturn DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt);
 

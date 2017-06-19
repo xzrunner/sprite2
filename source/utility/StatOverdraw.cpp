@@ -1,5 +1,9 @@
 #include "StatOverdraw.h"
 
+
+#include <stdio.h>
+
+
 namespace s2
 {
 

@@ -1,5 +1,5 @@
 #include "StatSymbol.h"
-
+#include <stdio.h>
 #include <glp_loop.h>
 
 namespace s2

@@ -1,5 +1,7 @@
 #include "sprite2/StatDrawCall.h"
 
+
+#include <stdio.h>
 #include <string.h>
 
 namespace s2

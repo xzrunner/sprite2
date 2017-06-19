@@ -1,7 +1,7 @@
 #include "StatTopNodes.h"
 
 #include <glp_loop.h>
-
+#include <stdio.h>
 #include <assert.h>
 
 namespace s2

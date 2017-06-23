@@ -518,6 +518,18 @@ void s2_spr_p3d_buffer_draw(float x, float y, float scale)
 }
 
 extern "C"
+void s2_spr_p3d_tick()
+{
+	Particle3d::Instance()->Tick();
+}
+
+extern "C"
+void s2_spr_p3d_gc()
+{
+	Particle3d::Instance()->GC();
+}
+
+extern "C"
 void s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count)
 {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);

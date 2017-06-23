@@ -7,8 +7,6 @@
 #include <CU_RefCountObj.h>
 #include <CU_Uncopyable.h>
 
-struct p3d_emitter;
-
 namespace s2
 {
 
@@ -25,6 +23,7 @@ public:
 
 	bool Update(float time);
 	RenderReturn Draw(const P3dRenderParams& rp, bool alone) const;
+	bool PrepareEmitter();
 
 	bool IsLoop() const;
 	void SetLoop(bool loop);
@@ -64,11 +63,11 @@ public:
 private:
 	union
 	{
-		struct 
+		struct
 		{
 			const P3dEmitterCfg* cfg;
 
-			p3d_emitter* et;
+			int          et;
 			float        mt[6];
 			bool         local;
 		};
@@ -77,6 +76,8 @@ private:
 
 	} m_state;
 
+	bool m_active;
+	bool m_loop;
 }; // Particle3dEmitter
 
 typedef ObjectPool<Particle3dEmitter> P3dEmitterPool;

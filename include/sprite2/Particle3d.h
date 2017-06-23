@@ -16,6 +16,9 @@ public:
 
 	float GetTime() const { return m_time; }
 
+	void Tick();
+	void GC();
+
 private:
 	void Init();
 

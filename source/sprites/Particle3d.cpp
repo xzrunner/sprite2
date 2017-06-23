@@ -210,4 +210,14 @@ void Particle3d::Init()
 	p3d_regist_cb(blend_begin_func, blend_end_func, render_func, update_func, add_func, remove_func);	
 }
 
+void Particle3d::Tick()
+{
+	p3d_tick();
+}
+
+void Particle3d::GC()
+{
+	p3d_gc();
+}
+
 }

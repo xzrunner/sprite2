@@ -359,6 +359,8 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* 
 		return false;
 	}
 
+	et->PrepareEmitter();
+
 	float time = Particle3d::Instance()->GetTime();
 	float et_time = et->GetTime();
 	assert(et_time <= time);

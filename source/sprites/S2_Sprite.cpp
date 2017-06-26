@@ -43,6 +43,7 @@ Sprite::Sprite()
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
+	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
 #ifdef S2_RES_LOG
@@ -60,6 +61,7 @@ Sprite::Sprite(const Sprite& spr)
 	, m_bounding(NULL)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(spr.m_flags)
+	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
 #ifdef S2_RES_LOG
@@ -83,6 +85,7 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
+	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
 #ifdef S2_RES_LOG
@@ -102,9 +105,13 @@ Sprite::~Sprite()
 	std::cout << "-- sprite " << COUNT << "\n";
 #endif // S2_RES_LOG
 
-	ClearActorsVisitor visitor;
-	SprVisitorParams params;
-	Traverse(visitor, params);
+	if (m_actors)
+	{
+		ClearActorsVisitor visitor;
+		SprVisitorParams params;
+		Traverse(visitor, params);
+		delete m_actors;
+	}
 
 	if (m_sym) {
 		m_sym->RemoveReference();
@@ -611,43 +618,30 @@ void Sprite::CacheLocalMat()
 
 void Sprite::AddActor(Actor* actor) const
 {
-	m_actors.push_back(actor);
+	if (!m_actors) {
+		m_actors = new SprActors();
+	}
+	m_actors->Add(actor);
 }
 
 void Sprite::DelActor(Actor* actor) const
 {
-	std::vector<Actor*>::iterator itr = m_actors.begin();
-	for ( ; itr != m_actors.end(); ) {
-		if (*itr == actor) {
-			itr = m_actors.erase(itr);
-		} else {
-			++itr;
-		}
+	if (m_actors) {
+		m_actors->Del(actor);
 	}
-}
-
-const Actor* Sprite::QueryActor(const Actor* prev) const
-{
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		if (m_actors[i]->GetParent() == prev) {
-			return m_actors[i];
-		}
-	}
-	return NULL;
 }
 
 void Sprite::ClearActors() const
 {
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		delete m_actors[i];
+	if (m_actors) {
+		m_actors->Clear();
 	}
-	m_actors.clear();
 }
 
 void Sprite::ConnectActors(const Actor* parent) const
 {
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		m_actors[i]->SetParent(parent);
+	if (m_actors) {
+		m_actors->Connect(parent);
 	}
 }
 
@@ -728,6 +722,8 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	}
 
 	m_flags = spr.m_flags;
+
+	m_actors = NULL;
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

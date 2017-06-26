@@ -215,10 +215,14 @@ void Particle3dSprite::SetLoop(bool loop)
 	}
 
 	// reuse none
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		Particle3dActor* actor = static_cast<Particle3dActor*>(m_actors[i]);
-		if (Particle3dEmitter* et = actor->GetEmitter()) {
-			et->SetLoop(loop);
+	if (m_actors)
+	{
+		const std::vector<Actor*>& actors = m_actors->GetActors();
+		for (int i = 0, n = actors.size(); i < n; ++i) {
+			Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
+			if (Particle3dEmitter* et = actor->GetEmitter()) {
+				et->SetLoop(loop);
+			}
 		}
 	}
 }
@@ -243,10 +247,14 @@ void Particle3dSprite::SetLocal(bool local)
 	}
 
 	// reuse none
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		Particle3dActor* actor = static_cast<Particle3dActor*>(m_actors[i]);
-		if (Particle3dEmitter* et = actor->GetEmitter()) {
-			et->SetLocal(local);
+	if (m_actors)
+	{
+		const std::vector<Actor*>& actors = m_actors->GetActors();
+		for (int i = 0, n = actors.size(); i < n; ++i) {
+			Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
+			if (Particle3dEmitter* et = actor->GetEmitter()) {
+				et->SetLocal(local);
+			}
 		}
 	}
 }
@@ -388,10 +396,14 @@ void Particle3dSprite::ChangeEmitterBuffer(ReuseType reuse, const P3dEmitterCfg*
 		ChangeEmitterBuffer(m_et, cfg, add);
 		break;
 	case REUSE_NONE:
-		for (int i = 0, n = m_actors.size(); i < n; ++i) {
-			Particle3dActor* actor = static_cast<Particle3dActor*>(m_actors[i]);
-			Particle3dEmitter* et = actor->GetEmitter();
-			ChangeEmitterBuffer(et, cfg, add);			
+		if (m_actors)
+		{
+			const std::vector<Actor*>& actors = m_actors->GetActors();
+			for (int i = 0, n = actors.size(); i < n; ++i) {
+				Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
+				Particle3dEmitter* et = actor->GetEmitter();
+				ChangeEmitterBuffer(et, cfg, add);			
+			}
 		}
 		break;
 	}

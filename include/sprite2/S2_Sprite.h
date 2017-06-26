@@ -5,13 +5,13 @@
 #include "S2_Message.h"
 #include "s2_macro.h"
 #include "VisitResult.h"
+#include "SprActors.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
 
-#include <vector>
 #include <string>
 
 #include <stdint.h>
@@ -121,9 +121,11 @@ public:
 
 	void AddActor(Actor* actor) const;
 	void DelActor(Actor* actor) const;
-	const Actor* QueryActor(const Actor* prev) const;
-	bool HaveActor() const { return !m_actors.empty(); }
-	int ActorCount() const { return m_actors.size(); }
+	const Actor* QueryActor(const Actor* prev) const {
+		return m_actors ? m_actors->Query(prev) : NULL;
+	}
+	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
+	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }
 	void ClearActors() const;
 	void ConnectActors(const Actor* parent) const;
 
@@ -214,7 +216,7 @@ protected:
 	/************************************************************************/
 	mutable uint32_t		m_flags;
 
-	mutable std::vector<Actor*> m_actors;
+	mutable SprActors*      m_actors;
 
 private:
 	int m_id;

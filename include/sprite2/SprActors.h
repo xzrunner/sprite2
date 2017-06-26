@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_ACTORS_H_
 #define _SPRITE2_SPR_ACTORS_H_
 
-#define SPR_ACTORS_HASH
+// #define SPR_ACTORS_HASH
 
 #include <CU_Uncopyable.h>
 

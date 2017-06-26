@@ -50,7 +50,6 @@ void SprActors::Add(Actor* actor)
 	if (m_hash) {
 		ds_hash_insert(m_hash, const_cast<Actor*>(actor->GetParent()), actor, true);
 	} else {
-#endif // SPR_ACTORS_HASH
 		if (m_actors.size() > MAX_COUNT_NO_HASH) {
 			m_hash = ds_hash_create(MAX_COUNT_NO_HASH, MAX_COUNT_NO_HASH * 2, 0.5f, 
 				_hash_func, _equal_func);
@@ -59,7 +58,6 @@ void SprActors::Add(Actor* actor)
 				ds_hash_insert(m_hash, const_cast<Actor*>(actor->GetParent()), actor, true);
 			}
 		}
-#ifdef SPR_ACTORS_HASH
 	}
 #endif // SPR_ACTORS_HASH
 }

@@ -10,7 +10,9 @@
 
 #define S2_DISABLE_MODEL
 
-//#define S2_DISABLE_STATISTICS
+#ifndef NDEBUG
+#define S2_DISABLE_STATISTICS
+#endif // NDEBUG
 
 #ifdef _WIN32
 #define	S2_DEBUG

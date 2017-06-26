@@ -30,7 +30,7 @@ SprActors::~SprActors()
 static unsigned int
 _hash_func(int hash_sz, void* key) 
 {
-	uint32_t k = reinterpret_cast<uint32_t>(key);
+	uint64_t k = reinterpret_cast<uint64_t>(key);
 	return k % hash_sz;
 }
 

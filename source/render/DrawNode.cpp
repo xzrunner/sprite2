@@ -97,7 +97,7 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 
 RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 {
-	if (CullingTestOutside(spr, rp)) {
+	if (!rp.IsDisableCulling() && CullingTestOutside(spr, rp)) {
 		return RENDER_OUTSIDE;
 	}
 	if (!spr->IsDTexForceCached()) {
@@ -269,7 +269,10 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 	if (rp.view_region.IsValid())
 	{
-		if (sm::is_rect_contain_rect(rp.view_region, sr)) {
+		if (!sr.IsValid()) {
+			rp.SetDisableCulling(true);
+			return false;
+		} else if (sm::is_rect_contain_rect(rp.view_region, sr)) {
 			rp.SetDisableCulling(true);
 			return false;
 		} else if (sm::is_rect_intersect_rect(rp.view_region, sr)) {

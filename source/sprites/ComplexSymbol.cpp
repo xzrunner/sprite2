@@ -135,7 +135,8 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
-			if (DrawNode::CullingTestOutside(child, *rp_child)) {
+			if (!rp_child->IsDisableCulling() && 
+				DrawNode::CullingTestOutside(child, *rp_child)) {
 				continue;
 			}
 			ret |= DrawNode::Draw(child, *rp_child);

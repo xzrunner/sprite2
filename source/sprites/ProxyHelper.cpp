@@ -917,12 +917,13 @@ bool ProxyHelper::ActorGetWorldPos(const Actor* actor, sm::vec2& pos)
 		if (!ActorGetWorldPos(items[0].second->QueryActor(items[0].first), ret)) {
 			return false;
 		}
-		for (int i = 1, n = items.size(); i < n; ++i) {
-			sm::vec2 cpos;
-			if (!ActorGetWorldPos(items[i].second->QueryActor(items[i].first), cpos) || cpos != ret) {
-				return false;
-			}
-		}
+		// FIXME
+		// for (int i = 1, n = items.size(); i < n; ++i) {
+		// 	sm::vec2 cpos;
+		// 	if (!ActorGetWorldPos(items[i].second->QueryActor(items[i].first), cpos) || cpos != ret) {
+		// 		return false;
+		// 	}
+		// }
 		pos = ret;
 		return true;
 	} 

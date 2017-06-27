@@ -3,7 +3,9 @@
 
 #include "S2_Actor.h"
 
+#ifdef SPR_ACTORS_HASH
 #include <ds_hash.h>
+#endif // SPR_ACTORS_HASH
 
 namespace s2
 {

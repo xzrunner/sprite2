@@ -12,9 +12,10 @@ RenderShader::RenderShader()
 
 RenderShader::RenderShader(const RenderShader& rs)
 {
-	m_state.filter = NULL;
-	m_state.blend = rs.m_state.blend;
+	m_state.filter     = NULL;
+	m_state.blend      = rs.m_state.blend;
 	m_state.fast_blend = rs.m_state.fast_blend;
+	m_state.downsample = rs.m_state.downsample;
 
 	if (rs.m_state.filter) {
 		m_state.filter = rs.m_state.filter->Clone();
@@ -35,8 +36,9 @@ RenderShader& RenderShader::operator = (const RenderShader& rs)
 			m_state.filter = NULL;
 		}
 	}
-	m_state.blend = rs.m_state.blend;
+	m_state.blend      = rs.m_state.blend;
 	m_state.fast_blend = rs.m_state.fast_blend;
+	m_state.downsample = rs.m_state.downsample;
 	return *this;
 }
 
@@ -67,6 +69,8 @@ RenderShader RenderShader::operator * (const RenderShader& rs) const
 		ret.m_state.filter = m_state.filter->Clone();
 	}
 
+	ret.m_state.downsample = rs.m_state.downsample * m_state.downsample;
+
 	return ret;
 }
 
@@ -96,9 +100,10 @@ void RenderShader::SetFilter(const RenderFilter* filter)
 
 void RenderShader::Init()
 {
-	m_state.filter = NULL;
-	m_state.blend = BM_NULL;
+	m_state.filter     = NULL;
+	m_state.blend      = BM_NULL;
 	m_state.fast_blend = FBM_NULL;
+	m_state.downsample = 1;
 }
 
 void RenderShader::Term()

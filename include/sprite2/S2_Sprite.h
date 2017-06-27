@@ -102,12 +102,10 @@ public:
 	const RenderColor&	GetColor() const;
 	const RenderShader& GetShader() const;
 	const RenderCamera& GetCamera() const;
-	float GetDownsample() const;
 
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
-	void SetDownsample(float downsample);
 
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);

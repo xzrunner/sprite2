@@ -569,11 +569,13 @@ RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& r
 // 		DrawAABB(spr, rp, Color(255, 0, 0));
 // 	}
 
-	//if (spr->GetDownsample() != 1) {
-	//	DrawDownsample::Draw(spr, rp, spr->GetDownsample());
-	//} else {
-	RenderReturn ret = spr->GetSymbol()->Draw(rp, spr);
-	//}
+	RenderReturn ret = RENDER_OK;
+	float ds = spr->GetShader().GetDownsample();
+	if (fabs(ds - 1) > FLT_EPSILON) {
+		DrawDownsample::Draw(spr, rp, ds);
+	} else {
+		ret = spr->GetSymbol()->Draw(rp, spr);
+	}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);
 	}

@@ -26,11 +26,13 @@ public:
 	const RenderFilter* GetFilter() const { return m_state.filter; }
 	BlendMode GetBlend() const { return m_state.blend; }
 	FastBlendMode GetFastBlend() const { return m_state.fast_blend; }
+	float GetDownsample() const { return m_state.downsample; }
 
 	void SetFilter(FilterMode mode);
 	void SetFilter(const RenderFilter* filter);
 	void SetBlend(BlendMode mode) { m_state.blend = mode; }
 	void SetFastBlend(FastBlendMode mode) { m_state.fast_blend = mode; }
+	void SetDownsample(float downsample) { m_state.downsample = downsample; }
 
 	/**
 	 *  @interface
@@ -49,6 +51,7 @@ private:
 			RenderFilter* filter;
 			BlendMode     blend;
 			FastBlendMode fast_blend;
+			float         downsample;
 		};
 
 		RenderShader* next;

@@ -18,7 +18,7 @@ SprDefault::SprDefault()
 	m_shader = new RenderShader();
 	m_camera = new RenderCamera();
 
-	m_render = new SprRender(m_color, m_shader, m_camera, 1);
+	m_render = new SprRender(m_color, m_shader, m_camera);
 }
 
 }

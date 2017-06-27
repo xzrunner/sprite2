@@ -464,15 +464,6 @@ const RenderCamera& Sprite::GetCamera() const
 	}
 }
 
-float Sprite::GetDownsample() const
-{
-	if (!m_render) {
-		return SprDefault::Instance()->Render()->GetDownsample();
-	} else {
-		return m_render->GetDownsample();
-	}
-}
-
 void Sprite::SetColor(const RenderColor& color)
 {
 	if (m_render == SprDefault::Instance()->Render() || !m_render) {
@@ -497,18 +488,6 @@ void Sprite::SetCamera(const RenderCamera& camera)
 		m_render = SprRenderPool::Instance()->Pop();
 	}
 	m_render->SetCamera(camera);
-	SetDirty(true);
-}
-
-void Sprite::SetDownsample(float downsample)
-{
-	if (downsample == GetDownsample()) {
-		return;
-	}
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
-	}
-	m_render->SetDownsample(downsample);
 	SetDirty(true);
 }
 

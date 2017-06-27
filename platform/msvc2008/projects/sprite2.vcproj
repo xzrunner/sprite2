@@ -1172,10 +1172,6 @@
 				Name="sprite"
 				>
 				<File
-					RelativePath="..\..\..\include\sprite2\S2_Message.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\source\sprites\S2_Sprite.cpp"
 					>
 				</File>
@@ -1189,22 +1185,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\SprDefault.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\SprGeo.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprGeo.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\source\sprites\SprRender.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\include\sprite2\SprRender.h"
 					>
 				</File>
 				<File
@@ -1284,6 +1264,42 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\sprite2\SprNameMap.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="component"
+					>
+					<File
+						RelativePath="..\..\..\include\sprite2\S2_Message.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\SprActors.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprActors.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprActors.inl"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\SprGeo.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprGeo.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\source\sprites\SprRender.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\include\sprite2\SprRender.h"
 						>
 					</File>
 				</Filter>

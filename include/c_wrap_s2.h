@@ -83,8 +83,6 @@ const char* s2_spr_get_name(void* spr);
 int   s2_spr_get_sym_id(const void* spr);
 int   s2_spr_get_sym_type(const void* spr);
 
-void  s2_spr_set_downsample(void* spr, float downsample);
-
 void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
 bool  s2_spr_point_test(const void* spr, float x, float y);
 void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);

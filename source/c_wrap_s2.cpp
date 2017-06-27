@@ -356,12 +356,6 @@ int s2_spr_get_sym_type(const void* spr) {
 }
 
 extern "C"
-void s2_spr_set_downsample(void* spr, float downsample) {
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	s2_spr->SetDownsample(downsample);
-}
-
-extern "C"
 void s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]) {
 	S2_MAT outer;
 #ifdef S2_MATRIX_FIX

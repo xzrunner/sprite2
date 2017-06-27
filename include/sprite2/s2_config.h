@@ -10,7 +10,7 @@
 
 #define S2_DISABLE_MODEL
 
-#ifndef NDEBUG
+#ifdef NDEBUG
 #define S2_DISABLE_STATISTICS
 #endif // NDEBUG
 

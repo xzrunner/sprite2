@@ -41,6 +41,7 @@
 #include "Particle3dEmitter.h"
 #include "OrthoCamera.h"
 #include "ProxySymbol.h"	// todo
+#include "ProxySprite.h"
 #include "ProxyHelper.h"
 
 #include <logger.h>
@@ -776,6 +777,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 				ret = _ret;
 			}
 		}
+		ProxySprite::DelParentProxyRef(p_actor);
 		old_spr->RemoveReference();
 		return ret;
 	} else if (sym_type == SYM_ANCHOR) {

@@ -43,9 +43,9 @@ public:
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-private:
-	void AddParentProxyRef(const Actor* parent) const;
-	void DelParentProxyRef(const Actor* parent) const;
+public:
+	static void AddParentProxyRef(const Actor* parent);
+	static void DelParentProxyRef(const Actor* parent);
 
 private:
 

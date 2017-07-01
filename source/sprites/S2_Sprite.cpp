@@ -128,14 +128,35 @@ Sprite::~Sprite()
 	}
 }
 
+int Sprite::GetCount()
+{
+	return COUNT;
+}
+
 void Sprite::AddReference() const
 {
+	if (m_sym->GetID() == 1054894) {
+		printf("++++++++++++++++++++++++++++++++++++ 1054894 spr add ref %d\n", GetRefCount());
+	}
 	cu::RefCountObj::AddReference();
 }
 
 void Sprite::RemoveReference() const
 {
+	if (m_sym->GetID() == 1054894) {
+		printf("++++++++++++++++++++++++++++++++++++ 1054894 spr del ref %d\n", GetRefCount());
+	}
 	cu::RefCountObj::RemoveReference();
+}
+
+void Sprite::Retain(const Actor* actor) const
+{
+	AddReference();
+}
+
+void Sprite::Release(const Actor* actor) const
+{
+	RemoveReference();
 }
 
 void Sprite::SetSymbol(Symbol* sym)

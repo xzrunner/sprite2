@@ -208,7 +208,7 @@ VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisit
 	return VISIT_OVER;
 }
 
-void ProxySprite::AddParentProxyRef(const Actor* parent) const
+void ProxySprite::AddParentProxyRef(const Actor* parent)
 {
 	while (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		parent->GetSpr()->AddReference();
@@ -216,7 +216,7 @@ void ProxySprite::AddParentProxyRef(const Actor* parent) const
 	}
 }
 
-void ProxySprite::DelParentProxyRef(const Actor* parent) const
+void ProxySprite::DelParentProxyRef(const Actor* parent)
 {
 	while (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		const Actor* curr = parent;

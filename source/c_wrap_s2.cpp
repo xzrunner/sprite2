@@ -565,11 +565,13 @@ void s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty)
 extern "C"
 void s2_actor_retain(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	s2_actor->GetSpr()->Retain(s2_actor);
 }
 
 extern "C"
 void s2_actor_release(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	s2_actor->GetSpr()->Release(s2_actor);
 }
 
 extern "C"
@@ -754,6 +756,7 @@ extern "C"
 int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	const Actor* p_actor = static_cast<const Actor*>(parent);
 	const Sprite* p_spr = p_actor->GetSpr();
+
 	const Actor* new_actor = static_cast<const Actor*>(child);
 	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
 	Sprite* old_spr = p_spr->FetchChildByName(name_id, p_actor);
@@ -1079,7 +1082,7 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 }
 
 extern "C"
-void* s2_actor_get_anchor_real(void* actor) {
+void* s2_actor_get_anchor_real_for_fetch(void* actor) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_ANCHOR) {
 		return actor;
@@ -1088,6 +1091,8 @@ void* s2_actor_get_anchor_real(void* actor) {
 	const AnchorActor* anchor_actor = VI_DOWNCASTING<const AnchorActor*>(s2_actor);
 	void* ret = const_cast<Actor*>(anchor_actor->GetAnchor());
 	if (ret) {
+		s2_actor_release(actor);
+		s2_actor_retain(ret);
 		return ret;
 	} else {
 		return actor;

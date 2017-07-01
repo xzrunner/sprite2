@@ -48,6 +48,9 @@ public:
 	virtual void AddReference() const;
 	virtual void RemoveReference() const;
 
+	virtual void Retain(const Actor* actor) const;
+	virtual void Release(const Actor* actor) const;
+
 	virtual void OnMessage(const UpdateParams& up, Message msg) {}
 	
  	virtual bool Update(const UpdateParams& up) { return false; }

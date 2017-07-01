@@ -157,9 +157,9 @@ void Flatten::AddQuad(const ImageSymbol* img, const sm::vec2 vertices[4])
 void Flatten::AddNode(Sprite* spr, Actor* actor, const S2_MAT& prev_mat)
 {
 	Node node;
-	if (spr) {
-		spr->AddReference();
-	}
+// 	if (spr) {
+// 		spr->AddReference();
+// 	}
 	node.spr      = spr;
 	node.actor    = actor;
 	node.prev_mat = prev_mat;
@@ -323,9 +323,9 @@ Flatten::Node::Node(const Node& node)
 Flatten::Node& Flatten::Node::operator = (const Node& node)
 {
 	spr = node.spr;
-	if (spr) {
-		spr->AddReference();
-	}
+// 	if (spr) {
+// 		spr->AddReference();
+// 	}
 
 	actor = node.actor;
 

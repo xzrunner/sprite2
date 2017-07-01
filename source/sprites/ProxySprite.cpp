@@ -21,12 +21,12 @@ ProxySprite* ProxySprite::Clone() const
 	return new ProxySprite(*this);
 }
 
-void ProxySprite::Retain(const Actor* actor)
+void ProxySprite::Retain(const Actor* actor) const
 {
 	AddParentProxyRef(actor);
 }
 
-void ProxySprite::Release(const Actor* actor)
+void ProxySprite::Release(const Actor* actor) const
 {
 	DelParentProxyRef(actor);	
 }
@@ -219,8 +219,9 @@ void ProxySprite::AddParentProxyRef(const Actor* parent) const
 void ProxySprite::DelParentProxyRef(const Actor* parent) const
 {
 	while (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-		parent->GetSpr()->RemoveReference();
+		const Actor* curr = parent;
 		parent = parent->GetParent();
+		curr->GetSpr()->RemoveReference();
 	}
 }
 

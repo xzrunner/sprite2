@@ -22,8 +22,8 @@ public:
 	 *    Sprite
 	 */
 
-	virtual void Retain(const Actor* actor);
-	virtual void Release(const Actor* actor);
+	virtual void Retain(const Actor* actor) const;
+	virtual void Release(const Actor* actor) const;
 
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 

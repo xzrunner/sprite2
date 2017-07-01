@@ -41,13 +41,6 @@ public:
 	Sprite(Symbol* sym, uint32_t id = -1);
 	virtual ~Sprite();
 	
-	/**
-	 *  @interface
-	 *    cu::RefCountObj
-	 */
-	virtual void AddReference() const;
-	virtual void RemoveReference() const;
-
 	virtual void Retain(const Actor* actor) const;
 	virtual void Release(const Actor* actor) const;
 
@@ -69,6 +62,8 @@ public:
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
 
 	static void InitHook(void (*init_flags)(Sprite* spr));
+
+	static int GetAllSprCount();
 
 public:
 

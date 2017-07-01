@@ -38,6 +38,8 @@ public:
 
 	sm::rect GetBounding(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
+	static int GetAllSymCount();
+
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const = 0;	
 

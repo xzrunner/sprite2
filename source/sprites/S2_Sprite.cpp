@@ -25,9 +25,7 @@ namespace s2
 
 static int NEXT_ID = 0;
 
-#ifdef S2_RES_LOG
-static int COUNT = 0;
-#endif // S2_RES_LOG
+static int ALL_SPR_COUNT = 0;
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 static const sm::vec2 POS0_PROXY = sm::vec2(0, 0);
@@ -46,10 +44,7 @@ Sprite::Sprite()
 	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ sprite " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_SPR_COUNT;
 
 	InitFlags();
 }
@@ -64,10 +59,7 @@ Sprite::Sprite(const Sprite& spr)
 	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ sprite " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_SPR_COUNT;
 
 	InitFromSpr(spr);
 }
@@ -88,10 +80,7 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 	, m_actors(NULL)
 	, m_id(NEXT_ID++)
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ sprite " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_SPR_COUNT;
 
 	cu::RefCountObjAssign(m_sym, sym);
 
@@ -100,10 +89,7 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 
 Sprite::~Sprite()
 {
-#ifdef S2_RES_LOG
-	--COUNT;
-	std::cout << "-- sprite " << COUNT << "\n";
-#endif // S2_RES_LOG
+	--ALL_SPR_COUNT;
 
 	if (m_actors)
 	{
@@ -126,27 +112,6 @@ Sprite::~Sprite()
 	if (m_render != SprDefault::Instance()->Render()) {
 		SprRenderPool::Instance()->Push(m_render);
 	}
-}
-
-int Sprite::GetCount()
-{
-	return COUNT;
-}
-
-void Sprite::AddReference() const
-{
-	if (m_sym->GetID() == 1054894) {
-		printf("++++++++++++++++++++++++++++++++++++ 1054894 spr add ref %d\n", GetRefCount());
-	}
-	cu::RefCountObj::AddReference();
-}
-
-void Sprite::RemoveReference() const
-{
-	if (m_sym->GetID() == 1054894) {
-		printf("++++++++++++++++++++++++++++++++++++ 1054894 spr del ref %d\n", GetRefCount());
-	}
-	cu::RefCountObj::RemoveReference();
 }
 
 void Sprite::Retain(const Actor* actor) const
@@ -318,6 +283,11 @@ void Sprite::SetOffset(const sm::vec2& offset)
 void Sprite::InitHook(void (*init_flags)(Sprite* spr))
 {
 	INIT_FLAGS = init_flags;
+}
+
+int Sprite::GetAllSprCount()
+{
+	return ALL_SPR_COUNT;
 }
 
 VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat) const

@@ -1,6 +1,5 @@
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
-// #include "FixActorPathVisitor.h"
 #include "SprVisitorParams.h"
 #include "SprDefault.h"
 #include "SprSRT.h"
@@ -12,9 +11,7 @@
 namespace s2
 {
 
-#ifdef S2_RES_LOG
-static int COUNT = 0;
-#endif // S2_RES_LOG
+static int ALL_ACTOR_COUNT = 0;
 
 Actor::Actor()
 	: m_spr(NULL)
@@ -22,6 +19,8 @@ Actor::Actor()
 	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
+	++ALL_ACTOR_COUNT;
+
 	InitFlags();
 }
 
@@ -31,10 +30,7 @@ Actor::Actor(const Sprite* spr, const Actor* parent)
 	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ actor " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_ACTOR_COUNT;
 
 	if (m_spr) {
 		m_spr->AddActor(this);
@@ -47,10 +43,7 @@ Actor::Actor(const Sprite* spr, const Actor* parent)
 
 Actor::~Actor()
 {
-#ifdef S2_RES_LOG
-	--COUNT;
-	std::cout << "-- actor " << COUNT << "\n";
-#endif // S2_RES_LOG
+	--ALL_ACTOR_COUNT;
 
 	if (m_geo != ActorDefault::Instance()->Geo()) {
 		ActorGeoPool::Instance()->Push(m_geo);
@@ -193,6 +186,11 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 		m_aabb.UpdateParent(this);
 		SetFlattenDirtyToRoot();
 	}
+}
+
+int Actor::GetAllActorCount()
+{
+	return ALL_ACTOR_COUNT;
 }
 
 }

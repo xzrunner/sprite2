@@ -10,34 +10,23 @@
 namespace s2
 {
 
-#ifdef S2_RES_LOG
-static int COUNT = 0;
-#endif // S2_RES_LOG
+static int ALL_SYM_COUNT = 0;
 
 Symbol::Symbol() 
 	: m_id(-1) 
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ symbol " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_SYM_COUNT;
 }
 
 Symbol::Symbol(uint32_t id) 
 	: m_id(id) 
 {
-#ifdef S2_RES_LOG
-	++COUNT;
-	std::cout << "++ symbol id:" << m_id << ", count: " << COUNT << "\n";
-#endif // S2_RES_LOG
+	++ALL_SYM_COUNT;
 }
 
 Symbol::~Symbol() 
 {
-#ifdef S2_RES_LOG
-	--COUNT;
-	std::cout << "-- symbol id:" << m_id << ", count: " << COUNT << "\n";
-#endif // S2_RES_LOG
+	--ALL_SYM_COUNT;
 }
 
 sm::rect Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) const
@@ -47,6 +36,11 @@ sm::rect Symbol::GetBounding(const Sprite* spr, const Actor* actor, bool cache) 
 		return rect;
 	}
 	return GetBoundingImpl(spr, actor, cache);
+}
+
+int Symbol::GetAllSymCount()
+{
+	return ALL_SYM_COUNT;
 }
 
 }

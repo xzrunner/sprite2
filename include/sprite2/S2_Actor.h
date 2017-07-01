@@ -58,6 +58,8 @@ public:
 
 	void SetFlattenDirtyToRoot() const;
 
+	static int GetAllActorCount();
+
 private:
 	void InitFlags();
 

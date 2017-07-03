@@ -90,7 +90,7 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 	curr->OnMessage(up, this, msg);
 	switch (msg)
 	{
-	case MSG_START:
+	case MSG_START: case MSG_TRIGGER:
 		curr->Start(up, this);
 		if (m_start_random) {
 			RandomStartTime(up);

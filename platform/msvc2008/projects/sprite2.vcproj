@@ -1516,11 +1516,31 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\source\utility\StatSymbol.cpp"
+					RelativePath="..\..\..\source\sprites\StatSprCount.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\include\sprite2\StatSymbol.h"
+					RelativePath="..\..\..\include\sprite2\StatSprCount.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\StatSymCount.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\StatSymCount.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\utility\StatSymDraw.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\StatSymDraw.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\StatSymType.h"
 					>
 				</File>
 				<File

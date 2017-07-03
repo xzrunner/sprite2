@@ -1,6 +1,7 @@
 #include "StatSymCount.h"
 
 #include <stdio.h>
+#include <string.h>
 
 namespace s2
 {

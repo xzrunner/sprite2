@@ -8,7 +8,8 @@
 #include "SymbolVisitor.h"
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
@@ -18,11 +19,24 @@ namespace s2
 
 Scale9Symbol::Scale9Symbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Scale9Symbol::Scale9Symbol(uint32_t id)
 	: Symbol(id)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Scale9Symbol::~Scale9Symbol()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
 }
 
 int Scale9Symbol::Type() const 
@@ -44,8 +58,8 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 RenderReturn Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_SCALE9);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_SCALE9);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SCALE9);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_SCALE9);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;

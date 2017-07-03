@@ -5,7 +5,8 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 namespace s2
@@ -14,16 +15,26 @@ namespace s2
 ShapeSymbol::ShapeSymbol()
 	: m_shape(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SHAPE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ShapeSymbol::ShapeSymbol(uint32_t id)
 	: Symbol(id)
 	, m_shape(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SHAPE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ShapeSymbol::~ShapeSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_SHAPE);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_shape) {
 		m_shape->RemoveReference();
 	}
@@ -37,8 +48,8 @@ int ShapeSymbol::Type() const
 RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_SHAPE);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_SHAPE);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_SHAPE);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_shape || !spr) {

@@ -7,7 +7,8 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 namespace s2
@@ -16,16 +17,26 @@ namespace s2
 SkeletonSymbol::SkeletonSymbol()
 	: m_skeleton(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SKELETON);
+#endif // S2_DISABLE_STATISTICS
 }
 
 SkeletonSymbol::SkeletonSymbol(uint32_t id)
 	: Symbol(id)
 	, m_skeleton(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_SKELETON);
+#endif // S2_DISABLE_STATISTICS
 }
 
 SkeletonSymbol::~SkeletonSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_SKELETON);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_skeleton) {
 		m_skeleton->RemoveReference();
 	}
@@ -39,8 +50,8 @@ int SkeletonSymbol::Type() const
 RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_SKELETON);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_SKELETON);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_SKELETON);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_skeleton) {

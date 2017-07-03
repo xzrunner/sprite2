@@ -5,7 +5,8 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
@@ -17,16 +18,26 @@ namespace s2
 IconSymbol::IconSymbol()
 	: m_icon(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ICON);
+#endif // S2_DISABLE_STATISTICS
 }
 
 IconSymbol::IconSymbol(uint32_t id)
 	: Symbol(id)
 	, m_icon(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ICON);
+#endif // S2_DISABLE_STATISTICS
 }
 
 IconSymbol::~IconSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_ICON);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_icon) {
 		m_icon->RemoveReference();
 	}
@@ -40,8 +51,8 @@ int IconSymbol::Type() const
 RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ICON);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_ICON);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_ICON);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_icon) {

@@ -5,7 +5,8 @@
 #include "S2_Sprite.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <rigging.h>
@@ -30,16 +31,26 @@ namespace s2
 Anim2Symbol::Anim2Symbol()
 	: m_anim(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Anim2Symbol::Anim2Symbol(uint32_t id)
 	: Symbol(id)
 	, m_anim(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Anim2Symbol::~Anim2Symbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
+
 	if(m_anim) {
 		release_anim(m_anim);
 		m_anim = NULL;
@@ -56,8 +67,8 @@ int Anim2Symbol::Type() const
 RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ANIM2);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_ANIM2);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_ANIM2);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_anim || !spr) {

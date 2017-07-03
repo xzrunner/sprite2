@@ -13,7 +13,8 @@
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatOverdraw.h"
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #ifdef S2_DEBUG
@@ -35,6 +36,9 @@ ImageSymbol::ImageSymbol()
 	: m_tex(NULL)
 	, m_rotate(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ImageSymbol::ImageSymbol(uint32_t id)
@@ -42,10 +46,17 @@ ImageSymbol::ImageSymbol(uint32_t id)
 	, m_tex(NULL)
 	, m_rotate(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ImageSymbol::~ImageSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_tex) {
 		m_tex->RemoveReference();
 	}
@@ -59,8 +70,8 @@ int ImageSymbol::Type() const
 RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_IMAGE);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_IMAGE);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_IMAGE);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {

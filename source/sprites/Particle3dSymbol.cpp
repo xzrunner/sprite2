@@ -11,7 +11,8 @@
 #include "Particle3dActor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatTopNodes.h"
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <ps_3d.h>
@@ -29,6 +30,10 @@ Particle3dSymbol::Particle3dSymbol()
 	, m_loop(true)
 	, m_local(true)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	Particle3d::Instance();
 }
 
@@ -39,11 +44,19 @@ Particle3dSymbol::Particle3dSymbol(uint32_t id)
 	, m_loop(true)
 	, m_local(true)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	Particle3d::Instance();
 }
 
 Particle3dSymbol::~Particle3dSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_et_cfg) {
 		m_et_cfg->RemoveReference();
 	}
@@ -65,8 +78,8 @@ RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 		id = spr->GetSymbol()->GetID();
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_PARTICLE3D);
-	StatSymbol::DrawCostCP cp2(StatSymbol::SYM_PARTICLE3D);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE3D);
+	StatSymDraw::DrawCostCP cp2(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
 
 	if (rp.IsDisableParticle3d()) {

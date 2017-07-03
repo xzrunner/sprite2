@@ -7,7 +7,8 @@
 #include "TrailEmitter.h"
 #include "TrailEmitterCfg.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <mt_2d.h>
@@ -21,6 +22,9 @@ TrailSymbol::TrailSymbol()
 	: m_et_cfg(NULL)
 	, m_et(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TrailSymbol::TrailSymbol(uint32_t id)
@@ -28,10 +32,17 @@ TrailSymbol::TrailSymbol(uint32_t id)
 	, m_et_cfg(NULL)
 	, m_et(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TrailSymbol::~TrailSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_et_cfg) {
 		m_et_cfg->RemoveReference();
 	}
@@ -48,8 +59,8 @@ int TrailSymbol::Type() const
 RenderReturn TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TRAIL);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_TRAIL);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TRAIL);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_TRAIL);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {

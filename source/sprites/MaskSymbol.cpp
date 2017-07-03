@@ -7,7 +7,8 @@
 #include "BoundingBox.h"
 #include "SymbolVisitor.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 namespace s2
@@ -17,6 +18,9 @@ MaskSymbol::MaskSymbol()
 	: m_base(NULL)
 	, m_mask(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
 }
 
 MaskSymbol::MaskSymbol(uint32_t id)
@@ -24,10 +28,17 @@ MaskSymbol::MaskSymbol(uint32_t id)
 	, m_base(NULL)
 	, m_mask(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
 }
 
 MaskSymbol::~MaskSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_base) {
 		m_base->RemoveReference();
 	}
@@ -54,8 +65,8 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_MASK);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_MASK);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_MASK);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

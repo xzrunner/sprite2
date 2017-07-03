@@ -20,7 +20,8 @@
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatDrawCall.h"
 #include "sprite2/StatTopNodes.h"
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <SM_Test.h>
@@ -36,6 +37,9 @@ ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
 	, m_ft(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ComplexSymbol::ComplexSymbol(uint32_t id)
@@ -43,10 +47,17 @@ ComplexSymbol::ComplexSymbol(uint32_t id)
 	, m_scissor(0, 0)
 	, m_ft(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ComplexSymbol::~ComplexSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
+
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 	if (m_ft) {
 		FlattenMgr::Instance()->Delete(GetID());
@@ -74,8 +85,8 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 		id = spr->GetSymbol()->GetID();
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_COMPLEX);
-	StatSymbol::DrawCostCP cp2(StatSymbol::SYM_COMPLEX);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_COMPLEX);
+	StatSymDraw::DrawCostCP cp2(STAT_SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

@@ -19,7 +19,8 @@
 #include "AnimCurrCreator.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatTopNodes.h"
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
@@ -33,6 +34,9 @@ AnimSymbol::AnimSymbol()
 	, m_curr(NULL)
 	, m_copy(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
 }
 
 AnimSymbol::AnimSymbol(uint32_t id)
@@ -42,10 +46,17 @@ AnimSymbol::AnimSymbol(uint32_t id)
 	, m_curr(NULL)
 	, m_copy(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
 }
 
 AnimSymbol::~AnimSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
+
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
 		Layer* layer = m_layers[i];
 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
@@ -94,8 +105,8 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		id = spr->GetSymbol()->GetID();
 	}
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_ANIMATION);
-	StatSymbol::DrawCostCP cp2(StatSymbol::SYM_ANIMATION);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIMATION);
+	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;

@@ -4,7 +4,8 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <ps_2d.h>
@@ -17,6 +18,10 @@ namespace s2
 Particle2dSymbol::Particle2dSymbol()
 	: m_et_cfg(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
+
 	Particle2d::Instance();
 }
 
@@ -24,11 +29,18 @@ Particle2dSymbol::Particle2dSymbol(uint32_t id)
 	: Symbol(id)
 	, m_et_cfg(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
+
 	Particle2d::Instance();
 }
 
 Particle2dSymbol::~Particle2dSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
 }
 
 int Particle2dSymbol::Type() const 
@@ -39,8 +51,8 @@ int Particle2dSymbol::Type() const
 RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_PARTICLE2D);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_PARTICLE2D);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE2D);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_PARTICLE2D);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {

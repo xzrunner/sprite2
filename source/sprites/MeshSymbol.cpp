@@ -7,7 +7,8 @@
 #include "DrawNode.h"
 #include "S2_Mesh.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
@@ -20,6 +21,9 @@ MeshSymbol::MeshSymbol()
 	: m_mesh(NULL)
 	, m_pause(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
 }
 
 MeshSymbol::MeshSymbol(uint32_t id)
@@ -27,10 +31,17 @@ MeshSymbol::MeshSymbol(uint32_t id)
 	, m_mesh(NULL)
 	, m_pause(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
 }
 
 MeshSymbol::~MeshSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_mesh) {
 		m_mesh->RemoveReference();
 	}
@@ -44,8 +55,8 @@ int MeshSymbol::Type() const
 RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_MESH);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_MESH);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_mesh) {

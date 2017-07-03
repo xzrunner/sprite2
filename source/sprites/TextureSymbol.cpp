@@ -5,7 +5,8 @@
 #include "PolygonShape.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
@@ -16,15 +17,25 @@ namespace s2
 
 TextureSymbol::TextureSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTURE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TextureSymbol::TextureSymbol(uint32_t id)
 	: Symbol(id)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTURE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TextureSymbol::~TextureSymbol()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Subtract(STAT_SYM_TEXTURE);
+#endif // S2_DISABLE_STATISTICS
+
 	Clear();
 }
 
@@ -36,8 +47,8 @@ int TextureSymbol::Type() const
 RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TEXTURE);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_TEXTURE);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTURE);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

@@ -19,9 +19,10 @@ namespace s2
 class TextboxSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
-	TextboxSymbol() {}
+	TextboxSymbol();
 	TextboxSymbol(uint32_t id);
 	TextboxSymbol(Textbox tb);
+	virtual ~TextboxSymbol();
 
 	/**
 	 *  @interface

@@ -9,7 +9,8 @@
 #include "FlattenParams.h"
 #include "Flatten.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatSymbol.h"
+#include "sprite2/StatSymDraw.h"
+#include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <gtxt_label.h>
@@ -20,14 +21,34 @@
 namespace s2
 {
 
+TextboxSymbol::TextboxSymbol()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTBOX);
+#endif // S2_DISABLE_STATISTICS
+}
+
 TextboxSymbol::TextboxSymbol(uint32_t id)
 	: Symbol(id)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTBOX);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TextboxSymbol::TextboxSymbol(Textbox tb)
 	: m_tb(tb)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTBOX);
+#endif // S2_DISABLE_STATISTICS
+}
+
+TextboxSymbol::~TextboxSymbol()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSymCount::Instance()->Add(STAT_SYM_TEXTBOX);
+#endif // S2_DISABLE_STATISTICS
 }
 
 int TextboxSymbol::Type() const 
@@ -38,8 +59,8 @@ int TextboxSymbol::Type() const
 RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatSymbol::Instance()->AddDrawCount(StatSymbol::SYM_TEXTBOX);
-	StatSymbol::DrawCostCP cp(StatSymbol::SYM_TEXTBOX);
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTBOX);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {

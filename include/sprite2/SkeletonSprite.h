@@ -11,7 +11,10 @@ class SkeletonSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	SkeletonSprite();
+	SkeletonSprite(const SkeletonSprite& spr);
+	SkeletonSprite& operator = (const SkeletonSprite& spr);
 	SkeletonSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~SkeletonSprite();
 
 	/**
 	 *  @interface

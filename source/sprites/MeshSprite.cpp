@@ -4,6 +4,9 @@
 #include "UpdateParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <stddef.h>
 
@@ -14,6 +17,10 @@ MeshSprite::MeshSprite()
 	: m_base(NULL)
 	, m_only_draw_bound(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 //	m_speed.set(0, -0.01f);
 }
 
@@ -24,6 +31,10 @@ MeshSprite::MeshSprite(const MeshSprite& mesh)
 	, m_base(mesh.m_base)
 	, m_only_draw_bound(mesh.m_only_draw_bound)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 	if (mesh.m_base) {
 		mesh.m_base->AddReference();
 	}
@@ -43,6 +54,10 @@ MeshSprite::MeshSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id) 
 	, m_only_draw_bound(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 	Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(sym)->GetMesh();
 	m_base = mesh->GetBaseSymbol();
 	if (m_base) {
@@ -56,6 +71,10 @@ MeshSprite::MeshSprite(Symbol* sym, uint32_t id)
 
 MeshSprite::~MeshSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_MESH);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_base) {
 		m_base->RemoveReference();
 	}

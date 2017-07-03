@@ -10,7 +10,10 @@ class ShapeSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	ShapeSprite();
+	ShapeSprite(const ShapeSprite& spr);
+	ShapeSprite& operator = (const ShapeSprite& spr);
 	ShapeSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~ShapeSprite();
 
 	/**
 	 *  @interface

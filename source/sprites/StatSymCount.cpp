@@ -15,13 +15,9 @@ StatSymCount::StatSymCount()
 void StatSymCount::Print(std::string& str) const
 {
 	static char buf[512];
-	sprintf(buf, "img %d, complex %d, anim %d\n", 
+	sprintf(buf, "SYM: img %d, complex %d, anim %d\n", 
 		m_counts[STAT_SYM_IMAGE], m_counts[STAT_SYM_COMPLEX], m_counts[STAT_SYM_ANIMATION]);
 	str += buf;
-}
-
-void StatSymCount::Reset()
-{
 }
 
 void StatSymCount::Add(StatSymType type)

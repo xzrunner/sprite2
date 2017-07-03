@@ -6,6 +6,9 @@
 #include "UpdateParams.h"
 #include "S2_Symbol.h"
 #include "SprGeo.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <stddef.h>
 
@@ -14,12 +17,40 @@ namespace s2
 
 ImageSprite::ImageSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+}
+
+ImageSprite::ImageSprite(const ImageSprite& spr)
+	: Sprite(spr)
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+}
+
+ImageSprite& ImageSprite::operator = (const ImageSprite& spr)
+{
+	Sprite::operator = (spr);
+	return *this;
 }
 
 ImageSprite::ImageSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+
 	m_geo->SetOffset(m_sym->GetBounding(this).Center());
+}
+
+ImageSprite::~ImageSprite()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ImageSprite* ImageSprite::Clone() const

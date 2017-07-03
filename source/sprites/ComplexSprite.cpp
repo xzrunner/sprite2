@@ -6,6 +6,9 @@
 #include "SprVisitorParams.h"
 #include "SymType.h"
 #include "ProxyHelper.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <assert.h>
 
@@ -15,12 +18,39 @@ namespace s2
 ComplexSprite::ComplexSprite() 
 	: m_action(-1)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
+}
+
+ComplexSprite::ComplexSprite(const ComplexSprite& spr)
+	: Sprite(spr)
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
+}
+
+ComplexSprite& ComplexSprite::operator = (const ComplexSprite& spr)
+{
+	Sprite::operator = (spr);
+	return *this;
 }
 
 ComplexSprite::ComplexSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_action(-1)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
+}
+
+ComplexSprite::~ComplexSprite()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_COMPLEX);
+#endif // S2_DISABLE_STATISTICS
 }
 
 ComplexSprite* ComplexSprite::Clone() const

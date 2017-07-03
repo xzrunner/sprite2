@@ -10,7 +10,10 @@ class TextureSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	TextureSprite();
+	TextureSprite(const TextureSprite& spr);
+	TextureSprite& operator = (const TextureSprite& spr);
 	TextureSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~TextureSprite();
 
 	/**
 	 *  @interface

@@ -1,5 +1,5 @@
-#ifndef _SPRITE2_STAT_SYM_COUNT_H_
-#define _SPRITE2_STAT_SYM_COUNT_H_
+#ifndef _SPRITE2_STAT_SPR_COUNT_H_
+#define _SPRITE2_STAT_SPR_COUNT_H_
 
 #include "StatSymType.h"
 
@@ -10,10 +10,11 @@
 namespace s2
 {
 
-class StatSymCount
+class StatSprCount
 {
 public:
 	void Print(std::string& str) const;
+	void Reset();
 
 	void Add(StatSymType type);
 	void Subtract(StatSymType type);
@@ -21,10 +22,10 @@ public:
 private:
 	int m_counts[STAT_SYM_MAX];
 
-	SINGLETON_DECLARATION(StatSymCount);
+	SINGLETON_DECLARATION(StatSprCount);
 
-}; // StatSymCount
+}; // StatSprCount
 
 }
 
-#endif // _SPRITE2_STAT_SYM_COUNT_H_
+#endif // _SPRITE2_STAT_SPR_COUNT_H_

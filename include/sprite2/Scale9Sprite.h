@@ -13,7 +13,10 @@ class Scale9Sprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	Scale9Sprite();
+	Scale9Sprite(const Scale9Sprite& spr);
+	Scale9Sprite& operator = (const Scale9Sprite& spr);
 	Scale9Sprite(Symbol* sym, uint32_t id = -1);
+	virtual ~Scale9Sprite();
 
 	/**
 	 *  @interface

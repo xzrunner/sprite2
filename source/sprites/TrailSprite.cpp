@@ -5,6 +5,9 @@
 #include "Trail.h"
 #include "S2_Actor.h"
 #include "TrailEmitter.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <mt_2d.h>
 
@@ -18,6 +21,9 @@ TrailSprite::TrailSprite()
 	, m_local(false)
 	, m_in_p3d(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
 }
 
 TrailSprite::TrailSprite(const TrailSprite& spr)
@@ -26,6 +32,10 @@ TrailSprite::TrailSprite(const TrailSprite& spr)
 	, m_local(spr.m_local)
 	, m_in_p3d(spr.m_in_p3d)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
+
 	CreateSpr();
 }
 
@@ -47,11 +57,19 @@ TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
 	, m_local(false)
 	, m_in_p3d(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
+
 	CreateSpr();
 }
 
 TrailSprite::~TrailSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_TRAIL);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_et) {
 		m_et->RemoveReference();
 	}

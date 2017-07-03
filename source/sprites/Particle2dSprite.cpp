@@ -3,6 +3,9 @@
 #include "S2_Symbol.h"
 #include "RenderParams.h"
 #include "UpdateParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <ps_2d.h>
 
@@ -16,12 +19,19 @@ namespace s2
 Particle2dSprite::Particle2dSprite() 
 	: m_et(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Particle2dSprite::Particle2dSprite(const Particle2dSprite& spr)
 	: Sprite(spr)
 	, m_et(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
+
 	if (spr.m_et) {
 		m_et = p2d_emitter_create(spr.m_et->cfg);
 	}
@@ -41,6 +51,10 @@ Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
+
 	const p2d_emitter_cfg* cfg = VI_DOWNCASTING<Particle2dSymbol*>(sym)->GetEmitterCfg();
 	if (cfg) {
 		m_et = p2d_emitter_create(cfg);
@@ -50,6 +64,10 @@ Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id)
 
 Particle2dSprite::~Particle2dSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_PARTICLE2D);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_et) {
 		p2d_emitter_release(m_et);
 	}

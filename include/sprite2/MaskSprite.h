@@ -10,7 +10,10 @@ class MaskSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	MaskSprite();
+	MaskSprite(const MaskSprite& spr);
+	MaskSprite& operator = (const MaskSprite& spr);
 	MaskSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~MaskSprite();
 
 	/**
 	 *  @interface

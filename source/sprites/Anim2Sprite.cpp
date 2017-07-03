@@ -1,6 +1,9 @@
 #include "Anim2Sprite.h"
 #include "Anim2Symbol.h"
 #include "UpdateParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 namespace s2
 {
@@ -8,6 +11,23 @@ namespace s2
 Anim2Sprite::Anim2Sprite() 
 	: m_static_time(-1)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Anim2Sprite::Anim2Sprite(const Anim2Sprite& spr)
+	: Sprite(spr)
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Anim2Sprite& Anim2Sprite::operator = (const Anim2Sprite& spr)
+{
+	Sprite::operator = (spr);
+	return *this;
 }
 
 Anim2Sprite::Anim2Sprite(Symbol* sym, uint32_t id)
@@ -15,6 +35,16 @@ Anim2Sprite::Anim2Sprite(Symbol* sym, uint32_t id)
 	, m_curr(VI_DOWNCASTING<Anim2Symbol*>(sym))
 	, m_static_time(-1)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Anim2Sprite::~Anim2Sprite()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_ANIM2);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Anim2Sprite* Anim2Sprite::Clone() const

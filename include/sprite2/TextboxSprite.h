@@ -13,7 +13,10 @@ class TextboxSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	TextboxSprite();
+	TextboxSprite(const TextboxSprite& spr);
+	TextboxSprite& operator = (const TextboxSprite& spr);
 	TextboxSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~TextboxSprite();
 
 	/**
 	 *  @interface

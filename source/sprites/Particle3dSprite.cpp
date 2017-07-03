@@ -10,6 +10,9 @@
 #include "RenderParams.h"
 #include "CreateActorsVisitor.h"
 #include "SprVisitorParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <ps_3d.h>
 
@@ -28,6 +31,9 @@ Particle3dSprite::Particle3dSprite()
 	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
@@ -39,6 +45,10 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	, m_reuse(spr.m_reuse)
 	, m_start_radius(spr.m_start_radius)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	CreateSpr();
 }
 
@@ -64,6 +74,10 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
 	m_loop  = p3d_sym->IsLoop();
 	m_local = p3d_sym->IsLocal();
@@ -73,6 +87,10 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 
 Particle3dSprite::~Particle3dSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_PARTICLE3D);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_et) {
 		m_et->RemoveReference();
 	}

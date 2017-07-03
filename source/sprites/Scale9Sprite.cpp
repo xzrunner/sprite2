@@ -2,6 +2,9 @@
 #include "Scale9Symbol.h"
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <stddef.h>
 
@@ -10,12 +13,39 @@ namespace s2
 
 Scale9Sprite::Scale9Sprite() 
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Scale9Sprite::Scale9Sprite(const Scale9Sprite& spr)
+	: Sprite(spr)
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Scale9Sprite& Scale9Sprite::operator = (const Scale9Sprite& spr)
+{
+	Sprite::operator = (spr);
+	return *this;
 }
 
 Scale9Sprite::Scale9Sprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_s9(VI_DOWNCASTING<Scale9Symbol*>(sym)->GetScale9())
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
+}
+
+Scale9Sprite::~Scale9Sprite()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_SCALE9);
+#endif // S2_DISABLE_STATISTICS
 }
 
 Scale9Sprite* Scale9Sprite::Clone() const

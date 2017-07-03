@@ -4,17 +4,47 @@
 #include "S2_Actor.h"
 #include "SpriteVisitor.h"
 #include "SprVisitorParams.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 namespace s2
 {
 
 MaskSprite::MaskSprite() 
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
+}
+
+MaskSprite::MaskSprite(const MaskSprite& spr)
+	: Sprite(spr)
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
+}
+
+MaskSprite& MaskSprite::operator = (const MaskSprite& spr)
+{
+	Sprite::operator = (spr);
+	return *this;
 }
 
 MaskSprite::MaskSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
+}
+
+MaskSprite::~MaskSprite()
+{
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_MASK);
+#endif // S2_DISABLE_STATISTICS
 }
 
 MaskSprite* MaskSprite::Clone() const

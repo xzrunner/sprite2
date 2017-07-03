@@ -10,7 +10,10 @@ class IconSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	IconSprite();
+	IconSprite(const IconSprite& spr);
+	IconSprite& operator = (const IconSprite& spr);
 	IconSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~IconSprite();
 
 	/**
 	 *  @interface

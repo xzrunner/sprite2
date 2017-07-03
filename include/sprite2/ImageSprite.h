@@ -10,7 +10,10 @@ class ImageSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	ImageSprite();
+	ImageSprite(const ImageSprite& spr);
+	ImageSprite& operator = (const ImageSprite& spr);
 	ImageSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~ImageSprite();
 
 	/**
 	 *  @interface

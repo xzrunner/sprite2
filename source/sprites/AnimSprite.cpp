@@ -5,6 +5,9 @@
 #include "UpdateParams.h"
 #include "SprVisitorParams.h"
 #include "AnimCurrCreator.h"
+#ifndef S2_DISABLE_STATISTICS
+#include "sprite2/StatSprCount.h"
+#endif // S2_DISABLE_STATISTICS
 
 #include <stdlib.h>
 #include <assert.h>
@@ -19,6 +22,9 @@ AnimSprite::AnimSprite()
 	, m_start_random(false)
 	, m_curr(NULL)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
 }
 
 AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
@@ -28,6 +34,10 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 	, m_fps(VI_DOWNCASTING<AnimSymbol*>(sym)->GetFPS())
 	, m_start_random(false)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
+
 	AnimSymbol* anim_sym = VI_DOWNCASTING<AnimSymbol*>(m_sym);
 	m_curr = AnimCurrCreator::Create(anim_sym, this);
 }
@@ -35,6 +45,10 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 AnimSprite::AnimSprite(const AnimSprite& spr)
 	: Sprite(spr)
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
+
 	this->operator = (spr);
 }
 
@@ -55,6 +69,10 @@ AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
 
 AnimSprite::~AnimSprite()
 {
+#ifndef S2_DISABLE_STATISTICS
+	StatSprCount::Instance()->Subtract(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
+
 	if (m_curr) {
 		m_curr->RemoveReference();
 	}

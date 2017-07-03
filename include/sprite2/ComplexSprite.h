@@ -10,7 +10,10 @@ class ComplexSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	ComplexSprite();
+	ComplexSprite(const ComplexSprite& spr);
+	ComplexSprite& operator = (const ComplexSprite& spr);
 	ComplexSprite(Symbol* sym, uint32_t id = -1);
+	virtual ~ComplexSprite();
 
 	/**
 	 *  @interface

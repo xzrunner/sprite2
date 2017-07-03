@@ -10,7 +10,6 @@
 #include <SM_Rect.h>
 
 #include <CU_RefCountObj.h>
-#include <CU_Cloneable.h>
 
 namespace s2
 {
@@ -21,7 +20,7 @@ class Sprite;
 class Actor;
 class RenderParams;
 
-class AnimCurr : public cu::RefCountObj, public cu::Cloneable
+class AnimCurr : public cu::RefCountObj
 {
 public:
 	virtual ~AnimCurr() {}	

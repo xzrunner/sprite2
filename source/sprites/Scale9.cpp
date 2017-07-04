@@ -310,9 +310,6 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center,
 			case S9_MID_LEFT:
 				src_h = m_sz_left;
 				break;
-			case S9_MID_CENTER:
-				src_h = dst_w;
-				break;
 			case S9_MID_RIGHT:
 				src_h = m_sz_right;
 				break;
@@ -348,9 +345,6 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center,
 				break;
 			case S9_MID_LEFT:
 				src_w = m_sz_left;
-				break;
-			case S9_MID_CENTER:
-				src_h = dst_h;
 				break;
 			case S9_MID_RIGHT:
 				src_w = m_sz_right;

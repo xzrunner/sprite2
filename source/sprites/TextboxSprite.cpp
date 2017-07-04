@@ -22,6 +22,9 @@ TextboxSprite::TextboxSprite()
 
 TextboxSprite::TextboxSprite(const TextboxSprite& spr)
 	: Sprite(spr)
+	, m_tb(spr.m_tb)
+	, m_text(spr.m_text)
+	, m_time(spr.m_time)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_TEXTBOX);
@@ -31,6 +34,11 @@ TextboxSprite::TextboxSprite(const TextboxSprite& spr)
 TextboxSprite& TextboxSprite::operator = (const TextboxSprite& spr)
 {
 	Sprite::operator = (spr);
+
+	m_tb   = spr.m_tb;
+	m_text = spr.m_text;
+	m_time = spr.m_time;
+
 	return *this;
 }
 

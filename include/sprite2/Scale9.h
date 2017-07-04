@@ -66,7 +66,7 @@ public:
 
 private:
 	void ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, 
-		float dst_w, float dst_h);
+		float dst_w, float dst_h, bool no_scale_w, bool no_scale_h);
 
 	sm::vec2 GetChildSize(SCALE9_IDX idx) const;
 	

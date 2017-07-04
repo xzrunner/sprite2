@@ -8,6 +8,7 @@
 #include "UpdateParams.h"
 #include "FlattenParams.h"
 #include "Flatten.h"
+#include "TextboxSprite.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
@@ -139,25 +140,31 @@ void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 
 sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
-	if (!actor) {
+	if (actor)
+	{
+		const sm::rect& r = actor->GetAABB().GetRect();
+		const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+		if (!r.IsValid()) {
+			const TextboxActor* tb_actor = VI_DOWNCASTING<const TextboxActor*>(actor);
+			return TextboxActor::CalcAABB(tb_spr->GetTextbox(), GetBounding(), tb_actor->GetText());
+		}
+
+		sm::rect ret(r.Width(), r.Height());
+
+		float offy = - (r.Height() - tb_spr->GetTextbox().height) * 0.5f;
+		ret.ymin += offy;
+		ret.ymax += offy;
+		return ret;
+	}
+	else if (spr)
+	{
+		const TextboxSprite* tb_spr = dynamic_cast<const TextboxSprite*>(spr);
+		return sm::rect(tb_spr->GetTextbox().width, tb_spr->GetTextbox().height);
+	}
+	else 
+	{
 		return sm::rect(m_tb.width, m_tb.height);
 	}
-
-	sm::rect rect = GetBounding();
-
-	const sm::rect& r = actor->GetAABB().GetRect();
-	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
-	if (!r.IsValid()) {
-		const TextboxActor* tb_actor = VI_DOWNCASTING<const TextboxActor*>(actor);
-		return TextboxActor::CalcAABB(tb_spr->GetTextbox(), GetBounding(), tb_actor->GetText());
-	}
-
-	sm::rect ret(r.Width(), r.Height());
-
-	float offy = - (r.Height() - tb_spr->GetTextbox().height) * 0.5f;
-	ret.ymin += offy;
-	ret.ymax += offy;
-	return ret;
 }
 
 }

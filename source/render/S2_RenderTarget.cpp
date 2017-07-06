@@ -1,4 +1,5 @@
 #include "S2_RenderTarget.h"
+#include "StatImages.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <unirender/UR_RenderTarget.h>
@@ -12,10 +13,14 @@ RenderTarget::RenderTarget(int width, int height)
 {
 	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 	m_impl = new ur::RenderTarget(rc, width, height);
+
+	StatImages::Instance()->Add(width, height, ur::TEXTURE_RGBA8);
 }
 
 RenderTarget::~RenderTarget()
 {
+	StatImages::Instance()->Add(m_impl->Width(), m_impl->Height(), ur::TEXTURE_RGBA8);
+
 	delete m_impl;
 }
 

@@ -7,6 +7,7 @@
 #include <model3/Model.h>
 #include <model3/Mesh.h>
 #include <model3/m3_typedef.h>
+#include <model3/ResourceAPI.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Model3Shader.h>
 
@@ -50,9 +51,11 @@ RenderReturn ModelSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		const m3::Mesh* mesh = meshes[i];
 
 		const m3::Material& material = mesh->GetMaterial();
+		int tex_id = m3::ResourceAPI::GetTexID(material.texture);
 		shader->SetMaterial(material.ambient, material.diffuse, material.specular, 
-			material.shininess, material.tex);
+			material.shininess, tex_id);
 		shader->SetLightPosition(sm::vec3(0.25f, 0.25f, 1));
+		shader->SetModelview(mesh->GetMat());
 
 		int vertex_type = mesh->GetVertexType();
 		bool normal = vertex_type & m3::VERTEX_FLAG_NORMALS;

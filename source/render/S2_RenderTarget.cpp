@@ -9,17 +9,19 @@
 namespace s2
 {
 
+static const int IMG_ID = -2;
+
 RenderTarget::RenderTarget(int width, int height)
 {
 	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 	m_impl = new ur::RenderTarget(rc, width, height);
 
-	StatImages::Instance()->Add(width, height, ur::TEXTURE_RGBA8);
+	StatImages::Instance()->Add(IMG_ID, width, height, ur::TEXTURE_RGBA8);
 }
 
 RenderTarget::~RenderTarget()
 {
-	StatImages::Instance()->Add(m_impl->Width(), m_impl->Height(), ur::TEXTURE_RGBA8);
+	StatImages::Instance()->Remove(IMG_ID, m_impl->Width(), m_impl->Height(), ur::TEXTURE_RGBA8);
 
 	delete m_impl;
 }

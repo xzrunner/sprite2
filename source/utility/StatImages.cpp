@@ -4,6 +4,10 @@
 #include <unirender/ur_typedef.h>
 #include <shaderlab/ShaderMgr.h>
 
+#include <assert.h>
+#include <math.h>
+#include <float.h>
+
 namespace s2
 {
 
@@ -16,31 +20,57 @@ StatImages::StatImages()
 	m_4096_count = 0;
 }
 
-void StatImages::Add(int width, int height, int type)
+void StatImages::Add(int id, int width, int height, int type)
 {
-	int bpp = GetTexBPP(type);
+	if (id == -1) {
+		int zz = 0;
+	}
 	++m_count;
-	m_memory += width * height * bpp / 8 / 1024.0f / 1024.0f;
+
+	int bpp = GetTexBPP(type);
+	float mem = width * height * bpp / 8 / 1024.0f / 1024.0f;
+	m_memory += mem;
 
 	if (width == 4096 && height == 4096) {
 		++m_4096_count;
 	}
+
+	std::map<int, float>::iterator itr = m_id2mem.find(id);
+	if (itr == m_id2mem.end()) {
+		m_id2mem.insert(std::make_pair(id, mem));
+	} else {
+		itr->second += mem;
+	}
 }
 
-void StatImages::Remove(int width, int height, int type)
+void StatImages::Remove(int id, int width, int height, int type)
 {
-	int bpp = GetTexBPP(type);
+	if (id == -1) {
+		int zz = 0;
+	}
+
 	--m_count;
-	m_memory -= width * height * bpp / 8 / 1024.0f / 1024.0f;
+
+	int bpp = GetTexBPP(type);
+	float mem = width * height * bpp / 8 / 1024.0f / 1024.0f;
+	m_memory -= mem;
 
 	if (width == 4096 && height == 4096) {
 		--m_4096_count;
+	}
+
+	std::map<int, float>::iterator itr = m_id2mem.find(id);
+	assert(itr != m_id2mem.end());
+	itr->second -= mem;
+	if (fabs(itr->second) < FLT_EPSILON) {
+		m_id2mem.erase(itr);
 	}
 }
 
 void StatImages::Print(std::string& str) const
 {
 	static char buf[512];
+
 	sprintf(buf, "Images: n %d, mem %.1f, nmax %d\n", 
 		m_count, m_memory, m_4096_count);
 	str += buf;

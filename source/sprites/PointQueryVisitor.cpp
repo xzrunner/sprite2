@@ -7,6 +7,8 @@
 #include "SprVisitorParams.h"
 #include "AnchorSprite.h"
 #include "ComplexSymbol.h"
+#include "ShapeSymbol.h"
+#include "Shape.h"
 
 #include <SM_Calc.h>
 
@@ -168,9 +170,21 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr, params.actor);
 	if (rect.Width() == 0 || rect.Height() == 0 || !rect.IsValid()) {
 		return false;
-	} else {
+	} 
+	
+	int type = spr->GetSymbol()->Type();
+	if (type != SYM_SHAPE) {
 		return IsPointInRect(rect, params.mt);
 	}
+
+	const ShapeSymbol* shape_sym = VI_DOWNCASTING<const ShapeSymbol*>(spr->GetSymbol());
+	const Shape* shape = shape_sym->GetShape();
+	sm::vec2 pos = params.mt.Inverted() * m_pos;
+	if (shape && shape->IsContain(pos)) {
+		return true;
+	}
+
+	return false;
 }
 
 bool PointQueryVisitor::IsPointInScissor(const Sprite* spr, const SprVisitorParams& params) const

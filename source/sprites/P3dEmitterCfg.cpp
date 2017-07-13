@@ -25,7 +25,11 @@ P3dEmitterCfg::~P3dEmitterCfg()
 	}
 
 	for (int i = 0; i < m_impl->sym_count; ++i) {
-		static_cast<Symbol*>(m_impl->syms[i].ud)->RemoveReference();
+		void* ud = m_impl->syms[i].ud;
+		if (!ud) {
+			continue;
+		}
+		static_cast<Symbol*>(ud)->RemoveReference();
 	}
 	delete m_impl;
 }

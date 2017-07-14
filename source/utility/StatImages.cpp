@@ -22,9 +22,6 @@ StatImages::StatImages()
 
 void StatImages::Add(int id, int width, int height, int type)
 {
-	if (id == -1) {
-		int zz = 0;
-	}
 	++m_count;
 
 	int bpp = GetTexBPP(type);
@@ -45,10 +42,6 @@ void StatImages::Add(int id, int width, int height, int type)
 
 void StatImages::Remove(int id, int width, int height, int type)
 {
-	if (id == -1) {
-		int zz = 0;
-	}
-
 	--m_count;
 
 	int bpp = GetTexBPP(type);

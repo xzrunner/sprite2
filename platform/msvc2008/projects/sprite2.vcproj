@@ -1500,6 +1500,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\utility\StatImages.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\StatImages.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\utility\StatOverdraw.cpp"
 					>
 				</File>

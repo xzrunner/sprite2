@@ -69,7 +69,7 @@ sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const s
 		break;
 	case Textbox::HA_CENTER:
 		ret.xmin = (rect.xmin + rect.xmax) * 0.5f - w * 0.5f;
-		ret.xmax = rect.xmin + w;
+		ret.xmax = ret.xmin + w;
 		break;
 	}
 	switch (tb.align_vert)
@@ -82,7 +82,7 @@ sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const s
 		break;
 	case Textbox::VA_CENTER:
 		ret.ymin = (rect.ymin + rect.ymax) * 0.5f - h * 0.5f;
-		ret.ymax = rect.ymin + h;
+		ret.ymax = ret.ymin + h;
 		break;
 	}
 

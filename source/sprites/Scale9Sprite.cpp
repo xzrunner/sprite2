@@ -20,6 +20,7 @@ Scale9Sprite::Scale9Sprite()
 
 Scale9Sprite::Scale9Sprite(const Scale9Sprite& spr)
 	: Sprite(spr)
+	, m_s9(spr.m_s9)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_SCALE9);

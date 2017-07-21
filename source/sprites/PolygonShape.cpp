@@ -66,6 +66,14 @@ void PolygonShape::Draw(const RenderParams& rp) const
 void PolygonShape::SetPolygon(Polygon* poly)
 {
 	cu::RefCountObjAssign(m_poly, poly);
+
+	m_bounding.MakeEmpty();
+	if (poly) {
+		const std::vector<sm::vec2>& tris = poly->GetTriangles();
+		for (int i = 0, n = tris.size(); i < n; ++i) {
+			m_bounding.Combine(tris[i]);
+		}
+	}
 }
 
 }

@@ -1,0 +1,23 @@
+#ifndef _SPRITE2_SHAPE_TYPE_H_
+#define _SPRITE2_SHAPE_TYPE_H_
+
+namespace s2
+{
+
+enum ShapeType
+{
+	SHAPE_UNKNOWN = 0,
+
+	SHAPE_POINT,
+	SHAPE_RECT,
+	SHAPE_CIRCLE,
+	SHAPE_POLYLINE,
+	SHAPE_POLYGON,
+	SHAPE_COSINE,
+	SHAPE_BEZIER,
+
+}; // ShapeType
+
+}
+
+#endif // _SPRITE2_SHAPE_TYPE_H_

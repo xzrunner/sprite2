@@ -24,6 +24,7 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
+	virtual int Type() const { return SHAPE_BEZIER; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual void Draw(const RenderParams& rp) const;
 

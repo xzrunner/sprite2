@@ -845,6 +845,10 @@
 							RelativePath="..\..\..\include\sprite2\ShapeConfig.h"
 							>
 						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\ShapeType.h"
+							>
+						</File>
 					</Filter>
 					<Filter
 						Name="utility"
@@ -875,6 +879,10 @@
 						</File>
 						<File
 							RelativePath="..\..\..\include\sprite2\Polygon.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\PolyType.h"
 							>
 						</File>
 						<File

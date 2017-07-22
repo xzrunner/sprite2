@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "Polygon.h"
+#include "PolyType.h"
 #include "Color.h"
 
 namespace s2
@@ -16,6 +17,8 @@ public:
 	ColorPolygon() {}
 	ColorPolygon(const Color& color);
 	
+	virtual int Type() const { return POLY_COLOR; }
+
 	virtual void Draw(const RenderParams& rp) const;
 	virtual void Build();
 

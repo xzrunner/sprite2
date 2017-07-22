@@ -3,6 +3,7 @@
 
 #include "pre_defined.h"
 #include "Polygon.h"
+#include "PolyType.h"
 
 #include <SM_Rect.h>
 
@@ -19,6 +20,8 @@ public:
 	TexturePolygon& operator = (const TexturePolygon& poly);
 	TexturePolygon(const ImageSymbol* img);
 	virtual ~TexturePolygon();
+
+	virtual int Type() const { return POLY_TEXTURE; }
 
 	virtual void Draw(const RenderParams& rp) const;
 	virtual void Build();

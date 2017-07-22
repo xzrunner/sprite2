@@ -21,6 +21,8 @@ public:
 	Shape(const Shape& shape) : m_bounding(shape.m_bounding) {}
 	virtual ~Shape() {}
 
+	virtual int Type() const = 0;
+
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 

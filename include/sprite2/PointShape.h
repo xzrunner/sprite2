@@ -2,6 +2,7 @@
 #define _SPRITE2_POINT_SHAPE_H_
 
 #include "Shape.h"
+#include "ShapeType.h"
 
 namespace s2
 {
@@ -23,6 +24,7 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
+	virtual int Type() const { return SHAPE_POINT; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
 	virtual void Draw(const RenderParams& rp) const;

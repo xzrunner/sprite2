@@ -23,6 +23,7 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
+	virtual int Type() const { return SHAPE_COSINE; }
 	virtual void Draw(const RenderParams& rp) const;
 
 private:

@@ -20,6 +20,8 @@ class Polygon : public cu::RefCountObj
 public:
 	virtual ~Polygon() {}
 
+	virtual int Type() const = 0;
+
 	virtual void Draw(const RenderParams& rp) const = 0;
 	virtual void Build() = 0;
 

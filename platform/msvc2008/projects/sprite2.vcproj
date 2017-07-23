@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -105,7 +105,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
+				AdditionalIncludeDirectories="..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -383,10 +383,6 @@
 					RelativePath="..\..\..\include\sprite2\ImageSymbol.h"
 					>
 				</File>
-				<Filter
-					Name="image"
-					>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="06.complex"
@@ -1457,6 +1453,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\ProxySymbol.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="16.audio"
+				>
+				<File
+					RelativePath="..\..\..\source\sprites\AudioSprite.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AudioSprite.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\sprites\AudioSymbol.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AudioSymbol.h"
 					>
 				</File>
 			</Filter>

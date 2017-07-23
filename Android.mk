@@ -15,6 +15,7 @@ LOCAL_C_INCLUDES := \
 	${GTXT_SRC_PATH} \
 	${SHADERLAB_SRC_PATH}/include \
 	${UNIRENDER_SRC_PATH}/include \
+	${UNIAUDIO_SRC_PATH}/include \
 	${GIMG_SRC_PATH} \
 	${CAMERA25_SRC_PATH} \
 	${RVG_SRC_PATH} \

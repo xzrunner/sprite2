@@ -21,7 +21,16 @@ public:
 	 */
 	virtual AudioSprite* Clone() const;
 
+	/**
+	 *  @interface
+	 *    Sprite
+	 */
+	virtual void OnMessage(const UpdateParams& up, Message msg);
+
 	void Play();
+	void Stop();
+	void Pause();
+	void Resume();
 
 private:
 

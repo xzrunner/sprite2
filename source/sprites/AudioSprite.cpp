@@ -51,12 +51,55 @@ AudioSprite* AudioSprite::Clone() const
 	return new AudioSprite(*this);
 }
 
+void AudioSprite::OnMessage(const UpdateParams& up, Message msg)
+{
+	switch (msg)
+	{
+	case MSG_START: 
+		Play();
+		break;
+	case MSG_STOP:
+		Stop();
+		break;
+	case MSG_TRIGGER:
+		Play();
+		break;
+	}
+}
+
 void AudioSprite::Play()
 {
 	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
 	ua::Source* source = sym->GetSource();
 	if (source) {
 		source->Play();
+	}
+}
+
+void AudioSprite::Stop()
+{
+	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
+	ua::Source* source = sym->GetSource();
+	if (source) {
+		source->Stop();
+	}
+}
+
+void AudioSprite::Pause()
+{
+	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
+	ua::Source* source = sym->GetSource();
+	if (source) {
+		source->Pause();
+	}
+}
+
+void AudioSprite::Resume()
+{
+	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
+	ua::Source* source = sym->GetSource();
+	if (source) {
+		source->Resume();
 	}
 }
 

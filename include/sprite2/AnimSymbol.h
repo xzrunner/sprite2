@@ -80,7 +80,7 @@ public:
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/
-	void AddLayer(Layer* layer);
+	void AddLayer(Layer* layer, int idx = -1);
 	bool Clear();
 
 protected:

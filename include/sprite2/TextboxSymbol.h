@@ -36,6 +36,8 @@ public:
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }
 
+	void SetTextbox(const Textbox& tb) { m_tb = tb; }
+
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 

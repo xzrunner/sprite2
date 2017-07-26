@@ -259,9 +259,13 @@ void AnimSymbol::BuildCurr()
 	}
 }
 
-void AnimSymbol::AddLayer(Layer* layer)
+void AnimSymbol::AddLayer(Layer* layer, int idx)
 {
-	m_layers.push_back(layer);
+	if (idx < 0) {
+		m_layers.push_back(layer);		
+	} else {
+		m_layers.insert(m_layers.begin() + idx, layer);
+	}
 
 	m_aabb.MakeEmpty();
 }

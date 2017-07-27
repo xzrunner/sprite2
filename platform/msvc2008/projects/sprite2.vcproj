@@ -507,25 +507,37 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\source\sprites\LerpCircle.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\LerpCircle.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\source\sprites\LerpSpiral.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\include\sprite2\LerpSpiral.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\include\sprite2\LerpType.h"
 						>
 					</File>
+					<Filter
+						Name="types"
+						>
+						<File
+							RelativePath="..\..\..\source\sprites\LerpCircle.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\LerpCircle.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\LerpSpiral.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\LerpSpiral.h"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\source\sprites\LerpWiggle.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\LerpWiggle.h"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="cache"

@@ -5,7 +5,6 @@
 #include "SpriteVisitor.h"
 #include "DrawNode.h"
 #include "AnimLerp.h"
-#include "AnimLerp.h"
 #include "SprVisitorParams.h"
 #include "S2_Symbol.h"
 #include "S2_Actor.h"
@@ -395,13 +394,15 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 				assert(actor.slot == next_frame.items[actor.next].slot);
 				Sprite* tween = m_slots[actor.slot];
 				int time = ctrl_frame + 1 - frame.time;
+				int tot_time = next_frame.time - frame.time;
 				const AnimCopy::Lerp& lerp = m_copy->m_lerps[actor.lerp];
 				LoadSprLerpData(tween, lerp, time);
 
-				float process = (float) (ctrl_frame + 1 - frame.time) / (next_frame.time - frame.time);
 				const Sprite* begin = actor.spr;
 				const Sprite* end = next_frame.items[actor.next].spr;
-				AnimLerp::LerpSpecial(begin, end, tween, process);
+				AnimLerp::LerpSpecial(begin, end, tween, time, tot_time);
+
+				AnimLerp::LerpExpression(begin, end, tween, time, tot_time, frame.lerps);
 			}
 			else if (actor.prev != -1)
 			{
@@ -414,7 +415,7 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 				const AnimCopy::Lerp& lerp = m_copy->m_lerps[pre_actor.lerp];
 				LoadSprLerpData(tween, lerp, time);
 
-				AnimLerp::LerpSpecial(pre_actor.spr, actor.spr, tween, 1);
+				AnimLerp::LerpSpecial(pre_actor.spr, actor.spr, tween, time, time);
 			}
 			else
 			{

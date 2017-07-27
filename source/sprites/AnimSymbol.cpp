@@ -203,8 +203,8 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 		else
 		{
 			assert(frame >= curr_f->index && frame < next_f->index);
-			float process = (float) (frame - curr_f->index) / (next_f->index - curr_f->index);
-			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, process, curr_f->lerps);
+			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, frame - curr_f->index, 
+				next_f->index - curr_f->index, curr_f->lerps);
 		}
 	}
 }

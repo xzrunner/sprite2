@@ -3,6 +3,7 @@
 
 #include "Color.h"
 #include "SprSRT.h"
+#include "AnimLerp.h"
 
 #include <SM_Vector.h>
 
@@ -63,6 +64,10 @@ private:
 	{
 		int time;
 		std::vector<Item> items;
+
+		std::vector<std::pair<AnimLerp::SprData, ILerp*> > lerps;
+
+		~Frame();
 	};
 
 	struct Layer

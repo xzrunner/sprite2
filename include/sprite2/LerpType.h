@@ -9,6 +9,7 @@ enum LerpType
 	LERP_UNKNOWN = 0,
 	LERP_CIRCLE,
 	LERP_SPIRAL,
+	LERP_WIGGLE,
 };
 
 }

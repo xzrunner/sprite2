@@ -19,12 +19,15 @@ public:
 
 public:
 	static void Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-		std::vector<Sprite*>& tween, float process, const std::vector<std::pair<SprData, ILerp*> >& lerps);
+		std::vector<Sprite*>& tween, int time, int tot_time, const std::vector<std::pair<SprData, ILerp*> >& lerps);
 
-	static void Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float process,
+	static void Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
 		const std::vector<std::pair<SprData, ILerp*> >& lerps);	
 
-	static void LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, float process);	
+	static void LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time);	
+
+	static void LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
+		const std::vector<std::pair<SprData, ILerp*> >& lerps);
 
 	static bool IsMatched(const Sprite* s0, const Sprite* s1);
 

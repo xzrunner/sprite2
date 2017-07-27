@@ -8,6 +8,7 @@
 #include "Particle3dSprite.h"
 #include "LerpCircle.h"
 #include "LerpSpiral.h"
+#include "LerpWiggle.h"
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "RenderColor.h"
@@ -20,7 +21,7 @@ namespace s2
 {
 
 void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-					std::vector<Sprite*>& tween, float process, const std::vector<std::pair<SprData, ILerp*> >& lerps)
+					std::vector<Sprite*>& tween, int time, int tot_time, const std::vector<std::pair<SprData, ILerp*> >& lerps)
 {
 	for (int i = 0, n = begin.size(); i < n; ++i)
 	{
@@ -37,7 +38,7 @@ void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*
 		}
 		Sprite* tween_spr = VI_CLONE(Sprite, start_spr);
 		if (end_spr) {
-			Lerp(start_spr, end_spr, tween_spr, process, lerps);
+			Lerp(start_spr, end_spr, tween_spr, time, tot_time, lerps);
 		}
 		tween.push_back(tween_spr);
 	}
@@ -54,9 +55,11 @@ Color color_interpolate(const Color& begin, const Color& end, float scale)
 	return ret;
 }
 
-void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float process,
+void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
 					const std::vector<std::pair<SprData, ILerp*> >& lerps)
 {
+	float process = static_cast<float>(time) / tot_time;
+
 	sm::vec2 shear;
 	shear.x = (end->GetShear().x - begin->GetShear().x) * process + begin->GetShear().x;
 	shear.y = (end->GetShear().y - begin->GetShear().y) * process + begin->GetShear().y;
@@ -84,32 +87,14 @@ void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, float
 	rc.SetMul(color_interpolate(begin->GetColor().GetMul(), end->GetColor().GetMul(), process));
 	tween->SetColor(rc);
 
-	LerpSpecial(begin, end, tween, process);
-	
-	for (int i = 0, n = lerps.size(); i < n; ++i) 
-	{
-		SprData data = lerps[i].first;
-		ILerp* lerp = lerps[i].second;
-		switch (lerp->Type())
-		{
-		case LERP_CIRCLE:
-			if (data == SPR_POS) {
-				sm::vec2 base_t = static_cast<LerpCircle*>(lerp)->Lerp(base_s, base_e, process);
-				tween->SetPosition(base_t - offset);
-			}
-			break;
-		case LERP_SPIRAL:
-			if (data == SPR_POS) {
-				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);
-				tween->SetPosition(base_t - offset);
-			}
-			break;
-		}
-	}
+	LerpSpecial(begin, end, tween, time, tot_time);
+	LerpExpression(begin, end, tween, time, tot_time, lerps);
 }
 
-void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, float process)
+void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time)
 {
+	float process = static_cast<float>(time) / tot_time;
+
 	assert(begin->GetSymbol()->Type() == end->GetSymbol()->Type());
 	switch (begin->GetSymbol()->Type())
 	{
@@ -155,6 +140,45 @@ void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween
 			p3d_t->SetStartRadius(start_radius);
 		}
 		break;
+	}
+}
+
+void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time, 
+							  const std::vector<std::pair<SprData, ILerp*> >& lerps)
+{
+	float process = static_cast<float>(time) / tot_time;
+
+	sm::vec2 offset = (end->GetOffset() - begin->GetOffset()) * process + begin->GetOffset();
+
+	sm::vec2 base_s = begin->GetPosition() + begin->GetOffset(),
+		     base_e = end->GetPosition() + end->GetOffset();
+	sm::vec2 base_t = (base_e - base_s) * process + base_s;
+
+	for (int i = 0, n = lerps.size(); i < n; ++i) 
+	{
+		SprData data = lerps[i].first;
+		ILerp* lerp = lerps[i].second;
+		switch (lerp->Type())
+		{
+		case LERP_CIRCLE:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpCircle*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		case LERP_SPIRAL:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpSpiral*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		case LERP_WIGGLE:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpWiggle*>(lerp)->Lerp(base_s, time / 30.0f);
+				tween->SetPosition(base_t - offset);
+			}
+			break;
+		}
 	}
 }
 

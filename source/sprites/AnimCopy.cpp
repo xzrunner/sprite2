@@ -6,6 +6,7 @@
 #include "Flatten.h"
 #include "FlattenParams.h"
 #include "AnimFlatten.h"
+#include "ILerp.h"
 
 #include <assert.h>
 
@@ -154,11 +155,19 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 			const AnimSymbol::Frame* src_frame = src_layer->frames[iframe];
 			Frame& dst_frame = dst_layer.frames[iframe];
 			dst_frame.time = src_frame->index;
+
 			dst_frame.items.resize(src_frame->sprs.size());
 			for (int iitem = 0, nitem = src_frame->sprs.size(); iitem < nitem; ++iitem) {
 				const Sprite* src_spr = src_frame->sprs[iitem];
 				src_spr->AddReference();
 				dst_frame.items[iitem].spr = src_spr;
+			}
+
+			dst_frame.lerps.reserve(src_frame->lerps.size());
+			for (int ilerp = 0, nlerp = src_frame->lerps.size(); ilerp < nlerp; ++ilerp) {
+				AnimLerp::SprData type = src_frame->lerps[ilerp].first;
+				ILerp* lerp = src_frame->lerps[ilerp].second;
+				dst_frame.lerps.push_back(std::make_pair(type, lerp));
 			}
 		}
 	}
@@ -304,6 +313,18 @@ AnimCopy::Item::~Item()
 	if (spr) {
 		spr->RemoveReference();
 	}
+}
+
+/************************************************************************/
+/* struct AnimCopy::Frame                                               */
+/************************************************************************/
+
+AnimCopy::Frame::~Frame()
+{
+	for (int i = 0, n = lerps.size(); i < n; ++i) {
+		delete lerps[i].second;
+	}
+	lerps.clear();
 }
 
 }

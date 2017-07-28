@@ -9,6 +9,7 @@
 #include "LerpCircle.h"
 #include "LerpSpiral.h"
 #include "LerpWiggle.h"
+#include "LerpEase.h"
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "RenderColor.h"
@@ -176,6 +177,22 @@ void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tw
 			if (data == SPR_POS) {
 				sm::vec2 base_t = static_cast<LerpWiggle*>(lerp)->Lerp(base_s, time / 30.0f);
 				tween->SetPosition(base_t - offset);
+			}
+			break;
+		case LERP_EASE:
+			if (data == SPR_POS) {
+				sm::vec2 base_t = static_cast<LerpEase*>(lerp)->Lerp(base_s, base_e, process);
+				tween->SetPosition(base_t - offset);
+			} else if (data == SPR_SCALE) {
+				const sm::vec2& b_scale = begin->GetScale();
+				const sm::vec2& e_scale = end->GetScale();
+				sm::vec2 s = static_cast<LerpEase*>(lerp)->Lerp(b_scale, e_scale, process);
+				tween->SetScale(s);
+			} else if (data == SPR_ROTATE) {
+				float b_angle = begin->GetAngle();
+				float e_angle = end->GetAngle();
+				float angle = static_cast<LerpEase*>(lerp)->Lerp(b_angle, e_angle, process);
+				tween->SetAngle(angle);
 			}
 			break;
 		}

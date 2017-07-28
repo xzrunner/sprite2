@@ -15,6 +15,8 @@ public:
 	enum SprData
 	{
 		SPR_POS = 0,
+		SPR_SCALE,
+		SPR_ROTATE,
 	};
 
 public:

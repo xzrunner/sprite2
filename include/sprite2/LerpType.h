@@ -10,6 +10,7 @@ enum LerpType
 	LERP_CIRCLE,
 	LERP_SPIRAL,
 	LERP_WIGGLE,
+	LERP_EASE,
 };
 
 }

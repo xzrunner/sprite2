@@ -522,6 +522,14 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\..\source\sprites\LerpEase.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\include\sprite2\LerpEase.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\source\sprites\LerpSpiral.cpp"
 							>
 						</File>

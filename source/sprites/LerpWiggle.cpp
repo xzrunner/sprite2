@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include <assert.h>
+#include <stdlib.h>
 
 namespace s2
 {

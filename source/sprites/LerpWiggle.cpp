@@ -1,5 +1,7 @@
 #include "LerpWiggle.h"
 
+#include <cmath>
+
 #include <assert.h>
 
 namespace s2

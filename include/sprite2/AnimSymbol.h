@@ -28,6 +28,7 @@ public:
 
 	public:
 		Frame() : index(0), tween(false) {}
+		~Frame();
 
 	}; // Frame
 

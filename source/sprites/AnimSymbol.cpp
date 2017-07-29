@@ -22,6 +22,7 @@
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
+#include "ILerp.h"
 
 #include <assert.h>
 
@@ -328,6 +329,17 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		}
 	}
 	return AABBHelper::CalcAABB(children, actor);
+}
+
+/************************************************************************/
+/* class AnimSymbol::Frame                                              */
+/************************************************************************/
+
+AnimSymbol::Frame::~Frame()
+{
+	for (int i = 0, n = lerps.size(); i < n; ++i) {
+		delete lerps[i].second;
+	}
 }
 
 /************************************************************************/

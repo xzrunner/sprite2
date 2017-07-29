@@ -284,7 +284,9 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 
 	int src_w, src_h;
 	sm::vec2 sz = img_sym->GetNoTrimedSize();
-	assert(sz.x != 0 && sz.y != 0);
+	if (sz.x == 0 || sz.y == 0) {
+		return;
+	}
 	src_w = sz.x;
 	src_h = sz.y;
 

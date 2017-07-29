@@ -2,6 +2,7 @@
 #include "RenderParams.h"
 #include "ImageSymbol.h"
 #include "TexcoordsMap.h"
+#include "S2_Texture.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>

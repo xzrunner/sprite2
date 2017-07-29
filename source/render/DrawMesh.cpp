@@ -116,6 +116,9 @@ RenderReturn DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, con
 	if (sym->Type() == SYM_IMAGE) 
 	{
 	 	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
+	 	if(!img_sym->GetTexture()->IsLoadFinished()) {
+	 		return RENDER_ON_LOADING;
+	 	}
 	 	float texcoords[8];
 	 	int tex_id;
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {

@@ -36,6 +36,9 @@ RenderReturn Icon::Draw(const RenderParams& rp, float process) const
 	if (!m_img) {
 		return RENDER_NO_DATA;
 	}
+	if (!m_img->GetTexture()->IsLoadFinished()) {
+		return RENDER_NO_DATA;
+	}
 
 //	process = 0.5;
 

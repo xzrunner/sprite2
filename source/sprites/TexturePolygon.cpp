@@ -53,6 +53,9 @@ TexturePolygon::~TexturePolygon()
 
 void TexturePolygon::Draw(const RenderParams& rp) const
 {
+	if (!m_img->GetTexture()->IsLoadFinished()) {
+		return;
+	}
 	if (m_tris.empty()) {
 		return;
 	}

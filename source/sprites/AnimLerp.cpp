@@ -175,7 +175,7 @@ void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tw
 			break;
 		case LERP_WIGGLE:
 			if (data == SPR_POS) {
-				sm::vec2 base_t = static_cast<LerpWiggle*>(lerp)->Lerp(base_s, time / 30.0f);
+				base_t = static_cast<LerpWiggle*>(lerp)->Lerp(base_t, time / 30.0f);
 				tween->SetPosition(base_t - offset);
 			}
 			break;

@@ -80,6 +80,11 @@ Particle2dSprite* Particle2dSprite::Clone() const
 
 void Particle2dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	// update inherit
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
+
 	switch (msg)
 	{
 	case MSG_START: case MSG_TRIGGER:

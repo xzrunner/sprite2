@@ -60,6 +60,11 @@ ComplexSprite* ComplexSprite::Clone() const
 
 void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	// update inherit
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
+
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
 

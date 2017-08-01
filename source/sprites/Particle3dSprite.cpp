@@ -103,6 +103,11 @@ Particle3dSprite* Particle3dSprite::Clone() const
 
 void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	// update inherit
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
+
 	Particle3dEmitter* et = NULL;
 	switch (m_reuse)
 	{

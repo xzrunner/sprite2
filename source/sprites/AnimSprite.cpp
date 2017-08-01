@@ -85,6 +85,11 @@ AnimSprite* AnimSprite::Clone() const
 
 void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 {
+	// update inherit
+	if (!up.IsForce() && !IsInheritUpdate()) {
+		return;
+	}
+
 	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
 	assert(curr);
 	curr->OnMessage(up, this, msg);

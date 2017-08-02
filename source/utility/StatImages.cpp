@@ -94,11 +94,9 @@ int StatImages::GetTexBPP(int type)
 #endif
 		break;
 	case ur::TEXTURE_ETC2:
-#ifdef __ANDROID__
+#if defined( __APPLE__ ) && !defined(__MACOSX)
 		bpp = 8;
-#elif defined( __APPLE__ ) && !defined(__MACOSX)
-		bpp = 8;
-#elif defined _WIN32
+#elif defined _WIN32 || defined __ANDROID__
 		ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 		if (rc->IsSupportETC2()) {
 			bpp = 8;

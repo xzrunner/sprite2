@@ -3,6 +3,7 @@
 #include "S2_Symbol.h"
 #include "SymType.h"
 #include "MeshSymbol.h"
+#include "S2_RVG.h"
 
 #include <rigging.h>
 
@@ -41,6 +42,15 @@ render_func(void* sym, float* mat, const void* ud)
 }
 
 static void
+debug_draw_func(float x, float y, uint32_t color)
+{
+	Color col;
+	col.FromRGBA(color);
+	RVG::SetColor(col);
+	RVG::Rect(sm::vec2(x, y), 5, 5, true);
+}
+
+static void
 update_skin_func(void* sym, const rg_skeleton_pose* sk_pose) 
 {
 	Symbol* s2_sym = static_cast<Symbol*>(sym);
@@ -62,7 +72,7 @@ update_mesh_func(void* sym, const rg_tl_deform_state* deform_state, const float*
 
 void Animation2::Init()
 {
-	rg_skeleton_init(render_func);
+	rg_skeleton_init(render_func, debug_draw_func);
 	rg_skeleton_skin_init(update_skin_func, update_mesh_func);
 	rg_timeline_init();
 }

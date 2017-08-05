@@ -166,7 +166,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 			dst_frame.lerps.reserve(src_frame->lerps.size());
 			for (int ilerp = 0, nlerp = src_frame->lerps.size(); ilerp < nlerp; ++ilerp) {
 				AnimLerp::SprData type = src_frame->lerps[ilerp].first;
-				ILerp* lerp = src_frame->lerps[ilerp].second;
+				ILerp* lerp = src_frame->lerps[ilerp].second->Clone();
 				dst_frame.lerps.push_back(std::make_pair(type, lerp));
 			}
 		}

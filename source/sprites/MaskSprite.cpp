@@ -129,15 +129,21 @@ VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisito
 {
 	VisitResult ret = VISIT_OVER;
 	Sprite* mask = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
-	SprVisitorParams cp = params;
-	cp.actor = mask->QueryActor(params.actor);
-    if (!SpriteVisitor::VisitChild(visitor, cp, mask, ret))
-	    return ret;
+	if (mask) {
+		SprVisitorParams cp = params;
+		cp.actor = mask->QueryActor(params.actor);
+		if (!SpriteVisitor::VisitChild(visitor, cp, mask, ret))
+			return ret;
+	}
 	Sprite* base = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
-	cp.actor = base->QueryActor(params.actor);
-    if (!SpriteVisitor::VisitChild(visitor, cp, base, ret))
-	    return ret;
-    return ret;
+	if (base) {
+		SprVisitorParams cp = params;
+		cp.actor = base->QueryActor(params.actor);
+		if (!SpriteVisitor::VisitChild(visitor, cp, base, ret))
+			return ret;
+		return ret;
+	}
+	return ret;
 }
 
 }

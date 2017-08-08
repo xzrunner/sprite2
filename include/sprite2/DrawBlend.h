@@ -15,8 +15,9 @@ public:
 	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp);
 
 private:
-	static RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp);
+	static RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large);
 	static RenderReturn DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp);
+	static RenderReturn DrawRT2ScreenLarge(int tex_id);
 
 }; // DrawBlend
 

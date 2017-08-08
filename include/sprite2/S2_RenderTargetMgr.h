@@ -18,6 +18,10 @@ public:
 
 	int GetTexID(int idx) const;
 
+	void InitScreenCB(RenderTarget* (*fetch_screen)(), void (*return_screen)(RenderTarget* rt));
+	s2::RenderTarget* FetchScreen();
+	void ReturnScreen(s2::RenderTarget* rt);
+
 public:
 	static const int WIDTH;
 	static const int HEIGHT;

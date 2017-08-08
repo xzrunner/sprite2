@@ -11,6 +11,9 @@ SINGLETON_DEFINITION(RenderTargetMgr);
 const int RenderTargetMgr::WIDTH  = 1024;
 const int RenderTargetMgr::HEIGHT = 1024;
 
+static RenderTarget* (*FETCH_SCREEN)() = NULL;
+static void (*RETURN_SCREEN)(RenderTarget* rt) = NULL;
+
 RenderTargetMgr::RenderTargetMgr()
 {
 }
@@ -54,6 +57,28 @@ int RenderTargetMgr::GetTexID(int idx) const
 		return  -1;
 	} else {
 		return m_items[idx].rt->GetTexID();
+	}
+}
+
+void RenderTargetMgr::InitScreenCB(RenderTarget* (*fetch_screen)(), void (*return_screen)(RenderTarget* rt))
+{
+	FETCH_SCREEN = fetch_screen;
+	RETURN_SCREEN = return_screen;
+}
+
+RenderTarget* RenderTargetMgr::FetchScreen()
+{
+	if (FETCH_SCREEN) {
+		return FETCH_SCREEN();
+	} else {
+		return NULL;
+	}
+}
+
+void RenderTargetMgr::ReturnScreen(RenderTarget* rt)
+{
+	if (RETURN_SCREEN) {
+		RETURN_SCREEN(rt);
 	}
 }
 

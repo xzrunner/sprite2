@@ -18,6 +18,7 @@
 #include "DrawDownsample.h"
 #include "sprite2/Utility.h"
 #include "BoundingBox.h"
+#include "DrawIntegrate.h"
 
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
@@ -451,6 +452,10 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 
 RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 {
+	if (spr->IsIntegrate()) {
+		return DrawIntegrate::Draw(spr, rp);
+	}
+
 	RenderShader rs;
 	RenderCamera rc;
 	if (rp.IsDisableRenderDraw()) {

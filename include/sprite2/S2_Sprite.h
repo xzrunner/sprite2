@@ -137,6 +137,7 @@ protected:
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
 	static const uint32_t FLAG_DIRTY          = 0x00000004;
 	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
+	static const uint32_t FLAG_INTEGRATE      = 0x00000010;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -148,6 +149,7 @@ protected:
 	static const uint32_t FLAG_NEED_ACTOR_FOR_CHILD = 0x00000200;
 
 	static const uint32_t FLAG_MAT_DISABLE    = 0x00000400;	
+	static const uint32_t FLAG_COLOR_DISABLE  = 0x00000800;	
 
 	// dtex
 	static const uint32_t FLAG_DTEX_DISABLE            = 0x00001000;
@@ -163,6 +165,7 @@ public:
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(Dirty, FLAG_DIRTY)
 	S2_FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
+	S2_FLAG_METHOD(Integrate, FLAG_INTEGRATE)
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -174,6 +177,7 @@ public:
 	S2_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
 
 	S2_FLAG_METHOD(MatDisable, FLAG_MAT_DISABLE)
+	S2_FLAG_METHOD(ColorDisable, FLAG_COLOR_DISABLE)
 
 	// actor
 	S2_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)

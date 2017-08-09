@@ -9,7 +9,7 @@
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
-#include "Utility.h"
+#include "sprite2/Utility.h"
 
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>

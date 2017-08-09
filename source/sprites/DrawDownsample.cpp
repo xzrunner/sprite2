@@ -18,16 +18,16 @@
 namespace s2
 {
 
-void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	if (downsample <= 0) {
-		return;
+		return RENDER_NO_DATA;
 	}
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return;
+		return RENDER_NO_RT;
 	}
 
 #ifndef S2_DISABLE_STATISTICS
@@ -49,26 +49,33 @@ void DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downs
 	DrawRT2Screen(rt->GetTexID(), spr, rp, downsample);
 
 	RT->Return(rt);
+
+	return RENDER_OK;
 }
 
-void DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams _rp(rp);
-	_rp.mt.Identity();
-	_rp.mt.Scale(downsample, downsample);
-	_rp.view_region.MakeEmpty();
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	rp_child->mt.Identity();
+	rp_child->mt.Scale(downsample, downsample);
+	rp_child->view_region.MakeEmpty();
 
 	spr->SetMatDisable(true);
-	spr->GetSymbol()->Draw(_rp, spr);
+	spr->GetSymbol()->Draw(*rp_child, spr);
 	spr->SetMatDisable(false);
 
+	RenderParamsPool::Instance()->Push(rp_child); 
+
 	mgr->FlushShader();
+
+	return RENDER_OK;
 }
 
-void DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -118,6 +125,8 @@ void DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderPa
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+
+	return RENDER_OK;
 }
 
 }

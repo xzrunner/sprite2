@@ -33,7 +33,7 @@ AudioSymbol::~AudioSymbol()
 #endif // S2_DISABLE_STATISTICS
 
 	if (m_source) {
-		delete m_source;
+		m_source->RemoveReference();
 	}
 }
 

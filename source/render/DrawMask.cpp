@@ -39,7 +39,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddMask();
+	StatPingPong::Instance()->AddCount(StatPingPong::MASK);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();

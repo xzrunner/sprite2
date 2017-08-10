@@ -19,7 +19,7 @@ namespace s2
 RenderReturn DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddOuterGlow();
+	StatPingPong::Instance()->AddCount(StatPingPong::OUTER_GLOW);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();

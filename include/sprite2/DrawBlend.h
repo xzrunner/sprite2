@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_DRAW_BLEND_H_
 #define _SPRITE2_DRAW_BLEND_H_
 
-#include "RenderReturn.h"
+#include "DrawPingPong.h"
 
 namespace s2
 {
@@ -9,15 +9,16 @@ namespace s2
 class Sprite;
 class RenderParams;
 
-class DrawBlend
+class DrawBlend : public DrawPingPong
 {
 public:
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp);
+	DrawBlend();
 
-private:
-	static RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large);
-	static RenderReturn DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp);
-	static RenderReturn DrawRT2ScreenLarge(int tex_id);
+protected:
+	virtual RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const;
+
+	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+		const RenderParams& rp, bool reset_color) const;
 
 }; // DrawBlend
 

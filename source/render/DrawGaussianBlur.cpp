@@ -43,7 +43,7 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddGaussianBlur();
+	StatPingPong::Instance()->AddCount(StatPingPong::GAUSSIAN_BLUR);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();

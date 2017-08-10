@@ -31,7 +31,7 @@ RenderReturn DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, flo
 	}
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddDownSample();
+	StatPingPong::Instance()->AddCount(StatPingPong::DOWN_SAMPLE);
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();

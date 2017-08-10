@@ -292,7 +292,7 @@ RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, con
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddMesh();
+	StatPingPong::Instance()->AddCount(StatPingPong::MESH);
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();

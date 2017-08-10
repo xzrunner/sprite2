@@ -11,16 +11,23 @@ namespace s2
 class StatPingPong
 {
 public:
+	enum Type
+	{
+		MESH = 0,
+		MASK,
+		BLEND,
+		GAUSSIAN_BLUR,
+		OUTER_GLOW,
+		DOWN_SAMPLE,
+		INTEGRATE,
+		RT_OUTSIDE,
+	};
+
+public:
 	void Print(std::string& str) const;
 	void Reset();
 
-	void AddMesh() { ++m_mesh; }
-	void AddMask() { ++m_mask; }
-	void AddBlend() { ++m_blend; }
-	void AddGaussianBlur() { ++m_gaussian_blur; }
-	void AddOuterGlow() { ++m_outer_glow; }
-	void AddDownSample() { ++m_down_sample; }
-	void AddRTOutside() { ++m_rt_outside; }
+	void AddCount(Type type);
 
 private:
 	int m_mesh;
@@ -29,6 +36,7 @@ private:
 	int m_gaussian_blur;
 	int m_outer_glow;
 	int m_down_sample;
+	int m_integrate;
 	int m_rt_outside;
 
 	SINGLETON_DECLARATION(StatPingPong);

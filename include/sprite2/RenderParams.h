@@ -66,8 +66,9 @@ private:
 	static const uint32_t FLAG_DISABLE_FILTER       = 0x00000008;
 	static const uint32_t FLAG_DISABLE_DTEX_C2      = 0x00000010;
 	static const uint32_t FLAG_DISABLE_CULLING      = 0x00000020;
+	static const uint32_t FLAG_DISABLE_INTEGRATE    = 0x00000040;
 
-	static const uint32_t FLAG_DISABLE_PARTICLE3D   = 0x00000040;
+	static const uint32_t FLAG_DISABLE_PARTICLE3D   = 0x00000080;
 
 public:
 	S2_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
@@ -76,6 +77,7 @@ public:
 	S2_FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
 	S2_FLAG_METHOD(DisableDTexC2, FLAG_DISABLE_DTEX_C2)
 	S2_FLAG_METHOD(DisableCulling, FLAG_DISABLE_CULLING)
+	S2_FLAG_METHOD(DisableIntegrate, FLAG_DISABLE_INTEGRATE)
 
 	S2_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
 

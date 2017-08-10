@@ -86,6 +86,8 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 		}
 	}
 
+	child = rp;
+
 	Utility::PrepareColor(rp.color, spr, actor, child.color);
 	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
 
@@ -452,8 +454,10 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 
 RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 {
-	if (spr->IsIntegrate()) {
-		return DrawIntegrate::Draw(spr, rp);
+	const RenderShader& spr_s = spr->GetShader();
+
+	if (!rp.IsDisableIntegrate() && spr->IsIntegrate()) {
+		return DrawIntegrate().Draw(spr, rp);
 	}
 
 	RenderShader rs;
@@ -507,7 +511,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	{
 		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
-		ret = DrawBlend::Draw(spr, rp);
+		ret = DrawBlend().Draw(spr, rp);
 		//		}
 	} 
 	else if (filter != FM_NULL) 

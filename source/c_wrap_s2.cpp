@@ -1181,7 +1181,7 @@ extern "C"
 void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddRTOutside();
+	StatPingPong::Instance()->AddCount(StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -1204,7 +1204,7 @@ extern "C"
 void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddRTOutside();
+	StatPingPong::Instance()->AddCount(StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderScissor::Instance()->Disable();

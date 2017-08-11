@@ -86,6 +86,17 @@ void RenderParams::Reset()
 #endif // S2_DISABLE_STATISTICS
 }
 
+inline
+void RenderParams::Init()
+{
+	Reset();
+}
+
+inline
+void RenderParams::Term()
+{
+}
+
 }
 
 #endif // _SPRITE2_RENDER_PARAMS_INL_

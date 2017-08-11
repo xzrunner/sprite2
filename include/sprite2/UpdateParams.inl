@@ -100,6 +100,20 @@ const Actor* UpdateParams::GetActor() const
 	return m_actor;
 }
 
+inline
+void UpdateParams::Init()
+{
+	m_prev_mat.Identity();
+	m_prev_filter = FM_NULL;
+	m_actor = NULL;
+	m_force = false;
+}
+
+inline
+void UpdateParams::Term()
+{
+}
+
 }
 
 #endif // _SPRITE2_UPDATE_PARAMS_INL_

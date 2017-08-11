@@ -56,6 +56,8 @@ public:
 	 *  @interface
 	 *    ObjectPool3
 	 */
+	void Init();
+	void Term();
 	RenderParams* GetNext() const { return m_next; }
 	void SetNext(RenderParams* next) { m_next = next; }
 

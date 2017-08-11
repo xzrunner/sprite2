@@ -30,6 +30,7 @@ T* ObjectPool3<T>::Pop()
 	if (m_freelist) {
 		T* ret = m_freelist;
 		m_freelist = m_freelist->GetNext();
+		ret->Init();
 		return ret;
 	} else {
 		return new T();
@@ -39,6 +40,7 @@ T* ObjectPool3<T>::Pop()
 template <typename T>
 void ObjectPool3<T>::Push(T* obj)
 {
+	obj->Term();
 	if (m_freelist) {
 		obj->SetNext(m_freelist);
 	} else {

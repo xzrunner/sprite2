@@ -37,6 +37,8 @@ public:
 	 *  @interface
 	 *    ObjectPool3
 	 */
+	void Init();
+	void Term();
 	UpdateParams* GetNext() const { return m_next; }
 	void SetNext(UpdateParams* next) { m_next = next; }
 

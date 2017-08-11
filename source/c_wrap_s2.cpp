@@ -620,6 +620,9 @@ get_actor_world_mat(const Actor* actor) {
 	S2_MAT mt;
 	const Actor* curr = actor;
 	while (curr) {
+		if (curr->GetSpr()->GetSymbol()->Type() == SYM_MASK) {
+			break;
+		}
 		mt = mt * curr->GetLocalMat() * curr->GetSpr()->GetLocalMat();
 		curr = curr->GetParent();
 	}

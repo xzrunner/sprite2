@@ -456,9 +456,9 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 {
 	const RenderShader& spr_s = spr->GetShader();
 
-	if (!rp.IsDisableIntegrate() && spr->IsIntegrate()) {
-		return DrawIntegrate().Draw(spr, rp);
-	}
+// 	if (!rp.IsDisableIntegrate() && spr->IsIntegrate()) {
+// 		return DrawIntegrate().Draw(spr, rp);
+// 	}
 
 	RenderShader rs;
 	RenderCamera rc;

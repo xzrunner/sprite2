@@ -42,7 +42,6 @@ ImageSprite::ImageSprite(Symbol* sym, uint32_t id)
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_IMAGE);
 #endif // S2_DISABLE_STATISTICS
-	SetOffset(m_sym->GetBounding(this).Center());
 }
 
 ImageSprite::~ImageSprite()

@@ -44,11 +44,11 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	
 	const Actor* actor_real = spr_real->QueryActor(actor);
 	
-	// visible
-	bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
-	if (!visible) {
-		return false;
-	}
+	//// visible
+	//bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
+	//if (!visible) {
+	//	return false;
+	//}
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;

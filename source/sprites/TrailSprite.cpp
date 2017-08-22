@@ -115,12 +115,12 @@ bool TrailSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	// visible
-	const Actor* actor = up.GetActor();
-	bool visible = actor ? actor->IsVisible() : IsVisible();
-	if (!visible) {
-		return false;
-	}
+	//// visible
+	//const Actor* actor = up.GetActor();
+	//bool visible = actor ? actor->IsVisible() : IsVisible();
+	//if (!visible) {
+	//	return false;
+	//}
 
 	float time = Trail::Instance()->GetTime();
 	float et_time = m_et->GetTime();

@@ -79,12 +79,12 @@ bool MaskSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	// visible
-	const Actor* actor = up.GetActor();
-	bool visible = actor ? actor->IsVisible() : IsVisible();
-	if (!visible) {
-		return false;
-	}
+	//// visible
+	//const Actor* actor = up.GetActor();
+	//bool visible = actor ? actor->IsVisible() : IsVisible();
+	//if (!visible) {
+	//	return false;
+	//}
 
 	bool dirty = false;
 

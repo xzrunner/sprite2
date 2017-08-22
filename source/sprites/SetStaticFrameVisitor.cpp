@@ -29,10 +29,10 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 
 	// visible
 	const Actor* actor = params.actor;
-	bool visible = actor ? actor->IsVisible() : spr->IsVisible();
-	if (!visible) {
-		return VISIT_OVER;
-	}
+	//bool visible = actor ? actor->IsVisible() : spr->IsVisible();
+	//if (!visible) {
+	//	return VISIT_OVER;
+	//}
 
 	VisitResult ret = VISIT_OVER;
 	switch (type)

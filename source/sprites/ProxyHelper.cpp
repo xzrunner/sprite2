@@ -408,6 +408,25 @@ bool ProxyHelper::SprGetFrameCount(const Sprite* spr, int& count)
 	}
 }
 
+void ProxyHelper::SprAnimSetLoop(Sprite* spr, bool loop)
+{
+	const Symbol* sym = spr->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			SprAnimSetLoop(items[i].second, loop);
+		}
+	}
+	else if (type == SYM_ANIMATION)
+	{
+		AnimSprite* anim_spr = VI_DOWNCASTING<AnimSprite*>(spr);
+		anim_spr->SetLoop(loop);
+	}	
+}
+
 bool ProxyHelper::SprHasAction(const Sprite* spr, const std::string& action)
 {
 	const Symbol* sym = spr->GetSymbol();

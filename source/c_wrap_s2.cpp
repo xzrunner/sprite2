@@ -430,6 +430,13 @@ int s2_spr_get_frame_count(void* spr) {
 }
 
 extern "C"
+void s2_spr_anim_set_loop(void* spr, bool loop)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	ProxyHelper::SprAnimSetLoop(s2_spr, loop);
+}
+
+extern "C"
 bool s2_spr_has_action(const void* spr, const char* name) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	return ProxyHelper::SprHasAction(s2_spr, _char2string(name));

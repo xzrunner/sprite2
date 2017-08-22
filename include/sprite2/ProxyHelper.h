@@ -42,6 +42,7 @@ public:
 
 	// anim
 	static bool SprGetFrameCount(const Sprite* spr, int& count);
+	static void SprAnimSetLoop(Sprite* spr, bool loop);
 
 	// complex
 	static bool SprHasAction(const Sprite* spr, const std::string& action);

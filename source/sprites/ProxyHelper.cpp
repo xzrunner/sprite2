@@ -528,6 +528,44 @@ void ProxyHelper::SprTextboxResetTime(Sprite* spr)
 	}
 }
 
+void ProxyHelper::SprTextboxSetFontColor(Sprite* spr, uint32_t abgr)
+{
+	const Symbol* sym = spr->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			SprTextboxSetFontColor(items[i].second, abgr);
+		}
+	}
+	else if (type == SYM_TEXTBOX)
+	{
+		TextboxSprite* tb_spr = VI_DOWNCASTING<TextboxSprite*>(spr);
+		tb_spr->GetTextbox().font_color.FromABGR(abgr);
+	}
+}
+
+void ProxyHelper::SprTextboxSetEdgeColor(Sprite* spr, uint32_t abgr)
+{
+	const Symbol* sym = spr->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY) 
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			SprTextboxSetEdgeColor(items[i].second, abgr);
+		}
+	}
+	else if (type == SYM_TEXTBOX)
+	{
+		TextboxSprite* tb_spr = VI_DOWNCASTING<TextboxSprite*>(spr);
+		tb_spr->GetTextbox().edge_color.FromABGR(abgr);
+	}
+}
+
 void ProxyHelper::SprAnim2SetStaticTime(Sprite* spr, int time)
 {
 	const Symbol* sym = spr->GetSymbol();

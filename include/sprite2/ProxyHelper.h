@@ -51,6 +51,8 @@ public:
 
 	// textbox
 	static void SprTextboxResetTime(Sprite* spr);
+	static void SprTextboxSetFontColor(Sprite* spr, uint32_t abgr);
+	static void SprTextboxSetEdgeColor(Sprite* spr, uint32_t abgr);
 
 	// anim2
 	static void SprAnim2SetStaticTime(Sprite* spr, int time);

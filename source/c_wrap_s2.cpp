@@ -479,6 +479,20 @@ void s2_spr_textbox_reset_time(void* spr)
 }
 
 extern "C"
+void s2_spr_textbox_set_font_color(void* spr, uint32_t abgr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	ProxyHelper::SprTextboxSetFontColor(s2_spr, abgr);
+}
+
+extern "C"
+void s2_spr_textbox_set_edge_color(void* spr, uint32_t abgr)
+{
+	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	ProxyHelper::SprTextboxSetEdgeColor(s2_spr, abgr);
+}
+
+extern "C"
 void s2_spr_anim2_set_static_time(void* spr, int time) 
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);

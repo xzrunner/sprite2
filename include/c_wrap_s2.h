@@ -111,6 +111,8 @@ void  s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ym
 //////////////////////////////////////////////////////////////////////////
 
 void  s2_spr_textbox_reset_time(void* spr);
+void  s2_spr_textbox_set_font_color(void* spr, uint32_t abgr);
+void  s2_spr_textbox_set_edge_color(void* spr, uint32_t abgr);
 
 //////////////////////////////////////////////////////////////////////////
 // anim2

@@ -1360,7 +1360,7 @@ uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL
 }
 
 extern "C"
-void s2_set_viewport(int x, int y, int w, int h)
+void s2_set_viewport(float x, float y, float w, float h)
 {
 	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
 	ctx->SetViewport(x, y, w, h);

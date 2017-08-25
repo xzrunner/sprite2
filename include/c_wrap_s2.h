@@ -288,7 +288,7 @@ enum S2_PIXEL_TYPE
 
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type);
 
-void s2_set_viewport(int x, int y, int w, int h);
+void s2_set_viewport(float x, float y, float w, float h);
 
 #endif // _sprite2_wrap_c_h_
 

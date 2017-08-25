@@ -12,7 +12,11 @@ RenderContext::RenderContext()
 	, m_proj_width(0)
 	, m_proj_height(0)
 	, m_screen_width(0)
-	, m_screen_height(0) 
+	, m_screen_height(0)
+	, m_vp_x(0)
+	, m_vp_y(0) 
+	, m_vp_w(0)
+	, m_vp_h(0)
 {}
 
 RenderContext::RenderContext(float proj_width, float proj_height, int screen_width, int screen_height)
@@ -22,6 +26,10 @@ RenderContext::RenderContext(float proj_width, float proj_height, int screen_wid
 	, m_proj_height(proj_height) 
 	, m_screen_width(screen_width)
 	, m_screen_height(screen_height)
+	, m_vp_x(0)
+	, m_vp_y(0) 
+	, m_vp_w(0)
+	, m_vp_h(0)
 {}
 
 void RenderContext::SetModelView(const sm::vec2& offset, float scale)
@@ -50,7 +58,9 @@ void RenderContext::SetProjection(int width, int height)
 
 void RenderContext::SetScreen(int width, int height)
 {
-	if (m_screen_width == width && m_screen_height == height) {
+	if (m_screen_width == width && m_screen_height == height ||
+		m_vp_w != 0 && width != m_vp_w ||
+		m_vp_h != 0 && height != m_vp_h) {
 		return;
 	}
 
@@ -58,6 +68,26 @@ void RenderContext::SetScreen(int width, int height)
 	m_screen_height = height;
 
 	UpdateViewport();
+}
+
+void RenderContext::SetViewport(int x, int y, int w, int h)
+{
+	if (m_vp_x == x &&
+		m_vp_y == y &&
+		m_vp_w == w &&
+		m_vp_h == h) {
+		return;
+	}
+
+	m_vp_x = x;
+	m_vp_y = y;
+	m_vp_w = w;
+	m_vp_h = h;
+	UpdateViewport();
+
+	m_proj_width = w;
+	m_proj_height = h;
+	UpdateProjection();
 }
 
 void RenderContext::UpdateMVP() const
@@ -78,12 +108,12 @@ void RenderContext::UpdateProjection() const
 
 void RenderContext::UpdateViewport() const
 {
-	if (m_screen_width == 0 && m_screen_height == 0) {
+	if (m_vp_w == 0 && m_vp_h == 0) {
 		return;
 	}
 
 	sl::ShaderMgr::Instance()->GetContext()->SetViewport(
-		0, 0, m_screen_width, m_screen_height);
+		m_vp_x, m_vp_y, m_vp_w, m_vp_h);
 }
 
 }

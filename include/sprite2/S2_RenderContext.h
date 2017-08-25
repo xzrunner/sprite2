@@ -15,6 +15,7 @@ public:
 	void SetModelView(const sm::vec2& offset, float scale);
 	void SetProjection(int width, int height);
 	void SetScreen(int width, int height);
+	void SetViewport(int x, int y, int w, int h);
 
 	void UpdateMVP() const;
 	void UpdateModelView() const;
@@ -39,6 +40,8 @@ private:
 
 	int m_screen_width;
 	int m_screen_height;
+
+	int m_vp_x, m_vp_y, m_vp_w, m_vp_h;
 
 }; // RenderContext
 

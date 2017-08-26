@@ -28,8 +28,8 @@ RenderContext::RenderContext(float proj_width, float proj_height, int screen_wid
 	, m_screen_height(screen_height)
 	, m_vp_x(0)
 	, m_vp_y(0) 
-	, m_vp_w(0)
-	, m_vp_h(0)
+	, m_vp_w(screen_width)
+	, m_vp_h(screen_height)
 {}
 
 void RenderContext::SetModelView(const sm::vec2& offset, float scale)

@@ -6,9 +6,14 @@
 #include "SprVisitorParams.h"
 #include "UpdateParams.h"
 #include "Anim2Sprite.h"
+#include "AudioSymbol.h"
+
+#include <uniaudio/Source.h>
 
 namespace s2
 {
+
+static const float FPS = 30.0f;
 
 SetStaticFrameVisitor::SetStaticFrameVisitor(int static_frame)
 	: m_static_frame(static_frame)
@@ -53,6 +58,15 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 		break;
 	case SYM_COMPLEX: case SYM_MESH: case SYM_MASK: case SYM_PROXY:
 		ret = VISIT_INTO;
+		break;
+	case SYM_AUDIO:
+		{
+			const AudioSymbol* audio_sym = VI_DOWNCASTING<const AudioSymbol*>(spr->GetSymbol());
+			ua::Source* source = const_cast<AudioSymbol*>(audio_sym)->GetSource();
+			if (source) {
+				source->Seek(m_static_frame / FPS);
+			}
+		}
 		break;
     default:
         break;

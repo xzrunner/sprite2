@@ -21,10 +21,10 @@ void RenderScreen::Scissor(float x, float y, float w, float h)
 	w *= mv_scale;
 	h *= mv_scale;
 
-	float proj_w = ctx->GetProjWidth(),
-		  proj_h = ctx->GetProjHeight();
-	x += proj_w * 0.5f;
-	y += proj_h * 0.5f;
+	float screen_w = ctx->GetScreenWidth(),
+		  screen_h = ctx->GetScreenHeight();
+	x += screen_w * 0.5f;
+	y += screen_h * 0.5f;
 
 	x += ctx->GetMVOffset().x * mv_scale;
 	y += ctx->GetMVOffset().y * mv_scale;
@@ -32,13 +32,13 @@ void RenderScreen::Scissor(float x, float y, float w, float h)
 	if (x < 0) {
 		w += x;
 		x = 0;
-	} else if (x > proj_w) {
+	} else if (x > screen_w) {
 		w = h = 0;
 	}
 	if (y < 0) {
 		h += y;
 		y = 0;
-	} else if (y > proj_h) {
+	} else if (y > screen_h) {
 		w = h = 0;
 	}
 

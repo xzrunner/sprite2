@@ -25,9 +25,6 @@ public:
 	const sm::vec2& GetMVOffset() const { return m_mv_offset; }
 	float GetMVScale() const { return m_mv_scale; }
 
-	float GetProjWidth() const { return m_proj_width; }
-	float GetProjHeight() const { return m_proj_height; }
-
 	int  GetScreenWidth() const { return m_screen_width; }
 	int  GetScreenHeight() const { return m_screen_height; }
 

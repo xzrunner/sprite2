@@ -22,4 +22,11 @@ void Blackboard::SetScreenSize(int w, int h)
 	}
 }
 
+void Blackboard::Clear()
+{
+	m_screen_cache_texid = -1;
+	m_cam = NULL;
+	m_screen_sz.Set(0, 0);
+}
+
 }

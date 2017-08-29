@@ -21,6 +21,8 @@ public:
 	const sm::ivec2& GetScreenSize() const { return m_screen_sz; }
 	void SetScreenSize(int w, int h);
 
+	void Clear();
+
 private:
 	int m_screen_cache_texid;
 

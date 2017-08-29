@@ -616,6 +616,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\sprites\Particle3dFlatten.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\Particle3dFlatten.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\Particle3dSprite.cpp"
 					>
 				</File>
@@ -1636,6 +1644,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\source\render\DrawIntegrate.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\DrawIntegrate.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\render\DrawMask.cpp"
 					>
 				</File>
@@ -1665,6 +1681,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\sprite2\DrawOuterGlow.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\source\render\DrawPingPong.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\DrawPingPong.h"
 					>
 				</File>
 				<File

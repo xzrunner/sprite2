@@ -14,8 +14,8 @@ public:
 	RenderTarget(int width, int height);
 	virtual ~RenderTarget();
 
-	void Bind();
-	void Unbind();
+	virtual void Bind();
+	virtual void Unbind();
 
 	int Width() const;
 	int Height() const;

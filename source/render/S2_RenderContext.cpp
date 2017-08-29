@@ -58,16 +58,8 @@ void RenderContext::SetProjection(int width, int height)
 
 void RenderContext::SetScreen(int width, int height)
 {
-	if (m_screen_width == width && m_screen_height == height ||
-		m_vp_w != 0 && width != m_vp_w ||
-		m_vp_h != 0 && height != m_vp_h) {
-		return;
-	}
-
 	m_screen_width  = width;
 	m_screen_height = height;
-
-	UpdateViewport();
 }
 
 void RenderContext::SetViewport(int x, int y, int w, int h)

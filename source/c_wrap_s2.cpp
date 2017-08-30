@@ -25,6 +25,7 @@
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
+#include "QueryLoadedVisitor.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -415,6 +416,14 @@ extern "C"
 void s2_spr_set_force_update(void* spr, bool force) {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
 	ProxyHelper::SprSetForceUpdate(s2_spr, force);
+}
+
+extern "C"
+bool s2_spr_is_res_loaded(const void* spr) {
+	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
+	QueryLoadedVisitor visitor;
+	s2_spr->Traverse(visitor, SprVisitorParams());
+	return visitor.IsLoaded();
 }
 
 extern "C"

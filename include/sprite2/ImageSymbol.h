@@ -38,6 +38,8 @@ public:
 
 	const sm::i16_rect& GetRegion() const { return m_region; }
 
+	bool IsLoaded() const;
+
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 

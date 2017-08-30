@@ -168,6 +168,11 @@ void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
 	m_region = region;
 }
 
+bool ImageSymbol::IsLoaded() const
+{
+	return m_tex && m_tex->IsLoadFinished();
+}
+
 sm::rect ImageSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return m_size;

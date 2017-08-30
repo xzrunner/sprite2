@@ -90,6 +90,8 @@ void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
 bool  s2_spr_get_force_update(const void* spr);
 void  s2_spr_set_force_update(void* spr, bool force);
 
+bool  s2_spr_is_res_loaded(const void* spr);
+
 //////////////////////////////////////////////////////////////////////////
 // animation
 //////////////////////////////////////////////////////////////////////////

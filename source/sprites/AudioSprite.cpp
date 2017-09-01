@@ -3,6 +3,7 @@
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS
+#include "sprite2/AudioContext.h"
 
 #include <uniaudio/Source.h>
 
@@ -69,6 +70,10 @@ void AudioSprite::OnMessage(const UpdateParams& up, Message msg)
 
 void AudioSprite::Play()
 {
+	if (!AudioContext::IsEnable()) {
+		return;
+	}
+
 	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
 	ua::Source* source = sym->GetSource();
 	if (source) {
@@ -78,6 +83,10 @@ void AudioSprite::Play()
 
 void AudioSprite::Stop()
 {
+	if (!AudioContext::IsEnable()) {
+		return;
+	}
+
 	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
 	ua::Source* source = sym->GetSource();
 	if (source) {
@@ -87,6 +96,10 @@ void AudioSprite::Stop()
 
 void AudioSprite::Pause()
 {
+	if (!AudioContext::IsEnable()) {
+		return;
+	}
+
 	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
 	ua::Source* source = sym->GetSource();
 	if (source) {
@@ -96,6 +109,10 @@ void AudioSprite::Pause()
 
 void AudioSprite::Resume()
 {
+	if (!AudioContext::IsEnable()) {
+		return;
+	}
+
 	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
 	ua::Source* source = sym->GetSource();
 	if (source) {

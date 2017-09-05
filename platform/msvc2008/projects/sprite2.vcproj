@@ -1488,6 +1488,14 @@
 				Name="16.audio"
 				>
 				<File
+					RelativePath="..\..\..\source\sprites\AudioContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\sprite2\AudioContext.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\sprites\AudioSprite.cpp"
 					>
 				</File>

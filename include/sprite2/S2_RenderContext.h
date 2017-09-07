@@ -28,6 +28,10 @@ public:
 	int  GetScreenWidth() const { return m_screen_width; }
 	int  GetScreenHeight() const { return m_screen_height; }
 
+	void GetViewport(int& x, int& y, int& w, int& h) const {
+		x = m_vp_x; y = m_vp_y; w = m_vp_w; h = m_vp_h; 
+	}
+
 private:
 	sm::vec2 m_mv_offset;
 	float    m_mv_scale;

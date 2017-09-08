@@ -36,6 +36,11 @@ void CosineShape::Draw(const RenderParams& rp) const
 	ShapeVertices::Draw(m_mid_points, m_closed, rp);
 }
 
+void CosineShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 void CosineShape::UpdatePolyline()
 {
 	if (m_vertices.size() <= 1) {

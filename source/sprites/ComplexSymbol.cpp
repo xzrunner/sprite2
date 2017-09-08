@@ -23,6 +23,7 @@
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
+#include "DrawNodeDeferred.h"
 
 #include <SM_Test.h>
 
@@ -157,6 +158,63 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	if (scissor) {
 		RenderScissor::Instance()->Pop();
 	}
+
+	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
+}
+
+RenderReturn ComplexSymbol::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+{
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
+		return RENDER_INVISIBLE;
+	}
+
+// 	sm::vec2 scissor_sz = m_scissor.Size();
+// 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
+// 	if (scissor) 
+// 	{
+// 		sm::vec2 min = rp_child->mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
+// 			max = rp_child->mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
+// 		if (min.x > max.x) {
+// 			std::swap(min.x, max.x);
+// 		}
+// 		if (min.y > max.y) {
+// 			std::swap(min.y, max.y);
+// 		}
+// 		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
+// 	}
+
+	RenderReturn ret = RENDER_OK;
+
+	int action = GetAction(spr, rp.actor);
+	const std::vector<Sprite*>& children = GetActionChildren(action);
+	if (rp.IsDisableCulling()) {
+		for (int i = 0, n = children.size(); i < n; ++i) 
+		{
+			const Sprite* child = children[i];
+			rp_child->actor = child->QueryActor(rp.actor);
+			ret |= DrawNodeDeferred::Draw(dlist, child, *rp_child);
+		}
+	} else {
+		for (int i = 0, n = children.size(); i < n; ++i) 
+		{
+			const Sprite* child = children[i];
+			rp_child->actor = child->QueryActor(rp.actor);
+			if (!rp_child->IsDisableCulling() && 
+				DrawNode::CullingTestOutside(child, *rp_child)) {
+					continue;
+			}
+			ret |= DrawNodeDeferred::Draw(dlist, child, *rp_child);
+		}
+	}
+
+// 	if (scissor) {
+// 		RenderScissor::Instance()->Pop();
+// 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 

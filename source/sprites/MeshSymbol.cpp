@@ -102,6 +102,14 @@ RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
+RenderReturn MeshSymbol::DrawDeferred(cooking::DisplayList* dlist, 
+									  const RenderParams& rp, 
+									  const Sprite* spr) const
+{
+	// todo
+	return RENDER_OK;
+}
+
 bool MeshSymbol::Update(const UpdateParams& up, float time)
 {
  	if (m_mesh) {

@@ -76,6 +76,11 @@ void CircleShape::Draw(const RenderParams& rp) const
 	RVG::Circle(c, r, false, 32);
 }
 
+void CircleShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 const sm::vec2& CircleShape::GetCenter() const 
 { 
 	return m_center; 

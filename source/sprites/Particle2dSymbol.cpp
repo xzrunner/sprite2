@@ -81,6 +81,14 @@ RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 	return ret;
 }
 
+RenderReturn Particle2dSymbol::DrawDeferred(cooking::DisplayList* dlist, 
+											const RenderParams& rp, 
+											const Sprite* spr) const
+{
+	// todo
+	return RENDER_OK;
+}
+
 sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty

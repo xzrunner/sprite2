@@ -69,6 +69,11 @@ void BezierShape::Draw(const RenderParams& rp) const
 	}
 }
 
+void BezierShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 void BezierShape::UpdatePolyline()
 {
 	const int num = std::max(20, (int)(sm::dis_pos_to_pos(m_control_nodes[0], m_control_nodes[3]) / 10));

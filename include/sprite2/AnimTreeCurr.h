@@ -49,6 +49,7 @@ public:
 	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 	virtual int GetSlotSize() const { return m_slots.size(); }
 	virtual RenderReturn Draw(const RenderParams& rp) const;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const;
 	virtual void Clear();
 	virtual sm::rect CalcAABB(const Actor* actor) const;
 

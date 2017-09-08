@@ -62,6 +62,8 @@ static const uint32_t S2_DISABLE_DRAW_PARTICLE3D   = 0x00000001;
 
 void  s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				  float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
+void  s2_spr_draw_deferred(const void* actor, float x, float y, float angle, float sx, float sy,
+						   float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
 
 void  s2_spr_set_pos(void* spr, float x, float y);
 void  s2_spr_set_angle(void* spr, float angle);

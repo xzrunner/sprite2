@@ -87,6 +87,35 @@ RenderReturn Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
+RenderReturn Scale9Symbol::DrawDeferred(cooking::DisplayList* dlist, 
+										const RenderParams& rp, 
+										const Sprite* spr) const
+{
+	RenderReturn ret = RENDER_OK;
+	if (rp.actor) {
+		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+		*rp_child = rp;
+		if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			ret = VI_DOWNCASTING<const Scale9Actor*>(rp.actor)->GetScale9().DrawDeferred(dlist, *rp_child);
+		} else {
+			ret = RENDER_INVISIBLE;
+		}
+		RenderParamsPool::Instance()->Push(rp_child); 
+	} else if (spr) {
+		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+		*rp_child = rp;
+		if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			ret = VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().DrawDeferred(dlist, *rp_child);
+		} else {
+			ret = RENDER_INVISIBLE;
+		}
+		RenderParamsPool::Instance()->Push(rp_child); 
+	} else {
+		ret = m_s9.Draw(rp);
+	}
+	return ret;
+}
+
 void Scale9Symbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	if (fp.GetActor()) {

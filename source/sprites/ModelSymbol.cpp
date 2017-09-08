@@ -66,6 +66,14 @@ RenderReturn ModelSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return s2::RENDER_OK;
 }
 
+RenderReturn ModelSymbol::DrawDeferred(cooking::DisplayList* dlist, 
+									   const RenderParams& rp, 
+									   const Sprite* spr) const
+{
+	// todo
+	return RENDER_OK;
+}
+
 void ModelSymbol::SetModel(m3::Model* model)
 {
 	cu::RefCountObjAssign(m_model, model);

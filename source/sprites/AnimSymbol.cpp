@@ -161,6 +161,27 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
+RenderReturn AnimSymbol::DrawDeferred(cooking::DisplayList* dlist,
+									  const RenderParams& rp, 
+									  const Sprite* spr) const
+{	
+	RenderReturn ret = RENDER_OK;
+	if (spr) {
+		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+		*rp_child = rp;
+		if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
+			const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
+			assert(curr);
+			ret = curr->DrawDeferred(dlist, *rp_child);
+		}
+		RenderParamsPool::Instance()->Push(rp_child); 
+	} else {
+		ret = m_curr->DrawDeferred(dlist, rp);
+	}
+	return ret;
+}
+
 bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
 	m_curr->SetTime(time);

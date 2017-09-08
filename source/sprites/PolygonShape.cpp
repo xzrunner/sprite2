@@ -63,6 +63,11 @@ void PolygonShape::Draw(const RenderParams& rp) const
 	}
 }
 
+void PolygonShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 void PolygonShape::SetPolygon(Polygon* poly)
 {
 	cu::RefCountObjAssign(m_poly, poly);

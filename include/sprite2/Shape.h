@@ -9,6 +9,8 @@
 #include <CU_RefCountObj.h>
 #include <CU_Cloneable.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -27,6 +29,7 @@ public:
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
 	virtual void Draw(const RenderParams& rp) const = 0;
+	virtual void DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const = 0;
 
 	/**
 	 *  @interface

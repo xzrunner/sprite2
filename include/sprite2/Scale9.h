@@ -7,6 +7,8 @@
 
 #include <vector>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -49,6 +51,7 @@ public:
 	~Scale9();
 
 	RenderReturn Draw(const RenderParams& rp) const;
+	RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }

@@ -11,6 +11,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -31,6 +33,7 @@ public:
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const {}
 

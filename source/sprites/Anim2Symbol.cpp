@@ -92,6 +92,12 @@ RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return RENDER_OK;
 }
 
+RenderReturn Anim2Symbol::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+{
+	// todo
+	return RENDER_OK;
+}
+
 void Anim2Symbol::SetAnim(rg_animation* anim)
 {
 	if(m_anim) {

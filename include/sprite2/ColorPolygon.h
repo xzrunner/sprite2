@@ -20,6 +20,7 @@ public:
 	virtual int Type() const { return POLY_COLOR; }
 
 	virtual void Draw(const RenderParams& rp) const;
+	virtual void DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	virtual void Build();
 
 	const Color& GetColor() const { return m_color; }

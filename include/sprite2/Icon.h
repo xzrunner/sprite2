@@ -8,6 +8,8 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -23,6 +25,7 @@ public:
 	virtual ~Icon() {}
 
 	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

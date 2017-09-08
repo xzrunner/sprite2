@@ -11,6 +11,8 @@
 
 #include <CU_RefCountObj.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -37,6 +39,7 @@ public:
 	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const = 0;
 	virtual int GetSlotSize() const = 0;
 	virtual RenderReturn Draw(const RenderParams& rp) const = 0;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual void Clear() = 0;
 	virtual sm::rect CalcAABB(const Actor* actor) const = 0;
 

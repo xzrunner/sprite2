@@ -24,6 +24,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 	// todo: only for scale9 layout
@@ -51,6 +52,9 @@ private:
 	void DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
 	void DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
 	void DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
+
+	void DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
+		sm::vec2* vertices, float* texcoords, int tex_id) const;
 
 protected:
 	Texture* m_tex;

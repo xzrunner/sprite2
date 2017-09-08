@@ -76,6 +76,14 @@ RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
+RenderReturn SkeletonSymbol::DrawDeferred(cooking::DisplayList* dlist, 
+										  const RenderParams& rp, 
+										  const Sprite* spr) const
+{
+	// todo
+	return RENDER_OK;
+}
+
 void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
 {
 	cu::RefCountObjAssign(m_skeleton, skeleton);

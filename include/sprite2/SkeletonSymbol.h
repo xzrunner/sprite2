@@ -24,6 +24,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const;
 
 	void SetSkeleton(Skeleton* skeleton);
 	const Skeleton* GetSkeleton() const { return m_skeleton; }

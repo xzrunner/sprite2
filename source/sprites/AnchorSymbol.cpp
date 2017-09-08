@@ -8,6 +8,7 @@
 #include "BoundingBox.h"
 #include "Flatten.h"
 #include "FlattenParams.h"
+#include "DrawNodeDeferred.h"
 
 #include <assert.h>
 
@@ -38,6 +39,35 @@ RenderReturn AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		rp_child->mt = m;
 //		rp_child->SetDisableCulling(true);
 		ret = DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
+	} else {
+		ret = RENDER_NO_DATA;
+	}
+	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return ret;
+}
+
+RenderReturn AnchorSymbol::DrawDeferred(cooking::DisplayList* dlist, const 
+										RenderParams& rp, 
+										const Sprite* spr) const
+{
+	assert(spr);
+	const Actor* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
+	if (!anchor) {
+		return RENDER_NO_DATA;
+	}
+
+	RenderReturn ret = RENDER_OK;
+
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	rp_child->actor = GetRealActor(spr, rp.actor);
+	if (rp_child->actor) {
+		S2_MAT m;
+		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, m);
+		rp_child->mt = m;
+//		rp_child->SetDisableCulling(true);
+		ret = DrawNodeDeferred::Draw(dlist, rp_child->actor->GetSpr(), *rp_child);
 	} else {
 		ret = RENDER_NO_DATA;
 	}

@@ -26,6 +26,7 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Sprite3Shader.h>
+#include <cooking.h>
 
 #include <assert.h>
 
@@ -130,6 +131,64 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 			DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
 		} else {
 			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+		}
+	}
+
+	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
+}
+
+RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist, 
+									   const RenderParams& rp, 
+									   const Sprite* spr) const
+{
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
+		return RENDER_INVISIBLE;
+	}
+
+	float xmin = FLT_MAX, ymin = FLT_MAX,
+		  xmax =-FLT_MAX, ymax =-FLT_MAX;
+	sm::vec2 vertices[4];
+	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
+	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
+	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
+	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
+	for (int i = 0; i < 4; ++i) 
+	{
+		sm::vec2 pos = rp_child->mt * vertices[i];
+		if (pos.x < xmin) xmin = pos.x;
+		if (pos.x > xmax) xmax = pos.x;
+		if (pos.y < ymin) ymin = pos.y;
+		if (pos.y > ymax) ymax = pos.y;
+		vertices[i] = pos;
+	}
+
+	if (rp.view_region.IsValid() && 
+		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
+		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
+		return RENDER_OUTSIDE;
+	}
+
+	float texcoords[8];
+	int tex_id;
+	if (!QueryTexcoords(false, texcoords, tex_id)) {
+		OnQueryTexcoordsFail();
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	if (mgr->GetShaderType() == sl::BLEND) {
+		// todo
+	} else {
+		const Camera* cam = Blackboard::Instance()->GetCamera();
+		if (cam && cam->Type() == CAM_PSEUDO3D) {
+			// todo
+		} else {
+			DrawOrthoDeferred(dlist, *rp_child, vertices, texcoords, tex_id);
 		}
 	}
 
@@ -294,6 +353,18 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float
 	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 	shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
+}
+
+void ImageSymbol::DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
+									sm::vec2* vertices, float* texcoords, int tex_id) const
+{
+	const RenderColor& col = rp.color;
+	uint32_t col_mul = col.GetMulABGR(), 
+		     col_add = col.GetAddABGR();
+	uint32_t col_rmap = col.GetRMapABGR(),
+		     col_gmap = col.GetGMapABGR(),
+			 col_bmap = col.GetBMapABGR();
+	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, &vertices[0].x, texcoords, tex_id);
 }
 
 }

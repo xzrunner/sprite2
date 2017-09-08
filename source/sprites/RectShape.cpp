@@ -40,4 +40,9 @@ void RectShape::Draw(const RenderParams& rp) const
 	RVG::Rect(min, max, false);
 }
 
+void RectShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 }

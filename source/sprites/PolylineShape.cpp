@@ -106,6 +106,11 @@ void PolylineShape::Draw(const RenderParams& rp) const
 	ShapeVertices::Draw(m_vertices, m_closed, rp);
 }
 
+void PolylineShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	// todo
+}
+
 void PolylineShape::SetVertices(const std::vector<sm::vec2>& vertices)
 {
 	m_vertices = vertices;

@@ -7,6 +7,7 @@
 #include "SymType.h"
 #include "Flatten.h"
 #include "FlattenParams.h"
+#include "DrawNodeDeferred.h"
 
 #include <SM_Calc.h>
 
@@ -65,6 +66,17 @@ RenderReturn Scale9::Draw(const RenderParams& rp) const
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
 			ret |= DrawNode::Draw(m_grids[i], rp);
+		}
+	}
+	return ret;
+}
+
+RenderReturn Scale9::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
+{
+	RenderReturn ret = RENDER_OK;
+	for (int i = 0; i < 9; ++i) {
+		if (m_grids[i]) {
+			ret |= DrawNodeDeferred::Draw(dlist, m_grids[i], rp);
 		}
 	}
 	return ret;

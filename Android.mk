@@ -26,6 +26,8 @@ LOCAL_C_INCLUDES := \
 	${MTRAIL_SRC_PATH} \
 	${GLP_SRC_PATH} \
 	${DS_SRC_PATH} \
+	${COOKING_SRC_PATH}/include \
+	${MULTITASK_SRC_PATH}/include \
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH) -name "*.cpp" -print)) \
@@ -43,7 +45,7 @@ LOCAL_STATIC_LIBRARIES := \
 	polymesh \
 	ps \
 	mtrail \
-	
+	cooking \
 
 include $(BUILD_STATIC_LIBRARY)	
 

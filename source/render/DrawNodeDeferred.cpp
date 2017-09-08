@@ -2,7 +2,7 @@
 #include "RenderScissor.h"	// todo
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
-#include "Utility.h"
+#include "sprite2/Utility.h"
 #include "SprDefault.h"
 #include "RenderFilter.h"
 

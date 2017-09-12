@@ -18,6 +18,7 @@ public:
 	RenderFilter(FilterMode mode) 
 		: m_mode(mode) 
 	{}
+	virtual ~RenderFilter() {}
 
 	virtual bool operator == (const RenderFilter& rf) const {
 		return GetMode() == rf.GetMode();

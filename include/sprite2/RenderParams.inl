@@ -95,6 +95,9 @@ void RenderParams::Init()
 inline
 void RenderParams::Term()
 {
+	color.Term();
+	shader.Term();
+	camera.Term();
 }
 
 }

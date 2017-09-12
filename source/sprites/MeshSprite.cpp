@@ -97,12 +97,12 @@ bool MeshSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	//// visible
-	//const Actor* actor = up.GetActor();
-	//bool visible = actor ? actor->IsVisible() : IsVisible();
-	//if (!visible) {
-	//	return false;
-	//}
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;

@@ -104,12 +104,12 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	//// visible
-	//const Actor* actor = up.GetActor();
-	//bool visible = actor ? actor->IsVisible() : IsVisible();
-	//if (!visible) {
-	//	return false;
-	//}
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
 
 	if (!m_et) {
 		return false;

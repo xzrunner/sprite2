@@ -63,12 +63,12 @@ bool ImageSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	//// visible
-	//const Actor* actor = up.GetActor();
-	//bool visible = actor ? actor->IsVisible() : IsVisible();
-	//if (!visible) {
-	//	return false;
-	//}
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
 
 	FilterMode filter_mode = up.GetPrevFilter();
 	const RenderFilter* filter = GetShader().GetFilter();

@@ -59,12 +59,12 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	//// visible
-	//const Actor* actor = up.GetActor();
-	//bool visible = actor ? actor->IsVisible() : IsVisible();
-	//if (!visible) {
-	//	return false;
-	//}
+	// visible
+	const Actor* actor = up.GetActor();
+	bool visible = actor ? actor->IsVisible() : IsVisible();
+	if (!visible) {
+		return false;
+	}
 
 	bool ret = m_curr.Update();
 	if (ret) {

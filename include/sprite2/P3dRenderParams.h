@@ -21,7 +21,7 @@ public:
 	uint32_t    flags;
 
 public:
-	P3dRenderParams() : local(true), flags(0) {}
+	P3dRenderParams() : local(true), flags(0xffffffff) {}
 
 }; // P3dRenderParams
 

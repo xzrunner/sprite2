@@ -91,7 +91,9 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	rp_child->Reset();
 
-	rp_child->SetFlags(rp->flags);
+	if (rp->flags != 0xffffffff) {
+		rp_child->SetFlags(rp->flags);
+	}
 
 	rp_child->color.SetMul(mul * rp->rc.GetMul());
 	rp_child->color.SetAdd(add + rp->rc.GetAdd());

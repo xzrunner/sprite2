@@ -381,13 +381,6 @@ int s2_spr_get_ref_count(void* spr) {
 }
 
 extern "C"
-const char* s2_spr_get_name(void* spr) {
-	std::string name;
-	SprNameMap::Instance()->IDToStr(static_cast<Sprite*>(spr)->GetName(), name);
-	return name.c_str();
-}
-
-extern "C"
 int s2_spr_get_sym_id(const void* spr) {
 	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
 	int id = 0;

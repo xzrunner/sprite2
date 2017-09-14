@@ -134,7 +134,7 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 
 	switch (msg)
 	{
-	case MSG_START: 
+	case MSG_START: case MSG_PLAY:
 		et->Start();
 		et->ResetTime();
 		break;

@@ -726,8 +726,8 @@ void s2_actor_update(void* actor, bool force) {
 	}
 }
 
-extern "C"
-void s2_actor_msg_start(void* actor, bool force) {
+static void actor_send_msg(void* actor, bool force, s2::Message msg) 
+{
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
 	UpdateParams up(s2_actor);
@@ -735,31 +735,27 @@ void s2_actor_msg_start(void* actor, bool force) {
 	up.SetForce(force);
 
 	const Sprite* s2_spr = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_START);
+	const_cast<Sprite*>(s2_spr)->OnMessage(up, msg);
+}
+
+extern "C"
+void s2_actor_msg_start(void* actor, bool force) {
+	actor_send_msg(actor, force, MSG_START);
+}
+
+extern "C"
+void s2_actor_msg_play(void* actor, bool force) {
+	actor_send_msg(actor, force, MSG_PLAY);
 }
 
 extern "C"
 void s2_actor_msg_stop(void* actor, bool force) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-
-	UpdateParams up(s2_actor);
-	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	up.SetForce(force);
-
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_STOP);
+	actor_send_msg(actor, force, MSG_STOP);
 }
 
 extern "C"
 void s2_actor_msg_clear(void* actor, bool force) {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-
-	UpdateParams up(s2_actor);
-	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
-	up.SetForce(force);
-
-	const Sprite* s2_spr = s2_actor->GetSpr();
-	const_cast<Sprite*>(s2_spr)->OnMessage(up, MSG_CLEAR);
+	actor_send_msg(actor, force, MSG_CLEAR);
 }
 
 extern "C"

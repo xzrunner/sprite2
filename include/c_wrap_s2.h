@@ -162,6 +162,7 @@ void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, 
 void  s2_actor_update(void* actor, bool force);
 
 void  s2_actor_msg_start(void* actor, bool force);
+void  s2_actor_msg_play(void* actor, bool force);
 void  s2_actor_msg_stop(void* actor, bool force);
 void  s2_actor_msg_clear(void* actor, bool force);
 

@@ -56,7 +56,7 @@ void AudioSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	switch (msg)
 	{
-	case MSG_START: 
+	case MSG_PLAY: 
 		Play();
 		break;
 	case MSG_STOP:

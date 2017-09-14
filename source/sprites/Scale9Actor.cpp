@@ -18,7 +18,7 @@ void Scale9Actor::Resize(float width, float height)
 	}
 	m_s9.SetSize(width, height);
 
-	SetFlattenDirtyToRoot();
+//	SetFlattenDirtyToRoot();
 }
 
 }

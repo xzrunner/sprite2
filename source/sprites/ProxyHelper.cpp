@@ -1108,7 +1108,7 @@ void ProxyHelper::ActorSetVisible(Actor* actor, bool visible)
 	else
 	{
 		if (visible != actor->IsVisible()) {
-			actor->SetFlattenDirtyToRoot();
+//			actor->SetFlattenDirtyToRoot();
 			actor->SetVisible(visible, true);
 		}
 	}

@@ -184,7 +184,7 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 	}
 	if (up_aabb) {
 		m_aabb.UpdateParent(this);
-		SetFlattenDirtyToRoot();
+//		SetFlattenDirtyToRoot();
 	}
 }
 

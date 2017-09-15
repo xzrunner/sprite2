@@ -384,7 +384,7 @@ extern "C"
 const char* s2_spr_get_name(void* spr) {
 	std::string name;
 	SprNameMap::Instance()->IDToStr(static_cast<Sprite*>(spr)->GetName(), name);
-	char* cstr = new char[name.length() + 1];
+	char* cstr = (char*)malloc(name.length() + 1);
 	strcpy(cstr, name.c_str());
 	return cstr;
 }

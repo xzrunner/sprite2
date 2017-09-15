@@ -80,6 +80,7 @@ void  s2_spr_retain(void* spr);
 void  s2_spr_release(void* spr);
 int   s2_spr_get_id(void* spr);
 int   s2_spr_get_ref_count(void* spr);
+const char* s2_spr_get_name(void* spr);
 
 int   s2_spr_get_sym_id(const void* spr);
 int   s2_spr_get_sym_type(const void* spr);

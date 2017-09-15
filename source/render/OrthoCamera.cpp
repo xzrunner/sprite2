@@ -18,7 +18,8 @@ void OrthoCamera::OnSize(int width, int height)
 	if (ctx) {
 		ctx->SetProjection(width, height);
 		ctx->SetScreen(width, height);
-		ctx->SetViewport(0, 0, width, height);
+		// todo: set viewport single
+//		ctx->SetViewport(0, 0, width, height);
 	}
 }
 

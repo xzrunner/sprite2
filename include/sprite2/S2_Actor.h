@@ -12,6 +12,9 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include S2_MAT_HEADER
+#include <flatten/Flatten.h>
+
+#include <memory>
 
 namespace s2
 {
@@ -58,6 +61,11 @@ public:
 
 	void SetFlattenDirtyToRoot() const;
 
+	bool BuildFlatten();
+	bool HasFlatten() const;
+	void FlattenUpdate(bool force);
+	void FlattenDraw(const s2::RenderParams& rp) const;
+
 	static int GetAllActorCount();
 
 private:
@@ -91,8 +99,12 @@ private:
 	SprRender*        m_render;
 	mutable uint32_t  m_flags;
 
+	std::unique_ptr<ft::Flatten> m_flatten;
+
 }; // Actor
 
 }
+
+#include "S2_Actor.inl"
 
 #endif // _SPRITE2_ACTOR_H_

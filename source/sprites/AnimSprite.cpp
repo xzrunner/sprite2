@@ -125,6 +125,13 @@ bool AnimSprite::Update(const UpdateParams& up)
 	return curr->Update(up, GetSymbol(), this, m_loop, m_interval, m_fps);
 }
 
+bool AnimSprite::AutoUpdate(const Actor* actor)
+{
+	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
+	assert(curr);
+	return curr->Update(UpdateParams(), GetSymbol(), this, m_loop, m_interval, m_fps);
+}
+
 Sprite* AnimSprite::FetchChildByName(int name, const Actor* actor) const
 {
 	const AnimCurr* curr = GetAnimCurr(actor);

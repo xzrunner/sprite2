@@ -47,6 +47,10 @@ public:
 	virtual void OnMessage(const UpdateParams& up, Message msg) {}
 	
  	virtual bool Update(const UpdateParams& up) { return false; }
+
+	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }
+	virtual bool AutoUpdate(const Actor* actor) { return false; }
+
 	virtual Sprite* FetchChildByName(int name, const Actor* actor) const { return NULL; }
 	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const { return NULL; }
 

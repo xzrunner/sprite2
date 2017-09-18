@@ -62,6 +62,8 @@ static const uint32_t S2_DISABLE_DRAW_PARTICLE3D   = 0x00000001;
 
 void  s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				  float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
+void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
+				     float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
 void  s2_spr_draw_deferred(const void* actor, float x, float y, float angle, float sx, float sy,
 						   float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
 
@@ -157,9 +159,12 @@ void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
 void  s2_actor_retain(void* actor);
 void  s2_actor_release(void* actor);
 
+void  s2_actor_build_ft(void* actor);
+
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					float xmin, float ymin, float xmax, float ymax);
 void  s2_actor_update(void* actor, bool force);
+void  s2_actor_update_ft(void* actor, bool force);
 
 void  s2_actor_msg_start(void* actor, bool force);
 void  s2_actor_msg_play(void* actor, bool force);

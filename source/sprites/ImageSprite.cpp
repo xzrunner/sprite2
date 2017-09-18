@@ -82,4 +82,10 @@ bool ImageSprite::Update(const UpdateParams& up)
 	return false;
 }
 
+bool ImageSprite::AutoUpdate(const Actor* actor)
+{
+	// todo
+	return false;
+}
+
 }

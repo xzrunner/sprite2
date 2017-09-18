@@ -197,6 +197,77 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 	return RENDER_OK;
 }
 
+bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
+{
+	#ifndef S2_DISABLE_STATISTICS
+	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
+	StatSymDraw::DrawCostCP cp(STAT_SYM_IMAGE);
+#endif // S2_DISABLE_STATISTICS
+
+	if (!m_tex->IsLoadFinished()) {
+		return true;
+	}
+
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	//if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+	//	RenderParamsPool::Instance()->Push(rp_child); 
+	//	return RENDER_INVISIBLE;
+	//}
+
+	float xmin = FLT_MAX, ymin = FLT_MAX,
+		  xmax =-FLT_MAX, ymax =-FLT_MAX;
+	sm::vec2 vertices[4];
+	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
+	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
+	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
+	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
+	for (int i = 0; i < 4; ++i) 
+	{
+		sm::vec2 pos = rp_child->mt * vertices[i];
+		if (pos.x < xmin) xmin = pos.x;
+		if (pos.x > xmax) xmax = pos.x;
+		if (pos.y < ymin) ymin = pos.y;
+		if (pos.y > ymax) ymax = pos.y;
+		vertices[i] = pos;
+	}
+
+	if (rp.view_region.IsValid() && 
+		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
+		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
+		RenderParamsPool::Instance()->Push(rp_child); 
+		return true;
+	}
+
+	float texcoords[8];
+	int tex_id;
+	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
+		OnQueryTexcoordsFail();
+	}
+
+#ifndef S2_DISABLE_STATISTICS
+	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
+	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
+	StatOverdraw::Instance()->AddArea(area);
+#endif // S2_DISABLE_STATISTICS
+	
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	if (mgr->GetShaderType() == sl::BLEND) {
+		DrawBlend(*rp_child, vertices, texcoords, tex_id);
+	} else {
+		const Camera* cam = Blackboard::Instance()->GetCamera();
+		if (cam && cam->Type() == CAM_PSEUDO3D) {
+			DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
+		} else {
+			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+		}
+	}
+
+	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return true;
+}
+
 void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	sm::vec2 vertices[4];

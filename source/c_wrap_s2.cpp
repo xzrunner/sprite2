@@ -245,6 +245,53 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 }
 
 extern "C"
+void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
+	                 float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
+{
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	if (!s2_actor->HasFlatten()) {
+		return s2_spr_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax, flag, min_edge);
+	}
+
+	s2::RenderParams* rp = s2::RenderParamsPool::Instance()->Pop();
+	rp->Reset();
+
+	float* m = rp->mt.x;
+	float c, s;
+	if (angle == 0) {
+		c = 1;
+		s = 0;
+	} else {
+		c = sm::cos_fast(angle);
+		s = sm::sin_fast(angle);
+	}
+	m[0] = c * sx;
+	m[1] = s * sx;
+	m[2] = -s * sy;
+	m[3] = c * sy;
+	m[4] = x;
+	m[5] = y;
+
+	rp->view_region.xmin = xmin;
+	rp->view_region.ymin = ymin;
+	rp->view_region.xmax = xmax;
+	rp->view_region.ymax = ymax;
+
+	rp->actor = NULL;
+
+	//	rp->SetDisableCulling(true);
+
+	if (flag & S2_DISABLE_DRAW_PARTICLE3D == 1) {
+		rp->SetDisableParticle3d(true);
+	}
+	rp->min_edge = min_edge;
+
+	s2_actor->FlattenDraw(*rp);
+
+	s2::RenderParamsPool::Instance()->Push(rp);
+}
+
+extern "C"
 void s2_spr_draw_deferred(const void* actor, float x, float y, float angle, float sx, float sy,
 						  float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
 {
@@ -656,6 +703,12 @@ void s2_actor_release(void* actor) {
 }
 
 extern "C"
+void s2_actor_build_ft(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->BuildFlatten();
+}
+
+extern "C"
 void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				   float xmin, float ymin, float xmax, float ymax) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
@@ -725,6 +778,16 @@ void s2_actor_update(void* actor, bool force) {
 		ProxyHelper::SprSetInheritUpdate(s2_spr, old_inherit_update == 1);
 	} else {
 		const_cast<Sprite*>(s2_spr)->Update(up);
+	}
+}
+
+extern "C"
+void  s2_actor_update_ft(void* actor, bool force) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->HasFlatten()) {
+		s2_actor->FlattenUpdate(force);
+	} else {
+		s2_actor_update(actor, force);
 	}
 }
 

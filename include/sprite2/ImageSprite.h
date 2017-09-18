@@ -26,6 +26,8 @@ public:
 	 *    Sprite
 	 */
 	virtual bool Update(const UpdateParams& up);
+	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }	// todo
+	virtual bool AutoUpdate(const Actor* actor);
 
 	VI_DUMMY_FUNC
 

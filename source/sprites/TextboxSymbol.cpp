@@ -139,6 +139,12 @@ RenderReturn TextboxSymbol::DrawDeferred(cooking::DisplayList* dlist, const Rend
 	return RENDER_OK;
 }
 
+bool TextboxSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
+{
+	Draw(rp, spr);
+	return true;
+}
+
 void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 {
 	ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());

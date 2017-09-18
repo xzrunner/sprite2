@@ -34,6 +34,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const = 0;
+	virtual bool DrawFlatten(const RenderParams& rp, const Sprite* spr = NULL) const { return false; }
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const {}
 

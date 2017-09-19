@@ -3,7 +3,7 @@
 #include "AnimTreeCurr.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "FlattenParams.h"
 #include "AnimFlatten.h"
 #include "ILerp.h"

@@ -5,7 +5,7 @@
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
 #include "SymType.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "FlattenParams.h"
 #include "DrawNodeDeferred.h"
 

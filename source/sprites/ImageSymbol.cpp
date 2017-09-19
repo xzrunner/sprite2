@@ -9,7 +9,7 @@
 #include "Pseudo3DCamera.h"
 #include "S2_RenderContext.h"
 #include "RenderCtxStack.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatOverdraw.h"

@@ -1,4 +1,4 @@
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
 #include "ImageSymbol.h"

@@ -7,7 +7,7 @@
 #include "DrawNode.h"
 #include "UpdateParams.h"
 #include "FlattenParams.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "TextboxSprite.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"

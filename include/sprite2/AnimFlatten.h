@@ -2,7 +2,7 @@
 #define _SPRITE2_ANIM_FLATTEN_H_
 
 #include "SymbolFlatten.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 
 namespace s2
 {

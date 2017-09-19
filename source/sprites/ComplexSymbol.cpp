@@ -13,7 +13,7 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
-#include "Flatten.h"
+#include "sprite2/Flatten.h"
 #include "FlattenParams.h"
 #include "AABBHelper.h"
 #include "FlattenMgr.h"

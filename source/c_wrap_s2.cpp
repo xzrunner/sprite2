@@ -715,6 +715,14 @@ void s2_actor_build_ft(void* actor) {
 }
 
 extern "C"
+void s2_actor_set_ft_dirty(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	while (s2_actor && !s2_actor->SetFlattenDirty()) {
+		s2_actor = const_cast<Actor*>(s2_actor->GetParent());
+	}
+}
+
+extern "C"
 void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				   float xmin, float ymin, float xmax, float ymax) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
@@ -750,6 +758,49 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	rp.actor = s2_actor;
 	rp.mt = mt * rp.mt;
 	DrawNode::Draw(s2_spr, rp);
+
+	RenderParamsPool::Instance()->Push(rp_child);
+}
+
+extern "C"
+void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
+	                  float xmin, float ymin, float xmax, float ymax) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	if (!s2_actor->HasFlatten()) {
+		return s2_actor_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax);
+	}
+
+	RenderParams rp;
+	rp.view_region.xmin = xmin;
+	rp.view_region.ymin = ymin;
+	rp.view_region.xmax = xmax;
+	rp.view_region.ymax = ymax;
+
+	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
+
+	std::stack<const Actor*> path;
+	const Actor* curr = s2_actor;
+	while (curr) {
+		path.push(curr);
+		curr = curr->GetParent();
+	}
+
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	while (path.size() > 1) {
+		const Actor* curr = path.top();
+		path.pop();
+		rp.actor = curr;
+		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		rp = *rp_child;
+	}
+
+	S2_MAT mt;
+	mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	rp.actor = s2_actor;
+	rp.mt = mt * rp.mt;
+	s2_actor->FlattenDraw(rp);
 
 	RenderParamsPool::Instance()->Push(rp_child);
 }

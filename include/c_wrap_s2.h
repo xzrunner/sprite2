@@ -161,9 +161,12 @@ void  s2_actor_release(void* actor);
 
 bool  s2_actor_has_ft(const void* actor);
 void  s2_actor_build_ft(void* actor);
+void  s2_actor_set_ft_dirty(void* actor);
 
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					float xmin, float ymin, float xmax, float ymax);
+void  s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
+					   float xmin, float ymin, float xmax, float ymax);
 void  s2_actor_update(void* actor, bool force);
 void  s2_actor_update_ft(void* actor, bool force);
 

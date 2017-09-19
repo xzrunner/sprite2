@@ -61,6 +61,8 @@ public:
 
 	void SetFlattenDirtyToRoot() const;
 
+	void SetFlatten(const std::shared_ptr<ft::Flatten>& ft, int pos);
+	bool SetFlattenDirty();
 	bool BuildFlatten();
 	bool HasFlatten() const;
 	void FlattenUpdate(bool force);
@@ -92,6 +94,15 @@ public:
 	S2_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
 private:
+	struct Flatten
+	{
+		Flatten() : impl(nullptr), pos(-1) {}
+
+		std::shared_ptr<ft::Flatten> impl;
+		int pos;
+	};
+
+private:
 	const Sprite*     m_spr;
 	const Actor*      m_parent;
 
@@ -100,7 +111,7 @@ private:
 	SprRender*        m_render;
 	mutable uint32_t  m_flags;
 
-	std::unique_ptr<ft::Flatten> m_flatten;
+	Flatten           m_flatten;
 
 }; // Actor
 

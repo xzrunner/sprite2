@@ -20,7 +20,6 @@ Actor::Actor()
 	, m_parent(NULL)
 	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
-	, m_flatten(nullptr)
 {
 	++ALL_ACTOR_COUNT;
 
@@ -32,7 +31,6 @@ Actor::Actor(const Sprite* spr, const Actor* parent)
 	, m_parent(parent)
 	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
-	, m_flatten(nullptr)
 {
 	++ALL_ACTOR_COUNT;
 

@@ -65,6 +65,7 @@ public:
 	bool HasFlatten() const;
 	void FlattenUpdate(bool force);
 	void FlattenDraw(const s2::RenderParams& rp) const;
+	void FlattenSetFrame(int frame);
 
 	static int GetAllActorCount();
 

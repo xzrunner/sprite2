@@ -37,6 +37,14 @@ void Actor::FlattenDraw(const s2::RenderParams& rp) const
 	}
 }
 
+inline
+void Actor::FlattenSetFrame(int frame)
+{
+	if (m_flatten) {
+		m_flatten->SetFrame(false, frame);
+	}
+}
+
 }
 
 #endif // _SPRITE2_ACTOR_INL_

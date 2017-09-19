@@ -703,6 +703,12 @@ void s2_actor_release(void* actor) {
 }
 
 extern "C"
+bool s2_actor_has_ft(const void* actor) {
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	return s2_actor->HasFlatten();
+}
+
+extern "C"
 void s2_actor_build_ft(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	s2_actor->BuildFlatten();
@@ -827,6 +833,16 @@ extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	ProxyHelper::ActorSetFrame(s2_actor, frame);
+}
+
+extern "C"
+void s2_actor_set_frame_ft(void* actor, int frame) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	if (s2_actor->HasFlatten()) {
+		s2_actor->FlattenSetFrame(frame);
+	} else {
+		s2_actor_set_frame(actor, frame);
+	}
 }
 
 extern "C"

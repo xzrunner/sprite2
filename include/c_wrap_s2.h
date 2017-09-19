@@ -159,6 +159,7 @@ void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
 void  s2_actor_retain(void* actor);
 void  s2_actor_release(void* actor);
 
+bool  s2_actor_has_ft(const void* actor);
 void  s2_actor_build_ft(void* actor);
 
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
@@ -172,6 +173,7 @@ void  s2_actor_msg_stop(void* actor, bool force);
 void  s2_actor_msg_clear(void* actor, bool force);
 
 void  s2_actor_set_frame(void* actor, int frame);
+void  s2_actor_set_frame_ft(void* actor, int frame);
 int   s2_actor_get_frame(void* actor);
 
 int   s2_actor_get_component_count(void* actor);

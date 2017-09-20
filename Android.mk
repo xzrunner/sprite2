@@ -28,6 +28,7 @@ LOCAL_C_INCLUDES := \
 	${DS_SRC_PATH} \
 	${COOKING_SRC_PATH}/include \
 	${MULTITASK_SRC_PATH}/include \
+	${FLATTEN_SRC_PATH}/include \
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH) -name "*.cpp" -print)) \

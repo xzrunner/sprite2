@@ -57,6 +57,8 @@ private:
 	void DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
 		sm::vec2* vertices, float* texcoords, int tex_id) const;
 
+	bool CalcVertices(const RenderParams& rp, sm::vec2* vertices) const;
+
 protected:
 	Texture* m_tex;
 

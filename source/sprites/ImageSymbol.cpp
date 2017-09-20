@@ -86,27 +86,9 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return RENDER_INVISIBLE;
 	}
 
-	float xmin = FLT_MAX, ymin = FLT_MAX,
-		  xmax =-FLT_MAX, ymax =-FLT_MAX;
 	sm::vec2 vertices[4];
-	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
-	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
-	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
-	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
-	for (int i = 0; i < 4; ++i) 
-	{
-		sm::vec2 pos = rp_child->mt * vertices[i];
-		if (pos.x < xmin) xmin = pos.x;
-		if (pos.x > xmax) xmax = pos.x;
-		if (pos.y < ymin) ymin = pos.y;
-		if (pos.y > ymax) ymax = pos.y;
-		vertices[i] = pos;
-	}
-
-	if (rp.view_region.IsValid() && 
-		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
-		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	if (!CalcVertices(*rp_child, vertices)) {
+		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_OUTSIDE;
 	}
 
@@ -116,11 +98,11 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		OnQueryTexcoordsFail();
 	}
 
-#ifndef S2_DISABLE_STATISTICS
-	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
-	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	StatOverdraw::Instance()->AddArea(area);
-#endif // S2_DISABLE_STATISTICS
+//#ifndef S2_DISABLE_STATISTICS
+//	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
+//	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
+//	StatOverdraw::Instance()->AddArea(area);
+//#endif // S2_DISABLE_STATISTICS
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
@@ -150,27 +132,9 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 		return RENDER_INVISIBLE;
 	}
 
-	float xmin = FLT_MAX, ymin = FLT_MAX,
-		  xmax =-FLT_MAX, ymax =-FLT_MAX;
 	sm::vec2 vertices[4];
-	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
-	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
-	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
-	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
-	for (int i = 0; i < 4; ++i) 
-	{
-		sm::vec2 pos = rp_child->mt * vertices[i];
-		if (pos.x < xmin) xmin = pos.x;
-		if (pos.x > xmax) xmax = pos.x;
-		if (pos.y < ymin) ymin = pos.y;
-		if (pos.y > ymax) ymax = pos.y;
-		vertices[i] = pos;
-	}
-
-	if (rp.view_region.IsValid() && 
-		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
-		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	if (!CalcVertices(*rp_child, vertices)) {
+		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_OUTSIDE;
 	}
 
@@ -195,47 +159,20 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return RENDER_OK;
-}
+}	
 
 bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
 {
-	#ifndef S2_DISABLE_STATISTICS
-	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_IMAGE);
-#endif // S2_DISABLE_STATISTICS
+//#ifndef S2_DISABLE_STATISTICS
+//	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
+//#endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {
 		return true;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	//if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-	//	RenderParamsPool::Instance()->Push(rp_child); 
-	//	return RENDER_INVISIBLE;
-	//}
-
-	float xmin = FLT_MAX, ymin = FLT_MAX,
-		  xmax =-FLT_MAX, ymax =-FLT_MAX;
 	sm::vec2 vertices[4];
-	vertices[0] = sm::vec2(m_size.xmin, m_size.ymin);
-	vertices[1] = sm::vec2(m_size.xmax, m_size.ymin);
-	vertices[2] = sm::vec2(m_size.xmax, m_size.ymax);
-	vertices[3] = sm::vec2(m_size.xmin, m_size.ymax);
-	for (int i = 0; i < 4; ++i) 
-	{
-		sm::vec2 pos = rp_child->mt * vertices[i];
-		if (pos.x < xmin) xmin = pos.x;
-		if (pos.x > xmax) xmax = pos.x;
-		if (pos.y < ymin) ymin = pos.y;
-		if (pos.y > ymax) ymax = pos.y;
-		vertices[i] = pos;
-	}
-
-	if (rp.view_region.IsValid() && 
-		(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
-		 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
+	if (!CalcVertices(rp, vertices)) {
 		return true;
 	}
 
@@ -245,25 +182,23 @@ bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
 		OnQueryTexcoordsFail();
 	}
 
-#ifndef S2_DISABLE_STATISTICS
-	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
-	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	StatOverdraw::Instance()->AddArea(area);
-#endif // S2_DISABLE_STATISTICS
+//#ifndef S2_DISABLE_STATISTICS
+//	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
+//	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
+//	StatOverdraw::Instance()->AddArea(area);
+//#endif // S2_DISABLE_STATISTICS
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
-		DrawBlend(*rp_child, vertices, texcoords, tex_id);
+		DrawBlend(rp, vertices, texcoords, tex_id);
 	} else {
 		const Camera* cam = Blackboard::Instance()->GetCamera();
 		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
+			DrawPseudo3D(rp, vertices, texcoords, tex_id);
 		} else {
-			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+			DrawOrtho(rp, vertices, texcoords, tex_id);
 		}
 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return true;
 }
@@ -436,6 +371,68 @@ void ImageSymbol::DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderPar
 		     col_gmap = col.GetGMapABGR(),
 			 col_bmap = col.GetBMapABGR();
 	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, &vertices[0].x, texcoords, tex_id);
+}
+
+bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
+{
+	float xmin = FLT_MAX, ymin = FLT_MAX,
+		  xmax = -FLT_MAX, ymax = -FLT_MAX;
+
+	const float* mt = rp.mt.x;
+
+	float x, y;
+
+	sm::vec2* ptr_dst = &vertices[0];
+
+	x = (m_size.xmin * mt[0] + m_size.ymin * mt[2]) + mt[4];
+	y = (m_size.xmin * mt[1] + m_size.ymin * mt[3]) + mt[5];
+	if (x < xmin) xmin = x;
+	if (x > xmax) xmax = x;
+	if (y < ymin) ymin = y;
+	if (y > ymax) ymax = y;
+	ptr_dst->x = x;
+	ptr_dst->y = y;
+	++ptr_dst;
+
+	x = (m_size.xmax * mt[0] + m_size.ymin * mt[2]) + mt[4];
+	y = (m_size.xmax * mt[1] + m_size.ymin * mt[3]) + mt[5];
+	if (x < xmin) xmin = x;
+	if (x > xmax) xmax = x;
+	if (y < ymin) ymin = y;
+	if (y > ymax) ymax = y;
+	ptr_dst->x = x;
+	ptr_dst->y = y;
+	++ptr_dst;
+
+	x = (m_size.xmax * mt[0] + m_size.ymax * mt[2]) + mt[4];
+	y = (m_size.xmax * mt[1] + m_size.ymax * mt[3]) + mt[5];
+	if (x < xmin) xmin = x;
+	if (x > xmax) xmax = x;
+	if (y < ymin) ymin = y;
+	if (y > ymax) ymax = y;
+	ptr_dst->x = x;
+	ptr_dst->y = y;
+	++ptr_dst;
+
+	x = (m_size.xmin * mt[0] + m_size.ymax * mt[2]) + mt[4];
+	y = (m_size.xmin * mt[1] + m_size.ymax * mt[3]) + mt[5];
+	if (x < xmin) xmin = x;
+	if (x > xmax) xmax = x;
+	if (y < ymin) ymin = y;
+	if (y > ymax) ymax = y;
+	ptr_dst->x = x;
+	ptr_dst->y = y;
+	++ptr_dst;
+
+	if (rp.IsViewRegionValid()) {
+		const sm::rect& vr = rp.GetViewRegion();
+		if (xmax <= vr.xmin || xmin >= vr.xmax ||
+			ymax <= vr.ymin || ymin >= vr.ymax) {
+			return false;
+		}
+	}
+
+	return true;
 }
 
 }

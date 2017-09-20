@@ -49,6 +49,7 @@ LOCAL_STATIC_LIBRARIES := \
 	ps \
 	mtrail \
 	cooking \
+	flatten \
 
 include $(BUILD_STATIC_LIBRARY)	
 

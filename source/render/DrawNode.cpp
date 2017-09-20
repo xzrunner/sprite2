@@ -34,7 +34,7 @@ static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
 static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 static void (*DTEX_SYM_INSERT)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h);
-static const float* (*DTEX_SYM_QUERY)(uint64_t uid, int* tex_id);
+static const float* (*DTEX_SYM_QUERY)(uint64_t uid, int& tex_id, int& block_id);
 
 static uint64_t (*GET_SYM_UID)(const Symbol*);
 static uint64_t (*GET_SPR_UID)(const Sprite*);
@@ -47,7 +47,7 @@ void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 
 void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
 						  void (*dtex_sym_insert)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h),
-						  const float* dtex_sym_query(uint64_t uid, int* tex_id))
+						  const float* dtex_sym_query(uint64_t uid, int& tex_id, int& block_id))
 {
 	PREPARE_REDNER_PARAMS = prepare_render_params;
 	DTEX_SYM_INSERT = dtex_sym_insert;
@@ -394,9 +394,9 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol* sym)
 	return ret;
 }
 
-const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id)
+const float* DrawNode::DTexQuerySym(const Symbol* sym, int& tex_id, int& block_id)
 {
-	return DTEX_SYM_QUERY(GET_SYM_UID(sym), &tex_id);
+	return DTEX_SYM_QUERY(GET_SYM_UID(sym), tex_id, block_id);
 }
 
 RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
@@ -439,9 +439,9 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 
 RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
-	int tex_id;
+	int tex_id, block_id;
 	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
-	const float* texcoords = DTEX_SYM_QUERY(uid, &tex_id);
+	const float* texcoords = DTEX_SYM_QUERY(uid, tex_id, block_id);
 	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {
 		ret = DrawSprImpl(spr, rp);

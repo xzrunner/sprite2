@@ -23,8 +23,6 @@ class RenderParams
 public:
 	sm::vec2 vertex_offset;		// for blend
 
-	sm::rect view_region;
-
 	S2_MAT mt;
 
 	RenderColor	color;
@@ -42,6 +40,9 @@ public:
 	uint32_t parent_id;
 #endif // S2_DISABLE_STATISTICS
 
+private:
+	sm::rect view_region;
+
 public:
 	RenderParams();
 	RenderParams(const RenderParams& params);
@@ -51,6 +52,11 @@ public:
 
 	uint32_t GetFlags() const { return m_flags; }
 	void SetFlags(uint32_t flags) { m_flags = flags; }
+
+	void SetViewRegion(float xmin, float ymin, float xmax, float ymax);
+	void SetViewRegion(const sm::rect& vr);
+	void ClearViewRegion();
+	const sm::rect& GetViewRegion() const { return view_region; }
 
 	/**
 	 *  @interface
@@ -72,6 +78,8 @@ private:
 
 	static const uint32_t FLAG_DISABLE_PARTICLE3D   = 0x00000080;
 
+	static const uint32_t FLAG_VIEW_REGION_VALID    = 0x00000100;
+
 public:
 	S2_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
 	S2_FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
@@ -82,6 +90,8 @@ public:
 	S2_FLAG_METHOD(DisableIntegrate, FLAG_DISABLE_INTEGRATE)
 
 	S2_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
+
+	S2_FLAG_METHOD(ViewRegionValid, FLAG_VIEW_REGION_VALID)
 
 private:
 	mutable uint32_t m_flags;

@@ -240,10 +240,12 @@ RenderReturn Flatten::DrawQuads(int begin, int end, const RenderParams& rp, sl::
 		++ptr_dst;
 		++ptr_src;
 
-		if (rp.view_region.IsValid() && 
-			(xmax <= rp.view_region.xmin || xmin >= rp.view_region.xmax ||
-			 ymax <= rp.view_region.ymin || ymin >= rp.view_region.ymax)) {
-			continue;
+		if (rp.IsViewRegionValid()) {
+			const sm::rect& vr = rp.GetViewRegion();
+			if (xmax <= vr.xmin || xmin >= vr.xmax ||
+				ymax <= vr.ymin || ymin >= vr.ymax) {
+				continue;
+			}
 		}
 
 		shader->DrawQuad(&VERTEX_BUF[0].x, &ptr_quad->texcoords[0].x, ptr_quad->tex_id);

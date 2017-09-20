@@ -100,7 +100,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	rp_child->shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
 
-	rp_child->view_region = rp->view_region;
+	rp_child->SetViewRegion(rp->view_region);
 
 	// todo color trans
 

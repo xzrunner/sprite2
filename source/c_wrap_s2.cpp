@@ -102,11 +102,7 @@ void s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, 
 				    float xmin, float ymin, float xmax, float ymax) {
 	RenderParams rp;
 	rp.mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
-
-	rp.view_region.xmin = xmin;
-	rp.view_region.ymin = ymin;
-	rp.view_region.xmax = xmax;
-	rp.view_region.ymax = ymax;
+	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	rp.actor = s2_actor;
@@ -221,10 +217,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	m[4] = x;
 	m[5] = y;
 
-	rp->view_region.xmin = xmin;
-	rp->view_region.ymin = ymin;
-	rp->view_region.xmax = xmax;
-	rp->view_region.ymax = ymax;
+	rp->SetViewRegion(xmin, ymin, xmax, ymax);
 
 	rp->actor = s2_actor;
 
@@ -272,10 +265,7 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 	m[4] = x;
 	m[5] = y;
 
-	rp->view_region.xmin = xmin;
-	rp->view_region.ymin = ymin;
-	rp->view_region.xmax = xmax;
-	rp->view_region.ymax = ymax;
+	rp->SetViewRegion(xmin, ymin, xmax, ymax);
 
 	rp->actor = NULL;
 
@@ -316,10 +306,7 @@ void s2_spr_draw_deferred(const void* actor, float x, float y, float angle, floa
 	m[4] = x;
 	m[5] = y;
 
-	rp->view_region.xmin = xmin;
-	rp->view_region.ymin = ymin;
-	rp->view_region.xmax = xmax;
-	rp->view_region.ymax = ymax;
+	rp->SetViewRegion(xmin, ymin, xmax, ymax);
 
 	rp->actor = s2_actor;
 
@@ -728,10 +715,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 
 	RenderParams rp;
-	rp.view_region.xmin = xmin;
-	rp.view_region.ymin = ymin;
-	rp.view_region.xmax = xmax;
-	rp.view_region.ymax = ymax;
+	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
 
@@ -771,10 +755,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 	}
 
 	RenderParams rp;
-	rp.view_region.xmin = xmin;
-	rp.view_region.ymin = ymin;
-	rp.view_region.xmax = xmax;
-	rp.view_region.ymax = ymax;
+	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
 	const Sprite* s2_spr = static_cast<const Sprite*>(s2_actor->GetSpr());
 

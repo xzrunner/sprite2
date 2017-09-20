@@ -62,7 +62,7 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	*rp_child = rp;
 	rp_child->mt.Identity();
 	rp_child->mt.Scale(downsample, downsample);
-	rp_child->view_region.MakeEmpty();
+	rp_child->ClearViewRegion();
 
 	spr->SetMatDisable(true);
 	spr->GetSymbol()->Draw(*rp_child, spr);

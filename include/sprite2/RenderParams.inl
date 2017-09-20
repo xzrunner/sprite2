@@ -87,6 +87,30 @@ void RenderParams::Reset()
 }
 
 inline
+void RenderParams::SetViewRegion(float xmin, float ymin, float xmax, float ymax)
+{
+	view_region.xmin = xmin;
+	view_region.ymin = ymin;
+	view_region.xmax = xmax;
+	view_region.ymax = ymax;
+	SetViewRegionValid(view_region.IsValid());
+}
+
+inline
+void RenderParams::SetViewRegion(const sm::rect& vr)
+{
+	view_region = vr;
+	SetViewRegionValid(view_region.IsValid());
+}
+
+inline
+void RenderParams::ClearViewRegion()
+{
+	view_region.MakeEmpty();
+	SetViewRegionValid(false);
+}
+
+inline
 void RenderParams::Init()
 {
 	Reset();

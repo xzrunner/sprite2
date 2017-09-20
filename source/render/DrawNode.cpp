@@ -250,7 +250,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 
 	RenderScissor* rs = RenderScissor::Instance();
-	if (rs->IsEmpty() && !rp.view_region.IsValid()) {
+	if (rs->IsEmpty() && !rp.IsViewRegionValid()) {
 		rp.SetDisableCulling(true);
 		return false;
 	}
@@ -270,15 +270,15 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 		rp.SetDisableCulling(true);
 		return true;
 	}
-	if (rp.view_region.IsValid())
+	if (rp.IsViewRegionValid())
 	{
 		if (!sr.IsValid()) {
 			rp.SetDisableCulling(true);
 			return false;
-		} else if (sm::is_rect_contain_rect(rp.view_region, sr)) {
+		} else if (sm::is_rect_contain_rect(rp.GetViewRegion(), sr)) {
 			rp.SetDisableCulling(true);
 			return false;
-		} else if (sm::is_rect_intersect_rect(rp.view_region, sr)) {
+		} else if (sm::is_rect_intersect_rect(rp.GetViewRegion(), sr)) {
 			rp.SetDisableCulling(false);
 			return false;
 		} else {

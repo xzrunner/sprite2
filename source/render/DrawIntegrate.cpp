@@ -26,7 +26,7 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	rp_child->color.Init();
 	rp_child->shader.Init();
 	rp_child->mt.Identity();
-	rp_child->view_region.MakeEmpty();
+	rp_child->ClearViewRegion();
 
 //	spr->SetMatDisable(true);
 	spr->SetColorDisable(true);

@@ -108,12 +108,12 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	if (mgr->GetShaderType() == sl::BLEND) {
 		DrawBlend(*rp_child, vertices, texcoords, tex_id);
 	} else {
-		const Camera* cam = Blackboard::Instance()->GetCamera();
-		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
-		} else {
+		//const Camera* cam = Blackboard::Instance()->GetCamera();
+		//if (cam && cam->Type() == CAM_PSEUDO3D) {
+		//	DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
+		//} else {
 			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
-		}
+		//}
 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
@@ -148,12 +148,12 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 	if (mgr->GetShaderType() == sl::BLEND) {
 		// todo
 	} else {
-		const Camera* cam = Blackboard::Instance()->GetCamera();
-		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			// todo
-		} else {
+		//const Camera* cam = Blackboard::Instance()->GetCamera();
+		//if (cam && cam->Type() == CAM_PSEUDO3D) {
+		//	// todo
+		//} else {
 			DrawOrthoDeferred(dlist, *rp_child, vertices, texcoords, tex_id);
-		}
+		//}
 	}
 
 	RenderParamsPool::Instance()->Push(rp_child); 
@@ -192,12 +192,12 @@ bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
 	if (mgr->GetShaderType() == sl::BLEND) {
 		DrawBlend(rp, vertices, texcoords, tex_id);
 	} else {
-		const Camera* cam = Blackboard::Instance()->GetCamera();
-		if (cam && cam->Type() == CAM_PSEUDO3D) {
-			DrawPseudo3D(rp, vertices, texcoords, tex_id);
-		} else {
+		//const Camera* cam = Blackboard::Instance()->GetCamera();
+		//if (cam && cam->Type() == CAM_PSEUDO3D) {
+		//	DrawPseudo3D(rp, vertices, texcoords, tex_id);
+		//} else {
 			DrawOrtho(rp, vertices, texcoords, tex_id);
-		}
+		//}
 	}
 
 	return true;

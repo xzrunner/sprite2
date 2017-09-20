@@ -49,7 +49,7 @@ RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_SHAPE);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_SHAPE);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_shape || !spr) {

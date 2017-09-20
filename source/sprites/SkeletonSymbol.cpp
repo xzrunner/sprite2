@@ -51,7 +51,7 @@ RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) con
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_SKELETON);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_SKELETON);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_skeleton) {

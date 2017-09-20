@@ -48,7 +48,7 @@ RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTURE);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTURE);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

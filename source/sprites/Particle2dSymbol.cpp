@@ -52,7 +52,7 @@ RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE2D);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_PARTICLE2D);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_PARTICLE2D);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {

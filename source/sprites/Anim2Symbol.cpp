@@ -68,7 +68,7 @@ RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_ANIM2);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_ANIM2);
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_anim || !spr) {

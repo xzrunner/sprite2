@@ -66,7 +66,7 @@ RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
-	StatSymDraw::DrawCostCP cp(STAT_SYM_MASK);
+//	StatSymDraw::DrawCostCP cp(STAT_SYM_MASK);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();

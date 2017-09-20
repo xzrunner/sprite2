@@ -50,14 +50,14 @@ protected:
 #endif // S2_DEBUG
 
 private:
-	void DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
-	void DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
-	void DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const;
+	void DrawBlend(const RenderParams& rp, float* vertices, const float* texcoords, int tex_id) const;
+	void DrawOrtho(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;
+	void DrawPseudo3D(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;
 
 	void DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
-		sm::vec2* vertices, float* texcoords, int tex_id) const;
+		const float* vertices, const float* texcoords, int tex_id) const;
 
-	bool CalcVertices(const RenderParams& rp, sm::vec2* vertices) const;
+	bool CalcVertices(const RenderParams& rp, float* vertices) const;
 
 protected:
 	Texture* m_tex;

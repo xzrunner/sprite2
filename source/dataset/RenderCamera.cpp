@@ -49,7 +49,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 	return ret;
 }
 
-void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4]) const
+void RenderCamera::CalculateZ(float cam_angle, const float vertices[8], float z[4]) const
 {
 	if (m_state.mode == CM_ORTHO || m_state.mode == CM_PERSPECTIVE_NO_HEIGHT) {
 		memset(z, 0, sizeof(float) * 4);
@@ -60,7 +60,7 @@ void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4])
 
 	float ymin = FLT_MAX, ymax = -FLT_MAX;
 	for (int i = 0; i < 4; ++i) {
-		float y = vertices[i].y;
+		float y = vertices[i * 2 + 1];
 		if (y < ymin) ymin = y;
 		if (y > ymax) ymax = y;
 	}
@@ -76,7 +76,7 @@ void RenderCamera::CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4])
 	float height = (ymax - ymin) * HEIGHT_VAL;
 	//	float height = ymax - ymin;
 	for (int i = 0; i < 4; ++i) {
-		float y = vertices[i].y;
+		float y = vertices[i * 2 + 1];
 		z[i] = -(y - ymin) / (ymax - ymin) * height * zs;
 	}
 }

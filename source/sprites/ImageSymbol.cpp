@@ -86,7 +86,7 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		return RENDER_INVISIBLE;
 	}
 
-	sm::vec2 vertices[4];
+	float vertices[8];
 	if (!CalcVertices(*rp_child, vertices)) {
 		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_OUTSIDE;
@@ -132,7 +132,7 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 		return RENDER_INVISIBLE;
 	}
 
-	sm::vec2 vertices[4];
+	float vertices[8];
 	if (!CalcVertices(*rp_child, vertices)) {
 		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_OUTSIDE;
@@ -171,7 +171,7 @@ bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
 		return true;
 	}
 
-	sm::vec2 vertices[4];
+	float vertices[8];
 	if (!CalcVertices(rp, vertices)) {
 		return true;
 	}
@@ -243,7 +243,7 @@ sm::rect ImageSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, boo
 	return m_size;
 }
 
-void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const
+void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float* texcoords, int tex_id) const
 {
 	if (!m_tex) {
 		return;
@@ -253,8 +253,9 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* t
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 
-	for (int i = 0; i < 4; ++i) {
-		vertices[i] += rp.vertex_offset;
+	for (int i = 0, ptr = 0; i < 4; ++i) {
+		vertices[ptr++] += rp.vertex_offset.x;
+		vertices[ptr++] += rp.vertex_offset.y;
 	}
 
 	sm::vec2 vertices_scr[4];
@@ -294,10 +295,10 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, sm::vec2* vertices, float* t
 		return;
 	}
 
-	shader->Draw(&vertices[0].x, texcoords, &tex_coords_base[0].x, tex_id, screen_cache_texid);
+	shader->Draw(vertices, texcoords, &tex_coords_base[0].x, tex_id, screen_cache_texid);
 }
 
-void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const
+void ImageSymbol::DrawOrtho(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 // 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -305,7 +306,7 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* t
 	if (mgr->GetShaderType() == sl::FILTER) {
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-		shader->Draw(&vertices[0].x, texcoords, tex_id);
+		shader->Draw(vertices, texcoords, tex_id);
 	} else if (mgr->GetShaderType() == sl::SPRITE2) {
 		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 #ifdef S2_DEBUG
@@ -324,11 +325,11 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, sm::vec2* vertices, float* t
 		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
 #endif // S2_DEBUG
 		shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-		shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
+		shader->DrawQuad(vertices, texcoords, tex_id);
 	}
 }
 
-void ImageSymbol::DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float* texcoords, int tex_id) const
+void ImageSymbol::DrawPseudo3D(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
 	const Camera* cam = Blackboard::Instance()->GetCamera();
 	assert(cam && cam->Type() == CAM_PSEUDO3D);
@@ -338,12 +339,12 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float
 	rp.camera.CalculateZ(pcam->GetAngle(), vertices, z);
 
 	std::vector<sm::vec3> _vertices;
-	_vertices.push_back(sm::vec3(vertices[0].x, vertices[0].y, z[0]));
-	_vertices.push_back(sm::vec3(vertices[1].x, vertices[1].y, z[1]));
-	_vertices.push_back(sm::vec3(vertices[2].x, vertices[2].y, z[2]));
-	_vertices.push_back(sm::vec3(vertices[0].x, vertices[0].y, z[0]));
-	_vertices.push_back(sm::vec3(vertices[2].x, vertices[2].y, z[2]));
-	_vertices.push_back(sm::vec3(vertices[3].x, vertices[3].y, z[3]));
+	_vertices.push_back(sm::vec3(vertices[0], vertices[1], z[0]));
+	_vertices.push_back(sm::vec3(vertices[2], vertices[3], z[1]));
+	_vertices.push_back(sm::vec3(vertices[4], vertices[5], z[2]));
+	_vertices.push_back(sm::vec3(vertices[0], vertices[1], z[0]));
+	_vertices.push_back(sm::vec3(vertices[4], vertices[4], z[2]));
+	_vertices.push_back(sm::vec3(vertices[6], vertices[7], z[3]));
 
 	std::vector<sm::vec2> _texcoords;
 	_texcoords.push_back(sm::vec2(texcoords[0], texcoords[1]));
@@ -362,7 +363,7 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, sm::vec2* vertices, float
 }
 
 void ImageSymbol::DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
-									sm::vec2* vertices, float* texcoords, int tex_id) const
+									const float* vertices, const float* texcoords, int tex_id) const
 {
 	const RenderColor& col = rp.color;
 	uint32_t col_mul = col.GetMulABGR(), 
@@ -370,10 +371,10 @@ void ImageSymbol::DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderPar
 	uint32_t col_rmap = col.GetRMapABGR(),
 		     col_gmap = col.GetGMapABGR(),
 			 col_bmap = col.GetBMapABGR();
-	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, &vertices[0].x, texcoords, tex_id);
+	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, vertices, texcoords, tex_id);
 }
 
-bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
+bool ImageSymbol::CalcVertices(const RenderParams& rp, float* vertices) const
 {
 	float xmin = FLT_MAX, ymin = FLT_MAX,
 		  xmax = -FLT_MAX, ymax = -FLT_MAX;
@@ -382,7 +383,7 @@ bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
 
 	float x, y;
 
-	sm::vec2* ptr_dst = &vertices[0];
+	float* ptr_dst = &vertices[0];
 
 	x = (m_size.xmin * mt[0] + m_size.ymin * mt[2]) + mt[4];
 	y = (m_size.xmin * mt[1] + m_size.ymin * mt[3]) + mt[5];
@@ -390,9 +391,8 @@ bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
 	if (x > xmax) xmax = x;
 	if (y < ymin) ymin = y;
 	if (y > ymax) ymax = y;
-	ptr_dst->x = x;
-	ptr_dst->y = y;
-	++ptr_dst;
+	*ptr_dst++ = x;
+	*ptr_dst++ = y;
 
 	x = (m_size.xmax * mt[0] + m_size.ymin * mt[2]) + mt[4];
 	y = (m_size.xmax * mt[1] + m_size.ymin * mt[3]) + mt[5];
@@ -400,9 +400,8 @@ bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
 	if (x > xmax) xmax = x;
 	if (y < ymin) ymin = y;
 	if (y > ymax) ymax = y;
-	ptr_dst->x = x;
-	ptr_dst->y = y;
-	++ptr_dst;
+	*ptr_dst++ = x;
+	*ptr_dst++ = y;
 
 	x = (m_size.xmax * mt[0] + m_size.ymax * mt[2]) + mt[4];
 	y = (m_size.xmax * mt[1] + m_size.ymax * mt[3]) + mt[5];
@@ -410,9 +409,8 @@ bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
 	if (x > xmax) xmax = x;
 	if (y < ymin) ymin = y;
 	if (y > ymax) ymax = y;
-	ptr_dst->x = x;
-	ptr_dst->y = y;
-	++ptr_dst;
+	*ptr_dst++ = x;
+	*ptr_dst++ = y;
 
 	x = (m_size.xmin * mt[0] + m_size.ymax * mt[2]) + mt[4];
 	y = (m_size.xmin * mt[1] + m_size.ymax * mt[3]) + mt[5];
@@ -420,9 +418,8 @@ bool ImageSymbol::CalcVertices(const RenderParams& rp, sm::vec2* vertices) const
 	if (x > xmax) xmax = x;
 	if (y < ymin) ymin = y;
 	if (y > ymax) ymax = y;
-	ptr_dst->x = x;
-	ptr_dst->y = y;
-	++ptr_dst;
+	*ptr_dst++ = x;
+	*ptr_dst++ = y;
 
 	if (rp.IsViewRegionValid()) {
 		const sm::rect& vr = rp.GetViewRegion();

@@ -18,7 +18,7 @@ public:
 
 	RenderCamera operator * (const RenderCamera& rc) const;
 
-	void CalculateZ(float cam_angle, sm::vec2 vertices[4], float z[4]) const;
+	void CalculateZ(float cam_angle, const float vertices[8], float z[4]) const;
 
 	CameraMode GetMode() const { return m_state.mode; }
 	void SetMode(CameraMode mode) { m_state.mode = mode; }

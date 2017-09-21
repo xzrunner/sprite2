@@ -161,7 +161,9 @@ RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist,
 	return RENDER_OK;
 }	
 
-bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
+bool ImageSymbol::DrawFlatten(cooking::DisplayList* dlist,
+	                          const RenderParams& rp, 
+	                          const Sprite* spr) const
 {
 //#ifndef S2_DISABLE_STATISTICS
 //	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
@@ -190,13 +192,19 @@ bool ImageSymbol::DrawFlatten(const RenderParams& rp, const Sprite* spr) const
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
-		DrawBlend(rp, vertices, texcoords, tex_id);
+		if (!dlist) {
+			DrawBlend(rp, vertices, texcoords, tex_id);
+		}
 	} else {
 		//const Camera* cam = Blackboard::Instance()->GetCamera();
 		//if (cam && cam->Type() == CAM_PSEUDO3D) {
 		//	DrawPseudo3D(rp, vertices, texcoords, tex_id);
 		//} else {
-			DrawOrtho(rp, vertices, texcoords, tex_id);
+			if (dlist) {
+				DrawOrthoDeferred(dlist, rp, vertices, texcoords, tex_id);
+			} else {
+				DrawOrtho(rp, vertices, texcoords, tex_id);
+			}
 		//}
 	}
 

@@ -23,7 +23,7 @@ void RenderTask::Run()
 void RenderTask::Flush()
 {
 	m_dlist.Replay();
-	m_dlist.Clear();
+//	m_dlist.Clear();
 	RenderParamsPool::Instance()->Push(m_rp); 
 	m_freelist.Push(this);
 }

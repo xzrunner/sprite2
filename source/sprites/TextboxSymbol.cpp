@@ -100,11 +100,15 @@ sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 	else if (spr)
 	{
 		const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
-		return sm::rect(tb_spr->GetTextbox().width, tb_spr->GetTextbox().height);
+		return sm::rect(
+			static_cast<float>(tb_spr->GetTextbox().width), 
+			static_cast<float>(tb_spr->GetTextbox().height));
 	}
 	else 
 	{
-		return sm::rect(m_tb.width, m_tb.height);
+		return sm::rect(
+			static_cast<float>(m_tb.width), 
+			static_cast<float>(m_tb.height));
 	}
 }
 

@@ -112,7 +112,7 @@ bool Anim2Curr::Update(bool loop, int fps)
 	}
 
 	// update frame
-	int curr_frame = (m_curr_time - m_start_time) * fps + 1;
+	int curr_frame = static_cast<int>((m_curr_time - m_start_time) * fps + 1);
 	int max_frame = m_sym->GetAnim()->max_frame;
 	int loop_max_frame = max_frame/* + interval * fps*/;
 	if (loop) {

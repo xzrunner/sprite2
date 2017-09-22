@@ -21,8 +21,8 @@ void RenderScreen::Scissor(float x, float y, float w, float h)
 	w *= mv_scale;
 	h *= mv_scale;
 
-	float screen_w = ctx->GetScreenWidth(),
-		  screen_h = ctx->GetScreenHeight();
+	float screen_w = static_cast<float>(ctx->GetScreenWidth()),
+		  screen_h = static_cast<float>(ctx->GetScreenHeight());
 	x += screen_w * 0.5f;
 	y += screen_h * 0.5f;
 
@@ -46,7 +46,8 @@ void RenderScreen::Scissor(float x, float y, float w, float h)
 		w = h = 0;
 	}
 
-	sl::ShaderMgr::Instance()->GetContext()->SetScissor(x, y, w, h);
+	sl::ShaderMgr::Instance()->GetContext()->SetScissor(
+		static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 
 }

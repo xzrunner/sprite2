@@ -226,8 +226,8 @@ void TexturePolygon::CalTexcoords(const sm::rect& rect)
 		cx /= 3;
 		cy /= 3;
 
-		int ix = (cx - rect.xmin) / sz.x,
-			iy = (cy - rect.ymin) / sz.y;
+		int ix = static_cast<int>((cx - rect.xmin) / sz.x),
+			iy = static_cast<int>((cy - rect.ymin) / sz.y);
 		sm::vec2 base;
 		base.x = rect.xmin + sz.x * ix;
 		base.y = rect.ymin + sz.y * iy;

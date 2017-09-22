@@ -35,8 +35,8 @@ LerpWiggle::LerpWiggle(float freq, float amp)
 
 sm::vec2 LerpWiggle::Lerp(const sm::vec2& v, float time) const
 {
-	int iter = std::floor(time * m_freq);
-	while (m_rands.size() <= (iter + 1) * 2) 
+	int iter = static_cast<int>(std::floor(time * m_freq));
+	while (static_cast<int>(m_rands.size()) <= (iter + 1) * 2)
 	{
 		float px = (rand() / static_cast<float>(RAND_MAX));
 		m_rands.push_back(px);

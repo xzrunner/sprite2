@@ -8,7 +8,7 @@ namespace s2
 SINGLETON_DEFINITION(Particle3dBuffer)
 
 static void (*UPDATE_SRT_FUNC)(void* params, float x, float y, float scale);
-static void (*REMOVE_FUNC)(struct Particle3dEmitter*);
+static void (*REMOVE_FUNC)(class Particle3dEmitter*);
 
 Particle3dBuffer::Particle3dBuffer()
 {

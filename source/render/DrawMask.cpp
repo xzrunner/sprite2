@@ -48,7 +48,8 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 	mgr->FlushShader();
 
 	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	RenderTarget* rt_base = RT->Fetch();
 	if (!rt_base) {

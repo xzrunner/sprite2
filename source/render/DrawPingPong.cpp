@@ -46,7 +46,8 @@ RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 
 	RenderScissor::Instance()->Disable();
 	if (!too_large) {
-		RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+		RenderCtxStack::Instance()->Push(RenderContext(
+			static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 	}
 
 	rt->Bind();

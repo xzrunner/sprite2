@@ -81,7 +81,7 @@ void s2_on_size(int w, int h)
 	RenderCtxStack* stack = RenderCtxStack::Instance();
 	if (stack->Size() <= 1) {
 		stack->Pop();
-		stack->Push(RenderContext(w, h, w, h));
+		stack->Push(RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	}
 }
 
@@ -131,7 +131,7 @@ void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, c
 
 	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(s2_sym);
 	const std::vector<Sprite*>& children = comp_sym->GetAllChildren();
-	if (child_idx >= 0 && child_idx < children.size()) {
+	if (child_idx >= 0 && child_idx < static_cast<int>(children.size())) {
 		Sprite* child = children[child_idx];
 		assert(child->GetSymbol()->GetID() == child_id);
 		return child;
@@ -223,7 +223,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 
 //	rp->SetDisableCulling(true);
 
-	if (flag & S2_DISABLE_DRAW_PARTICLE3D == 1) {
+	if ((flag & S2_DISABLE_DRAW_PARTICLE3D) == 1) {
 		rp->SetDisableParticle3d(true);
 	}
 	rp->min_edge = min_edge;
@@ -271,7 +271,7 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 
 	//	rp->SetDisableCulling(true);
 
-	if (flag & S2_DISABLE_DRAW_PARTICLE3D == 1) {
+	if ((flag & S2_DISABLE_DRAW_PARTICLE3D) == 1) {
 		rp->SetDisableParticle3d(true);
 	}
 	rp->min_edge = min_edge;
@@ -312,7 +312,7 @@ void s2_spr_draw_deferred(const void* actor, float x, float y, float angle, floa
 
 	//	rp->SetDisableCulling(true);
 
-	if (flag & S2_DISABLE_DRAW_PARTICLE3D == 1) {
+	if ((flag & S2_DISABLE_DRAW_PARTICLE3D) == 1) {
 		rp->SetDisableParticle3d(true);
 	}
 	rp->min_edge = min_edge;
@@ -1529,7 +1529,7 @@ extern "C"
 void s2_set_viewport(float x, float y, float w, float h)
 {
 	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
-	ctx->SetViewport(x, y, w, h);
+	ctx->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 
 }

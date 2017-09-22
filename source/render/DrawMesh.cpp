@@ -298,7 +298,8 @@ RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, con
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawMesh2RT(rt, rp, sym);
 

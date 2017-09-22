@@ -69,7 +69,8 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 		rc->Clear(0);
 	}
 
-	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams params;
 	params.mt.Scale(scale, -scale);
@@ -105,7 +106,8 @@ void DrawRT::Draw(const Symbol* sym, bool whitebg, float scale)
 	int w = static_cast<int>(sz.x * scale),
 		h = static_cast<int>(sz.y * scale);
 
-	RenderCtxStack::Instance()->Push(RenderContext(w, h, w, h));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(w), static_cast<float>(h), w, h));
 
 	RenderParams params;
 	sm::vec2 center = rect.Center();
@@ -139,7 +141,8 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 		rc->Clear(0);
 	}
 
-	RenderCtxStack::Instance()->Push(RenderContext(width, height, width, height));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);

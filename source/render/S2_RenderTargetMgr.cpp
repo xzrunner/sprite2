@@ -53,7 +53,7 @@ void RenderTargetMgr::Return(RenderTarget* rt)
 
 int RenderTargetMgr::GetTexID(int idx) const
 {
-	if (idx < 0 || idx >= m_items.size()) {
+	if (idx < 0 || idx >= static_cast<int>(m_items.size())) {
 		return  -1;
 	} else {
 		return m_items[idx].rt->GetTexID();

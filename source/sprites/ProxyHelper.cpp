@@ -1573,7 +1573,8 @@ void ProxyHelper::ActorScale9Resize(Actor* actor, int w, int h)
 	else if (type == SYM_SCALE9)
 	{
 		const Scale9Actor* s9_actor = static_cast<const Scale9Actor*>(actor);
-		const_cast<Scale9Actor*>(s9_actor)->Resize(w, h);	
+		const_cast<Scale9Actor*>(s9_actor)->Resize(
+			static_cast<float>(w), static_cast<float>(h));
 	}
 }
 

@@ -49,7 +49,7 @@ const RenderContext* RenderCtxStack::Top() const
 
 bool RenderCtxStack::Bind(int idx)
 {
-	if (idx < 0 || idx > m_stack.size()) {
+	if (idx < 0 || idx > static_cast<int>(m_stack.size())) {
 		return false;
 	}
 	BindCtx(m_stack[idx]);

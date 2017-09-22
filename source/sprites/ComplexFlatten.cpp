@@ -40,7 +40,7 @@ const Flatten* ComplexFlatten::GetFlatten(int action) const
 	if (action == -1 && !m_actions.empty()) {
 		return &m_actions[0];
 	} else {
-		if (action >= 0 && action < m_actions.size()) {
+		if (action >= 0 && action < static_cast<int>(m_actions.size())) {
 			return &m_actions[action];
 		} else {
 			return NULL;

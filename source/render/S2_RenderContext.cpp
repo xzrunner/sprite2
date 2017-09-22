@@ -50,8 +50,8 @@ void RenderContext::SetProjection(int width, int height)
 		return;
 	}
 
-	m_proj_width  = width;
-	m_proj_height = height;
+	m_proj_width  = static_cast<float>(width);
+	m_proj_height = static_cast<float>(height);
 
 	UpdateProjection();
 }
@@ -77,8 +77,8 @@ void RenderContext::SetViewport(int x, int y, int w, int h)
 	m_vp_h = h;
 	UpdateViewport();
 
-	m_proj_width = w;
-	m_proj_height = h;
+	m_proj_width  = static_cast<float>(w);
+	m_proj_height = static_cast<float>(h);
 	UpdateProjection();
 }
 
@@ -95,7 +95,7 @@ void RenderContext::UpdateModelView() const
 
 void RenderContext::UpdateProjection() const
 {
-	sl::SubjectMVP2::Instance()->NotifyProjection(m_proj_width, m_proj_height);
+	sl::SubjectMVP2::Instance()->NotifyProjection(static_cast<int>(m_proj_width), static_cast<int>(m_proj_height));
 }
 
 void RenderContext::UpdateViewport() const

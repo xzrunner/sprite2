@@ -202,7 +202,7 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 	m_sz_right = sz_right;
 	m_sz_top   = sz_top;
 	m_sz_down  = sz_down;
-	SetSize(w, h);
+	SetSize(static_cast<float>(w), static_cast<float>(h));
 }
 
 void Scale9::Flattening(const FlattenParams& fp, Flatten& ft) const
@@ -299,8 +299,8 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 	if (sz.x == 0 || sz.y == 0) {
 		return;
 	}
-	src_w = sz.x;
-	src_h = sz.y;
+	src_w = static_cast<int>(sz.x);
+	src_h = static_cast<int>(sz.y);
 
 	const float times = spr->GetAngle() / SM_PI;
 	bool rotate = fabs(times - (int)times) > 0.1f;

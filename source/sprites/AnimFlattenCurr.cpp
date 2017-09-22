@@ -66,9 +66,9 @@ void AnimFlattenCurr::Start(const UpdateParams& up, const Sprite* spr)
 
 int AnimFlattenCurr::UpdateFrameCursor(bool loop, float interval, int fps)
 {
-	int curr_frame = (m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps;
+	int curr_frame = static_cast<int>((m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps);
 	int max_frame = m_max_frame_idx - 1;
-	int loop_max_frame = max_frame + interval * fps;
+	int loop_max_frame = static_cast<int>(max_frame + interval * fps);
 	if (loop) {
 		if (curr_frame <= max_frame) {
 			;

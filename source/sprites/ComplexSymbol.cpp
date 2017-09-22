@@ -262,7 +262,7 @@ void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
 {
-	if (action < 0 || action >= m_actions.size()) {
+	if (action < 0 || action >= static_cast<int>(m_actions.size())) {
 		return m_children;
 	} else {
 		if (m_actions[action].sprs.empty()) {
@@ -338,7 +338,7 @@ bool ComplexSymbol::Add(Sprite* spr, int idx)
 {
 	spr->AddReference();
 	if (m_children.empty() || 
-		idx >= m_children.size() ||
+		idx >= static_cast<int>(m_children.size()) ||
 		idx < 0) {
 		m_children.push_back(spr);
 	} else {

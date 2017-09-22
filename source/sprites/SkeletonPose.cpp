@@ -55,7 +55,7 @@ void SkeletonPose::Lerp(const SkeletonPose& begin, const SkeletonPose& end, floa
 
 void SkeletonPose::SetJointPose(int idx, const JointPose& pose) 
 {
-	if (idx >= 0 && idx < m_joints_pose.size()) {
+	if (idx >= 0 && idx < static_cast<int>(m_joints_pose.size())) {
 		m_joints_pose[idx] = pose;
 	}
 }

@@ -135,7 +135,7 @@ Sprite* ComplexSprite::FetchChildByIdx(int idx, const Actor* actor) const
 	Sprite* ret = NULL;
 	const std::vector<Sprite*>& children 
 		= VI_DOWNCASTING<ComplexSymbol*>(m_sym)->GetAllChildren();
-	if (idx >= 0 && idx < children.size()) {
+	if (idx >= 0 && idx < static_cast<int>(children.size())) {
 		ret = children[idx];
 	}
 	if (ret) {

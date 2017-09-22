@@ -159,7 +159,7 @@ Sprite* AnimTreeCurr::FetchChildByName(int name, const Actor* actor) const
 Sprite* AnimTreeCurr::FetchChildByIdx(int idx) const
 {
 	Sprite* ret = NULL;
-	if (idx >= 0 && idx < m_slots.size()) {
+	if (idx >= 0 && idx < static_cast<int>(m_slots.size())) {
 		ret = m_slots[idx];
 	}
 	if (ret) {
@@ -270,14 +270,14 @@ void AnimTreeCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int 
 	spr->SetLocalSRT(srt);
 
 	Color mul(lerp.col_mul), add(lerp.col_add);
-	mul.r += lerp.dcol_mul[0] * time;
-	mul.g += lerp.dcol_mul[1] * time;
-	mul.b += lerp.dcol_mul[2] * time;
-	mul.a += lerp.dcol_mul[3] * time;
-	add.r += lerp.dcol_add[0] * time;
-	add.g += lerp.dcol_add[1] * time;
-	add.b += lerp.dcol_add[2] * time;
-	add.a += lerp.dcol_add[3] * time;
+	mul.r += static_cast<uint8_t>(lerp.dcol_mul[0] * time);
+	mul.g += static_cast<uint8_t>(lerp.dcol_mul[1] * time);
+	mul.b += static_cast<uint8_t>(lerp.dcol_mul[2] * time);
+	mul.a += static_cast<uint8_t>(lerp.dcol_mul[3] * time);
+	add.r += static_cast<uint8_t>(lerp.dcol_add[0] * time);
+	add.g += static_cast<uint8_t>(lerp.dcol_add[1] * time);
+	add.b += static_cast<uint8_t>(lerp.dcol_add[2] * time);
+	add.a += static_cast<uint8_t>(lerp.dcol_add[3] * time);
 
 	RenderColor col = spr->GetColor();
 	col.SetMul(mul);
@@ -287,9 +287,9 @@ void AnimTreeCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int 
 
 int AnimTreeCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
 {
-	int curr_frame = (m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps;
+	int curr_frame = static_cast<int>((m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps);
 	int max_frame = m_copy->m_max_frame_idx - 1;
-	int loop_max_frame = max_frame + interval * fps;
+	int loop_max_frame = static_cast<int>(max_frame + interval * fps);
 	if (loop) {
 		if (curr_frame <= max_frame) {
 			;

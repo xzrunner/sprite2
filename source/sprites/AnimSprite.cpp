@@ -204,7 +204,7 @@ void AnimSprite::RandomStartTime(const UpdateParams& up)
 {
 	int start = VI_DOWNCASTING<const AnimSymbol*>(m_sym)->GetMaxFrameIdx();
 	float p = (rand() / static_cast<float>(RAND_MAX));
-	start *= p;
+	start = static_cast<int>(start * p);
 
 	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
 	assert(curr);

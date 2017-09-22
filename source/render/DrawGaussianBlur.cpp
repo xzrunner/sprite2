@@ -53,7 +53,8 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 	mgr->FlushShader();
 
 	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawInit(rt, spr, rp);
 
@@ -141,11 +142,11 @@ RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* ds
 	if (hori) {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_HORI);
 		sl::GaussianBlurHoriProg* prog = static_cast<sl::GaussianBlurHoriProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_HORI));
-		prog->SetTexWidth(RT->WIDTH);
+		prog->SetTexWidth(static_cast<float>(RT->WIDTH));
 	} else {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_VERT);
 		sl::GaussianBlurVertProg* prog = static_cast<sl::GaussianBlurVertProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_VERT));
-		prog->SetTexHeight(RT->HEIGHT);
+		prog->SetTexHeight(static_cast<float>(RT->HEIGHT));
 	}
 	shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
 

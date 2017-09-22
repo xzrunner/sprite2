@@ -41,7 +41,8 @@ void RenderScissor::Push(float x, float y, float w, float h, bool use_render_scr
 	if (use_render_screen) {
 		RenderScreen::Scissor(x, y, w, h);
 	} else {
-		sl::ShaderMgr::Instance()->GetContext()->SetScissor(x, y, w, h);
+		sl::ShaderMgr::Instance()->GetContext()->SetScissor(
+			static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 	}
 }
 
@@ -67,7 +68,8 @@ void RenderScissor::Pop()
 	if (r.use_render_screen) {
 		RenderScreen::Scissor(r.x, r.y, r.w, r.h);
 	} else {
-		sl::ShaderMgr::Instance()->GetContext()->SetScissor(r.x, r.y, r.w, r.h);
+		sl::ShaderMgr::Instance()->GetContext()->SetScissor(
+			static_cast<int>(r.x), static_cast<int>(r.y), static_cast<int>(r.w), static_cast<int>(r.h));
 	}
 }
 

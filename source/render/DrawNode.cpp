@@ -377,7 +377,8 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol* sym)
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	RenderReturn r = DrawSymToRT(sym, rt);
 	if (r != RENDER_OK) {
@@ -412,7 +413,8 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 	sl::ShaderMgr::Instance()->FlushShader();
 
 	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(RT->WIDTH, RT->HEIGHT, RT->WIDTH, RT->HEIGHT));
+	RenderCtxStack::Instance()->Push(RenderContext(
+		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawSprToRT(spr, rp, rt);
 	bool loading_finished = (ret & RENDER_ON_LOADING) == 0;

@@ -70,10 +70,10 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 			r = (col) & 0xff;
 		Color mul = rp->ct.GetMul();
 		Color add = rp->ct.GetAdd();
-		a *= mul.a / 255.0f;
-		b *= mul.b / 255.0f;
-		g *= mul.g / 255.0f;
-		r *= mul.r / 255.0f;
+		a = static_cast<int>(a * mul.a / 255.0f);
+		b = static_cast<int>(b * mul.b / 255.0f);
+		g = static_cast<int>(g * mul.g / 255.0f);
+		r = static_cast<int>(r * mul.r / 255.0f);
 		a += add.a;
 		b += add.b;
 		g += add.g;

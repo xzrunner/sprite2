@@ -49,10 +49,10 @@ static inline
 Color color_interpolate(const Color& begin, const Color& end, float scale)
 {
 	Color ret;
-	ret.r = begin.r + (end.r - begin.r) * scale;
-	ret.g = begin.g + (end.g - begin.g) * scale;
-	ret.b = begin.b + (end.b - begin.b) * scale;
-	ret.a = begin.a + (end.a - begin.a) * scale;
+	ret.r = static_cast<uint8_t>(begin.r + (end.r - begin.r) * scale);
+	ret.g = static_cast<uint8_t>(begin.g + (end.g - begin.g) * scale);
+	ret.b = static_cast<uint8_t>(begin.b + (end.b - begin.b) * scale);
+	ret.a = static_cast<uint8_t>(begin.a + (end.a - begin.a) * scale);
 	return ret;
 }
 

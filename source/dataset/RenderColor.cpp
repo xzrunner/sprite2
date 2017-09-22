@@ -77,10 +77,10 @@ void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor&
 		to_abgr(lmul, la, lb, lg, lr);
 		to_abgr(rmul, ra, rb, rg, rr);
 		uint8_t r, g, b, a;
-		r = lr * rr * INV_255;
-		g = lg * rg * INV_255;
-		b = lb * rb * INV_255;
-		a = la * ra * INV_255;
+		r = static_cast<uint8_t>(lr * rr * INV_255);
+		g = static_cast<uint8_t>(lg * rg * INV_255);
+		b = static_cast<uint8_t>(lb * rb * INV_255);
+		a = static_cast<uint8_t>(la * ra * INV_255);
 		c.m_state.colors[IDX_MUL] = from_abgr(a, b, g, r);
 	}
 	// ADD
@@ -132,19 +132,19 @@ void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor&
 		to_abgr(rbmap, rbmapa, rbmapb, rbmapg, rbmapr);
 
 		uint8_t r, g, b;
-		r = (lrmapr * rrmapr + lrmapg * rgmapr + lrmapb * rbmapr) * INV_255;
-		g = (lrmapr * rrmapg + lrmapg * rgmapg + lrmapb * rbmapg) * INV_255;
-		b = (lrmapr * rrmapb + lrmapg * rgmapb + lrmapb * rbmapb) * INV_255;
+		r = static_cast<uint8_t>((lrmapr * rrmapr + lrmapg * rgmapr + lrmapb * rbmapr) * INV_255);
+		g = static_cast<uint8_t>((lrmapr * rrmapg + lrmapg * rgmapg + lrmapb * rbmapg) * INV_255);
+		b = static_cast<uint8_t>((lrmapr * rrmapb + lrmapg * rgmapb + lrmapb * rbmapb) * INV_255);
 		c.m_state.colors[IDX_RMAP] = from_abgr(0, b, g, r);
 
-		r = (lgmapr * rrmapr + lgmapg * rgmapr + lgmapb * rbmapr) * INV_255;
-		g = (lgmapr * rrmapg + lgmapg * rgmapg + lgmapb * rbmapg) * INV_255;
-		b = (lgmapr * rrmapb + lgmapg * rgmapb + lgmapb * rbmapb) * INV_255;
+		r = static_cast<uint8_t>((lgmapr * rrmapr + lgmapg * rgmapr + lgmapb * rbmapr) * INV_255);
+		g = static_cast<uint8_t>((lgmapr * rrmapg + lgmapg * rgmapg + lgmapb * rbmapg) * INV_255);
+		b = static_cast<uint8_t>((lgmapr * rrmapb + lgmapg * rgmapb + lgmapb * rbmapb) * INV_255);
 		c.m_state.colors[IDX_GMAP] = from_abgr(0, b, g, r);
 
-		r = (lbmapr * rrmapr + lbmapg * rgmapr + lbmapb * rbmapr) * INV_255;
-		g = (lbmapr * rrmapg + lbmapg * rgmapg + lbmapb * rbmapg) * INV_255;
-		b = (lbmapr * rrmapb + lbmapg * rgmapb + lbmapb * rbmapb) * INV_255;
+		r = static_cast<uint8_t>((lbmapr * rrmapr + lbmapg * rgmapr + lbmapb * rbmapr) * INV_255);
+		g = static_cast<uint8_t>((lbmapr * rrmapg + lbmapg * rgmapg + lbmapb * rbmapg) * INV_255);
+		b = static_cast<uint8_t>((lbmapr * rrmapb + lbmapg * rgmapb + lbmapb * rbmapb) * INV_255);
 		c.m_state.colors[IDX_BMAP] = from_abgr(0, b, g, r);
 	}
 }

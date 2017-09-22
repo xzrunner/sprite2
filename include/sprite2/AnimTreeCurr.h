@@ -73,7 +73,7 @@ private:
 	const AnimCopy* m_copy;
 
 	std::vector<int> m_layer_cursor;
-	std::vector<bool> m_layer_cursor_update;
+	std::vector<int> m_layer_cursor_update;
 
 	std::vector<Sprite*> m_slots;
 

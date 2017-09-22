@@ -335,44 +335,55 @@ void AnimTreeCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 
 void AnimTreeCurr::UpdateCursor()
 {
-	int frame = m_ctrl.GetFrame();
-	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
-	{
-		m_layer_cursor_update[i] = false;
+	if (m_layer_cursor.empty()) {
+		return;
+	}
 
-		const AnimCopy::Layer& layer = m_copy->m_layers[i];
-		if (layer.frames.empty()) {
+	assert(m_layer_cursor.size() == m_layer_cursor_update.size());
+	
+	int frame = m_ctrl.GetFrame();
+	int* layer_cursor_ptr = &m_layer_cursor[0];
+	int* layer_cursor_update_ptr = &m_layer_cursor_update[0];
+	const AnimCopy::Layer* layer_ptr = &m_copy->m_layers[0];
+	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i, ++layer_cursor_ptr, ++layer_cursor_update_ptr, ++layer_ptr)
+	{
+		*layer_cursor_update_ptr = false;
+
+		const int frame_num = layer_ptr->frames.size();
+		if (frame_num == 0) {
 			continue;
 		}
 
-		int cursor = m_layer_cursor[i];
+		int cursor = *layer_cursor_ptr;
 		if (cursor == INT_MAX) {
 			continue;
 		}
 
-		int frame_num = layer.frames.size();
-		assert(cursor < frame_num);
-		if (cursor >= 0 && cursor < layer.frames.size() && layer.frames[cursor].time == frame + 1) {
-			m_layer_cursor_update[i] = true;
+		assert(cursor < frame_num && frame_num > 0);
+		const s2::AnimCopy::Frame* first_frame_ptr = &layer_ptr->frames[0];
+		if (cursor >= 0 && cursor < frame_num && (first_frame_ptr + cursor)->time == frame + 1) {
+			*layer_cursor_update_ptr = true;
 		} else {
-			while (frame_num > 1 && cursor < frame_num - 1 && layer.frames[cursor + 1].time <= frame + 1) {
+			while (frame_num > 1 && cursor < frame_num - 1 && (first_frame_ptr + cursor + 1)->time <= frame + 1) {
 				++cursor;
-				m_layer_cursor_update[i] = true;
+				*layer_cursor_update_ptr = true;
 			}
 		}
-		if (cursor == 0 && frame + 1 < layer.frames[cursor].time) {
+		if (cursor == 0 && frame + 1 < (first_frame_ptr + cursor)->time) {
 			cursor = -1;
 		}
-		if (cursor == frame_num - 1 && frame + 1 > layer.frames[cursor].time) {
+		if (cursor == frame_num - 1 && frame + 1 > (first_frame_ptr + cursor)->time) {
 			cursor = INT_MAX;
 		}
-		m_layer_cursor[i] = cursor;
+		*layer_cursor_ptr = cursor;
 	}
 }
 
 void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 {
-	std::vector<std::pair<AnimLerp::SprData, ILerp*> > todo;
+	if (m_layer_cursor.empty()) {
+		return;
+	}
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
@@ -381,21 +392,23 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 	int ctrl_frame = m_ctrl.GetFrame();
 
 	m_curr_num = 0;
-	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
+	int* layer_cursor_ptr = &m_layer_cursor[0];
+	int* layer_cursor_update_ptr = &m_layer_cursor_update[0];
+	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i, ++layer_cursor_ptr, ++layer_cursor_update_ptr)
 	{
-		int cursor = m_layer_cursor[i];
+		int cursor = *layer_cursor_ptr;
 		if (cursor == -1 || cursor == INT_MAX) {
 			continue;
 		}
-		const AnimCopy::Frame& frame = m_copy->m_layers[i].frames[cursor];
-		for (int j = 0, m = frame.items.size(); j < m; ++j)
+		const AnimCopy::Layer& layer = m_copy->m_layers[i];
+		const AnimCopy::Frame& frame = layer.frames[cursor];
+		for (const auto& actor : frame.items)
 		{
-			const AnimCopy::Item& actor = frame.items[j];
 			m_curr[m_curr_num++] = actor.slot;
 			if (actor.next != -1) 
 			{
 				assert(actor.lerp != -1);
-				const AnimCopy::Frame& next_frame = m_copy->m_layers[i].frames[cursor + 1];
+				const AnimCopy::Frame& next_frame = layer.frames[cursor + 1];
 
 				if (actor.slot != next_frame.items[actor.next].slot) {
 					int sym_id = 0;
@@ -422,7 +435,7 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 			else if (actor.prev != -1)
 			{
 				assert(actor.lerp == -1);
-				const AnimCopy::Frame& pre_frame = m_copy->m_layers[i].frames[cursor - 1];
+				const AnimCopy::Frame& pre_frame = layer.frames[cursor - 1];
 				const AnimCopy::Item& pre_actor = pre_frame.items[actor.prev];
 				assert(actor.slot == pre_actor.slot);
 				Sprite* tween = m_slots[pre_actor.slot];
@@ -439,8 +452,8 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 
-			bool last_frame = cursor == m_copy->m_layers[i].frames.size() - 1;
-			if (!last_frame && m_layer_cursor_update[i] && actor.prev == -1) 
+			bool last_frame = cursor == layer.frames.size() - 1;
+			if (!last_frame && *layer_cursor_update_ptr && actor.prev == -1)
 			{
 				Sprite* child = m_slots[actor.slot];
 				up_child->SetActor(child->QueryActor(up.GetActor()));

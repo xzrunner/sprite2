@@ -8,7 +8,8 @@
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
 
-#include <flatten/Flatten.h>
+#include <flatten/FTList.h>
+#include <memmgr/MemoryPool.h>
 
 namespace s2
 {
@@ -188,6 +189,12 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 		m_aabb.UpdateParent(this);
 //		SetFlattenDirtyToRoot();
 	}
+}
+
+void Actor::BuildDisplayList()
+{
+	m_dlist = std::make_shared<cooking::DisplayList>(
+		mm::MemoryPool::Instance()->GetFreelistAlloc());
 }
 
 int Actor::GetAllActorCount()

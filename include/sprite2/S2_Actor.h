@@ -12,9 +12,11 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include S2_MAT_HEADER
-#include <flatten/Flatten.h>
 
 #include <memory>
+
+namespace ft { class FTList; }
+namespace cooking { class DisplayList; }
 
 namespace s2
 {
@@ -25,6 +27,7 @@ class RenderColor;
 class RenderShader;
 class RenderCamera;
 class SprRender;
+class RenderParams;
 
 class Actor : private cu::Uncopyable
 {
@@ -61,13 +64,16 @@ public:
 
 	void SetFlattenDirtyToRoot() const;
 
-	void SetFlatten(const std::shared_ptr<ft::Flatten>& ft, int pos);
+	void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);
 	bool SetFlattenDirty();
 	bool BuildFlatten();
 	bool HasFlatten() const;
 	void FlattenUpdate(bool force);
 	void FlattenDraw(const s2::RenderParams& rp) const;
 	void FlattenSetFrame(int frame);
+
+	void BuildDisplayList();
+	void SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist);
 
 	static int GetAllActorCount();
 
@@ -96,10 +102,8 @@ public:
 private:
 	struct Flatten
 	{
-		Flatten() : impl(nullptr), pos(-1) {}
-
-		std::shared_ptr<ft::Flatten> impl;
-		int pos;
+		std::shared_ptr<ft::FTList> list = nullptr;
+		int pos = -1;
 	};
 
 private:
@@ -112,6 +116,8 @@ private:
 	mutable uint32_t  m_flags;
 
 	Flatten           m_flatten;
+
+	mutable std::shared_ptr<cooking::DisplayList> m_dlist = nullptr;
 
 }; // Actor
 

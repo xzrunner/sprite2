@@ -710,6 +710,12 @@ void s2_actor_set_ft_dirty(void* actor) {
 }
 
 extern "C"
+void s2_actor_build_dlist(void* actor) {
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	s2_actor->BuildDisplayList();
+}
+
+extern "C"
 void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				   float xmin, float ymin, float xmax, float ymax) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);

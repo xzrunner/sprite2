@@ -21,6 +21,9 @@ public:
 	const sm::ivec2& GetScreenSize() const { return m_screen_sz; }
 	void SetScreenSize(int w, int h);
 
+	void SetDlistEnable(bool enable) { m_dlist_enable = enable; }
+	bool IsDlistEnable() const { return m_dlist_enable; }
+
 	void Clear();
 
 private:
@@ -29,6 +32,8 @@ private:
 	Camera* m_cam;
 
 	sm::ivec2 m_screen_sz;
+
+	bool m_dlist_enable;
 	
 	SINGLETON_DECLARATION(Blackboard);
 

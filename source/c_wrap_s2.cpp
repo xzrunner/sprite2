@@ -51,6 +51,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
+#include <shaderlab/Statistics.h>
 #include <c_wrap_cooking.h>
 
 #include <iostream>
@@ -275,6 +276,8 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 		rp->SetDisableParticle3d(true);
 	}
 	rp->min_edge = min_edge;
+
+	rp->SetEnableDrawlist(Blackboard::Instance()->IsDlistEnable());
 
 	s2_actor->FlattenDraw(*rp);
 
@@ -784,6 +787,8 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 
 	S2_MAT mt;
 	mt.SetTransformation(x, y, angle, sx, sy, 0, 0, 0, 0);
+
+	rp.SetEnableDrawlist(Blackboard::Instance()->IsDlistEnable());
 
 	rp.actor = s2_actor;
 	rp.mt = mt * rp.mt;

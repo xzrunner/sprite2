@@ -80,6 +80,8 @@ private:
 
 	static const uint32_t FLAG_VIEW_REGION_VALID    = 0x00000100;
 
+	static const uint32_t FLAG_ENABLE_DRAWLIST      = 0x00000200;
+
 public:
 	S2_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
 	S2_FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
@@ -92,6 +94,8 @@ public:
 	S2_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
 
 	S2_FLAG_METHOD(ViewRegionValid, FLAG_VIEW_REGION_VALID)
+
+	S2_FLAG_METHOD(EnableDrawlist, FLAG_ENABLE_DRAWLIST)
 
 private:
 	mutable uint32_t m_flags;

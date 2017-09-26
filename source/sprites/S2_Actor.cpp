@@ -9,7 +9,6 @@
 #include "S2_Symbol.h"
 
 #include <flatten/FTList.h>
-#include <memmgr/MemoryPool.h>
 
 namespace s2
 {

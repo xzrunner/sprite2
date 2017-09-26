@@ -105,8 +105,12 @@ bool AnimTreeCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprit
 	return dirty;
 }
 
-void AnimTreeCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
+bool AnimTreeCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
+	if (frame == m_ctrl.GetFrame()) {
+		return false;
+	}
+
 	int frame_copy = frame;
 	frame = frame % (m_copy->m_max_frame_idx);
 
@@ -119,6 +123,8 @@ void AnimTreeCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame
 	LoadCurrSprites(up, spr);
 
 	SetChildrenFrame(up, spr, frame_copy, fps);
+
+	return true;
 }
 
 void AnimTreeCurr::Start(const UpdateParams& up, const Sprite* spr)

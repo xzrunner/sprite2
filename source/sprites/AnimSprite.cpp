@@ -182,10 +182,10 @@ int AnimSprite::GetFrame(const Actor* actor) const
 	return curr->GetFrame();
 }
 
-void AnimSprite::SetFrame(const UpdateParams& up, int frame)
+bool AnimSprite::SetFrame(const UpdateParams& up, int frame)
 {
 	if (!up.IsForce() && !IsInheritUpdate()) {
-		return;
+		return false;
 	}
 
 	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));

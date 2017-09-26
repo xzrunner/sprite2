@@ -47,8 +47,12 @@ bool AnimFlattenCurr::Update(const UpdateParams& up, const Symbol* sym, const Sp
 	return dirty;
 }
 
-void AnimFlattenCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
+bool AnimFlattenCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
+	if (frame == m_ctrl.GetFrame()) {
+		return false;
+	}
+
 	frame = frame % m_max_frame_idx;
 	m_ctrl.SetFrame(frame, fps);
 
@@ -56,6 +60,8 @@ void AnimFlattenCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int fr
 	AnimFlatten* flatten = const_cast<AnimSymbol*>(sym)->GetFlatten();
 	assert(flatten);
 	flatten->SetFrame(up, frame);
+
+	return true;
 }
 
 void AnimFlattenCurr::Start(const UpdateParams& up, const Sprite* spr)

@@ -48,7 +48,7 @@ public:
 	void SetStartRandom(const UpdateParams& up, bool random);
 
 	int  GetFrame(const Actor* actor) const;
-	void SetFrame(const UpdateParams& up, int frame);
+	bool SetFrame(const UpdateParams& up, int frame);
 
 	void SetActive(bool active, const Actor* actor);
 

@@ -193,8 +193,7 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 
 void Actor::BuildDisplayList()
 {
-	m_dlist = std::make_shared<cooking::DisplayList>(
-		mm::MemoryPool::Instance()->GetFreelistAlloc());
+	m_dlist = std::make_shared<cooking::DisplayList>();
 }
 
 int Actor::GetAllActorCount()

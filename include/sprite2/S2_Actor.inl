@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_ACTOR_INL_
 #define _SPRITE2_ACTOR_INL_
 
+#include "sprite2/RenderParams.h"
+
 #include <flatten/FTList.h>
 
 namespace s2
@@ -54,8 +56,11 @@ inline
 void Actor::FlattenDraw(const s2::RenderParams& rp) const
 {
 	if (m_flatten.list) {
-		m_flatten.list->DrawDeferred(m_flatten.pos, rp, m_dlist);
-		//m_flatten.list->DrawForward(m_flatten.pos, rp);
+		if (rp.IsEnableDrawlist()) {
+			m_flatten.list->DrawDeferred(m_flatten.pos, rp, m_dlist);
+		} else {
+			m_flatten.list->DrawForward(m_flatten.pos, rp);
+		}
 	}
 }
 

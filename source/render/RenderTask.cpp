@@ -16,7 +16,7 @@ RenderTask::RenderTask(const Sprite* spr, RenderParams* rp)
 
 void RenderTask::Run()
 {
-	DrawNodeDeferred::Draw(&m_dlist, m_spr, *m_rp);
+//	DrawNodeDeferred::Draw(&m_dlist, m_spr, *m_rp);
 	cooking::RenderTaskMgr::Instance()->AddResult(this);
 }
 

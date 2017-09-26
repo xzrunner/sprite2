@@ -16,7 +16,7 @@ public:
 	virtual void Run();
 	virtual void Flush();
 	
-	cooking::DisplayList& GetDisplayList() { return m_dlist; }
+//	cooking::DisplayList& GetDisplayList() { return m_dlist; }
 
 	static RenderTask* Create(const Sprite* spr, RenderParams* rp);
 
@@ -25,7 +25,7 @@ private:
 	virtual ~RenderTask() {}
 
 private:
-	cooking::DisplayList m_dlist;
+//	cooking::DisplayList m_dlist;
 
 	const Sprite* m_spr;
 	RenderParams* m_rp;

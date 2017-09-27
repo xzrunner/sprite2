@@ -1,4 +1,4 @@
-#include "AnimTreeCurr.h"
+#include "AnimCurr.h"
 #include "AnimCopy.h"
 #include "S2_Sprite.h"
 #include "Animation.h"
@@ -29,14 +29,14 @@
 namespace s2
 {
 
-AnimTreeCurr::AnimTreeCurr()
+AnimCurr::AnimCurr()
 	: m_copy(NULL)
 	, m_curr(NULL)
 {
 	ResetLayerCursor();
 }
 
-AnimTreeCurr::AnimTreeCurr(const AnimTreeCurr& curr)
+AnimCurr::AnimCurr(const AnimCurr& curr)
 	: m_copy(curr.m_copy)
 	, m_layer_cursor(curr.m_layer_cursor)
 	, m_layer_cursor_update(curr.m_layer_cursor_update)
@@ -49,7 +49,7 @@ AnimTreeCurr::AnimTreeCurr(const AnimTreeCurr& curr)
 	for_each(m_slots.begin(), m_slots.end(), cu::AddRefFunctor<Sprite>());	
 }
 
-AnimTreeCurr& AnimTreeCurr::operator = (const AnimTreeCurr& curr)
+AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 {	
 	m_copy = curr.m_copy;
 	m_layer_cursor = curr.m_layer_cursor;
@@ -63,18 +63,18 @@ AnimTreeCurr& AnimTreeCurr::operator = (const AnimTreeCurr& curr)
 	return *this;
 }
 
-AnimTreeCurr::~AnimTreeCurr()
+AnimCurr::~AnimCurr()
 {
 	delete m_curr;
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-AnimTreeCurr* AnimTreeCurr::Clone() const
+AnimCurr* AnimCurr::Clone() const
 {
-	return new AnimTreeCurr(*this);
+	return new AnimCurr(*this);
 }
 
-bool AnimTreeCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
+bool AnimCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
 						  bool loop, float interval, int fps)
 {
 	if (!m_ctrl.IsActive()) {
@@ -104,7 +104,7 @@ bool AnimTreeCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprit
 	return dirty;
 }
 
-bool AnimTreeCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
+bool AnimCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps)
 {
 	if (frame == m_ctrl.GetFrame()) {
 		return false;
@@ -126,7 +126,7 @@ bool AnimTreeCurr::SetFrame(const UpdateParams& up, const Sprite* spr, int frame
 	return true;
 }
 
-void AnimTreeCurr::Start(const UpdateParams& up, const Sprite* spr)
+void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 {
 	m_ctrl.Reset();
 	m_ctrl.SetFrame(0);
@@ -135,7 +135,7 @@ void AnimTreeCurr::Start(const UpdateParams& up, const Sprite* spr)
 	LoadCurrSprites(up, spr);
 }
 
-void AnimTreeCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
+void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 {
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
@@ -149,7 +149,7 @@ void AnimTreeCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message 
 	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
-Sprite* AnimTreeCurr::FetchChildByName(int name, const Actor* actor) const
+Sprite* AnimCurr::FetchChildByName(int name, const Actor* actor) const
 {
 	std::vector<std::pair<const Actor*, Sprite*> > group;
 	for (int i = 0, n = m_slots.size(); i < n; ++i) {
@@ -161,7 +161,7 @@ Sprite* AnimTreeCurr::FetchChildByName(int name, const Actor* actor) const
 	return ProxyHelper::BuildGroup(group);
 }
 
-Sprite* AnimTreeCurr::FetchChildByIdx(int idx) const
+Sprite* AnimCurr::FetchChildByIdx(int idx) const
 {
 	Sprite* ret = NULL;
 	if (idx >= 0 && idx < static_cast<int>(m_slots.size())) {
@@ -173,7 +173,7 @@ Sprite* AnimTreeCurr::FetchChildByIdx(int idx) const
 	return ret;
 }
 
-VisitResult AnimTreeCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
+VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
 	if (m_curr_num == 0) {
@@ -203,7 +203,7 @@ VisitResult AnimTreeCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParam
 	return ret;
 }
 
-RenderReturn AnimTreeCurr::Draw(const RenderParams& rp) const
+RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 {
 	RenderReturn ret = RENDER_OK;
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
@@ -217,18 +217,18 @@ RenderReturn AnimTreeCurr::Draw(const RenderParams& rp) const
 	return ret;
 }
 
-void AnimTreeCurr::Clear()
+void AnimCurr::Clear()
 {
 	m_ctrl.Clear();
 	m_curr_num = 0;
 }
 
-sm::rect AnimTreeCurr::CalcAABB(const Actor* actor) const
+sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 {
 	return AABBHelper::CalcAABB(m_slots, actor);
 }
 
-void AnimTreeCurr::SetAnimCopy(const AnimCopy* copy)
+void AnimCurr::SetAnimCopy(const AnimCopy* copy)
 {
 	if (m_copy == copy) {
 		return;
@@ -251,7 +251,7 @@ void AnimTreeCurr::SetAnimCopy(const AnimCopy* copy)
 	}
 }
 
-void AnimTreeCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
+void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
 {
 	SprSRT srt;
 	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
@@ -276,7 +276,7 @@ void AnimTreeCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int 
 	spr->SetColor(col);
 }
 
-int AnimTreeCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
+int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
 {
 	int curr_frame = static_cast<int>((m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps);
 	int max_frame = m_copy->m_max_frame_idx - 1;
@@ -306,7 +306,7 @@ int AnimTreeCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool res
 	return curr_frame;
 }
 
-void AnimTreeCurr::ResetLayerCursor()
+void AnimCurr::ResetLayerCursor()
 {
 	if (m_copy) {
 		m_layer_cursor.assign(m_copy->m_layers.size(), 0);
@@ -314,7 +314,7 @@ void AnimTreeCurr::ResetLayerCursor()
 	}
 }
 
-void AnimTreeCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
+void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 {
 	if (m_copy->m_max_item_num < 0) {
 		return;
@@ -324,7 +324,7 @@ void AnimTreeCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 	LoadCurrSpritesImpl(up, spr);
 }
 
-void AnimTreeCurr::UpdateCursor()
+void AnimCurr::UpdateCursor()
 {
 	if (m_layer_cursor.empty()) {
 		return;
@@ -370,7 +370,7 @@ void AnimTreeCurr::UpdateCursor()
 	}
 }
 
-void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
+void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 {
 	if (m_layer_cursor.empty()) {
 		return;
@@ -456,7 +456,7 @@ void AnimTreeCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr
 	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
-bool AnimTreeCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
+bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 {
 	bool dirty = false;
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
@@ -474,7 +474,7 @@ bool AnimTreeCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 	return dirty;
 }
 
-void AnimTreeCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int static_frame, int fps)
+void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int static_frame, int fps)
 {
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i)
 	{

@@ -18,7 +18,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 #include "ILerp.h"
-#include "sprite2/AnimTreeCurr.h"
+#include "sprite2/AnimCurr.h"
 #include "sprite2/UpdateParams.h"
 
 #include <assert.h>
@@ -111,7 +111,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 #endif // S2_DISABLE_STATISTICS
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			const AnimTreeCurr* curr = anim->GetAnimCurr(rp.actor);
+			const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
 			assert(curr);
 			ret = curr->Draw(*rp_child);
 		}
@@ -185,7 +185,7 @@ void AnimSymbol::LoadCopy()
 void AnimSymbol::BuildCurr()
 {
 	if (!m_curr) {
-		m_curr = new AnimTreeCurr();
+		m_curr = new AnimCurr();
 		m_curr->SetAnimCopy(GetCopy());
 		m_curr->Start(UpdateParams(), nullptr);
 	}

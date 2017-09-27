@@ -1,5 +1,5 @@
-#ifndef _SPRITE2_ANIM_TREE_CURR_H_
-#define _SPRITE2_ANIM_TREE_CURR_H_
+#ifndef _SPRITE2_ANIM_CURR_H_
+#define _SPRITE2_ANIM_CURR_H_
 
 #include "S2_Message.h"
 #include "AnimCopy.h"
@@ -25,19 +25,19 @@ class SprVisitorParams;
 class RenderParams;
 class UpdateParams;
 
-class AnimTreeCurr : public cu::RefCountObj
+class AnimCurr : public cu::RefCountObj
 {
 public:
-	AnimTreeCurr();
-	AnimTreeCurr(const AnimTreeCurr& curr);
-	AnimTreeCurr& operator = (const AnimTreeCurr& curr);
-	virtual ~AnimTreeCurr();
+	AnimCurr();
+	AnimCurr(const AnimCurr& curr);
+	AnimCurr& operator = (const AnimCurr& curr);
+	virtual ~AnimCurr();
 
 	/**
 	 *  @interface
 	 *    Cloneable
 	 */
-	virtual AnimTreeCurr* Clone() const;
+	virtual AnimCurr* Clone() const;
 
 	virtual bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
@@ -88,8 +88,8 @@ private:
 	int* m_curr;
 	int  m_curr_num;
 
-}; // AnimTreeCurr
+}; // AnimCurr
 
 }
 
-#endif // _SPRITE2_ANIM_TREE_CURR_H_
+#endif // _SPRITE2_ANIM_CURR_H_

@@ -11,7 +11,7 @@ namespace s2
 {
 
 class AnimCopy;
-class AnimTreeCurr;
+class AnimCurr;
 
 class AnimSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -90,7 +90,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	AnimTreeCurr* m_curr;
+	AnimCurr* m_curr;
 	mutable AnimCopy* m_copy;
 
 }; // AnimSymbol

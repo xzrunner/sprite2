@@ -14,7 +14,7 @@
 #include "ComplexSprite.h"
 #include "ComplexActor.h"
 #include "AnimSymbol.h"
-#include "AnimTreeCurr.h"
+#include "AnimCurr.h"
 #include "AnimSprite.h"
 #include "Anim2Sprite.h"
 #include "Particle3dSprite.h"
@@ -1464,7 +1464,7 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(actor->GetSpr());
-		const AnimTreeCurr* curr = anim->GetAnimCurr(actor);
+		const AnimCurr* curr = anim->GetAnimCurr(actor);
 		if (curr) {
 			count = curr->GetSlotSize();
 			return true;

@@ -57,11 +57,27 @@ int TextboxSymbol::Type() const
 
 RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {
-	return DrawImpl(nullptr, rp, spr);
+	if (!spr) {
+		return RENDER_NO_DATA;
+	}
+
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
+	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
+		RenderParamsPool::Instance()->Push(rp_child);
+		return RENDER_INVISIBLE;
+	}
+
+	RenderReturn ret = DrawImpl(nullptr, *rp_child, spr);
+
+	RenderParamsPool::Instance()->Push(rp_child);
+
+	return ret;
 }
 
 bool TextboxSymbol::DrawFlatten(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
+	assert(spr);
 	DrawImpl(dlist, rp, spr);
 	return true;
 }
@@ -106,17 +122,6 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 	//	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
-	if (!spr) {
-		return RENDER_NO_DATA;
-	}
-
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child);
-		return RENDER_INVISIBLE;
-	}
-
 	const std::string* text = NULL;
 	const Actor* actor = rp.actor;
 	if (actor) {
@@ -130,17 +135,15 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 		text = &tb_spr->GetText(UpdateParams());
 	}
 	if (!text || text->empty()) {
-		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (rp_child->shader.GetFilter() && sl::FILTER_MODE(rp_child->shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
+	if (rp.shader.GetFilter() && sl::FILTER_MODE(rp.shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);
-	}
-	else {
+	} else {
 		mgr->SetShader(sl::SPRITE2);
 	}
 
@@ -167,11 +170,9 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 
 	s.overflow = tb.overflow;
 
-	DrawText(dlist, s, rp_child->mt, rp_child->color.GetMul(), rp_child->color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
+	DrawText(dlist, s, rp.mt, rp.color.GetMul(), rp.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
-
-	RenderParamsPool::Instance()->Push(rp_child);
 
 	return RENDER_OK;
 }

@@ -79,7 +79,7 @@ private:
 	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 		
 private:
-	std::shared_ptr<AnimCopy> m_copy;
+	std::shared_ptr<const AnimCopy> m_copy;
 
 	AnimCtrl m_ctrl;
 

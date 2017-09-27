@@ -12,7 +12,6 @@ namespace s2
 {
 
 class AnimCopy;
-class AnimCurr;
 
 class AnimSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -56,7 +55,6 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual bool Update(const UpdateParams& up, float time);
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -68,8 +66,6 @@ public:
 
 	const std::shared_ptr<AnimCopy>& GetCopy() const;
 	void LoadCopy();
-
-	void BuildCurr();
 	
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -89,8 +85,6 @@ protected:
 	int m_fps;
 
 	mutable sm::rect m_aabb;
-
-	std::unique_ptr<AnimCurr> m_curr;
 
 	mutable std::shared_ptr<AnimCopy> m_copy;
 

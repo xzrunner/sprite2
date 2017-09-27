@@ -28,7 +28,6 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-	, m_curr(nullptr)
 	, m_copy(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -39,7 +38,6 @@ AnimSymbol::AnimSymbol()
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-	, m_curr(nullptr)
 	, m_copy(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -84,42 +82,31 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 {	
-#ifndef S2_DISABLE_STATISTICS
-	int id = -1;
-	if (spr) {
-		id = spr->GetSymbol()->GetID();
+	if (!spr) {
+		return RENDER_NO_DATA;
 	}
+
+#ifndef S2_DISABLE_STATISTICS
+	int id = spr->GetSymbol()->GetID();
 	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIMATION);
 //	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;
-	if (spr) {
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
+	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	*rp_child = rp;
 #ifndef S2_DISABLE_STATISTICS
-		rp_child->parent_id = id;
-		rp_child->level = rp.level + 1;
+	rp_child->parent_id = id;
+	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
-		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
-			ret = curr.Draw(*rp_child);
-		}
-		RenderParamsPool::Instance()->Push(rp_child); 
-	} else {
-		assert(m_curr);
-		ret = m_curr->Draw(rp);
+	if (DrawNode::Prepare(rp, spr, *rp_child)) {
+		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
+		const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
+		ret = curr.Draw(*rp_child);
 	}
+	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
-}
-
-bool AnimSymbol::Update(const UpdateParams& up, float time)
-{
-	assert(m_curr);
-	m_curr->SetTime(time);
-	return m_curr->Update(up, this, NULL);
 }
 
 int AnimSymbol::GetMaxFrameIdx() const
@@ -176,16 +163,6 @@ void AnimSymbol::LoadCopy()
 	m_copy->LoadFromSym(*this);
 }
 
-void AnimSymbol::BuildCurr()
-{
-	if (!m_curr) 
-	{
-		m_curr = std::make_unique<AnimCurr>();
-		m_curr->SetAnimCopy(GetCopy());
-		m_curr->Start(UpdateParams(), nullptr);
-	}
-}
-
 void AnimSymbol::AddLayer(Layer* layer, int idx)
 {
 	if (idx < 0) {
@@ -210,8 +187,6 @@ bool AnimSymbol::Clear()
 		delete layer;
  	}
 	m_layers.clear();
-	assert(m_curr);
-	m_curr->Clear();
 	m_aabb.MakeEmpty();
 	return dirty;	
 }

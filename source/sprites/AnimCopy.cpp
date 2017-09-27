@@ -3,9 +3,6 @@
 #include "AnimTreeCurr.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
-#include "sprite2/Flatten.h"
-#include "FlattenParams.h"
-#include "AnimFlatten.h"
 #include "ILerp.h"
 
 #include <assert.h>
@@ -31,91 +28,6 @@ void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 	ConnectItems(sym);
 	LoadLerpData(sym);
 	CreateSprSlots(sym);
-}
-
-void AnimCopy::StoreToFlatten(AnimFlatten& ft, const Actor* actor) const
-{
-	S2_MAT prev_mat;
-	if (actor) {
-		Utility::PrepareMat(S2_MAT(), actor->GetSpr(), actor, prev_mat);
-	}
-
-	// prepare slots
-	std::vector<Sprite*> slots;
-	slots.resize(m_slots.size());
-	for (int i = 0, n = m_slots.size(); i < n; ++i) {
-		slots[i] = VI_CLONE(Sprite, m_slots[i]);
-	}
-	
-	// filling frames
-	std::vector<Flatten> frames;
-	frames.reserve(m_max_frame_idx);
-	for (int i = 0; i < m_max_frame_idx; ++i)
-	{
-		int time = i + 1;
-		Flatten frame;
-		for (int j = 0, m = m_layers.size(); j < m; ++j)
-		{
-			const Layer& layer = m_layers[j];
-			if (layer.frames.empty()) {
-				continue;
-			}
-			// find curr frame
-			const Frame* curr = NULL;
-			int curr_frame = -1;
-			for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe; ++iframe) {				
-				const Frame& frame = layer.frames[iframe];
-				if (frame.time == time) {
-					curr = &frame;
-					curr_frame = iframe;
-					break;
-				} else if (frame.time > time) {
-					break;
-				} else if (iframe < nframe - 1) {
-					const Frame& next = layer.frames[iframe + 1];
-					if (next.time > time) {
-						curr = &frame;
-						curr_frame = iframe;
-					}
-				}
-			}
-			if (!curr) {
-				continue;
-			}
-
-			// filling
-			for (int iitem = 0, nitem = curr->items.size(); iitem < nitem; ++iitem) 
-			{
-				const Item& item = curr->items[iitem];
-				const Sprite* spr = NULL;
-				if (item.next != -1)
-				{
-					assert(item.lerp != -1);
-					const Frame& next_frame = layer.frames[curr_frame + 1];
-					assert(item.slot == next_frame.items[item.next].slot);
-					Sprite* tween = slots[item.slot];
-					AnimTreeCurr::LoadSprLerpData(tween, m_lerps[item.lerp], time - curr->time);
-					// todo AnimLerp::LerpSpecial
-					spr = tween;
-				}
-				else
-				{
-					spr = item.spr;
-				}
-
-				FlattenParams fp;
-				fp.SetPrevMat(prev_mat);
-				fp.SetSpr(spr);
-				fp.SetActor(spr->QueryActor(actor));
-				spr->GetSymbol()->Flattening(fp, frame);	
-			}
-		}
-		frames.push_back(frame);
-	}
-	ft.SetFrames(frames);
-
-	// release slots
-	for_each(slots.begin(), slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 void AnimCopy::SetCountNum(const AnimSymbol& sym)

@@ -11,8 +11,7 @@ namespace s2
 {
 
 class AnimCopy;
-class AnimCurr;
-class AnimFlatten;
+class AnimTreeCurr;
 
 class AnimSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -56,9 +55,7 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const;
 	virtual bool Update(const UpdateParams& up, float time);
-	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const;
 
 	const std::vector<Layer*>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -71,11 +68,6 @@ public:
 	// tree
 	const AnimCopy* GetCopy() const;
 	void LoadCopy();
-
-	// flatten
-	void BuildFlatten(const Actor* actor) const;
-	bool HasFlatten() const { return m_ft != NULL; }
-	AnimFlatten* GetFlatten() { return m_ft; }
 
 	void BuildCurr();
 	
@@ -98,8 +90,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	mutable AnimFlatten* m_ft;
-	AnimCurr* m_curr;
+	AnimTreeCurr* m_curr;
 	mutable AnimCopy* m_copy;
 
 }; // AnimSymbol

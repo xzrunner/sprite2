@@ -9,8 +9,6 @@
 #include "Pseudo3DCamera.h"
 #include "S2_RenderContext.h"
 #include "RenderCtxStack.h"
-#include "sprite2/Flatten.h"
-#include "FlattenParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatOverdraw.h"
 #include "sprite2/StatSymDraw.h"
@@ -121,46 +119,6 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return RENDER_OK;
 }
 
-RenderReturn ImageSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-									   const RenderParams& rp, 
-									   const Sprite* spr) const
-{
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return RENDER_INVISIBLE;
-	}
-
-	float vertices[8];
-	if (!CalcVertices(*rp_child, vertices)) {
-		RenderParamsPool::Instance()->Push(rp_child);
-		return RENDER_OUTSIDE;
-	}
-
-	float texcoords[8];
-	int tex_id;
-	if (!QueryTexcoords(false, texcoords, tex_id)) {
-		OnQueryTexcoordsFail();
-	}
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (mgr->GetShaderType() == sl::BLEND) {
-		// todo
-	} else {
-		//const Camera* cam = Blackboard::Instance()->GetCamera();
-		//if (cam && cam->Type() == CAM_PSEUDO3D) {
-		//	// todo
-		//} else {
-			DrawOrthoDeferred(dlist, *rp_child, vertices, texcoords, tex_id);
-		//}
-	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
-
-	return RENDER_OK;
-}	
-
 bool ImageSymbol::DrawFlatten(cooking::DisplayList* dlist,
 	                          const RenderParams& rp, 
 	                          const Sprite* spr) const
@@ -209,21 +167,6 @@ bool ImageSymbol::DrawFlatten(cooking::DisplayList* dlist,
 	}
 
 	return true;
-}
-
-void ImageSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
-{
-	sm::vec2 vertices[4];
-	sm::rect sz = GetBounding();
-	
-	S2_MAT mt;
-	Utility::PrepareMat(fp.GetPrevMat(), fp.GetSpr(), fp.GetActor(), mt);
-	vertices[0] = mt * sm::vec2(sz.xmin, sz.ymin);
-	vertices[1] = mt * sm::vec2(sz.xmax, sz.ymin);
-	vertices[2] = mt * sm::vec2(sz.xmax, sz.ymax);
-	vertices[3] = mt * sm::vec2(sz.xmin, sz.ymax);
-
-	ft.AddQuad(this, vertices);
 }
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const

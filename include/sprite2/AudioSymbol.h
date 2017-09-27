@@ -22,7 +22,6 @@ public:
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const { return RENDER_NO_DATA; }
-	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const { return RENDER_NO_DATA; }
 
 	void SetSource(ua::Source* src);
 	ua::Source* GetSource() { return m_source; }

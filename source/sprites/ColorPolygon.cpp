@@ -22,11 +22,6 @@ void ColorPolygon::Draw(const RenderParams& rp) const
 	RVG::Triangles(tris);
 }
 
-void ColorPolygon::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
-{
-	// todo
-}
-
 void ColorPolygon::Build()
 {
 	m_tris.clear();

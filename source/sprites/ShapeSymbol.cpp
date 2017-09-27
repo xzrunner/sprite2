@@ -70,28 +70,6 @@ RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
-RenderReturn ShapeSymbol::DrawDeferred(cooking::DisplayList* dlist,
-									   const RenderParams& rp, 
-									   const Sprite* spr) const
-{
-	if (!m_shape || !spr) {
-		return RENDER_NO_DATA;
-	}
-
-	RenderReturn ret = RENDER_OK;
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (DrawNode::Prepare(rp, spr, *rp_child)) {
-		// todo: shape's render ret
-		m_shape->DrawDeferred(dlist, *rp_child);
-		ret = RENDER_OK;
-	} else {
-		ret = RENDER_INVISIBLE;
-	}
-	RenderParamsPool::Instance()->Push(rp_child); 
-	return ret;
-}
-
 void ShapeSymbol::SetShape(Shape* shape)
 {
 	cu::RefCountObjAssign(m_shape, shape);

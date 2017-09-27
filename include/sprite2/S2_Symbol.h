@@ -21,8 +21,6 @@ class UpdateParams;
 class Sprite;
 class SymbolVisitor;
 class Actor;
-class Flatten;
-class FlattenParams;
 
 class Symbol : public VIRTUAL_INHERITANCE cu::RefCountObj, private cu::Uncopyable
 {
@@ -33,10 +31,8 @@ public:
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
-	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const = 0;
 	virtual bool DrawFlatten(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const { return false; }
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
-	virtual void Flattening(const FlattenParams& fp, Flatten& ft) const {}
 
 	int GetID() const { return m_id; }
 

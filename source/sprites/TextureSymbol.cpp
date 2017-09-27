@@ -75,29 +75,6 @@ RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	return ret;
 }
 
-RenderReturn TextureSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-										 const RenderParams& rp, 
-										 const Sprite* spr) const
-{
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return RENDER_INVISIBLE;
-	}
-
-	RenderReturn ret = RENDER_OK;
-
-	// todo shape's draw return
-	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
-		m_polygons[i]->DrawDeferred(dlist, *rp_child);
-	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
-
-	return ret;
-}
-
 void TextureSymbol::AddPolygon(PolygonShape* poly)
 {
 	poly->AddReference();

@@ -25,7 +25,6 @@ public:
 	virtual ~Icon() {}
 
 	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
-	virtual RenderReturn DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

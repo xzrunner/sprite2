@@ -6,8 +6,6 @@
 #include "TextboxActor.h"
 #include "DrawNode.h"
 #include "UpdateParams.h"
-#include "FlattenParams.h"
-#include "sprite2/Flatten.h"
 #include "TextboxSprite.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
@@ -62,21 +60,10 @@ RenderReturn TextboxSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	return DrawImpl(nullptr, rp, spr);
 }
 
-RenderReturn TextboxSymbol::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
-{
-	// todo
-	return RENDER_OK;
-}
-
 bool TextboxSymbol::DrawFlatten(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	DrawImpl(dlist, rp, spr);
 	return true;
-}
-
-void TextboxSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
-{
-	ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());
 }
 
 sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

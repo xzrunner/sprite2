@@ -52,33 +52,6 @@ RenderReturn StaticQuadIcon::Draw(const RenderParams& rp, float process) const
 	return RENDER_OK;
 }
 
-RenderReturn StaticQuadIcon::DrawDeferred(cooking::DisplayList* dlist, 
-										  const RenderParams& rp, 
-										  float process) const
-{
-	if (!m_img) {
-		return RENDER_NO_DATA;
-	}
-
-	sm::vec2 vertices[4];
-	for (int i = 0; i < 4; ++i) {
-		vertices[i] = rp.mt * m_screen[i];
-	}
-
-	// draw
-	cooking::change_shader(dlist, sl::SPRITE2);
-	const RenderColor& col = rp.color;
-	uint32_t col_mul = col.GetMulABGR(), 
-		     col_add = col.GetAddABGR();
-	uint32_t col_rmap = col.GetRMapABGR(),
-		     col_gmap = col.GetGMapABGR(),
-			 col_bmap = col.GetBMapABGR();
-	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, 
-		&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());
-
-	return RENDER_OK;
-}
-
 sm::rect StaticQuadIcon::GetRegion(float process) const
 {
 	sm::rect ret;

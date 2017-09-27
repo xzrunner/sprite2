@@ -5,9 +5,6 @@
 #include "ImageSymbol.h"
 #include "S2_Texture.h"
 #include "SymType.h"
-#include "sprite2/Flatten.h"
-#include "FlattenParams.h"
-#include "DrawNodeDeferred.h"
 
 #include <SM_Calc.h>
 
@@ -66,17 +63,6 @@ RenderReturn Scale9::Draw(const RenderParams& rp) const
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
 			ret |= DrawNode::Draw(m_grids[i], rp);
-		}
-	}
-	return ret;
-}
-
-RenderReturn Scale9::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
-{
-	RenderReturn ret = RENDER_OK;
-	for (int i = 0; i < 9; ++i) {
-		if (m_grids[i]) {
-			ret |= DrawNodeDeferred::Draw(dlist, m_grids[i], rp);
 		}
 	}
 	return ret;
@@ -203,20 +189,6 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 	m_sz_top   = sz_top;
 	m_sz_down  = sz_down;
 	SetSize(static_cast<float>(w), static_cast<float>(h));
-}
-
-void Scale9::Flattening(const FlattenParams& fp, Flatten& ft) const
-{
-	for (int i = 0; i < 9; ++i) 
-	{
-		if (!m_grids[i]) {
-			continue;
-		}
-		Sprite* spr = m_grids[i];
-		FlattenParams c_fp = fp;
-		c_fp.SetSpr(spr);
-		spr->GetSymbol()->Flattening(c_fp, ft);
-	}
 }
 
 void Scale9::GetGrids(std::vector<Sprite*>& grids) const

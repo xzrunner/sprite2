@@ -6,7 +6,7 @@
 namespace s2
 {
 
-class AnimCurr;
+class AnimTreeCurr;
 
 class AnimActor : public Actor
 {
@@ -14,10 +14,10 @@ public:
 	AnimActor(const Sprite* spr, const Actor* parent);
 	virtual ~AnimActor();
 
-	const AnimCurr* GetCurr() const { return m_curr; }
+	const AnimTreeCurr* GetCurr() const { return m_curr; }
 
 private:
-	AnimCurr* m_curr;
+	AnimTreeCurr* m_curr;
 
 }; // AnimActor
 

@@ -87,14 +87,6 @@ RenderReturn TrailSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return RENDER_OK;
 }
 
-RenderReturn TrailSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-									   const RenderParams& rp, 
-									   const Sprite* spr) const
-{
-	// todo
-	return RENDER_OK;
-}
-
 void TrailSymbol::SetEmitterCfg(const TrailEmitterCfg* cfg)
 {
 	if (m_et_cfg == cfg) {

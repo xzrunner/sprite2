@@ -153,15 +153,6 @@ void Actor::SetCamera(const RenderCamera& camera)
 	m_render->SetCamera(camera);
 }
 
-void Actor::SetFlattenDirtyToRoot() const
-{
-	const Actor* actor = this;
-	while (actor) {
-		actor->SetFlattenDirty(true);
-		actor = actor->GetParent();
-	}
-}
-
 void Actor::InitFlags()
 {
 	m_flags = 0;
@@ -186,7 +177,6 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 	}
 	if (up_aabb) {
 		m_aabb.UpdateParent(this);
-//		SetFlattenDirtyToRoot();
 	}
 }
 

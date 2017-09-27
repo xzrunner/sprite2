@@ -24,7 +24,6 @@ public:
 	virtual int Type() const { return POLY_TEXTURE; }
 
 	virtual void Draw(const RenderParams& rp) const;
-	virtual void DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	virtual void Build();
 
 	const std::vector<sm::vec2>& GetTexcoords() const { return m_texcoords; }

@@ -3,7 +3,6 @@
 #include "S2_Sprite.h"
 #include "S2_Actor.h"
 #include "DrawNode.h"
-#include "DrawNodeDeferred.h"
 
 #include <assert.h>
 
@@ -46,15 +45,6 @@ RenderReturn ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_items.size(); i < n; ++i) {
 		ret |= DrawNode::Draw(m_items[i].second, rp);
-	}
-	return ret;
-}
-
-RenderReturn ProxySymbol::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
-{
-	RenderReturn ret = RENDER_OK;
-	for (int i = 0, n = m_items.size(); i < n; ++i) {
-		ret |= DrawNodeDeferred::Draw(dlist, m_items[i].second, rp);
 	}
 	return ret;
 }

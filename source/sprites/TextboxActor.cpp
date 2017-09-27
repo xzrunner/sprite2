@@ -46,8 +46,6 @@ void TextboxActor::SetText(const std::string& text)
 	ActorAABB& aabb = GetAABB();
 	aabb.SetRect(rect);
 	aabb.UpdateParent(this);
-
-//	SetFlattenDirtyToRoot();
 }
 
 sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const std::string& text)

@@ -62,8 +62,6 @@ public:
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	void SetFlattenDirtyToRoot() const;
-
 	void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);
 	bool SetFlattenDirty();
 	bool BuildFlatten();

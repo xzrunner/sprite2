@@ -1,8 +1,8 @@
 #include "AnimActor.h"
 #include "AnimSprite.h"
 #include "AnimSymbol.h"
-#include "AnimCurrCreator.h"
-#include "AnimCurr.h"
+#include "AnimTreeCurr.h"
+#include "UpdateParams.h"
 
 #include <assert.h>
 
@@ -25,7 +25,9 @@ AnimActor::AnimActor(const Sprite* spr, const Actor* parent)
 ////	}
 
 	const AnimSymbol* anim_sym = VI_DOWNCASTING<const AnimSymbol*>(spr->GetSymbol());
-	m_curr = AnimCurrCreator::Create(anim_sym, spr);	
+	m_curr = new AnimTreeCurr();
+	m_curr->SetAnimCopy(anim_sym->GetCopy());
+	m_curr->Start(UpdateParams(), spr);
 }
 
 AnimActor::~AnimActor()

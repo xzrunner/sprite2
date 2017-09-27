@@ -28,7 +28,6 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
 	virtual void Draw(const RenderParams& rp) const;
-	virtual void DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	const sm::vec2& GetCenter() const;
 	void SetCenter(const sm::vec2& center);

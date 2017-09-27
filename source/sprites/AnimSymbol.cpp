@@ -1,6 +1,5 @@
 #include "AnimSymbol.h"
 #include "AnimCopy.h"
-#include "AnimFlattenCurr.h"
 #include "SymType.h"
 #include "AnimSprite.h"
 #include "S2_Sprite.h"
@@ -11,18 +10,16 @@
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
 #include "AnimActor.h"
-#include "AnimFlatten.h"
-#include "FlattenParams.h"
 #include "AABBHelper.h"
-#include "FlattenMgr.h"
 #include "sprite2/Utility.h"
-#include "AnimCurrCreator.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatTopNodes.h"
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 #include "ILerp.h"
+#include "sprite2/AnimTreeCurr.h"
+#include "sprite2/UpdateParams.h"
 
 #include <assert.h>
 
@@ -31,7 +28,6 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-	, m_ft(NULL)
 	, m_curr(NULL)
 	, m_copy(NULL)
 {
@@ -43,7 +39,6 @@ AnimSymbol::AnimSymbol()
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-	, m_ft(NULL)
 	, m_curr(NULL)
 	, m_copy(NULL)
 {
@@ -68,10 +63,6 @@ AnimSymbol::~AnimSymbol()
 		delete layer;
 	}
 
-	if (m_ft) {
-		delete m_ft;
-		FlattenMgr::Instance()->Delete(GetID());
-	} 
 	if (m_curr) {
 		m_curr->RemoveReference();
 	}
@@ -111,73 +102,22 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;
-	if (m_ft) 
-	{
+	if (spr) {
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
 #ifndef S2_DISABLE_STATISTICS
 		rp_child->parent_id = id;
 		rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
-		if (DrawNode::Prepare(rp, spr, *rp_child)) 
-		{
-			int frame = -1;
-			if (spr) {
-				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
-				assert(curr);
-				frame = curr->GetFrame();
-			} else {
-				assert(m_curr);
-				frame = m_curr->GetFrame();
-			}
-
-			ret = m_ft->Draw(*rp_child, frame);
-		} else {
-			ret = RENDER_INVISIBLE;
-		}
-		RenderParamsPool::Instance()->Push(rp_child); 
-	}
-	else
-	{
-		if (spr) {
-			RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-			*rp_child = rp;
-#ifndef S2_DISABLE_STATISTICS
-			rp_child->parent_id = id;
-			rp_child->level = rp.level + 1;
-#endif // S2_DISABLE_STATISTICS
-			if (DrawNode::Prepare(rp, spr, *rp_child)) {
-				const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-				const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
-				assert(curr);
-				ret = curr->Draw(*rp_child);
-			}
-			RenderParamsPool::Instance()->Push(rp_child); 
-		} else {
-			ret = m_curr->Draw(rp);
-		}
-	}
-	return ret;
-}
-
-RenderReturn AnimSymbol::DrawDeferred(cooking::DisplayList* dlist,
-									  const RenderParams& rp, 
-									  const Sprite* spr) const
-{	
-	RenderReturn ret = RENDER_OK;
-	if (spr) {
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-			const AnimCurr* curr = anim->GetAnimCurr(rp.actor);
+			const AnimTreeCurr* curr = anim->GetAnimCurr(rp.actor);
 			assert(curr);
-			ret = curr->DrawDeferred(dlist, *rp_child);
+			ret = curr->Draw(*rp_child);
 		}
 		RenderParamsPool::Instance()->Push(rp_child); 
 	} else {
-		ret = m_curr->DrawDeferred(dlist, rp);
+		ret = m_curr->Draw(rp);
 	}
 	return ret;
 }
@@ -186,12 +126,6 @@ bool AnimSymbol::Update(const UpdateParams& up, float time)
 {
 	m_curr->SetTime(time);
 	return m_curr->Update(up, this, NULL);
-}
-
-void AnimSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
-{
-	ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());
-	BuildFlatten(fp.GetActor());
 }
 
 int AnimSymbol::GetMaxFrameIdx() const
@@ -233,10 +167,6 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 
 const AnimCopy* AnimSymbol::GetCopy() const
 {
-	if (m_ft) {
-		return NULL;
-	} 
-
 	if (!m_copy) {
 		m_copy = new AnimCopy;
 		m_copy->LoadFromSym(*this);
@@ -246,38 +176,18 @@ const AnimCopy* AnimSymbol::GetCopy() const
 
 void AnimSymbol::LoadCopy()
 {
-	if (m_ft) {
-		return;
-	}
-
 	if (!m_copy) {
 		m_copy = new AnimCopy;
 	}
 	m_copy->LoadFromSym(*this);
 }
 
-void AnimSymbol::BuildFlatten(const Actor* actor) const
-{
-	if (m_ft) {
-		return;
-	}
-	m_ft = new AnimFlatten;
-	FlattenMgr::Instance()->Add(GetID(), m_ft);
-
-	if (m_copy) {
-		m_copy->StoreToFlatten(*m_ft, actor);
-	} else {
-		AnimCopy* copy = new AnimCopy;
-		copy->LoadFromSym(*this);
-		copy->StoreToFlatten(*m_ft, actor);
-		delete copy;
-	}
-}
-
 void AnimSymbol::BuildCurr()
 {
 	if (!m_curr) {
-		m_curr = AnimCurrCreator::Create(this, NULL);
+		m_curr = new AnimTreeCurr();
+		m_curr->SetAnimCopy(GetCopy());
+		m_curr->Start(UpdateParams(), nullptr);
 	}
 }
 

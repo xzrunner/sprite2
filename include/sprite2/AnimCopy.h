@@ -18,7 +18,6 @@ namespace s2
 class Sprite;
 class Actor;
 class AnimSymbol;
-class AnimFlatten;
 
 class AnimCopy
 {
@@ -27,8 +26,6 @@ public:
 	~AnimCopy();
 
 	void LoadFromSym(const AnimSymbol& sym);
-
-	void StoreToFlatten(AnimFlatten& ft, const Actor* actor) const;
 	
 private:
 	void SetCountNum(const AnimSymbol& sym);

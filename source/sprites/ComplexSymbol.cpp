@@ -1,6 +1,5 @@
 #include "ComplexSymbol.h"
 #include "ComplexActor.h"
-#include "ComplexFlatten.h"
 #include "SymType.h"
 #include "ComplexSprite.h"
 #include "S2_Sprite.h"
@@ -13,17 +12,13 @@
 #include "SprVisitorParams.h"
 #include "SymbolVisitor.h"
 #include "S2_Actor.h"
-#include "sprite2/Flatten.h"
-#include "FlattenParams.h"
 #include "AABBHelper.h"
-#include "FlattenMgr.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatDrawCall.h"
 #include "sprite2/StatTopNodes.h"
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
-#include "DrawNodeDeferred.h"
 
 #include <SM_Test.h>
 
@@ -36,7 +31,6 @@ namespace s2
 
 ComplexSymbol::ComplexSymbol()
 	: m_scissor(0, 0)
-	, m_ft(NULL)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_COMPLEX);
@@ -46,7 +40,6 @@ ComplexSymbol::ComplexSymbol()
 ComplexSymbol::ComplexSymbol(uint32_t id)
 	: Symbol(id)
 	, m_scissor(0, 0)
-	, m_ft(NULL)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_COMPLEX);
@@ -60,10 +53,6 @@ ComplexSymbol::~ComplexSymbol()
 #endif // S2_DISABLE_STATISTICS
 
 	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
-	if (m_ft) {
-		FlattenMgr::Instance()->Delete(GetID());
-		delete m_ft;
-	}
 }
 
 int ComplexSymbol::Type() const 
@@ -98,12 +87,6 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	}
 
 	int action = GetAction(spr, rp.actor);
-
-	if (m_ft) {
-		RenderReturn ret = m_ft->Draw(*rp_child, action);
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return ret;
-	}
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
@@ -164,63 +147,6 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	return ret;
 }
 
-RenderReturn ComplexSymbol::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
-{
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return RENDER_INVISIBLE;
-	}
-
-// 	sm::vec2 scissor_sz = m_scissor.Size();
-// 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
-// 	if (scissor) 
-// 	{
-// 		sm::vec2 min = rp_child->mt * sm::vec2(m_scissor.xmin, m_scissor.ymin),
-// 			max = rp_child->mt * sm::vec2(m_scissor.xmax, m_scissor.ymax);
-// 		if (min.x > max.x) {
-// 			std::swap(min.x, max.x);
-// 		}
-// 		if (min.y > max.y) {
-// 			std::swap(min.y, max.y);
-// 		}
-// 		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
-// 	}
-
-	RenderReturn ret = RENDER_OK;
-
-	int action = GetAction(spr, rp.actor);
-	const std::vector<Sprite*>& children = GetActionChildren(action);
-	if (rp.IsDisableCulling()) {
-		for (int i = 0, n = children.size(); i < n; ++i) 
-		{
-			const Sprite* child = children[i];
-			rp_child->actor = child->QueryActor(rp.actor);
-			ret |= DrawNodeDeferred::Draw(dlist, child, *rp_child);
-		}
-	} else {
-		for (int i = 0, n = children.size(); i < n; ++i) 
-		{
-			const Sprite* child = children[i];
-			rp_child->actor = child->QueryActor(rp.actor);
-			if (!rp_child->IsDisableCulling() && 
-				DrawNode::CullingTestOutside(child, *rp_child)) {
-					continue;
-			}
-			ret |= DrawNodeDeferred::Draw(dlist, child, *rp_child);
-		}
-	}
-
-// 	if (scissor) {
-// 		RenderScissor::Instance()->Pop();
-// 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
-
-	return ret;
-}
-
 bool ComplexSymbol::Update(const UpdateParams& up, float time)
 {
 	bool ret = false;
@@ -238,26 +164,6 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	UpdateParamsPool::Instance()->Push(up_child); 
 
 	return ret;
-}
-
-void ComplexSymbol::Flattening(const FlattenParams& fp, Flatten& ft) const
-{
-	BuildFlatten(fp.GetActor());
-
-	if (SprNameMap::IsNormalName(fp.GetSpr()->GetName())) 
-	{
-		ft.AddNode(const_cast<Sprite*>(fp.GetSpr()), const_cast<Actor*>(fp.GetActor()), fp.GetPrevMat());
-	} 
-	else 
-	{
-		int action = GetAction(fp.GetSpr(), fp.GetActor());
-		const Flatten* curr_ft = m_ft->GetFlatten(action);
-		if (curr_ft) {
-			S2_MAT mat;
-			Utility::PrepareMat(fp.GetPrevMat(), fp.GetSpr(), fp.GetActor(), mat);
-			ft.Combine(*curr_ft, mat);
-		}
-	}
 }
 
 const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
@@ -283,55 +189,6 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 		}
 	}
 	return idx;
-}
-
-static void build_flatten(const Actor* actor, const std::vector<Sprite*>& src, Flatten& dst)
-{
-	for (int i = 0, n = src.size(); i < n; ++i)
-	{
-		const Sprite* c_spr = src[i];
-		const Actor* c_actor = c_spr->QueryActor(actor);
-		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
-		if (!visible) {
-			continue;
-		}
-		FlattenParams fp;
-		fp.SetSpr(c_spr);
-		fp.SetActor(c_actor);		
-		c_spr->GetSymbol()->Flattening(fp, dst);
-	}
-}
-
-void ComplexSymbol::BuildFlatten(const Actor* actor) const
-{
-	// todo: flatten dirty
-	// fp.GetActor() && fp.GetActor()->IsFlattenDirty())
-	if (m_ft) {
-		return;
-	}
-
-	std::vector<Flatten> actions;
-	if (m_actions.empty())
-	{
-		actions.resize(1);
-		build_flatten(actor, m_children, actions[0]);
-	}
-	else
-	{
-		actions.resize(m_actions.size());
-		for (int i = 0, n = m_actions.size(); i < n; ++i) {
-			const Action& action = m_actions[i];
-			build_flatten(actor, action.sprs, actions[i]);
-		}
-	}
-
-	m_ft = new ComplexFlatten;
-	m_ft->SetData(actions);
-	FlattenMgr::Instance()->Add(GetID(), m_ft);
-
-	if (actor) {
-		actor->SetFlattenDirty(false);
-	}
 }
 
 bool ComplexSymbol::Add(Sprite* spr, int idx)

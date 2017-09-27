@@ -31,7 +31,6 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
 	virtual void Draw(const RenderParams& rp) const;
-	virtual void DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void SetPolygon(Polygon* poly);
 	const Polygon* GetPolygon() const { return m_poly; }

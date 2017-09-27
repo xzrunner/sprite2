@@ -92,14 +92,6 @@ RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
-RenderReturn MaskSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-									  const RenderParams& rp, 
-									  const Sprite* spr) const
-{
-	// todo
-	return RENDER_OK;
-}
-
 void MaskSymbol::SetBase(Sprite* base)
 {
 	cu::RefCountObjAssign(m_base, base);

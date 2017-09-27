@@ -26,7 +26,6 @@
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
 #include "QueryLoadedVisitor.h"
-#include "sprite2/S2_Cooking.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
@@ -282,49 +281,6 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 	s2_actor->FlattenDraw(*rp);
 
 	s2::RenderParamsPool::Instance()->Push(rp);
-}
-
-extern "C"
-void s2_spr_draw_deferred(const void* actor, float x, float y, float angle, float sx, float sy,
-						  float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
-{
-	RenderParams* rp = RenderParamsPool::Instance()->Pop();
-	rp->Reset();
-
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
-
-	float* m = rp->mt.x;
-	float c, s;
-	if (angle == 0) {
-		c = 1;
-		s = 0;
-	} else {
-		c = sm::cos_fast(angle);
-		s = sm::sin_fast(angle);
-	}
-	m[0] = c * sx;
-	m[1] = s * sx;
-	m[2] = - s * sy;
-	m[3] = c * sy;
-	m[4] = x;
-	m[5] = y;
-
-	rp->SetViewRegion(xmin, ymin, xmax, ymax);
-
-	rp->actor = s2_actor;
-
-	//	rp->SetDisableCulling(true);
-
-	if ((flag & S2_DISABLE_DRAW_PARTICLE3D) == 1) {
-		rp->SetDisableParticle3d(true);
-	}
-	rp->min_edge = min_edge;
-
-	if (s2_actor->GetSpr()->IsDTexDisable()) {
-		rp->SetDisableDTexC2(true);
-	}
-
-	Cooking::Instance()->Draw(s2_actor->GetSpr(), rp);
 }
 
 extern "C"

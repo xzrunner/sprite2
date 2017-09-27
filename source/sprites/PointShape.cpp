@@ -49,11 +49,6 @@ void PointShape::Draw(const RenderParams& rp) const
 	RVG::Circle(center, r, true);
 }
 
-void PointShape::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
-{
-	// todo
-}
-
 const sm::vec2& PointShape::GetPos() const 
 { 
 	return m_pos; 

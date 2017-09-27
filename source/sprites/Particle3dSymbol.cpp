@@ -125,14 +125,6 @@ RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-											const RenderParams& rp, 
-											const Sprite* spr) const
-{
-	// todo
-	return RENDER_OK;
-}
-
 bool Particle3dSymbol::Update(const UpdateParams& up, float time)
 {
 // 	time = Particle3d::Instance()->GetTime();

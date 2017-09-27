@@ -9,12 +9,12 @@
 #include "UpdateParams.h"
 #include "RenderColor.h"
 #include "SetStaticFrameVisitor.h"
-#include "AnimCurr.h"
 
 #include "ComplexSymbol.h"
 #include "ComplexSprite.h"
 #include "ComplexActor.h"
 #include "AnimSymbol.h"
+#include "AnimTreeCurr.h"
 #include "AnimSprite.h"
 #include "Anim2Sprite.h"
 #include "Particle3dSprite.h"
@@ -1108,7 +1108,6 @@ void ProxyHelper::ActorSetVisible(Actor* actor, bool visible)
 	else
 	{
 		if (visible != actor->IsVisible()) {
-//			actor->SetFlattenDirtyToRoot();
 			actor->SetVisible(visible, true);
 		}
 	}
@@ -1465,7 +1464,7 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(actor->GetSpr());
-		const AnimCurr* curr = anim->GetAnimCurr(actor);
+		const AnimTreeCurr* curr = anim->GetAnimCurr(actor);
 		if (curr) {
 			count = curr->GetSlotSize();
 			return true;

@@ -130,47 +130,6 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 	//}
 }
 
-void TexturePolygon::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp) const
-{
-	if (!m_img->GetTexture()->IsLoadFinished()) {
-		return;
-	}
-	if (m_tris.empty()) {
-		return;
-	}
-	assert(m_tris.size() == m_texcoords.size()
-		&& m_tris.size() % 3 == 0);
-
-	cooking::change_shader(dlist, sl::SPRITE2);
-	const RenderColor& col = rp.color;
-	uint32_t col_mul = col.GetMulABGR(), 
-		     col_add = col.GetAddABGR();
-	uint32_t col_rmap = col.GetRMapABGR(),
-		     col_gmap = col.GetGMapABGR(),
-			 col_bmap = col.GetBMapABGR();
-	for (int i = 0, n = m_tris.size(); i < n; i += 3) 
-	{
-		sm::vec2 vertices[4], texcoords[4];
-		for (int j = 0; j < 3; ++j) {
-			vertices[j] = rp.mt * m_tris[i+j];
-			texcoords[j] = m_texcoords[i+j];
-		}
-		vertices[3] = vertices[2];
-		texcoords[3] = texcoords[2];
-
-		float _texcoords[8];
-		int tex_id;
-		if (!m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id)) {
-			m_img->OnQueryTexcoordsFail();
-		}
-
-		TexcoordsMap::Trans(_texcoords, texcoords);
-
-		cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, 
-			&vertices[0].x, &texcoords[0].x, tex_id);
-	}
-}
-
 void TexturePolygon::Build()
 {
 	m_tris.clear();

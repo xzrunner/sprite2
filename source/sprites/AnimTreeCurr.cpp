@@ -17,7 +17,6 @@
 #include "SprVisitorParams.h"
 #include "SetStaticFrameVisitor.h"
 #include "AABBHelper.h"
-#include "DrawNodeDeferred.h"
 
 #include <algorithm>
 #include <climits>
@@ -213,20 +212,6 @@ RenderReturn AnimTreeCurr::Draw(const RenderParams& rp) const
 		Sprite* child = m_slots[m_curr[i]];
 		rp_child->actor = child->QueryActor(rp.actor);
 		ret |= DrawNode::Draw(child, *rp_child);
-	}
-	RenderParamsPool::Instance()->Push(rp_child); 
-	return ret;
-}
-
-RenderReturn AnimTreeCurr::DrawDeferred(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
-{
-	RenderReturn ret = RENDER_OK;
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	for (int i = 0; i < m_curr_num; ++i) {
-		Sprite* child = m_slots[m_curr[i]];
-		rp_child->actor = child->QueryActor(rp.actor);
-		ret |= DrawNodeDeferred::Draw(dlist, child, *rp_child);
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;

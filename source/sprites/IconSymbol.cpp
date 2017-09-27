@@ -82,37 +82,6 @@ RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return ret;
 }
 
-RenderReturn IconSymbol::DrawDeferred(cooking::DisplayList* dlist, 
-									  const RenderParams& rp, 
-									  const Sprite* spr) const
-{
-	if (!m_icon) {
-		return RENDER_NO_DATA;
-	}
-
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
-		return RENDER_INVISIBLE;
-	}
-
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
-	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
-
-	float process = 1;
-	if (spr) {
-		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
-	}
-	RenderReturn ret = m_icon->DrawDeferred(dlist, *rp_child, process);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
-
-	return ret;
-}
-
 void IconSymbol::SetIcon(Icon* icon)
 {
 	cu::RefCountObjAssign(m_icon, icon);

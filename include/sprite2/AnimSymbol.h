@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace s2
 {
@@ -65,8 +66,7 @@ public:
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
 
-	// tree
-	const AnimCopy* GetCopy() const;
+	const std::shared_ptr<AnimCopy>& GetCopy() const;
 	void LoadCopy();
 
 	void BuildCurr();
@@ -90,8 +90,9 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	AnimCurr* m_curr;
-	mutable AnimCopy* m_copy;
+	std::unique_ptr<AnimCurr> m_curr;
+
+	mutable std::shared_ptr<AnimCopy> m_copy;
 
 }; // AnimSymbol
 

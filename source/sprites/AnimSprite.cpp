@@ -19,7 +19,7 @@ AnimSprite::AnimSprite()
 	, m_interval(0)
 	, m_fps(30)
 	, m_start_random(false)
-	, m_curr(NULL)
+	, m_curr(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
@@ -38,7 +38,7 @@ AnimSprite::AnimSprite(Symbol* sym, uint32_t id)
 #endif // S2_DISABLE_STATISTICS
 
 	AnimSymbol* anim_sym = VI_DOWNCASTING<AnimSymbol*>(m_sym);
-	m_curr = new AnimCurr();
+	m_curr = std::make_unique<AnimCurr>();
 	m_curr->SetAnimCopy(anim_sym->GetCopy());
 	m_curr->Start(UpdateParams(), this);
 }
@@ -63,7 +63,7 @@ AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
 		m_curr = spr.m_curr->Clone();
 		m_curr->Start(UpdateParams(), this);
 	} else {
-		m_curr = NULL;
+		m_curr = nullptr;
 	}
 	return *this;
 }
@@ -73,10 +73,6 @@ AnimSprite::~AnimSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_curr) {
-		m_curr->RemoveReference();
-	}
 }
 
 AnimSprite* AnimSprite::Clone() const
@@ -91,13 +87,12 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
-	assert(curr);
-	curr->OnMessage(up, this, msg);
+	AnimCurr& curr = GetAnimCurr(up.GetActor());
+	curr.OnMessage(up, this, msg);
 	switch (msg)
 	{
 	case MSG_START: case MSG_TRIGGER:
-		curr->Start(up, this);
+		curr.Start(up, this);
 		if (m_start_random) {
 			RandomStartTime(up);
 		}
@@ -121,51 +116,44 @@ bool AnimSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
-	assert(curr);
-	return curr->Update(up, GetSymbol(), this, m_loop, m_interval, m_fps);
+	AnimCurr& curr = GetAnimCurr(up.GetActor());
+	return curr.Update(up, GetSymbol(), this, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::AutoUpdate(const Actor* actor)
 {
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
-	assert(curr);
-	return curr->Update(UpdateParams(), GetSymbol(), this, m_loop, m_interval, m_fps);
+	AnimCurr& curr = GetAnimCurr(actor);
+	return curr.Update(UpdateParams(), GetSymbol(), this, m_loop, m_interval, m_fps);
 }
 
 Sprite* AnimSprite::FetchChildByName(int name, const Actor* actor) const
 {
-	const AnimCurr* curr = GetAnimCurr(actor);
-	assert(curr);
-	return curr->FetchChildByName(name, actor);
+	AnimCurr& curr = GetAnimCurr(actor);
+	return curr.FetchChildByName(name, actor);
 }
 
 Sprite* AnimSprite::FetchChildByIdx(int idx, const Actor* actor) const
 {
-	const AnimCurr* curr = GetAnimCurr(actor);
-	assert(curr);
-	return curr->FetchChildByIdx(idx);
+	AnimCurr& curr = GetAnimCurr(actor);
+	return curr.FetchChildByIdx(idx);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	const Actor* actor = params.actor;
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
-	assert(curr);
-	return curr->Traverse(visitor, params);
+	AnimCurr& curr = GetAnimCurr(actor);
+	return curr.Traverse(visitor, params);
 }
 
-const AnimCurr* AnimSprite::GetAnimCurr(const Actor* actor) const 
+AnimCurr& AnimSprite::GetAnimCurr(const Actor* actor) const 
 { 
-	const AnimCurr* curr = m_curr;
-// 	if (ActorCount() > 1)
-// 	{
-		const AnimActor* anim_actor = static_cast<const AnimActor*>(actor);
-		if (anim_actor && anim_actor->GetCurr()) {
-			curr = anim_actor->GetCurr();
-		}
-//	}
-	return curr;
+	const AnimActor* anim_actor = static_cast<const AnimActor*>(actor);
+	if (anim_actor && anim_actor->GetCurr()) {
+		return *anim_actor->GetCurr();
+	} else {
+		assert(m_curr);
+		return *m_curr;		
+	}
 }
 
 void AnimSprite::SetStartRandom(const UpdateParams& up, bool random) 
@@ -178,9 +166,8 @@ void AnimSprite::SetStartRandom(const UpdateParams& up, bool random)
 
 int AnimSprite::GetFrame(const Actor* actor) const 
 { 
-	const AnimCurr* curr = GetAnimCurr(actor);
-	assert(curr);
-	return curr->GetFrame();
+	AnimCurr& curr = GetAnimCurr(actor);
+	return curr.GetFrame();
 }
 
 bool AnimSprite::SetFrame(const UpdateParams& up, int frame)
@@ -189,16 +176,14 @@ bool AnimSprite::SetFrame(const UpdateParams& up, int frame)
 		return false;
 	}
 
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
-	assert(curr);
-	return curr->SetFrame(up, this, frame, m_fps);
+	AnimCurr& curr = GetAnimCurr(up.GetActor());
+	return curr.SetFrame(up, this, frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const Actor* actor)
 {
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(actor));
-	assert(curr);
-	curr->SetActive(active);
+	AnimCurr& curr = GetAnimCurr(actor);
+	curr.SetActive(active);
 }
 
 void AnimSprite::RandomStartTime(const UpdateParams& up)
@@ -207,10 +192,8 @@ void AnimSprite::RandomStartTime(const UpdateParams& up)
 	float p = (rand() / static_cast<float>(RAND_MAX));
 	start = static_cast<int>(start * p);
 
-	AnimCurr* curr = const_cast<AnimCurr*>(GetAnimCurr(up.GetActor()));
-	assert(curr);
-//	curr.SetTime(start / m_fps);
-	curr->SetFrame(up, this, start, m_fps);
+	AnimCurr& curr = GetAnimCurr(up.GetActor());
+	curr.SetFrame(up, this, start, m_fps);
 }
 
 }

@@ -7,10 +7,9 @@
 #include "AnimCtrl.h"
 #include "RenderReturn.h"
 
-#include <CU_RefCountObj.h>
-
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace s2
 {
@@ -25,7 +24,7 @@ class SprVisitorParams;
 class RenderParams;
 class UpdateParams;
 
-class AnimCurr : public cu::RefCountObj
+class AnimCurr
 {
 public:
 	AnimCurr();
@@ -33,7 +32,7 @@ public:
 	AnimCurr& operator = (const AnimCurr& curr);
 	~AnimCurr();
 
-	AnimCurr* Clone() const;
+	std::unique_ptr<AnimCurr> Clone() const;
 
 	bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
@@ -56,7 +55,7 @@ public:
 
 	sm::rect CalcAABB(const Actor* actor) const;
 
-	void SetAnimCopy(const AnimCopy* copy);
+	void SetAnimCopy(const std::shared_ptr<AnimCopy>& copy);
 
 	int GetFrame() const { return m_ctrl.GetFrame(); }
 
@@ -80,9 +79,9 @@ private:
 	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 		
 private:
-	AnimCtrl m_ctrl;
+	std::shared_ptr<AnimCopy> m_copy;
 
-	const AnimCopy* m_copy;
+	AnimCtrl m_ctrl;
 
 	std::vector<int> m_layer_cursor;
 	std::vector<int> m_layer_cursor_update;

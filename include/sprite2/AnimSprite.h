@@ -37,7 +37,7 @@ public:
 	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	const AnimCurr* GetAnimCurr(const Actor* actor) const;
+	AnimCurr& GetAnimCurr(const Actor* actor) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -62,7 +62,7 @@ protected:
 
 	bool m_start_random;
 
-	AnimCurr* m_curr;
+	std::unique_ptr<AnimCurr> m_curr;
 
 	VI_DUMMY_FUNC
 

@@ -12,12 +12,11 @@ class AnimActor : public Actor
 {
 public:
 	AnimActor(const Sprite* spr, const Actor* parent);
-	virtual ~AnimActor();
 
-	const AnimCurr* GetCurr() const { return m_curr; }
+	const std::unique_ptr<AnimCurr>& GetCurr() const { return m_curr; }
 
 private:
-	AnimCurr* m_curr;
+	std::unique_ptr<AnimCurr> m_curr;
 
 }; // AnimActor
 

@@ -1,6 +1,5 @@
 #include "AnimCopy.h"
 #include "AnimSymbol.h"
-#include "AnimCurr.h"
 #include "S2_Sprite.h"
 #include "RenderColor.h"
 #include "ILerp.h"

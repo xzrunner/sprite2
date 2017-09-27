@@ -69,9 +69,9 @@ AnimCurr::~AnimCurr()
 	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
-AnimCurr* AnimCurr::Clone() const
+std::unique_ptr<AnimCurr> AnimCurr::Clone() const
 {
-	return new AnimCurr(*this);
+	return std::make_unique<AnimCurr>(*this);
 }
 
 bool AnimCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
@@ -228,9 +228,9 @@ sm::rect AnimCurr::CalcAABB(const Actor* actor) const
 	return AABBHelper::CalcAABB(m_slots, actor);
 }
 
-void AnimCurr::SetAnimCopy(const AnimCopy* copy)
+void AnimCurr::SetAnimCopy(const std::shared_ptr<AnimCopy>& copy)
 {
-	if (m_copy == copy) {
+	if (m_copy.get() == copy.get()) {
 		return;
 	}
 

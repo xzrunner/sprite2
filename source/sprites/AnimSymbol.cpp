@@ -102,8 +102,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 int AnimSymbol::GetMaxFrameIdx() const
 {
 	int index = 0;
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		const std::unique_ptr<Layer>& layer = m_layers[i];
+	for (const auto& layer : m_layers) {
 		if (!layer->frames.empty()) {
 			index = std::max(index, layer->frames.back()->index);
 		}
@@ -113,9 +112,8 @@ int AnimSymbol::GetMaxFrameIdx() const
 
 void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 {
-	for (int i = 0, n = m_layers.size(); i < n; ++i)
+	for (const auto& layer : m_layers)
 	{
-		const std::unique_ptr<Layer>& layer = m_layers[i];
 		int curr = layer->GetCurrFrame(frame);
 		int next = layer->GetNextFrame(frame);
 		if (curr < 0) {
@@ -124,9 +122,9 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 		const std::unique_ptr<Frame>& curr_f = layer->frames[curr];
 		if (!curr_f->tween || next < 0)
 		{
-			for (int i = 0, n = curr_f->sprs.size(); i < n; ++i) {
-				Sprite* spr = VI_CLONE(Sprite, curr_f->sprs[i]);
-				sprs.push_back(spr);	
+			for (auto spr : curr_f->sprs) {
+				Sprite* new_spr = VI_CLONE(Sprite, spr);
+				sprs.push_back(new_spr);
 			}
 		}
 		else
@@ -196,21 +194,17 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 
 	std::vector<Sprite*> children;
 	int num = 0;
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		const std::unique_ptr<Layer>& layer = m_layers[i];
-		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			const std::unique_ptr<Frame>& frame = layer->frames[j];
+	for (const auto& layer : m_layers) {
+		for (const auto& frame : layer->frames) {
 			num += frame->sprs.size();
 		}
 	}
 	children.reserve(num);
 	sm::rect aabb;
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		const std::unique_ptr<Layer>& layer = m_layers[i];
-		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			const std::unique_ptr<Frame>& frame = layer->frames[j];
-			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
-				children.push_back(frame->sprs[k]);			
+	for (const auto& layer : m_layers) {
+		for (const auto& frame : layer->frames) {
+			for (auto spr : frame->sprs) {
+				children.push_back(spr);			
 			}
 		}
 	}
@@ -237,15 +231,16 @@ int AnimSymbol::Layer::GetCurrFrame(int index) const
 	}
 
 	int prev = -1, curr = -1;
-	for (int i = 0, n = frames.size(); i < n; ++i)
+	int idx = 0;
+	for (const auto& frame : frames)
 	{
-		const std::unique_ptr<Frame>& frame = frames[i];
 		if (frame->index >= index) {
-			curr = i;
+			curr = idx;
 			break;
 		} else {
-			prev = i;
+			prev = idx;
 		}
+		++idx;
 	}
 	
 	if (curr < 0) {
@@ -262,12 +257,12 @@ int AnimSymbol::Layer::GetCurrFrame(int index) const
 
 int AnimSymbol::Layer::GetNextFrame(int index) const
 {
-	for (int i = 0, n = frames.size(); i < n; ++i)
-	{
-		const std::unique_ptr<Frame>& frame = frames[i];
+	int idx = 0;
+	for (const auto& frame : frames) {
 		if (frame->index > index) {
-			return i;
+			return idx;
 		}
+		++idx;
 	}
 	return -1;
 }

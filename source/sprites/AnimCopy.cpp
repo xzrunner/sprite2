@@ -35,12 +35,11 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 
 	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers 
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
-	for (int i = 0, n = layers.size(); i < n; ++i) 
+	for (const auto& layer : layers) 
 	{
 		int max_count = -1;
-		for (int j = 0, m = layers[i]->frames.size(); j < m; ++j) 
+		for (const auto& frame : layer->frames) 
 		{
-			const std::unique_ptr<AnimSymbol::Frame>& frame = layers[i]->frames[j];
 			int count = frame->sprs.size();
 			if (count > max_count) {
 				max_count = count;

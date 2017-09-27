@@ -56,7 +56,7 @@ public:
 	LerpEase& operator = (const LerpEase& lerp);
 	LerpEase(int type);
 
-	virtual ILerp* Clone() const { return new LerpEase(*this); }
+	virtual std::unique_ptr<ILerp> Clone() const { return std::make_unique<LerpEase>(*this); }
 
 	virtual int Type() const { return LERP_EASE; }
 

@@ -1,19 +1,19 @@
 #ifndef _SPRITE2_ILERP_H_
 #define _SPRITE2_ILERP_H_
 
-#include <CU_Cloneable.h>
+#include <memory>
 
 #include <stddef.h>
 
 namespace s2
 {
 
-class ILerp : public cu::Cloneable
+class ILerp
 {
 public:
 	virtual ~ILerp() {}
 
-	virtual ILerp* Clone() const { return NULL; }
+	virtual std::unique_ptr<ILerp> Clone() const { return nullptr; }
 
 	virtual int Type() const = 0;
 

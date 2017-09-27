@@ -62,9 +62,7 @@ private:
 		int time;
 		std::vector<Item> items;
 
-		std::vector<std::pair<AnimLerp::SprData, ILerp*> > lerps;
-
-		~Frame();
+		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 	};
 
 	struct Layer

@@ -33,14 +33,14 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 {
 	m_max_frame_idx = sym.GetMaxFrameIdx();
 
-	const std::vector<AnimSymbol::Layer*>& layers 
+	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers 
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	for (int i = 0, n = layers.size(); i < n; ++i) 
 	{
 		int max_count = -1;
 		for (int j = 0, m = layers[i]->frames.size(); j < m; ++j) 
 		{
-			const AnimSymbol::Frame* frame = layers[i]->frames[j];
+			const std::unique_ptr<AnimSymbol::Frame>& frame = layers[i]->frames[j];
 			int count = frame->sprs.size();
 			if (count > max_count) {
 				max_count = count;
@@ -52,18 +52,18 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 
 void AnimCopy::FillingLayers(const AnimSymbol& sym)
 {
-	const std::vector<AnimSymbol::Layer*>& layers 
+	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	m_layers.clear();
 	m_layers.resize(layers.size());
 	for (int ilayer = 0, nlayer = layers.size(); ilayer < nlayer; ++ilayer) 
 	{
-		const AnimSymbol::Layer* src_layer = layers[ilayer];
+		const std::unique_ptr<AnimSymbol::Layer>& src_layer = layers[ilayer];
 		Layer& dst_layer = m_layers[ilayer];
 		dst_layer.frames.resize(src_layer->frames.size());
 		for (int iframe = 0, nframe = src_layer->frames.size(); iframe < nframe; ++iframe)
 		{
-			const AnimSymbol::Frame* src_frame = src_layer->frames[iframe];
+			const std::unique_ptr<AnimSymbol::Frame>& src_frame = src_layer->frames[iframe];
 			Frame& dst_frame = dst_layer.frames[iframe];
 			dst_frame.time = src_frame->index;
 
@@ -77,8 +77,8 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 			dst_frame.lerps.reserve(src_frame->lerps.size());
 			for (int ilerp = 0, nlerp = src_frame->lerps.size(); ilerp < nlerp; ++ilerp) {
 				AnimLerp::SprData type = src_frame->lerps[ilerp].first;
-				ILerp* lerp = src_frame->lerps[ilerp].second->Clone();
-				dst_frame.lerps.push_back(std::make_pair(type, lerp));
+				std::unique_ptr<ILerp> lerp = src_frame->lerps[ilerp].second->Clone();
+				dst_frame.lerps.push_back(std::make_pair(type, std::move(lerp)));
 			}
 		}
 	}
@@ -86,7 +86,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 
 void AnimCopy::ConnectItems(const AnimSymbol& sym)
 {
-	const std::vector<AnimSymbol::Layer*>& layers 
+	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
@@ -94,7 +94,7 @@ void AnimCopy::ConnectItems(const AnimSymbol& sym)
 		if (layer.frames.size() <= 1) {
 			continue;
 		}
-		const AnimSymbol::Layer* src_layer = layers[ilayer];
+		const std::unique_ptr<AnimSymbol::Layer>& src_layer = layers[ilayer];
 		for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe - 1; ++iframe) 
 		{
 			if (!src_layer->frames[iframe]->tween) {
@@ -120,7 +120,7 @@ void AnimCopy::ConnectItems(const AnimSymbol& sym)
 
 void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 {
-	const std::vector<AnimSymbol::Layer*>& layers 
+	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
@@ -168,7 +168,7 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 
 void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 {
-	const std::vector<AnimSymbol::Layer*>& layers 
+	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
 		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
@@ -224,18 +224,6 @@ AnimCopy::Item::~Item()
 	if (spr) {
 		spr->RemoveReference();
 	}
-}
-
-/************************************************************************/
-/* struct AnimCopy::Frame                                               */
-/************************************************************************/
-
-AnimCopy::Frame::~Frame()
-{
-	for (int i = 0, n = lerps.size(); i < n; ++i) {
-		delete lerps[i].second;
-	}
-	lerps.clear();
 }
 
 }

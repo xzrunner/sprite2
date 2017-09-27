@@ -23,7 +23,7 @@ public:
 		std::vector<Sprite*> sprs;
 
 		bool tween;
-		std::vector<std::pair<AnimLerp::SprData, ILerp*> > lerps;
+		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 
 	public:
 		Frame() : index(0), tween(false) {}
@@ -35,11 +35,11 @@ public:
 	{
 	public:
 		std::string name;
-		std::vector<Frame*> frames;
+		std::vector<std::unique_ptr<Frame>> frames;
 
 	public:
-		Frame* GetCurrFrame(int index) const;
-		Frame* GetNextFrame(int index) const;
+		int GetCurrFrame(int index) const;
+		int GetNextFrame(int index) const;
 
 	}; // Layer
 
@@ -56,7 +56,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
 
-	const std::vector<Layer*>& GetLayers() const { return m_layers; }
+	const std::vector<std::unique_ptr<Layer>>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
 
 	void CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const;
@@ -70,7 +70,7 @@ public:
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/
-	void AddLayer(Layer* layer, int idx = -1);
+	void AddLayer(std::unique_ptr<Layer> layer, int idx = -1);
 	bool Clear();
 
 protected:
@@ -80,7 +80,7 @@ private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 protected:
-	std::vector<Layer*> m_layers;	// todo rm
+	std::vector<std::unique_ptr<Layer>> m_layers;
 
 	int m_fps;
 

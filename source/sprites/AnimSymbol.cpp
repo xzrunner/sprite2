@@ -50,16 +50,6 @@ AnimSymbol::~AnimSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
-
-	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		Layer* layer = m_layers[i];
-		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			Frame* frame = layer->frames[j];
-			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFunctor<Sprite>());
-			delete frame;
-		}
-		delete layer;
-	}
 }
 
 int AnimSymbol::Type() const 
@@ -70,9 +60,9 @@ int AnimSymbol::Type() const
 void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 {
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) {
-		Layer* layer = m_layers[ilayer];
+		const std::unique_ptr<Layer>& layer = m_layers[ilayer];
 		for (int iframe = 0, nframe = layer->frames.size(); iframe < nframe; ++iframe) {
-			Frame* frame = layer->frames[iframe];
+			const std::unique_ptr<Frame>& frame = layer->frames[iframe];
 			for (int ispr = 0, nspr = frame->sprs.size(); ispr < nspr; ++ispr) {
 				visitor.Visit(frame->sprs[ispr]);
 			}
@@ -113,7 +103,7 @@ int AnimSymbol::GetMaxFrameIdx() const
 {
 	int index = 0;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		AnimSymbol::Layer* layer = m_layers[i];
+		const std::unique_ptr<Layer>& layer = m_layers[i];
 		if (!layer->frames.empty()) {
 			index = std::max(index, layer->frames.back()->index);
 		}
@@ -125,12 +115,14 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 {
 	for (int i = 0, n = m_layers.size(); i < n; ++i)
 	{
-		Layer* layer = m_layers[i];
-		Frame *curr_f = layer->GetCurrFrame(frame),
-			  *next_f = layer->GetNextFrame(frame);
-		if (!curr_f)
+		const std::unique_ptr<Layer>& layer = m_layers[i];
+		int curr = layer->GetCurrFrame(frame);
+		int next = layer->GetNextFrame(frame);
+		if (curr < 0) {
 			continue;
-		if (!curr_f->tween || !next_f)
+		}
+		const std::unique_ptr<Frame>& curr_f = layer->frames[curr];
+		if (!curr_f->tween || next < 0)
 		{
 			for (int i = 0, n = curr_f->sprs.size(); i < n; ++i) {
 				Sprite* spr = VI_CLONE(Sprite, curr_f->sprs[i]);
@@ -139,8 +131,9 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 		}
 		else
 		{
+			const std::unique_ptr<Frame>& next_f = layer->frames[next];
 			assert(frame >= curr_f->index && frame < next_f->index);
-			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, frame - curr_f->index, 
+			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, frame - curr_f->index,
 				next_f->index - curr_f->index, curr_f->lerps);
 		}
 	}
@@ -163,12 +156,12 @@ void AnimSymbol::LoadCopy()
 	m_copy->LoadFromSym(*this);
 }
 
-void AnimSymbol::AddLayer(Layer* layer, int idx)
+void AnimSymbol::AddLayer(std::unique_ptr<Layer> layer, int idx)
 {
 	if (idx < 0) {
-		m_layers.push_back(layer);		
+		m_layers.push_back(std::move(layer));		
 	} else {
-		m_layers.insert(m_layers.begin() + idx, layer);
+		m_layers.insert(m_layers.begin() + idx, std::move(layer));
 	}
 
 	m_aabb.MakeEmpty();
@@ -177,15 +170,6 @@ void AnimSymbol::AddLayer(Layer* layer, int idx)
 bool AnimSymbol::Clear()
 {
 	bool dirty = false;
- 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
- 		Layer* layer = m_layers[i];
- 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
- 			Frame* frame = layer->frames[j];
-			for_each(frame->sprs.begin(), frame->sprs.end(), cu::RemoveRefFunctor<Sprite>());
-			delete frame;
- 		}
-		delete layer;
- 	}
 	m_layers.clear();
 	m_aabb.MakeEmpty();
 	return dirty;	
@@ -213,18 +197,18 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 	std::vector<Sprite*> children;
 	int num = 0;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		Layer* layer = m_layers[i];
+		const std::unique_ptr<Layer>& layer = m_layers[i];
 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			Frame* frame = layer->frames[j];
+			const std::unique_ptr<Frame>& frame = layer->frames[j];
 			num += frame->sprs.size();
 		}
 	}
 	children.reserve(num);
 	sm::rect aabb;
 	for (int i = 0, n = m_layers.size(); i < n; ++i) {
-		Layer* layer = m_layers[i];
+		const std::unique_ptr<Layer>& layer = m_layers[i];
 		for (int j = 0, m = layer->frames.size(); j < m; ++j) {
-			Frame* frame = layer->frames[j];
+			const std::unique_ptr<Frame>& frame = layer->frames[j];
 			for (int k = 0, l = frame->sprs.size(); k < l; ++k) {
 				children.push_back(frame->sprs[k]);			
 			}
@@ -239,55 +223,53 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 
 AnimSymbol::Frame::~Frame()
 {
-	for (int i = 0, n = lerps.size(); i < n; ++i) {
-		delete lerps[i].second;
-	}
+	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 /************************************************************************/
 /* class AnimSymbol::Layer                                              */
 /************************************************************************/
 
-AnimSymbol::Frame* AnimSymbol::Layer::GetCurrFrame(int index) const
+int AnimSymbol::Layer::GetCurrFrame(int index) const
 {
 	if (frames.empty()) {
-		return NULL;
+		return -1;
 	}
 
-	AnimSymbol::Frame *prev = NULL, *curr = NULL;
+	int prev = -1, curr = -1;
 	for (int i = 0, n = frames.size(); i < n; ++i)
 	{
-		AnimSymbol::Frame* frame = frames[i];
+		const std::unique_ptr<Frame>& frame = frames[i];
 		if (frame->index >= index) {
-			curr = frame;
+			curr = i;
 			break;
 		} else {
-			prev = frame;
+			prev = i;
 		}
 	}
 	
-	if (!curr) {
-		return NULL;
-	} else if (curr->index == index) {
+	if (curr < 0) {
+		return -1;
+	} else if (curr == index) {
 		return curr;
-	} else if (!prev) {
-		return NULL;
+	} else if (prev < 0) {
+		return -1;
 	} else {
-		assert(prev->index <= index);
+		assert(prev <= index);
 		return prev;
 	}
 }
 
-AnimSymbol::Frame* AnimSymbol::Layer::GetNextFrame(int index) const
+int AnimSymbol::Layer::GetNextFrame(int index) const
 {
 	for (int i = 0, n = frames.size(); i < n; ++i)
 	{
-		AnimSymbol::Frame* frame = frames[i];
+		const std::unique_ptr<Frame>& frame = frames[i];
 		if (frame->index > index) {
-			return frame;
+			return i;
 		}
 	}
-	return NULL;
+	return -1;
 }
 
 }

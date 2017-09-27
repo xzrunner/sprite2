@@ -2,12 +2,14 @@
 #define _SPRITE2_ANIM_LERP_H_
 
 #include <vector>
+#include <memory>
+
+#include "sprite2/ILerp.h"
 
 namespace s2
 {
 
 class Sprite;
-class ILerp;
 
 class AnimLerp
 {
@@ -21,15 +23,15 @@ public:
 
 public:
 	static void Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-		std::vector<Sprite*>& tween, int time, int tot_time, const std::vector<std::pair<SprData, ILerp*> >& lerps);
+		std::vector<Sprite*>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);
 
 	static void Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
-		const std::vector<std::pair<SprData, ILerp*> >& lerps);	
+		const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);	
 
 	static void LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time);	
 
 	static void LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
-		const std::vector<std::pair<SprData, ILerp*> >& lerps);
+		const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);
 
 	static bool IsMatched(const Sprite* s0, const Sprite* s1);
 

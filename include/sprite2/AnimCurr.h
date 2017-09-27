@@ -31,26 +31,30 @@ public:
 	AnimCurr();
 	AnimCurr(const AnimCurr& curr);
 	AnimCurr& operator = (const AnimCurr& curr);
-	virtual ~AnimCurr();
+	~AnimCurr();
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual AnimCurr* Clone() const;
+	AnimCurr* Clone() const;
 
-	virtual bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
+	bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
-	virtual bool SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
-	virtual void Start(const UpdateParams& up, const Sprite* spr);
-	virtual void OnMessage(const UpdateParams& up, const Sprite* spr, Message msg);
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
-	virtual Sprite* FetchChildByIdx(int idx) const;
-	virtual VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
-	virtual int GetSlotSize() const { return m_slots.size(); }
-	virtual RenderReturn Draw(const RenderParams& rp) const;
-	virtual void Clear();
-	virtual sm::rect CalcAABB(const Actor* actor) const;
+	bool SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
+
+	void Start(const UpdateParams& up, const Sprite* spr);
+
+	void OnMessage(const UpdateParams& up, const Sprite* spr, Message msg);
+
+	Sprite* FetchChildByName(int name, const Actor* actor) const;
+	Sprite* FetchChildByIdx(int idx) const;
+
+	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+
+	int GetSlotSize() const { return m_slots.size(); }
+
+	RenderReturn Draw(const RenderParams& rp) const;
+
+	void Clear();
+
+	sm::rect CalcAABB(const Actor* actor) const;
 
 	void SetAnimCopy(const AnimCopy* copy);
 

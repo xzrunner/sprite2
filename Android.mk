@@ -33,7 +33,7 @@ LOCAL_C_INCLUDES := \
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH) -name "*.cpp" -print)) \
 
-LOCAL_CPPFLAGS  := -std=c++11
+LOCAL_CPPFLAGS  := -std=c++1y
 
 LOCAL_STATIC_LIBRARIES := \
 	sm \

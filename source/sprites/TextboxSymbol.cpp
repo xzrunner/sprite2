@@ -17,6 +17,8 @@
 #include <shaderlab/FilterMode.h>
 #include <shaderlab/FilterShader.h>
 
+#include <assert.h>
+
 namespace s2
 {
 

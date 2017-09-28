@@ -1,0 +1,1208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="dataset">
+      <UniqueIdentifier>{4468e0ed-bd8f-4a11-a820-c007b7e42e18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\render">
+      <UniqueIdentifier>{c03c987b-c6e8-4296-9618-5cad2c24e46d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\render\filter">
+      <UniqueIdentifier>{125bab9d-6ff9-472e-8731-32b533047acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\render\filter\items">
+      <UniqueIdentifier>{509460e3-d60a-4921-b470-dc363004de13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\render\blend">
+      <UniqueIdentifier>{8c54ed5f-6de4-4a3a-b741-be634f620a29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\render\camera">
+      <UniqueIdentifier>{62ab1603-8300-4678-9baf-eeb103c88463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\primitive">
+      <UniqueIdentifier>{ab59db80-ff7b-426d-910d-7afed87f5365}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\resources">
+      <UniqueIdentifier>{3d6d4d0d-c2ea-47c4-a62a-284a3392d4f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\bound">
+      <UniqueIdentifier>{14d514ad-80ac-4f8f-aec4-cf618e241260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites">
+      <UniqueIdentifier>{ca72012d-43b0-4d97-a2e7-22c58811df4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\01.image">
+      <UniqueIdentifier>{de591786-c8a3-40d2-8e3b-bb11a51b3e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\06.complex">
+      <UniqueIdentifier>{e978e19b-d67e-46f1-b16f-e58fc87c4141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\00.anchor">
+      <UniqueIdentifier>{124de707-da6b-4826-b9f8-24d6579e2089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\07.anim">
+      <UniqueIdentifier>{bc1562f8-9734-49a9-9879-30eeaaed488d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\07.anim\lerp">
+      <UniqueIdentifier>{a0c871d7-a67f-4b75-b9ee-651569f2a993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\07.anim\lerp\types">
+      <UniqueIdentifier>{9d23bb76-3f07-4698-8875-29b3001f0b80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\07.anim\cache">
+      <UniqueIdentifier>{c6ae0b98-f08a-43cb-8465-19401234a513}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\08.particle3d">
+      <UniqueIdentifier>{a110f4e5-8f74-4944-b3fd-688ee7048183}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\08.particle3d\common">
+      <UniqueIdentifier>{53e91928-c634-4fac-b417-697de42a28e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\08.particle3d\wrap">
+      <UniqueIdentifier>{eb3af3be-7330-43d6-975d-65207979591b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\02.scale9">
+      <UniqueIdentifier>{dcc26060-eefc-4a1b-994a-178320b69b7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\09.particle2d">
+      <UniqueIdentifier>{f90661d7-e579-417d-9e5f-5aef861c47ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\05.textbox">
+      <UniqueIdentifier>{b82f3a36-337e-4795-88c4-d9b2b9cd9a18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\10.shape">
+      <UniqueIdentifier>{3f0cb3bc-b481-48d0-8bd4-7953833160e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\10.shape\shape">
+      <UniqueIdentifier>{b46eceda-803f-4e24-b05a-3b82af6ac9ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\10.shape\shape\base">
+      <UniqueIdentifier>{ec0cb83c-94e4-4a6d-a006-11d24fcffd06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\10.shape\shape\utility">
+      <UniqueIdentifier>{57c202eb-0d69-42f8-b519-e7f4bc19d404}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\10.shape\shape\polygon">
+      <UniqueIdentifier>{9e24d633-869d-483a-ba74-81c8ecef73d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\11.mesh">
+      <UniqueIdentifier>{d18ae08c-64d5-4190-b2e1-c7dda4e38b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\04.texture">
+      <UniqueIdentifier>{b3a993d2-b455-4e8f-99b9-469e5a8861c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\12.mask">
+      <UniqueIdentifier>{7b3a8c0b-0706-4b74-977d-ce55f8a818dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\13.trail">
+      <UniqueIdentifier>{724e12cc-f055-4d41-950e-5f897562d0e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\13.trail\wrap">
+      <UniqueIdentifier>{39bedd5b-3a6f-4403-a133-5a0c368cc2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\03.icon">
+      <UniqueIdentifier>{acb0c255-5bac-4bf4-8d71-ce4e41a004df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\03.icon\icon">
+      <UniqueIdentifier>{32fb056c-78a2-44fc-b845-8471506fd84c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\03.icon\icon\base">
+      <UniqueIdentifier>{d2f937a6-1433-4136-8b64-47d37090a9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\14.skeleton">
+      <UniqueIdentifier>{dce2fc0a-586e-4938-925d-b78a3d97c098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\07.anim2">
+      <UniqueIdentifier>{914b2791-2bf5-46c0-85be-daaf8fa95892}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite">
+      <UniqueIdentifier>{eafc6e39-a1e3-418a-9970-ba3426444e4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\visitor">
+      <UniqueIdentifier>{a64ede4c-6a93-4127-be3d-9c72dd5b15d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\visitor\actor">
+      <UniqueIdentifier>{e698a840-bc5d-45b3-844b-daa2a2b0ddc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\visitor\query">
+      <UniqueIdentifier>{361eb39c-30f7-40dd-b047-f3cc1a2f56fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\visitor\set">
+      <UniqueIdentifier>{16464de8-d701-4d30-a591-aa431d5cc779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\utility">
+      <UniqueIdentifier>{e141099e-8f98-445c-9631-f4366654743a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\component">
+      <UniqueIdentifier>{f11a2297-b218-4714-80c2-1febb613fa77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\symbol">
+      <UniqueIdentifier>{f3cee88b-fed3-43b6-b9a4-a6172ff05611}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\actor">
+      <UniqueIdentifier>{7a35f947-0185-4194-9229-e1c7b446bce2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\15.model">
+      <UniqueIdentifier>{d742afad-6bec-4e1a-b369-14a14af297c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\99.proxy">
+      <UniqueIdentifier>{bc05bde6-1fb4-4633-9ba8-ca330db66ba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\16.audio">
+      <UniqueIdentifier>{4e976978-c050-499b-be46-d9c351be1a8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{359100ca-fad0-41e5-adba-26bd1f5e520d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility\stat">
+      <UniqueIdentifier>{d55735e4-4c2d-4374-8ff2-9fd8bee9e92e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{1f1e47c1-9aa3-4425-bc4a-f2a7bf9996e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\draw">
+      <UniqueIdentifier>{43c7c48b-5e2e-404a-9da5-f4be9562b24c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\adapter">
+      <UniqueIdentifier>{c4dc6d17-efff-4edc-85c1-ca72fe9ff2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\rt">
+      <UniqueIdentifier>{85087e18-6ddd-4cc2-aab5-4919eb512650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\scissor">
+      <UniqueIdentifier>{08076aa0-257b-4ba0-bf45-b49e7f63fbf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\ctx">
+      <UniqueIdentifier>{a1e8545d-8533-4d2a-a233-b60399c093bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\camera">
+      <UniqueIdentifier>{05def23e-657e-4293-88b1-22e9eb13949c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp">
+      <Filter>dataset\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp">
+      <Filter>dataset\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp">
+      <Filter>dataset\render\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp">
+      <Filter>dataset\render\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\Package.cpp">
+      <Filter>dataset\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\S2_Texture.cpp">
+      <Filter>dataset\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp">
+      <Filter>sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TexcoordsMap.cpp">
+      <Filter>sprites</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ImageSprite.cpp">
+      <Filter>sprites\01.image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ImageSymbol.cpp">
+      <Filter>sprites\01.image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ComplexActor.cpp">
+      <Filter>sprites\06.complex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ComplexSprite.cpp">
+      <Filter>sprites\06.complex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ComplexSymbol.cpp">
+      <Filter>sprites\06.complex</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnchorActor.cpp">
+      <Filter>sprites\00.anchor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnchorSprite.cpp">
+      <Filter>sprites\00.anchor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnchorSymbol.cpp">
+      <Filter>sprites\00.anchor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimActor.cpp">
+      <Filter>sprites\07.anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Animation.cpp">
+      <Filter>sprites\07.anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimSprite.cpp">
+      <Filter>sprites\07.anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimSymbol.cpp">
+      <Filter>sprites\07.anim</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimLerp.cpp">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\LerpCircle.cpp">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\LerpEase.cpp">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\LerpSpiral.cpp">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\LerpWiggle.cpp">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimCopy.cpp">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimCtrl.cpp">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3dActor.cpp">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3dSprite.cpp">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3dSymbol.cpp">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3d.cpp">
+      <Filter>sprites\08.particle3d\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\P3dEmitterCfg.cpp">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3dBuffer.cpp">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3dEmitter.cpp">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Scale9.cpp">
+      <Filter>sprites\02.scale9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Scale9Actor.cpp">
+      <Filter>sprites\02.scale9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Scale9Sprite.cpp">
+      <Filter>sprites\02.scale9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Scale9Symbol.cpp">
+      <Filter>sprites\02.scale9</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle2d.cpp">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle2dSprite.cpp">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle2dSymbol.cpp">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TextboxActor.cpp">
+      <Filter>sprites\05.textbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TextboxSprite.cpp">
+      <Filter>sprites\05.textbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TextboxSymbol.cpp">
+      <Filter>sprites\05.textbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ShapeSprite.cpp">
+      <Filter>sprites\10.shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ShapeSymbol.cpp">
+      <Filter>sprites\10.shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\BezierShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CircleShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CosineShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\PointShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\PolygonShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\PolylineShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\RectShape.cpp">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ShapeVertices.cpp">
+      <Filter>sprites\10.shape\shape\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ColorPolygon.cpp">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Polygon.cpp">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TexturePolygon.cpp">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\MeshSprite.cpp">
+      <Filter>sprites\11.mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\MeshSymbol.cpp">
+      <Filter>sprites\11.mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\S2_Mesh.cpp">
+      <Filter>sprites\11.mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TextureSprite.cpp">
+      <Filter>sprites\04.texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TextureSymbol.cpp">
+      <Filter>sprites\04.texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\MaskActor.cpp">
+      <Filter>sprites\12.mask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\MaskSprite.cpp">
+      <Filter>sprites\12.mask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\MaskSymbol.cpp">
+      <Filter>sprites\12.mask</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Trail.cpp">
+      <Filter>sprites\13.trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TrailSprite.cpp">
+      <Filter>sprites\13.trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TrailSymbol.cpp">
+      <Filter>sprites\13.trail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TrailEmitter.cpp">
+      <Filter>sprites\13.trail\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\TrailEmitterCfg.cpp">
+      <Filter>sprites\13.trail\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\IconSprite.cpp">
+      <Filter>sprites\03.icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\IconSymbol.cpp">
+      <Filter>sprites\03.icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\DynamicRectIcon.cpp">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\DynamicSectorIcon.cpp">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StaticQuadIcon.cpp">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StaticRectIcon.cpp">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Icon.cpp">
+      <Filter>sprites\03.icon\icon\base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Joint.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\JointPose.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Skeleton.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SkeletonPose.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SkeletonSprite.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SkeletonSymbol.cpp">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Anim2Curr.cpp">
+      <Filter>sprites\07.anim2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Anim2Sprite.cpp">
+      <Filter>sprites\07.anim2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Anim2Symbol.cpp">
+      <Filter>sprites\07.anim2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Animation2.cpp">
+      <Filter>sprites\07.anim2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\S2_Sprite.cpp">
+      <Filter>sprites\sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
+      <Filter>sprites\sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SpriteVisitor.cpp">
+      <Filter>sprites\sprite\visitor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ClearActorsVisitor.cpp">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CreateActorsVisitor.cpp">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ResetActorFlagVisitor.cpp">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\PointQueryVisitor.cpp">
+      <Filter>sprites\sprite\visitor\query</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SetStaticFrameVisitor.cpp">
+      <Filter>sprites\sprite\visitor\set</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp">
+      <Filter>sprites\sprite\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprActors.cpp">
+      <Filter>sprites\sprite\component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprGeo.cpp">
+      <Filter>sprites\sprite\component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SprRender.cpp">
+      <Filter>sprites\sprite\component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\S2_Symbol.cpp">
+      <Filter>sprites\symbol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorGeo.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\S2_Actor.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ModelSprite.cpp">
+      <Filter>sprites\15.model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ModelSymbol.cpp">
+      <Filter>sprites\15.model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ProxyActor.cpp">
+      <Filter>sprites\99.proxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ProxyHelper.cpp">
+      <Filter>sprites\99.proxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ProxySprite.cpp">
+      <Filter>sprites\99.proxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ProxySymbol.cpp">
+      <Filter>sprites\99.proxy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AudioContext.cpp">
+      <Filter>sprites\16.audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AudioSprite.cpp">
+      <Filter>sprites\16.audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AudioSymbol.cpp">
+      <Filter>sprites\16.audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\Blackboard.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\StatImages.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StatPingPong.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StatSprCount.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StatSymCount.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\StatSymDraw.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\StatTopNodes.cpp">
+      <Filter>utility\stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawBlend.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\DrawDownsample.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawMask.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawMesh.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawNode.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawPingPong.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\S2_RVG.cpp">
+      <Filter>render\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\S2_RenderTarget.cpp">
+      <Filter>render\rt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\S2_RenderTargetMgr.cpp">
+      <Filter>render\rt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderScissor.cpp">
+      <Filter>render\scissor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderScreen.cpp">
+      <Filter>render\scissor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp">
+      <Filter>render\ctx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\S2_RenderContext.cpp">
+      <Filter>render\ctx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\CameraMgr.cpp">
+      <Filter>render\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\OrthoCamera.cpp">
+      <Filter>render\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\Pseudo3DCamera.cpp">
+      <Filter>render\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimCurr.cpp">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\sprite2\RenderColor.h">
+      <Filter>dataset\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
+      <Filter>dataset\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderShader.h">
+      <Filter>dataset\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\FilterFactory.h">
+      <Filter>dataset\render\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\FilterMode.h">
+      <Filter>dataset\render\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h">
+      <Filter>dataset\render\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFBlur.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFBurningMap.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFColGrading.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFEdgeDetection.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFGaussianBlur.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFGray.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFHeatHaze.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFNull.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFOuterGlow.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFOutline.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFRelief.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFShockWave.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h">
+      <Filter>dataset\render\filter\items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\BlendMode.h">
+      <Filter>dataset\render\blend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\FastBlendMode.h">
+      <Filter>dataset\render\blend</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CameraMode.h">
+      <Filter>dataset\render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h">
+      <Filter>dataset\render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Color.h">
+      <Filter>dataset\primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Matrix.h">
+      <Filter>dataset\primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Package.h">
+      <Filter>dataset\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Texture.h">
+      <Filter>dataset\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AABB.h">
+      <Filter>dataset\bound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\BoundingBox.h">
+      <Filter>dataset\bound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\OBB.h">
+      <Filter>dataset\bound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprTimer.h">
+      <Filter>sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TexcoordsMap.h">
+      <Filter>sprites</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ImageSprite.h">
+      <Filter>sprites\01.image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ImageSymbol.h">
+      <Filter>sprites\01.image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h">
+      <Filter>sprites\06.complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ComplexSprite.h">
+      <Filter>sprites\06.complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ComplexSymbol.h">
+      <Filter>sprites\06.complex</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnchorActor.h">
+      <Filter>sprites\00.anchor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnchorSprite.h">
+      <Filter>sprites\00.anchor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnchorSymbol.h">
+      <Filter>sprites\00.anchor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimActor.h">
+      <Filter>sprites\07.anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Animation.h">
+      <Filter>sprites\07.anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimSprite.h">
+      <Filter>sprites\07.anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimSymbol.h">
+      <Filter>sprites\07.anim</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimLerp.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ILerp.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpType.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpCircle.h">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpEase.h">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpSpiral.h">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpWiggle.h">
+      <Filter>sprites\07.anim\lerp\types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimCopy.h">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimCtrl.h">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3dActor.h">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3dSprite.h">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3dSymbol.h">
+      <Filter>sprites\08.particle3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\P3dRenderParams.h">
+      <Filter>sprites\08.particle3d\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3d.h">
+      <Filter>sprites\08.particle3d\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\P3dEmitterCfg.h">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3dBuffer.h">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3dEmitter.h">
+      <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Scale9.h">
+      <Filter>sprites\02.scale9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Scale9Actor.h">
+      <Filter>sprites\02.scale9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Scale9Sprite.h">
+      <Filter>sprites\02.scale9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Scale9Symbol.h">
+      <Filter>sprites\02.scale9</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle2d.h">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle2dSprite.h">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle2dSymbol.h">
+      <Filter>sprites\09.particle2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Textbox.h">
+      <Filter>sprites\05.textbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextboxActor.h">
+      <Filter>sprites\05.textbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextboxSprite.h">
+      <Filter>sprites\05.textbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextboxSymbol.h">
+      <Filter>sprites\05.textbox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ShapeSprite.h">
+      <Filter>sprites\10.shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ShapeSymbol.h">
+      <Filter>sprites\10.shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\BezierShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CircleShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CosineShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\PointShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\PolygonShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\PolylineShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RectShape.h">
+      <Filter>sprites\10.shape\shape</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Shape.h">
+      <Filter>sprites\10.shape\shape\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ShapeConfig.h">
+      <Filter>sprites\10.shape\shape\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ShapeType.h">
+      <Filter>sprites\10.shape\shape\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ShapeVertices.h">
+      <Filter>sprites\10.shape\shape\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Polygon.h">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\PolyType.h">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TexturePolygon.h">
+      <Filter>sprites\10.shape\shape\polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\MeshSprite.h">
+      <Filter>sprites\11.mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\MeshSymbol.h">
+      <Filter>sprites\11.mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Mesh.h">
+      <Filter>sprites\11.mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextureSprite.h">
+      <Filter>sprites\04.texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextureSymbol.h">
+      <Filter>sprites\04.texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\MaskActor.h">
+      <Filter>sprites\12.mask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\MaskSprite.h">
+      <Filter>sprites\12.mask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\MaskSymbol.h">
+      <Filter>sprites\12.mask</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Trail.h">
+      <Filter>sprites\13.trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TrailSprite.h">
+      <Filter>sprites\13.trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TrailSymbol.h">
+      <Filter>sprites\13.trail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TrailEmitter.h">
+      <Filter>sprites\13.trail\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TrailEmitterCfg.h">
+      <Filter>sprites\13.trail\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\IconSprite.h">
+      <Filter>sprites\03.icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\IconSymbol.h">
+      <Filter>sprites\03.icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DynamicRectIcon.h">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DynamicSectorIcon.h">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StaticQuadIcon.h">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StaticRectIcon.h">
+      <Filter>sprites\03.icon\icon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Icon.h">
+      <Filter>sprites\03.icon\icon\base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Joint.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\JointPose.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Skeleton.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SkeletonPose.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SkeletonSprite.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SkeletonSymbol.h">
+      <Filter>sprites\14.skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Anim2Curr.h">
+      <Filter>sprites\07.anim2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Anim2Sprite.h">
+      <Filter>sprites\07.anim2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Anim2Symbol.h">
+      <Filter>sprites\07.anim2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Animation2.h">
+      <Filter>sprites\07.anim2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Sprite.h">
+      <Filter>sprites\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
+      <Filter>sprites\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\VisitResult.h">
+      <Filter>sprites\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h">
+      <Filter>sprites\sprite\visitor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ClearActorsVisitor.h">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CreateActorsVisitor.h">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ResetActorFlagVisitor.h">
+      <Filter>sprites\sprite\visitor\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\PointQueryVisitor.h">
+      <Filter>sprites\sprite\visitor\query</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SetStaticFrameVisitor.h">
+      <Filter>sprites\sprite\visitor\set</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h">
+      <Filter>sprites\sprite\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Message.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprGeo.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprRender.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Symbol.h">
+      <Filter>sprites\symbol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SymType.h">
+      <Filter>sprites\symbol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorGeo.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_Actor.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h">
+      <Filter>sprites\15.model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h">
+      <Filter>sprites\15.model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ProxyActor.h">
+      <Filter>sprites\99.proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ProxyHelper.h">
+      <Filter>sprites\99.proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ProxySprite.h">
+      <Filter>sprites\99.proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ProxySymbol.h">
+      <Filter>sprites\99.proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AudioContext.h">
+      <Filter>sprites\16.audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AudioSprite.h">
+      <Filter>sprites\16.audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AudioSymbol.h">
+      <Filter>sprites\16.audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Blackboard.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ObjectPool2.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\pre_defined.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\s2_config.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatImages.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatOverdraw.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatPingPong.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatSprCount.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatSymCount.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatSymDraw.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatSymType.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\StatTopNodes.h">
+      <Filter>utility\stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawBlend.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawDownsample.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawGaussianBlur.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawMask.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawNode.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawOuterGlow.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawPingPong.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_RVG.h">
+      <Filter>render\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTarget.h">
+      <Filter>render\rt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTargetMgr.h">
+      <Filter>render\rt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h">
+      <Filter>render\scissor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h">
+      <Filter>render\scissor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h">
+      <Filter>render\ctx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\S2_RenderContext.h">
+      <Filter>render\ctx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Camera.h">
+      <Filter>render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CameraMgr.h">
+      <Filter>render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CameraType.h">
+      <Filter>render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\OrthoCamera.h">
+      <Filter>render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h">
+      <Filter>render\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimCurr.h">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\sprite2\RenderParams.inl">
+      <Filter>dataset\render</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\Color.inl">
+      <Filter>dataset\primitive</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\Matrix.inl">
+      <Filter>dataset\primitive</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\AABB.inl">
+      <Filter>dataset\bound</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\OBB.inl">
+      <Filter>dataset\bound</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\SprActors.inl">
+      <Filter>sprites\sprite\component</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\ObjectPool.inl">
+      <Filter>utility</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\ObjectPool2.inl">
+      <Filter>utility</Filter>
+    </None>
+  </ItemGroup>
+</Project>

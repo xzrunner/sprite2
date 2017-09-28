@@ -1,6 +1,7 @@
 #ifndef _SPRITE2_UPDATE_PARAMS_H_
 #define _SPRITE2_UPDATE_PARAMS_H_
 
+#include "sprite2/pre_defined.h"
 #include S2_MAT_HEADER
 
 #include "FilterMode.h"

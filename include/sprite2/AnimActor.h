@@ -2,21 +2,22 @@
 #define _SPRITE2_ANIM_ACTOR_H_
 
 #include "S2_Actor.h"
+#include "sprite2/AnimState.h"
+#include "sprite2/AnimCurr.h"
 
 namespace s2
 {
-
-class AnimCurr;
 
 class AnimActor : public Actor
 {
 public:
 	AnimActor(const Sprite* spr, const Actor* parent);
 
-	const std::unique_ptr<AnimCurr>& GetCurr() const { return m_curr; }
+	AnimState& GetState() { return m_state; }
+	const AnimState& GetState() const { return m_state; }
 
 private:
-	std::unique_ptr<AnimCurr> m_curr;
+	AnimState m_state;
 
 }; // AnimActor
 

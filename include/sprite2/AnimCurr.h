@@ -34,6 +34,8 @@ public:
 
 	std::unique_ptr<AnimCurr> Clone() const;
 
+	void AssignSameStruct(const AnimCurr& src);
+
 	bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
 	bool SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);

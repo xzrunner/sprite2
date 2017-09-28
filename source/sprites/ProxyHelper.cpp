@@ -1464,7 +1464,7 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(actor->GetSpr());
-		const AnimCurr& curr = anim->GetAnimCurr(actor);
+		const AnimCurr& curr = anim->GetOriginCurr(actor);
 		count = curr.GetSlotSize();
 		return true;
 	}

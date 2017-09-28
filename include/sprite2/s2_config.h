@@ -21,3 +21,5 @@
 #ifndef _WIN32
 #define SPR_ACTORS_HASH
 #endif // _WIN32
+
+//#define S2_MULTITHREAD

@@ -92,7 +92,7 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 #endif // S2_DISABLE_STATISTICS
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
 		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
-		const AnimCurr& curr = anim->GetAnimCurr(rp.actor);
+		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
 		ret = curr.Draw(*rp_child);
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
@@ -189,7 +189,7 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 {
 	if (actor) {
 		const AnimActor* anim_actor = static_cast<const AnimActor*>(actor);
-		return anim_actor->GetCurr()->CalcAABB(actor);
+		return anim_actor->GetState().GetOrigin().CalcAABB(actor);
 	}
 
 	std::vector<Sprite*> children;

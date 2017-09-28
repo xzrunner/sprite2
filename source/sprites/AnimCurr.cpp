@@ -74,8 +74,34 @@ std::unique_ptr<AnimCurr> AnimCurr::Clone() const
 	return std::make_unique<AnimCurr>(*this);
 }
 
+void AnimCurr::AssignSameStruct(const AnimCurr& src)
+{
+	assert(m_copy == src.m_copy);
+
+	m_ctrl = src.m_ctrl;
+	m_layer_cursor = src.m_layer_cursor;
+	m_layer_cursor_update = src.m_layer_cursor_update;
+
+	assert(m_slots.size() == src.m_slots.size());
+	if (!m_slots.empty())
+	{
+		Sprite*const* s = &src.m_slots[0];
+		Sprite** d = &m_slots[0];
+		SprSRT srt;
+		for (int i = 0, n = m_slots.size(); i < n; ++i, ++s, ++d) {
+			(*s)->GetLocalSRT(srt);
+			(*d)->SetLocalSRT(srt);
+			(*d)->SetColor((*s)->GetColor());
+		}
+	}
+
+	assert(m_curr && src.m_curr);
+	memcpy(m_curr, src.m_curr, sizeof(int) * m_copy->m_max_item_num);
+	m_curr_num = src.m_curr_num;
+}
+
 bool AnimCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr, 
-						  bool loop, float interval, int fps)
+	                  bool loop, float interval, int fps)
 {
 	if (!m_ctrl.IsActive()) {
 		return UpdateChildren(up, spr);

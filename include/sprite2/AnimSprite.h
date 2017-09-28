@@ -2,13 +2,13 @@
 #define _SPRITE2_ANIM_SPRITE_H_
 
 #include "S2_Sprite.h"
+#include "sprite2/AnimState.h"
+#include "sprite2/AnimCurr.h"
 
 #include <vector>
 
 namespace s2
 {
-
-class AnimCurr;
 
 class AnimSprite : public VIRTUAL_INHERITANCE Sprite
 {
@@ -37,7 +37,13 @@ public:
 	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	AnimCurr& GetAnimCurr(const Actor* actor) const;
+	AnimCurr& GetOriginCurr(const Actor* actor);
+	AnimCurr& GetUpdateCurr(const Actor* actor);
+	AnimCurr& GetDrawCurr(const Actor* actor);
+
+	const AnimCurr& GetOriginCurr(const Actor* actor) const;
+	const AnimCurr& GetUpdateCurr(const Actor* actor) const;
+	const AnimCurr& GetDrawCurr(const Actor* actor) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -62,7 +68,7 @@ protected:
 
 	bool m_start_random;
 
-	std::unique_ptr<AnimCurr> m_curr;
+	AnimState m_state;
 
 	VI_DUMMY_FUNC
 

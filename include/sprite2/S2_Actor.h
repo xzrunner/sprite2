@@ -61,7 +61,8 @@ public:
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
-
+	
+#ifndef S2_DISABLE_FLATTEN
 	void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);
 	bool SetFlattenDirty();
 	bool BuildFlatten();
@@ -69,6 +70,7 @@ public:
 	void FlattenUpdate(bool force);
 	void FlattenDraw(const s2::RenderParams& rp) const;
 	void FlattenSetFrame(int frame);
+#endif // S2_DISABLE_FLATTEN
 
 	void BuildDisplayList();
 	void SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist);
@@ -83,7 +85,9 @@ private:
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
 	static const uint32_t FLAG_AABB_TIGHT     = 0x00000004;
 
+#ifndef S2_DISABLE_FLATTEN
 	static const uint32_t FLAG_FLATTEN_DIRTY  = 0x00000008;
+#endif // S2_DISABLE_FLATTEN
 
 	static const uint32_t FLAG_COLOR_DIRTY    = 0x00000010;
 
@@ -94,7 +98,9 @@ public:
 
 	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
 	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
+#ifndef S2_DISABLE_FLATTEN
 	S2_FLAG_METHOD(FlattenDirty, FLAG_FLATTEN_DIRTY)
+#endif // S2_DISABLE_FLATTEN
 	S2_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
 private:
@@ -113,7 +119,9 @@ private:
 	SprRender*        m_render;
 	mutable uint32_t  m_flags;
 
+#ifndef S2_DISABLE_FLATTEN
 	Flatten           m_flatten;
+#endif // S2_DISABLE_FLATTEN
 
 	mutable std::shared_ptr<cooking::DisplayList> m_dlist = nullptr;
 

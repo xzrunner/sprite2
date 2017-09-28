@@ -3,10 +3,14 @@
 
 #include "sprite2/RenderParams.h"
 
+#ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
+#endif // S2_DISABLE_FLATTEN
 
 namespace s2
 {
+
+#ifndef S2_DISABLE_FLATTEN
 
 inline
 void Actor::SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos)
@@ -71,6 +75,8 @@ void Actor::FlattenSetFrame(int frame)
 		m_flatten.list->SetFrame(m_flatten.pos, false, frame, m_dlist);
 	}
 }
+
+#endif // S2_DISABLE_FLATTEN
 
 inline
 void Actor::SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist)

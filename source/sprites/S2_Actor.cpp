@@ -8,7 +8,10 @@
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
 
+#ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
+#endif // S2_DISABLE_FLATTEN
+#include <cooking/DisplayList.h>
 
 namespace s2
 {

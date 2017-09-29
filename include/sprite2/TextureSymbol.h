@@ -25,7 +25,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
 	const std::vector<PolygonShape*>& GetPolygons() const { return m_polygons; }
 	std::vector<PolygonShape*>& GetPolygons() { return m_polygons; }

@@ -21,7 +21,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const { return RENDER_NO_DATA; }
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const { return RENDER_NO_DATA; }
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
 
 	void SetSource(ua::Source* src);
 	ua::Source* GetSource() { return m_source; }

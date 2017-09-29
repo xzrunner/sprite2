@@ -24,7 +24,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
 	void SetEmitterCfg(const P3dEmitterCfg* cfg);
@@ -42,6 +43,8 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
 
 private:
+	RenderReturn DrawImpl(const RenderParams& rp, const Sprite* spr) const;
+
 	RenderReturn DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
 	RenderReturn DrawEmitter(const RenderParams& rp, const Sprite* spr, 
 		const Particle3dEmitter* et) const;

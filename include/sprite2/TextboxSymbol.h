@@ -30,8 +30,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const;
-	virtual bool DrawFlatten(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }

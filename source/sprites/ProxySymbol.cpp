@@ -40,7 +40,7 @@ int ProxySymbol::Type() const
 	return SYM_PROXY;
 }
 
-RenderReturn ProxySymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_items.size(); i < n; ++i) {

@@ -67,7 +67,7 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -145,6 +145,11 @@ RenderReturn ComplexSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
+}
+
+RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	return RENDER_SKIP;
 }
 
 bool ComplexSymbol::Update(const UpdateParams& up, float time)

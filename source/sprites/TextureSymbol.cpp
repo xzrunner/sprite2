@@ -44,7 +44,7 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
@@ -73,6 +73,21 @@ RenderReturn TextureSymbol::Draw(const RenderParams& rp, const Sprite* spr) cons
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
+}
+
+RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+	shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
+
+	// todo shape's draw return
+	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
+		m_polygons[i]->Draw(rp);
+	}
+
+	return RENDER_OK;
 }
 
 void TextureSymbol::AddPolygon(PolygonShape* poly)

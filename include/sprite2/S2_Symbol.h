@@ -12,6 +12,7 @@
 #include <stddef.h>
 
 namespace cooking { class DisplayList; }
+namespace ft { class FTList; }
 
 namespace s2
 {
@@ -30,8 +31,8 @@ public:
 	virtual ~Symbol();
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
-	virtual RenderReturn Draw(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
-	virtual bool DrawFlatten(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = NULL) const { return false; }
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const = 0;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const = 0;
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 
 	int GetID() const { return m_id; }

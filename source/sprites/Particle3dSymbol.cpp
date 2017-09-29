@@ -70,7 +70,7 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -82,47 +82,12 @@ RenderReturn Particle3dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 //	StatSymDraw::DrawCostCP cp2(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
 
-	if (rp.IsDisableParticle3d()) {
-		return RENDER_SKIP;
-	}
+	return DrawImpl(rp, spr);
+}
 
-	if (!IsVisible(rp, spr)) {
-		return RENDER_INVISIBLE;
-	}
-
-	Particle3dSprite::ReuseType reuse;
-	if (spr) {
-		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-		reuse = p3d_spr->GetReuse();
-	} else {
-		reuse = Particle3dSprite::REUSE_ALL;
-	}
-	RenderReturn ret = RENDER_OK;
-	switch (reuse)
-	{
-	case Particle3dSprite::REUSE_ALL:
-		ret = DrawSymbol(rp, spr);
-		break;
-	case Particle3dSprite::REUSE_COMMON:
-		{
-			const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-			ret = DrawEmitter(rp, spr, p3d_spr->GetEmitter());
-		}
-		break;
-	case Particle3dSprite::REUSE_NONE:
-		{
-			if (rp.actor) {
-				const Particle3dActor* actor = static_cast<const Particle3dActor*>(rp.actor);
-				ret = DrawEmitter(rp, spr, actor->GetEmitter());
-			} else {
-				ret = RENDER_NO_DATA;
-			}
-		}
-		break;
-	default:
-		break;
-	}
-	return ret;
+RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	return DrawImpl(rp, spr);
 }
 
 bool Particle3dSymbol::Update(const UpdateParams& up, float time)
@@ -176,6 +141,53 @@ void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg)
 sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty
+}
+
+RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* spr) const
+{
+	if (rp.IsDisableParticle3d()) {
+		return RENDER_SKIP;
+	}
+
+	if (!IsVisible(rp, spr)) {
+		return RENDER_INVISIBLE;
+	}
+
+	Particle3dSprite::ReuseType reuse;
+	if (spr) {
+		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		reuse = p3d_spr->GetReuse();
+	}
+	else {
+		reuse = Particle3dSprite::REUSE_ALL;
+	}
+	RenderReturn ret = RENDER_OK;
+	switch (reuse)
+	{
+	case Particle3dSprite::REUSE_ALL:
+		ret = DrawSymbol(rp, spr);
+		break;
+	case Particle3dSprite::REUSE_COMMON:
+	{
+		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		ret = DrawEmitter(rp, spr, p3d_spr->GetEmitter());
+	}
+	break;
+	case Particle3dSprite::REUSE_NONE:
+	{
+		if (rp.actor) {
+			const Particle3dActor* actor = static_cast<const Particle3dActor*>(rp.actor);
+			ret = DrawEmitter(rp, spr, actor->GetEmitter());
+		}
+		else {
+			ret = RENDER_NO_DATA;
+		}
+	}
+	break;
+	default:
+		break;
+	}
+	return ret;
 }
 
 RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const

@@ -164,7 +164,7 @@ RenderReturn DrawNode::Draw(const Symbol* sym, const RenderParams& rp,
  		}
  	}
  
- 	RenderReturn ret = sym->Draw(*rp_child);
+ 	RenderReturn ret = sym->DrawTree(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 
@@ -205,7 +205,7 @@ RenderReturn DrawNode::Draw(const Symbol* sym, const RenderParams& rp, const S2_
 		}
 	}
 
-	RenderReturn ret = sym->Draw(*rp_child);
+	RenderReturn ret = sym->DrawTree(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 
@@ -585,7 +585,7 @@ RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& r
 	if (fabs(ds - 1) > FLT_EPSILON) {
 		DrawDownsample::Draw(spr, rp, ds);
 	} else {
-		ret = spr->GetSymbol()->Draw(rp, spr);
+		ret = spr->GetSymbol()->DrawTree(rp, spr);
 	}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);

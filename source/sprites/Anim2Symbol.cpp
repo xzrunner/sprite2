@@ -64,7 +64,7 @@ int Anim2Symbol::Type() const
 	return SYM_ANIM2;
 }
 
-RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
@@ -88,6 +88,20 @@ RenderReturn Anim2Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
+
+	return RENDER_OK;
+}
+
+RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	if (!m_anim || !spr) {
+		return RENDER_NO_DATA;
+	}
+
+	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
+	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
+	// todo return rg's render ret
+	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp);
 
 	return RENDER_OK;
 }

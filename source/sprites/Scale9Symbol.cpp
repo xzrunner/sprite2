@@ -54,7 +54,7 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SCALE9);
@@ -84,6 +84,11 @@ RenderReturn Scale9Symbol::Draw(const RenderParams& rp, const Sprite* spr) const
 		ret = m_s9.Draw(rp);
 	}
 	return ret;
+}
+
+RenderReturn Scale9Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	return RENDER_SKIP;
 }
 
 void Scale9Symbol::Resize(float width, float height)

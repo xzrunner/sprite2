@@ -17,7 +17,7 @@ int AnchorSymbol::Type() const
 	return SYM_ANCHOR; 
 }
 
-RenderReturn AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 	assert(spr);
 	const Actor* anchor = VI_DOWNCASTING<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
@@ -42,6 +42,11 @@ RenderReturn AnchorSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
+}
+
+RenderReturn AnchorSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	return RENDER_SKIP;
 }
 
 sm::rect AnchorSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

@@ -48,7 +48,7 @@ int Particle2dSymbol::Type() const
 	return SYM_PARTICLE2D; 
 }
 
-RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle2dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE2D);
@@ -79,6 +79,23 @@ RenderReturn Particle2dSymbol::Draw(const RenderParams& rp, const Sprite* spr) c
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
+}
+
+RenderReturn Particle2dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	if (!spr) {
+		return RENDER_NO_DATA;
+	}
+
+	const Particle2dSprite* p2d_spr = VI_DOWNCASTING<const Particle2dSprite*>(spr);
+	p2d_spr->SetMatrix(rp.mt);
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+	shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
+
+	return p2d_spr->Draw(rp);
 }
 
 sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

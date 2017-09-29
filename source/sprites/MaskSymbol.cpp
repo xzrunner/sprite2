@@ -3,6 +3,7 @@
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawMask.h"
+#include "DrawMaskFT.h"
 #include "DrawNode.h"
 #include "BoundingBox.h"
 #include "SymbolVisitor.h"
@@ -10,6 +11,8 @@
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
+
+#include <flatten/FTNode.h>
 
 namespace s2
 {
@@ -62,7 +65,7 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
@@ -90,6 +93,24 @@ RenderReturn MaskSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
+}
+
+RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, 
+	                              ft::FTList& ft, int pos) const
+{
+	if (m_base && m_mask)
+	{
+		int n_tot = ft.GetNode(pos)->GetCount();
+		int n_base = ft.GetNode(pos + 1)->GetCount();
+		int n_mask = ft.GetNode(pos + 1 + n_base)->GetCount();
+		assert(n_tot - 1 == n_base + n_mask);
+		DrawMaskFT::Draw(ft, pos + 1, pos + 1 + n_base, rp);
+	}
+	else if (m_base || m_mask)
+	{
+		ft.DrawForward(pos + 1, rp);
+	}
+	return RENDER_OK;
 }
 
 void MaskSymbol::SetBase(Sprite* base)

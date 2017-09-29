@@ -66,7 +66,7 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	rp_child->ClearViewRegion();
 
 	spr->SetMatDisable(true);
-	spr->GetSymbol()->Draw(*rp_child, spr);
+	spr->GetSymbol()->DrawTree(*rp_child, spr);
 	spr->SetMatDisable(false);
 
 	RenderParamsPool::Instance()->Push(rp_child); 

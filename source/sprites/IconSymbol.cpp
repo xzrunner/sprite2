@@ -48,7 +48,7 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
@@ -80,6 +80,24 @@ RenderReturn IconSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
+}
+
+RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	if (!m_icon) {
+		return RENDER_NO_DATA;
+	}
+
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+	shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
+
+	float process = 1;
+	if (spr) {
+		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
+	}
+	return m_icon->Draw(rp, process);
 }
 
 void IconSymbol::SetIcon(Icon* icon)

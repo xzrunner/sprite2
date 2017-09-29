@@ -45,7 +45,7 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
@@ -68,6 +68,17 @@ RenderReturn ShapeSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
+}
+
+RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	if (!m_shape || !spr) {
+		return RENDER_NO_DATA;
+	}
+
+	m_shape->Draw(rp);
+
+	return RENDER_OK;
 }
 
 void ShapeSymbol::SetShape(Shape* shape)

@@ -52,7 +52,7 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
@@ -99,6 +99,27 @@ RenderReturn MeshSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 
+	return ret;
+}
+
+RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	if (!m_mesh) {
+		return RENDER_NO_DATA;
+	}
+
+	const MeshSprite* mesh_spr = VI_DOWNCASTING<const MeshSprite*>(spr);
+	if (mesh_spr) {
+		const pm::MeshTransform& mtrans = mesh_spr->GetMeshTrans();
+		m_mesh->LoadFromTransform(mtrans);
+	}
+
+	RenderReturn ret = RENDER_OK;
+	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
+		ret = DrawMesh::DrawInfoXY(m_mesh, &rp.mt);
+	} else {
+		ret = DrawMesh::DrawTexture(m_mesh, rp, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+	}
 	return ret;
 }
 

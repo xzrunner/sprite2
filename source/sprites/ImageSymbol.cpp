@@ -66,7 +66,7 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
@@ -119,21 +119,23 @@ RenderReturn ImageSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	return RENDER_OK;
 }
 
-bool ImageSymbol::DrawFlatten(cooking::DisplayList* dlist,
-	                          const RenderParams& rp, 
-	                          const Sprite* spr) const
+RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
+	                               const RenderParams& rp, 
+	                               const Sprite* spr,
+	                               ft::FTList& ft, 
+	                               int pos) const
 {
 //#ifndef S2_DISABLE_STATISTICS
 //	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
 //#endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {
-		return true;
+		return RENDER_ON_LOADING;
 	}
 
 	float vertices[8];
 	if (!CalcVertices(rp, vertices)) {
-		return true;
+		return RENDER_OUTSIDE;
 	}
 
 	float texcoords[8];
@@ -166,7 +168,7 @@ bool ImageSymbol::DrawFlatten(cooking::DisplayList* dlist,
 		//}
 	}
 
-	return true;
+	return RENDER_OK;
 }
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const

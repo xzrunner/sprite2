@@ -47,7 +47,7 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-RenderReturn SkeletonSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);

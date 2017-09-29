@@ -70,7 +70,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {	
 	if (!spr) {
 		return RENDER_NO_DATA;
@@ -97,6 +97,11 @@ RenderReturn AnimSymbol::Draw(const RenderParams& rp, const Sprite* spr) const
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
+}
+
+RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+{
+	return RENDER_SKIP;
 }
 
 int AnimSymbol::GetMaxFrameIdx() const

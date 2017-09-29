@@ -20,26 +20,11 @@ void Actor::SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos)
 }
 
 inline
-bool Actor::SetFlattenDirty()
+void Actor::CreateFlatten()
 {
-	if (m_flatten.list) {
-		m_flatten.list->SetDirty();
-		return true;
-	} else {
-		return false;
-	}
-}
-
-inline
-bool Actor::BuildFlatten()
-{
-	if (!m_flatten.list || IsFlattenDirty()) {
-		m_flatten.list = std::make_shared<ft::FTList>(this);
-		m_flatten.pos = 0;
-		return true;
-	} else {
-		return false;
-	}
+	assert(!m_flatten.list);
+	m_flatten.list = std::make_shared<ft::FTList>(this);
+	m_flatten.pos = 0;
 }
 
 inline

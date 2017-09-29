@@ -243,8 +243,14 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	if (!s2_actor->HasFlatten()) {
-		return s2_spr_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax, flag, min_edge);
+		const_cast<Actor*>(s2_actor)->BuildFlatten();
 	}
+	assert(s2_actor->HasFlatten());
+
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	return s2_spr_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax, flag, min_edge);
+	//}
 
 	s2::RenderParams* rp = s2::RenderParamsPool::Instance()->Pop();
 	rp->Reset();
@@ -657,15 +663,13 @@ bool s2_actor_has_ft(const void* actor) {
 extern "C"
 void s2_actor_build_ft(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	s2_actor->BuildFlatten();
+	s2_actor->CreateFlatten();
 }
 
 extern "C"
 void s2_actor_set_ft_dirty(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	while (s2_actor && !s2_actor->SetFlattenDirty()) {
-		s2_actor = const_cast<Actor*>(s2_actor->GetParent());
-	}
+	s2_actor->SetFlattenDirty();
 }
 
 extern "C"
@@ -716,8 +720,14 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 	                  float xmin, float ymin, float xmax, float ymax) {
 	const Actor* s2_actor = static_cast<const Actor*>(actor);
 	if (!s2_actor->HasFlatten()) {
-		return s2_actor_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax);
+		const_cast<Actor*>(s2_actor)->BuildFlatten();
 	}
+	assert(s2_actor->HasFlatten());
+
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	return s2_actor_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax);
+	//}
 
 	RenderParams rp;
 	rp.SetViewRegion(xmin, ymin, xmax, ymax);
@@ -748,6 +758,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 
 	rp.actor = s2_actor;
 	rp.mt = mt * rp.mt;
+
 	s2_actor->FlattenDraw(rp);
 
 	RenderParamsPool::Instance()->Push(rp_child);
@@ -789,11 +800,17 @@ void s2_actor_update(void* actor, bool force) {
 extern "C"
 void  s2_actor_update_ft(void* actor, bool force) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->HasFlatten()) {
-		s2_actor->FlattenUpdate(force);
-	} else {
-		s2_actor_update(actor, force);
+	if (!s2_actor->HasFlatten()) {
+		s2_actor->BuildFlatten();
 	}
+	assert(s2_actor->HasFlatten());
+
+	s2_actor->FlattenUpdate(force);
+
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	s2_actor_update(actor, force);
+	//}
 }
 
 static void actor_send_msg(void* actor, bool force, s2::Message msg) 
@@ -837,11 +854,15 @@ void s2_actor_set_frame(void* actor, int frame) {
 extern "C"
 void s2_actor_set_frame_ft(void* actor, int frame) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
-	if (s2_actor->HasFlatten()) {
-		s2_actor->FlattenSetFrame(frame);
-	} else {
-		s2_actor_set_frame(actor, frame);
+	if (!s2_actor->HasFlatten()) {
+		s2_actor->BuildFlatten();
 	}
+	assert(s2_actor->HasFlatten());
+
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	s2_actor_set_frame(actor, frame);
+	//}
 }
 
 extern "C"

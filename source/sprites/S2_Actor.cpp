@@ -156,6 +156,34 @@ void Actor::SetCamera(const RenderCamera& camera)
 	m_render->SetCamera(camera);
 }
 
+void Actor::SetFlattenDirty()
+{
+	const Actor* curr = this;
+	while (curr) {
+		if (curr->m_flatten.list) {
+			curr->m_flatten.list->SetDirty();
+			return;
+		}
+		curr = curr->m_parent;
+	}
+}
+
+void Actor::BuildFlatten()
+{
+	const Actor* curr = this;
+	while (curr) {
+		if (curr->m_flatten.list) {
+			if (!curr->m_flatten.list->IsDirty()) {
+				printf("++++++ should be dirty %d\n", GetSpr()->GetSymbol()->GetID());
+			} else {
+				curr->m_flatten.list->Build(curr->m_dlist);
+			}
+			return;
+		}
+		curr = curr->m_parent;
+	}
+}
+
 void Actor::InitFlags()
 {
 	m_flags = 0;

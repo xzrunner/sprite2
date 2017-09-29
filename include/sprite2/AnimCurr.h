@@ -79,6 +79,8 @@ private:
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
 	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
+
+	void UpdateSlotsVisible();
 		
 private:
 	std::shared_ptr<const AnimCopy> m_copy;

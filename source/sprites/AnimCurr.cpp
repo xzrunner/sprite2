@@ -93,6 +93,8 @@ void AnimCurr::AssignSameStruct(const AnimCurr& src)
 			(*d)->SetLocalSRT(srt);
 			(*d)->SetColor((*s)->GetColor());
 		}
+
+		(*s)->SetVisible((*d)->IsVisible());
 	}
 
 	assert(m_curr && src.m_curr);
@@ -206,34 +208,67 @@ Sprite* AnimCurr::FetchChildByIdx(int idx) const
 VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	if (m_curr_num == 0) {
+	if (m_slots.empty()) {
 		return ret;
 	}
 
 	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
-		int* curr = &m_curr[0];
-		for (int i = 0; i < m_curr_num; ++i, ++curr) 
-		{
-			Sprite* child = m_slots[*curr];
-			cp.actor = child->QueryActor(params.actor);
-			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+		Sprite*const* ptr = &m_slots[0];
+		for (int i = 0, n = m_slots.size(); i < n; ++i, ++ptr) {
+			std::string str;
+			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);			
+			cp.actor = (*ptr)->QueryActor(params.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, (*ptr), ret)) {
 				break;
 			}
 		}
-	} else {
-		int* curr = &m_curr[m_curr_num - 1];
-		for (int i = m_curr_num - 1; i >= 0; --i, --curr) 
-		{
-			Sprite* child = m_slots[*curr];
-			cp.actor = child->QueryActor(params.actor);
-			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+	}
+	else {
+		Sprite*const* ptr = &m_slots[m_slots.size() - 1];
+		for (int i = 0, n = m_slots.size(); i < n; ++i, --ptr) {
+			std::string str;
+			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);
+			cp.actor = (*ptr)->QueryActor(params.actor);
+			if (!SpriteVisitor::VisitChild(visitor, cp, (*ptr), ret)) {
 				break;
 			}
 		}
 	}
 	return ret;
 }
+
+//VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
+//{
+//	VisitResult ret = VISIT_OVER;
+//	if (m_curr_num == 0) {
+//		return ret;
+//	}
+//
+//	SprVisitorParams cp = params;
+//	if (visitor.GetOrder()) {
+//		int* curr = &m_curr[0];
+//		for (int i = 0; i < m_curr_num; ++i, ++curr) 
+//		{
+//			Sprite* child = m_slots[*curr];
+//			cp.actor = child->QueryActor(params.actor);
+//			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+//				break;
+//			}
+//		}
+//	} else {
+//		int* curr = &m_curr[m_curr_num - 1];
+//		for (int i = m_curr_num - 1; i >= 0; --i, --curr) 
+//		{
+//			Sprite* child = m_slots[*curr];
+//			cp.actor = child->QueryActor(params.actor);
+//			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+//				break;
+//			}
+//		}
+//	}
+//	return ret;
+//}
 
 RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 {
@@ -258,6 +293,7 @@ void AnimCurr::Clear()
 {
 	m_ctrl.Clear();
 	m_curr_num = 0;
+	UpdateSlotsVisible();
 }
 
 sm::rect AnimCurr::CalcAABB(const Actor* actor) const
@@ -286,6 +322,8 @@ void AnimCurr::SetAnimCopy(const std::shared_ptr<AnimCopy>& copy)
 		Sprite* dst = VI_CLONE(Sprite, src);
 		m_slots[i] = dst;
 	}
+
+	UpdateSlotsVisible();
 }
 
 void AnimCurr::LoadSprLerpData(Sprite* spr, const AnimCopy::Lerp& lerp, int time)
@@ -491,6 +529,8 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 	}
 
 	UpdateParamsPool::Instance()->Push(up_child); 
+
+	UpdateSlotsVisible();
 }
 
 bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
@@ -550,6 +590,22 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 			vp.actor = child->QueryActor(up.GetActor());
 			child->Traverse(visitor, vp, false);
 		}
+	}
+}
+
+void AnimCurr::UpdateSlotsVisible()
+{
+	for (auto spr : m_slots) {
+		spr->SetVisible(false);
+	}
+
+	if (m_curr_num == 0) {
+		return;
+	}
+
+	int* curr = &m_curr[0];
+	for (int i = 0; i < m_curr_num; ++i, ++curr) {
+		m_slots[*curr]->SetVisible(true);
 	}
 }
 

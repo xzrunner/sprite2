@@ -202,7 +202,7 @@ remove_func(p3d_particle* p, void* ud)
 	if (p->ud) {
 		Sprite* spr = static_cast<Sprite*>(p->ud);
 		spr->RemoveReference();
-		p->ud = NULL;
+		p->ud = nullptr;
 	}
 }
 

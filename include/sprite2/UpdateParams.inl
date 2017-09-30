@@ -13,9 +13,9 @@ namespace s2
 inline
 UpdateParams::UpdateParams()
 	: m_prev_filter(FM_NULL)
-	, m_actor(NULL)
+	, m_actor(nullptr)
 	, m_force(false)
-	, m_next(NULL)
+	, m_next(nullptr)
 {
 }
 
@@ -24,7 +24,7 @@ UpdateParams::UpdateParams(const Actor* actor)
 	: m_prev_filter(FM_NULL)
 	, m_actor(actor)
 	, m_force(false)
-	, m_next(NULL)
+	, m_next(nullptr)
 {
 }
 
@@ -34,7 +34,7 @@ UpdateParams::UpdateParams(const UpdateParams& params)
 	, m_prev_filter(FM_NULL)
 	, m_actor(params.m_actor)
 	, m_force(params.m_force)
-	, m_next(NULL)
+	, m_next(nullptr)
 {
 }
 
@@ -105,7 +105,7 @@ void UpdateParams::Init()
 {
 	m_prev_mat.Identity();
 	m_prev_filter = FM_NULL;
-	m_actor = NULL;
+	m_actor = nullptr;
 	m_force = false;
 }
 

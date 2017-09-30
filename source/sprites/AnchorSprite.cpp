@@ -69,7 +69,7 @@ Sprite* AnchorSprite::FetchChildByName(int name, const Actor* actor) const
 		const Sprite* anchor_spr = anchor->GetSpr();
 		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor));
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -80,7 +80,7 @@ Sprite* AnchorSprite::FetchChildByIdx(int idx, const Actor* actor) const
 		const Sprite* anchor_spr = anchor->GetSpr();
 		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor));
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -109,7 +109,7 @@ const Actor* AnchorSprite::QueryAnchor(const Actor* actor) const
 		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
 		return anchor_actor->GetAnchor();
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 

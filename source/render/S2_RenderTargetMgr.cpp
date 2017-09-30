@@ -11,8 +11,8 @@ SINGLETON_DEFINITION(RenderTargetMgr);
 const int RenderTargetMgr::WIDTH  = 1024;
 const int RenderTargetMgr::HEIGHT = 1024;
 
-static RenderTarget* (*FETCH_SCREEN)() = NULL;
-static void (*RETURN_SCREEN)(RenderTarget* rt) = NULL;
+static RenderTarget* (*FETCH_SCREEN)() = nullptr;
+static void (*RETURN_SCREEN)(RenderTarget* rt) = nullptr;
 
 RenderTargetMgr::RenderTargetMgr()
 {
@@ -71,7 +71,7 @@ RenderTarget* RenderTargetMgr::FetchScreen()
 	if (FETCH_SCREEN) {
 		return FETCH_SCREEN();
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 

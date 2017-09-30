@@ -32,7 +32,7 @@ namespace s2
 
 Sprite* ProxyHelper::BuildGroup(const std::vector<std::pair<const Actor*, Sprite*> >& items, bool force_group)
 {
-	Sprite* ret = NULL;
+	Sprite* ret = nullptr;
 	if (!force_group && items.size() == 1) 
 	{
 		ret = items[0].second;
@@ -244,7 +244,7 @@ const Actor* ProxyHelper::SprPointQuery(const Sprite* spr, const sm::vec2& pos, 
 				return actor;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 	else
 	{
@@ -254,7 +254,7 @@ const Actor* ProxyHelper::SprPointQuery(const Sprite* spr, const sm::vec2& pos, 
 		spr->Traverse(visitor, params);
 		const Actor* ret = visitor.GetSelectedActor();
 		if (!ret) {
-			return NULL;
+			return nullptr;
 		}
 
 		const S2_MAT& selected_mat = visitor.GetSelectedMat();

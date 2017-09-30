@@ -18,8 +18,8 @@ namespace s2
 {
 
 MaskSymbol::MaskSymbol()
-	: m_base(NULL)
-	, m_mask(NULL)
+	: m_base(nullptr)
+	, m_mask(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_MASK);
@@ -28,8 +28,8 @@ MaskSymbol::MaskSymbol()
 
 MaskSymbol::MaskSymbol(uint32_t id)
 	: Symbol(id)
-	, m_base(NULL)
-	, m_mask(NULL)
+	, m_base(nullptr)
+	, m_mask(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_MASK);

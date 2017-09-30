@@ -8,7 +8,7 @@ namespace s2
 const float Joint::RADIUS = 10;
 
 Joint::Joint(Sprite* spr, const JointPose& joint_local)
-	: m_parent(NULL)
+	: m_parent(nullptr)
 	, m_skin(spr, -joint_local)
 {
 	if (Sprite* spr = m_skin.spr) {
@@ -117,7 +117,7 @@ void Joint::DeconnectParent()
 	}
 
 	m_parent->RemoveReference();
-	m_parent = NULL;
+	m_parent = nullptr;
 }
 
 /************************************************************************/

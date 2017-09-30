@@ -70,7 +70,7 @@ const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
 			}
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 }

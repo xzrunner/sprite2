@@ -16,7 +16,7 @@ namespace s2
 {
 
 IconSymbol::IconSymbol()
-	: m_icon(NULL)
+	: m_icon(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ICON);
@@ -25,7 +25,7 @@ IconSymbol::IconSymbol()
 
 IconSymbol::IconSymbol(uint32_t id)
 	: Symbol(id)
-	, m_icon(NULL)
+	, m_icon(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ICON);

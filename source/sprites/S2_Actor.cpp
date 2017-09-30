@@ -19,8 +19,8 @@ namespace s2
 static int ALL_ACTOR_COUNT = 0;
 
 Actor::Actor()
-	: m_spr(NULL)
-	, m_parent(NULL)
+	: m_spr(nullptr)
+	, m_parent(nullptr)
 	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {

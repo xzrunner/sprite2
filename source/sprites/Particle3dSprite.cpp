@@ -24,7 +24,7 @@ namespace s2
 {
 
 Particle3dSprite::Particle3dSprite() 
-	: m_et(NULL)
+	: m_et(nullptr)
 	, m_loop(true)
 	, m_local(true)
 	, m_alone(false)
@@ -38,7 +38,7 @@ Particle3dSprite::Particle3dSprite()
 
 Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 	: Sprite(spr)
-	, m_et(NULL)
+	, m_et(nullptr)
 	, m_loop(spr.m_loop)
 	, m_local(spr.m_local)
 	, m_alone(spr.m_alone)
@@ -55,7 +55,7 @@ Particle3dSprite::Particle3dSprite(const Particle3dSprite& spr)
 Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_et             = NULL;
+	m_et             = nullptr;
 	m_loop           = spr.m_loop;
 	m_local          = spr.m_local;
 	m_alone          = spr.m_alone;
@@ -69,7 +69,7 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 
 Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id) 
 	: Sprite(sym, id)
-	, m_et(NULL)
+	, m_et(nullptr)
 	, m_alone(false)
 	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)
@@ -108,7 +108,7 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	Particle3dEmitter* et = NULL;
+	Particle3dEmitter* et = nullptr;
 	switch (m_reuse)
 	{
 	case REUSE_ALL:

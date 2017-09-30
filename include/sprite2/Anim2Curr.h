@@ -32,7 +32,7 @@ public:
 		if (idx >= 0 && idx < static_cast<int>(m_frames_ptr.size())) {
 			return &m_frames_ptr[idx];
 		} else {
-			return NULL;
+			return nullptr;
 		}
 	}
 

@@ -12,7 +12,7 @@ namespace s2
 {
 
 Icon::Icon()
-	: m_img(NULL)
+	: m_img(nullptr)
 {
 }
 

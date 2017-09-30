@@ -29,7 +29,7 @@ namespace s2
 {
 
 Anim2Symbol::Anim2Symbol()
-	: m_anim(NULL)
+	: m_anim(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ANIM2);
@@ -38,7 +38,7 @@ Anim2Symbol::Anim2Symbol()
 
 Anim2Symbol::Anim2Symbol(uint32_t id)
 	: Symbol(id)
-	, m_anim(NULL)
+	, m_anim(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ANIM2);
@@ -53,7 +53,7 @@ Anim2Symbol::~Anim2Symbol()
 
 	if(m_anim) {
 		release_anim(m_anim);
-		m_anim = NULL;
+		m_anim = nullptr;
 	}
 
 	// todo release sk
@@ -110,7 +110,7 @@ void Anim2Symbol::SetAnim(rg_animation* anim)
 {
 	if(m_anim) {
 		release_anim(m_anim);
-		m_anim = NULL;
+		m_anim = nullptr;
 	}
 	m_anim = anim;
 }

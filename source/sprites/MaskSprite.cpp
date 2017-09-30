@@ -113,7 +113,7 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 Sprite* MaskSprite::FetchChildByName(int name, const Actor* actor) const
 {
-	Sprite* ret = NULL;
+	Sprite* ret = nullptr;
 	if (name == SprNameMap::BASE_ID) {
 		ret = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
 	} else if (name == SprNameMap::MASK_ID) {

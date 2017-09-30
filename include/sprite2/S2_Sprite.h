@@ -51,8 +51,8 @@ public:
 	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }
 	virtual bool AutoUpdate(const Actor* actor) { return false; }
 
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const { return NULL; }
-	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const { return NULL; }
+	virtual Sprite* FetchChildByName(int name, const Actor* actor) const { return nullptr; }
+	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const { return nullptr; }
 
 	virtual void SetSymbol(Symbol* sym);
 
@@ -77,7 +77,7 @@ public:
 	 *  @note
 	 *    should after other virtual
 	 */
-	virtual Sprite* Clone() const { return NULL; }
+	virtual Sprite* Clone() const { return nullptr; }
 
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat = true) const;
 
@@ -87,8 +87,8 @@ public:
 	int  GetName() const { return m_name; }
 	void SetName(const std::string& name);
 
-	const BoundingBox* GetBounding(const Actor* actor = NULL) const; 
-	void UpdateBounding(const Actor* actor = NULL) const;
+	const BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
+	void UpdateBounding(const Actor* actor = nullptr) const;
 
 	void Translate(const sm::vec2& trans);
 	void Rotate(float rot);
@@ -122,7 +122,7 @@ public:
 	void AddActor(Actor* actor) const;
 	void DelActor(Actor* actor) const;
 	const Actor* QueryActor(const Actor* prev) const {
-		return m_actors ? m_actors->Query(prev) : NULL;
+		return m_actors ? m_actors->Query(prev) : nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
 	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }

@@ -9,7 +9,7 @@ namespace s2
 
 Particle3dActor::Particle3dActor(const Sprite* spr, const Actor* parent)
 	: Actor(spr, parent) 
-	, m_et(NULL)
+	, m_et(nullptr)
 {
 	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
 	const Particle3dSymbol* p3d_sym = VI_DOWNCASTING<const Particle3dSymbol*>(spr->GetSymbol());

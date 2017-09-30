@@ -36,7 +36,7 @@ public:
 	 *  @note
 	 *    should after other virtual
 	 */
-	virtual Shape* Clone() const { return NULL; }
+	virtual Shape* Clone() const { return nullptr; }
 
 	const sm::rect& GetBounding() const {
 		return m_bounding;

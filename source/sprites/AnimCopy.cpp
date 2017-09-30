@@ -215,7 +215,7 @@ AnimCopy::Item::Item()
 	, next(-1)
 	, prev(-1)
 	, lerp(-1)
-	, spr(NULL) 
+	, spr(nullptr) 
 {}
 
 AnimCopy::Item::~Item() 

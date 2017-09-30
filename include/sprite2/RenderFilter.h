@@ -24,7 +24,7 @@ public:
 		return GetMode() == rf.GetMode();
 	}
 
-	virtual RenderFilter* Clone() const { return NULL; }
+	virtual RenderFilter* Clone() const { return nullptr; }
 
 	FilterMode GetMode() const { return m_mode; }
 

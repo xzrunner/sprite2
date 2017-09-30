@@ -20,7 +20,7 @@ namespace s2
 PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
 	: SpriteVisitor(false)
 	, m_pos(pos)
-	, m_selected_spr(NULL)
+	, m_selected_spr(nullptr)
 	, m_finded(false)
 {
 }
@@ -161,7 +161,7 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 	if (m_selected_spr && m_finded) {
 		return m_selected_params.actor;
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 

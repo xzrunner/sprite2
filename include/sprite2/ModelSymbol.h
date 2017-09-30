@@ -26,7 +26,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
 
 	void SetModel(m3::Model* model);
@@ -35,7 +35,7 @@ public:
 	const m3::AABB& GetAABB() const { return m_aabb; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
 	m3::Model* m_model;

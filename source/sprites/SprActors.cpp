@@ -13,7 +13,7 @@ static const int MAX_COUNT_NO_HASH = 4;
 
 SprActors::SprActors()
 #ifdef SPR_ACTORS_HASH
-	: m_hash(NULL)
+	: m_hash(nullptr)
 #endif // SPR_ACTORS_HASH
 {
 }
@@ -92,7 +92,7 @@ void SprActors::Clear()
 #ifdef SPR_ACTORS_HASH
 	if (m_hash) {
 		ds_hash_release(m_hash); 
-		m_hash = NULL;
+		m_hash = nullptr;
 	}
 #endif // SPR_ACTORS_HASH
 }

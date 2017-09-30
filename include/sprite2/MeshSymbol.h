@@ -26,7 +26,7 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = NULL) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
@@ -40,7 +40,7 @@ public:
 	void SetPause(bool pause) { m_pause = pause; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = NULL, const Actor* actor = NULL, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
 	Mesh* m_mesh;

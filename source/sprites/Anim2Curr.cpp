@@ -12,23 +12,23 @@ namespace s2
 {
 
 Anim2Curr::Anim2Curr()
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_frame(0)
-	, m_sk_pose(NULL)
-	, m_sk_skin(NULL)
+	, m_sk_pose(nullptr)
+	, m_sk_skin(nullptr)
 	, m_active(true)
 {
 	ResetTime();
 }
 
 Anim2Curr::Anim2Curr(const Anim2Curr& curr)
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_frame(curr.m_frame)
 	, m_frames_ptr(curr.m_frames_ptr)
 	, m_start_time(curr.m_start_time)
 	, m_curr_time(curr.m_curr_time)
-	, m_sk_pose(NULL)
-	, m_sk_skin(NULL)
+	, m_sk_pose(nullptr)
+	, m_sk_skin(nullptr)
 	, m_active(curr.m_active)
 {
 	cu::RefCountObjAssign(m_sym, curr.m_sym);
@@ -36,20 +36,20 @@ Anim2Curr::Anim2Curr(const Anim2Curr& curr)
 
 Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 {
-	m_sym = NULL;
+	m_sym = nullptr;
 	cu::RefCountObjAssign(m_sym, curr.m_sym);
 	m_frame = curr.m_frame;
 	m_frames_ptr = curr.m_frames_ptr;
 	m_start_time = curr.m_start_time;
 	m_curr_time = curr.m_curr_time;
-	m_sk_pose = NULL;
-	m_sk_skin = NULL;
+	m_sk_pose = nullptr;
+	m_sk_skin = nullptr;
 	m_active = curr.m_active;
 	return *this;
 }
 
 Anim2Curr::Anim2Curr(Anim2Symbol* sym)
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_frame(0)
 	, m_active(true)
 {

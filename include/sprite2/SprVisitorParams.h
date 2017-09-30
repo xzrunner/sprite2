@@ -18,7 +18,7 @@ public:
 	const Actor* actor;
 
 public:
-	SprVisitorParams() : actor(NULL) {}
+	SprVisitorParams() : actor(nullptr) {}
 
 }; // SprVisitorParams
 

@@ -67,7 +67,7 @@ const Actor* AnchorSymbol::GetRealActor(const Sprite* spr, const Actor* actor)
 			return anchor_actor->GetAnchor();
 		}
 	}	
-	return NULL;
+	return nullptr;
 }
 
 }

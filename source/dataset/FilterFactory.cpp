@@ -61,7 +61,7 @@ FilterFactory::~FilterFactory()
 
 RenderFilter* FilterFactory::Create(FilterMode mode)
 {
-	RenderFilter* filter = NULL;	
+	RenderFilter* filter = nullptr;	
 	switch (mode)
 	{
 	case FM_NULL:

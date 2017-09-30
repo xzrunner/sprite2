@@ -38,7 +38,7 @@ Scale9& Scale9::operator = (const Scale9& s9)
 		if (spr) {
 			m_grids[i] = VI_CLONE(Sprite, spr);
 		} else {
-			m_grids[i] = NULL;
+			m_grids[i] = nullptr;
 		}
 	}
 	m_sz_left  = s9.m_sz_left;
@@ -181,7 +181,7 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 		if (src) {
 			m_grids[i] = VI_CLONE(Sprite, src);
 		} else {
-			m_grids[i] = NULL;
+			m_grids[i] = nullptr;
 		}
 	}
 	m_sz_left  = sz_left;

@@ -10,15 +10,15 @@ namespace s2
 {
 
 Mesh::Mesh()
-	: m_base(NULL)
+	: m_base(nullptr)
 	, m_width(0)
 	, m_height(0)
-	, m_mesh(NULL)
+	, m_mesh(nullptr)
 {
 }
 
 Mesh::Mesh(const Symbol* base)
-	: m_mesh(NULL)
+	: m_mesh(nullptr)
 {
 	base->AddReference();
 	m_base = base;

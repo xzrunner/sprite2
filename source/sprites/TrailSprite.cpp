@@ -17,7 +17,7 @@ namespace s2
 {
 
 TrailSprite::TrailSprite()
-	: m_et(NULL)
+	: m_et(nullptr)
 	, m_local(false)
 	, m_in_p3d(false)
 {
@@ -28,7 +28,7 @@ TrailSprite::TrailSprite()
 
 TrailSprite::TrailSprite(const TrailSprite& spr)
 	: Sprite(spr)
-	, m_et(NULL)
+	, m_et(nullptr)
 	, m_local(spr.m_local)
 	, m_in_p3d(spr.m_in_p3d)
 {
@@ -42,7 +42,7 @@ TrailSprite::TrailSprite(const TrailSprite& spr)
 TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_et             = NULL;
+	m_et             = nullptr;
 	m_local          = spr.m_local;
 	m_in_p3d         = spr.m_in_p3d;
 
@@ -53,7 +53,7 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 
 TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_et(NULL)
+	, m_et(nullptr)
 	, m_local(false)
 	, m_in_p3d(false)
 {

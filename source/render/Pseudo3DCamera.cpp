@@ -15,7 +15,7 @@ static const float Z = -250;
 static const float ANGLE = -20;
 
 Pseudo3DCamera::Pseudo3DCamera()
-	: m_cam(NULL)
+	: m_cam(nullptr)
 {
 	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
 	if (ctx) {

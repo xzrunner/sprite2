@@ -65,23 +65,23 @@ void SprRender::Term()
 {
 	if (m_state.color) {
 		RenderColorPool::Instance()->Push(m_state.color);
-		m_state.color  = NULL;
+		m_state.color  = nullptr;
 	}
 	if (m_state.shader) {
 		RenderShaderPool::Instance()->Push(m_state.shader);
-		m_state.shader = NULL;
+		m_state.shader = nullptr;
 	}
 	if (m_state.camera) {
 		RenderCameraPool::Instance()->Push(m_state.camera);
-		m_state.camera = NULL;
+		m_state.camera = nullptr;
 	}
 }
 
 void SprRender::Init()
 {
-	m_state.color  = NULL;
-	m_state.shader = NULL;
-	m_state.camera = NULL;
+	m_state.color  = nullptr;
+	m_state.shader = nullptr;
+	m_state.camera = nullptr;
 }
 
 }

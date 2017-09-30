@@ -126,7 +126,7 @@ void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, c
 {
 	const Symbol* s2_sym = static_cast<const Symbol*>(sym);
 	if (s2_sym->Type() != SYM_COMPLEX) {
-		return NULL;
+		return nullptr;
 	}
 
 	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(s2_sym);
@@ -144,7 +144,7 @@ void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, c
 				return child;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -273,7 +273,7 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 
 	rp->SetViewRegion(xmin, ymin, xmax, ymax);
 
-	rp->actor = NULL;
+	rp->actor = nullptr;
 
 	//	rp->SetDisableCulling(true);
 
@@ -868,7 +868,7 @@ void* s2_actor_fetch_child(const void* actor, const char* name) {
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -879,7 +879,7 @@ void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	if (child) {
 		return const_cast<Sprite*>(child);
 	} else {
-		return NULL;
+		return nullptr;
 	}
 }
 
@@ -1238,7 +1238,7 @@ extern "C"
 const char* s2_actor_get_text(void* actor) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
-		return NULL;
+		return nullptr;
 	}
 
 	TextboxActor* textbox = static_cast<TextboxActor*>(s2_actor);
@@ -1295,7 +1295,7 @@ void s2_actor_anchor_deconnect(void* actor) {
 	const Actor* parent = s2_actor->GetParent();
 	if (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_ANCHOR) {
 		parent->GetSpr()->DelActor(s2_actor);
-		s2_actor->SetParent(NULL);
+		s2_actor->SetParent(nullptr);
 	}
 }
 

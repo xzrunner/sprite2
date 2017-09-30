@@ -17,7 +17,7 @@ namespace s2
 {
 
 Particle2dSprite::Particle2dSprite() 
-	: m_et(NULL)
+	: m_et(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
@@ -26,7 +26,7 @@ Particle2dSprite::Particle2dSprite()
 
 Particle2dSprite::Particle2dSprite(const Particle2dSprite& spr)
 	: Sprite(spr)
-	, m_et(NULL)
+	, m_et(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
@@ -40,7 +40,7 @@ Particle2dSprite::Particle2dSprite(const Particle2dSprite& spr)
 Particle2dSprite& Particle2dSprite::operator = (const Particle2dSprite& spr)
 {
 	Sprite::operator = (spr);
-	m_et = NULL;
+	m_et = nullptr;
 	if (spr.m_et) {
 		m_et = p2d_emitter_create(spr.m_et->cfg);
 	}
@@ -49,7 +49,7 @@ Particle2dSprite& Particle2dSprite::operator = (const Particle2dSprite& spr)
 
 Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id) 
 	: Sprite(sym, id)
-	, m_et(NULL)
+	, m_et(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
@@ -149,7 +149,7 @@ RenderReturn Particle2dSprite::Draw(const RenderParams& rp) const
 	if (m_et->local_mode_draw) {
 		p2d_emitter_draw(m_et, &rp.mt);
 	} else {
-		p2d_emitter_draw(m_et, NULL);
+		p2d_emitter_draw(m_et, nullptr);
 	}
 	return RENDER_OK;
 }

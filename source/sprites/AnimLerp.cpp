@@ -27,7 +27,7 @@ void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*
 	for (int i = 0, n = begin.size(); i < n; ++i)
 	{
 		Sprite *start_spr = begin[i], 
-			   *end_spr = NULL;
+			   *end_spr = nullptr;
 		for (int j = 0, m = end.size(); j < m; ++j)
 		{
 			Sprite* spr = end[j];

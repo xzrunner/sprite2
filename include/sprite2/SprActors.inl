@@ -44,7 +44,7 @@ const Actor* SprActors::Query(const Actor* prev) const
 				return m_actors[i];
 			}
 		}
-		return NULL;
+		return nullptr;
 #ifdef SPR_ACTORS_HASH
 	}
 #endif // SPR_ACTORS_HASH

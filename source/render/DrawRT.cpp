@@ -156,7 +156,7 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 uint8_t* DrawRT::StoreToMemory(int width, int height, int channels)
 {
 	if (channels != 3 && channels != 4) {
-		return NULL;
+		return nullptr;
 	}
 
 	if (width == -1) {
@@ -169,7 +169,7 @@ uint8_t* DrawRT::StoreToMemory(int width, int height, int channels)
 	int sz = width * height * channels;
 	uint8_t* pixels = new uint8_t[sz];
 	if (!pixels) {
-		return NULL;
+		return nullptr;
 	}
 
 	memset(pixels, 0, sz);

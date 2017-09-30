@@ -9,10 +9,10 @@ namespace s2
 inline
 RenderParams::RenderParams()
 	: vertex_offset(0, 0)
-	, actor(NULL)
+	, actor(nullptr)
 	, min_edge(0)
 	, m_flags(0)
-	, m_next(NULL)
+	, m_next(nullptr)
 #ifndef S2_DISABLE_STATISTICS
 	, level(0)
 	, parent_id(0)
@@ -32,7 +32,7 @@ RenderParams::RenderParams(const RenderParams& params)
 	, actor(params.actor)
 	, min_edge(params.min_edge)
 	, m_flags(params.m_flags)
-	, m_next(NULL)
+	, m_next(nullptr)
 #ifndef S2_DISABLE_STATISTICS
 	, level(params.level)
 	, parent_id(params.parent_id)
@@ -72,7 +72,7 @@ void RenderParams::Reset()
 	shader.Init();
 	camera.Init();
 
-	actor = NULL;
+	actor = nullptr;
 
 	m_flags = 0;
 

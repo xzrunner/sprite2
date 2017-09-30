@@ -102,7 +102,7 @@ void TrailEmitter::CreateEmitter(const TrailEmitterCfg* cfg)
 	cu::RefCountObjAssign(m_state.cfg, cfg);
 	if (m_state.et) {
 		t2d_emitter_release(m_state.et);
-		m_state.et = NULL;
+		m_state.et = nullptr;
 	}
 	if (m_state.cfg) {
 		m_state.et = t2d_emitter_create(m_state.cfg->GetImpl());
@@ -111,19 +111,19 @@ void TrailEmitter::CreateEmitter(const TrailEmitterCfg* cfg)
 
 void TrailEmitter::Init()
 {
-	m_state.cfg = NULL;
-	m_state.et = NULL;
+	m_state.cfg = nullptr;
+	m_state.et = nullptr;
 }
 
 void TrailEmitter::Term()
 {
 	if (m_state.cfg) {
 		m_state.cfg->RemoveReference();
-        m_state.cfg = NULL;
+        m_state.cfg = nullptr;
 	}
 	if (m_state.et) {
 		t2d_emitter_release(m_state.et);
-		m_state.et = NULL;
+		m_state.et = nullptr;
 	}
 }
 

@@ -14,7 +14,7 @@ namespace s2
 {
 
 MeshSprite::MeshSprite() 
-	: m_base(NULL)
+	: m_base(nullptr)
 	, m_only_draw_bound(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -125,7 +125,7 @@ Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const
 	public:
 		FetchVisitor(int name) 
 			: m_name(name)
-			, m_spr(NULL) 
+			, m_spr(nullptr) 
 		{}
 
 		virtual void Visit(Sprite* spr) const

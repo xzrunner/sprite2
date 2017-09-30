@@ -19,7 +19,7 @@ public:
 	 *  @interface
 	 *    cu::Cloneable
 	 */
-	virtual BoundingBox* Clone() const { return NULL; }
+	virtual BoundingBox* Clone() const { return nullptr; }
 
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsContain(const sm::rect& rect) const = 0;

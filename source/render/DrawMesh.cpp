@@ -217,7 +217,7 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, con
 	float w = src_texcoords[4] - src_texcoords[0],
 		  h = src_texcoords[5] - src_texcoords[1];	
 
-	void (*draw)(const float* positions, const float* texcoords, int tex_id) = NULL;
+	void (*draw)(const float* positions, const float* texcoords, int tex_id) = nullptr;
 
 	if (type == sl::SPRITE2)
 	{

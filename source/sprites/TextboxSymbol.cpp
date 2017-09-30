@@ -123,7 +123,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 	//	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
-	const std::string* text = NULL;
+	const std::string* text = nullptr;
 	const Actor* actor = rp.actor;
 	if (actor) {
 		const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);

@@ -9,7 +9,7 @@ namespace s2
 CreateActorsVisitor::CreateActorsVisitor()
 	: m_need_actor(false)
 {
-	m_path.push(NULL);
+	m_path.push(nullptr);
 }
 
 VisitResult CreateActorsVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)

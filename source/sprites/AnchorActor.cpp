@@ -9,7 +9,7 @@ namespace s2
 
 AnchorActor::AnchorActor(const Sprite* spr, const Actor* parent)
 	: Actor(spr, parent) 
-	, m_anchor(NULL)
+	, m_anchor(nullptr)
 {
 }
 
@@ -30,7 +30,7 @@ void AnchorActor::SetAnchor(const Actor* anchor)
 	if (m_anchor != anchor) {
 		if (m_anchor) {
 			// disconnect
-			const_cast<Actor*>(m_anchor)->SetParent(NULL);
+			const_cast<Actor*>(m_anchor)->SetParent(nullptr);
 			m_anchor->GetSpr()->RemoveReference();
 		}
 		m_anchor = anchor;
@@ -64,9 +64,9 @@ void AnchorActor::Clear()
 	if (m_anchor) 
 	{
 		// disconnect
-		const_cast<Actor*>(m_anchor)->SetParent(NULL);
+		const_cast<Actor*>(m_anchor)->SetParent(nullptr);
 		m_anchor->GetSpr()->RemoveReference();
-		m_anchor = NULL;
+		m_anchor = nullptr;
 	}
 
 	// make it empty

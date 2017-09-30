@@ -18,7 +18,7 @@ namespace s2
 {
 
 MeshSymbol::MeshSymbol()
-	: m_mesh(NULL)
+	: m_mesh(nullptr)
 	, m_pause(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -28,7 +28,7 @@ MeshSymbol::MeshSymbol()
 
 MeshSymbol::MeshSymbol(uint32_t id)
 	: Symbol(id)
-	, m_mesh(NULL)
+	, m_mesh(nullptr)
 	, m_pause(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -86,7 +86,7 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
  		ret = DrawMesh::DrawInfoXY(m_mesh, &rp_child->mt);
  	} else {
- 		ret = DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+ 		ret = DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
  	}
  
 //  	if (!m_pause && mesh_spr)
@@ -118,7 +118,7 @@ RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
 		ret = DrawMesh::DrawInfoXY(m_mesh, &rp.mt);
 	} else {
-		ret = DrawMesh::DrawTexture(m_mesh, rp, mesh_spr ? mesh_spr->GetBaseSym() : NULL);
+		ret = DrawMesh::DrawTexture(m_mesh, rp, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
 	}
 	return ret;
 }

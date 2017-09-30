@@ -9,7 +9,7 @@ namespace s2
 {
 
 P3dEmitterCfg::P3dEmitterCfg()
-	: m_impl(NULL)
+	: m_impl(nullptr)
 {
 }
 

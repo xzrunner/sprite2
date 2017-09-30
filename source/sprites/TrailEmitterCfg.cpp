@@ -9,7 +9,7 @@ namespace s2
 {
 
 TrailEmitterCfg::TrailEmitterCfg()
-	: m_impl(NULL)
+	: m_impl(nullptr)
 {
 }
 

@@ -41,7 +41,7 @@ void RenderCtxStack::Pop()
 const RenderContext* RenderCtxStack::Top() const
 {
 	if (m_stack.empty()) {
-		return NULL;
+		return nullptr;
 	} else {
 		return &m_stack[m_stack.size() - 1];
 	}

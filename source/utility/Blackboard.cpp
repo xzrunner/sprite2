@@ -8,7 +8,7 @@ SINGLETON_DEFINITION(Blackboard);
 
 Blackboard::Blackboard()
 	: m_screen_cache_texid(-1)
-	, m_cam(NULL)
+	, m_cam(nullptr)
 	, m_dlist_enable(false)
 {
 }
@@ -26,7 +26,7 @@ void Blackboard::SetScreenSize(int w, int h)
 void Blackboard::Clear()
 {
 	m_screen_cache_texid = -1;
-	m_cam = NULL;
+	m_cam = nullptr;
 }
 
 }

@@ -7,13 +7,13 @@ namespace s2
 {
 
 PolygonShape::PolygonShape()
-	: m_poly(NULL)
+	: m_poly(nullptr)
 {
 }
 
 PolygonShape::PolygonShape(const PolygonShape& poly)
 	: PolylineShape(poly)
-	, m_poly(NULL)
+	, m_poly(nullptr)
 {
 	cu::RefCountObjAssign(m_poly, poly.m_poly);
 }
@@ -28,7 +28,7 @@ PolygonShape& PolygonShape::operator = (const PolygonShape& poly)
 
 PolygonShape::PolygonShape(const std::vector<sm::vec2>& vertices)
 	: PolylineShape(vertices, true)
-	, m_poly(NULL)
+	, m_poly(nullptr)
 {
 }
 

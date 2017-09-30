@@ -35,13 +35,13 @@ static const sm::vec2 POS1_PROXY = sm::vec2(1, 1);
 static void (*INIT_FLAGS)(Sprite* spr);
 
 Sprite::Sprite()
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
-	, m_actors(NULL)
+	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -50,13 +50,13 @@ Sprite::Sprite()
 }
 
 Sprite::Sprite(const Sprite& spr)
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
-	, m_bounding(NULL)
+	, m_bounding(nullptr)
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(spr.m_flags)
-	, m_actors(NULL)
+	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -71,13 +71,13 @@ Sprite& Sprite::operator = (const Sprite& spr)
 }
 
 Sprite::Sprite(Symbol* sym, uint32_t id)
-	: m_sym(NULL)
+	: m_sym(nullptr)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
 	, m_render(SprDefault::Instance()->Render())
 	, m_flags(0)
-	, m_actors(NULL)
+	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -643,7 +643,7 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	{
  		if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
  			SprGeoPool::Instance()->Push(m_geo);
-			m_geo = NULL;
+			m_geo = nullptr;
  		}
  		if (spr.m_geo == SprDefault::Instance()->Geo()) {
  			m_geo = SprDefault::Instance()->Geo();
@@ -664,7 +664,7 @@ void Sprite::InitFromSpr(const Sprite& spr)
 	{
 		if (m_render && m_render != SprDefault::Instance()->Render()) {
 			SprRenderPool::Instance()->Push(m_render);
-			m_render = NULL;
+			m_render = nullptr;
 		}
 		if (spr.m_render == SprDefault::Instance()->Render()) 
 		{
@@ -693,7 +693,7 @@ void Sprite::InitFromSpr(const Sprite& spr)
 
 	m_flags = spr.m_flags;
 
-	m_actors = NULL;
+	m_actors = nullptr;
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

@@ -221,7 +221,7 @@ void Particle3dEmitter::CreateEmitter(const P3dEmitterCfg* cfg)
 
 void Particle3dEmitter::Init()
 {
-	m_state.cfg = NULL;
+	m_state.cfg = nullptr;
 	m_state.et = 0;
 	memset(m_state.mt, 0, sizeof(m_state.mt));
 	m_state.mt[0] = m_state.mt[3] = 1;

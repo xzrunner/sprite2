@@ -7,7 +7,7 @@ namespace s2
 {
 
 template <typename T>
-ObjectPool2<T>* ObjectPool2<T>::m_instance = NULL;
+ObjectPool2<T>* ObjectPool2<T>::m_instance = nullptr;
 
 template <typename T>
 ObjectPool2<T>* ObjectPool2<T>::Instance()

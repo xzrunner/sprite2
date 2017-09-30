@@ -69,7 +69,7 @@ Sprite* SprLUT::Query(int id)
 			return list[i];
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 void SprLUT::Clear()

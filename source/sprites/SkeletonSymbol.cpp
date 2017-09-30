@@ -15,7 +15,7 @@ namespace s2
 {
 
 SkeletonSymbol::SkeletonSymbol()
-	: m_skeleton(NULL)
+	: m_skeleton(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_SKELETON);
@@ -24,7 +24,7 @@ SkeletonSymbol::SkeletonSymbol()
 
 SkeletonSymbol::SkeletonSymbol(uint32_t id)
 	: Symbol(id)
-	, m_skeleton(NULL)
+	, m_skeleton(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_SKELETON);

@@ -7,7 +7,7 @@ namespace s2
 {
 
 template <typename T>
-ObjectPool3<T>* ObjectPool3<T>::m_instance = NULL;
+ObjectPool3<T>* ObjectPool3<T>::m_instance = nullptr;
 
 template <typename T>
 ObjectPool3<T>* ObjectPool3<T>::Instance()
@@ -21,7 +21,7 @@ ObjectPool3<T>* ObjectPool3<T>::Instance()
 template <typename T>
 ObjectPool3<T>::ObjectPool3()
 {
-	m_freelist = NULL;
+	m_freelist = nullptr;
 }
 
 template <typename T>
@@ -44,7 +44,7 @@ void ObjectPool3<T>::Push(T* obj)
 	if (m_freelist) {
 		obj->SetNext(m_freelist);
 	} else {
-		obj->SetNext(NULL);
+		obj->SetNext(nullptr);
 	}
 	m_freelist = obj;
 }

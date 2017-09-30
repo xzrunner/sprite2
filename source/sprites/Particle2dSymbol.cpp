@@ -16,7 +16,7 @@ namespace s2
 {
 
 Particle2dSymbol::Particle2dSymbol()
-	: m_et_cfg(NULL)
+	: m_et_cfg(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE2D);
@@ -27,7 +27,7 @@ Particle2dSymbol::Particle2dSymbol()
 
 Particle2dSymbol::Particle2dSymbol(uint32_t id)
 	: Symbol(id)
-	, m_et_cfg(NULL)
+	, m_et_cfg(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_PARTICLE2D);

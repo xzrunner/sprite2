@@ -15,7 +15,7 @@ namespace s2
 {
 
 ModelSymbol::ModelSymbol()
-	: m_model(NULL)
+	: m_model(nullptr)
 {
 }
 

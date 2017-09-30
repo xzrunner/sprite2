@@ -30,8 +30,8 @@ namespace s2
 {
 
 AnimCurr::AnimCurr()
-	: m_copy(NULL)
-	, m_curr(NULL)
+	: m_copy(nullptr)
+	, m_curr(nullptr)
 {
 	ResetLayerCursor();
 }
@@ -195,7 +195,7 @@ Sprite* AnimCurr::FetchChildByName(int name, const Actor* actor) const
 
 Sprite* AnimCurr::FetchChildByIdx(int idx) const
 {
-	Sprite* ret = NULL;
+	Sprite* ret = nullptr;
 	if (idx >= 0 && idx < static_cast<int>(m_slots.size())) {
 		ret = m_slots[idx];
 	}

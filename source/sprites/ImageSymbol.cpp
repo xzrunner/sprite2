@@ -32,7 +32,7 @@ namespace s2
 {
 
 ImageSymbol::ImageSymbol()
-	: m_tex(NULL)
+	: m_tex(nullptr)
 	, m_rotate(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -42,7 +42,7 @@ ImageSymbol::ImageSymbol()
 
 ImageSymbol::ImageSymbol(uint32_t id)
 	: Symbol(id)
-	, m_tex(NULL)
+	, m_tex(nullptr)
 	, m_rotate(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -222,7 +222,7 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 	vertices_scr[3] = rp.mt * sm::vec2(m_size.xmin, m_size.ymax);
 
 	const Camera* cam = Blackboard::Instance()->GetCamera();
-	const OrthoCamera* ocam = NULL;
+	const OrthoCamera* ocam = nullptr;
 	if (cam) {
 		assert(cam->Type() == CAM_ORTHO2D);
 		ocam = static_cast<const OrthoCamera*>(cam);

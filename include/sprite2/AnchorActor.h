@@ -13,13 +13,19 @@ public:
 		: Actor(spr, parent) {}
 
 	void SetAnchor(const ActorPtr& anchor);
-	const ActorPtr& GetAnchor() const { return m_anchor; }
+	const ActorPtr& GetAnchor() const { return m_anchor.actor; }
 
 private:
 	void Clear();
 
 private:
-	ActorPtr m_anchor;
+	struct Anchor
+	{
+		ActorPtr actor;
+		SprPtr   spr;
+	};
+
+	Anchor m_anchor;
 
 }; // AnchorActor
 

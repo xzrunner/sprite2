@@ -85,17 +85,15 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	//auto& actor = params.actor;
-	//auto& anchor = QueryAnchor(actor);
-	//if (anchor) {
-	//	SprVisitorParams cp = params;
-	//	cp.actor = anchor;
-	//	return anchor->GetSpr()->TraverseChildren(visitor, cp);
-	//} else {
-	//	return VISIT_OVER;
-	//}
-
-	return VISIT_OVER;
+	auto& actor = params.actor;
+	auto& anchor = QueryAnchor(actor);
+	if (anchor) {
+		SprVisitorParams cp = params;
+		cp.actor = anchor;
+		return anchor->GetSpr()->TraverseChildren(visitor, cp);
+	} else {
+		return VISIT_OVER;
+	}
 }
 
 ActorConstPtr AnchorSprite::QueryAnchor(const ActorConstPtr& actor) const

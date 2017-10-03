@@ -9,19 +9,21 @@ namespace s2
 
 void AnchorActor::SetAnchor(const ActorPtr& anchor)
 {
-	// fixme: ?
+	// anchor mount itself mean clean
 	if (anchor.get() == this) {
 		Clear();
 		return;
 	}
 
-	if (m_anchor != anchor)
+	if (m_anchor.actor != anchor)
 	{
 		// disconnect
-		if (m_anchor) {
-			m_anchor->SetParent(nullptr);
+		if (m_anchor.actor) {
+			m_anchor.actor->SetParent(nullptr);
 		}
-		m_anchor = anchor;
+		m_anchor.actor = anchor;
+		// cache spr
+		m_anchor.spr = anchor->GetSpr();
 	}
 
 	if (anchor) 
@@ -43,11 +45,12 @@ void AnchorActor::SetAnchor(const ActorPtr& anchor)
 
 void AnchorActor::Clear()
 {
-	if (m_anchor) 
+	if (m_anchor.actor) 
 	{
 		// disconnect
-		m_anchor->SetParent(nullptr);
-		m_anchor = nullptr;
+		m_anchor.actor->SetParent(nullptr);
+		m_anchor.actor.reset();
+		m_anchor.spr.reset();
 	}
 
 	// make it empty

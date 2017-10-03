@@ -6,7 +6,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatSprCount);
+CU_SINGLETON_DEFINITION(StatSprCount);
 
 StatSprCount::StatSprCount()
 {

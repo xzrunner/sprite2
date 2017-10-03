@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ANIMATION_H_
 #define _SPRITE2_ANIMATION_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -16,7 +16,7 @@ public:
 private:
 	float m_time;
 
-	SINGLETON_DECLARATION(Animation)
+	CU_SINGLETON_DECLARATION(Animation)
 
 }; // Animation
 

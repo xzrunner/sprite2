@@ -3,6 +3,8 @@
 
 #include S2_MAT_HEADER
 
+#include <memory>
+
 #include <cstddef>
 
 namespace s2
@@ -15,7 +17,7 @@ class SprVisitorParams
 public:
 	S2_MAT mt;
 
-	const Actor* actor;
+	ActorConstPtr actor;
 
 public:
 	SprVisitorParams() : actor(nullptr) {}

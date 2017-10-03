@@ -3,7 +3,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(SprNameMap);
+CU_SINGLETON_DEFINITION(SprNameMap);
 
 SprNameMap::SprNameMap() 
 	: m_next_static_id(0)

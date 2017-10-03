@@ -11,6 +11,8 @@ class DynamicSectorIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	DynamicSectorIcon();
 
+	virtual DynamicSectorIcon* Clone() const { return new DynamicSectorIcon(*this); }
+
 	void SetRegion(float min, float max);
 	void GetRegion(float& min, float& max) const;
 

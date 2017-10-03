@@ -15,9 +15,9 @@ public:
 	DrawBlend();
 
 protected:
-	virtual RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const;
+	virtual RenderReturn DrawSpr2RT(const SprConstPtr& spr, const RenderParams& rp, bool too_large) const;
 
-	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr, 
 		const RenderParams& rp, bool reset_color) const;
 
 }; // DrawBlend

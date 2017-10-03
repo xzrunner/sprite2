@@ -10,7 +10,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(SprTimer)
+CU_SINGLETON_DEFINITION(SprTimer)
 
 SprTimer::SprTimer()
 {

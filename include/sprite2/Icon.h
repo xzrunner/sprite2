@@ -4,9 +4,10 @@
 #include "pre_defined.h"
 #include "RenderReturn.h"
 
-#include <CU_RefCountObj.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
+
+#include <memory>
 
 namespace cooking { class DisplayList; }
 
@@ -16,13 +17,10 @@ namespace s2
 class RenderParams;
 class ImageSymbol;
 
-class Icon : public cu::RefCountObj
+class Icon
 {
 public:
-	Icon();
-	Icon(const Icon& icon);
-	Icon& operator = (const Icon& icon);
-	virtual ~Icon() {}
+	virtual Icon* Clone() const = 0;
 
 	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
 	
@@ -32,8 +30,8 @@ public:
 	void GenVertices(float process, const sm::vec2* texcoords,
 		sm::vec2* vertices) const;
 
-	void SetImage(ImageSymbol* img);
-	const ImageSymbol* GetImage() const { return m_img; }
+	void SetImage(const std::shared_ptr<ImageSymbol>& img);
+	const std::shared_ptr<ImageSymbol>& GetImage() const { return m_img; }
 
 protected:
 	virtual void GetQuad(float process, sm::vec2 quad[4]) const = 0;
@@ -41,7 +39,7 @@ protected:
 	virtual void Update() {}
 
 protected:
-	ImageSymbol* m_img;
+	std::shared_ptr<ImageSymbol> m_img;
 
 }; // Icon
 

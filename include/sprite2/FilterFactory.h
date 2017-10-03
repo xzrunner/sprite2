@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_FILTER_FACTORY_H_
 #define _SPRITE2_FILTER_FACTORY_H_
 
-#include "FilterMode.h"
+#include <cu/cu_macro.h>
 
-#include <CU_Singleton.h>
+#include "FilterMode.h"
 
 namespace s2
 {
@@ -26,7 +26,7 @@ private:
 	RenderFilter* m_temps[MAX_COUNT];
 
 private:
-	SINGLETON_DECLARATION(FilterFactory)
+	CU_SINGLETON_DECLARATION(FilterFactory)
 
 }; // FilterFactory
 

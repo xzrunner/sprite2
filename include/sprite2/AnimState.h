@@ -2,6 +2,7 @@
 #define _SPRITE2_ANIM_STATE_H_
 
 #include "sprite2/s2_config.h"
+#include "s2_typedef.h"
 
 #include <memory>
 
@@ -15,9 +16,11 @@ class Sprite;
 class AnimState
 {
 public:
-	void Assign(const AnimState& src, bool same_struct, const Sprite* spr);
+	void Assign(const AnimState& src, bool same_struct);
 
-	void Init(const std::shared_ptr<AnimCopy>& copy, const Sprite* spr);
+	void Init(const std::shared_ptr<AnimCopy>& copy);
+
+	void Start(const SprConstPtr& spr);
 
 	AnimCurr& GetOrigin() { return *m_origin; }
 #ifdef S2_MULTITHREAD
@@ -37,7 +40,7 @@ public:
 
 private:
 	void Init(std::unique_ptr<AnimCurr>& dst, 
-		const std::shared_ptr<AnimCopy>& copy, const Sprite* spr);
+		const std::shared_ptr<AnimCopy>& copy);
 
 	bool IsVaild() const {
 #ifdef S2_MULTITHREAD

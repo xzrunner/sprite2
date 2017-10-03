@@ -23,14 +23,14 @@
 namespace s2
 {
 
-RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
+RenderReturn DrawMask::Draw(const SprConstPtr& base, const SprConstPtr& mask, const RenderParams& rp)
 {
-	const Actor* base_actor = base->QueryActor(rp.actor);
+	auto base_actor = base->QueryActor(rp.actor);
 	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
 	}
-	const Actor* mask_actor = mask->QueryActor(rp.actor);
+	auto mask_actor = mask->QueryActor(rp.actor);
 	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
@@ -182,8 +182,9 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 //	return RENDER_OK;
 //}
 
-RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base, 
-									const Actor* actor, const RenderParams& rp)
+RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const SprConstPtr& base,
+									const ActorConstPtr& actor, 
+	                                const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -210,8 +211,9 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	return ret;
 }
 
-RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask, 
-									const Actor* actor, const RenderParams& rp)
+RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const SprConstPtr& mask,
+									const ActorConstPtr& actor, 
+	                                const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -239,7 +241,7 @@ RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
 }
 
 RenderReturn DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, 
-									  const Sprite* mask, const S2_MAT& mt)
+									  const SprConstPtr& mask, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 

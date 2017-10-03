@@ -3,7 +3,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Animation)
+CU_SINGLETON_DEFINITION(Animation)
 
 Animation::Animation()
 	: m_time(0)

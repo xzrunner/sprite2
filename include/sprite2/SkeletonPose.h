@@ -14,10 +14,10 @@ class SkeletonPose
 {
 public:
 	SkeletonPose() {}
-	SkeletonPose(const Skeleton* skeleton);
+	SkeletonPose(const Skeleton& skeleton);
 
-	void LoadFromSkeleton(const Skeleton* skeleton);
-	void StoreToSkeleton(const Skeleton* skeleton) const;
+	void LoadFromSkeleton(const Skeleton& skeleton);
+	void StoreToSkeleton(const Skeleton& skeleton) const;
 
 	void Lerp(const SkeletonPose& begin, const SkeletonPose& end, float process);
 

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_BLACKBOARD_H_
 #define _SPRITE2_BLACKBOARD_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 #include <SM_Vector.h>
 
 namespace s2
@@ -35,7 +35,7 @@ private:
 
 	bool m_dlist_enable;
 	
-	SINGLETON_DECLARATION(Blackboard);
+	CU_SINGLETON_DECLARATION(Blackboard);
 
 }; // Blackboard
 	

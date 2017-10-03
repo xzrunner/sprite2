@@ -22,21 +22,22 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
 
-	void SetEmitterCfg(const TrailEmitterCfg* cfg);
-	const TrailEmitterCfg* GetEmitterCfg() const { return m_et_cfg; }
+	void SetEmitterCfg(const std::shared_ptr<const TrailEmitterCfg>& cfg);
+	const std::shared_ptr<const TrailEmitterCfg>& GetEmitterCfg() const { return m_et_cfg; }
 
-	TrailEmitter* GetEmitter() const { return m_et; }
-
-protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	const std::unique_ptr<TrailEmitter>& GetEmitter() const { return m_et; }
 
 protected:
-	const TrailEmitterCfg* m_et_cfg;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
 
-	TrailEmitter* m_et;
+protected:
+	std::shared_ptr<const TrailEmitterCfg> m_et_cfg;
+
+	std::unique_ptr<TrailEmitter> m_et;
+
 }; // TrailSymbol
 
 }

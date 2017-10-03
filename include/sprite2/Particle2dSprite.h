@@ -18,14 +18,8 @@ public:
 	Particle2dSprite();
 	Particle2dSprite(const Particle2dSprite& spr);
 	Particle2dSprite& operator = (const Particle2dSprite& spr);
-	Particle2dSprite(Symbol* sym, uint32_t id = -1);
+	Particle2dSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~Particle2dSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual Particle2dSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -48,6 +42,8 @@ protected:
 	p2d_emitter* m_et;
 
 	mutable S2_MAT m_mat;
+
+	SPRITE_CLONE_FUNC(Particle2dSprite)
 
 	VI_DUMMY_FUNC
 

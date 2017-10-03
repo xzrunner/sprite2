@@ -11,33 +11,27 @@ class Polygon;
 class PolygonShape : public PolylineShape
 {
 public:
-	PolygonShape();
-	PolygonShape(const PolygonShape& poly);
-	PolygonShape& operator = (const PolygonShape& poly);
+	PolygonShape() = default;
+	PolygonShape(const PolygonShape& ps);
+	const PolygonShape& operator = (const PolygonShape& ps);
 	PolygonShape(const std::vector<sm::vec2>& vertices);
-	virtual ~PolygonShape();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual PolygonShape* Clone() const;	
 
 	/**
 	 *  @interface
 	 *    Shape
 	 */
+	virtual PolygonShape* Clone() const { return new PolygonShape(*this);  }
 	virtual int Type() const { return SHAPE_POLYGON; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;
 	virtual void Draw(const RenderParams& rp) const;
 
-	void SetPolygon(Polygon* poly);
-	const Polygon* GetPolygon() const { return m_poly; }
+	void SetPolygon(std::unique_ptr<Polygon> poly);
+	const std::unique_ptr<Polygon>& GetPolygon() const { return m_poly; }
 
 protected:
-	Polygon* m_poly;
-
+	std::unique_ptr<Polygon> m_poly;
+	
 }; // PolygonShape
 
 }

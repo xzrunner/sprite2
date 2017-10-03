@@ -1,7 +1,6 @@
 #include "S2_Mesh.h"
 #include "S2_Symbol.h"
 
-#include <polymesh/Mesh.h>
 #include <polymesh/TrianglesMesh.h>
 #include <polymesh/Skin2Mesh.h>
 #include <rigging.h>
@@ -13,31 +12,18 @@ Mesh::Mesh()
 	: m_base(nullptr)
 	, m_width(0)
 	, m_height(0)
-	, m_mesh(nullptr)
+	, m_node_radius(0)
 {
 }
 
-Mesh::Mesh(const Symbol* base)
-	: m_mesh(nullptr)
+Mesh::Mesh(const SymConstPtr& base)
+	: m_base(base)
 {
-	base->AddReference();
-	m_base = base;
-
 	sm::vec2 sz = m_base->GetBounding().Size();
 	m_width = sz.x;
 	m_height = sz.y;
 
 	m_node_radius = std::min(m_width * 0.1f, 5.0f);
-}
-
-Mesh::~Mesh()
-{
-	if (m_base) {
-		m_base->RemoveReference();
-	}
-	if (m_mesh) {
-		delete m_mesh;
-	}
 }
 
 void Mesh::DumpToTriangles(std::vector<sm::vec2>& vertices, 
@@ -95,7 +81,7 @@ void Mesh::Update(const rg_skeleton_pose* sk_pose)
 	switch (m_mesh->Type())
 	{
 	case pm::MESH_SKIN2:
-		static_cast<pm::Skin2Mesh*>(m_mesh)->Update(query_joint_world_mt, sk_pose);
+		static_cast<pm::Skin2Mesh*>(m_mesh.get())->Update(query_joint_world_mt, sk_pose);
 		break;
 	default:
 		break;
@@ -111,21 +97,13 @@ void Mesh::Update(const rg_tl_deform_state* deform_state, const float* vertices)
 	switch (m_mesh->Type())
 	{
 	case pm::MESH_TRIANGLES:
-		static_cast<pm::TrianglesMesh*>(m_mesh)->Update(
+		static_cast<pm::TrianglesMesh*>(m_mesh.get())->Update(
 			deform_state->offset0, deform_state->count0, deform_state->offset1, deform_state->count1, vertices);
 		break;
 	case pm::MESH_SKIN2:
-		static_cast<pm::Skin2Mesh*>(m_mesh)->Update(
+		static_cast<pm::Skin2Mesh*>(m_mesh.get())->Update(
 			deform_state->offset0, deform_state->count0, deform_state->offset1, deform_state->count1, vertices);
 		break;
-	}
-}
-
-void Mesh::SetMesh(pm::Mesh* mesh)
-{
-	if (m_mesh != mesh) {
-		delete m_mesh;
-		m_mesh = mesh;
 	}
 }
 

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ANIMATION2_H_
 #define _SPRITE2_ANIMATION2_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -15,7 +15,7 @@ private:
 
 private:
 	
-	SINGLETON_DECLARATION(Animation2);
+	CU_SINGLETON_DECLARATION(Animation2);
 
 }; // Animation2
 

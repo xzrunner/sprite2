@@ -3,23 +3,18 @@
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-#include <CU_Cloneable.h>
 
 #include <vector>
 
 namespace s2
 {
 
-class BoundingBox : public cu::Cloneable
+class BoundingBox
 {
 public:	
 	virtual ~BoundingBox() {}
 
-	/**
-	 *  @interface
-	 *    cu::Cloneable
-	 */
-	virtual BoundingBox* Clone() const { return nullptr; }
+	virtual BoundingBox* Clone() const = 0;
 
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsContain(const sm::rect& rect) const = 0;

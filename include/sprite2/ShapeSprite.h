@@ -12,14 +12,10 @@ public:
 	ShapeSprite();
 	ShapeSprite(const ShapeSprite& spr);
 	ShapeSprite& operator = (const ShapeSprite& spr);
-	ShapeSprite(Symbol* sym, uint32_t id = -1);
+	ShapeSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~ShapeSprite();
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual ShapeSprite* Clone() const;
+	SPRITE_CLONE_FUNC(ShapeSprite)
 
 	VI_DUMMY_FUNC
 

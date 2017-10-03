@@ -16,7 +16,7 @@ DrawIntegrate::DrawIntegrate()
 {	
 }
 
-RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const
+RenderReturn DrawIntegrate::DrawSpr2RT(const SprConstPtr& spr, const RenderParams& rp, bool too_large) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -43,7 +43,7 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	return RENDER_OK;
 }
 
-RenderReturn DrawIntegrate::DrawRT2Screen(int tex_id, const Sprite* spr, 
+RenderReturn DrawIntegrate::DrawRT2Screen(int tex_id, const SprConstPtr& spr, 
 										  const RenderParams& rp, bool too_large) const
 {
 	RenderReturn ret = RENDER_OK;

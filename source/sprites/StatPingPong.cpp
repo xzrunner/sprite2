@@ -7,7 +7,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatPingPong);
+CU_SINGLETON_DEFINITION(StatPingPong);
 
 StatPingPong::StatPingPong()
 {

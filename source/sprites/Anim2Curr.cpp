@@ -3,7 +3,6 @@
 #include "Animation.h"
 
 #include <rigging.h>
-#include <CU_RefCountObj.h>
 
 #include <assert.h>
 #include <string.h>
@@ -12,8 +11,7 @@ namespace s2
 {
 
 Anim2Curr::Anim2Curr()
-	: m_sym(nullptr)
-	, m_frame(0)
+	: m_frame(0)
 	, m_sk_pose(nullptr)
 	, m_sk_skin(nullptr)
 	, m_active(true)
@@ -22,7 +20,7 @@ Anim2Curr::Anim2Curr()
 }
 
 Anim2Curr::Anim2Curr(const Anim2Curr& curr)
-	: m_sym(nullptr)
+	: m_sym(curr.m_sym)
 	, m_frame(curr.m_frame)
 	, m_frames_ptr(curr.m_frames_ptr)
 	, m_start_time(curr.m_start_time)
@@ -31,13 +29,11 @@ Anim2Curr::Anim2Curr(const Anim2Curr& curr)
 	, m_sk_skin(nullptr)
 	, m_active(curr.m_active)
 {
-	cu::RefCountObjAssign(m_sym, curr.m_sym);
 }
 
 Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 {
-	m_sym = nullptr;
-	cu::RefCountObjAssign(m_sym, curr.m_sym);
+	m_sym = curr.m_sym;
 	m_frame = curr.m_frame;
 	m_frames_ptr = curr.m_frames_ptr;
 	m_start_time = curr.m_start_time;
@@ -48,13 +44,12 @@ Anim2Curr& Anim2Curr::operator = (const Anim2Curr& curr)
 	return *this;
 }
 
-Anim2Curr::Anim2Curr(Anim2Symbol* sym)
-	: m_sym(nullptr)
+Anim2Curr::Anim2Curr(const std::shared_ptr<Anim2Symbol>& sym)
+	: m_sym(sym)
 	, m_frame(0)
 	, m_active(true)
 {
 	ResetTime();
-	cu::RefCountObjAssign(m_sym, sym);
 
 	rg_skeleton* sk = sym->GetAnim()->sk;
 
@@ -73,9 +68,6 @@ Anim2Curr::Anim2Curr(Anim2Symbol* sym)
 
 Anim2Curr::~Anim2Curr()
 {
-	if (m_sym) {
-		m_sym->RemoveReference();
-	}
 	if (m_sk_pose) {
 		free(m_sk_pose);
 	}
@@ -112,8 +104,12 @@ bool Anim2Curr::Update(bool loop, int fps)
 	}
 
 	// update frame
+	auto sym_sp = m_sym.lock();
+	if (!sym_sp) {
+		return dirty;
+	}
 	int curr_frame = static_cast<int>((m_curr_time - m_start_time) * fps + 1);
-	int max_frame = m_sym->GetAnim()->max_frame;
+	int max_frame = sym_sp->GetAnim()->max_frame;
 	int loop_max_frame = max_frame/* + interval * fps*/;
 	if (loop) {
 		if (curr_frame <= max_frame) {
@@ -167,7 +163,12 @@ void Anim2Curr::ResetTime()
 
 void Anim2Curr::UpdateRigging()
 {
-	const rg_animation* anim = m_sym->GetAnim();
+	auto sym_sp = m_sym.lock();
+	if (!sym_sp) {
+		return;
+	}
+
+	const rg_animation* anim = sym_sp->GetAnim();
 
 	// todo: GetFramePtr(i) as dims_ptr
 	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->timeline.joints, m_frame);

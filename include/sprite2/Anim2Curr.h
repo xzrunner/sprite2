@@ -2,6 +2,7 @@
 #define _SPRITE2_ANIM2_CURR_H_
 
 #include <vector>
+#include <memory>
 
 #include <stdint.h>
 #include <stddef.h>
@@ -20,7 +21,7 @@ public:
 	Anim2Curr();
 	Anim2Curr(const Anim2Curr& curr);
 	Anim2Curr& operator = (const Anim2Curr& curr);
-	Anim2Curr(Anim2Symbol* sym);
+	Anim2Curr(const std::shared_ptr<Anim2Symbol>& sym);
 	~Anim2Curr();
 
 	bool Update(bool loop = true, int fps = 30);
@@ -45,7 +46,7 @@ private:
 	void UpdateRigging();
 
 private:
-	Anim2Symbol* m_sym;
+	std::weak_ptr<Anim2Symbol> m_sym;
 
 	int m_frame;
 

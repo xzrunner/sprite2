@@ -8,7 +8,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(SprDefault);
+CU_SINGLETON_DEFINITION(SprDefault);
 
 SprDefault::SprDefault()
 {

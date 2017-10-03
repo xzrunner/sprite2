@@ -8,15 +8,14 @@
 namespace s2
 {
 
-sm::rect AABBHelper::CalcAABB(const std::vector<Sprite*>& children, 
-							  const Actor* parent)
+sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children,
+	                          const ActorConstPtr& parent)
 {
 	sm::rect aabb;
 
-	for (int i = 0, n = children.size(); i < n; ++i) 
+	for (auto& c_spr : children) 
 	{
-		const Sprite* c_spr = children[i];
-		const Actor* c_actor = c_spr->QueryActor(parent);
+		auto& c_actor = c_spr->QueryActor(parent);
 		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
 		if (!visible) {
 			continue;
@@ -41,17 +40,16 @@ sm::rect AABBHelper::CalcAABB(const std::vector<Sprite*>& children,
 	return aabb;
 }
 
-void AABBHelper::UpdateChildrenAABBTight(const std::vector<Sprite*>& children, 
-										 const Actor* parent,
+void AABBHelper::UpdateChildrenAABBTight(const std::vector<SprPtr>& children,
+	                                     const ActorConstPtr& parent,
 										 const sm::rect& parent_aabb)
 {
 	if (!parent) {
 		return;
 	}
-	for (int i = 0, n = children.size(); i < n; ++i) 
+	for (auto& c_spr : children)
 	{
-		const Sprite* c_spr = children[i];
-		const Actor* c_actor = c_spr->QueryActor(parent);
+		auto& c_actor = c_spr->QueryActor(parent);
 		if (!c_actor) {
 			continue;
 		}

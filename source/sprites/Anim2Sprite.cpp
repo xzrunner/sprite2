@@ -30,9 +30,9 @@ Anim2Sprite& Anim2Sprite::operator = (const Anim2Sprite& spr)
 	return *this;
 }
 
-Anim2Sprite::Anim2Sprite(Symbol* sym, uint32_t id)
+Anim2Sprite::Anim2Sprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_curr(VI_DOWNCASTING<Anim2Symbol*>(sym))
+	, m_curr(S2_VI_PTR_DOWN_CAST<Anim2Symbol>(sym))
 	, m_static_time(-1)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -47,11 +47,6 @@ Anim2Sprite::~Anim2Sprite()
 #endif // S2_DISABLE_STATISTICS
 }
 
-Anim2Sprite* Anim2Sprite::Clone() const
-{
-	return new Anim2Sprite(*this);
-}
-
 bool Anim2Sprite::Update(const UpdateParams& up)
 {
 	// update inherit
@@ -60,7 +55,7 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;

@@ -19,21 +19,21 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
 
-	const Sprite* GetBase() const { return m_base; }
-	void SetBase(Sprite* base);
+	const SprPtr& GetBase() const { return m_base; }
+	void SetBase(const SprPtr& base) { m_base = base; }
 
-	const Sprite* GetMask() const { return m_mask; }
-	void SetMask(Sprite* mask);
-
-protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	const SprPtr& GetMask() const { return m_mask; }
+	void SetMask(const SprPtr& mask) { m_mask = mask; }
 
 protected:
-	Sprite* m_base;
-	Sprite* m_mask;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
+
+protected:
+	SprPtr m_base;
+	SprPtr m_mask;
 
 }; // MaskSymbol
 

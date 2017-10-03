@@ -49,7 +49,7 @@ DrawRT::~DrawRT()
 	}
 }
 
-void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx, float dy, float scale)
+void DrawRT::Draw(const SprConstPtr& spr, bool clear, int width, int height, float dx, float dy, float scale)
 {
 	if (width == -1) {
 		width = m_rt->Width();
@@ -86,7 +86,7 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 	m_rt->Unbind();
 }
 
-void DrawRT::Draw(const Symbol* sym, bool whitebg, float scale)
+void DrawRT::Draw(const SymConstPtr& sym, bool whitebg, float scale)
 {
 	m_rt->Bind();
 

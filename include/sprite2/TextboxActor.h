@@ -13,7 +13,7 @@ class Textbox;
 class TextboxActor : public Actor
 {
 public:
-	TextboxActor(const Sprite* spr, const Actor* parent)
+	TextboxActor(const SprConstPtr& spr, const ActorConstPtr& parent) 
 		: Actor(spr, parent) {}
 
 	void SetText(const std::string& text);

@@ -39,13 +39,13 @@ void TextboxActor::SetText(const std::string& text)
 
 	m_text = text;
 
-	const TextboxSprite* text_spr = VI_DOWNCASTING<const TextboxSprite*>(GetSpr());
+	auto& text_spr = S2_VI_PTR_DOWN_CAST<const TextboxSprite>(GetSpr());
 	const Textbox& tb = text_spr->GetTextbox();
 	sm::rect rect = CalcAABB(tb, GetSpr()->GetSymbol()->GetBounding(), m_text);
 
 	ActorAABB& aabb = GetAABB();
 	aabb.SetRect(rect);
-	aabb.UpdateParent(this);
+	aabb.UpdateParent(shared_from_this());
 }
 
 sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const std::string& text)

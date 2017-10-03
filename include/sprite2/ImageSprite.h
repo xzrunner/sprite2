@@ -12,22 +12,18 @@ public:
 	ImageSprite();
 	ImageSprite(const ImageSprite& spr);
 	ImageSprite& operator = (const ImageSprite& spr);
-	ImageSprite(Symbol* sym, uint32_t id = -1);
+	ImageSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~ImageSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual ImageSprite* Clone() const;
 
 	/**
 	 *  @interface
 	 *    Sprite
 	 */
 	virtual bool Update(const UpdateParams& up);
-	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }	// todo
-	virtual bool AutoUpdate(const Actor* actor);
+	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return false; }	// todo
+	virtual bool AutoUpdate(const ActorConstPtr& actor);
+
+	SPRITE_CLONE_FUNC(ImageSprite)
 
 	VI_DUMMY_FUNC
 

@@ -20,7 +20,7 @@ SetStaticFrameVisitor::SetStaticFrameVisitor(int static_frame)
 {
 }
 
-VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
+VisitResult SetStaticFrameVisitor::Visit(const SprConstPtr& spr, const SprVisitorParams& params)
 {	
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type == SYM_ANCHOR) {
@@ -33,7 +33,7 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	}
 
 	// visible
-	const Actor* actor = params.actor;
+	auto& actor = params.actor;
 	bool visible = actor ? actor->IsVisible() : spr->IsVisible();
 	if (!visible) {
 		return VISIT_OVER;
@@ -44,15 +44,15 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 	{
 	case SYM_ANIMATION:
 		{
-			AnimSprite* anim_spr = const_cast<AnimSprite*>(VI_DOWNCASTING<const AnimSprite*>(spr));
+			auto& anim_spr = std::const_pointer_cast<AnimSprite>(S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr));
 			anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
 		}
 		break;
 	case SYM_ANIM2:
 		{
-			Anim2Sprite* anim2_spr = const_cast<Anim2Sprite*>(VI_DOWNCASTING<const Anim2Sprite*>(spr));
+			auto& anim2_spr = S2_VI_PTR_DOWN_CAST<const Anim2Sprite>(spr);
 			if (anim2_spr->GetStaticTime() != m_static_frame) {
-				anim2_spr->SetStaticTime(s2::UpdateParams(), m_static_frame);
+				std::const_pointer_cast<Anim2Sprite>(anim2_spr)->SetStaticTime(UpdateParams(), m_static_frame);
 			}
 		}
 		break;
@@ -61,8 +61,8 @@ VisitResult SetStaticFrameVisitor::Visit(const Sprite* spr, const SprVisitorPara
 		break;
 	case SYM_AUDIO:
 		{
-			const AudioSymbol* audio_sym = VI_DOWNCASTING<const AudioSymbol*>(spr->GetSymbol());
-			ua::Source* source = const_cast<AudioSymbol*>(audio_sym)->GetSource();
+			auto& audio_sym = S2_VI_PTR_DOWN_CAST<const AudioSymbol>(spr->GetSymbol());
+			auto& source = std::const_pointer_cast<AudioSymbol>(audio_sym)->GetSource();
 			if (source) {
 				source->Seek(m_static_frame / FPS);
 			}

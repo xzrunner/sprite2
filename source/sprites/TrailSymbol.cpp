@@ -42,13 +42,6 @@ TrailSymbol::~TrailSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_TRAIL);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_et_cfg) {
-		m_et_cfg->RemoveReference();
-	}
-	if (m_et) {
-		m_et->RemoveReference();
-	}
 }
 
 int TrailSymbol::Type() const 
@@ -56,7 +49,7 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TRAIL);
@@ -78,7 +71,7 @@ RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
-	const TrailSprite* t2d_spr = VI_DOWNCASTING<const TrailSprite*>(spr);
+	auto& t2d_spr = S2_VI_PTR_DOWN_CAST<const TrailSprite>(spr);
 	// todo: return trail's render ret
 	t2d_spr->Draw(*rp_child);
 
@@ -87,27 +80,23 @@ RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	return RENDER_OK;
 }
 
-void TrailSymbol::SetEmitterCfg(const TrailEmitterCfg* cfg)
+void TrailSymbol::SetEmitterCfg(const std::shared_ptr<const TrailEmitterCfg>& cfg)
 {
 	if (m_et_cfg == cfg) {
 		return;
 	}
 
-	cu::RefCountObjAssign(m_et_cfg, cfg);
+	m_et_cfg = std::move(cfg);
 	if(!cfg) {
 		return;
 	}
 
-	if (m_et) {
-		m_et->RemoveReference();
-	}
-
-	m_et = TrailEmitterPool::Instance()->Pop();
+	m_et = std::make_unique<TrailEmitter>();
 	m_et->CreateEmitter(m_et_cfg);
 	m_et->Start();
 }
 
-sm::rect TrailSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect TrailSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

@@ -7,35 +7,29 @@ namespace s2
 
 const float Joint::RADIUS = 10;
 
-Joint::Joint(Sprite* spr, const JointPose& joint_local)
-	: m_parent(nullptr)
-	, m_skin(spr, -joint_local)
+Joint::Joint(const SprPtr& spr, const JointPose& joint_local)
+	: m_skin(spr, -joint_local)
 {
-	if (Sprite* spr = m_skin.spr) {
+	if (spr) {
 		JointPose src(spr->GetCenter(), spr->GetAngle(), spr->GetScale());
 		m_world_pose = local2world(src, joint_local);
 	}
 }
 
-Joint::~Joint()
-{
-	if (m_parent) {
-		m_parent->RemoveReference();
-	}
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Joint>());
-}
-
 void Joint::Translate(const sm::vec2& trans)
 {
 	m_world_pose.trans += trans;
-	if (m_parent) {
-		m_local_pose = world2local(m_parent->m_world_pose, m_world_pose);
+	if (auto p = m_parent.lock()) {
+		m_local_pose = world2local(p->m_world_pose, m_world_pose);
 	}
 	m_skin.Update(this);
 
 	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		m_children[i]->Translate(trans);
-	}
+		auto child = m_children[i];
+		if (child) {
+			child->Translate(trans);
+		}
+	} 
 }
 
 void Joint::Rotate(float rot)
@@ -71,8 +65,8 @@ RenderReturn Joint::Draw(const RenderParams& rp) const
 
 void Joint::Update()
 {
-	if (m_parent) {
-		m_world_pose = local2world(m_parent->GetWorldPose(), m_local_pose);
+	if (auto p = m_parent.lock()) {
+		m_world_pose = local2world(p->GetWorldPose(), m_local_pose);
 	}
 	m_skin.Update(this);
 
@@ -81,10 +75,10 @@ void Joint::Update()
 	}
 }
 
-bool Joint::ConnectChild(Joint* child)
+bool Joint::ConnectChild(const std::shared_ptr<Joint>& child)
 {
 	for (int i = 0, n = child->m_children.size(); i < n; ++i) {
-		if (child->m_children[i] == this) {
+		if (child->m_children[i].get() == this) {
 			return false;
 		}
 	}
@@ -94,30 +88,26 @@ bool Joint::ConnectChild(Joint* child)
 		}
 	}
 
-	child->AddReference();
 	m_children.push_back(child);
-
-	cu::RefCountObjAssign(child->m_parent, (Joint*)this);
 
 	return true;
 }
 
 void Joint::DeconnectParent()
 {
-	if (!m_parent) {
+	auto parent = m_parent.lock();
+	if (!parent) {
 		return;
 	}
 
-	for (int i = 0, n = m_parent->m_children.size(); i < n; ++i) {
-		if (m_parent->m_children[i] == this) {
-			this->RemoveReference();
-			m_parent->m_children.erase(m_parent->m_children.begin() + i);
+	for (int i = 0, n = parent->m_children.size(); i < n; ++i) {
+		if (parent->m_children[i].get() == this) {
+			parent->m_children.erase(parent->m_children.begin() + i);
 			break;
 		}
 	}
 
-	m_parent->RemoveReference();
-	m_parent = nullptr;
+	m_parent.reset();
 }
 
 /************************************************************************/
@@ -125,21 +115,10 @@ void Joint::DeconnectParent()
 /************************************************************************/
 
 Joint::Skin::
-Skin(Sprite* spr, const JointPose& skin_local)
+Skin(const SprPtr& spr, const JointPose& skin_local)
 	: spr(spr)
 	, skin_local(skin_local)
 {
-	if (this->spr) {
-		this->spr->AddReference();
-	}
-}
-
-Joint::Skin::
-~Skin()
-{
-	if (spr) {
-		spr->RemoveReference();
-	}
 }
 
 void Joint::Skin::

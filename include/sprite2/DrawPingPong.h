@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_DRAW_PINGPONG_H_
 #define _SPRITE2_DRAW_PINGPONG_H_
 
+#include "s2_typedef.h"
+
 #include "RenderReturn.h"
 
 namespace s2
@@ -14,15 +16,15 @@ class DrawPingPong
 public:
 	DrawPingPong(int stat_pp_type);
 
-	RenderReturn Draw(const Sprite* spr, const RenderParams& rp) const;
+	RenderReturn Draw(const SprConstPtr& spr, const RenderParams& rp) const;
 
 protected:
-	virtual RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const = 0;
-	virtual RenderReturn DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, bool too_large) const;
+	virtual RenderReturn DrawSpr2RT(const SprConstPtr& spr, const RenderParams& rp, bool too_large) const = 0;
+	virtual RenderReturn DrawRT2Screen(int tex_id, const SprConstPtr& spr, const RenderParams& rp, bool too_large) const;
 
-	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr, 
 		const RenderParams& rp, bool reset_color) const;
-	virtual RenderReturn DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
+	virtual RenderReturn DrawRT2ScreenLarge(int tex_id, const SprConstPtr& spr,
 		const RenderParams& rp, bool reset_color) const;
 
 private:

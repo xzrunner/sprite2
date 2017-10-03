@@ -15,14 +15,8 @@ public:
 	TextboxSprite();
 	TextboxSprite(const TextboxSprite& spr);
 	TextboxSprite& operator = (const TextboxSprite& spr);
-	TextboxSprite(Symbol* sym, uint32_t id = -1);
+	TextboxSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~TextboxSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual TextboxSprite* Clone() const;
 
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }
@@ -42,6 +36,8 @@ protected:
 private:
 	// for dynamic draw
 	mutable int m_time;	
+
+	SPRITE_CLONE_FUNC(TextboxSprite)
 
 	VI_DUMMY_FUNC
 

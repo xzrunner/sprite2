@@ -11,7 +11,9 @@ namespace s2
 class AnimActor : public Actor
 {
 public:
-	AnimActor(const Sprite* spr, const Actor* parent);
+	AnimActor(const SprConstPtr& spr, const ActorConstPtr& parent);
+
+	virtual void Init();
 
 	AnimState& GetState() { return m_state; }
 	const AnimState& GetState() const { return m_state; }

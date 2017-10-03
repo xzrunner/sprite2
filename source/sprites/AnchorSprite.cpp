@@ -9,8 +9,8 @@ namespace s2
 
 void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	const Actor* actor = up.GetActor();
-	const Actor* anchor = QueryAnchor(actor);
+	auto& actor = up.GetActor();
+	auto& anchor = QueryAnchor(actor);
 	if (!anchor) {
 		return;
 	}
@@ -18,31 +18,30 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
 
-	up_child->Push(this);
-	const Sprite* anchor_spr = anchor->GetSpr();
+	up_child->Push(shared_from_this());
+	auto& anchor_spr = anchor->GetSpr();
 	up_child->SetActor(anchor_spr->QueryActor(actor));
-	const_cast<Sprite*>(anchor_spr)->OnMessage(*up_child, msg);
+	std::const_pointer_cast<Sprite>(anchor_spr)->OnMessage(*up_child, msg);
 
 	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool AnchorSprite::Update(const UpdateParams& up)
 {
-	const Actor* actor = up.GetActor();
-	const Actor* anchor = QueryAnchor(actor);
+	auto& actor = up.GetActor();
+	auto& anchor = QueryAnchor(actor);
 	if (!anchor) {
 		return false;
 	}
 
-	const Sprite* spr_real = anchor->GetSpr();
+	auto& spr_real = anchor->GetSpr();
 
 	// update inherit
 	if (!up.IsForce() && !spr_real->IsInheritUpdate()) {
 		return false;
 	}
 
-	
-	const Actor* actor_real = spr_real->QueryActor(actor);
+	auto& actor_real = spr_real->QueryActor(actor);
 	
 	// visible
 	bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
@@ -53,31 +52,31 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
 
-	up_child->Push(this);
+	up_child->Push(shared_from_this());
 	up_child->SetActor(actor_real);
-	bool ret = const_cast<Sprite*>(spr_real)->Update(*up_child);
+	bool ret = std::const_pointer_cast<Sprite>(spr_real)->Update(*up_child);
 
 	UpdateParamsPool::Instance()->Push(up_child); 
 
 	return ret;
 }
 
-Sprite* AnchorSprite::FetchChildByName(int name, const Actor* actor) const
+SprPtr AnchorSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	const Actor* anchor = QueryAnchor(actor);
+	auto& anchor = QueryAnchor(actor);
 	if (anchor) {
-		const Sprite* anchor_spr = anchor->GetSpr();
+		auto& anchor_spr = anchor->GetSpr();
 		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor));
 	} else {
 		return nullptr;
 	}
 }
 
-Sprite* AnchorSprite::FetchChildByIdx(int idx, const Actor* actor) const
+SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 {
-	const Actor* anchor = QueryAnchor(actor);
+	auto& anchor = QueryAnchor(actor);
 	if (anchor) {
-		const Sprite* anchor_spr = anchor->GetSpr();
+		auto& anchor_spr = anchor->GetSpr();
 		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor));
 	} else {
 		return nullptr;
@@ -86,28 +85,23 @@ Sprite* AnchorSprite::FetchChildByIdx(int idx, const Actor* actor) const
 
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
-	const Actor* actor = params.actor;
-	const Actor* anchor = QueryAnchor(actor);
-	if (anchor) {
-		SprVisitorParams cp = params;
-		cp.actor = anchor;
-		return anchor->GetSpr()->TraverseChildren(visitor, cp);
-	} else {
-		return VISIT_OVER;
-	}
+	//auto& actor = params.actor;
+	//auto& anchor = QueryAnchor(actor);
+	//if (anchor) {
+	//	SprVisitorParams cp = params;
+	//	cp.actor = anchor;
+	//	return anchor->GetSpr()->TraverseChildren(visitor, cp);
+	//} else {
+	//	return VISIT_OVER;
+	//}
+
+	return VISIT_OVER;
 }
 
-void AnchorSprite::AddAnchor(const Actor* child, const Actor* parent)
-{
-	AnchorActor* actor = VI_DOWNCASTING<AnchorActor*>(ActorFactory::Instance()->Create(parent, this));
-	actor->SetAnchor(child);
-}
-
-const Actor* AnchorSprite::QueryAnchor(const Actor* actor) const
+ActorConstPtr AnchorSprite::QueryAnchor(const ActorConstPtr& actor) const
 {
 	if (actor) {
-		const AnchorActor* anchor_actor = static_cast<const AnchorActor*>(actor);
-		return anchor_actor->GetAnchor();
+		return std::static_pointer_cast<const AnchorActor>(actor)->GetAnchor();
 	} else {
 		return nullptr;
 	}

@@ -5,7 +5,7 @@
 namespace s2
 {
 
-MaskActor::MaskActor(const Sprite* spr, const Actor* parent)
+MaskActor::MaskActor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: Actor(spr, parent) 
 {
 	sm::rect mask_aabb = spr->GetSymbol()->GetBounding(spr);

@@ -15,14 +15,8 @@ public:
 	TrailSprite();
 	TrailSprite(const TrailSprite& spr);
 	TrailSprite& operator = (const TrailSprite& spr);
-	TrailSprite(Symbol* sym, uint32_t id = -1);
+	TrailSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~TrailSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual TrailSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -42,10 +36,12 @@ protected:
 	void CreateSpr();
 
 protected:
-	TrailEmitter* m_et;
+	std::unique_ptr<TrailEmitter> m_et;
 
 	bool m_local;
 	bool m_in_p3d;
+
+	SPRITE_CLONE_FUNC(TrailSprite)
 	
 	VI_DUMMY_FUNC
 

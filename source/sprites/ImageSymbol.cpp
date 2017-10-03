@@ -55,10 +55,6 @@ ImageSymbol::~ImageSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_IMAGE);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_tex) {
-		m_tex->RemoveReference();
-	}
 }
 
 int ImageSymbol::Type() const 
@@ -66,7 +62,7 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 	if (!m_tex) {
 		return RENDER_NO_DATA;
@@ -125,7 +121,7 @@ RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 
 RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 	                               const RenderParams& rp, 
-	                               const Sprite* spr,
+	                               const SprConstPtr& spr,
 	                               ft::FTList& ft, 
 	                               int pos) const
 {
@@ -184,9 +180,9 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
-void ImageSymbol::InitTex(Texture* tex, const sm::i16_rect& region)
+void ImageSymbol::InitTex(const std::shared_ptr<Texture>& tex, const sm::i16_rect& region)
 {
-	cu::RefCountObjAssign(m_tex, tex);
+	m_tex = tex;
 	m_region = region;
 }
 
@@ -195,7 +191,7 @@ bool ImageSymbol::IsLoaded() const
 	return m_tex && m_tex->IsLoadFinished();
 }
 
-sm::rect ImageSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect ImageSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	return m_size;
 }

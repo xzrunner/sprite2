@@ -2,10 +2,12 @@
 #define _SPRITE2_SCALE9_H_
 
 #include "RenderReturn.h"
+#include "s2_typedef.h"
 
 #include <SM_Vector.h>
 
 #include <vector>
+#include <memory>
 
 namespace cooking { class DisplayList; }
 
@@ -46,22 +48,21 @@ public:
 	Scale9();
 	Scale9(const Scale9& s9);
 	Scale9& operator = (const Scale9& s9);
-	~Scale9();
 
 	RenderReturn Draw(const RenderParams& rp) const;
 
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }
 
-	void Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9], 
+	void Build(SCALE9_TYPE type, int w, int h, SprPtr grids[9],
 		int sz_left, int sz_right, int sz_top, int sz_down);
 
-	void GetGrids(std::vector<Sprite*>& grids) const;
-	const Sprite* GetGrid(SCALE9_IDX idx) const { return m_grids[idx]; }
+	void GetGrids(std::vector<SprPtr>& grids) const;
+	const SprPtr& GetGrid(SCALE9_IDX idx) const { return m_grids[idx]; }
 
 	SCALE9_TYPE GetType() const { return m_type; }
 
-	static SCALE9_TYPE CheckType(Sprite* grids[9]);
+	static SCALE9_TYPE CheckType(SprPtr grids[9]);
 
 private:
 	void ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, 
@@ -82,7 +83,7 @@ private:
 	// 6 7 8
 	// 3 4 5
 	// 0 1 2
-	Sprite* m_grids[9];
+	SprPtr m_grids[9];
 
 	int m_sz_left, m_sz_right, m_sz_top, m_sz_down;
 

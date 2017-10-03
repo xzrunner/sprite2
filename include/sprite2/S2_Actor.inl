@@ -23,7 +23,7 @@ inline
 void Actor::CreateFlatten()
 {
 	assert(!m_flatten.list);
-	m_flatten.list = std::make_shared<ft::FTList>(this);
+	m_flatten.list = std::make_shared<ft::FTList>(shared_from_this());
 	m_flatten.pos = 0;
 }
 
@@ -42,7 +42,7 @@ void Actor::FlattenUpdate(bool force)
 }
 
 inline
-void Actor::FlattenDraw(const s2::RenderParams& rp) const
+void Actor::FlattenDraw(const RenderParams& rp) const
 {
 	if (m_flatten.list) {
 		if (rp.IsEnableDrawlist()) {

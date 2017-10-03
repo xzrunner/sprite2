@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_NAME_MAP_H_
 #define _SPRITE2_SPR_NAME_MAP_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 #include <map>
@@ -53,7 +53,7 @@ private:
 
 	int m_next_static_id, m_next_tmp_id, m_next_normal_id;
 
-	SINGLETON_DECLARATION(SprNameMap);
+	CU_SINGLETON_DECLARATION(SprNameMap);
 
 }; // SprNameMap
 

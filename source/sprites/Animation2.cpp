@@ -12,7 +12,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Animation2)
+CU_SINGLETON_DEFINITION(Animation2)
 
 Animation2::Animation2()
 {
@@ -22,7 +22,8 @@ Animation2::Animation2()
 static void
 render_func(void* sym, float* mat, const void* ud) 
 {
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	SymPtr s2_sym(static_cast<Symbol*>(sym));
+
 	const RenderParams* params = static_cast<const RenderParams*>(ud);
 
 #ifdef S2_MATRIX_FIX
@@ -53,20 +54,18 @@ debug_draw_func(float x, float y, uint32_t color)
 static void
 update_skin_func(void* sym, const rg_skeleton_pose* sk_pose) 
 {
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	SymPtr s2_sym(static_cast<Symbol*>(sym));
 	if (s2_sym->Type() == SYM_MESH) {
-		MeshSymbol* mesh_sym = VI_DOWNCASTING<MeshSymbol*>(s2_sym);
-		mesh_sym->UpdateMesh(sk_pose);
+		S2_VI_PTR_DOWN_CAST<MeshSymbol>(s2_sym)->UpdateMesh(sk_pose);
 	}
 }
 
 static void
 update_mesh_func(void* sym, const rg_tl_deform_state* deform_state, const float* vertices) 
 {
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	SymPtr s2_sym(static_cast<Symbol*>(sym));
 	if (s2_sym->Type() == SYM_MESH) {
-		MeshSymbol* mesh_sym = VI_DOWNCASTING<MeshSymbol*>(s2_sym);
-		mesh_sym->UpdateMesh(deform_state, vertices);
+		S2_VI_PTR_DOWN_CAST<MeshSymbol>(s2_sym)->UpdateMesh(deform_state, vertices);
 	}
 }
 

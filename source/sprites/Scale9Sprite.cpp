@@ -33,9 +33,9 @@ Scale9Sprite& Scale9Sprite::operator = (const Scale9Sprite& spr)
 	return *this;
 }
 
-Scale9Sprite::Scale9Sprite(Symbol* sym, uint32_t id)
+Scale9Sprite::Scale9Sprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_s9(VI_DOWNCASTING<Scale9Symbol*>(sym)->GetScale9())
+	, m_s9(S2_VI_PTR_DOWN_CAST<Scale9Symbol>(sym)->GetScale9())
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_SCALE9);
@@ -49,21 +49,16 @@ Scale9Sprite::~Scale9Sprite()
 #endif // S2_DISABLE_STATISTICS
 }
 
-Scale9Sprite* Scale9Sprite::Clone() const
-{
-	return new Scale9Sprite(*this);
-}
-
 VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	std::vector<Sprite*> grids;
+	std::vector<SprPtr> grids;
 	m_s9.GetGrids(grids);
 	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = grids.size(); i < n; ++i) 
 		{
-			Sprite* child = grids[i];
+			auto& child = grids[i];
 			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
@@ -72,7 +67,7 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	} else {
 		for (int i = grids.size() - 1; i >= 0; --i) 
 		{
-			Sprite* child = grids[i];
+			auto& child = grids[i];
 			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;

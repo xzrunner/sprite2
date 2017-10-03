@@ -11,10 +11,10 @@
 #include "RenderCamera.h"
 #include "SpriteVisitor.h"
 #include "S2_Actor.h"
-#include "ClearActorsVisitor.h"
 #include "SymType.h"
 #include "SprVisitorParams.h"
 #include "sprite2/Utility.h"
+#include "UpdateParams.h"
 
 #include <rigging.h>
 
@@ -32,7 +32,7 @@ static const sm::vec2 POS0_PROXY = sm::vec2(0, 0);
 static const sm::vec2 POS1_PROXY = sm::vec2(1, 1);
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-static void (*INIT_FLAGS)(Sprite* spr);
+static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
 	: m_sym(nullptr)
@@ -70,8 +70,8 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	return *this;
 }
 
-Sprite::Sprite(Symbol* sym, uint32_t id)
-	: m_sym(nullptr)
+Sprite::Sprite(const SymPtr& sym, uint32_t id)
+	: m_sym(sym)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo())
 	, m_bounding(new OBB())
@@ -82,8 +82,6 @@ Sprite::Sprite(Symbol* sym, uint32_t id)
 {
 	++ALL_SPR_COUNT;
 
-	cu::RefCountObjAssign(m_sym, sym);
-
 	InitFlags();
 }
 
@@ -91,43 +89,37 @@ Sprite::~Sprite()
 {
 	--ALL_SPR_COUNT;
 
-	if (m_actors)
-	{
-		ClearActorsVisitor visitor;
-		SprVisitorParams params;
-		Traverse(visitor, params);
+	if (m_actors) {
 		delete m_actors;
-	}
-
-	if (m_sym) {
-		m_sym->RemoveReference();
 	}
 
 	if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
 		SprGeoPool::Instance()->Push(m_geo);
 	}
 
-	delete m_bounding;
+	if (m_bounding) {
+		delete m_bounding;
+	}
 
 	if (m_render != SprDefault::Instance()->Render()) {
 		SprRenderPool::Instance()->Push(m_render);
 	}
 }
 
-void Sprite::Retain(const Actor* actor) const
+SprPtr Sprite::Clone() const
 {
-	AddReference();
+	auto ret = CloneImpl();
+	if (ret) {
+		ret->OnMessage(UpdateParams(), MSG_START);
+	}
+	return ret;
 }
 
-void Sprite::Release(const Actor* actor) const
+void Sprite::SetSymbol(const SymPtr& sym)
 {
-	RemoveReference();
-}
+	m_sym = sym;
 
-void Sprite::SetSymbol(Symbol* sym)
-{
-	cu::RefCountObjAssign(m_sym, sym);
-	UpdateBounding();
+	UpdateBounding(nullptr);
 
 	SetDirty(true);
 }
@@ -280,10 +272,10 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	SetDirty(true);
 }
 
-void Sprite::InitHook(void (*init_flags)(Sprite* spr))
-{
-	INIT_FLAGS = init_flags;
-}
+//void Sprite::InitHook(void (*init_flags)(const SprPtr& spr))
+//{
+//	INIT_FLAGS = init_flags;
+//}
 
 int Sprite::GetAllSprCount()
 {
@@ -295,17 +287,17 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 	p.actor = params.actor;
 	if (init_mat) {
-		Utility::PrepareMat(params.mt, this, params.actor, p.mt);
+		Utility::PrepareMat(params.mt, shared_from_this(), params.actor, p.mt);
 	}
 
 	VisitResult ret = VISIT_OVER;
 
-	VisitResult v_ret = visitor.Visit(this, p);
+	VisitResult v_ret = visitor.Visit(shared_from_this(), p);
 	switch (v_ret)
 	{
 	case VISIT_INTO:
 		{
-			visitor.VisitChildrenBegin(this, p);
+			visitor.VisitChildrenBegin(shared_from_this(), p);
 			VisitResult v = TraverseChildren(visitor, p);
 			switch (v)
 			{
@@ -313,7 +305,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 				assert(0);
 				break;
 			case VISIT_OVER:
-				ret = visitor.VisitChildrenEnd(this, p);
+				ret = visitor.VisitChildrenEnd(shared_from_this(), p);
 				break;
 			case VISIT_OUT: case VISIT_STOP:
 				ret = v;
@@ -329,7 +321,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	return ret;
 }
 
-const BoundingBox* Sprite::GetBounding(const Actor* actor) const 
+const BoundingBox* Sprite::GetBounding(const ActorConstPtr& actor) const
 { 
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
@@ -338,13 +330,13 @@ const BoundingBox* Sprite::GetBounding(const Actor* actor) const
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
-void Sprite::UpdateBounding(const Actor* actor) const
+void Sprite::UpdateBounding(const ActorConstPtr& actor) const
 {
 	if (!m_sym) {
 		return;
 	}
 
-	sm::rect rect = m_sym->GetBounding(this, actor);
+	sm::rect rect = m_sym->GetBounding(shared_from_this(), actor);
 	if (!rect.IsValid()) {
 		return;
 	}
@@ -586,7 +578,7 @@ void Sprite::CacheLocalMat()
 }
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-void Sprite::AddActor(Actor* actor) const
+void Sprite::AddActor(const ActorPtr& actor) const
 {
 	if (!m_actors) {
 		m_actors = new SprActors();
@@ -594,7 +586,7 @@ void Sprite::AddActor(Actor* actor) const
 	m_actors->Add(actor);
 }
 
-void Sprite::DelActor(Actor* actor) const
+void Sprite::DelActor(const ActorPtr& actor) const
 {
 	if (m_actors) {
 		m_actors->Del(actor);
@@ -608,7 +600,7 @@ void Sprite::ClearActors() const
 	}
 }
 
-void Sprite::ConnectActors(const Actor* parent) const
+void Sprite::ConnectActors(const ActorPtr& parent) const
 {
 	if (m_actors) {
 		m_actors->Connect(parent);
@@ -628,14 +620,14 @@ void Sprite::InitFlags()
 	SetBoundingDirty(true);
 	SetInheritUpdate(true);
 
-	if (INIT_FLAGS) {
-		INIT_FLAGS(this);
-	}
+	//if (INIT_FLAGS) {
+	//	INIT_FLAGS(shared_from_this());
+	//}
 }
 
 void Sprite::InitFromSpr(const Sprite& spr)
 {
-	cu::RefCountObjAssign(m_sym, spr.m_sym);
+	m_sym = spr.m_sym;
 
 	m_name = spr.m_name;
 

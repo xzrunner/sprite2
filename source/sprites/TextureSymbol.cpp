@@ -2,7 +2,6 @@
 #include "SymType.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
-#include "PolygonShape.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
@@ -30,6 +29,20 @@ TextureSymbol::TextureSymbol(uint32_t id)
 #endif // S2_DISABLE_STATISTICS
 }
 
+TextureSymbol::TextureSymbol(const TextureSymbol& sym)
+{
+	this->operator = (sym);
+}
+
+TextureSymbol& TextureSymbol::operator = (const TextureSymbol& sym)
+{
+	m_polygons.reserve(sym.m_polygons.size());
+	for (auto& src : sym.m_polygons) {
+		m_polygons.push_back(std::unique_ptr<PolygonShape>(src->Clone()));
+	}
+	return *this;
+}
+
 TextureSymbol::~TextureSymbol()
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -44,7 +57,7 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
@@ -75,7 +88,7 @@ RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	return ret;
 }
 
-RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -90,13 +103,7 @@ RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPa
 	return RENDER_OK;
 }
 
-void TextureSymbol::AddPolygon(PolygonShape* poly)
-{
-	poly->AddReference();
-	m_polygons.push_back(poly);
-}
-
-sm::rect TextureSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect TextureSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	sm::rect rect;
 	for (size_t i = 0, n = m_polygons.size(); i < n; ++i) {
@@ -107,7 +114,6 @@ sm::rect TextureSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 
 void TextureSymbol::Clear()
 {
-	for_each(m_polygons.begin(), m_polygons.end(), cu::RemoveRefFunctor<PolygonShape>());
 	m_polygons.clear();
 }
 

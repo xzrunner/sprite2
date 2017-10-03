@@ -7,56 +7,38 @@
 namespace s2
 {
 
-AnchorActor::AnchorActor(const Sprite* spr, const Actor* parent)
-	: Actor(spr, parent) 
-	, m_anchor(nullptr)
+void AnchorActor::SetAnchor(const ActorPtr& anchor)
 {
-}
-
-AnchorActor::~AnchorActor() 
-{
-	if (m_anchor) {
-		m_anchor->GetSpr()->RemoveReference();
-	}
-}
-
-void AnchorActor::SetAnchor(const Actor* anchor) 
-{
-	if (anchor == this) {
+	// fixme: ?
+	if (anchor.get() == this) {
 		Clear();
 		return;
 	}
 
-	if (m_anchor != anchor) {
+	if (m_anchor != anchor)
+	{
+		// disconnect
 		if (m_anchor) {
-			// disconnect
-			const_cast<Actor*>(m_anchor)->SetParent(nullptr);
-			m_anchor->GetSpr()->RemoveReference();
+			m_anchor->SetParent(nullptr);
 		}
 		m_anchor = anchor;
-		if (anchor) {
-			anchor->GetSpr()->AddReference();
-		}
 	}
 
 	if (anchor) 
 	{
 		GetAABB().SetRect(anchor->GetAABB().GetRect());
-		anchor->GetSpr()->ConnectActors(this);
-		if (const Actor* parent = anchor->GetParent()) {
+		anchor->GetSpr()->ConnectActors(shared_from_this());
+
+		auto& parent = anchor->GetParent();
+		if (parent) {
 			const_cast<ActorAABB&>(parent->GetAABB()).SetRect(sm::rect());	// make it empty
 		}
-		const_cast<Actor*>(anchor)->GetAABB().UpdateParent(anchor);
+		anchor->GetAABB().UpdateParent(anchor);
 	} 
 	else 
 	{
-		GetAABB().Update(this);
+		GetAABB().Update(shared_from_this());
 	}
-}
-
-const Actor* AnchorActor::GetAnchor() const
-{
-	return m_anchor;
 }
 
 void AnchorActor::Clear()
@@ -64,8 +46,7 @@ void AnchorActor::Clear()
 	if (m_anchor) 
 	{
 		// disconnect
-		const_cast<Actor*>(m_anchor)->SetParent(nullptr);
-		m_anchor->GetSpr()->RemoveReference();
+		m_anchor->SetParent(nullptr);
 		m_anchor = nullptr;
 	}
 

@@ -3,51 +3,22 @@
 
 #include "S2_Actor.h"
 
-#ifdef SPR_ACTORS_HASH
-#include <ds_hash.h>
-#endif // SPR_ACTORS_HASH
-
 namespace s2
 {
 
 inline
-const Actor* SprActors::Query(const Actor* prev) const
+ActorPtr SprActors::Query(const ActorConstPtr& prev) const
 {
-	//static int tot = 0;
-	//static int num = 0;
-	//static std::map<const Sprite*, int> test;
-	//std::map<const Sprite*, int>::iterator itr = test.find(this);
-	//if (itr != test.end()) {
-	//	if (m_actors.size() != itr->second) {
-	//		tot += m_actors.size() - itr->second;
-	//		itr->second = m_actors.size();
-	//	}
-	//} else {
-	//	if (!m_actors.empty()) {
-	//		test.insert(std::make_pair(this, m_actors.size()));
-	//		tot += m_actors.size();
-	//		++num;
-	//	}
-	//}
-	//float avg = (float)(tot) / num;
-
-	//////////////////////////////////////////////////////////////////////////
-
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) {
-		void* val = ds_hash_query(m_hash, const_cast<Actor*>(prev));
-		return static_cast<const Actor*>(val);
-	} else {
-#endif // SPR_ACTORS_HASH
-		for (int i = 0, n = m_actors.size(); i < n; ++i) {
-			if (m_actors[i]->GetParent() == prev) {
-				return m_actors[i];
+	for (auto& actor : m_actors) 
+	{
+		if (actor) {
+			auto sp_p = actor->GetParent();
+			if (sp_p && sp_p == prev) {
+				return actor;
 			}
 		}
-		return nullptr;
-#ifdef SPR_ACTORS_HASH
 	}
-#endif // SPR_ACTORS_HASH
+	return nullptr;
 }
 
 inline

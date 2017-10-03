@@ -46,13 +46,12 @@ void s2_get_screen_size(int* w, int* h);
 /* symbol                                                               */
 /************************************************************************/
 
-void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, float sy,
-					 float xmin, float ymin, float xmax, float ymax);
-void  s2_symbol_draw2(const void* symbol, float x, float y);
-
-void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, const char* child_name);
-
-int   s2_symbol_get_type_id(const char* name);
+//void  s2_symbol_draw(const void* actor, float x, float y, float angle, float sx, float sy,
+//					 float xmin, float ymin, float xmax, float ymax);
+//
+//void* s2_symbol_query_child(const void* sym, int child_idx, uint32_t child_id, const char* child_name);
+//
+//int   s2_symbol_get_type_id(const char* name);
 
 /************************************************************************/
 /* sprite                                                               */
@@ -65,93 +64,86 @@ void  s2_spr_draw(const void* actor, float x, float y, float angle, float sx, fl
 void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 				     float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
 
-void  s2_spr_set_pos(void* spr, float x, float y);
-void  s2_spr_set_angle(void* spr, float angle);
-void  s2_spr_set_scale(void* spr, float sx, float sy);
+void  s2_spr_set_pos(void* actor, float x, float y);
+void  s2_spr_set_angle(void* actor, float angle);
+void  s2_spr_set_scale(void* actor, float sx, float sy);
 
-void  s2_spr_get_pos(const void* spr, float* x, float* y);
-float s2_spr_get_angle(const void* spr);
-void  s2_spr_get_scale(const void* spr, float* sx, float* sy);
+void  s2_spr_get_pos(const void* actor, float* x, float* y);
+float s2_spr_get_angle(const void* actor);
+void  s2_spr_get_scale(const void* actor, float* sx, float* sy);
 
-void  s2_spr_set_col_mul(void* spr, uint32_t abgr);
-void  s2_spr_set_col_add(void* spr, uint32_t abgr);
+//void  s2_spr_set_col_mul(void* actor, uint32_t abgr);
+//void  s2_spr_set_col_add(void* actor, uint32_t abgr);
 
-void  s2_spr_retain(void* spr);
-void  s2_spr_release(void* spr);
-int   s2_spr_get_id(void* spr);
-int   s2_spr_get_ref_count(void* spr);
-const char* s2_spr_get_name(void* spr);
+//void  s2_spr_retain(void* spr);
+//void  s2_spr_release(void* spr);
+const char* s2_spr_get_name(void* actor);
 
-int   s2_spr_get_sym_id(const void* spr);
-int   s2_spr_get_sym_type(const void* spr);
+int   s2_spr_get_sym_id(const void* actor);
+int   s2_spr_get_sym_type(const void* actor);
 
-void  s2_spr_draw_aabb(const void* spr, float x, float y, float angle, float sx, float sy, const float mat[6]);
-bool  s2_spr_point_test(const void* spr, float x, float y);
-void* s2_spr_point_query(const void* spr, float x, float y, float mat[6]);
+void  s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx, float sy, const float mat[6]);
+bool  s2_spr_point_test(const void* actor, float x, float y);
 
-bool  s2_spr_get_force_update(const void* spr);
-void  s2_spr_set_force_update(void* spr, bool force);
+bool  s2_spr_get_force_update(const void* actor);
+void  s2_spr_set_force_update(void* actor, bool force);
 
-bool  s2_spr_is_res_loaded(const void* spr);
+bool  s2_spr_is_res_loaded(const void* actor);
 
 //////////////////////////////////////////////////////////////////////////
 // animation
 //////////////////////////////////////////////////////////////////////////
 
-int   s2_spr_get_frame_count(void* spr);
-void  s2_spr_anim_set_loop(void* spr, bool loop);
+int   s2_spr_get_frame_count(void* actor);
+void  s2_spr_anim_set_loop(void* actor, bool loop);
 
 //////////////////////////////////////////////////////////////////////////
 // complex
 //////////////////////////////////////////////////////////////////////////
 
-bool  s2_spr_has_action(const void* spr, const char* name);
+bool  s2_spr_has_action(const void* actor, const char* name);
 
 //////////////////////////////////////////////////////////////////////////
 // textbox
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_spr_textbox_reset_time(void* spr);
-void  s2_spr_textbox_set_font_color(void* spr, uint32_t abgr);
-void  s2_spr_textbox_set_edge_color(void* spr, uint32_t abgr);
+void  s2_spr_textbox_reset_time(void* actor);
+void  s2_spr_textbox_set_font_color(void* actor, uint32_t abgr);
+void  s2_spr_textbox_set_edge_color(void* actor, uint32_t abgr);
 
 //////////////////////////////////////////////////////////////////////////
 // anim2
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_spr_anim2_set_static_time(void* spr, int time);
+void  s2_spr_anim2_set_static_time(void* actor, int time);
 
 //////////////////////////////////////////////////////////////////////////
 // particle3d
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_spr_p3d_set_local(void* spr, bool local);
-void  s2_spr_p3d_set_loop(void* spr, bool loop);
-bool  s2_spr_p3d_is_finished(const void* spr);
-void  s2_spr_p3d_update(void* spr, float dt);
+void  s2_spr_p3d_set_local(void* actor, bool local);
+void  s2_spr_p3d_set_loop(void* actor, bool loop);
+bool  s2_spr_p3d_is_finished(const void* actor);
+void  s2_spr_p3d_update(void* actor, float dt);
 void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 void  s2_spr_p3d_tick();
 void  s2_spr_p3d_gc();
 
 //////////////////////////////////////////////////////////////////////////
-// proxy
-//////////////////////////////////////////////////////////////////////////
-
-void  s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count);
-
-//////////////////////////////////////////////////////////////////////////
 // dtex
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_spr_set_dtex_enable(void* spr, bool enable);
-void  s2_spr_set_dtex_force_cached(void* spr, bool cache);
-void  s2_spr_set_dtex_force_cached_dirty(void* spr, bool dirty);
+void  s2_spr_set_dtex_enable(void* actor, bool enable);
+void  s2_spr_set_dtex_force_cached(void* actor, bool cache);
+void  s2_spr_set_dtex_force_cached_dirty(void* actor, bool dirty);
 
 /************************************************************************/
 /* actor                                                                */
 /************************************************************************/
 
-void  s2_actor_retain(void* actor);
+void* s2_actor_get_real_ptr(void* actor);
+
+//void  s2_actor_retain(void* actor);
 void  s2_actor_release(void* actor);
 
 bool  s2_actor_has_ft(const void* actor);
@@ -189,10 +181,8 @@ int   s2_actor_mount(const void* actor, const char* name, const void* anchor);
 
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]);
 
-void* s2_actor_create(const void* parent_actor, void* child_spr);
 int   s2_actor_get_count();
 
-void* s2_actor_get_spr(void* actor);
 void  s2_actor_get_aabb(const void* actor, float aabb[4]);
 
 void  s2_actor_set_pos(void* actor, float x, float y);

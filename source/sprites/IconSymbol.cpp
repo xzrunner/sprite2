@@ -1,7 +1,6 @@
 #include "IconSymbol.h"
 #include "SymType.h"
 #include "IconSprite.h"
-#include "Icon.h"
 #include "RenderParams.h"
 #include "DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
@@ -32,15 +31,22 @@ IconSymbol::IconSymbol(uint32_t id)
 #endif // S2_DISABLE_STATISTICS
 }
 
+IconSymbol::IconSymbol(const IconSymbol& sym)
+	: m_icon(sym.m_icon->Clone())
+{
+}
+
+IconSymbol& IconSymbol::operator = (const IconSymbol& sym)
+{
+	m_icon.reset(sym.m_icon->Clone());
+	return *this;
+}
+
 IconSymbol::~IconSymbol()
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_ICON);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_icon) {
-		m_icon->RemoveReference();
-	}
 }
 
 int IconSymbol::Type() const 
@@ -48,7 +54,7 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
@@ -73,7 +79,7 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 
 	float process = 1;
 	if (spr) {
-		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
+		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
 	}
 	RenderReturn ret = m_icon->Draw(*rp_child, process);
 
@@ -82,7 +88,7 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
-RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	if (!m_icon) {
 		return RENDER_NO_DATA;
@@ -95,17 +101,12 @@ RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 
 	float process = 1;
 	if (spr) {
-		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
+		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
 	}
 	return m_icon->Draw(rp, process);
 }
 
-void IconSymbol::SetIcon(Icon* icon)
-{
-	cu::RefCountObjAssign(m_icon, icon);
-}
-
-sm::rect IconSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect IconSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	sm::rect r;
 	if (!m_icon) {
@@ -114,7 +115,7 @@ sm::rect IconSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool
 
 	float process = 1;
 	if (spr) {
-		process = VI_DOWNCASTING<const IconSprite*>(spr)->GetProcess();
+		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
 	}
 	return m_icon->GetRegion(process);
 }

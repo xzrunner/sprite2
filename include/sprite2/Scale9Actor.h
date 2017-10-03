@@ -10,7 +10,7 @@ namespace s2
 class Scale9Actor : public Actor
 {
 public:
-	Scale9Actor(const Sprite* spr, const Actor* parent);
+	Scale9Actor(const SprConstPtr& spr, const ActorConstPtr& parent);
 
 	const Scale9& GetScale9() const { return m_s9; }
 

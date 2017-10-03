@@ -14,16 +14,10 @@ class AnimSprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
 	AnimSprite();
-	AnimSprite(Symbol* sym, uint32_t id = -1);
+	AnimSprite(const SymPtr& sym, uint32_t id = -1);
 	AnimSprite(const AnimSprite& spr);
 	AnimSprite& operator = (const AnimSprite& spr);
 	virtual ~AnimSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual AnimSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -31,19 +25,19 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual bool NeedAutoUpdate(const Actor* actor) const { return true; }
-	virtual bool AutoUpdate(const Actor* actor);
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
-	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const;
+	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return true; }
+	virtual bool AutoUpdate(const ActorConstPtr& actor);
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
+	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	AnimCurr& GetOriginCurr(const Actor* actor);
-	AnimCurr& GetUpdateCurr(const Actor* actor);
-	AnimCurr& GetDrawCurr(const Actor* actor);
+	AnimCurr& GetOriginCurr(const ActorConstPtr& actor);
+	AnimCurr& GetUpdateCurr(const ActorConstPtr& actor);
+	AnimCurr& GetDrawCurr(const ActorConstPtr& actor);
 
-	const AnimCurr& GetOriginCurr(const Actor* actor) const;
-	const AnimCurr& GetUpdateCurr(const Actor* actor) const;
-	const AnimCurr& GetDrawCurr(const Actor* actor) const;
+	const AnimCurr& GetOriginCurr(const ActorConstPtr& actor) const;
+	const AnimCurr& GetUpdateCurr(const ActorConstPtr& actor) const;
+	const AnimCurr& GetDrawCurr(const ActorConstPtr& actor) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
@@ -52,10 +46,10 @@ public:
 
 	void SetStartRandom(const UpdateParams& up, bool random);
 
-	int  GetFrame(const Actor* actor) const;
+	int  GetFrame(const ActorConstPtr& actor) const;
 	bool SetFrame(const UpdateParams& up, int frame);
 
-	void SetActive(bool active, const Actor* actor);
+	void SetActive(bool active, const ActorConstPtr& actor);
 
 private:
 	void RandomStartTime(const UpdateParams& up);
@@ -69,6 +63,8 @@ protected:
 	bool m_start_random;
 
 	AnimState m_state;
+
+	SPRITE_CLONE_FUNC(AnimSprite)
 
 	VI_DUMMY_FUNC
 

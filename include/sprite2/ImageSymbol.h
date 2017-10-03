@@ -23,8 +23,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
 
 	// todo: only for scale9 layout
 	virtual sm::vec2 GetNoTrimedSize() const;
@@ -32,16 +32,16 @@ public:
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& tex_id) const = 0;
 	virtual bool OnQueryTexcoordsFail() const = 0;
 
-	void InitTex(Texture* tex, const sm::i16_rect& region);
+	void InitTex(const std::shared_ptr<Texture>& tex, const sm::i16_rect& region);
 
-	const Texture* GetTexture() const { return m_tex; }
+	const std::shared_ptr<Texture>& GetTexture() const { return m_tex; }
 
 	const sm::i16_rect& GetRegion() const { return m_region; }
 
 	bool IsLoaded() const;
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
 
 #ifdef S2_DEBUG
 	virtual bool IsProxyImg() const = 0;
@@ -58,7 +58,7 @@ private:
 	bool CalcVertices(const RenderParams& rp, float* vertices) const;
 
 protected:
-	Texture* m_tex;
+	std::shared_ptr<Texture> m_tex;
 
 	sm::i16_rect m_region;
 	sm::rect     m_size;

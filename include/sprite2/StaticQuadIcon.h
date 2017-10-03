@@ -13,6 +13,8 @@ public:
 	StaticQuadIcon(const StaticQuadIcon& icon);
 	StaticQuadIcon& operator = (const StaticQuadIcon& icon);
 
+	virtual StaticQuadIcon* Clone() const { return new StaticQuadIcon(*this); }
+
 	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
 
 	virtual sm::rect GetRegion(float process) const;

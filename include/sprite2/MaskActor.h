@@ -9,7 +9,7 @@ namespace s2
 class MaskActor : public Actor
 {
 public:
-	MaskActor(const Sprite* spr, const Actor* parent);
+	MaskActor(const SprConstPtr& spr, const ActorConstPtr& parent);
 
 }; // MaskActor
 

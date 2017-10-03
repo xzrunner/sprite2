@@ -5,7 +5,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Particle3dBuffer)
+CU_SINGLETON_DEFINITION(Particle3dBuffer)
 
 static void (*UPDATE_SRT_FUNC)(void* params, float x, float y, float scale);
 static void (*REMOVE_FUNC)(class Particle3dEmitter*);
@@ -19,29 +19,26 @@ Particle3dBuffer::~Particle3dBuffer()
 	Clear();
 }
 
-void Particle3dBuffer::Insert(Particle3dEmitter* emitter)
+void Particle3dBuffer::Insert(const std::shared_ptr<Particle3dEmitter>& emitter)
 {
 	if (!emitter) {
 		return;
 	}
 
-	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
-	for ( ; itr != m_emitters.end(); ++itr) {
-		if (*itr == emitter) {
+	for (auto et : m_emitters) {
+		if (et.lock() == emitter) {
 			return;
 		}
 	}
 
-	emitter->AddReference();
 	m_emitters.push_back(emitter);
 }
 
-void Particle3dBuffer::Remove(Particle3dEmitter* emitter)
+void Particle3dBuffer::Remove(const std::shared_ptr<Particle3dEmitter>& emitter)
 {
-	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
+	auto itr = m_emitters.begin();
 	for ( ; itr != m_emitters.end(); ++itr) {
-		if (*itr == emitter) {
-			(*itr)->RemoveReference();
+		if ((*itr).lock() == emitter) {
 			m_emitters.erase(itr);
 			break;
 		}
@@ -50,22 +47,17 @@ void Particle3dBuffer::Remove(Particle3dEmitter* emitter)
 
 void Particle3dBuffer::Clear()
 {
-	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
-	for ( ; itr != m_emitters.end(); ++itr) {
-		(*itr)->RemoveReference();
-	}
 	m_emitters.clear();
 }
 
 bool Particle3dBuffer::Update(float time)
 {
 	bool ret = false;
-	std::list<Particle3dEmitter*>::iterator itr = m_emitters.begin();
+	auto itr = m_emitters.begin();
 	for ( ; itr != m_emitters.end(); ) 
 	{
-		Particle3dEmitter* emitter = *itr;
-		if (emitter->IsFinished()) {
-			(*itr)->RemoveReference();
+		std::shared_ptr<Particle3dEmitter>& emitter = itr->lock();
+		if (!emitter || emitter->IsFinished()) {
 			itr = m_emitters.erase(itr);
 		} else {
 			if (emitter->Update(time)) {
@@ -79,14 +71,18 @@ bool Particle3dBuffer::Update(float time)
 
 void Particle3dBuffer::Draw(const sm::vec2& pos, float scale) const
 {
-	std::list<Particle3dEmitter*>::const_iterator itr = m_emitters.begin();
 	P3dRenderParams rp;
-	for ( ; itr != m_emitters.end(); ++itr) 
+	for (auto et : m_emitters)
 	{
+		auto et_sp = et.lock();
+		if (!et_sp) {
+			continue;
+		}
+
 		rp.mt.Identity();
 		rp.mt.Scale(scale, scale);
 		rp.mt.Translate(pos.x, pos.y);
-		(*itr)->Draw(rp, true);
+		et_sp->Draw(rp, true);
 	}
 }
 

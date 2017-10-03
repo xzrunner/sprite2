@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_IMAGES_H_
 #define _SPRITE2_STAT_IMAGES_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 #include <map>
@@ -32,7 +32,7 @@ private:
 
 	std::map<int, float> m_id2mem;
 
-	SINGLETON_DECLARATION(StatImages);
+	CU_SINGLETON_DECLARATION(StatImages);
 
 }; // StatImages
 

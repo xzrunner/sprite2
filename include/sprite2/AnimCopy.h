@@ -23,7 +23,6 @@ class AnimCopy
 {
 public:
 	AnimCopy();
-	~AnimCopy();
 
 	void LoadFromSym(const AnimSymbol& sym);
 	
@@ -51,10 +50,9 @@ private:
 		int16_t slot;
 		int16_t lerp;
 
-		const Sprite* spr;
+		SprConstPtr spr;
 
 		Item();
-		~Item();
 	};
 
 	struct Frame
@@ -73,11 +71,11 @@ private:
 private:
 	std::vector<Layer> m_layers;
 
-	std::vector<const Sprite*> m_slots;
+	std::vector<SprConstPtr> m_slots;
 
 	std::vector<Lerp> m_lerps;
 
-	std::vector<const Sprite*> m_sprites;	
+	std::vector<SprConstPtr> m_sprites;
 
 	int m_max_frame_idx;
 	int m_max_item_num;

@@ -6,7 +6,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(RenderTargetMgr);
+CU_SINGLETON_DEFINITION(RenderTargetMgr);
 
 const int RenderTargetMgr::WIDTH  = 1024;
 const int RenderTargetMgr::HEIGHT = 1024;

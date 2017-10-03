@@ -1,14 +1,12 @@
 #ifndef _SPRITE2_RENDER_TARGET_H_
 #define _SPRITE2_RENDER_TARGET_H_
 
-#include <CU_RefCountObj.h>
-
 namespace ur { class RenderTarget; }
 
 namespace s2
 {
 
-class RenderTarget : public cu::RefCountObj
+class RenderTarget
 {
 public:
 	RenderTarget(int width, int height);

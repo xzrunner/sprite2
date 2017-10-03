@@ -9,7 +9,7 @@ namespace s2
 class CacheMatVisitor : public SymbolVisitor
 {
 public:
-	virtual void Visit(Sprite* spr) const;
+	virtual void Visit(const SprPtr& spr) const;
 }; // CacheMatVisitor
 
 }

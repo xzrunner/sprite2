@@ -29,7 +29,7 @@ TextureSprite& TextureSprite::operator = (const TextureSprite& spr)
 	return *this;
 }
 
-TextureSprite::TextureSprite(Symbol* sym, uint32_t id)
+TextureSprite::TextureSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -42,11 +42,6 @@ TextureSprite::~TextureSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_TEXTURE);
 #endif // S2_DISABLE_STATISTICS
-}
-
-TextureSprite* TextureSprite::Clone() const
-{
-	return new TextureSprite(*this);
 }
 
 }

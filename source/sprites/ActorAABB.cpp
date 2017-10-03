@@ -14,19 +14,20 @@ ActorAABB::ActorAABB()
 {
 }
 
-void ActorAABB::Init(const Actor* curr)
+void ActorAABB::Init(const ActorConstPtr& curr)
 {	
 	if (m_static) {
 		return;
 	}
 
 	// not pass actor, in ctor
+	SprPtr spr = curr->GetSpr();
 	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr());
 
 	UpdateTight(curr);
 }
 
-bool ActorAABB::Update(const Actor* curr)
+bool ActorAABB::Update(const ActorConstPtr& curr)
 {
 	if (m_static) {
 		return false;
@@ -43,7 +44,7 @@ bool ActorAABB::Update(const Actor* curr)
 	return true;
 }
 
-bool ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
+bool ActorAABB::Combine(const ActorConstPtr& curr, const sm::rect& rect)
 {
 	if (m_static) {
 		return false;
@@ -61,13 +62,13 @@ bool ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
 	return true;
 }
 
-void ActorAABB::UpdateParent(const Actor* curr)
+void ActorAABB::UpdateParent(const ActorConstPtr& curr)
 {
 	if (m_static) {
 		return;
 	}
 
-	const Actor* parent = curr->GetParent();
+	auto& parent = curr->GetParent();
 	if (!parent) {
 		return;
 	}
@@ -79,7 +80,7 @@ void ActorAABB::UpdateParent(const Actor* curr)
 
 	if (curr->IsAABBTight()) 
 	{
-		const_cast<Actor*>(parent)->GetAABB().m_rect.MakeEmpty();
+		std::const_pointer_cast<Actor>(parent)->GetAABB().m_rect.MakeEmpty();
 		const_cast<ActorAABB&>(p_aabb).Update(parent);
 		UpdateTight(curr);
 	} 
@@ -105,7 +106,7 @@ void ActorAABB::SetStaticRect(const sm::rect& rect)
 	m_rect = rect;
 }
 
-sm::rect ActorAABB::UpdateTight(const Actor* curr)
+sm::rect ActorAABB::UpdateTight(const ActorConstPtr& curr)
 {
 	if (!m_rect.IsValid()) {
 		return m_rect;
@@ -125,7 +126,11 @@ sm::rect ActorAABB::UpdateTight(const Actor* curr)
 		trans_r.Combine(mat * bounding[i]);
 	}
 
-	const Actor* parent = curr->GetParent();
+	auto& parent = curr->GetParent();
+	if (!parent) {
+		return trans_r;
+	}
+
 	bool tight = parent && IsRectTight(trans_r, parent->GetAABB().GetRect());
 	curr->SetAABBTight(tight);
 
@@ -140,9 +145,9 @@ bool ActorAABB::IsRectTight(const sm::rect& inner, const sm::rect& outer)
 		|| inner.ymax == outer.ymax;
 }
 
-sm::rect ActorAABB::Build(const Actor* curr)
+sm::rect ActorAABB::Build(const ActorConstPtr& curr)
 {
-	const Sprite* spr = curr->GetSpr();
+	const SprConstPtr& spr = curr->GetSpr();
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, curr, false);
 	return r;
 }

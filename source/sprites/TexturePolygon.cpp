@@ -17,39 +17,9 @@
 namespace s2
 {
 
-TexturePolygon::TexturePolygon()
-	: m_img(nullptr)
+TexturePolygon::TexturePolygon(const std::shared_ptr<const ImageSymbol>& img)
+	: m_img(img)
 {
-}
-
-TexturePolygon::TexturePolygon(const TexturePolygon& poly)
-	: m_img(nullptr)
-	, m_texcoords(poly.m_texcoords)
-{
-	cu::RefCountObjAssign(m_img, poly.m_img);
-}
-
-TexturePolygon& TexturePolygon::operator = (const TexturePolygon& poly)
-{
-	m_img = nullptr;
-	cu::RefCountObjAssign(m_img, poly.m_img);
-	m_texcoords = poly.m_texcoords;
-	return *this;
-}
-
-TexturePolygon::TexturePolygon(const ImageSymbol* img)
-	: m_img(const_cast<ImageSymbol*>(img))
-{
-	if (img) {
-		img->AddReference();
-	}
-}
-
-TexturePolygon::~TexturePolygon()
-{
-	if (m_img) {
-		m_img->RemoveReference();
-	}
 }
 
 void TexturePolygon::Draw(const RenderParams& rp) const

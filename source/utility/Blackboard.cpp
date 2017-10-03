@@ -4,7 +4,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Blackboard);
+CU_SINGLETON_DEFINITION(Blackboard);
 
 Blackboard::Blackboard()
 	: m_screen_cache_texid(-1)

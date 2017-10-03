@@ -1,7 +1,9 @@
 #ifndef _SPRITE2_ACTOR_FACTORY_H_
 #define _SPRITE2_ACTOR_FACTORY_H_
 
-#include <CU_Singleton.h>
+#include "s2_typedef.h"
+
+#include <memory>
 
 namespace s2
 {
@@ -12,10 +14,8 @@ class Sprite;
 class ActorFactory
 {
 public:
-	Actor* Create(const Actor* parent, const Sprite* child) const;
-
-private:
-	SINGLETON_DECLARATION(ActorFactory);
+	static ActorPtr Create(const ActorConstPtr& parent, 
+		const SprConstPtr& child);
 
 }; // ActorFactory
 

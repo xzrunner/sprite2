@@ -9,30 +9,21 @@ namespace s2
 class ProxySprite : public VIRTUAL_INHERITANCE Sprite
 {
 public:
-	ProxySprite(Symbol* sym);
+	ProxySprite(const SymPtr& sym);
 	
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual ProxySprite* Clone() const;
-
 	/**
 	 *  @interface
 	 *    Sprite
 	 */
 
-	virtual void Retain(const Actor* actor) const;
-	virtual void Release(const Actor* actor) const;
-
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 
 	virtual bool Update(const UpdateParams& up);
 	// proxy's fetch must be a proxy
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
-	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const;
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
+	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
 
-	virtual void SetSymbol(Symbol* sym);
+	virtual void SetSymbol(const SymPtr& sym);
 
 	virtual void SetCenter(const sm::vec2& pos);
 	virtual void SetPosition(const sm::vec2& pos);
@@ -43,11 +34,7 @@ public:
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-public:
-	static void AddParentProxyRef(const Actor* parent);
-	static void DelParentProxyRef(const Actor* parent);
-
-private:
+	SPRITE_CLONE_FUNC(ProxySprite)
 
 	VI_DUMMY_FUNC
 

@@ -57,7 +57,7 @@ int TextboxSymbol::Type() const
 	return SYM_TEXTBOX; 
 }
 
-RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 	if (!spr) {
 		return RENDER_NO_DATA;
@@ -77,20 +77,20 @@ RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	return ret;
 }
 
-RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	assert(spr);
 	return DrawImpl(dlist, rp, spr);
 }
 
-sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect TextboxSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (actor)
 	{
 		const sm::rect& r = actor->GetAABB().GetRect();
-		const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+		auto& tb_spr = S2_VI_PTR_DOWN_CAST<const TextboxSprite>(spr);
 		if (!r.IsValid()) {
-			const TextboxActor* tb_actor = VI_DOWNCASTING<const TextboxActor*>(actor);
+			auto& tb_actor = std::static_pointer_cast<const TextboxActor>(actor);
 			return TextboxActor::CalcAABB(tb_spr->GetTextbox(), GetBounding(), tb_actor->GetText());
 		}
 
@@ -103,7 +103,7 @@ sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 	}
 	else if (spr)
 	{
-		const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+		auto& tb_spr = S2_VI_PTR_DOWN_CAST<const TextboxSprite>(spr);
 		return sm::rect(
 			static_cast<float>(tb_spr->GetTextbox().width), 
 			static_cast<float>(tb_spr->GetTextbox().height));
@@ -116,7 +116,7 @@ sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 	}
 }
 
-RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTBOX);
@@ -124,13 +124,11 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 #endif // S2_DISABLE_STATISTICS
 
 	const std::string* text = nullptr;
-	const Actor* actor = rp.actor;
-	if (actor) {
-		const TextboxActor* tb_actor = static_cast<const TextboxActor*>(actor);
-		text = &tb_actor->GetText();
+	if (rp.actor) {
+		text = &std::static_pointer_cast<const TextboxActor>(rp.actor)->GetText();
 	}
 
-	const TextboxSprite* tb_spr = VI_DOWNCASTING<const TextboxSprite*>(spr);
+	auto& tb_spr = S2_VI_PTR_DOWN_CAST<const TextboxSprite>(spr);
 
 	if (!text) {
 		text = &tb_spr->GetText(UpdateParams());

@@ -23,7 +23,7 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 {
 }
 
-RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
+RenderReturn DrawPingPong::Draw(const SprConstPtr& spr, const RenderParams& rp) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -69,7 +69,7 @@ RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const Sprite* spr, 
+RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const SprConstPtr& spr, 
 										 const RenderParams& rp, bool too_large) const
 {
 	RenderReturn ret = RENDER_OK;
@@ -81,7 +81,7 @@ RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const Sprite* spr,
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr, 
 											  const RenderParams& rp, bool reset_color) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -127,10 +127,10 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr,
 	return RENDER_OK;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
+RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const SprConstPtr& spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	s2::RenderCtxStack::Instance()->Push(s2::RenderContext(2, 2, 0, 0));
+	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
 
 	float xmin = -1, ymin = -1;
 	float xmax =  1, ymax =  1;
@@ -160,7 +160,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
 		RenderColorPool::Instance()->Push(col);
 	}
 
-	s2::RenderCtxStack::Instance()->Pop();
+	RenderCtxStack::Instance()->Pop();
 
 	return RENDER_OK;
 }

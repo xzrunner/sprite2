@@ -6,7 +6,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatSymCount);
+CU_SINGLETON_DEFINITION(StatSymCount);
 
 StatSymCount::StatSymCount()
 {

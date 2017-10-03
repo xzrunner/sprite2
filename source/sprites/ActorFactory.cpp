@@ -18,17 +18,12 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(ActorFactory);
-
-ActorFactory::ActorFactory()
-{
-}
-
-Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
+ActorPtr ActorFactory::Create(const ActorConstPtr& parent,
+	                                        const SprConstPtr& child)
 {
 	assert(child);
 
-	Actor* actor = const_cast<Actor*>(child->QueryActor(parent));
+	auto actor = child->QueryActor(parent);
 	if (actor) {
 		return actor;
 	}
@@ -36,31 +31,36 @@ Actor* ActorFactory::Create(const Actor* parent, const Sprite* child) const
 	switch (child->GetSymbol()->Type())
 	{
 	case SYM_ANCHOR:
-		actor = new AnchorActor(child, parent);
+		actor = std::make_shared<AnchorActor>(child, parent);
 		break;
 	case SYM_SCALE9:
-		actor = new Scale9Actor(child, parent);
+		actor = std::make_shared<Scale9Actor>(child, parent);
 		break;
 	case SYM_TEXTBOX:
-		actor = new TextboxActor(child, parent);
+		actor = std::make_shared<TextboxActor>(child, parent);
 		break;
 	case SYM_COMPLEX:
-		actor = new ComplexActor(child, parent);
+		actor = std::make_shared<ComplexActor>(child, parent);
 		break;
 	case SYM_ANIMATION:
-		actor = new AnimActor(child, parent);
+		actor = std::make_shared<AnimActor>(child, parent);
 		break;
 	case SYM_PARTICLE3D:
-		actor = new Particle3dActor(child, parent);
+		actor = std::make_shared<Particle3dActor>(child, parent);
 		break;
 	case SYM_MASK:
-		actor = new MaskActor(child, parent);
+		actor = std::make_shared<MaskActor>(child, parent);
 		break;
 	case SYM_PROXY:
-		actor = new ProxyActor(child, parent);
+		actor = std::make_shared<ProxyActor>(child, parent);
 		break;
 	default:
-		actor = new Actor(child, parent);
+		actor = std::make_shared<Actor>(child, parent);
+	}
+
+	if (actor) {
+		child->AddActor(actor);
+		actor->Init();
 	}
 
 	return actor;

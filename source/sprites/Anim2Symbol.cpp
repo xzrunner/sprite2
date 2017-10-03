@@ -14,17 +14,6 @@
 #include <assert.h>
 #include <string.h>
 
-static void release_anim(rg_animation* anim)
-{
-	int i;
-	rg_skeleton* sk = anim->sk;
-	for (i = 0; i < sk->skin_count; ++i) {
-		rg_skin* skin = &sk->skins[i];
-		static_cast<s2::Symbol*>(skin->ud)->RemoveReference();
-	}
-	free(anim);
-}
-
 namespace s2
 {
 
@@ -52,19 +41,16 @@ Anim2Symbol::~Anim2Symbol()
 #endif // S2_DISABLE_STATISTICS
 
 	if(m_anim) {
-		release_anim(m_anim);
-		m_anim = nullptr;
+		free(m_anim);
 	}
-
-	// todo release sk
 }
-	
+
 int Anim2Symbol::Type() const
 {
 	return SYM_ANIM2;
 }
 
-RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
@@ -82,8 +68,8 @@ RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 		return RENDER_INVISIBLE;
 	}
 
-	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
-	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
+	auto& anim_spr = S2_VI_PTR_DOWN_CAST<const Anim2Sprite>(spr);
+	const Anim2Curr& curr = std::const_pointer_cast<Anim2Sprite>(anim_spr)->GetAnimCurr();
 	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
 
@@ -92,14 +78,14 @@ RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	return RENDER_OK;
 }
 
-RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	if (!m_anim || !spr) {
 		return RENDER_NO_DATA;
 	}
 
-	const Anim2Sprite* anim_spr = VI_DOWNCASTING<const Anim2Sprite*>(spr);
-	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
+	auto& anim_spr = S2_VI_PTR_DOWN_CAST<const Anim2Sprite>(spr);
+	const Anim2Curr& curr = std::const_pointer_cast<Anim2Sprite>(anim_spr)->GetAnimCurr();
 	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp);
 
@@ -108,14 +94,25 @@ RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 
 void Anim2Symbol::SetAnim(rg_animation* anim)
 {
+	if (m_anim == anim) {
+		return;
+	}
+
 	if(m_anim) {
-		release_anim(m_anim);
-		m_anim = nullptr;
+		free(m_anim);
 	}
 	m_anim = anim;
+
+	m_symbols.clear();
+	rg_skeleton* sk = anim->sk;
+	m_symbols.reserve(sk->skin_count);
+	for (int i = 0; i < sk->skin_count; ++i) {
+		rg_skin* skin = &sk->skins[i];
+		m_symbols.push_back(SymPtr(static_cast<Symbol*>(skin->ud)));
+	}
 }
 
-sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect Anim2Symbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (!m_anim) {
 		return sm::rect(); // empty
@@ -136,7 +133,7 @@ sm::rect Anim2Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, boo
 		rg_pose_mat world;
 		rg_local2worldmat(&joint->world_pose, &skin->local, &world);
 
-		Symbol* sym = static_cast<Symbol*>(skin->ud);
+		SymPtr sym(static_cast<Symbol*>(skin->ud));
 		sm::rect sb = sym->GetBounding();
 		if (sb.Width() == 0 || sb.Height() == 0) {
 			continue;

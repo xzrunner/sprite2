@@ -29,7 +29,7 @@ ShapeSprite& ShapeSprite::operator = (const ShapeSprite& spr)
 	return *this;
 }
 
-ShapeSprite::ShapeSprite(Symbol* sym, uint32_t id) 
+ShapeSprite::ShapeSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id) 
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -42,11 +42,6 @@ ShapeSprite::~ShapeSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_SHAPE);
 #endif // S2_DISABLE_STATISTICS	
-}
-
-ShapeSprite* ShapeSprite::Clone() const
-{
-	return new ShapeSprite(*this);
 }
 
 }

@@ -9,17 +9,17 @@ namespace s2
 class AnchorActor : public Actor
 {
 public:
-	AnchorActor(const Sprite* spr, const Actor* parent);
-	virtual ~AnchorActor();
+	AnchorActor(const SprConstPtr& spr, const ActorConstPtr& parent)
+		: Actor(spr, parent) {}
 
-	void SetAnchor(const Actor* anchor);
-	const Actor* GetAnchor() const;
+	void SetAnchor(const ActorPtr& anchor);
+	const ActorPtr& GetAnchor() const { return m_anchor; }
 
 private:
 	void Clear();
 
 private:
-	const Actor* m_anchor;
+	ActorPtr m_anchor;
 
 }; // AnchorActor
 

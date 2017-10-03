@@ -4,13 +4,13 @@
 #include "pre_defined.h"
 #include "S2_Message.h"
 #include "s2_macro.h"
+#include "s2_typedef.h"
 #include "VisitResult.h"
 #include "SprActors.h"
 
+#include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
-#include <CU_RefCountObj.h>
-#include <CU_Cloneable.h>
 
 #include <string>
 
@@ -32,29 +32,28 @@ class Actor;
 class SprVisitorParams;
 class SprSRT;
 
-class Sprite : public cu::RefCountObj, public cu::Cloneable
+class Sprite : public std::enable_shared_from_this<Sprite>
 {
 public:
 	Sprite();
 	Sprite(const Sprite& spr);
 	Sprite& operator = (const Sprite& spr);
-	Sprite(Symbol* sym, uint32_t id = -1);
+	Sprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~Sprite();
 	
-	virtual void Retain(const Actor* actor) const;
-	virtual void Release(const Actor* actor) const;
+	SprPtr Clone() const;
 
 	virtual void OnMessage(const UpdateParams& up, Message msg) {}
 	
  	virtual bool Update(const UpdateParams& up) { return false; }
 
-	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }
-	virtual bool AutoUpdate(const Actor* actor) { return false; }
+	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return false; }
+	virtual bool AutoUpdate(const ActorConstPtr& actor) { return false; }
 
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const { return nullptr; }
-	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const { return nullptr; }
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const { return nullptr; }
+	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const { return nullptr; }
 
-	virtual void SetSymbol(Symbol* sym);
+	virtual void SetSymbol(const SymPtr& sym);
 
 	virtual void SetCenter(const sm::vec2& pos);
 	virtual void SetPosition(const sm::vec2& pos);
@@ -65,30 +64,21 @@ public:
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
 
-	static void InitHook(void (*init_flags)(Sprite* spr));
+//	static void InitHook(void (*init_flags)(const SprPtr& spr));
 
 	static int GetAllSprCount();
 
 public:
-
-	/**
-	 *  @interface
-	 *    cu::Cloneable
-	 *  @note
-	 *    should after other virtual
-	 */
-	virtual Sprite* Clone() const { return nullptr; }
-
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat = true) const;
 
-	Symbol* GetSymbol() { return m_sym; }
-	const Symbol* GetSymbol() const { return m_sym; }
+	SymPtr& GetSymbol() { return m_sym; }
+	const SymPtr& GetSymbol() const { return m_sym; }
 
 	int  GetName() const { return m_name; }
 	void SetName(const std::string& name);
 
-	const BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
-	void UpdateBounding(const Actor* actor = nullptr) const;
+	const BoundingBox* GetBounding(const ActorConstPtr& actor = nullptr) const; 
+	void UpdateBounding(const ActorConstPtr& actor = nullptr) const;
 
 	void Translate(const sm::vec2& trans);
 	void Rotate(float rot);
@@ -119,17 +109,19 @@ public:
 
 	int GetID() const { return m_id; }
 
-	void AddActor(Actor* actor) const;
-	void DelActor(Actor* actor) const;
-	const Actor* QueryActor(const Actor* prev) const {
-		return m_actors ? m_actors->Query(prev) : nullptr;
+	void AddActor(const ActorPtr& actor) const;
+	void DelActor(const ActorPtr& actor) const;
+	ActorPtr QueryActor(const ActorConstPtr& prev) const {
+		return (m_actors && prev) ? m_actors->Query(prev) : nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
 	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }
 	void ClearActors() const;
-	void ConnectActors(const Actor* parent) const;
+	void ConnectActors(const ActorPtr& parent) const;
 
 private:
+	virtual SprPtr CloneImpl() const = 0;
+
 	void InitFlags();
 
 	void InitFromSpr(const Sprite& spr);
@@ -165,39 +157,39 @@ protected:
 	static const uint32_t FLAG_MAX            = 0x00008000;
 
 public:
-	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
-	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
-	S2_FLAG_METHOD(Dirty, FLAG_DIRTY)
-	S2_FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
-	S2_FLAG_METHOD(Integrate, FLAG_INTEGRATE)
+	CU_FLAG_METHOD(Visible, FLAG_VISIBLE)
+	CU_FLAG_METHOD(Editable, FLAG_EDITABLE)
+	CU_FLAG_METHOD(Dirty, FLAG_DIRTY)
+	CU_FLAG_METHOD(BoundingDirty, FLAG_BOUNDING_DIRTY)
+	CU_FLAG_METHOD(Integrate, FLAG_INTEGRATE)
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	S2_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
+	CU_FLAG_METHOD(GeoMatrix, FLAG_GEO_MATRIX)
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-//	S2_FLAG_METHOD(ForceUpdate, FLAG_FORCE_UPDATE)
+//	CU_FLAG_METHOD(ForceUpdate, FLAG_FORCE_UPDATE)
 	bool IsForceUpdate() const { return (m_flags & FLAG_FORCE_UPDATE) != 0; }
 	void SetForceUpdate(bool flag) const;
 
-	S2_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
+	CU_FLAG_METHOD(InheritUpdate, FLAG_INHERIT_UPDATE)
 
-	S2_FLAG_METHOD(MatDisable, FLAG_MAT_DISABLE)
-	S2_FLAG_METHOD(ColorDisable, FLAG_COLOR_DISABLE)
+	CU_FLAG_METHOD(MatDisable, FLAG_MAT_DISABLE)
+	CU_FLAG_METHOD(ColorDisable, FLAG_COLOR_DISABLE)
 
 	// actor
-	S2_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)
-	S2_FLAG_METHOD(NeedActorForChild, FLAG_NEED_ACTOR_FOR_CHILD)
+	CU_FLAG_METHOD(NeedActor, FLAG_NEED_ACTOR)
+	CU_FLAG_METHOD(NeedActorForChild, FLAG_NEED_ACTOR_FOR_CHILD)
 
 	// dtex
-	S2_FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)
-	S2_FLAG_METHOD(DTexForceCached, FLAG_DTEX_FORCE_CACHED)
-	S2_FLAG_METHOD(DTexForceCachedDirty, FLAG_DTEX_FORCE_CACHED_DIRTY)
-	S2_FLAG_METHOD(DTexCacheBegin, FLAG_DTEX_CACHE_BEGIN)
+	CU_FLAG_METHOD(DTexDisable, FLAG_DTEX_DISABLE)
+	CU_FLAG_METHOD(DTexForceCached, FLAG_DTEX_FORCE_CACHED)
+	CU_FLAG_METHOD(DTexForceCachedDirty, FLAG_DTEX_FORCE_CACHED_DIRTY)
+	CU_FLAG_METHOD(DTexCacheBegin, FLAG_DTEX_CACHE_BEGIN)
 	
 	bool GetUserFlag(uint32_t key) const;
 	void SetUserFlag(uint32_t key, bool val) const;
 
 protected:
-	Symbol*					m_sym;
+	SymPtr m_sym;
 
 	/************************************************************************/
 	/* info                                                                 */

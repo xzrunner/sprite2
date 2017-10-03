@@ -20,14 +20,13 @@ public:
 	{
 	public:
 		int index;
-		std::vector<Sprite*> sprs;
+		std::vector<SprPtr> sprs;
 
 		bool tween;
 		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 
 	public:
 		Frame() : index(0), tween(false) {}
-		~Frame();
 
 	}; // Frame
 
@@ -54,13 +53,13 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
 
 	const std::vector<std::unique_ptr<Layer>>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
 
-	void CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const;
+	void CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const;
 
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
@@ -75,10 +74,11 @@ public:
 	bool Clear();
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, 
+		const ActorConstPtr& actor = nullptr, bool cache = true) const;
 
 private:
-	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
+	sm::rect CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const;
 
 protected:
 	std::vector<std::unique_ptr<Layer>> m_layers;

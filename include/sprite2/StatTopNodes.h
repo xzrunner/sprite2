@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_TOP_NODES_H_
 #define _SPRITE2_STAT_TOP_NODES_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <list>
 #include <string>
@@ -51,7 +51,7 @@ private:
 	std::list<DrawNode> m_nodes;
 	uint32_t m_min_time;
 
-	SINGLETON_DECLARATION(StatTopNodes);
+	CU_SINGLETON_DECLARATION(StatTopNodes);
 
 }; // StatTopNodes
 

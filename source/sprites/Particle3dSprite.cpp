@@ -67,7 +67,7 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 	return *this;
 }
 
-Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id) 
+Particle3dSprite::Particle3dSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(nullptr)
 	, m_alone(false)
@@ -78,7 +78,7 @@ Particle3dSprite::Particle3dSprite(Symbol* sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
 
-	Particle3dSymbol* p3d_sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
+	auto& p3d_sym = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(m_sym);
 	m_loop  = p3d_sym->IsLoop();
 	m_local = p3d_sym->IsLocal();
 
@@ -90,15 +90,6 @@ Particle3dSprite::~Particle3dSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_et) {
-		m_et->RemoveReference();
-	}
-}
-
-Particle3dSprite* Particle3dSprite::Clone() const
-{
-	return new Particle3dSprite(*this);
 }
 
 void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
@@ -108,22 +99,18 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	Particle3dEmitter* et = nullptr;
+	std::shared_ptr<Particle3dEmitter> et;
 	switch (m_reuse)
 	{
 	case REUSE_ALL:
-		{
-			Symbol* sym = const_cast<Symbol*>(GetSymbol());
-			et = VI_DOWNCASTING<Particle3dSymbol*>(sym)->GetEmitter();
-		}
+		et = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitter();
 		break;
 	case REUSE_COMMON:
 		et = m_et;
 		break;
 	case REUSE_NONE:
-		if (const Actor* actor = up.GetActor()) {
-			const Particle3dActor* p3d_actor = static_cast<const Particle3dActor*>(actor);
-			et = const_cast<Particle3dActor*>(p3d_actor)->GetEmitter();
+		if (auto& actor = up.GetActor()) {
+			et = std::static_pointer_cast<const Particle3dActor>(actor)->GetEmitter();
 		}
 		break;
 	}
@@ -161,7 +148,7 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -176,8 +163,8 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 	{
 	case REUSE_ALL:
 		{
-			Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(GetSymbol());
-			ret = UpdateEmitter(up, sym->GetEmitter());
+			auto& et = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitter();
+			ret = UpdateEmitter(up, et);
 		}
 		break;
 	case REUSE_COMMON:
@@ -185,11 +172,11 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 		break;
 	case REUSE_NONE:
 		{
-			const Actor* actor = up.GetActor();
+			auto& actor = up.GetActor();
 			if (actor) {
-				Particle3dActor* p3d_actor 
-					= const_cast<Particle3dActor*>(static_cast<const Particle3dActor*>(actor));
-				ret = UpdateEmitter(up, p3d_actor->GetEmitter());
+				auto& a = std::static_pointer_cast<const Particle3dActor>(actor);
+				auto& ac = std::const_pointer_cast<Particle3dActor>(a);
+				ret = UpdateEmitter(up, ac->GetEmitter());
 			}
 		}
 		break;
@@ -227,8 +214,7 @@ void Particle3dSprite::SetLoop(bool loop)
 	m_loop = loop;
 
 	// reuse all
-	Symbol* sym = const_cast<Symbol*>(GetSymbol());
-	if (Particle3dEmitter* et = VI_DOWNCASTING<Particle3dSymbol*>(sym)->GetEmitter()) {
+	if (auto& et = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitter()) {
 		et->SetLoop(loop);
 	}
 
@@ -240,10 +226,13 @@ void Particle3dSprite::SetLoop(bool loop)
 	// reuse none
 	if (m_actors)
 	{
-		const std::vector<Actor*>& actors = m_actors->GetActors();
-		for (int i = 0, n = actors.size(); i < n; ++i) {
-			Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
-			if (Particle3dEmitter* et = actor->GetEmitter()) {
+		auto& actors = m_actors->GetActors();
+		for (auto& actor : actors) 
+		{
+			if (!actor) {
+				continue;
+			}
+			if (auto& et = std::static_pointer_cast<Particle3dActor>(actor)->GetEmitter()) {
 				et->SetLoop(loop);
 			}
 		}
@@ -259,8 +248,7 @@ void Particle3dSprite::SetLocal(bool local)
 	m_local = local;
 
 	// reuse all
-	Symbol* sym = const_cast<Symbol*>(GetSymbol());
-	if (Particle3dEmitter* et = VI_DOWNCASTING<Particle3dSymbol*>(sym)->GetEmitter()) {
+	if (auto& et = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitter()) {
 		et->SetLocal(local);
 	}
 	
@@ -272,10 +260,13 @@ void Particle3dSprite::SetLocal(bool local)
 	// reuse none
 	if (m_actors)
 	{
-		const std::vector<Actor*>& actors = m_actors->GetActors();
-		for (int i = 0, n = actors.size(); i < n; ++i) {
-			Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
-			if (Particle3dEmitter* et = actor->GetEmitter()) {
+		auto& actors = m_actors->GetActors();
+		for (auto& actor : actors) 
+		{
+			if (!actor) {
+				continue;
+			}
+			if (auto& et = std::static_pointer_cast<Particle3dActor>(actor)->GetEmitter()) {
 				et->SetLocal(local);
 			}
 		}
@@ -293,8 +284,7 @@ void Particle3dSprite::SetReuse(Particle3dSprite::ReuseType reuse)
 		return;
 	}
 
-	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	auto& cfg = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitterCfg();
 	if (!cfg) {
 		return;
 	}
@@ -320,8 +310,7 @@ void Particle3dSprite::SetAlone(bool alone)
 		return;
 	}
 
-	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	auto& cfg = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitterCfg();
 	if (!cfg) {
 		return;
 	}
@@ -334,13 +323,12 @@ void Particle3dSprite::CreateSpr()
 {
 	assert(!m_et);
 
-	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	auto& cfg = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitterCfg();
 	if (!cfg) {
 		return;
 	}
 
-	m_et = P3dEmitterPool::Instance()->Pop();
+	m_et = std::make_shared<Particle3dEmitter>();
 	m_et->CreateEmitter(cfg);
 	m_et->Start();
 
@@ -356,19 +344,18 @@ void Particle3dSprite::CreateSpr()
 	}
 }
 
-bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* et)
+bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, const std::shared_ptr<Particle3dEmitter>& et)
 {
-	Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-	const P3dEmitterCfg* cfg = sym->GetEmitterCfg();
+	auto& cfg = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitterCfg();
 	if (!cfg) {
 		return false;
 	}
 
-	const_cast<P3dEmitterCfg*>(cfg)->SetStartRadius(m_start_radius);
+	std::const_pointer_cast<P3dEmitterCfg, const P3dEmitterCfg>(cfg)->SetStartRadius(m_start_radius);
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(this);
+	up_child->Push(shared_from_this());
 
 	float mt[6];
 	const S2_MAT& world_mat = up_child->GetPrevMat();
@@ -404,14 +391,13 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, Particle3dEmitter* 
 	return true;
 }
 
-void Particle3dSprite::ChangeEmitterBuffer(ReuseType reuse, const P3dEmitterCfg* cfg, bool add)
+void Particle3dSprite::ChangeEmitterBuffer(ReuseType reuse, const std::shared_ptr<const P3dEmitterCfg>& cfg, bool add)
 {
 	switch (reuse)
 	{
 	case REUSE_ALL:
 		{
-			Particle3dSymbol* sym = VI_DOWNCASTING<Particle3dSymbol*>(m_sym);
-			Particle3dEmitter* et = VI_DOWNCASTING<Particle3dSymbol*>(sym)->GetEmitter();
+			auto& et = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(GetSymbol())->GetEmitter();
 			ChangeEmitterBuffer(et, cfg, add);
 		}
 		break;
@@ -421,18 +407,22 @@ void Particle3dSprite::ChangeEmitterBuffer(ReuseType reuse, const P3dEmitterCfg*
 	case REUSE_NONE:
 		if (m_actors)
 		{
-			const std::vector<Actor*>& actors = m_actors->GetActors();
-			for (int i = 0, n = actors.size(); i < n; ++i) {
-				Particle3dActor* actor = static_cast<Particle3dActor*>(actors[i]);
-				Particle3dEmitter* et = actor->GetEmitter();
-				ChangeEmitterBuffer(et, cfg, add);			
+			auto& actors = m_actors->GetActors();
+			for (auto& actor : actors) 
+			{
+				if (!actor) {
+					continue;
+				}
+				if (auto& et = std::static_pointer_cast<Particle3dActor>(actor)->GetEmitter()) {
+					ChangeEmitterBuffer(et, cfg, add);
+				}
 			}
 		}
 		break;
 	}
 }
 
-void Particle3dSprite::ChangeEmitterBuffer(Particle3dEmitter* et, const P3dEmitterCfg* cfg, bool add)
+void Particle3dSprite::ChangeEmitterBuffer(std::shared_ptr<Particle3dEmitter>& et, const std::shared_ptr<const P3dEmitterCfg>& cfg, bool add)
 {
 	if (!et) {
 		return;

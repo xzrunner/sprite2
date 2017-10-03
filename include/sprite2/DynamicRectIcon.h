@@ -11,6 +11,8 @@ class DynamicRectIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	DynamicRectIcon();
 
+	virtual DynamicRectIcon* Clone() const { return new DynamicRectIcon(*this); }
+
 	void SetRegion(const sm::rect& begin, const sm::rect& end);
 	void GetRegion(sm::rect& begin, sm::rect& end) const;
 	

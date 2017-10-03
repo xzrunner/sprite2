@@ -20,18 +20,9 @@ P3dEmitterCfg::P3dEmitterCfg(p3d_emitter_cfg* impl)
 
 P3dEmitterCfg::~P3dEmitterCfg()
 {
-	if (!m_impl) {
-		return;
+	if (m_impl) {
+		delete m_impl;
 	}
-
-	for (int i = 0; i < m_impl->sym_count; ++i) {
-		void* ud = m_impl->syms[i].ud;
-		if (!ud) {
-			continue;
-		}
-		static_cast<Symbol*>(ud)->RemoveReference();
-	}
-	delete m_impl;
 }
 
 void P3dEmitterCfg::SetStartRadius(float radius)

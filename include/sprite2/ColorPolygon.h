@@ -17,6 +17,10 @@ public:
 	ColorPolygon() {}
 	ColorPolygon(const Color& color);
 	
+	virtual std::unique_ptr<Polygon> Clone() {
+		return std::make_unique<ColorPolygon>(*this);
+	}
+
 	virtual int Type() const { return POLY_COLOR; }
 
 	virtual void Draw(const RenderParams& rp) const;

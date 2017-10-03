@@ -32,7 +32,7 @@ AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 	return *this;
 }
 
-AudioSprite::AudioSprite(Symbol* sym, uint32_t id)
+AudioSprite::AudioSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -45,11 +45,6 @@ AudioSprite::~AudioSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_AUDIO);
 #endif // S2_DISABLE_STATISTICS
-}
-
-AudioSprite* AudioSprite::Clone() const
-{
-	return new AudioSprite(*this);
 }
 
 void AudioSprite::OnMessage(const UpdateParams& up, Message msg)
@@ -74,8 +69,7 @@ void AudioSprite::Play()
 		return;
 	}
 
-	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
-	ua::Source* source = sym->GetSource();
+	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
 	if (source) {
 		source->Play();
 	}
@@ -87,8 +81,7 @@ void AudioSprite::Stop()
 		return;
 	}
 
-	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
-	ua::Source* source = sym->GetSource();
+	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
 	if (source) {
 		source->Stop();
 	}
@@ -100,8 +93,7 @@ void AudioSprite::Pause()
 		return;
 	}
 
-	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
-	ua::Source* source = sym->GetSource();
+	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
 	if (source) {
 		source->Pause();
 	}
@@ -113,8 +105,7 @@ void AudioSprite::Resume()
 		return;
 	}
 
-	AudioSymbol* sym = VI_DOWNCASTING<AudioSymbol*>(m_sym);
-	ua::Source* source = sym->GetSource();
+	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
 	if (source) {
 		source->Resume();
 	}

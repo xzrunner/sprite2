@@ -3,6 +3,8 @@
 
 #include "S2_Symbol.h"
 
+#include <vector>
+
 struct rg_animation;
 
 namespace s2
@@ -21,17 +23,23 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
 
 	void SetAnim(rg_animation* anim);
 	const rg_animation* GetAnim() const { return m_anim; }
 
+	void AddCachedSym(const SymPtr& sym) { m_symbols.push_back(sym); }
+
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
 
 protected:
 	rg_animation* m_anim;
+
+private:
+	// cache anim used all symbol
+	std::vector<SymPtr> m_symbols;
 
 }; // Anim2Symbol
 

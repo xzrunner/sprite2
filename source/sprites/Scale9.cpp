@@ -19,7 +19,6 @@ Scale9::Scale9()
 	, m_width(0)
 	, m_height(0)
 {
-	memset(m_grids, 0, sizeof(m_grids));
 	m_sz_left = m_sz_right = m_sz_top = m_sz_down = 0;
 }
 
@@ -33,10 +32,11 @@ Scale9& Scale9::operator = (const Scale9& s9)
 	m_type = s9.m_type;
 	m_width = s9.m_width;
 	m_height = s9.m_height;
-	for (int i = 0; i < 9; ++i) {
-		Sprite* spr = s9.m_grids[i];
+	for (int i = 0; i < 9; ++i) 
+	{
+		const SprPtr& spr = s9.m_grids[i];
 		if (spr) {
-			m_grids[i] = VI_CLONE(Sprite, spr);
+			m_grids[i] = spr->Clone();
 		} else {
 			m_grids[i] = nullptr;
 		}
@@ -46,15 +46,6 @@ Scale9& Scale9::operator = (const Scale9& s9)
 	m_sz_top   = s9.m_sz_top;
 	m_sz_down  = s9.m_sz_down;
 	return *this;
-}
-
-Scale9::~Scale9()
-{
-	for (int i = 0; i < 9; ++i) {
-		if (m_grids[i]) {
-			m_grids[i]->RemoveReference();
-		}
-	}
 }
 
 RenderReturn Scale9::Draw(const RenderParams& rp) const
@@ -166,20 +157,16 @@ void Scale9::SetSize(float width, float height)
 	}
 }
 
-void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9], 
+void Scale9::Build(SCALE9_TYPE type, int w, int h, SprPtr grids[9],
 				   int sz_left, int sz_right, int sz_top, int sz_down)
 {
 	m_type = type;
 	m_width = m_height = 0;
 	for (int i = 0; i < 9; ++i) 
 	{
-		Sprite* dst = m_grids[i];
-		if (dst) {
-			dst->RemoveReference();
-		}	
-		Sprite* src = grids[i];
+		const SprPtr& src = grids[i];
 		if (src) {
-			m_grids[i] = VI_CLONE(Sprite, src);
+			m_grids[i] = src->Clone();
 		} else {
 			m_grids[i] = nullptr;
 		}
@@ -191,7 +178,7 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, Sprite* grids[9],
 	SetSize(static_cast<float>(w), static_cast<float>(h));
 }
 
-void Scale9::GetGrids(std::vector<Sprite*>& grids) const
+void Scale9::GetGrids(std::vector<SprPtr>& grids) const
 {
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
@@ -200,7 +187,7 @@ void Scale9::GetGrids(std::vector<Sprite*>& grids) const
 	}
 }
 
-SCALE9_TYPE Scale9::CheckType(Sprite* grids[9])
+SCALE9_TYPE Scale9::CheckType(SprPtr grids[9])
 {
 	SCALE9_TYPE type = S9_NULL;
 	do {
@@ -253,16 +240,15 @@ SCALE9_TYPE Scale9::CheckType(Sprite* grids[9])
 void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, float dst_h,
 						  bool no_scale_w, bool no_scale_h)
 {
-	if (dst_w < 0) { dst_w = 1; }
-	if (dst_h < 0) { dst_h = 1; }
-
-	Sprite* spr = m_grids[idx];
-
-	Symbol* sym = spr->GetSymbol();
-	ImageSymbol* img_sym = VI_DOWNCASTING<ImageSymbol*>(sym);
-	if (!img_sym) {
+	if (idx < 0 || idx >= 9 || !m_grids[idx]) {
 		return;
 	}
+
+	auto& spr = m_grids[idx];
+	auto& img_sym = S2_VI_PTR_DOWN_CAST<ImageSymbol>(spr->GetSymbol());
+
+	if (dst_w < 0) { dst_w = 1; }
+	if (dst_h < 0) { dst_h = 1; }
 
 	spr->SetPosition(center);
 
@@ -374,14 +360,14 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 
 sm::vec2 Scale9::GetChildSize(SCALE9_IDX idx) const
 {
-	const Sprite* spr = m_grids[idx];
-	if (!spr) {
+	if (idx < 0 || idx >= 9 || !m_grids[idx]) {
 		return sm::vec2(0, 0);
 	}
-	const Symbol* sym = spr->GetSymbol();
+
+	auto& spr = m_grids[idx];
+	auto& sym = spr->GetSymbol();
 	if (sym->Type() == SYM_IMAGE) {
-		const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
-		return img_sym->GetNoTrimedSize();
+		return S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym)->GetNoTrimedSize();
 	} else {
 		return sym->GetBounding(spr).Size();
 	}

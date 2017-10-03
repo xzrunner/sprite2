@@ -3,7 +3,7 @@
 
 #include "S2_RenderContext.h"
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <vector>
 
@@ -29,7 +29,7 @@ private:
 private:
 	std::vector<RenderContext> m_stack;
 
-	SINGLETON_DECLARATION(RenderCtxStack)
+	CU_SINGLETON_DECLARATION(RenderCtxStack)
 
 }; // RenderCtxStack
 

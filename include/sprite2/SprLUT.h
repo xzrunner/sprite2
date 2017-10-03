@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_LUT_H_
 #define _SPRITE2_SPR_LUT_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <vector>
 
@@ -38,7 +38,7 @@ private:
 	int m_search_length;
 	int m_search_times;
 
-	SINGLETON_DECLARATION(SprLUT);
+	CU_SINGLETON_DECLARATION(SprLUT);
 
 }; // SprLUT
 

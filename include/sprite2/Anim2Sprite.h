@@ -13,14 +13,8 @@ public:
 	Anim2Sprite();
 	Anim2Sprite(const Anim2Sprite& spr);
 	Anim2Sprite& operator = (const Anim2Sprite& spr);
-	Anim2Sprite(Symbol* sym, uint32_t id = -1);
+	Anim2Sprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~Anim2Sprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual Anim2Sprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -37,6 +31,8 @@ protected:
 	int m_static_time;
 
 	Anim2Curr m_curr;
+
+	SPRITE_CLONE_FUNC(Anim2Sprite)
 
 	VI_DUMMY_FUNC
 

@@ -12,20 +12,16 @@ public:
 	IconSprite();
 	IconSprite(const IconSprite& spr);
 	IconSprite& operator = (const IconSprite& spr);
-	IconSprite(Symbol* sym, uint32_t id = -1);
+	IconSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~IconSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual IconSprite* Clone() const;
 
 	void SetProcess(float process) { m_process = process; }
 	float GetProcess() const { return m_process; }
 
 protected:
 	float m_process;
+
+	SPRITE_CLONE_FUNC(IconSprite)
 
 	VI_DUMMY_FUNC
 

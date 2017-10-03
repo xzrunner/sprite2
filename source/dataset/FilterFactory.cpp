@@ -25,7 +25,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(FilterFactory)
+CU_SINGLETON_DEFINITION(FilterFactory)
 
 FilterFactory::FilterFactory() 
 {

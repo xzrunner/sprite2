@@ -45,7 +45,7 @@ int Scale9Symbol::Type() const
 
 void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 {
-	std::vector<Sprite*> grids;
+	std::vector<SprPtr> grids;
 	m_s9.GetGrids(grids);
 	for (int i = 0, n = grids.size(); i < n; ++i) {
 		if (grids[i]) {
@@ -54,7 +54,7 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SCALE9);
@@ -66,7 +66,7 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			ret = VI_DOWNCASTING<const Scale9Actor*>(rp.actor)->GetScale9().Draw(*rp_child);
+			ret = std::static_pointer_cast<const Scale9Actor>(rp.actor)->GetScale9().Draw(*rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
@@ -75,7 +75,7 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			ret = VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().Draw(*rp_child);
+			ret = S2_VI_PTR_DOWN_CAST<const Scale9Sprite>(spr)->GetScale9().Draw(*rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
@@ -86,7 +86,7 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 	return ret;
 }
 
-RenderReturn Scale9Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn Scale9Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
 }
@@ -96,13 +96,13 @@ void Scale9Symbol::Resize(float width, float height)
 	m_s9.SetSize(width, height);
 }
 
-sm::rect Scale9Symbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect Scale9Symbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	sm::vec2 sz;
 	if (actor) {
-		sz = VI_DOWNCASTING<const Scale9Actor*>(actor)->GetScale9().GetSize();
+		sz = S2_VI_PTR_DOWN_CAST<const Scale9Actor>(actor)->GetScale9().GetSize();
 	} else if (spr) {
-		sz = VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9().GetSize();
+		sz = S2_VI_PTR_DOWN_CAST<const Scale9Sprite>(spr)->GetScale9().GetSize();
 	} else {
 		sz = m_s9.GetSize();
 	}

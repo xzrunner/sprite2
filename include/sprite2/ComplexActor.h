@@ -9,7 +9,7 @@ namespace s2
 class ComplexActor : public Actor
 {
 public:
-	ComplexActor(const Sprite* spr, const Actor* parent);
+	ComplexActor(const SprConstPtr& spr, const ActorConstPtr& parent);
 
 	void SetAction(int action);
 	int GetAction() const;

@@ -3,9 +3,9 @@
 
 #include "pre_defined.h"
 #include "RenderColor.h"
-
-#include <CU_Singleton.h>
 #include S2_MAT_HEADER
+
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -30,7 +30,7 @@ private:
 private:
 	float m_time;
 
-	SINGLETON_DECLARATION(Trail)
+	CU_SINGLETON_DECLARATION(Trail)
 
 }; // Trail
 

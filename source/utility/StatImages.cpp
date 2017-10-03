@@ -12,7 +12,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatImages);
+CU_SINGLETON_DEFINITION(StatImages);
 
 StatImages::StatImages()
 {

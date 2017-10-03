@@ -32,7 +32,7 @@ MaskSprite& MaskSprite::operator = (const MaskSprite& spr)
 	return *this;
 }
 
-MaskSprite::MaskSprite(Symbol* sym, uint32_t id)
+MaskSprite::MaskSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -47,26 +47,21 @@ MaskSprite::~MaskSprite()
 #endif // S2_DISABLE_STATISTICS
 }
 
-MaskSprite* MaskSprite::Clone() const
-{
-	return new MaskSprite(*this);
-}
-
 void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
+	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(this);
+	up_child->Push(shared_from_this());
 
-	if (const Sprite* base = sym->GetBase()) {
+	if (auto& base = sym->GetBase()) {
 		up_child->SetActor(base->QueryActor(up.GetActor()));
-		const_cast<Sprite*>(base)->OnMessage(*up_child, msg);
+		std::const_pointer_cast<Sprite>(base)->OnMessage(*up_child, msg);
 	}
-	if (const Sprite* mask = sym->GetMask()) {
+	if (auto& mask = sym->GetMask()) {
 		up_child->SetActor(mask->QueryActor(up.GetActor()));
-		const_cast<Sprite*>(mask)->OnMessage(*up_child, msg);
+		std::const_pointer_cast<Sprite>(mask)->OnMessage(*up_child, msg);
 	}
 
 	UpdateParamsPool::Instance()->Push(up_child); 
@@ -80,7 +75,7 @@ bool MaskSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -90,18 +85,18 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(this);
+	up_child->Push(shared_from_this());
 
-	MaskSymbol* sym = VI_DOWNCASTING<MaskSymbol*>(m_sym);
-	if (const Sprite* base = sym->GetBase()) {
+	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
+	if (auto& base = sym->GetBase()) {
 		up_child->SetActor(base->QueryActor(up.GetActor()));
-		if (const_cast<Sprite*>(base)->Update(*up_child)) {
+		if (std::const_pointer_cast<Sprite>(base)->Update(*up_child)) {
 			dirty = true;
 		}
 	}
-	if (const Sprite* mask = sym->GetMask()) {
+	if (auto& mask = sym->GetMask()) {
 		up_child->SetActor(mask->QueryActor(up.GetActor()));
-		if (const_cast<Sprite*>(mask)->Update(*up_child)) {
+		if (std::const_pointer_cast<Sprite>(mask)->Update(*up_child)) {
 			dirty = true;
 		}
 	}
@@ -111,16 +106,13 @@ bool MaskSprite::Update(const UpdateParams& up)
 	return dirty;
 }
 
-Sprite* MaskSprite::FetchChildByName(int name, const Actor* actor) const
+SprPtr MaskSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	Sprite* ret = nullptr;
+	SprPtr ret = nullptr;
 	if (name == SprNameMap::BASE_ID) {
-		ret = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
+		ret = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetBase();
 	} else if (name == SprNameMap::MASK_ID) {
-		ret = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
-	}
-	if (ret) {
-		ret->AddReference();
+		ret = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetMask();
 	}
 	return ret;
 }
@@ -128,14 +120,14 @@ Sprite* MaskSprite::FetchChildByName(int name, const Actor* actor) const
 VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	Sprite* base = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetBase());
+	auto& base = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetBase();
 	if (base) {
 		SprVisitorParams cp = params;
 		cp.actor = base->QueryActor(params.actor);
 		if (!SpriteVisitor::VisitChild(visitor, cp, base, ret))
 			return ret;
 	}
-	Sprite* mask = const_cast<Sprite*>(VI_DOWNCASTING<MaskSymbol*>(m_sym)->GetMask());
+	auto& mask = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetMask();
 	if (mask) {
 		SprVisitorParams cp = params;
 		cp.actor = mask->QueryActor(params.actor);

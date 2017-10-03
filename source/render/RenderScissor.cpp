@@ -10,7 +10,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(RenderScissor)
+CU_SINGLETON_DEFINITION(RenderScissor)
 
 RenderScissor::RenderScissor() 
 {

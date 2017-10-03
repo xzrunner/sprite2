@@ -30,7 +30,7 @@ IconSprite& IconSprite::operator = (const IconSprite& spr)
 	return *this;
 }
 
-IconSprite::IconSprite(Symbol* sym, uint32_t id)
+IconSprite::IconSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_process(1)
 {
@@ -44,11 +44,6 @@ IconSprite::~IconSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_ICON);
 #endif // S2_DISABLE_STATISTICS
-}
-
-IconSprite* IconSprite::Clone() const
-{
-	return new IconSprite(*this);
 }
 
 }

@@ -23,7 +23,7 @@
 namespace s2
 {
 
-RenderReturn DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
+RenderReturn DrawGaussianBlur::Draw(const SprConstPtr& spr, const RenderParams& rp, int iterations)
 {
 	RenderReturn ret = RENDER_OK;
 
@@ -38,7 +38,7 @@ RenderReturn DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& rp, i
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations)
+RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const SprConstPtr& spr, const RenderParams& rp, int iterations)
 {	
 	RenderReturn ret = RENDER_OK;
 
@@ -103,7 +103,7 @@ RenderReturn DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offs
 	return RENDER_OK;
 }
 
-RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const SprConstPtr& spr, const RenderParams& rp)
 {
 	rt->Bind();
 

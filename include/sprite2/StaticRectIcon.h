@@ -11,6 +11,8 @@ class StaticRectIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	StaticRectIcon();
 	
+	virtual StaticRectIcon* Clone() const { return new StaticRectIcon(*this); }
+
 	void SetRegion(const sm::rect& r);
 	void GetRegion(sm::vec2& min, sm::vec2& max) const;
 

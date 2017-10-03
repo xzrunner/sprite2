@@ -12,7 +12,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Particle2d)
+CU_SINGLETON_DEFINITION(Particle2d)
 
 Particle2d::Particle2d()
 	: m_time(0)
@@ -45,7 +45,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 #endif // S2_MATRIX_FIX
 	}
 
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	SymPtr s2_sym(static_cast<Symbol*>(sym));
 
 	Color mul, add;
 	memcpy(&mul, mul_col, sizeof(*mul_col));

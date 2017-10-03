@@ -7,16 +7,15 @@
 namespace s2
 {
 
-Particle3dActor::Particle3dActor(const Sprite* spr, const Actor* parent)
-	: Actor(spr, parent) 
-	, m_et(nullptr)
+Particle3dActor::Particle3dActor(const SprConstPtr& spr, const ActorConstPtr& parent)
+	: Actor(spr, parent)
 {
-	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
-	const Particle3dSymbol* p3d_sym = VI_DOWNCASTING<const Particle3dSymbol*>(spr->GetSymbol());
-	const P3dEmitterCfg* cfg = p3d_sym->GetEmitterCfg();
-	if (cfg) 
+	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+	auto& p3d_sym = S2_VI_PTR_DOWN_CAST<const Particle3dSymbol>(spr->GetSymbol());
+	auto& cfg = p3d_sym->GetEmitterCfg();
+	if (cfg)
 	{
-		m_et = P3dEmitterPool::Instance()->Pop();
+		m_et = std::make_shared<Particle3dEmitter>();
 		m_et->CreateEmitter(cfg);
 		m_et->Start();
 
@@ -31,13 +30,12 @@ Particle3dActor::Particle3dActor(const Sprite* spr, const Actor* parent)
 
 Particle3dActor::~Particle3dActor()
 {
-	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(GetSpr());
-	if (m_et) {
-		if (p3d_spr->IsAlone()) {
-			Particle3dBuffer::Instance()->Remove(m_et);
-		}
-		m_et->RemoveReference();
-	}
+	//if (m_et) {
+	//	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(GetSpr());
+	//	if (p3d_spr->IsAlone()) {
+	//		Particle3dBuffer::Instance()->Remove(m_et);
+	//	}
+	//}
 }
 
 }

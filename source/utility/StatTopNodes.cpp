@@ -7,7 +7,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatTopNodes);
+CU_SINGLETON_DEFINITION(StatTopNodes);
 
 static const int TOP_NODE_NUM = 20;
 

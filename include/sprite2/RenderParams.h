@@ -6,11 +6,14 @@
 #include "RenderShader.h"
 #include "RenderCamera.h"
 #include "pre_defined.h"
-#include "s2_macro.h"
 #include "ObjectPool3.h"
+#include "s2_typedef.h"
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
+#include <cu/cu_macro.h>
+
+#include <memory>
 
 namespace s2
 {
@@ -31,7 +34,7 @@ public:
 
 	RenderCamera camera;
 	
-	const Actor* actor;
+	ActorConstPtr actor;
 
 	int min_edge;
 
@@ -83,19 +86,19 @@ private:
 	static const uint32_t FLAG_ENABLE_DRAWLIST      = 0x00000200;
 
 public:
-	S2_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
-	S2_FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
-	S2_FLAG_METHOD(DisableBlend, FLAG_DISABLE_BLEND)
-	S2_FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
-	S2_FLAG_METHOD(DisableDTexC2, FLAG_DISABLE_DTEX_C2)
-	S2_FLAG_METHOD(DisableCulling, FLAG_DISABLE_CULLING)
-	S2_FLAG_METHOD(DisableIntegrate, FLAG_DISABLE_INTEGRATE)
+	CU_FLAG_METHOD(ChangeShader, FLAG_CHANGE_SHADER)
+	CU_FLAG_METHOD(DisableRenderDraw, FLAG_DISABLE_RENDER_DRAW)
+	CU_FLAG_METHOD(DisableBlend, FLAG_DISABLE_BLEND)
+	CU_FLAG_METHOD(DisableFilter, FLAG_DISABLE_FILTER)
+	CU_FLAG_METHOD(DisableDTexC2, FLAG_DISABLE_DTEX_C2)
+	CU_FLAG_METHOD(DisableCulling, FLAG_DISABLE_CULLING)
+	CU_FLAG_METHOD(DisableIntegrate, FLAG_DISABLE_INTEGRATE)
 
-	S2_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
+	CU_FLAG_METHOD(DisableParticle3d, FLAG_DISABLE_PARTICLE3D)
 
-	S2_FLAG_METHOD(ViewRegionValid, FLAG_VIEW_REGION_VALID)
+	CU_FLAG_METHOD(ViewRegionValid, FLAG_VIEW_REGION_VALID)
 
-	S2_FLAG_METHOD(EnableDrawlist, FLAG_ENABLE_DRAWLIST)
+	CU_FLAG_METHOD(EnableDrawlist, FLAG_ENABLE_DRAWLIST)
 
 private:
 	mutable uint32_t m_flags;

@@ -5,12 +5,11 @@
 namespace s2
 {
 
-ComplexActor::ComplexActor(const Sprite* spr, const Actor* parent)
-	: Actor(spr, parent) 
+ComplexActor::ComplexActor(const SprConstPtr& spr, const ActorConstPtr& parent)
+	: Actor(spr, parent)
 	, m_action(-1)
 {
-	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
-	const sm::rect& scissor = comp_sym->GetScissor();
+	auto& scissor = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(spr->GetSymbol())->GetScissor();
 	if (scissor.Width() > 0 && scissor.Height() > 0) {
 		GetAABB().SetStaticRect(scissor);
 	}
@@ -24,7 +23,7 @@ void ComplexActor::SetAction(int action)
 
 	m_action = action;
 
-	GetAABB().Update(this);
+	GetAABB().Update(shared_from_this());
 }
 
 int ComplexActor::GetAction() const 

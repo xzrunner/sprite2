@@ -3,7 +3,7 @@
 
 #include "StatSymType.h"
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 
@@ -22,7 +22,7 @@ public:
 private:
 	int m_counts[STAT_SYM_MAX];
 
-	SINGLETON_DECLARATION(StatSprCount);
+	CU_SINGLETON_DECLARATION(StatSprCount);
 
 }; // StatSprCount
 

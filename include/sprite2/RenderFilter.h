@@ -3,12 +3,10 @@
 
 #include "FilterMode.h"
 
-#include <CU_Cloneable.h>
-
 namespace s2
 {
 
-class RenderFilter : public cu::Cloneable
+class RenderFilter
 {
 public:
 	RenderFilter() : m_mode(FM_NULL) {}

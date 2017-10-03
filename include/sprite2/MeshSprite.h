@@ -14,14 +14,8 @@ public:
 	MeshSprite();
 	MeshSprite(const MeshSprite& mesh);
 	MeshSprite& operator = (const MeshSprite& mesh);
-	MeshSprite(Symbol* sym, uint32_t id = -1);
+	MeshSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~MeshSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual MeshSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -29,9 +23,9 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 
-	void Lerp(const MeshSprite* begin, const MeshSprite* end, float process);
+	void Lerp(const MeshSprite& begin, const MeshSprite& end, float process);
 
 	const sm::vec2& GetSpeed() const { return m_speed; }
 	void SetSpeed(const sm::vec2& spd) { m_speed = spd; }
@@ -39,8 +33,8 @@ public:
 	const pm::MeshTransform& GetMeshTrans() const { return m_trans; }
 	pm::MeshTransform& GetMeshTrans() { return m_trans; }
 
-	const Symbol* GetBaseSym() const { return m_base; }
-	void SetBaseSym(const Symbol* sym);
+	const SymConstPtr& GetBaseSym() const { return m_base; }
+	void SetBaseSym(const SymPtr& sym) { m_base = sym; }
 
 	bool OnlyDrawBound() const { return m_only_draw_bound; }
 	void SetOnlyDrawBound(bool only_draw_bound) { m_only_draw_bound = only_draw_bound; }
@@ -50,9 +44,11 @@ protected:
 
 	pm::MeshTransform m_trans;
 
- 	const Symbol* m_base;
+	SymConstPtr m_base;
 
 	bool m_only_draw_bound;
+
+	SPRITE_CLONE_FUNC(MeshSprite)
 
 	VI_DUMMY_FUNC
 

@@ -3,7 +3,7 @@
 
 #include "StatSymType.h"
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 
@@ -55,7 +55,7 @@ private:
 private:
 	Item m_items[STAT_SYM_MAX];
 	
-	SINGLETON_DECLARATION(StatSymDraw);
+	CU_SINGLETON_DECLARATION(StatSymDraw);
 
 }; // StatSymDraw
 

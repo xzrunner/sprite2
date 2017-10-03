@@ -36,7 +36,7 @@ ImageSprite& ImageSprite::operator = (const ImageSprite& spr)
 	return *this;
 }
 
-ImageSprite::ImageSprite(Symbol* sym, uint32_t id)
+ImageSprite::ImageSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -51,11 +51,6 @@ ImageSprite::~ImageSprite()
 #endif // S2_DISABLE_STATISTICS
 }
 
-ImageSprite* ImageSprite::Clone() const
-{
-	return new ImageSprite(*this);
-}
-
 bool ImageSprite::Update(const UpdateParams& up)
 {
 	// update inherit
@@ -64,7 +59,7 @@ bool ImageSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -82,7 +77,7 @@ bool ImageSprite::Update(const UpdateParams& up)
 	return false;
 }
 
-bool ImageSprite::AutoUpdate(const Actor* actor)
+bool ImageSprite::AutoUpdate(const ActorConstPtr& actor)
 {
 	// todo
 	return false;

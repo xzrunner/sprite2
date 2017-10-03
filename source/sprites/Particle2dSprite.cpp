@@ -47,7 +47,7 @@ Particle2dSprite& Particle2dSprite::operator = (const Particle2dSprite& spr)
 	return *this;
 }
 
-Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id) 
+Particle2dSprite::Particle2dSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(nullptr)
 {
@@ -55,7 +55,7 @@ Particle2dSprite::Particle2dSprite(Symbol* sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE2D);
 #endif // S2_DISABLE_STATISTICS
 
-	const p2d_emitter_cfg* cfg = VI_DOWNCASTING<Particle2dSymbol*>(sym)->GetEmitterCfg();
+	auto cfg = S2_VI_PTR_DOWN_CAST<Particle2dSymbol>(GetSymbol())->GetEmitterCfg();
 	if (cfg) {
 		m_et = p2d_emitter_create(cfg);
 		p2d_emitter_start(m_et);
@@ -71,11 +71,6 @@ Particle2dSprite::~Particle2dSprite()
 	if (m_et) {
 		p2d_emitter_release(m_et);
 	}
-}
-
-Particle2dSprite* Particle2dSprite::Clone() const
-{
-	return new Particle2dSprite(*this);
 }
 
 void Particle2dSprite::OnMessage(const UpdateParams& up, Message msg)
@@ -105,7 +100,7 @@ bool Particle2dSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;

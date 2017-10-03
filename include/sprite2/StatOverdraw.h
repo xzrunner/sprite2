@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_OVERDRAW_H_
 #define _SPRITE2_STAT_OVERDRAW_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 
@@ -19,7 +19,7 @@ public:
 private:
 	float m_area;
 
-	SINGLETON_DECLARATION(StatOverdraw);
+	CU_SINGLETON_DECLARATION(StatOverdraw);
 
 }; // StatOverdraw
 

@@ -1,72 +1,24 @@
 #include "SprActors.h"
 
-#ifdef SPR_ACTORS_HASH
-#include <ds_hash.h>
-#endif // SPR_ACTORS_HASH
-
 namespace s2
 {
 
-#ifdef SPR_ACTORS_HASH
-static const int MAX_COUNT_NO_HASH = 4;
-#endif // SPR_ACTORS_HASH
-
 SprActors::SprActors()
-#ifdef SPR_ACTORS_HASH
-	: m_hash(nullptr)
-#endif // SPR_ACTORS_HASH
 {
 }
 
 SprActors::~SprActors()
 {
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) {
-		ds_hash_release(m_hash); 
-	}
-#endif // SPR_ACTORS_HASH
 }
 
-#ifdef SPR_ACTORS_HASH
-
-static unsigned int
-_hash_func(int hash_sz, void* key) 
-{
-	uint64_t k = reinterpret_cast<uint64_t>(key);
-	return k % hash_sz;
-}
-
-static bool
-_equal_func(void* key0, void* key1)
-{
-	return key0 == key1;
-}
-
-#endif // SPR_ACTORS_HASH
-
-void SprActors::Add(Actor* actor)
+void SprActors::Add(const ActorPtr& actor)
 {
 	m_actors.push_back(actor);
-
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) {
-		ds_hash_insert(m_hash, const_cast<Actor*>(actor->GetParent()), actor, true);
-	} else {
-		if (m_actors.size() > MAX_COUNT_NO_HASH) {
-			m_hash = ds_hash_create(MAX_COUNT_NO_HASH, MAX_COUNT_NO_HASH * 2, 0.5f, 
-				_hash_func, _equal_func);
-			for (int i = 0, n = m_actors.size(); i < n; ++i) {
-				Actor* actor = m_actors[i];
-				ds_hash_insert(m_hash, const_cast<Actor*>(actor->GetParent()), actor, true);
-			}
-		}
-	}
-#endif // SPR_ACTORS_HASH
 }
 
-void SprActors::Del(Actor* actor)
+void SprActors::Del(const ActorPtr& actor)
 {
-	std::vector<Actor*>::iterator itr = m_actors.begin();
+	auto itr = m_actors.begin();
 	for ( ; itr != m_actors.end(); ) {
 		if (*itr == actor) {
 			itr = m_actors.erase(itr);
@@ -74,45 +26,20 @@ void SprActors::Del(Actor* actor)
 			++itr;
 		}
 	}
-
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) {
-		ds_hash_remove(m_hash, const_cast<Actor*>(actor->GetParent()));
-	}
-#endif // SPR_ACTORS_HASH
 }
 
 void SprActors::Clear()
 {
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		delete m_actors[i];
-	}
 	m_actors.clear();
-
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) {
-		ds_hash_release(m_hash); 
-		m_hash = nullptr;
-	}
-#endif // SPR_ACTORS_HASH
 }
 
-void SprActors::Connect(const Actor* prev)
+void SprActors::Connect(const ActorPtr& prev)
 {
-	for (int i = 0, n = m_actors.size(); i < n; ++i) {
-		m_actors[i]->SetParent(prev);
-	}
-
-#ifdef SPR_ACTORS_HASH
-	if (m_hash) 
-	{
-		ds_hash_clear(m_hash);
-		for (int i = 0, n = m_actors.size(); i < n; ++i) {
-			Actor* actor = m_actors[i];
-			ds_hash_insert(m_hash, const_cast<Actor*>(actor->GetParent()), actor, true);
+	for (auto& actor : m_actors) {
+		if (actor) {
+			actor->SetParent(prev);
 		}
 	}
-#endif // SPR_ACTORS_HASH
 }
 
 }

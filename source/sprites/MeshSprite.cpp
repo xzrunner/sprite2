@@ -34,10 +34,6 @@ MeshSprite::MeshSprite(const MeshSprite& mesh)
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
-
-	if (mesh.m_base) {
-		mesh.m_base->AddReference();
-	}
 }
 
 MeshSprite& MeshSprite::operator = (const MeshSprite& mesh)
@@ -45,12 +41,12 @@ MeshSprite& MeshSprite::operator = (const MeshSprite& mesh)
 	Sprite::operator = (mesh);
 	m_speed = mesh.m_speed;
 	m_trans = mesh.m_trans;
-	cu::RefCountObjAssign(m_base, mesh.m_base);
+	m_base = mesh.m_base;
 	m_only_draw_bound = mesh.m_only_draw_bound;
 	return *this;
 }
 
-MeshSprite::MeshSprite(Symbol* sym, uint32_t id) 
+MeshSprite::MeshSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id) 
 	, m_only_draw_bound(false)
 {
@@ -58,11 +54,8 @@ MeshSprite::MeshSprite(Symbol* sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
 
-	Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(sym)->GetMesh();
+	const std::unique_ptr<Mesh>& mesh = S2_VI_PTR_DOWN_CAST<const MeshSymbol>(sym)->GetMesh();
 	m_base = mesh->GetBaseSymbol();
-	if (m_base) {
-		m_base->AddReference();
-	}
 
 //	m_speed.set(0, -0.01f);
 
@@ -74,15 +67,6 @@ MeshSprite::~MeshSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_base) {
-		m_base->RemoveReference();
-	}
-}
-
-MeshSprite* MeshSprite::Clone() const
-{
-	return new MeshSprite(*this);
 }
 
 void MeshSprite::OnMessage(const UpdateParams& up, Message msg)
@@ -98,7 +82,7 @@ bool MeshSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -106,19 +90,19 @@ bool MeshSprite::Update(const UpdateParams& up)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(this);
+	up_child->Push(shared_from_this());
 	bool ret;
 	if (m_base) {
-		ret = const_cast<Symbol*>(m_base)->Update(*up_child, 0);
+		ret = std::const_pointer_cast<Symbol>(m_base)->Update(*up_child, 0);
 	} else {
-		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		ret = const_cast<Symbol*>(mesh->GetBaseSymbol())->Update(*up_child, 0);
+		const auto& mesh = S2_VI_PTR_DOWN_CAST<MeshSymbol>(m_sym)->GetMesh();
+		ret = std::const_pointer_cast<Symbol>(mesh->GetBaseSymbol())->Update(*up_child, 0);
 	}
 	UpdateParamsPool::Instance()->Push(up_child); 
 	return ret;
 }
 
-Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const
+SprPtr MeshSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
 	class FetchVisitor : public SymbolVisitor
 	{
@@ -128,43 +112,35 @@ Sprite* MeshSprite::FetchChildByName(int name, const Actor* actor) const
 			, m_spr(nullptr) 
 		{}
 
-		virtual void Visit(Sprite* spr) const
+		virtual void Visit(const SprPtr& spr) const
 		{
 			if (!m_spr && spr->GetName() == m_name) {
 				m_spr = spr;
 			}
 		}
 
-		Sprite* GetResult() { return m_spr; }
+		SprPtr GetResult() { return m_spr; }
 		
 	private:
 		int m_name;
-		mutable Sprite* m_spr;
+		mutable SprPtr m_spr;
 
 	}; // FetchVisitor
 
 	FetchVisitor visitor(name);
 	if (m_base) {
-		const_cast<Symbol*>(m_base)->Traverse(visitor);
+		std::const_pointer_cast<Symbol>(m_base)->Traverse(visitor);
 	} else {
-		Mesh* mesh = VI_DOWNCASTING<MeshSymbol*>(m_sym)->GetMesh();
-		const_cast<Symbol*>(mesh->GetBaseSymbol())->Traverse(visitor);
+		const auto& mesh = S2_VI_PTR_DOWN_CAST<MeshSymbol>(m_sym)->GetMesh();
+		std::const_pointer_cast<Symbol>(mesh->GetBaseSymbol())->Traverse(visitor);
 	}
-	Sprite* ret = visitor.GetResult();
-	if (ret) {
-		ret->AddReference();
-	}
-	return ret;
+
+	return visitor.GetResult();
 }
 
-void MeshSprite::Lerp(const MeshSprite* begin, const MeshSprite* end, float process)
+void MeshSprite::Lerp(const MeshSprite& begin, const MeshSprite& end, float process)
 {
-	m_trans.Lerp(begin->GetMeshTrans(), end->GetMeshTrans(), process);
-}
-
-void MeshSprite::SetBaseSym(const Symbol* sym) 
-{ 
-	cu::RefCountObjAssign(m_base, sym); 
+	m_trans.Lerp(begin.GetMeshTrans(), end.GetMeshTrans(), process);
 }
 
 }

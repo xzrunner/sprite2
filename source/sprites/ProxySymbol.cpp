@@ -9,30 +9,9 @@
 namespace s2
 {
 
-ProxySymbol::ProxySymbol(const std::vector<std::pair<const Actor*, Sprite*> >& items)
+ProxySymbol::ProxySymbol(const std::vector<std::pair<const ActorConstPtr, SprPtr>>& items)
 	: m_items(items)
 {
-	for (int i=  0, n = m_items.size(); i < n; ++i) 
-	{
-		Sprite* child = m_items[i].second;
-		assert(child);
-		child->AddReference();
-		const Actor* parent = m_items[i].first;
-		if (parent) {
-			parent->GetSpr()->AddReference();
-		}
-	}
-}
-
-ProxySymbol::~ProxySymbol()
-{
-	for (int i = 0, n = m_items.size(); i < n; ++i) {
-		m_items[i].second->RemoveReference();
-		const Actor* parent = m_items[i].first;
-		if (parent) {
-			parent->GetSpr()->RemoveReference();
-		}
-	}
 }
 
 int ProxySymbol::Type() const
@@ -40,7 +19,7 @@ int ProxySymbol::Type() const
 	return SYM_PROXY;
 }
 
-RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_items.size(); i < n; ++i) {
@@ -49,7 +28,7 @@ RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	return ret;
 }
 
-sm::rect ProxySymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect ProxySymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

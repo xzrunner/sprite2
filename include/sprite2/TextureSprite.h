@@ -12,14 +12,10 @@ public:
 	TextureSprite();
 	TextureSprite(const TextureSprite& spr);
 	TextureSprite& operator = (const TextureSprite& spr);
-	TextureSprite(Symbol* sym, uint32_t id = -1);
+	TextureSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~TextureSprite();
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual TextureSprite* Clone() const;
+	SPRITE_CLONE_FUNC(TextureSprite)
 
 	VI_DUMMY_FUNC
 

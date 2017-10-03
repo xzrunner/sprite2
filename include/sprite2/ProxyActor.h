@@ -9,7 +9,7 @@ namespace s2
 class ProxyActor : public Actor
 {
 public:
-	ProxyActor(const Sprite* spr, const Actor* parent);
+	ProxyActor(const SprConstPtr& spr, const ActorConstPtr& parent);
 
 #ifndef S2_DISABLE_FLATTEN
 	virtual void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);
@@ -18,7 +18,7 @@ public:
 	virtual void BuildFlatten();
 	virtual bool HasFlatten() const;
 	virtual void FlattenUpdate(bool force);
-	virtual void FlattenDraw(const s2::RenderParams& rp) const;
+	virtual void FlattenDraw(const RenderParams& rp) const;
 	virtual void FlattenSetFrame(int frame);
 #endif // S2_DISABLE_FLATTEN
 

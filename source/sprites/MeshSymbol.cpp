@@ -41,10 +41,6 @@ MeshSymbol::~MeshSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_mesh) {
-		m_mesh->RemoveReference();
-	}
 }
 
 int MeshSymbol::Type() const 
@@ -52,7 +48,7 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
@@ -76,7 +72,7 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 // 	shader->SetColor(p.color.GetMulABGR(), p.color.GetAddABGR());
 // 	shader->SetColorMap(p.color.GetMapRABGR(), p.color.GetMapGABGR(), p.color.GetMapBABGR());
 
-	const MeshSprite* mesh_spr = VI_DOWNCASTING<const MeshSprite*>(spr);
+	auto& mesh_spr = S2_VI_PTR_DOWN_CAST<const MeshSprite>(spr);
  	if (mesh_spr) {
 		const pm::MeshTransform& mtrans = mesh_spr->GetMeshTrans();
 		m_mesh->LoadFromTransform(mtrans);
@@ -102,13 +98,13 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
-RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	if (!m_mesh) {
 		return RENDER_NO_DATA;
 	}
 
-	const MeshSprite* mesh_spr = VI_DOWNCASTING<const MeshSprite*>(spr);
+	auto& mesh_spr = S2_VI_PTR_DOWN_CAST<const MeshSprite>(spr);
 	if (mesh_spr) {
 		const pm::MeshTransform& mtrans = mesh_spr->GetMeshTrans();
 		m_mesh->LoadFromTransform(mtrans);
@@ -126,7 +122,7 @@ RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 bool MeshSymbol::Update(const UpdateParams& up, float time)
 {
  	if (m_mesh) {
- 		return const_cast<Symbol*>(m_mesh->GetBaseSymbol())->Update(up, time);
+ 		return std::const_pointer_cast<Symbol>(m_mesh->GetBaseSymbol())->Update(up, time);
  	} else {
 		return false;
 	}
@@ -146,12 +142,7 @@ void MeshSymbol::UpdateMesh(const rg_tl_deform_state* deform_state, const float*
  	}
 }
 
-void MeshSymbol::SetMesh(Mesh* mesh)
-{
-	cu::RefCountObjAssign(m_mesh, mesh);
-}
-
-sm::rect MeshSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect MeshSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (m_mesh) {
 		return m_mesh->GetRegion();

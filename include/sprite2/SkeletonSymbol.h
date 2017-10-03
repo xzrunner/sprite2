@@ -2,13 +2,12 @@
 #define _SPRITE2_SKELETON_SYMBOL_H_
 
 #include "S2_Symbol.h"
+#include "Skeleton.h"
 
 #include <vector>
 
 namespace s2
 {
-
-class Skeleton;
 
 class SkeletonSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -23,17 +22,17 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
+	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
 
-	void SetSkeleton(Skeleton* skeleton);
-	const Skeleton* GetSkeleton() const { return m_skeleton; }
-
-protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	void SetSkeleton(std::unique_ptr<Skeleton>& skeleton) { m_skeleton = std::move(m_skeleton); }
+	const std::unique_ptr<Skeleton>& GetSkeleton() const { return m_skeleton; }
 
 protected:
-	Skeleton* m_skeleton;
+	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
+
+protected:
+	std::unique_ptr<Skeleton> m_skeleton;
 
 }; // SkeletonSymbol
 

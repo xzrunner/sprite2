@@ -18,33 +18,27 @@ namespace s2
 
 static int ALL_ACTOR_COUNT = 0;
 
-Actor::Actor()
-	: m_spr(nullptr)
-	, m_parent(nullptr)
-	, m_geo(ActorDefault::Instance()->Geo())
+Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
+	: m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
+	m_spr = spr;
+	m_parent = parent;
+
 	++ALL_ACTOR_COUNT;
 
 	InitFlags();
 }
 
-Actor::Actor(const Sprite* spr, const Actor* parent)
-	: m_spr(spr)
-	, m_parent(parent)
-	, m_geo(ActorDefault::Instance()->Geo())
-	, m_render(SprDefault::Instance()->Render())
-{
-	++ALL_ACTOR_COUNT;
-
-	if (m_spr) {
-		m_spr->AddActor(this);
-	}
-
-	InitFlags();
-
-	m_aabb.Init(this);
-}
+//Actor::Actor()
+//	: m_spr(nullptr)
+//	, m_geo(ActorDefault::Instance()->Geo())
+//	, m_render(SprDefault::Instance()->Render())
+//{
+//	++ALL_ACTOR_COUNT;
+//
+//	InitFlags();
+//}
 
 Actor::~Actor()
 {
@@ -56,6 +50,11 @@ Actor::~Actor()
 	if (m_render != SprDefault::Instance()->Render()) {
 		SprRenderPool::Instance()->Push(m_render);
 	}
+}
+
+void Actor::Init()
+{
+	m_aabb.Init(shared_from_this());
 }
 
 void Actor::SetPosition(const sm::vec2& pos)
@@ -70,7 +69,7 @@ void Actor::SetPosition(const sm::vec2& pos)
 	m_geo->SetPosition(pos);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	m_aabb.Update(shared_from_this());
 }
 
 void Actor::SetAngle(float angle)
@@ -85,7 +84,7 @@ void Actor::SetAngle(float angle)
 	m_geo->SetAngle(angle);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	m_aabb.Update(shared_from_this());
 }
 
 void Actor::SetScale(const sm::vec2& scale)
@@ -100,7 +99,7 @@ void Actor::SetScale(const sm::vec2& scale)
 	m_geo->SetScale(scale);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	m_aabb.Update(shared_from_this());
 }
 
 const RenderColor& Actor::GetColor() const
@@ -159,28 +158,42 @@ void Actor::SetCamera(const RenderCamera& camera)
 void Actor::SetFlattenDirty()
 {
 	const Actor* curr = this;
-	while (curr) {
+	while (curr)
+	{
 		if (curr->m_flatten.list) {
 			curr->m_flatten.list->SetDirty();
-			return;
+			break;
 		}
-		curr = curr->m_parent;
+
+		auto p = curr->m_parent.lock();
+		if (p) {
+			curr = p.get();
+		} else {
+			break;
+		}
 	}
 }
 
 void Actor::BuildFlatten()
 {
 	const Actor* curr = this;
-	while (curr) {
+	while (curr) 
+	{
 		if (curr->m_flatten.list) {
 			if (!curr->m_flatten.list->IsDirty()) {
 				printf("++++++ should be dirty %d\n", GetSpr()->GetSymbol()->GetID());
 			} else {
 				curr->m_flatten.list->Build(curr->m_dlist);
 			}
-			return;
+			break;
 		}
-		curr = curr->m_parent;
+
+		auto p = curr->m_parent.lock();
+		if (p) {
+			curr = p.get();
+		} else {
+			break;
+		}
 	}
 }
 
@@ -207,7 +220,7 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 		m_flags &= ~FLAG_VISIBLE;
 	}
 	if (up_aabb) {
-		m_aabb.UpdateParent(this);
+		m_aabb.UpdateParent(shared_from_this());
 	}
 }
 

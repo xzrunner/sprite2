@@ -51,8 +51,6 @@ ComplexSymbol::~ComplexSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS
-
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 int ComplexSymbol::Type() const 
@@ -62,12 +60,12 @@ int ComplexSymbol::Type() const
 
 void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		visitor.Visit(m_children[i]);
+	for (auto& child : m_children) {
+		visitor.Visit(child);
 	}
 }
 
-RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -109,11 +107,10 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 
 	RenderReturn ret = RENDER_OK;
 
-	const std::vector<Sprite*>& children = GetActionChildren(action);
+	auto& children = GetActionChildren(action);
 	if (rp.IsDisableCulling()) {
-		for (int i = 0, n = children.size(); i < n; ++i) 
+		for (auto& child : children) 
 		{
-			const Sprite* child = children[i];
 			rp_child->actor = child->QueryActor(rp.actor);
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
@@ -122,9 +119,8 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 			ret |= DrawNode::Draw(child, *rp_child);
 		}
 	} else {
-		for (int i = 0, n = children.size(); i < n; ++i) 
+		for (auto& child : children)
 		{
-			const Sprite* child = children[i];
 			rp_child->actor = child->QueryActor(rp.actor);
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
@@ -147,7 +143,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	return ret;
 }
 
-RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
 }
@@ -158,9 +154,8 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	for (auto& child : m_children) 
 	{
-		Sprite* child = m_children[i];
 		up_child->SetActor(child->QueryActor(up.GetActor()));
 		if (child->Update(*up_child)) {
 			ret = true;
@@ -171,7 +166,7 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	return ret;
 }
 
-const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
+const std::vector<SprPtr>& ComplexSymbol::GetActionChildren(int action) const
 {
 	if (action < 0 || action >= static_cast<int>(m_actions.size())) {
 		return m_children;
@@ -202,9 +197,8 @@ int ComplexSymbol::GetActionIdx(const std::string& name) const
 	return idx;
 }
 
-bool ComplexSymbol::Add(Sprite* spr, int idx)
+bool ComplexSymbol::Add(const SprPtr& spr, int idx)
 {
-	spr->AddReference();
 	if (m_children.empty() || 
 		idx >= static_cast<int>(m_children.size()) ||
 		idx < 0) {
@@ -216,11 +210,11 @@ bool ComplexSymbol::Add(Sprite* spr, int idx)
 	return true;
 }
 
-bool ComplexSymbol::Remove(Sprite* spr)
+bool ComplexSymbol::Remove(const Sprite& spr)
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (spr == m_children[i]) {
-			spr->RemoveReference();
+	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	{
+		if (&spr == m_children[i].get()) {
 			m_children.erase(m_children.begin() + i);
 			m_aabb.MakeEmpty();
 			return true;
@@ -229,7 +223,7 @@ bool ComplexSymbol::Remove(Sprite* spr)
 	return false;
 }
 
-//bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, Sprite* dst)
+//bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, SprPtr dst)
 //{
 //	int idx = -1;
 //	for (int i = 0, n = m_children.size(); i < n; ++i) {
@@ -271,7 +265,6 @@ bool ComplexSymbol::Clear()
 		return false;
 	}
 
-	for_each(m_children.begin(), m_children.end(), cu::RemoveRefFunctor<Sprite>());
 	m_children.clear();
 
 	// todo
@@ -282,10 +275,11 @@ bool ComplexSymbol::Clear()
 	return true;
 }
 
-bool ComplexSymbol::ResetOrder(const Sprite* spr, bool up)
+bool ComplexSymbol::ResetOrder(const Sprite& spr, bool up)
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (m_children[i] != spr) {
+	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	{
+		if (m_children[i].get() != &spr) {
 			continue;
 		}
 		if (up && i != n - 1) {
@@ -299,21 +293,22 @@ bool ComplexSymbol::ResetOrder(const Sprite* spr, bool up)
 	return false;
 }
 
-bool ComplexSymbol::ResetOrderMost(const Sprite* spr, bool up)
+bool ComplexSymbol::ResetOrderMost(const Sprite& spr, bool up)
 {
-	for (int i = 0, n = m_children.size(); i < n; ++i) {
-		if (m_children[i] != spr) {
+	for (int i = 0, n = m_children.size(); i < n; ++i) 
+	{
+		if (m_children[i].get() != &spr) {
 			continue;
 		}
 		if (up && i != n - 1) {
-			Sprite* tmp = m_children[i];
+			auto tmp = m_children[i];
 			for (int j = i + 1; j < n; ++j) {
 				m_children[j-1] = m_children[j];
 			}
 			m_children[n - 1] = tmp;
 			return true;
 		} else if (!up && i != 0) {
-			Sprite* tmp = m_children[i];
+			auto tmp = m_children[i];
 			for (int j = i - 1; j >= 0; --j) {
 				m_children[j+1] = m_children[j];
 			}
@@ -325,33 +320,33 @@ bool ComplexSymbol::ResetOrderMost(const Sprite* spr, bool up)
 	return false;
 }
 
-bool ComplexSymbol::Sort(std::vector<Sprite*>& sprs)
-{
-	std::map<int, Sprite*> order_sorted;
-	for (int i = 0, n = sprs.size(); i < n; ++i) {
-		Sprite* obj = sprs[i];
-		for (int j = 0, m = m_children.size(); j < m; ++j) {
-			if (obj == m_children[j]) {
-				order_sorted.insert(std::make_pair(j, obj));
-			}
-		}
-	}
+//bool ComplexSymbol::Sort(std::vector<SprPtr>& sprs)
+//{
+//	std::map<int, SprPtr> order_sorted;
+//	for (int i = 0, n = sprs.size(); i < n; ++i) {
+//		SprPtr obj = sprs[i];
+//		for (int j = 0, m = m_children.size(); j < m; ++j) {
+//			if (obj == m_children[j].get()) {
+//				order_sorted.insert(std::make_pair(j, obj));
+//			}
+//		}
+//	}
+//
+//	if (order_sorted.size() != sprs.size()) {
+//		return false;
+//	}
+//
+//	std::vector<SprPtr> list_dst;
+//	list_dst.reserve(sprs.size());
+//	std::map<int, SprPtr>::iterator itr = order_sorted.begin();
+//	for ( ; itr != order_sorted.end(); ++itr) {
+//		list_dst.push_back(itr->second);
+//	}
+//	sprs = list_dst;
+//	return true;
+//}
 
-	if (order_sorted.size() != sprs.size()) {
-		return false;
-	}
-
-	std::vector<Sprite*> list_dst;
-	list_dst.reserve(sprs.size());
-	std::map<int, Sprite*>::iterator itr = order_sorted.begin();
-	for ( ; itr != order_sorted.end(); ++itr) {
-		list_dst.push_back(itr->second);
-	}
-	sprs = list_dst;
-	return true;
-}
-
-sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect ComplexSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (!cache) {
 		return CalcAABB(spr, actor);
@@ -363,7 +358,7 @@ sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 	return m_aabb;
 }
 
-sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+sm::rect ComplexSymbol::CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const
 {
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
@@ -371,18 +366,18 @@ sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 	}
 
 	int action = GetAction(spr, actor);
-	const std::vector<Sprite*>& sprs = GetActionChildren(action);
+	auto& sprs = GetActionChildren(action);
 	return AABBHelper::CalcAABB(sprs, actor);
 }
 
-int ComplexSymbol::GetAction(const Sprite* spr, const Actor* actor) const
+int ComplexSymbol::GetAction(const SprConstPtr& spr, const ActorConstPtr& actor) const
 {
 	int action = -1;
 	if (spr) 
 	{
-		action = VI_DOWNCASTING<const ComplexSprite*>(spr)->GetAction();
+		action = S2_VI_PTR_DOWN_CAST<const ComplexSprite>(spr)->GetAction();
 		if (actor) {
-			const ComplexActor* comp_actor = static_cast<const ComplexActor*>(actor);
+			auto& comp_actor = std::static_pointer_cast<const ComplexActor>(actor);
 			action = comp_actor->GetAction();
 		}
 	}

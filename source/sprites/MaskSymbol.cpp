@@ -41,13 +41,6 @@ MaskSymbol::~MaskSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_MASK);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_base) {
-		m_base->RemoveReference();
-	}
-	if (m_mask) {
-		m_mask->RemoveReference();
-	}
 }
 
 int MaskSymbol::Type() const 
@@ -65,7 +58,7 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
@@ -95,7 +88,7 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
-RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, 
+RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, 
 	                              ft::FTList& ft, int pos) const
 {
 	if (m_base && m_mask)
@@ -113,17 +106,7 @@ RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	return RENDER_OK;
 }
 
-void MaskSymbol::SetBase(Sprite* base)
-{
-	cu::RefCountObjAssign(m_base, base);
-}
-
-void MaskSymbol::SetMask(Sprite* mask)
-{
-	cu::RefCountObjAssign(m_mask, mask);
-}
-
-sm::rect MaskSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect MaskSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (m_mask) {
 		sm::rect b;

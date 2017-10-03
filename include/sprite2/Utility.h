@@ -9,7 +9,7 @@ namespace s2
 class Utility
 {
 public:
-	static void PrepareMat(const S2_MAT& parent_mt, const Sprite* spr, const Actor* actor, S2_MAT& dst)
+	static void PrepareMat(const S2_MAT& parent_mt, const SprConstPtr& spr, const ActorConstPtr& actor, S2_MAT& dst)
 	{
 		if (spr->IsMatDisable()) {
 			dst = parent_mt;
@@ -24,7 +24,7 @@ public:
 		}
 	}
 
-	static void PrepareColor(const RenderColor& parent_rc, const Sprite* spr, const Actor* actor, RenderColor& dst)
+	static void PrepareColor(const RenderColor& parent_rc, const SprConstPtr& spr, const ActorConstPtr& actor, RenderColor& dst)
 	{
 		if (spr->IsColorDisable()) {
 			dst = parent_rc;

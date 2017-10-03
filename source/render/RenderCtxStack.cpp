@@ -7,7 +7,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(RenderCtxStack)
+CU_SINGLETON_DEFINITION(RenderCtxStack)
 
 RenderCtxStack::RenderCtxStack() 
 {

@@ -5,9 +5,9 @@
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
-#include <CU_RefCountObj.h>
 
 #include <vector>
+#include <memory>
 
 namespace cooking { class DisplayList; }
 
@@ -17,10 +17,10 @@ namespace s2
 class RenderColor;
 class RenderParams;
 
-class Polygon : public cu::RefCountObj
+class Polygon
 {
 public:
-	virtual ~Polygon() {}
+	virtual std::unique_ptr<Polygon> Clone() = 0;
 
 	virtual int Type() const = 0;
 

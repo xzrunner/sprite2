@@ -15,15 +15,15 @@ class CreateActorsVisitor : public SpriteVisitor
 public:
 	CreateActorsVisitor();
 
-	virtual VisitResult Visit(const Sprite* spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params);
 
-	virtual VisitResult VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params);
-	virtual VisitResult VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params);
 
 private:
 	bool m_need_actor;
 
-	std::stack<const Actor*> m_path;
+	std::stack<ActorConstPtr> m_path;
 
 }; // CreateActorsVisitor
 

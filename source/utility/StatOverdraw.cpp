@@ -7,7 +7,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatOverdraw);
+CU_SINGLETON_DEFINITION(StatOverdraw);
 
 StatOverdraw::StatOverdraw()
 {

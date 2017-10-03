@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_PARTICLE2D_H_
 #define _SPRITE2_PARTICLE2D_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -19,7 +19,7 @@ private:
 private:
 	float m_time;
 
-	SINGLETON_DECLARATION(Particle2d)
+	CU_SINGLETON_DECLARATION(Particle2d)
 
 }; // Particle2d
 

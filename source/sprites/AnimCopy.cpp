@@ -15,11 +15,6 @@ AnimCopy::AnimCopy()
 {
 }
 
-AnimCopy::~AnimCopy()
-{
-	for_each(m_slots.begin(), m_slots.end(), cu::RemoveRefFunctor<Sprite>());
-}
-
 void AnimCopy::LoadFromSym(const AnimSymbol& sym)
 {
 	SetCountNum(sym);
@@ -33,12 +28,11 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 {
 	m_max_frame_idx = sym.GetMaxFrameIdx();
 
-	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers 
-		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
-	for (const auto& layer : layers) 
+	auto& layers = sym.GetLayers();
+	for (auto& layer : layers) 
 	{
 		int max_count = -1;
-		for (const auto& frame : layer->frames) 
+		for (auto& frame : layer->frames) 
 		{
 			int count = frame->sprs.size();
 			if (count > max_count) {
@@ -51,8 +45,7 @@ void AnimCopy::SetCountNum(const AnimSymbol& sym)
 
 void AnimCopy::FillingLayers(const AnimSymbol& sym)
 {
-	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
-		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
+	auto& layers = sym.GetLayers();
 	m_layers.clear();
 	m_layers.resize(layers.size());
 	for (int ilayer = 0, nlayer = layers.size(); ilayer < nlayer; ++ilayer) 
@@ -68,9 +61,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 
 			dst_frame.items.resize(src_frame->sprs.size());
 			for (int iitem = 0, nitem = src_frame->sprs.size(); iitem < nitem; ++iitem) {
-				const Sprite* src_spr = src_frame->sprs[iitem];
-				src_spr->AddReference();
-				dst_frame.items[iitem].spr = src_spr;
+				dst_frame.items[iitem].spr = src_frame->sprs[iitem];
 			}
 
 			dst_frame.lerps.reserve(src_frame->lerps.size());
@@ -85,8 +76,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 
 void AnimCopy::ConnectItems(const AnimSymbol& sym)
 {
-	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
-		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
+	auto& layers = sym.GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
 		Layer& layer = m_layers[ilayer];
@@ -104,8 +94,8 @@ void AnimCopy::ConnectItems(const AnimSymbol& sym)
 			Frame& next = layer.frames[iframe + 1];
 			for (int icurr = 0, ncurr = curr.items.size(); icurr < ncurr; ++icurr) {
 				for (int inext = 0, nnext = next.items.size(); inext < nnext; ++inext) {
-					const Sprite* curr_spr = src_layer->frames[iframe]->sprs[icurr];
-					const Sprite* next_spr = src_layer->frames[iframe+1]->sprs[inext];
+					auto& curr_spr = src_layer->frames[iframe]->sprs[icurr];
+					auto& next_spr = src_layer->frames[iframe+1]->sprs[inext];
 					if (curr_spr->GetName() == next_spr->GetName()) {
 						curr.items[icurr].next = inext;
 						next.items[inext].prev = icurr;
@@ -119,8 +109,7 @@ void AnimCopy::ConnectItems(const AnimSymbol& sym)
 
 void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 {
-	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
-		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
+	auto& layers = sym.GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
 		Layer& layer = m_layers[ilayer];
@@ -139,8 +128,8 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 
 				Lerp dst;
 
-				const Sprite* begin = layers[ilayer]->frames[iframe]->sprs[iitem];
-				const Sprite* end = layers[ilayer]->frames[iframe+1]->sprs[item.next];
+				auto& begin = layers[ilayer]->frames[iframe]->sprs[iitem];
+				auto& end   = layers[ilayer]->frames[iframe+1]->sprs[item.next];
 				int dt = layer.frames[iframe + 1].time - layer.frames[iframe].time;
 
 				SprSRT bsrt, esrt;
@@ -167,8 +156,7 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 
 void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 {
-	const std::vector<std::unique_ptr<AnimSymbol::Layer>>& layers
-		= VI_DOWNCASTING<const AnimSymbol&>(sym).GetLayers();
+	auto& layers = sym.GetLayers();
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) 
 	{
 		Layer& layer = m_layers[ilayer];
@@ -182,8 +170,8 @@ void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 					continue;
 				}
 				int slot = m_slots.size();
-				const Sprite* spr = VI_CLONE(Sprite, layers[ilayer]->frames[iframe]->sprs[iitem]);
-				m_slots.push_back(spr);
+				
+				m_slots.push_back(layers[ilayer]->frames[iframe]->sprs[iitem]->Clone());
 				item.slot = slot;
 
 				Item* ptr = &item;
@@ -217,12 +205,5 @@ AnimCopy::Item::Item()
 	, lerp(-1)
 	, spr(nullptr) 
 {}
-
-AnimCopy::Item::~Item() 
-{
-	if (spr) {
-		spr->RemoveReference();
-	}
-}
 
 }

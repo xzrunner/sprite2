@@ -20,7 +20,7 @@ UpdateParams::UpdateParams()
 }
 
 inline
-UpdateParams::UpdateParams(const Actor* actor)
+UpdateParams::UpdateParams(const ActorConstPtr& actor)
 	: m_prev_filter(FM_NULL)
 	, m_actor(actor)
 	, m_force(false)
@@ -48,7 +48,7 @@ UpdateParams& UpdateParams::operator = (const UpdateParams& params)
 }
 
 inline
-void UpdateParams::Push(const Sprite* spr)
+void UpdateParams::Push(const SprConstPtr& spr)
 {
 	if (!spr) {
 		return;
@@ -89,18 +89,6 @@ FilterMode UpdateParams::GetPrevFilter() const
 }
 
 inline
-void UpdateParams::SetActor(const Actor* actor)
-{
-	m_actor = actor;
-}
-
-inline
-const Actor* UpdateParams::GetActor() const
-{
-	return m_actor;
-}
-
-inline
 void UpdateParams::Init()
 {
 	m_prev_mat.Identity();
@@ -112,6 +100,7 @@ void UpdateParams::Init()
 inline
 void UpdateParams::Term()
 {
+	m_actor.reset();
 }
 
 }

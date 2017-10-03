@@ -11,22 +11,10 @@
 namespace s2
 {
 
-Skeleton::Skeleton(const Joint* root, const std::vector<Joint*>& all_joints)
+Skeleton::Skeleton(const std::shared_ptr<Joint>& root, const std::vector<std::shared_ptr<Joint>>& all_joints)
 	: m_root(root)
 	, m_all_joints(all_joints)
 {
-	if (m_root) {
-		m_root->AddReference();
-	}
-	for_each(m_all_joints.begin(), m_all_joints.end(), cu::AddRefFunctor<Joint>());
-}
-
-Skeleton::~Skeleton()
-{
-	if (m_root) {
-		m_root->RemoveReference();
-	}
-	for_each(m_all_joints.begin(), m_all_joints.end(), cu::RemoveRefFunctor<Joint>());
 }
 
 RenderReturn Skeleton::Draw(const RenderParams& rp) const
@@ -41,10 +29,9 @@ RenderReturn Skeleton::Draw(const RenderParams& rp) const
 sm::rect Skeleton::GetBounding() const
 {
 	sm::rect b;
-	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
+	for (auto& joint : m_all_joints) 
 	{
-		const Joint* joint = m_all_joints[i];
-		const Sprite* spr = joint->GetSkinSpr();
+		auto& spr = joint->GetSkinSpr();
 		if (spr) {
 			spr->GetBounding()->CombineTo(b);
 		} else {
@@ -54,12 +41,11 @@ sm::rect Skeleton::GetBounding() const
 	return b;
 }
 
-const Joint* Skeleton::QueryByPos(const sm::vec2& pos) const
+std::shared_ptr<Joint> Skeleton::QueryByPos(const sm::vec2& pos) const
 {
-	for (int i = 0, n = m_all_joints.size(); i < n; ++i) 
+	for (auto& joint : m_all_joints) 
 	{
-		const Joint* joint = m_all_joints[i];
-		const Sprite* spr = joint->GetSkinSpr();
+		auto& spr = joint->GetSkinSpr();
 		if (spr) {
 			if (spr->GetBounding()->IsContain(pos)) {
 				return joint;

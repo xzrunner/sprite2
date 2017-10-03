@@ -31,10 +31,6 @@ AudioSymbol::~AudioSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_AUDIO);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_source) {
-		m_source->RemoveReference();
-	}
 }
 
 int AudioSymbol::Type() const
@@ -42,12 +38,7 @@ int AudioSymbol::Type() const
 	return SYM_AUDIO;
 }
 
-void AudioSymbol::SetSource(ua::Source* src)
-{
-	cu::RefCountObjAssign(m_source, src);
-}
-
-sm::rect AudioSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect AudioSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

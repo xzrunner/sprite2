@@ -5,10 +5,10 @@
 namespace s2
 {
 
-Scale9Actor::Scale9Actor(const Sprite* spr, const Actor* parent)
+Scale9Actor::Scale9Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: Actor(spr, parent)
-	, m_s9(VI_DOWNCASTING<const Scale9Sprite*>(spr)->GetScale9())
 {
+	m_s9 = S2_VI_PTR_DOWN_CAST<const Scale9Sprite>(spr)->GetScale9();
 }
 
 void Scale9Actor::Resize(float width, float height)

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_CAMERA_MGR_H_
 #define _SPRITE2_CAMERA_MGR_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -23,7 +23,7 @@ public:
 private:
 	Type m_type;
 
-	SINGLETON_DECLARATION(CameraMgr)
+	CU_SINGLETON_DECLARATION(CameraMgr)
 
 }; // CameraMgr
 

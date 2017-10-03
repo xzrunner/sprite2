@@ -1,9 +1,12 @@
 #ifndef _SPRITE2_AABB_HELPER_H_
 #define _SPRITE2_AABB_HELPER_H_
 
+#include "s2_typedef.h"
+
 #include <SM_Rect.h>
 
 #include <vector>
+#include <memory>
 
 namespace s2
 {
@@ -14,10 +17,12 @@ class Actor;
 class AABBHelper
 {
 public:
-	static sm::rect CalcAABB(const std::vector<Sprite*>& children, const Actor* parent);
+	static sm::rect CalcAABB(const std::vector<SprPtr>& children, 
+		const ActorConstPtr& parent);
 
 private:
-	static void UpdateChildrenAABBTight(const std::vector<Sprite*>& children, const Actor* parent, const sm::rect& parent_aabb);
+	static void UpdateChildrenAABBTight(const std::vector<SprPtr>& children, 
+		const ActorConstPtr& parent, const sm::rect& parent_aabb);
 
 }; // AABBHelper
 

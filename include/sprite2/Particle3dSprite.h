@@ -17,14 +17,8 @@ public:
 	Particle3dSprite();
 	Particle3dSprite(const Particle3dSprite& spr);
 	Particle3dSprite& operator = (const Particle3dSprite& spr);
-	Particle3dSprite(Symbol* sym, uint32_t id = -1);
+	Particle3dSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~Particle3dSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual Particle3dSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -44,7 +38,8 @@ public:
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);
 
-	const Particle3dEmitter* GetEmitter() const { return m_et; }
+	const std::shared_ptr<Particle3dEmitter>& GetEmitter() const { return m_et; }
+	std::shared_ptr<Particle3dEmitter>& GetEmitter() { return m_et; }
 
 	enum ReuseType
 	{
@@ -62,13 +57,13 @@ protected:
 	void CreateSpr();
 
 private:
-	bool UpdateEmitter(const UpdateParams& up, Particle3dEmitter* et);
+	bool UpdateEmitter(const UpdateParams& up, const std::shared_ptr<Particle3dEmitter>& et);
 
-	void ChangeEmitterBuffer(ReuseType reuse, const P3dEmitterCfg* cfg, bool add);
-	static void ChangeEmitterBuffer(Particle3dEmitter* et, const P3dEmitterCfg* cfg, bool add);
+	void ChangeEmitterBuffer(ReuseType reuse, const std::shared_ptr<const P3dEmitterCfg>& cfg, bool add);
+	static void ChangeEmitterBuffer(std::shared_ptr<Particle3dEmitter>& et, const std::shared_ptr<const P3dEmitterCfg>& cfg, bool add);
 
 protected:
-	Particle3dEmitter* m_et;
+	std::shared_ptr<Particle3dEmitter> m_et;
 
 	bool m_loop;
 	bool m_local;
@@ -76,6 +71,8 @@ protected:
 	ReuseType m_reuse;
 
 	float m_start_radius;
+
+	SPRITE_CLONE_FUNC(Particle3dSprite)
 
 	VI_DUMMY_FUNC
 

@@ -3,8 +3,6 @@
 
 #include "ObjectPool.h"
 
-#include <CU_RefCountObj.h>
-
 namespace s2
 {
 
@@ -12,7 +10,7 @@ class RenderColor;
 class RenderShader;
 class RenderCamera;
 
-class SprRender : public cu::RefCountObj
+class SprRender
 {
 public:
 	SprRender();

@@ -7,7 +7,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(StatSymDraw);
+CU_SINGLETON_DEFINITION(StatSymDraw);
 
 StatSymDraw::StatSymDraw()
 {

@@ -4,7 +4,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(ActorDefault);
+CU_SINGLETON_DEFINITION(ActorDefault);
 
 ActorDefault::ActorDefault()
 {

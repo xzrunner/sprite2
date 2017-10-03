@@ -1,14 +1,17 @@
 #ifndef _SPRITE2_MESH_H_
 #define _SPRITE2_MESH_H_
 
-#include <CU_RefCountObj.h>
-#include <CU_Uncopyable.h>
+#include "s2_typedef.h"
+
+#include <cu/uncopyable.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
+#include <polymesh/Mesh.h>
 
 #include <vector>
+#include <memory>
 
-namespace pm { class Mesh; class MeshTransform; }
+namespace pm { class MeshTransform; }
 
 struct rg_skeleton_pose;
 struct rg_tl_deform_state;
@@ -18,14 +21,13 @@ namespace s2
 
 class Symbol;
 
-class Mesh : public cu::RefCountObj, private cu::Uncopyable
+class Mesh : private cu::Uncopyable
 {
 public:
 	Mesh();
-	Mesh(const Symbol* base);	
-	virtual ~Mesh();
+	Mesh(const SymConstPtr& base);
 
-	const Symbol* GetBaseSymbol() const { return m_base; }
+	const SymConstPtr& GetBaseSymbol() const { return m_base; }
 
 	float GetWidth() const { return m_width; }
 	float GetHeight() const { return m_height; }
@@ -43,15 +45,15 @@ public:
 	void Update(const rg_skeleton_pose* sk_pose);
 	void Update(const rg_tl_deform_state* deform_state, const float* vertices);
 
-	void SetMesh(pm::Mesh* mesh);
-	pm::Mesh* GetMesh() { return m_mesh; }
-	const pm::Mesh* GetMesh() const { return m_mesh; }
+	void SetMesh(std::unique_ptr<pm::Mesh> mesh) { m_mesh = std::move(mesh); }
+	std::unique_ptr<pm::Mesh>& GetMesh() { return m_mesh; }
+	const std::unique_ptr<pm::Mesh>& GetMesh() const { return m_mesh; }
 
 protected:
-	pm::Mesh* m_mesh;
+	std::unique_ptr<pm::Mesh> m_mesh;
 
 private:
-	const Symbol* m_base;
+	SymConstPtr m_base;
 	float m_width, m_height;	
 
 	float m_node_radius;

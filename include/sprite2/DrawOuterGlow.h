@@ -6,6 +6,8 @@
 
 #include S2_MAT_HEADER
 
+#include "s2_typedef.h"
+
 namespace s2
 {
 
@@ -15,7 +17,7 @@ class RenderParams;
 class DrawOuterGlow
 {
 public:
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, int iterations);
+	static RenderReturn Draw(const SprConstPtr& spr, const RenderParams& rp, int iterations);
 
 }; // DrawOuterGlow
 

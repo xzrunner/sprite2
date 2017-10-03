@@ -12,14 +12,8 @@ public:
 	MaskSprite();
 	MaskSprite(const MaskSprite& spr);
 	MaskSprite& operator = (const MaskSprite& spr);
-	MaskSprite(Symbol* sym, uint32_t id = -1);
+	MaskSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~MaskSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual MaskSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -27,8 +21,10 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+
+	SPRITE_CLONE_FUNC(MaskSprite)
 
 	VI_DUMMY_FUNC
 

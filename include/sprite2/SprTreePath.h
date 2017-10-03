@@ -1,8 +1,6 @@
 #ifndef _SPRITE2_SPR_TREE_PATH_H_
 #define _SPRITE2_SPR_TREE_PATH_H_
 
-#include <CU_Singleton.h>
-
 #include <vector>
 
 namespace s2

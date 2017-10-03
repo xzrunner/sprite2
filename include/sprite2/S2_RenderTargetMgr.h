@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_TARGET_MGR_H_
 #define _SPRITE2_RENDER_TARGET_MGR_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <vector>
 
@@ -19,8 +19,8 @@ public:
 	int GetTexID(int idx) const;
 
 	void InitScreenCB(RenderTarget* (*fetch_screen)(), void (*return_screen)(RenderTarget* rt));
-	s2::RenderTarget* FetchScreen();
-	void ReturnScreen(s2::RenderTarget* rt);
+	RenderTarget* FetchScreen();
+	void ReturnScreen(RenderTarget* rt);
 
 public:
 	static const int WIDTH;
@@ -38,7 +38,7 @@ private:
 private:
 	std::vector<Item> m_items;
 
-	SINGLETON_DECLARATION(RenderTargetMgr);
+	CU_SINGLETON_DECLARATION(RenderTargetMgr);
 
 }; // RenderTargetMgr
 

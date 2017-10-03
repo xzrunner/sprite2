@@ -7,6 +7,8 @@
 
 #include <SM_Rect.h>
 
+#include <memory>
+
 namespace s2
 {
 
@@ -15,11 +17,12 @@ class ImageSymbol;
 class TexturePolygon : public VIRTUAL_INHERITANCE Polygon
 {
 public:
-	TexturePolygon();
-	TexturePolygon(const TexturePolygon& poly);
-	TexturePolygon& operator = (const TexturePolygon& poly);
-	TexturePolygon(const ImageSymbol* img);
-	virtual ~TexturePolygon();
+	TexturePolygon() = default;
+	TexturePolygon(const std::shared_ptr<const ImageSymbol>& img);
+
+	virtual std::unique_ptr<Polygon> Clone() {
+		return std::make_unique<TexturePolygon>(*this);
+	}
 
 	virtual int Type() const { return POLY_TEXTURE; }
 
@@ -34,7 +37,7 @@ private:
 	void CalTexcoords(const sm::rect& rect);
 
 protected:
-	ImageSymbol* m_img;
+	std::shared_ptr<const ImageSymbol> m_img;
 
 	std::vector<sm::vec2> m_texcoords;
 

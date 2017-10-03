@@ -1,15 +1,21 @@
 #ifndef _SPRITE2_P3D_EMITTER_SYMBOL_H_
 #define _SPRITE2_P3D_EMITTER_SYMBOL_H_
 
-#include <CU_RefCountObj.h>
-#include <CU_Uncopyable.h>
+#include "s2_typedef.h"
+
+#include <cu/uncopyable.h>
+
+#include <vector>
+#include <memory>
 
 struct p3d_emitter_cfg;
 
 namespace s2
 {
 
-class P3dEmitterCfg : public cu::RefCountObj, private cu::Uncopyable
+class Symbol;
+
+class P3dEmitterCfg : private cu::Uncopyable
 {
 public:
 	P3dEmitterCfg();
@@ -19,9 +25,13 @@ public:
 	void SetStartRadius(float radius);
 
 	const p3d_emitter_cfg* GetImpl() const { return m_impl; }
+
+	void InsertCachedSym(const SymPtr& sym) { m_cached_sym.push_back(sym); }
 	
 private:
 	p3d_emitter_cfg* m_impl;
+
+	std::vector<SymPtr> m_cached_sym;
 
 }; // P3dEmitterCfg
 

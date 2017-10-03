@@ -33,7 +33,7 @@ static Color RED	(204, 51, 102, 128);
 static Color GREEN	(102, 204, 51, 128);
 static Color BLUE	(102, 51, 204, 128);
 
-RenderReturn DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
@@ -74,7 +74,7 @@ RenderReturn DrawMesh::DrawInfoUV(const Mesh* mesh, const S2_MAT* mt)
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
@@ -109,13 +109,14 @@ RenderReturn DrawMesh::DrawInfoXY(const Mesh* mesh, const S2_MAT* mt)
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, const Symbol* base_sym)
+RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp,
+	                               const SymConstPtr& base_sym)
 {
 	RenderReturn ret = RENDER_OK;
-	const Symbol* sym = base_sym ? base_sym : mesh->GetBaseSymbol();
+	auto& sym = base_sym ? base_sym : mesh->GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) 
 	{
-	 	const ImageSymbol* img_sym = VI_DOWNCASTING<const ImageSymbol*>(sym);
+	 	auto& img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym);
 	 	if(!img_sym->GetTexture()->IsLoadFinished()) {
 	 		return RENDER_ON_LOADING;
 	 	}
@@ -144,7 +145,7 @@ RenderReturn DrawMesh::DrawTexture(const Mesh* mesh, const RenderParams& rp, con
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawOnlyMesh(const Mesh* mesh, const S2_MAT& mt, int tex_id)
+RenderReturn DrawMesh::DrawOnlyMesh(const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt, int tex_id)
 {
 	std::vector<sm::vec2> vertices, texcoords;
 	std::vector<int> triangles;
@@ -198,7 +199,7 @@ static void draw_filter(const float* positions, const float* texcoords, int tex_
 	shader->Draw(positions, texcoords, tex_id);
 }
 
-RenderReturn DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
@@ -281,7 +282,7 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh* mesh, const RenderParams& rp, con
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, const Symbol* sym)
+RenderReturn DrawMesh::DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const SymConstPtr& sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -313,7 +314,7 @@ RenderReturn DrawMesh::DrawTwoPass(const Mesh* mesh, const RenderParams& rp, con
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol* sym)
+RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const SymConstPtr& sym)
 {
 	rt->Bind();
 
@@ -335,7 +336,7 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh* mesh, const S2_MAT& mt)
+RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt)
 {
 	return DrawOnlyMesh(mesh, mt, rt->GetTexID());
 }

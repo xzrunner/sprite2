@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_SCISSOR_H_
 #define _SPRITE2_RENDER_SCISSOR_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 #include <SM_Rect.h>
 
 #include <vector>
@@ -47,7 +47,7 @@ private:
 private:
 	std::vector<Rect> m_stack;
 	
-	SINGLETON_DECLARATION(RenderScissor)
+	CU_SINGLETON_DECLARATION(RenderScissor)
 
 }; // RenderScissor
 

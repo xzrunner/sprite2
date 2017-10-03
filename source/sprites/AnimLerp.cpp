@@ -21,25 +21,23 @@
 namespace s2
 {
 
-void AnimLerp::Lerp(const std::vector<Sprite*>& begin, const std::vector<Sprite*>& end, 
-					std::vector<Sprite*>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
+void AnimLerp::Lerp(const std::vector<SprPtr>& begin, const std::vector<SprPtr>& end,
+					std::vector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
-	for (int i = 0, n = begin.size(); i < n; ++i)
+	for (auto& start_spr : begin)
 	{
-		Sprite *start_spr = begin[i], 
-			   *end_spr = nullptr;
-		for (int j = 0, m = end.size(); j < m; ++j)
+		SprPtr end_spr;
+		for (auto& spr : end)
 		{
-			Sprite* spr = end[j];
-			if (IsMatched(start_spr, spr))
+			if (IsMatched(*start_spr, *spr))
 			{
 				end_spr = spr;
 				break;
 			}
 		}
-		Sprite* tween_spr = VI_CLONE(Sprite, start_spr);
+		SprPtr tween_spr = start_spr->Clone();
 		if (end_spr) {
-			Lerp(start_spr, end_spr, tween_spr, time, tot_time, lerps);
+			Lerp(*start_spr, *end_spr, tween_spr, time, tot_time, lerps);
 		}
 		tween.push_back(tween_spr);
 	}
@@ -56,103 +54,100 @@ Color color_interpolate(const Color& begin, const Color& end, float scale)
 	return ret;
 }
 
-void AnimLerp::Lerp(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time,
+void AnimLerp::Lerp(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time,
 					const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	float process = static_cast<float>(time) / tot_time;
 
 	sm::vec2 shear;
-	shear.x = (end->GetShear().x - begin->GetShear().x) * process + begin->GetShear().x;
-	shear.y = (end->GetShear().y - begin->GetShear().y) * process + begin->GetShear().y;
+	shear.x = (end.GetShear().x - begin.GetShear().x) * process + begin.GetShear().x;
+	shear.y = (end.GetShear().y - begin.GetShear().y) * process + begin.GetShear().y;
 	tween->SetShear(shear);
 
-	float xscale = (end->GetScale().x - begin->GetScale().x) * process + begin->GetScale().x,
-		  yscale = (end->GetScale().y - begin->GetScale().y) * process + begin->GetScale().y;
+	float xscale = (end.GetScale().x - begin.GetScale().x) * process + begin.GetScale().x,
+		  yscale = (end.GetScale().y - begin.GetScale().y) * process + begin.GetScale().y;
 	tween->SetScale(sm::vec2(xscale, yscale));
 
-	sm::vec2 offset = (end->GetOffset() - begin->GetOffset()) * process + begin->GetOffset();
+	sm::vec2 offset = (end.GetOffset() - begin.GetOffset()) * process + begin.GetOffset();
 	tween->SetOffset(offset);
 	tween->SetPosition(sm::vec2(0, 0));
 	tween->SetAngle(0);
 
-	float angle = (end->GetAngle() - begin->GetAngle()) * process + begin->GetAngle();
+	float angle = (end.GetAngle() - begin.GetAngle()) * process + begin.GetAngle();
 	tween->SetAngle(angle);
 
-	sm::vec2 base_s = begin->GetPosition() + begin->GetOffset(),
-		     base_e = end->GetPosition() + end->GetOffset();
+	sm::vec2 base_s = begin.GetPosition() + begin.GetOffset(),
+		     base_e = end.GetPosition() + end.GetOffset();
 	sm::vec2 base_t = (base_e - base_s) * process + base_s;
 	tween->SetPosition(base_t - offset);
 
 	RenderColor rc = tween->GetColor();
-	rc.SetAdd(color_interpolate(begin->GetColor().GetAdd(), end->GetColor().GetAdd(), process));
-	rc.SetMul(color_interpolate(begin->GetColor().GetMul(), end->GetColor().GetMul(), process));
+	rc.SetAdd(color_interpolate(begin.GetColor().GetAdd(), end.GetColor().GetAdd(), process));
+	rc.SetMul(color_interpolate(begin.GetColor().GetMul(), end.GetColor().GetMul(), process));
 	tween->SetColor(rc);
 
 	LerpSpecial(begin, end, tween, time, tot_time);
 	LerpExpression(begin, end, tween, time, tot_time, lerps);
 }
 
-void AnimLerp::LerpSpecial(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time)
+void AnimLerp::LerpSpecial(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time)
 {
 	float process = static_cast<float>(time) / tot_time;
 
-	assert(begin->GetSymbol()->Type() == end->GetSymbol()->Type());
-	switch (begin->GetSymbol()->Type())
+	assert(begin.GetSymbol()->Type() == end.GetSymbol()->Type());
+	switch (begin.GetSymbol()->Type())
 	{
 	case SYM_SCALE9:
 		{
-			sm::vec2 b_sz = VI_DOWNCASTING<const Scale9Sprite*>(begin)->GetScale9().GetSize(),
-				e_sz = VI_DOWNCASTING<const Scale9Sprite*>(end)->GetScale9().GetSize();
+			sm::vec2 b_sz = S2_VI_DOWN_CAST<const Scale9Sprite&>(begin).GetScale9().GetSize(),
+				     e_sz = S2_VI_DOWN_CAST<const Scale9Sprite&>(end).GetScale9().GetSize();
 			float t_w = (e_sz.x - b_sz.x) * process + b_sz.x,
-				t_h = (e_sz.y - b_sz.y) * process + b_sz.y;
-			VI_DOWNCASTING<Scale9Sprite*>(tween)->Resize(t_w, t_h);
+				  t_h = (e_sz.y - b_sz.y) * process + b_sz.y;
+			S2_VI_PTR_DOWN_CAST<Scale9Sprite>(tween)->Resize(t_w, t_h);
 		}
 		break;
 	case SYM_ICON:
 		{
-			float b_proc = VI_DOWNCASTING<const IconSprite*>(begin)->GetProcess(),
-				e_proc = VI_DOWNCASTING<const IconSprite*>(end)->GetProcess();
+			float b_proc = S2_VI_DOWN_CAST<const IconSprite&>(begin).GetProcess(),
+				  e_proc = S2_VI_DOWN_CAST<const IconSprite&>(end).GetProcess();
 			float proc = (e_proc - b_proc) * process + b_proc;
-			VI_DOWNCASTING<IconSprite*>(tween)->SetProcess(proc);
+			S2_VI_PTR_DOWN_CAST<IconSprite>(tween)->SetProcess(proc);
 		}
 		break;
 	case SYM_MESH:
 		{
-			const MeshSprite* mesh_b = VI_DOWNCASTING<const MeshSprite*>(begin);
-			const MeshSprite* mesh_e = VI_DOWNCASTING<const MeshSprite*>(end);
-			MeshSprite* mesh_t = VI_DOWNCASTING<MeshSprite*>(tween);
-			mesh_t->Lerp(mesh_b, mesh_e, process);
+			const MeshSprite& mesh_b = S2_VI_DOWN_CAST<const MeshSprite&>(begin);
+			const MeshSprite& mesh_e = S2_VI_DOWN_CAST<const MeshSprite&>(end);
+			S2_VI_PTR_DOWN_CAST<MeshSprite>(tween)->Lerp(mesh_b, mesh_e, process);
 		}
 		break;
 	case SYM_SKELETON:
 		{
-			const SkeletonSprite* sk_b = VI_DOWNCASTING<const SkeletonSprite*>(begin);
-			const SkeletonSprite* sk_e = VI_DOWNCASTING<const SkeletonSprite*>(end);
-			SkeletonSprite* sk_t = VI_DOWNCASTING<SkeletonSprite*>(tween);
-			sk_t->GetPose().Lerp(sk_b->GetPose(), sk_e->GetPose(), process);
+			const SkeletonSprite& sk_b = S2_VI_DOWN_CAST<const SkeletonSprite&>(begin);
+			const SkeletonSprite& sk_e = S2_VI_DOWN_CAST<const SkeletonSprite&>(end);
+			S2_VI_PTR_DOWN_CAST<SkeletonSprite>(tween)->GetPose().Lerp(sk_b.GetPose(), sk_e.GetPose(), process);
 		}
 		break;
 	case SYM_PARTICLE3D:
 		{
-			const Particle3dSprite* p3d_b = VI_DOWNCASTING<const Particle3dSprite*>(begin);
-			const Particle3dSprite* p3d_e = VI_DOWNCASTING<const Particle3dSprite*>(end);
-			Particle3dSprite* p3d_t = VI_DOWNCASTING<Particle3dSprite*>(tween);
-			float start_radius = (p3d_e->GetStartRadius() - p3d_b->GetStartRadius()) * process + p3d_b->GetStartRadius();
-			p3d_t->SetStartRadius(start_radius);
+			const Particle3dSprite& p3d_b = S2_VI_DOWN_CAST<const Particle3dSprite&>(begin);
+			const Particle3dSprite& p3d_e = S2_VI_DOWN_CAST<const Particle3dSprite&>(end);
+			float start_radius = (p3d_e.GetStartRadius() - p3d_b.GetStartRadius()) * process + p3d_b.GetStartRadius();
+			S2_VI_PTR_DOWN_CAST<Particle3dSprite>(tween)->SetStartRadius(start_radius);
 		}
 		break;
 	}
 }
 
-void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tween, int time, int tot_time, 
+void AnimLerp::LerpExpression(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time,
 							  const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	float process = static_cast<float>(time) / tot_time;
 
-	sm::vec2 offset = (end->GetOffset() - begin->GetOffset()) * process + begin->GetOffset();
+	sm::vec2 offset = (end.GetOffset() - begin.GetOffset()) * process + begin.GetOffset();
 
-	sm::vec2 base_s = begin->GetPosition() + begin->GetOffset(),
-		     base_e = end->GetPosition() + end->GetOffset();
+	sm::vec2 base_s = begin.GetPosition() + begin.GetOffset(),
+		     base_e = end.GetPosition() + end.GetOffset();
 	sm::vec2 base_t = (base_e - base_s) * process + base_s;
 
 	for (int i = 0, n = lerps.size(); i < n; ++i) 
@@ -184,13 +179,13 @@ void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tw
 				sm::vec2 base_t = static_cast<LerpEase*>(lerp.get())->Lerp(base_s, base_e, process);
 				tween->SetPosition(base_t - offset);
 			} else if (data == SPR_SCALE) {
-				const sm::vec2& b_scale = begin->GetScale();
-				const sm::vec2& e_scale = end->GetScale();
+				const sm::vec2& b_scale = begin.GetScale();
+				const sm::vec2& e_scale = end.GetScale();
 				sm::vec2 s = static_cast<LerpEase*>(lerp.get())->Lerp(b_scale, e_scale, process);
 				tween->SetScale(s);
 			} else if (data == SPR_ROTATE) {
-				float b_angle = begin->GetAngle();
-				float e_angle = end->GetAngle();
+				float b_angle = begin.GetAngle();
+				float e_angle = end.GetAngle();
 				float angle = static_cast<LerpEase*>(lerp.get())->Lerp(b_angle, e_angle, process);
 				tween->SetAngle(angle);
 			}
@@ -199,9 +194,9 @@ void AnimLerp::LerpExpression(const Sprite* begin, const Sprite* end, Sprite* tw
 	}
 }
 
-bool AnimLerp::IsMatched(const Sprite* s0, const Sprite* s1)
+bool AnimLerp::IsMatched(const Sprite& s0, const Sprite& s1)
 {
-	int name0 = s0->GetName(), name1 = s1->GetName();
+	int name0 = s0.GetName(), name1 = s1.GetName();
 	bool auto_named = SprNameMap::IsTmpName(name0) && SprNameMap::IsTmpName(name1);
 	if (auto_named && name0 == name1) {
 		return true;

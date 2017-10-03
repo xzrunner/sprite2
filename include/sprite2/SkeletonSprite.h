@@ -13,14 +13,8 @@ public:
 	SkeletonSprite();
 	SkeletonSprite(const SkeletonSprite& spr);
 	SkeletonSprite& operator = (const SkeletonSprite& spr);
-	SkeletonSprite(Symbol* sym, uint32_t id = -1);
+	SkeletonSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~SkeletonSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual SkeletonSprite* Clone() const;
 
 	const SkeletonPose& GetPose() const { return m_pose; }
 	SkeletonPose& GetPose() { return m_pose; }
@@ -28,6 +22,8 @@ public:
 
 protected:
 	SkeletonPose m_pose;
+
+	SPRITE_CLONE_FUNC(SkeletonSprite)
 
 	VI_DUMMY_FUNC
 

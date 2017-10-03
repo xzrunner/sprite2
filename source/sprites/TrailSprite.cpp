@@ -51,7 +51,7 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 	return *this;
 }
 
-TrailSprite::TrailSprite(Symbol* sym, uint32_t id)
+TrailSprite::TrailSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_et(nullptr)
 	, m_local(false)
@@ -69,29 +69,20 @@ TrailSprite::~TrailSprite()
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Subtract(STAT_SYM_TRAIL);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_et) {
-		m_et->RemoveReference();
-	}
 }
 
 void TrailSprite::CreateSpr()
 {
 	assert(!m_et);
 
-	const TrailEmitterCfg* cfg = VI_DOWNCASTING<TrailSymbol*>(m_sym)->GetEmitterCfg();
+	auto& cfg = S2_VI_PTR_DOWN_CAST<TrailSymbol>(GetSymbol())->GetEmitterCfg();
 	if (!cfg) {
 		return;
 	}
 
-	m_et = TrailEmitterPool::Instance()->Pop();
+	m_et = std::make_unique<TrailEmitter>();
 	m_et->CreateEmitter(cfg);
 	m_et->Start();
-}
-
-TrailSprite* TrailSprite::Clone() const
-{
-	return new TrailSprite(*this);
 }
 
 void TrailSprite::OnMessage(const UpdateParams& up, Message msg)
@@ -116,7 +107,7 @@ bool TrailSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;

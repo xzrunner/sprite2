@@ -23,7 +23,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Particle3d)
+CU_SINGLETON_DEFINITION(Particle3d)
 
 Particle3d::Particle3d()
 	: m_time(0)
@@ -125,10 +125,10 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	}
 
 	if (spr) {
-		Sprite* s2_spr = static_cast<Sprite*>(spr);
+		std::shared_ptr<Sprite> s2_spr(*static_cast<std::shared_ptr<Sprite>*>(spr));
 		DrawNode::Draw(s2_spr, *rp_child);
 	} else if (sym) {
-		Symbol* s2_sym = static_cast<Symbol*>(sym);
+		std::shared_ptr<Symbol> s2_sym(static_cast<Symbol*>(sym));
 		DrawNode::Draw(s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 		s2_sym->Update(UpdateParams(), time);
 	}
@@ -150,7 +150,7 @@ update_func(void* spr, float x, float y)
 		return;
 	}
 
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
+	std::shared_ptr<Sprite> s2_spr(*static_cast<std::shared_ptr<Sprite>*>(spr));
 	UpdateParams up;
 	S2_MAT mat;
 	mat.Translate(x, y);
@@ -168,24 +168,27 @@ add_func(p3d_particle* p, void* ud)
 
 	//////////////////////////////////////////////////////////////////////////
 
-	if (!p->ud) {
-		Symbol* sym = static_cast<Symbol*>(p->cfg.sym->ud);
-		switch (sym->Type())
+	assert(!p->ud);
+
+	SprPtr spr = nullptr;
+
+	SymPtr sym(static_cast<Symbol*>(p->cfg.sym->ud));
+	switch (sym->Type())
+	{
+	case SYM_TRAIL:
 		{
-		case SYM_TRAIL:
-			{
-				TrailSprite* s2_spr = new TrailSprite(sym);
-				s2_spr->SetInP3d();
-				p->ud = static_cast<Sprite*>(s2_spr);
-			}
-			break;
-		case SYM_PARTICLE3D:
-			{
-				Sprite* s2_p3d = new Particle3dSprite(sym);
-				p->ud = s2_p3d;
-			}
-			break;
+			auto t_spr = std::make_shared<TrailSprite>(sym);
+			t_spr->SetInP3d();
+			spr = t_spr;
 		}
+		break;
+	case SYM_PARTICLE3D:
+		spr = std::make_shared<Particle3dSprite>(sym);
+		break;
+	}
+
+	if (spr) {
+		p->ud = new std::shared_ptr<Sprite>(spr);
 	}
 }
 
@@ -200,8 +203,7 @@ remove_func(p3d_particle* p, void* ud)
 	//////////////////////////////////////////////////////////////////////////
 
 	if (p->ud) {
-		Sprite* spr = static_cast<Sprite*>(p->ud);
-		spr->RemoveReference();
+		delete static_cast<std::shared_ptr<Sprite>*>(p->ud);
 		p->ud = nullptr;
 	}
 }

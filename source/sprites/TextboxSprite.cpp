@@ -42,7 +42,7 @@ TextboxSprite& TextboxSprite::operator = (const TextboxSprite& spr)
 	return *this;
 }
 
-TextboxSprite::TextboxSprite(Symbol* sym, uint32_t id)
+TextboxSprite::TextboxSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
 	, m_time(0)
 {
@@ -50,7 +50,7 @@ TextboxSprite::TextboxSprite(Symbol* sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
-	TextboxSymbol* tb_sym = VI_DOWNCASTING<TextboxSymbol*>(sym);
+	auto& tb_sym = S2_VI_PTR_DOWN_CAST<TextboxSymbol>(sym);
 	assert(tb_sym);
 	m_tb = tb_sym->GetTextbox();
 }
@@ -62,16 +62,11 @@ TextboxSprite::~TextboxSprite()
 #endif // S2_DISABLE_STATISTICS	
 }
 
-TextboxSprite* TextboxSprite::Clone() const
-{
-	return new TextboxSprite(*this);
-}
-
 const std::string& TextboxSprite::GetText(const UpdateParams& up) const 
 { 
-	const Actor* actor = up.GetActor();
+	auto& actor = up.GetActor();
 	if (actor) {
-		return static_cast<const TextboxActor*>(actor)->GetText();
+		return std::static_pointer_cast<const TextboxActor>(actor)->GetText();
 	} else {
 		return m_text;
 	}
@@ -79,9 +74,10 @@ const std::string& TextboxSprite::GetText(const UpdateParams& up) const
 
 void TextboxSprite::SetText(const UpdateParams& up, const std::string& text) 
 {
-	Actor* actor = const_cast<Actor*>(up.GetActor());
+	auto& actor = up.GetActor();
 	if (actor) {
-		static_cast<TextboxActor*>(actor)->SetText(text);
+		std::const_pointer_cast<TextboxActor>(
+			std::static_pointer_cast<const TextboxActor>(actor))->SetText(text);
 	} else {
 		m_text = text;
 	}

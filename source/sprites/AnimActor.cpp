@@ -7,12 +7,15 @@
 namespace s2
 {
 
-AnimActor::AnimActor(const Sprite* spr, const Actor* parent)
-	: Actor(spr, parent) 
+AnimActor::AnimActor(const SprConstPtr& spr, const ActorConstPtr& parent)
+	: Actor(spr, parent)
 {
-	assert(spr->HaveActor());
-	const AnimSymbol* anim_sym = VI_DOWNCASTING<const AnimSymbol*>(spr->GetSymbol());
-	m_state.Init(anim_sym->GetCopy(), spr);
+}
+
+void AnimActor::Init()
+{
+	assert(GetSpr()->HaveActor());
+	m_state.Init(S2_VI_PTR_DOWN_CAST<const AnimSymbol>(GetSpr()->GetSymbol())->GetCopy());
 }
 
 }

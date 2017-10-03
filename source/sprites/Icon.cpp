@@ -11,28 +11,6 @@
 namespace s2
 {
 
-Icon::Icon()
-	: m_img(nullptr)
-{
-}
-
-Icon::Icon(const Icon& icon)
-	: m_img(icon.m_img)
-{
-	if (m_img) {
-		m_img->AddReference();
-	}
-}
-
-Icon& Icon::operator = (const Icon& icon)
-{
-	m_img = icon.m_img;
-	if (m_img) {
-		m_img->AddReference();
-	}
-	return *this;
-}
-
 RenderReturn Icon::Draw(const RenderParams& rp, float process) const
 {
 	if (!m_img) {
@@ -117,9 +95,9 @@ void Icon::GenVertices(float process, const sm::vec2* texcoords,
 	}
 }
 
-void Icon::SetImage(ImageSymbol* img)
+void Icon::SetImage(const std::shared_ptr<ImageSymbol>& img)
 {
-	cu::RefCountObjAssign(m_img, img);
+	m_img = img;
 	Update();
 }
 

@@ -2,7 +2,6 @@
 #include "SymType.h"
 #include "SkeletonSprite.h"
 #include "SkeletonPose.h"
-#include "Skeleton.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
@@ -36,10 +35,6 @@ SkeletonSymbol::~SkeletonSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_SKELETON);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_skeleton) {
-		m_skeleton->RemoveReference();
-	}
 }
 
 int SkeletonSymbol::Type() const 
@@ -47,7 +42,7 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
@@ -66,8 +61,10 @@ RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr)
 	}
 
 	if (spr) {
-		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
-		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
+		auto& sk_spr = S2_VI_PTR_DOWN_CAST<const SkeletonSprite>(spr);
+		if (m_skeleton) {
+			sk_spr->GetPose().StoreToSkeleton(*m_skeleton);
+		}
 	}
 	RenderReturn ret = m_skeleton->Draw(*rp_child);
 
@@ -76,19 +73,16 @@ RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr)
 	return ret;
 }
 
-void SkeletonSymbol::SetSkeleton(Skeleton* skeleton)
-{
-	cu::RefCountObjAssign(m_skeleton, skeleton);
-}
-
-sm::rect SkeletonSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect SkeletonSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (!m_skeleton) {
 		return sm::rect(); // empty
 	}
 	if (spr) {
-		const SkeletonSprite* sk_spr = VI_DOWNCASTING<const SkeletonSprite*>(spr);
-		sk_spr->GetPose().StoreToSkeleton(m_skeleton);
+		auto& sk_spr = S2_VI_PTR_DOWN_CAST<const SkeletonSprite>(spr);
+		if (m_skeleton) {
+			sk_spr->GetPose().StoreToSkeleton(*m_skeleton);
+		}
 	}
 	return m_skeleton->GetBounding();
 }

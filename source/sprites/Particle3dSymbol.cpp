@@ -56,13 +56,6 @@ Particle3dSymbol::~Particle3dSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_et_cfg) {
-		m_et_cfg->RemoveReference();
-	}
-	if (m_et) {
-		m_et->RemoveReference();
-	}
 }
 
 int Particle3dSymbol::Type() const 
@@ -70,7 +63,7 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -85,7 +78,7 @@ RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* sp
 	return DrawImpl(rp, spr);
 }
 
-RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	return DrawImpl(rp, spr);
 }
@@ -119,31 +112,28 @@ bool Particle3dSymbol::Update(const UpdateParams& up, float time)
 	}
 }
 
-void Particle3dSymbol::SetEmitterCfg(const P3dEmitterCfg* cfg) 
+void Particle3dSymbol::SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>& cfg)
 { 
 	if (m_et_cfg == cfg) {
 		return;
 	}
 
-	cu::RefCountObjAssign(m_et_cfg, cfg);
+	m_et_cfg = cfg;
 	if (!cfg) {
 		return;
 	}
 
-	if (m_et) {
-		m_et->RemoveReference();
-	}
-	m_et = P3dEmitterPool::Instance()->Pop();
+	m_et = std::make_shared<Particle3dEmitter>();
 	m_et->CreateEmitter(m_et_cfg);
 	m_et->Start();
 }
 
-sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect Particle3dSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	return sm::rect(); // empty
 }
 
-RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const SprConstPtr& spr) const
 {
 	if (rp.IsDisableParticle3d()) {
 		return RENDER_SKIP;
@@ -155,7 +145,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 
 	Particle3dSprite::ReuseType reuse;
 	if (spr) {
-		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
 		reuse = p3d_spr->GetReuse();
 	}
 	else {
@@ -169,14 +159,14 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 		break;
 	case Particle3dSprite::REUSE_COMMON:
 	{
-		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
 		ret = DrawEmitter(rp, spr, p3d_spr->GetEmitter());
 	}
 	break;
 	case Particle3dSprite::REUSE_NONE:
 	{
 		if (rp.actor) {
-			const Particle3dActor* actor = static_cast<const Particle3dActor*>(rp.actor);
+			auto& actor = std::static_pointer_cast<const Particle3dActor>(rp.actor);
 			ret = DrawEmitter(rp, spr, actor->GetEmitter());
 		}
 		else {
@@ -190,13 +180,13 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const SprConstPtr& spr) const
 {
 	if (!m_et) {
 		return RENDER_NO_DATA;
 	}
 	if (spr) {
-		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
 		if (p3d_spr->IsAlone()) {
 			return RENDER_NO_DATA;
 		}
@@ -221,7 +211,7 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	p3d_rp.mt    = rp_child->mt;
 	p3d_rp.rc    = rp_child->color;
 	if (spr) {
-		const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
 		p3d_rp.local = p3d_spr->IsLocal();
 	} else {
 		p3d_rp.local = m_local;
@@ -233,10 +223,10 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr, 
-										   const Particle3dEmitter* et) const
+RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const SprConstPtr& spr,
+	                                       const std::shared_ptr<Particle3dEmitter>& et) const
 {
-	const Particle3dSprite* p3d_spr = VI_DOWNCASTING<const Particle3dSprite*>(spr);
+	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
 
 	if (p3d_spr->IsAlone() || !et) {
 		return RENDER_NO_DATA;
@@ -319,7 +309,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	return ret;
 }
 
-bool Particle3dSymbol::IsVisible(const RenderParams& rp, const Sprite* spr)
+bool Particle3dSymbol::IsVisible(const RenderParams& rp, const SprConstPtr& spr)
 {
 	bool visible = true;
 	if (spr) {

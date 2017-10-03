@@ -1,11 +1,11 @@
 #ifndef _SPRITE2_PARTICLE3D_EMITTER_H_
 #define _SPRITE2_PARTICLE3D_EMITTER_H_
 
-#include "ObjectPool.h"
 #include "RenderReturn.h"
 
-#include <CU_RefCountObj.h>
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
+
+#include <memory>
 
 namespace s2
 {
@@ -13,13 +13,11 @@ namespace s2
 class P3dRenderParams;
 class P3dEmitterCfg;
 
-class Particle3dEmitter : public cu::RefCountObj, private cu::Uncopyable
+class Particle3dEmitter : private cu::Uncopyable
 {
 public:
 	Particle3dEmitter();
 	~Particle3dEmitter();
-
-	virtual void RemoveReference() const;
 
 	bool Update(float time);
 	RenderReturn Draw(const P3dRenderParams& rp, bool alone) const;
@@ -47,40 +45,21 @@ public:
 
 	void SetMat(float* mat);
 
-	void CreateEmitter(const P3dEmitterCfg* cfg);
+	void CreateEmitter(const std::shared_ptr<const P3dEmitterCfg>& cfg);
 
-	const P3dEmitterCfg* GetEmitterCfg() const { return m_state.cfg; }
-
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term();
-	Particle3dEmitter* GetNext() const { return m_state.next; }
-	void SetNext(Particle3dEmitter* next) { m_state.next = next; }
+	const std::shared_ptr<const P3dEmitterCfg>& GetEmitterCfg() const { return m_cfg; }
 
 private:
-	union
-	{
-		struct
-		{
-			const P3dEmitterCfg* cfg;
+	std::shared_ptr<const P3dEmitterCfg> m_cfg;
 
-			int          et;
-			float        mt[6];
-			bool         local;
-		};
-
-		Particle3dEmitter* next;
-
-	} m_state;
+	int   m_et;
+	float m_mt[6];
+	bool  m_local;
 
 	bool m_active;
 	bool m_loop;
-}; // Particle3dEmitter
 
-typedef ObjectPool<Particle3dEmitter> P3dEmitterPool;
+}; // Particle3dEmitter
 
 }
 

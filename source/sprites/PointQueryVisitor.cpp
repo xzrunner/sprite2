@@ -25,14 +25,7 @@ PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
 {
 }
 
-PointQueryVisitor::~PointQueryVisitor()
-{
-	if (m_selected_spr) {
-		m_selected_spr->RemoveReference();
-	}
-}
-
-VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorParams& params)
 {
 	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
 	if (!visible) {
@@ -43,8 +36,8 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	if (type == SYM_INVALID || type == SYM_UNKNOWN) {
 		return VISIT_OVER;
 	} else if (type == SYM_ANCHOR) {
-		const AnchorSprite* anchor_spr = VI_DOWNCASTING<const AnchorSprite*>(spr);
-		const Actor* real = anchor_spr->QueryAnchor(params.actor);
+		auto& anchor_spr = S2_VI_PTR_DOWN_CAST<const AnchorSprite>(spr);
+		auto real = anchor_spr->QueryAnchor(params.actor);
 		if (real) {
 			SprVisitorParams cp = params;
 			cp.actor = real->GetSpr()->QueryActor(params.actor);
@@ -56,10 +49,9 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 		return VISIT_OVER;
 	} else if (type == SYM_MASK) {
 		int name_id = SprNameMap::Instance()->QueryID("base");
-		Sprite* base_spr = spr->FetchChildByName(name_id, params.actor);
-		const Actor* c_actor = base_spr->QueryActor(params.actor);
+		auto base_spr = spr->FetchChildByName(name_id, params.actor);
+		auto c_actor = base_spr->QueryActor(params.actor);
 		bool visible = c_actor ? c_actor->IsVisible() : base_spr->IsVisible();
-		base_spr->RemoveReference();
 		if (!visible) {
 			return VISIT_OVER;
 		}
@@ -77,7 +69,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 	if (editable) 
 	{
-		cu::RefCountObjAssign(m_selected_spr, spr);
+		m_selected_spr = spr;
 		m_selected_params = params;
 		m_selected_path = m_curr_path;
 		m_finded = true;
@@ -99,7 +91,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 			}
 		}
 		if (use_new) {
-			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_spr = spr;
 			m_selected_params = params;
 			m_selected_path = m_curr_path;
 			return VISIT_OVER;
@@ -109,7 +101,7 @@ VisitResult PointQueryVisitor::Visit(const Sprite* spr, const SprVisitorParams& 
 	}
 }
 
-VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params)
 {
 	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
@@ -117,7 +109,7 @@ VisitResult PointQueryVisitor::VisitChildrenBegin(const Sprite* spr, const SprVi
 	return VISIT_OVER;
 }
 
-VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params)
 {
 	VisitResult ret = VISIT_OVER;
 
@@ -126,7 +118,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 		if (IsPointInScissor(spr, params))
 		{
 			bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
-			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_spr = spr;
 			m_selected_params = params;
 			m_selected_path = m_curr_path;
 			if (editable) {
@@ -142,7 +134,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 		bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 		if (editable) 
 		{
-			cu::RefCountObjAssign(m_selected_spr, spr);
+			m_selected_spr = spr;
 			m_selected_params = params;
 			m_selected_path = m_curr_path;
 			m_finded = true;
@@ -156,7 +148,7 @@ VisitResult PointQueryVisitor::VisitChildrenEnd(const Sprite* spr, const SprVisi
 	return ret;
 }
 
-const Actor* PointQueryVisitor::GetSelectedActor() const
+ActorConstPtr PointQueryVisitor::GetSelectedActor() const
 {
 	if (m_selected_spr && m_finded) {
 		return m_selected_params.actor;
@@ -165,7 +157,7 @@ const Actor* PointQueryVisitor::GetSelectedActor() const
 	}
 }
 
-bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& params) const
+bool PointQueryVisitor::QuerySprite(const SprConstPtr& spr, const SprVisitorParams& params) const
 {
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr, params.actor);
 	if (rect.Width() == 0 || rect.Height() == 0 || !rect.IsValid()) {
@@ -177,8 +169,7 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 		return IsPointInRect(rect, params.mt);
 	}
 
-	const ShapeSymbol* shape_sym = VI_DOWNCASTING<const ShapeSymbol*>(spr->GetSymbol());
-	const Shape* shape = shape_sym->GetShape();
+	auto& shape = S2_VI_PTR_DOWN_CAST<const ShapeSymbol>(spr->GetSymbol())->GetShape();
 	sm::vec2 pos = params.mt.Inverted() * m_pos;
 	if (shape && shape->IsContain(pos)) {
 		return true;
@@ -187,15 +178,14 @@ bool PointQueryVisitor::QuerySprite(const Sprite* spr, const SprVisitorParams& p
 	return false;
 }
 
-bool PointQueryVisitor::IsPointInScissor(const Sprite* spr, const SprVisitorParams& params) const
+bool PointQueryVisitor::IsPointInScissor(const SprConstPtr& spr, const SprVisitorParams& params) const
 {
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type != SYM_COMPLEX) {
 		return false;
 	}
 
-	const ComplexSymbol* comp_sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
-	const sm::rect& rect = comp_sym->GetScissor();
+	const sm::rect& rect = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(spr->GetSymbol())->GetScissor();
 	if (rect.Width() <= 0 || rect.Height() <= 0) {
 		return false;
 	}

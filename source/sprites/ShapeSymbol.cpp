@@ -1,6 +1,5 @@
 #include "ShapeSymbol.h"
 #include "SymType.h"
-#include "Shape.h"
 #include "RenderParams.h"
 #include "S2_Sprite.h"
 #include "DrawNode.h"
@@ -34,10 +33,6 @@ ShapeSymbol::~ShapeSymbol()
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Subtract(STAT_SYM_SHAPE);
 #endif // S2_DISABLE_STATISTICS
-
-	if (m_shape) {
-		m_shape->RemoveReference();
-	}
 }
 
 int ShapeSymbol::Type() const 
@@ -45,7 +40,7 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
@@ -70,7 +65,7 @@ RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	return ret;
 }
 
-RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	if (!m_shape || !spr) {
 		return RENDER_NO_DATA;
@@ -81,12 +76,7 @@ RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 	return RENDER_OK;
 }
 
-void ShapeSymbol::SetShape(Shape* shape)
-{
-	cu::RefCountObjAssign(m_shape, shape);
-}
-
-sm::rect ShapeSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect ShapeSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (m_shape) {
 		return m_shape->GetBounding();

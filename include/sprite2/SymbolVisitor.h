@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_SYMBOL_VISITOR_H_
 #define _SPRITE2_SYMBOL_VISITOR_H_
 
+#include "s2_typedef.h"
+
 namespace s2
 {
 
@@ -10,7 +12,7 @@ class SymbolVisitor
 {
 public:
 	virtual ~SymbolVisitor() {}
-	virtual void Visit(Sprite* spr) const = 0;
+	virtual void Visit(const SprPtr& spr) const = 0;
 }; // SymbolVisitor
 
 }

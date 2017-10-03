@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_DRAWCALL_H_
 #define _SPRITE2_STAT_DRAWCALL_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 
@@ -19,7 +19,7 @@ public:
 private:
 	int m_scissor;
 
-	SINGLETON_DECLARATION(StatDrawCall);
+	CU_SINGLETON_DECLARATION(StatDrawCall);
 
 }; // StatDrawCall
 

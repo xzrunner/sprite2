@@ -3,11 +3,12 @@
 
 #include "pre_defined.h"
 
+#include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include S2_MAT_HEADER
-#include <CU_RefCountObj.h>
-#include <CU_Cloneable.h>
+
+#include <memory>
 
 namespace cooking { class DisplayList; }
 
@@ -16,12 +17,14 @@ namespace s2
 
 class RenderParams;
 
-class Shape : public cu::RefCountObj, public cu::Cloneable
+class Shape
 {
 public:
 	Shape() {}
 	Shape(const Shape& shape) : m_bounding(shape.m_bounding) {}
 	virtual ~Shape() {}
+
+	virtual Shape* Clone() const = 0;
 
 	virtual int Type() const = 0;
 
@@ -29,14 +32,6 @@ public:
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
 	virtual void Draw(const RenderParams& rp) const = 0;
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 *  @note
-	 *    should after other virtual
-	 */
-	virtual Shape* Clone() const { return nullptr; }
 
 	const sm::rect& GetBounding() const {
 		return m_bounding;

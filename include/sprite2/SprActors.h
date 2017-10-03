@@ -1,15 +1,12 @@
 #ifndef _SPRITE2_SPR_ACTORS_H_
 #define _SPRITE2_SPR_ACTORS_H_
 
-#include "s2_config.h"
+#include "s2_typedef.h"
 
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 
 #include <vector>
-
-#ifdef SPR_ACTORS_HASH
-struct ds_hash;
-#endif // SPR_ACTORS_HASH
+#include <memory>
 
 namespace s2
 {
@@ -22,26 +19,22 @@ public:
 	SprActors();
 	~SprActors();
 	
-	void Add(Actor* actor);
-	void Del(Actor* actor);
+	void Add(const ActorPtr& actor);
+	void Del(const ActorPtr& actor);
 
-	const Actor* Query(const Actor* prev) const;
+	ActorPtr Query(const ActorConstPtr& prev) const;
 
 	bool IsEmpty() const;
 	int Size() const;
 
 	void Clear();
 
-	void Connect(const Actor* prev);
+	void Connect(const ActorPtr& prev);
 
-	const std::vector<Actor*>& GetActors() const { return m_actors; }
+	const std::vector<ActorPtr>& GetActors() const { return m_actors; }
 
 private:
-	std::vector<Actor*> m_actors;
-
-#ifdef SPR_ACTORS_HASH
-	struct ds_hash* m_hash;
-#endif // SPR_ACTORS_HASH
+	std::vector<ActorPtr> m_actors;
 
 }; // SprActors
 

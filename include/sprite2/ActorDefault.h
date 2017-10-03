@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ACTOR_DEFAULT_H_
 #define _SPRITE2_ACTOR_DEFAULT_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 namespace s2
 {
@@ -16,7 +16,7 @@ public:
 private:
 	ActorGeo* m_geo;
 
-	SINGLETON_DECLARATION(ActorDefault)
+	CU_SINGLETON_DECLARATION(ActorDefault)
 
 }; // ActorDefault
 

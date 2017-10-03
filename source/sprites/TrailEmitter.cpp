@@ -10,46 +10,39 @@ namespace s2
 
 TrailEmitter::TrailEmitter()
 {
-	Init();
+	m_et = nullptr;
 }
 
 TrailEmitter::~TrailEmitter()
 {
-	Term();
-}
-
-void TrailEmitter::RemoveReference() const
-{
-	if (GetRefCount() == 1) {
-		TrailEmitterPool::Instance()->Push(const_cast<TrailEmitter*>(this));
-	} else {
-		cu::RefCountObj::RemoveReference();
+	if (m_et) {
+		t2d_emitter_release(m_et);
 	}
 }
 
 bool TrailEmitter::Update(float time, const sm::vec2& pos)
 {
-	if (!m_state.et) {
+	if (!m_et) {
 		return false;
 	}
 
 	bool dirty = false;
 
-	if (m_state.et->time == 0)
+	if (m_et->time == 0)
 	{
 		float tot_time = Trail::Instance()->GetTime();
-		m_state.et->time = std::min(time, tot_time);
+		m_et->time = std::min(time, tot_time);
 	}
 	else
 	{
-		if (m_state.et->time < time)
+		if (m_et->time < time)
 		{
 			dirty = true;
-			float dt = time - m_state.et->time;
-			t2d_emitter_update(m_state.et, dt, (sm_vec2*)&pos);
+			float dt = time - m_et->time;
+			t2d_emitter_update(m_et, dt, (sm_vec2*)&pos);
 
 			float tot_time = Trail::Instance()->GetTime();
-			m_state.et->time = std::min(time, tot_time);
+			m_et->time = std::min(time, tot_time);
 		}
 	}
 
@@ -58,72 +51,54 @@ bool TrailEmitter::Update(float time, const sm::vec2& pos)
 
 void TrailEmitter::Draw(const TrailRenderParams& rp) const
 {
-	if (!m_state.et) {
+	if (!m_et) {
 		return;
 	}
 
-	t2d_emitter_draw(m_state.et, &rp);
+	t2d_emitter_draw(m_et, &rp);
 }
 
 void TrailEmitter::Start()
 {
-	if (m_state.et) {
-		m_state.et->time = Trail::Instance()->GetTime();
-		t2d_emitter_start(m_state.et);
+	if (m_et) {
+		m_et->time = Trail::Instance()->GetTime();
+		t2d_emitter_start(m_et);
 	}
 }
 
 void TrailEmitter::Stop()
 {
-	if (m_state.et) {
-		t2d_emitter_stop(m_state.et);
-		t2d_emitter_clear(m_state.et);
+	if (m_et) {
+		t2d_emitter_stop(m_et);
+		t2d_emitter_clear(m_et);
 	}
 }
 
 void TrailEmitter::Clear()
 {
-	if (m_state.et) {
-		t2d_emitter_clear(m_state.et);
+	if (m_et) {
+		t2d_emitter_clear(m_et);
 	}
 }
 
 float TrailEmitter::GetTime() const
 {
-	if (m_state.et) {
-		return m_state.et->time;
+	if (m_et) {
+		return m_et->time;
 	} else {
 		return Trail::Instance()->GetTime();
 	}
 }
 
-void TrailEmitter::CreateEmitter(const TrailEmitterCfg* cfg)
+void TrailEmitter::CreateEmitter(const std::shared_ptr<const TrailEmitterCfg>& cfg)
 {
-	cu::RefCountObjAssign(m_state.cfg, cfg);
-	if (m_state.et) {
-		t2d_emitter_release(m_state.et);
-		m_state.et = nullptr;
+	m_cfg = cfg;
+	if (m_et) {
+		t2d_emitter_release(m_et);
+		m_et = nullptr;
 	}
-	if (m_state.cfg) {
-		m_state.et = t2d_emitter_create(m_state.cfg->GetImpl());
-	}
-}
-
-void TrailEmitter::Init()
-{
-	m_state.cfg = nullptr;
-	m_state.et = nullptr;
-}
-
-void TrailEmitter::Term()
-{
-	if (m_state.cfg) {
-		m_state.cfg->RemoveReference();
-        m_state.cfg = nullptr;
-	}
-	if (m_state.et) {
-		t2d_emitter_release(m_state.et);
-		m_state.et = nullptr;
+	if (m_cfg) {
+		m_et = t2d_emitter_create(m_cfg->GetImpl());
 	}
 }
 

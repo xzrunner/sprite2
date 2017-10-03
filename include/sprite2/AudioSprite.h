@@ -2,6 +2,7 @@
 #define _SPRITE2_AUDIO_SPRITE_H_
 
 #include "S2_Sprite.h"
+#include "s2_macro.h"
 
 namespace s2
 {
@@ -12,14 +13,8 @@ public:
 	AudioSprite();
 	AudioSprite(const AudioSprite& spr);
 	AudioSprite& operator = (const AudioSprite& spr);
-	AudioSprite(Symbol* sym, uint32_t id = -1);
+	AudioSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~AudioSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual AudioSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -32,7 +27,7 @@ public:
 	void Pause();
 	void Resume();
 
-private:
+	SPRITE_CLONE_FUNC(AudioSprite)
 
 	VI_DUMMY_FUNC
 

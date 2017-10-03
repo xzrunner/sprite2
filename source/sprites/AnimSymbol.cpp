@@ -70,7 +70,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
 {	
 	if (!spr) {
 		return RENDER_NO_DATA;
@@ -91,7 +91,7 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
-		const AnimSprite* anim = VI_DOWNCASTING<const AnimSprite*>(spr);
+		auto& anim = S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr);
 		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
 		ret = curr.Draw(*rp_child);
 	}
@@ -99,7 +99,7 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
-RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
 }
@@ -107,7 +107,7 @@ RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 int AnimSymbol::GetMaxFrameIdx() const
 {
 	int index = 0;
-	for (const auto& layer : m_layers) {
+	for (auto& layer : m_layers) {
 		if (!layer->frames.empty()) {
 			index = std::max(index, layer->frames.back()->index);
 		}
@@ -115,9 +115,9 @@ int AnimSymbol::GetMaxFrameIdx() const
 	return index;
 }
 
-void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
+void AnimSymbol::CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const
 {
-	for (const auto& layer : m_layers)
+	for (auto& layer : m_layers)
 	{
 		int curr = layer->GetCurrFrame(frame);
 		int next = layer->GetNextFrame(frame);
@@ -127,9 +127,8 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<Sprite*>& sprs) const
 		const std::unique_ptr<Frame>& curr_f = layer->frames[curr];
 		if (!curr_f->tween || next < 0)
 		{
-			for (auto spr : curr_f->sprs) {
-				Sprite* new_spr = VI_CLONE(Sprite, spr);
-				sprs.push_back(new_spr);
+			for (auto& spr : curr_f->sprs) {
+				sprs.push_back(spr->Clone());
 			}
 		}
 		else
@@ -178,7 +177,7 @@ bool AnimSymbol::Clear()
 	return dirty;	
 }
 
-sm::rect AnimSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
+sm::rect AnimSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
 {
 	if (!cache) {
 		return CalcAABB(spr, actor);
@@ -190,39 +189,30 @@ sm::rect AnimSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool
 	return m_aabb;
 }
 
-sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
+sm::rect AnimSymbol::CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const
 {
 	if (actor) {
-		const AnimActor* anim_actor = static_cast<const AnimActor*>(actor);
+		auto& anim_actor = S2_VI_PTR_DOWN_CAST<const AnimActor>(actor);
 		return anim_actor->GetState().GetOrigin().CalcAABB(actor);
 	}
 
-	std::vector<Sprite*> children;
+	std::vector<SprPtr> children;
 	int num = 0;
-	for (const auto& layer : m_layers) {
-		for (const auto& frame : layer->frames) {
+	for (auto& layer : m_layers) {
+		for (auto& frame : layer->frames) {
 			num += frame->sprs.size();
 		}
 	}
 	children.reserve(num);
 	sm::rect aabb;
-	for (const auto& layer : m_layers) {
-		for (const auto& frame : layer->frames) {
-			for (auto spr : frame->sprs) {
+	for (auto& layer : m_layers) {
+		for (auto& frame : layer->frames) {
+			for (auto& spr : frame->sprs) {
 				children.push_back(spr);			
 			}
 		}
 	}
 	return AABBHelper::CalcAABB(children, actor);
-}
-
-/************************************************************************/
-/* class AnimSymbol::Frame                                              */
-/************************************************************************/
-
-AnimSymbol::Frame::~Frame()
-{
-	for_each(sprs.begin(), sprs.end(), cu::RemoveRefFunctor<Sprite>());
 }
 
 /************************************************************************/
@@ -237,7 +227,7 @@ int AnimSymbol::Layer::GetCurrFrame(int index) const
 
 	int prev = -1, curr = -1;
 	int idx = 0;
-	for (const auto& frame : frames)
+	for (auto& frame : frames)
 	{
 		if (frame->index >= index) {
 			curr = idx;
@@ -263,7 +253,7 @@ int AnimSymbol::Layer::GetCurrFrame(int index) const
 int AnimSymbol::Layer::GetNextFrame(int index) const
 {
 	int idx = 0;
-	for (const auto& frame : frames) {
+	for (auto& frame : frames) {
 		if (frame->index > index) {
 			return idx;
 		}

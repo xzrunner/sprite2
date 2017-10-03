@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_PINGPONG_H_
 #define _SPRITE2_STAT_PINGPONG_H_
 
-#include <CU_Singleton.h>
+#include <cu/cu_macro.h>
 
 #include <string>
 
@@ -39,7 +39,7 @@ private:
 	int m_integrate;
 	int m_rt_outside;
 
-	SINGLETON_DECLARATION(StatPingPong);
+	CU_SINGLETON_DECLARATION(StatPingPong);
 
 }; // StatPingPong
 

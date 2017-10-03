@@ -17,7 +17,7 @@
 namespace s2
 {
 
-SINGLETON_DEFINITION(Trail)
+CU_SINGLETON_DEFINITION(Trail)
 
 Trail::Trail()
 	: m_time(0)
@@ -36,7 +36,7 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 	assert(ud);
 	const TrailRenderParams* rp = (static_cast<const TrailRenderParams*>(ud));
 
-	Symbol* s2_sym = static_cast<Symbol*>(sym);
+	SymPtr s2_sym(static_cast<Symbol*>(sym));
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	rp_child->Reset();

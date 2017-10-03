@@ -12,14 +12,8 @@ public:
 	ComplexSprite();
 	ComplexSprite(const ComplexSprite& spr);
 	ComplexSprite& operator = (const ComplexSprite& spr);
-	ComplexSprite(Symbol* sym, uint32_t id = -1);
+	ComplexSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~ComplexSprite();
-
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual ComplexSprite* Clone() const;
 
 	/**
 	 *  @interface
@@ -27,20 +21,22 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual Sprite* FetchChildByName(int name, const Actor* actor) const;
-	virtual Sprite* FetchChildByIdx(int idx, const Actor* actor) const;
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
+	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
 	void SetAction(int action);
 	int GetAction() const { return m_action; }
 	
 private:
-	bool VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, Sprite* child, VisitResult& ret) const;
+	bool VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, const SprPtr& child, VisitResult& ret) const;
 
-	int GetAction(const Actor* actor) const;
+	int GetAction(const ActorConstPtr& actor) const;
 
 protected:
 	int m_action;
+
+	SPRITE_CLONE_FUNC(ComplexSprite)
 
 	VI_DUMMY_FUNC
 

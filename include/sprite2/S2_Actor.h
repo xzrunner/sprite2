@@ -2,18 +2,19 @@
 #define _SPRITE2_ACTOR_H_
 
 #include "pre_defined.h"
-#include "s2_macro.h"
+#include "s2_typedef.h"
 #include "ActorAABB.h"
 #include "ActorGeo.h"
 #include "ActorDefault.h"
 
-#include <CU_RefCountObj.h>
-#include <CU_Uncopyable.h>
+#include <cu/uncopyable.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include S2_MAT_HEADER
 
 #include <memory>
+
+#include <assert.h>
 
 namespace ft { class FTList; }
 namespace cooking { class DisplayList; }
@@ -29,17 +30,19 @@ class RenderCamera;
 class SprRender;
 class RenderParams;
 
-class Actor : private cu::Uncopyable
+class Actor : private cu::Uncopyable, public std::enable_shared_from_this<Actor>
 {
 public:
-	Actor();
-	Actor(const Sprite* spr, const Actor* parent);
+	Actor() = delete;
+	Actor(const SprConstPtr& spr, const ActorConstPtr& parent);
 	virtual ~Actor();
-	
-	const Sprite* GetSpr() const { return m_spr; }
-	
-	const Actor* GetParent() const { return m_parent; }
-	void SetParent(const Actor* parent) { m_parent = parent; }
+
+	virtual void Init();
+
+	SprPtr GetSpr() const { assert(!m_spr.expired()); return m_spr.lock(); }
+
+	ActorPtr GetParent() const { return m_parent.lock(); }
+	void SetParent(const ActorConstPtr& parent) { m_parent = parent; }
 
 	void SetPosition(const sm::vec2& pos);
 	const sm::vec2& GetPosition() const { return m_geo->GetPosition(); }
@@ -69,7 +72,7 @@ public:
 	virtual void BuildFlatten();
 	virtual bool HasFlatten() const;
 	virtual void FlattenUpdate(bool force);
-	virtual void FlattenDraw(const s2::RenderParams& rp) const;
+	virtual void FlattenDraw(const RenderParams& rp) const;
 	virtual void FlattenSetFrame(int frame);
 #endif // S2_DISABLE_FLATTEN
 
@@ -88,13 +91,13 @@ private:
 	static const uint32_t FLAG_COLOR_DIRTY    = 0x00000008;
 
 public:
-//	S2_FLAG_METHOD(Visible, FLAG_VISIBLE)
+//	CU_FLAG_METHOD(Visible, FLAG_VISIBLE)
 	bool IsVisible() const { return (m_flags & FLAG_VISIBLE) != 0; }
 	void SetVisible(bool flag, bool up_aabb = false) const;
 
-	S2_FLAG_METHOD(Editable, FLAG_EDITABLE)
-	S2_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
-	S2_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
+	CU_FLAG_METHOD(Editable, FLAG_EDITABLE)
+	CU_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
+	CU_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
 private:
 	struct Flatten
@@ -104,8 +107,8 @@ private:
 	};
 
 private:
-	const Sprite*     m_spr;
-	const Actor*      m_parent;
+	std::weak_ptr<Sprite> m_spr;
+	std::weak_ptr<Actor>  m_parent;
 
 	ActorGeo*         m_geo;
 	mutable ActorAABB m_aabb;

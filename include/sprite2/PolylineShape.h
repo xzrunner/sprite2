@@ -15,17 +15,12 @@ public:
 	PolylineShape();
 	PolylineShape(const PolylineShape& polyline);
 	PolylineShape(const std::vector<sm::vec2>& vertices, bool closed = false);
-	
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual PolylineShape* Clone() const;
 
 	/**
 	 *  @interface
 	 *    Shape
 	 */
+	virtual PolylineShape* Clone() const { return new PolylineShape(*this);  }
 	virtual int Type() const { return SHAPE_POLYLINE; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;

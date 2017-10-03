@@ -6,42 +6,22 @@
 namespace s2
 {
 
-PolygonShape::PolygonShape()
-	: m_poly(nullptr)
+PolygonShape::PolygonShape(const PolygonShape& ps)
 {
+	this->operator = (ps);
 }
 
-PolygonShape::PolygonShape(const PolygonShape& poly)
-	: PolylineShape(poly)
-	, m_poly(nullptr)
+const PolygonShape& PolygonShape::operator = (const PolygonShape& ps)
 {
-	cu::RefCountObjAssign(m_poly, poly.m_poly);
-}
-
-PolygonShape& PolygonShape::operator = (const PolygonShape& poly)
-{
-	PolylineShape::operator = (poly);
-
-	cu::RefCountObjAssign(m_poly, poly.m_poly);
+	if (ps.m_poly) {
+		m_poly = ps.m_poly->Clone();
+	}
 	return *this;
 }
 
 PolygonShape::PolygonShape(const std::vector<sm::vec2>& vertices)
 	: PolylineShape(vertices, true)
-	, m_poly(nullptr)
 {
-}
-
-PolygonShape::~PolygonShape()
-{
-	if (m_poly) {
-		m_poly->RemoveReference();
-	}
-}
-
-PolygonShape* PolygonShape::Clone() const
-{
-	return new PolygonShape(*this);
 }
 
 bool PolygonShape::IsContain(const sm::vec2& pos) const
@@ -63,9 +43,9 @@ void PolygonShape::Draw(const RenderParams& rp) const
 	}
 }
 
-void PolygonShape::SetPolygon(Polygon* poly)
+void PolygonShape::SetPolygon(std::unique_ptr<Polygon> poly)
 {
-	cu::RefCountObjAssign(m_poly, poly);
+	m_poly = std::move(poly);
 
 	m_bounding.MakeEmpty();
 	if (poly) {

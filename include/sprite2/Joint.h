@@ -4,14 +4,14 @@
 #include "pre_defined.h"
 #include "JointPose.h"
 #include "RenderReturn.h"
+#include "s2_typedef.h"
 
-#include <CU_RefCountObj.h>
-#include <CU_Uncopyable.h>
-
+#include <cu/uncopyable.h>
 #include <SM_Rect.h>
 
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace s2
 {
@@ -21,11 +21,10 @@ class Sprite;
 class RenderParams;
 class BoundingBox;
 
-class Joint : public cu::RefCountObj, private cu::Uncopyable
+class Joint : private cu::Uncopyable
 {
 public:
-	Joint(Sprite* spr, const JointPose& joint_local);
-	~Joint();
+	Joint(const SprPtr& spr, const JointPose& joint_local);
 
 	VIRTUAL_INHERITANCE void Translate(const sm::vec2& trans);
 	VIRTUAL_INHERITANCE void Rotate(float rot);
@@ -34,11 +33,11 @@ public:
 	RenderReturn Draw(const RenderParams& rp) const;
 	void Update();
 
-	bool ConnectChild(Joint* child);
+	bool ConnectChild(const std::shared_ptr<Joint>& child);
 	void DeconnectParent();
 
-	const Joint* GetParent() const { return m_parent; }
-	const std::vector<Joint*>& GetChildren() const { return m_children; }
+	std::shared_ptr<Joint> GetParent() const { return m_parent.lock(); }
+	const std::vector<std::shared_ptr<Joint>>& GetChildren() const { return m_children; }
 
 	const JointPose& GetWorldPose() const { return m_world_pose; }
 	const JointPose& GetLocalPose() const { return m_local_pose; }
@@ -47,7 +46,7 @@ public:
 	void SetLocalPose(const JointPose& pose) { m_local_pose = pose; }
 	void SetSkinPose(const JointPose& pose) { m_skin.skin_local = pose; }
 
-	const Sprite* GetSkinSpr() const { return m_skin.spr; }
+	const SprPtr& GetSkinSpr() const { return m_skin.spr; }
 
 	void SetName(const std::string& name) { m_name = name; }
 	const std::string& GetName() const { return m_name; }
@@ -58,11 +57,10 @@ public:
 private:
 	struct Skin : private cu::Uncopyable
 	{
-		Sprite* spr;
+		SprPtr spr;
 		JointPose skin_local;
 
-		Skin(Sprite* spr, const JointPose& skin_local);
-		~Skin();
+		Skin(const SprPtr& spr, const JointPose& skin_local);
 
 		void Update(const Joint* joint);
 
@@ -71,8 +69,8 @@ private:
 protected:
 	std::string m_name;
 
-	Joint* m_parent;
-	std::vector<Joint*> m_children;
+	std::weak_ptr<Joint> m_parent;
+	std::vector<std::shared_ptr<Joint>> m_children;
 
 	JointPose m_world_pose, m_local_pose;
 

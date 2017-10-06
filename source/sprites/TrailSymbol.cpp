@@ -49,7 +49,7 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TRAIL);
@@ -71,7 +71,7 @@ RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& sp
 	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
-	auto& t2d_spr = S2_VI_PTR_DOWN_CAST<const TrailSprite>(spr);
+	auto t2d_spr = S2_VI_DOWN_CAST<const TrailSprite*>(spr);
 	// todo: return trail's render ret
 	t2d_spr->Draw(*rp_child);
 
@@ -96,7 +96,7 @@ void TrailSymbol::SetEmitterCfg(const std::shared_ptr<const TrailEmitterCfg>& cf
 	m_et->Start();
 }
 
-sm::rect TrailSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect TrailSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

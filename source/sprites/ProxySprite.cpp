@@ -23,7 +23,7 @@ void ProxySprite::OnMessage(const UpdateParams& up, Message msg)
 	{
 		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 		*up_child = up;
-		up_child->SetActor(item.second->QueryActor(item.first));
+		up_child->SetActor(item.second->QueryActor(item.first.get()));
 		item.second->OnMessage(*up_child, msg);
 		UpdateParamsPool::Instance()->Push(up_child); 
 	}
@@ -37,7 +37,7 @@ bool ProxySprite::Update(const UpdateParams& up)
 	{
 		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 		*up_child = up;
-		up_child->SetActor(item.second->QueryActor(item.first));
+		up_child->SetActor(item.second->QueryActor(item.first.get()));
 		if (item.second->Update(*up_child)) {
 			ret = true;
 		}
@@ -52,7 +52,7 @@ SprPtr ProxySprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {
-			auto real_actor = item.second->QueryActor(item.first);
+			auto real_actor = item.second->QueryActor(item.first.get());
 			auto child = item.second->FetchChildByName(name, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
@@ -75,7 +75,7 @@ SprPtr ProxySprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {
-			auto real_actor = item.second->QueryActor(item.first);
+			auto real_actor = item.second->QueryActor(item.first.get());
 			auto child = item.second->FetchChildByIdx(idx, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
@@ -154,7 +154,7 @@ VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisit
 	SprVisitorParams cp = params;
 	for (auto& item : items) 
 	{
-		auto real_actor = item.second->QueryActor(item.first);
+		auto real_actor = item.second->QueryActor(item.first.get());
 		cp.actor = real_actor;
 		VisitResult ret = item.second->TraverseChildren(visitor, cp);
 		if (ret == VISIT_STOP) {

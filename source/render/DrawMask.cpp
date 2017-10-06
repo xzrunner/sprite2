@@ -23,14 +23,14 @@
 namespace s2
 {
 
-RenderReturn DrawMask::Draw(const SprConstPtr& base, const SprConstPtr& mask, const RenderParams& rp)
+RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
-	auto base_actor = base->QueryActor(rp.actor);
+	auto base_actor = base->QueryActor(rp.actor.get());
 	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
 	}
-	auto mask_actor = mask->QueryActor(rp.actor);
+	auto mask_actor = mask->QueryActor(rp.actor.get());
 	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
@@ -81,12 +81,12 @@ RenderReturn DrawMask::Draw(const SprConstPtr& base, const SprConstPtr& mask, co
 
 //RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 //{
-//	const Actor* base_actor = base->QueryActor(rp.actor);
+//	const Actor* base_actor = base->QueryActor(rp.actor.get());
 //	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
 //	}
-//	const Actor* mask_actor = mask->QueryActor(rp.actor);
+//	const Actor* mask_actor = mask->QueryActor(rp.actor.get());
 //	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
@@ -128,12 +128,12 @@ RenderReturn DrawMask::Draw(const SprConstPtr& base, const SprConstPtr& mask, co
 
 //RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 //{
-//	const Actor* base_actor = base->QueryActor(rp.actor);
+//	const Actor* base_actor = base->QueryActor(rp.actor.get());
 //	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
 //	}
-//	const Actor* mask_actor = mask->QueryActor(rp.actor);
+//	const Actor* mask_actor = mask->QueryActor(rp.actor.get());
 //	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
@@ -182,7 +182,7 @@ RenderReturn DrawMask::Draw(const SprConstPtr& base, const SprConstPtr& mask, co
 //	return RENDER_OK;
 //}
 
-RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const SprConstPtr& base,
+RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 									const ActorConstPtr& actor, 
 	                                const RenderParams& rp)
 {
@@ -211,7 +211,7 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const SprConstPtr& base,
 	return ret;
 }
 
-RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const SprConstPtr& mask,
+RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
 									const ActorConstPtr& actor, 
 	                                const RenderParams& rp)
 {
@@ -241,7 +241,7 @@ RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const SprConstPtr& mask,
 }
 
 RenderReturn DrawMask::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, 
-									  const SprConstPtr& mask, const S2_MAT& mt)
+									  const Sprite* mask, const S2_MAT& mt)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 

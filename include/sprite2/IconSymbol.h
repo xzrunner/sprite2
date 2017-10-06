@@ -24,15 +24,15 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
 	void SetIcon(std::unique_ptr<Icon>& icon) { m_icon = std::move(icon); }
 	const std::unique_ptr<Icon>& GetIcon() const { return m_icon; }
 	std::unique_ptr<Icon>& GetIcon() { return m_icon; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
 	std::unique_ptr<Icon> m_icon;

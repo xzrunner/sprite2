@@ -65,7 +65,7 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -84,7 +84,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& 
 		return RENDER_INVISIBLE;
 	}
 
-	int action = GetAction(spr, rp.actor);
+	int action = GetAction(spr, rp.actor.get());
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
@@ -111,26 +111,26 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& 
 	if (rp.IsDisableCulling()) {
 		for (auto& child : children) 
 		{
-			rp_child->actor = child->QueryActor(rp.actor);
+			rp_child->actor = child->QueryActor(rp.actor.get());
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
-			ret |= DrawNode::Draw(child, *rp_child);
+			ret |= DrawNode::Draw(child.get(), *rp_child);
 		}
 	} else {
 		for (auto& child : children)
 		{
-			rp_child->actor = child->QueryActor(rp.actor);
+			rp_child->actor = child->QueryActor(rp.actor.get());
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 			if (!rp_child->IsDisableCulling() && 
-				DrawNode::CullingTestOutside(child, *rp_child)) {
+				DrawNode::CullingTestOutside(child.get(), *rp_child)) {
 				continue;
 			}
-			ret |= DrawNode::Draw(child, *rp_child);
+			ret |= DrawNode::Draw(child.get(), *rp_child);
 		}
 	}
 
@@ -143,7 +143,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& 
 	return ret;
 }
 
-RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
 }
@@ -156,7 +156,7 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	*up_child = up;
 	for (auto& child : m_children) 
 	{
-		up_child->SetActor(child->QueryActor(up.GetActor()));
+		up_child->SetActor(child->QueryActor(up.GetActor().get()));
 		if (child->Update(*up_child)) {
 			ret = true;
 		}
@@ -346,7 +346,7 @@ bool ComplexSymbol::ResetOrderMost(const Sprite& spr, bool up)
 //	return true;
 //}
 
-sm::rect ComplexSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
 		return CalcAABB(spr, actor);
@@ -358,7 +358,7 @@ sm::rect ComplexSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConst
 	return m_aabb;
 }
 
-sm::rect ComplexSymbol::CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const
+sm::rect ComplexSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 {
 	sm::vec2 scissor_sz = m_scissor.Size();
 	if (scissor_sz.x > 0 && scissor_sz.y > 0) {
@@ -370,14 +370,14 @@ sm::rect ComplexSymbol::CalcAABB(const SprConstPtr& spr, const ActorConstPtr& ac
 	return AABBHelper::CalcAABB(sprs, actor);
 }
 
-int ComplexSymbol::GetAction(const SprConstPtr& spr, const ActorConstPtr& actor) const
+int ComplexSymbol::GetAction(const Sprite* spr, const Actor* actor) const
 {
 	int action = -1;
 	if (spr) 
 	{
-		action = S2_VI_PTR_DOWN_CAST<const ComplexSprite>(spr)->GetAction();
+		action = S2_VI_DOWN_CAST<const ComplexSprite*>(spr)->GetAction();
 		if (actor) {
-			auto& comp_actor = std::static_pointer_cast<const ComplexActor>(actor);
+			auto comp_actor = static_cast<const ComplexActor*>(actor);
 			action = comp_actor->GetAction();
 		}
 	}

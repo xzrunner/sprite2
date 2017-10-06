@@ -70,7 +70,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {	
 	if (!spr) {
 		return RENDER_NO_DATA;
@@ -91,15 +91,15 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
-		auto& anim = S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr);
-		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
+		auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
+		const AnimCurr& curr = anim->GetOriginCurr(rp.actor.get());
 		ret = curr.Draw(*rp_child);
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
 }
 
-RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
 }
@@ -177,7 +177,7 @@ bool AnimSymbol::Clear()
 	return dirty;	
 }
 
-sm::rect AnimSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect AnimSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!cache) {
 		return CalcAABB(spr, actor);
@@ -189,10 +189,10 @@ sm::rect AnimSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr
 	return m_aabb;
 }
 
-sm::rect AnimSymbol::CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const
+sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 {
 	if (actor) {
-		auto& anim_actor = S2_VI_PTR_DOWN_CAST<const AnimActor>(actor);
+		auto anim_actor = static_cast<const AnimActor*>(actor);
 		return anim_actor->GetState().GetOrigin().CalcAABB(actor);
 	}
 

@@ -20,7 +20,7 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 
 	up_child->Push(shared_from_this());
 	auto& anchor_spr = anchor->GetSpr();
-	up_child->SetActor(anchor_spr->QueryActor(actor));
+	up_child->SetActor(anchor_spr->QueryActor(actor.get()));
 	std::const_pointer_cast<Sprite>(anchor_spr)->OnMessage(*up_child, msg);
 
 	UpdateParamsPool::Instance()->Push(up_child); 
@@ -41,7 +41,7 @@ bool AnchorSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	auto& actor_real = spr_real->QueryActor(actor);
+	auto& actor_real = spr_real->QueryActor(actor.get());
 	
 	// visible
 	bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
@@ -66,7 +66,7 @@ SprPtr AnchorSprite::FetchChildByName(int name, const ActorConstPtr& actor) cons
 	auto& anchor = QueryAnchor(actor);
 	if (anchor) {
 		auto& anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor));
+		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor.get()));
 	} else {
 		return nullptr;
 	}
@@ -77,7 +77,7 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 	auto& anchor = QueryAnchor(actor);
 	if (anchor) {
 		auto& anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor));
+		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor.get()));
 	} else {
 		return nullptr;
 	}

@@ -8,8 +8,7 @@
 namespace s2
 {
 
-sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children,
-	                          const ActorConstPtr& parent)
+sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children, const Actor* parent)
 {
 	sm::rect aabb;
 
@@ -20,7 +19,7 @@ sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children,
 		if (!visible) {
 			continue;
 		}
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor.get());
 		if (!c_aabb.IsValid()) {
 			continue;
 		}
@@ -41,7 +40,7 @@ sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children,
 }
 
 void AABBHelper::UpdateChildrenAABBTight(const std::vector<SprPtr>& children,
-	                                     const ActorConstPtr& parent,
+	                                     const Actor* parent,
 										 const sm::rect& parent_aabb)
 {
 	if (!parent) {
@@ -59,7 +58,7 @@ void AABBHelper::UpdateChildrenAABBTight(const std::vector<SprPtr>& children,
 			c_actor->SetAABBTight(false);
 			continue;
 		}
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr, c_actor);
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor.get());
 		if (!c_aabb.IsValid()) {
 			c_actor->SetAABBTight(false);
 			continue;

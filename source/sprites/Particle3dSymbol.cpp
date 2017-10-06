@@ -63,7 +63,7 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -78,7 +78,7 @@ RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const SprConstPt
 	return DrawImpl(rp, spr);
 }
 
-RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return DrawImpl(rp, spr);
 }
@@ -128,12 +128,12 @@ void Particle3dSymbol::SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>&
 	m_et->Start();
 }
 
-sm::rect Particle3dSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty
 }
 
-RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* spr) const
 {
 	if (rp.IsDisableParticle3d()) {
 		return RENDER_SKIP;
@@ -145,7 +145,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const SprConstPt
 
 	Particle3dSprite::ReuseType reuse;
 	if (spr) {
-		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		reuse = p3d_spr->GetReuse();
 	}
 	else {
@@ -159,7 +159,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const SprConstPt
 		break;
 	case Particle3dSprite::REUSE_COMMON:
 	{
-		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		ret = DrawEmitter(rp, spr, p3d_spr->GetEmitter());
 	}
 	break;
@@ -180,13 +180,13 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const SprConstPt
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_et) {
 		return RENDER_NO_DATA;
 	}
 	if (spr) {
-		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		if (p3d_spr->IsAlone()) {
 			return RENDER_NO_DATA;
 		}
@@ -211,7 +211,7 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const SprConst
 	p3d_rp.mt    = rp_child->mt;
 	p3d_rp.rc    = rp_child->color;
 	if (spr) {
-		auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		p3d_rp.local = p3d_spr->IsLocal();
 	} else {
 		p3d_rp.local = m_local;
@@ -223,10 +223,10 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const SprConst
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const SprConstPtr& spr,
+RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 	                                       const std::shared_ptr<Particle3dEmitter>& et) const
 {
-	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+	auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 
 	if (p3d_spr->IsAlone() || !et) {
 		return RENDER_NO_DATA;
@@ -309,7 +309,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const SprCons
 	return ret;
 }
 
-bool Particle3dSymbol::IsVisible(const RenderParams& rp, const SprConstPtr& spr)
+bool Particle3dSymbol::IsVisible(const RenderParams& rp, const Sprite* spr)
 {
 	bool visible = true;
 	if (spr) {

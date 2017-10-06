@@ -48,7 +48,7 @@ public:
  	virtual bool Update(const UpdateParams& up) { return false; }
 
 	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return false; }
-	virtual bool AutoUpdate(const ActorConstPtr& actor) { return false; }
+	virtual bool AutoUpdate(const Actor* actor) { return false; }
 
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const { return nullptr; }
 	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const { return nullptr; }
@@ -77,8 +77,8 @@ public:
 	int  GetName() const { return m_name; }
 	void SetName(const std::string& name);
 
-	const BoundingBox* GetBounding(const ActorConstPtr& actor = nullptr) const; 
-	void UpdateBounding(const ActorConstPtr& actor = nullptr) const;
+	const BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
+	void UpdateBounding(const Actor* actor = nullptr) const;
 
 	void Translate(const sm::vec2& trans);
 	void Rotate(float rot);
@@ -111,7 +111,7 @@ public:
 
 	void AddActor(const ActorPtr& actor) const;
 	void DelActor(const ActorPtr& actor) const;
-	ActorPtr QueryActor(const ActorConstPtr& prev) const {
+	ActorPtr QueryActor(const Actor* prev) const {
 		return (m_actors && prev) ? m_actors->Query(prev) : nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }

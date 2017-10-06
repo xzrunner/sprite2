@@ -22,7 +22,7 @@ public:
 	void Add(const ActorPtr& actor);
 	void Del(const ActorPtr& actor);
 
-	ActorPtr Query(const ActorConstPtr& prev) const;
+	ActorPtr Query(const Actor* prev) const;
 
 	bool IsEmpty() const;
 	int Size() const;

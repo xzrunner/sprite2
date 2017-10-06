@@ -221,7 +221,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 		rp->SetDisableDTexC2(true);
 	}
 
-	DrawNode::Draw(s2_actor->GetSpr(), *rp);
+	DrawNode::Draw(s2_actor->GetSpr().get(), *rp);
 
 	RenderParamsPool::Instance()->Push(rp); 
 }
@@ -427,7 +427,7 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 	m = outer * m;
 
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = std::const_pointer_cast<Sprite>(s2_actor->GetSpr());
+	auto s2_spr = s2_actor->GetSpr().get();
 
 	sm::rect sz = s2_spr->GetSymbol()->GetBounding(s2_spr);
 	std::vector<sm::vec2> vertices(4);
@@ -683,7 +683,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	RenderParams rp;
 	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
-	auto s2_spr = std::const_pointer_cast<Sprite>(s2_actor->GetSpr());
+	auto s2_spr = s2_actor->GetSpr().get();
 
 	std::stack<ActorConstPtr> path;
 	auto curr = s2_actor;
@@ -698,7 +698,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		auto curr = path.top();
 		path.pop();
 		rp.actor = curr;
-		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		DrawNode::Prepare(rp, curr->GetSpr().get(), *rp_child);
 		rp = *rp_child;
 	}
 
@@ -744,7 +744,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 		auto curr = path.top();
 		path.pop();
 		rp.actor = curr;
-		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		DrawNode::Prepare(rp, curr->GetSpr().get(), *rp_child);
 		rp = *rp_child;
 	}
 

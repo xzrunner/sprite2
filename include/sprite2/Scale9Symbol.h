@@ -20,8 +20,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
-	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
 	const Scale9& GetScale9() const { return m_s9; }
 	Scale9& GetScale9() { return m_s9; }
@@ -29,7 +29,7 @@ public:
 	void Resize(float width, float height);
 
 protected:
-	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
 	Scale9 m_s9;

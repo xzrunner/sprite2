@@ -53,7 +53,7 @@ RenderReturn Scale9::Draw(const RenderParams& rp) const
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
-			ret |= DrawNode::Draw(m_grids[i], rp);
+			ret |= DrawNode::Draw(m_grids[i].get(), rp);
 		}
 	}
 	return ret;
@@ -369,7 +369,7 @@ sm::vec2 Scale9::GetChildSize(SCALE9_IDX idx) const
 	if (sym->Type() == SYM_IMAGE) {
 		return S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym)->GetNoTrimedSize();
 	} else {
-		return sym->GetBounding(spr).Size();
+		return sym->GetBounding(spr.get()).Size();
 	}
 }
 

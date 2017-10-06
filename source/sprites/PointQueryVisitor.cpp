@@ -40,7 +40,7 @@ VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorPar
 		auto real = anchor_spr->QueryAnchor(params.actor);
 		if (real) {
 			SprVisitorParams cp = params;
-			cp.actor = real->GetSpr()->QueryActor(params.actor);
+			cp.actor = real->GetSpr()->QueryActor(params.actor.get());
 			return Visit(real->GetSpr(), cp);
 		} else {
 			return VISIT_OVER;
@@ -50,7 +50,7 @@ VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorPar
 	} else if (type == SYM_MASK) {
 		int name_id = SprNameMap::Instance()->QueryID("base");
 		auto base_spr = spr->FetchChildByName(name_id, params.actor);
-		auto c_actor = base_spr->QueryActor(params.actor);
+		auto c_actor = base_spr->QueryActor(params.actor.get());
 		bool visible = c_actor ? c_actor->IsVisible() : base_spr->IsVisible();
 		if (!visible) {
 			return VISIT_OVER;
@@ -159,7 +159,7 @@ ActorConstPtr PointQueryVisitor::GetSelectedActor() const
 
 bool PointQueryVisitor::QuerySprite(const SprConstPtr& spr, const SprVisitorParams& params) const
 {
-	sm::rect rect = spr->GetSymbol()->GetBounding(spr, params.actor);
+	sm::rect rect = spr->GetSymbol()->GetBounding(spr.get(), params.actor.get());
 	if (rect.Width() == 0 || rect.Height() == 0 || !rect.IsValid()) {
 		return false;
 	} 

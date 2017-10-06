@@ -129,7 +129,7 @@ RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const Rend
 	} 
 	else 
 	{
-		ret = DrawTwoPass(mesh, rp, sym);
+		ret = DrawTwoPass(mesh, rp, *sym);
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -282,7 +282,7 @@ RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const Rend
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const SymConstPtr& sym)
+RenderReturn DrawMesh::DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const Symbol& sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -314,7 +314,7 @@ RenderReturn DrawMesh::DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const Rend
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const SymConstPtr& sym)
+RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
 {
 	rt->Bind();
 

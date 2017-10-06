@@ -57,7 +57,7 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
@@ -88,7 +88,7 @@ RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& 
 	return ret;
 }
 
-RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -103,7 +103,7 @@ RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPa
 	return RENDER_OK;
 }
 
-sm::rect TextureSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect TextureSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect rect;
 	for (size_t i = 0, n = m_polygons.size(); i < n; ++i) {

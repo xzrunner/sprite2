@@ -126,10 +126,10 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	if (spr) {
 		std::shared_ptr<Sprite> s2_spr(*static_cast<std::shared_ptr<Sprite>*>(spr));
-		DrawNode::Draw(s2_spr, *rp_child);
+		DrawNode::Draw(s2_spr.get(), *rp_child);
 	} else if (sym) {
 		std::shared_ptr<Symbol> s2_sym(static_cast<Symbol*>(sym));
-		DrawNode::Draw(s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+		DrawNode::Draw(*s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 		s2_sym->Update(UpdateParams(), time);
 	}
 

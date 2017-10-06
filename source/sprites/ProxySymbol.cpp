@@ -19,16 +19,16 @@ int ProxySymbol::Type() const
 	return SYM_PROXY;
 }
 
-RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0, n = m_items.size(); i < n; ++i) {
-		ret |= DrawNode::Draw(m_items[i].second, rp);
+		ret |= DrawNode::Draw(m_items[i].second.get(), rp);
 	}
 	return ret;
 }
 
-sm::rect ProxySymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect ProxySymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

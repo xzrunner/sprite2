@@ -78,7 +78,7 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	AnimCurr& curr = GetOriginCurr(up.GetActor());
+	AnimCurr& curr = GetOriginCurr(up.GetActor().get());
 	curr.OnMessage(up, shared_from_this(), msg);
 	switch (msg)
 	{
@@ -107,11 +107,11 @@ bool AnimSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	AnimCurr& curr = GetUpdateCurr(up.GetActor());
+	AnimCurr& curr = GetUpdateCurr(up.GetActor().get());
 	return curr.Update(up, GetSymbol(), shared_from_this(), m_loop, m_interval, m_fps);
 }
 
-bool AnimSprite::AutoUpdate(const ActorConstPtr& actor)
+bool AnimSprite::AutoUpdate(const Actor* actor)
 {
 	AnimCurr& curr = GetUpdateCurr(actor);
 	return curr.Update(UpdateParams(), GetSymbol(), shared_from_this(), m_loop, m_interval, m_fps);
@@ -119,34 +119,32 @@ bool AnimSprite::AutoUpdate(const ActorConstPtr& actor)
 
 SprPtr AnimSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	const AnimCurr& curr = GetOriginCurr(actor);
+	const AnimCurr& curr = GetOriginCurr(actor.get());
 	return curr.FetchChildByName(name, actor);
 }
 
-SprPtr AnimSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
+SprPtr AnimSprite::FetchChildByIdx(int idx, const ActorConstPtr& actor) const
 {
-	const AnimCurr& curr = GetOriginCurr(actor);
+	const AnimCurr& curr = GetOriginCurr(actor.get());
 	return curr.FetchChildByIdx(idx);
 }
 
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	auto& actor = params.actor;
-	const AnimCurr& curr = GetOriginCurr(actor);
+	const AnimCurr& curr = GetOriginCurr(actor.get());
 	return curr.Traverse(visitor, params);
 }
 
-AnimCurr& AnimSprite::GetOriginCurr(const ActorConstPtr& actor)
+AnimCurr& AnimSprite::GetOriginCurr(const Actor* actor)
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 	return anim_actor ? anim_actor->GetState().GetOrigin() : m_state.GetOrigin();
 }
 
-AnimCurr& AnimSprite::GetUpdateCurr(const ActorConstPtr& actor)
+AnimCurr& AnimSprite::GetUpdateCurr(const Actor* actor)
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 #ifdef S2_MULTITHREAD
 	return anim_actor ? anim_actor->GetState().GetUpdate() : m_state.GetUpdate();
 #else
@@ -154,10 +152,9 @@ AnimCurr& AnimSprite::GetUpdateCurr(const ActorConstPtr& actor)
 #endif // S2_MULTITHREAD
 }
 
-AnimCurr& AnimSprite::GetDrawCurr(const ActorConstPtr& actor)
+AnimCurr& AnimSprite::GetDrawCurr(const Actor* actor)
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 #ifdef S2_MULTITHREAD
 	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
 #else
@@ -165,17 +162,15 @@ AnimCurr& AnimSprite::GetDrawCurr(const ActorConstPtr& actor)
 #endif // S2_MULTITHREAD
 }
 
-const AnimCurr& AnimSprite::GetOriginCurr(const ActorConstPtr& actor) const
+const AnimCurr& AnimSprite::GetOriginCurr(const Actor* actor) const
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 	return anim_actor ? anim_actor->GetState().GetOrigin() : m_state.GetOrigin();
 }
 
-const AnimCurr& AnimSprite::GetUpdateCurr(const ActorConstPtr& actor) const
+const AnimCurr& AnimSprite::GetUpdateCurr(const Actor* actor) const
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 #ifdef S2_MULTITHREAD
 	return anim_actor ? anim_actor->GetState().GetUpdate() : m_state.GetUpdate();
 #else
@@ -183,10 +178,9 @@ const AnimCurr& AnimSprite::GetUpdateCurr(const ActorConstPtr& actor) const
 #endif // S2_MULTITHREAD
 }
 
-const AnimCurr& AnimSprite::GetDrawCurr(const ActorConstPtr& actor) const
+const AnimCurr& AnimSprite::GetDrawCurr(const Actor* actor) const
 {
-	auto& anim_actor = std::const_pointer_cast<AnimActor>(
-		S2_VI_PTR_DOWN_CAST<const AnimActor>(actor));
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
 #ifdef S2_MULTITHREAD
 	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
 #else
@@ -202,9 +196,9 @@ void AnimSprite::SetStartRandom(const UpdateParams& up, bool random)
 	}
 }
 
-int AnimSprite::GetFrame(const ActorConstPtr& actor) const 
+int AnimSprite::GetFrame(const ActorConstPtr& actor) const
 { 
-	const AnimCurr& curr = GetOriginCurr(actor);
+	const AnimCurr& curr = GetOriginCurr(actor.get());
 	return curr.GetFrame();
 }
 
@@ -214,13 +208,13 @@ bool AnimSprite::SetFrame(const UpdateParams& up, int frame)
 		return false;
 	}
 
-	AnimCurr& curr = GetUpdateCurr(up.GetActor());
+	AnimCurr& curr = GetUpdateCurr(up.GetActor().get());
 	return curr.SetFrame(up, shared_from_this(), frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const ActorConstPtr& actor)
 {
-	AnimCurr& curr = GetOriginCurr(actor);
+	AnimCurr& curr = GetOriginCurr(actor.get());
 	curr.SetActive(active);
 }
 
@@ -230,7 +224,7 @@ void AnimSprite::RandomStartTime(const UpdateParams& up)
 	float p = (rand() / static_cast<float>(RAND_MAX));
 	start = static_cast<int>(start * p);
 
-	AnimCurr& curr = GetOriginCurr(up.GetActor());
+	AnimCurr& curr = GetOriginCurr(up.GetActor().get());
 	curr.SetFrame(up, shared_from_this(), start, m_fps);
 }
 

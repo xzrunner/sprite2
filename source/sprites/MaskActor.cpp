@@ -8,7 +8,7 @@ namespace s2
 MaskActor::MaskActor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: Actor(spr, parent) 
 {
-	sm::rect mask_aabb = spr->GetSymbol()->GetBounding(spr);
+	sm::rect mask_aabb = spr->GetSymbol()->GetBounding(spr.get());
 	GetAABB().SetStaticRect(mask_aabb);
 }
 

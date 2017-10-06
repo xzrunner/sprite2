@@ -30,22 +30,22 @@
 namespace s2
 {
 
-static void (*AFTER_SPR)(const SprConstPtr&, const RenderParams&);
+static void (*AFTER_SPR)(const Sprite*, const RenderParams&);
 
-static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const SprConstPtr& spr, RenderParams& child);
+static void (*PREPARE_REDNER_PARAMS)(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 static void (*DTEX_SYM_INSERT)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h);
 static const float* (*DTEX_SYM_QUERY)(uint64_t uid, int& tex_id, int& block_id);
 
-static uint64_t (*GET_SYM_UID)(const SymConstPtr&);
-static uint64_t (*GET_SPR_UID)(const SprConstPtr&);
-static uint64_t (*GET_ACTOR_UID)(const ActorConstPtr&);
+static uint64_t (*GET_SYM_UID)(const Symbol&);
+static uint64_t (*GET_SPR_UID)(const Sprite*);
+static uint64_t (*GET_ACTOR_UID)(const Actor*);
 
-void DrawNode::InitCB(void (*after_spr)(const SprConstPtr&, const RenderParams&))
+void DrawNode::InitCB(void (*after_spr)(const Sprite*, const RenderParams&))
 {
 	AFTER_SPR = after_spr;
 }
 
-void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const SprConstPtr& spr, RenderParams& child),
+void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, const Sprite* spr, RenderParams& child),
 						  void (*dtex_sym_insert)(uint64_t uid, const sm::rect& bounding, int tex_id, int tex_w, int tex_h),
 						  const float* dtex_sym_query(uint64_t uid, int& tex_id, int& block_id))
 {
@@ -54,16 +54,16 @@ void DrawNode::InitDTexCB(void (*prepare_render_params)(const RenderParams& rp, 
 	DTEX_SYM_QUERY  = dtex_sym_query;
 }
 
-void DrawNode::InitUIDCB(uint64_t (*get_sym_uid)(const SymConstPtr&),
-						 uint64_t (*get_spr_uid)(const SprConstPtr&),
-						 uint64_t (*get_actor_uid)(const ActorConstPtr&))
+void DrawNode::InitUIDCB(uint64_t (*get_sym_uid)(const Symbol&),
+						 uint64_t (*get_spr_uid)(const Sprite*),
+						 uint64_t (*get_actor_uid)(const Actor*))
 {
 	GET_SYM_UID = get_sym_uid;
 	GET_SPR_UID = get_spr_uid;
 	GET_ACTOR_UID = get_actor_uid;
 }
 
-bool DrawNode::Prepare(const RenderParams& rp, const SprConstPtr& spr, RenderParams& child)
+bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child)
 {
 	if (!spr) {
 		child = rp;
@@ -81,15 +81,15 @@ bool DrawNode::Prepare(const RenderParams& rp, const SprConstPtr& spr, RenderPar
 	}
 
 	if (rp.min_edge > 0) {
-		if (IsSmall(spr, actor, rp.min_edge)) {
+		if (IsSmall(spr, actor.get(), rp.min_edge)) {
 			return false;
 		}
 	}
 
 	child = rp;
 
-	Utility::PrepareColor(rp.color, spr, actor, child.color);
-	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
+	Utility::PrepareColor(rp.color, spr, actor.get(), child.color);
+	Utility::PrepareMat(rp.mt, spr, actor.get(), child.mt);
 
 	if (PREPARE_REDNER_PARAMS) {
 		PREPARE_REDNER_PARAMS(rp, spr, child);
@@ -98,7 +98,7 @@ bool DrawNode::Prepare(const RenderParams& rp, const SprConstPtr& spr, RenderPar
 	return true;
 }
 
-RenderReturn DrawNode::Draw(const SprConstPtr& spr, const RenderParams& rp)
+RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 {
 	if (!rp.IsDisableCulling() && CullingTestOutside(spr, rp)) {
 		return RENDER_OUTSIDE;
@@ -126,7 +126,7 @@ RenderReturn DrawNode::Draw(const SprConstPtr& spr, const RenderParams& rp)
 	return ret;
 }
 
-RenderReturn DrawNode::Draw(const SymConstPtr& sym, const RenderParams& rp,
+RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 							const sm::vec2& pos, float angle, 
 							const sm::vec2& scale, const sm::vec2& shear)
 {
@@ -164,14 +164,14 @@ RenderReturn DrawNode::Draw(const SymConstPtr& sym, const RenderParams& rp,
  		}
  	}
  
- 	RenderReturn ret = sym->DrawTree(*rp_child);
+ 	RenderReturn ret = sym.DrawTree(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }
 
-RenderReturn DrawNode::Draw(const SymConstPtr& sym, const RenderParams& rp, const S2_MAT& _mt)
+RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_MAT& _mt)
 {
 	S2_MAT mt = _mt * rp.mt;
 
@@ -205,14 +205,14 @@ RenderReturn DrawNode::Draw(const SymConstPtr& sym, const RenderParams& rp, cons
 		}
 	}
 
-	RenderReturn ret = sym->DrawTree(*rp_child);
+	RenderReturn ret = sym.DrawTree(*rp_child);
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }
 
-RenderReturn DrawNode::DrawAABB(const SprConstPtr& spr, const RenderParams& rp, const Color& col)
+RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
 {
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
@@ -224,7 +224,7 @@ RenderReturn DrawNode::DrawAABB(const SprConstPtr& spr, const RenderParams& rp, 
 	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
 
 	std::vector<sm::vec2> vertices(4);
-	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
 	vertices[1] = sm::vec2(rect.xmin, rect.ymax);
 	vertices[2] = sm::vec2(rect.xmax, rect.ymax);
@@ -243,7 +243,7 @@ RenderReturn DrawNode::DrawAABB(const SprConstPtr& spr, const RenderParams& rp, 
 	return RENDER_OK;
 }
 
-bool DrawNode::CullingTestOutside(const SprConstPtr& spr, const RenderParams& rp)
+bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 {
 	if (rp.IsDisableCulling()) {
 		return false;
@@ -256,11 +256,11 @@ bool DrawNode::CullingTestOutside(const SprConstPtr& spr, const RenderParams& rp
 	}
 
 	sm::vec2 r_min, r_max;
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
 	r_min.Set(r.xmin, r.ymin);
 	r_max.Set(r.xmax, r.ymax);
 	S2_MAT mat;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
+	Utility::PrepareMat(rp.mt, spr, rp.actor.get(), mat);
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
@@ -293,7 +293,7 @@ bool DrawNode::CullingTestOutside(const SprConstPtr& spr, const RenderParams& rp
 	}
 }
 
-RenderReturn DrawNode::DrawSprToRT(const SprConstPtr& spr, const RenderParams& rp, RenderTarget* rt)
+RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -319,16 +319,16 @@ RenderReturn DrawNode::DrawSprToRT(const SprConstPtr& spr, const RenderParams& r
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprFromRT(const SprConstPtr& spr, const RenderParams& rp, const float* texcoords, int tex_id)
+RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
 	vertices[0] = sm::vec2(r.xmin, r.ymin);
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);
 	vertices[3] = sm::vec2(r.xmin, r.ymax);
 	S2_MAT mt;
-	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
+	Utility::PrepareMat(rp.mt, spr, rp.actor.get(), mt);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}
@@ -343,7 +343,7 @@ RenderReturn DrawNode::DrawSprFromRT(const SprConstPtr& spr, const RenderParams&
 	return RENDER_OK;
 }
 
-RenderReturn DrawNode::DrawSymToRT(const SymConstPtr& sym, RenderTarget* rt)
+RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -364,7 +364,7 @@ RenderReturn DrawNode::DrawSymToRT(const SymConstPtr& sym, RenderTarget* rt)
 	return ret;
 }
 
-RenderReturn DrawNode::DTexCacheSym(const SymConstPtr& sym)
+RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -388,19 +388,19 @@ RenderReturn DrawNode::DTexCacheSym(const SymConstPtr& sym)
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	DTEX_SYM_INSERT(GET_SYM_UID(sym), sym->GetBounding(), rt->GetTexID(), rt->Width(), rt->Height());
+	DTEX_SYM_INSERT(GET_SYM_UID(sym), sym.GetBounding(), rt->GetTexID(), rt->Width(), rt->Height());
 
 	RT->Return(rt);
 
 	return ret;
 }
 
-const float* DrawNode::DTexQuerySym(const SymConstPtr& sym, int& tex_id, int& block_id)
+const float* DrawNode::DTexQuerySym(const Symbol& sym, int& tex_id, int& block_id)
 {
 	return DTEX_SYM_QUERY(GET_SYM_UID(sym), tex_id, block_id);
 }
 
-RenderReturn DrawNode::DTexCacheSpr(const SprConstPtr& spr, const RenderParams& rp)
+RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -424,8 +424,8 @@ RenderReturn DrawNode::DTexCacheSpr(const SprConstPtr& spr, const RenderParams& 
 
 	if (loading_finished) 
 	{
-		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
-		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor);		
+		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor.get()) : GET_SPR_UID(spr);
+		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
 		DTEX_SYM_INSERT(uid, bounding, rt->GetTexID(), rt->Width(), rt->Height());
 		ret |= RENDER_UNKNOWN;
 	}
@@ -439,10 +439,10 @@ RenderReturn DrawNode::DTexCacheSpr(const SprConstPtr& spr, const RenderParams& 
 	return ret;
 }
 
-RenderReturn DrawNode::DTexQuerySpr(const SprConstPtr& spr, const RenderParams& rp)
+RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
 	int tex_id, block_id;
-	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
+	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor.get()) : GET_SPR_UID(spr);
 	const float* texcoords = DTEX_SYM_QUERY(uid, tex_id, block_id);
 	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {
@@ -454,7 +454,7 @@ RenderReturn DrawNode::DTexQuerySpr(const SprConstPtr& spr, const RenderParams& 
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImpl(const SprConstPtr& spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 {
 	const RenderShader& spr_s = spr->GetShader();
 
@@ -573,7 +573,7 @@ RenderReturn DrawNode::DrawSprImpl(const SprConstPtr& spr, const RenderParams& r
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImplFinal(const SprConstPtr& spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
 {
 // 	// for debug
 // 	if (spr->GetSymbol()->GetID() == 1079524) {
@@ -594,8 +594,8 @@ RenderReturn DrawNode::DrawSprImplFinal(const SprConstPtr& spr, const RenderPara
 	return ret;
 }
 
-bool DrawNode::IsSmall(const SprConstPtr& spr, 
-	                   const ActorConstPtr& actor, 
+bool DrawNode::IsSmall(const Sprite* spr, 
+	                   const Actor* actor, 
 	                   int min_edge)
 {
 	if (actor) {

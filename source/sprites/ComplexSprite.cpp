@@ -69,7 +69,7 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetActionChildren(GetAction(up.GetActor()));
 	for (auto& child : children) {
-		up_child->SetActor(child->QueryActor(up.GetActor()));
+		up_child->SetActor(child->QueryActor(up.GetActor().get()));
 		child->OnMessage(*up_child, msg);
 	}
 
@@ -100,7 +100,7 @@ bool ComplexSprite::Update(const UpdateParams& up)
 		GetActionChildren(GetAction(actor));
 	for (auto& child : children) 
 	{
-		up_child->SetActor(child->QueryActor(actor));
+		up_child->SetActor(child->QueryActor(actor.get()));
 		if (child->Update(*up_child)) {
 			dirty = true;
 		}
@@ -145,7 +145,7 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 		for (int i = 0, n = children.size(); i < n; ++i) 
 		{
 			auto& child = children[i];
-			cp.actor = child->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -154,7 +154,7 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 		for (int i = children.size() - 1; i >= 0; --i) 
 		{
 			auto& child = children[i];
-			cp.actor = child->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}

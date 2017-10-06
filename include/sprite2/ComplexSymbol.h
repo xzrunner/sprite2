@@ -22,8 +22,8 @@ public:
 	 */
 	virtual int Type() const;
 	virtual void Traverse(const SymbolVisitor& visitor);
-	virtual RenderReturn DrawTree(const RenderParams& rp, const SprConstPtr& spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const;
+	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
 	const std::vector<SprPtr>& GetActionChildren(int action) const;
@@ -57,12 +57,12 @@ public:
 	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const SprConstPtr& spr = nullptr, const ActorConstPtr& actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 private:
-	sm::rect CalcAABB(const SprConstPtr& spr, const ActorConstPtr& actor) const;
+	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
-	int GetAction(const SprConstPtr& spr, const ActorConstPtr& actor) const;
+	int GetAction(const Sprite* spr, const Actor* actor) const;
 
 protected:
 	std::vector<SprPtr> m_children;

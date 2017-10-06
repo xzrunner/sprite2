@@ -57,7 +57,7 @@ void Joint::Scale(const sm::vec2& scale)
 RenderReturn Joint::Draw(const RenderParams& rp) const
 {
 	if (m_skin.spr) {
-		return DrawNode::Draw(m_skin.spr, rp);
+		return DrawNode::Draw(m_skin.spr.get(), rp);
 	} else {
 		return RENDER_NO_DATA;
 	}

@@ -31,7 +31,7 @@ int ModelSymbol::Type() const
 	return SYM_MODEL;
 }
 
-RenderReturn ModelSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn ModelSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 // 	if (!spr) {
 // 		return;
@@ -71,7 +71,7 @@ void ModelSymbol::SetModel(m3::Model* model)
 	cu::RefCountObjAssign(m_model, model);
 }
 
-sm::rect ModelSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect ModelSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	// empty
 	return sm::rect();

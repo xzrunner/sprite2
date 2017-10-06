@@ -21,16 +21,16 @@ class RenderTarget;
 class DrawMask
 {
 public:
-	static RenderReturn Draw(const SprConstPtr& base, const SprConstPtr& mask, const RenderParams& rp);
+	static RenderReturn Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 //	static RenderReturn DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp);
 
 private:
-	static RenderReturn DrawBaseToRT(RenderTarget* rt, const SprConstPtr& base,
+	static RenderReturn DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 		const ActorConstPtr& actor, const RenderParams& rp);
-	static RenderReturn DrawMaskToRT(RenderTarget* rt, const SprConstPtr& mask,
+	static RenderReturn DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
 		const ActorConstPtr& actor, const RenderParams& rp);
 
-	static RenderReturn DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const SprConstPtr& mask, const S2_MAT& mt);
+	static RenderReturn DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt);
 
 }; // DrawMask
 

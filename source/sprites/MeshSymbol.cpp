@@ -48,7 +48,7 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
@@ -72,7 +72,7 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 // 	shader->SetColor(p.color.GetMulABGR(), p.color.GetAddABGR());
 // 	shader->SetColorMap(p.color.GetMapRABGR(), p.color.GetMapGABGR(), p.color.GetMapBABGR());
 
-	auto& mesh_spr = S2_VI_PTR_DOWN_CAST<const MeshSprite>(spr);
+	auto mesh_spr = S2_VI_DOWN_CAST<const MeshSprite*>(spr);
  	if (mesh_spr) {
 		const pm::MeshTransform& mtrans = mesh_spr->GetMeshTrans();
 		m_mesh->LoadFromTransform(mtrans);
@@ -98,13 +98,13 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 	return ret;
 }
 
-RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_mesh) {
 		return RENDER_NO_DATA;
 	}
 
-	auto& mesh_spr = S2_VI_PTR_DOWN_CAST<const MeshSprite>(spr);
+	auto mesh_spr = S2_VI_DOWN_CAST<const MeshSprite*>(spr);
 	if (mesh_spr) {
 		const pm::MeshTransform& mtrans = mesh_spr->GetMeshTrans();
 		m_mesh->LoadFromTransform(mtrans);
@@ -142,7 +142,7 @@ void MeshSymbol::UpdateMesh(const rg_tl_deform_state* deform_state, const float*
  	}
 }
 
-sm::rect MeshSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect MeshSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (m_mesh) {
 		return m_mesh->GetRegion();

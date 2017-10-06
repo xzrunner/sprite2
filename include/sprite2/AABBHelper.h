@@ -17,12 +17,11 @@ class Actor;
 class AABBHelper
 {
 public:
-	static sm::rect CalcAABB(const std::vector<SprPtr>& children, 
-		const ActorConstPtr& parent);
+	static sm::rect CalcAABB(const std::vector<SprPtr>& children, const Actor* parent);
 
 private:
 	static void UpdateChildrenAABBTight(const std::vector<SprPtr>& children, 
-		const ActorConstPtr& parent, const sm::rect& parent_aabb);
+		const Actor* parent, const sm::rect& parent_aabb);
 
 }; // AABBHelper
 

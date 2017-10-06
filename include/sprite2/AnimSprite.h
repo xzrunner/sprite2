@@ -26,18 +26,18 @@ public:
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
 	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return true; }
-	virtual bool AutoUpdate(const ActorConstPtr& actor);
+	virtual bool AutoUpdate(const Actor* actor);
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
-	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
+	virtual SprPtr FetchChildByIdx(int idx, const ActorConstPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	AnimCurr& GetOriginCurr(const ActorConstPtr& actor);
-	AnimCurr& GetUpdateCurr(const ActorConstPtr& actor);
-	AnimCurr& GetDrawCurr(const ActorConstPtr& actor);
+	AnimCurr& GetOriginCurr(const Actor* actor);
+	AnimCurr& GetUpdateCurr(const Actor* actor);
+	AnimCurr& GetDrawCurr(const Actor* actor);
 
-	const AnimCurr& GetOriginCurr(const ActorConstPtr& actor) const;
-	const AnimCurr& GetUpdateCurr(const ActorConstPtr& actor) const;
-	const AnimCurr& GetDrawCurr(const ActorConstPtr& actor) const;
+	const AnimCurr& GetOriginCurr(const Actor* actor) const;
+	const AnimCurr& GetUpdateCurr(const Actor* actor) const;
+	const AnimCurr& GetDrawCurr(const Actor* actor) const;
 
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }

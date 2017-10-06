@@ -605,7 +605,7 @@ void ProxyHelper::SprGetProxyChildren(const SprConstPtr& spr, std::vector<ActorP
 	actors.reserve(actors.size() + items.size());
 	for (int i = 0, n = items.size(); i < n; ++i) 
 	{
-		auto child_actor = items[i].second->QueryActor(items[i].first);
+		auto child_actor = items[i].second->QueryActor(items[i].first.get());
 		if (child_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 			SprGetProxyChildren(child_actor->GetSpr(), actors);
 		} else {
@@ -684,12 +684,12 @@ bool ProxyHelper::ActorGetAABB(const ActorPtr& actor, sm::rect& aabb)
 			return false;
 		}
 		sm::rect ret;
-		if (!ActorGetAABB(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetAABB(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::rect caabb;
-			if (!ActorGetAABB(items[i].second->QueryActor(items[i].first), caabb) || caabb != ret) {
+			if (!ActorGetAABB(items[i].second->QueryActor(items[i].first.get()), caabb) || caabb != ret) {
 				return false;
 			}
 		}
@@ -727,12 +727,12 @@ bool ProxyHelper::ActorGetPos(const ActorPtr& actor, sm::vec2& pos)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetPos(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetPos(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cpos;
-			if (!ActorGetPos(items[i].second->QueryActor(items[i].first), cpos) || cpos != ret) {
+			if (!ActorGetPos(items[i].second->QueryActor(items[i].first.get()), cpos) || cpos != ret) {
 				return false;
 			}
 		}
@@ -754,7 +754,7 @@ void ProxyHelper::ActorSetPos(ActorPtr& actor, const sm::vec2& pos)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetPos(const_cast<ActorPtr&>(child_actor), pos);
 		}
 	} 
@@ -776,12 +776,12 @@ bool ProxyHelper::ActorGetAngle(const ActorPtr& actor, float& angle)
 			return false;
 		}
 		float ret;
-		if (!ActorGetAngle(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetAngle(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			float cangle;
-			if (!ActorGetAngle(items[i].second->QueryActor(items[i].first), cangle) || cangle != ret) {
+			if (!ActorGetAngle(items[i].second->QueryActor(items[i].first.get()), cangle) || cangle != ret) {
 				return false;
 			}
 		}
@@ -803,7 +803,7 @@ void ProxyHelper::ActorSetAngle(ActorPtr& actor, float angle)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetAngle(const_cast<ActorPtr&>(child_actor), angle);
 		}
 	} 
@@ -825,12 +825,12 @@ bool ProxyHelper::ActorGetScale(const ActorPtr& actor, sm::vec2& scale)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetScale(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetScale(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cscale;
-			if (!ActorGetScale(items[i].second->QueryActor(items[i].first), cscale) || cscale != ret) {
+			if (!ActorGetScale(items[i].second->QueryActor(items[i].first.get()), cscale) || cscale != ret) {
 				return false;
 			}
 		}
@@ -852,7 +852,7 @@ void ProxyHelper::ActorSetScale(ActorPtr& actor, const sm::vec2& scale)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetScale(const_cast<ActorPtr&>(child_actor), scale);
 		}
 	} 
@@ -887,13 +887,13 @@ bool ProxyHelper::ActorGetWorldPos(const ActorPtr& actor, sm::vec2& pos)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetWorldPos(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetWorldPos(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		// FIXME
 		// for (int i = 1, n = items.size(); i < n; ++i) {
 		// 	sm::vec2 cpos;
-		// 	if (!ActorGetWorldPos(items[i].second->QueryActor(items[i].first), cpos) || cpos != ret) {
+		// 	if (!ActorGetWorldPos(items[i].second->QueryActor(items[i].first.get()), cpos) || cpos != ret) {
 		// 		return false;
 		// 	}
 		// }
@@ -920,12 +920,12 @@ bool ProxyHelper::ActorGetWorldAngle(const ActorPtr& actor, float& angle)
 			return false;
 		}
 		float ret;
-		if (!ActorGetWorldAngle(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetWorldAngle(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			float cangle;
-			if (!ActorGetWorldAngle(items[i].second->QueryActor(items[i].first), cangle) || cangle != ret) {
+			if (!ActorGetWorldAngle(items[i].second->QueryActor(items[i].first.get()), cangle) || cangle != ret) {
 				return false;
 			}
 		}
@@ -954,12 +954,12 @@ bool ProxyHelper::ActorGetWorldScale(const ActorPtr& actor, sm::vec2& scale)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetWorldScale(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetWorldScale(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cscale;
-			if (!ActorGetWorldScale(items[i].second->QueryActor(items[i].first), cscale) || cscale != ret) {
+			if (!ActorGetWorldScale(items[i].second->QueryActor(items[i].first.get()), cscale) || cscale != ret) {
 				return false;
 			}
 		}
@@ -986,12 +986,12 @@ bool ProxyHelper::ActorGetVisible(const ActorPtr& actor, bool& visible)
 			return false;
 		}
 		bool ret;
-		if (!ActorGetVisible(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetVisible(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			bool cvisible;
-			if (!ActorGetVisible(items[i].second->QueryActor(items[i].first), cvisible) || cvisible != ret) {
+			if (!ActorGetVisible(items[i].second->QueryActor(items[i].first.get()), cvisible) || cvisible != ret) {
 				return false;
 			}
 		}
@@ -1013,7 +1013,7 @@ void ProxyHelper::ActorSetVisible(ActorPtr& actor, bool visible)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetVisible(const_cast<ActorPtr&>(child_actor), visible);
 		}
 	} 
@@ -1037,12 +1037,12 @@ bool ProxyHelper::ActorGetEditable(const ActorPtr& actor, bool& editable)
 			return false;
 		}
 		bool ret;
-		if (!ActorGetEditable(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetEditable(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			bool ceditable;
-			if (!ActorGetEditable(items[i].second->QueryActor(items[i].first), ceditable) || ceditable != ret) {
+			if (!ActorGetEditable(items[i].second->QueryActor(items[i].first.get()), ceditable) || ceditable != ret) {
 				return false;
 			}
 		}
@@ -1064,7 +1064,7 @@ void ProxyHelper::ActorSetEditable(ActorPtr& actor, bool editable)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetEditable(const_cast<ActorPtr&>(child_actor), editable);
 		}
 	} 
@@ -1086,12 +1086,12 @@ bool ProxyHelper::ActorGetColMul(const ActorPtr& actor, uint32_t& mul)
 			return false;
 		}
 		uint32_t ret;
-		if (!ActorGetColMul(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetColMul(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t cmul;
-			if (!ActorGetColMul(items[i].second->QueryActor(items[i].first), cmul) || cmul != ret) {
+			if (!ActorGetColMul(items[i].second->QueryActor(items[i].first.get()), cmul) || cmul != ret) {
 				return false;
 			}
 		}
@@ -1113,7 +1113,7 @@ void ProxyHelper::ActorSetColMul(ActorPtr& actor, uint32_t mul)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetColMul(const_cast<ActorPtr&>(child_actor), mul);
 		}
 	} 
@@ -1140,12 +1140,12 @@ bool ProxyHelper::ActorGetColAdd(const ActorPtr& actor, uint32_t& add)
 			return false;
 		}
 		uint32_t ret;
-		if (!ActorGetColAdd(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetColAdd(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t cadd;
-			if (!ActorGetColAdd(items[i].second->QueryActor(items[i].first), cadd) || cadd != ret) {
+			if (!ActorGetColAdd(items[i].second->QueryActor(items[i].first.get()), cadd) || cadd != ret) {
 				return false;
 			}
 		}
@@ -1167,7 +1167,7 @@ void ProxyHelper::ActorSetColAdd(ActorPtr& actor, uint32_t add)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetColAdd(const_cast<ActorPtr&>(child_actor), add);
 		}
 	} 
@@ -1194,12 +1194,12 @@ bool ProxyHelper::ActorGetColMap(const ActorPtr& actor, uint32_t& rmap, uint32_t
 			return false;
 		}
 		uint32_t ret_r, ret_g, ret_b;
-		if (!ActorGetColMap(items[0].second->QueryActor(items[0].first), ret_r, ret_g, ret_b)) {
+		if (!ActorGetColMap(items[0].second->QueryActor(items[0].first.get()), ret_r, ret_g, ret_b)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t crmap, cgmap, cbmap;
-			if (!ActorGetColMap(items[i].second->QueryActor(items[i].first), crmap, cgmap, cbmap) || 
+			if (!ActorGetColMap(items[i].second->QueryActor(items[i].first.get()), crmap, cgmap, cbmap) || 
 				crmap != ret_r || cgmap != ret_g || cbmap != ret_b) {
 				return false;
 			}
@@ -1226,7 +1226,7 @@ void ProxyHelper::ActorSetColMap(ActorPtr& actor, uint32_t rmap, uint32_t gmap, 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetColMap(const_cast<ActorPtr&>(child_actor), rmap, gmap, bmap);
 		}
 	} 
@@ -1253,7 +1253,7 @@ void ProxyHelper::ActorSetFilter(ActorPtr& actor, int mode)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetFilter(const_cast<ActorPtr&>(child_actor), mode);
 		}
 	} 
@@ -1286,12 +1286,12 @@ bool ProxyHelper::ActorGetFrame(const ActorPtr& actor, int& frame)
 			return false;
 		}
 		int ret;
-		if (!ActorGetFrame(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetFrame(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			int cframe;
-			if (!ActorGetFrame(items[i].second->QueryActor(items[i].first), cframe) || cframe != ret) {
+			if (!ActorGetFrame(items[i].second->QueryActor(items[i].first.get()), cframe) || cframe != ret) {
 				return false;
 			}
 		}
@@ -1319,7 +1319,7 @@ void ProxyHelper::ActorSetFrame(ActorPtr& actor, int frame)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetFrame(const_cast<ActorPtr&>(child_actor), frame);
 		}
 	} 
@@ -1349,12 +1349,12 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 			return false;
 		}
 		int ret;
-		if (!ActorGetComponentCount(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetComponentCount(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			int ccount;
-			if (!ActorGetComponentCount(items[i].second->QueryActor(items[i].first), ccount) || ccount != ret) {
+			if (!ActorGetComponentCount(items[i].second->QueryActor(items[i].first.get()), ccount) || ccount != ret) {
 				return false;
 			}
 		}
@@ -1373,7 +1373,7 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 	{
 		auto& spr = S2_VI_PTR_DOWN_CAST<AnimSprite>(
 			std::const_pointer_cast<Sprite>(actor->GetSpr()));
-		const AnimCurr& curr = spr->GetOriginCurr(actor);
+		const AnimCurr& curr = spr->GetOriginCurr(actor.get());
 		count = curr.GetSlotSize();
 		return true;
 	}
@@ -1391,7 +1391,7 @@ void ProxyHelper::ActorSetAction(ActorPtr& actor, const std::string& action)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetAction(const_cast<ActorPtr&>(child_actor), action);
 		}
 	} 
@@ -1477,12 +1477,12 @@ bool ProxyHelper::ActorGetText(const Actor* actor, std::string& text)
 			return false;
 		}
 		std::string ret;
-		if (!ActorGetText(items[0].second->QueryActor(items[0].first), ret)) {
+		if (!ActorGetText(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			std::string ctext;
-			if (!ActorGetText(items[i].second->QueryActor(items[i].first), ctext) || ctext != ret) {
+			if (!ActorGetText(items[i].second->QueryActor(items[i].first.get()), ctext) || ctext != ret) {
 				return false;
 			}
 		}
@@ -1509,7 +1509,7 @@ void ProxyHelper::ActorSetText(ActorPtr& actor, const std::string& text)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorSetText(const_cast<ActorPtr&>(child_actor), text);
 		}
 	} 
@@ -1528,7 +1528,7 @@ void ProxyHelper::ActorScale9Resize(ActorPtr& actor, int w, int h)
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first);
+			const ActorPtr& child_actor = items[i].second->QueryActor(items[i].first.get());
 			ActorScale9Resize(const_cast<ActorPtr&>(child_actor), w, h);
 		}
 	} 

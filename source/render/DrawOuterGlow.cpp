@@ -16,7 +16,7 @@
 namespace s2
 {
 
-RenderReturn DrawOuterGlow::Draw(const SprConstPtr& spr, const RenderParams& rp, int iterations)
+RenderReturn DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatPingPong::Instance()->AddCount(StatPingPong::OUTER_GLOW);

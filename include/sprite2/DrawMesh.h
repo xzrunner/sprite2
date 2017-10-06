@@ -33,8 +33,8 @@ public:
 private:
 	static RenderReturn DrawOnePass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
-	static RenderReturn DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const SymConstPtr& sym);
-	static RenderReturn DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const SymConstPtr& sym);
+	static RenderReturn DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const Symbol& sym);
+	static RenderReturn DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
 	static RenderReturn DrawRT2Screen(RenderTarget* rt, const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt);
 
 }; // DrawMesh

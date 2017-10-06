@@ -19,7 +19,7 @@ DrawBlend::DrawBlend()
 {
 }
 
-RenderReturn DrawBlend::DrawSpr2RT(const SprConstPtr& spr, const RenderParams& rp, bool too_large) const
+RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
@@ -49,7 +49,7 @@ RenderReturn DrawBlend::DrawSpr2RT(const SprConstPtr& spr, const RenderParams& r
 	return ret;
 }
 
-RenderReturn DrawBlend::DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr, 
+RenderReturn DrawBlend::DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
 										   const RenderParams& rp, bool reset_color) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();

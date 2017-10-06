@@ -287,7 +287,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 	p.actor = params.actor;
 	if (init_mat) {
-		Utility::PrepareMat(params.mt, shared_from_this(), params.actor, p.mt);
+		Utility::PrepareMat(params.mt, this, params.actor.get(), p.mt);
 	}
 
 	VisitResult ret = VISIT_OVER;
@@ -321,7 +321,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	return ret;
 }
 
-const BoundingBox* Sprite::GetBounding(const ActorConstPtr& actor) const
+const BoundingBox* Sprite::GetBounding(const Actor* actor) const
 { 
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
@@ -330,13 +330,13 @@ const BoundingBox* Sprite::GetBounding(const ActorConstPtr& actor) const
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
-void Sprite::UpdateBounding(const ActorConstPtr& actor) const
+void Sprite::UpdateBounding(const Actor* actor) const
 {
 	if (!m_sym) {
 		return;
 	}
 
-	sm::rect rect = m_sym->GetBounding(shared_from_this(), actor);
+	sm::rect rect = m_sym->GetBounding(this, actor);
 	if (!rect.IsValid()) {
 		return;
 	}

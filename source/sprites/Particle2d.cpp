@@ -45,7 +45,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 #endif // S2_MATRIX_FIX
 	}
 
-	SymPtr s2_sym(static_cast<Symbol*>(sym));
+	Symbol* s2_sym(static_cast<Symbol*>(sym));
 
 	Color mul, add;
 	memcpy(&mul, mul_col, sizeof(*mul_col));
@@ -56,7 +56,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 	rp.color.SetMul(mul);
 	rp.color.SetAdd(add);
 
-	DrawNode::Draw(s2_sym, rp, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
+	DrawNode::Draw(*s2_sym, rp, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 }
 
 void Particle2d::Init()

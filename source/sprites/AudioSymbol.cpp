@@ -38,7 +38,7 @@ int AudioSymbol::Type() const
 	return SYM_AUDIO;
 }
 
-sm::rect AudioSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect AudioSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	return sm::rect(); // empty
 }

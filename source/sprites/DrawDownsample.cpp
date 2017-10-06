@@ -18,7 +18,7 @@
 namespace s2
 {
 
-RenderReturn DrawDownsample::Draw(const SprConstPtr& spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	if (downsample <= 0) {
 		return RENDER_NO_DATA;
@@ -54,7 +54,7 @@ RenderReturn DrawDownsample::Draw(const SprConstPtr& spr, const RenderParams& rp
 	return RENDER_OK;
 }
 
-RenderReturn DrawDownsample::DrawSpr2RT(const SprConstPtr& spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -76,7 +76,7 @@ RenderReturn DrawDownsample::DrawSpr2RT(const SprConstPtr& spr, const RenderPara
 	return RENDER_OK;
 }
 
-RenderReturn DrawDownsample::DrawRT2Screen(int tex_id, const SprConstPtr& spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 

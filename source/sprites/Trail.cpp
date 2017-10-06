@@ -36,7 +36,7 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 	assert(ud);
 	const TrailRenderParams* rp = (static_cast<const TrailRenderParams*>(ud));
 
-	SymPtr s2_sym(static_cast<Symbol*>(sym));
+	Symbol* s2_sym(static_cast<Symbol*>(sym));
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	rp_child->Reset();
@@ -49,7 +49,7 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 	rp_child->color.SetMul(mul * rp->ct.GetMul());
 	rp_child->color.SetAdd(add + rp->ct.GetAdd());
 
-	DrawNode::Draw(s2_sym, *rp_child, sm::vec2(x, y), angle - SM_PI * 0.5f, sm::vec2(scale, scale));
+	DrawNode::Draw(*s2_sym, *rp_child, sm::vec2(x, y), angle - SM_PI * 0.5f, sm::vec2(scale, scale));
 
 	RenderParamsPool::Instance()->Push(rp_child); 
 }

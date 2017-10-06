@@ -40,7 +40,7 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
@@ -65,7 +65,7 @@ RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& sp
 	return ret;
 }
 
-RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_shape || !spr) {
 		return RENDER_NO_DATA;
@@ -76,7 +76,7 @@ RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 	return RENDER_OK;
 }
 
-sm::rect ShapeSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect ShapeSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (m_shape) {
 		return m_shape->GetBounding();

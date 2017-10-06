@@ -23,7 +23,7 @@ ActorPtr ActorFactory::Create(const ActorConstPtr& parent,
 {
 	assert(child);
 
-	auto actor = child->QueryActor(parent);
+	auto actor = child->QueryActor(parent.get());
 	if (actor) {
 		return actor;
 	}

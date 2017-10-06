@@ -58,7 +58,7 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
@@ -73,22 +73,22 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 	}
 	RenderReturn ret = RENDER_OK;
 	if (m_base && m_mask) {
-		ret = DrawMask::Draw(m_base, m_mask, *rp_child);
+		ret = DrawMask::Draw(m_base.get(), m_mask.get(), *rp_child);
 //		ret = DrawMask::DrawByStencil(m_base, m_mask, *rp_child);
 	} else {
 		if (m_base) {
-			rp_child->actor = m_base->QueryActor(rp.actor);
-			ret = DrawNode::Draw(m_base, *rp_child);
+			rp_child->actor = m_base->QueryActor(rp.actor.get());
+			ret = DrawNode::Draw(m_base.get(), *rp_child);
 		} else if (m_mask) {
-			rp_child->actor = m_mask->QueryActor(rp.actor);
-			ret = DrawNode::Draw(m_mask, *rp_child);
+			rp_child->actor = m_mask->QueryActor(rp.actor.get());
+			ret = DrawNode::Draw(m_mask.get(), *rp_child);
 		}
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 
 	return ret;
 }
 
-RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, 
+RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, 
 	                              ft::FTList& ft, int pos) const
 {
 	if (m_base && m_mask)
@@ -106,7 +106,7 @@ RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	return RENDER_OK;
 }
 
-sm::rect MaskSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect MaskSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (m_mask) {
 		sm::rect b;

@@ -42,7 +42,7 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
@@ -61,7 +61,7 @@ RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const SprConstPtr&
 	}
 
 	if (spr) {
-		auto& sk_spr = S2_VI_PTR_DOWN_CAST<const SkeletonSprite>(spr);
+		auto sk_spr = S2_VI_DOWN_CAST<const SkeletonSprite*>(spr);
 		if (m_skeleton) {
 			sk_spr->GetPose().StoreToSkeleton(*m_skeleton);
 		}
@@ -73,13 +73,13 @@ RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const SprConstPtr&
 	return ret;
 }
 
-sm::rect SkeletonSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect SkeletonSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (!m_skeleton) {
 		return sm::rect(); // empty
 	}
 	if (spr) {
-		auto& sk_spr = S2_VI_PTR_DOWN_CAST<const SkeletonSprite>(spr);
+		auto sk_spr = S2_VI_DOWN_CAST<const SkeletonSprite*>(spr);
 		if (m_skeleton) {
 			sk_spr->GetPose().StoreToSkeleton(*m_skeleton);
 		}

@@ -55,7 +55,7 @@ public:
 
 	void Clear();
 
-	sm::rect CalcAABB(const ActorConstPtr& actor) const;
+	sm::rect CalcAABB(const Actor* actor) const;
 
 	void SetAnimCopy(const std::shared_ptr<AnimCopy>& copy);
 

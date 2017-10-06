@@ -59,7 +59,7 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 		for (int i = 0, n = grids.size(); i < n; ++i) 
 		{
 			auto& child = grids[i];
-			cp.actor = child->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -68,7 +68,7 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 		for (int i = grids.size() - 1; i >= 0; --i) 
 		{
 			auto& child = grids[i];
-			cp.actor = child->QueryActor(params.actor);
+			cp.actor = child->QueryActor(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}

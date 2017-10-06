@@ -23,12 +23,12 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 {
 }
 
-RenderReturn DrawPingPong::Draw(const SprConstPtr& spr, const RenderParams& rp) const
+RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
 	sm::rect sz;
-	spr->GetBounding(rp.actor)->CombineTo(sz);
+	spr->GetBounding(rp.actor.get())->CombineTo(sz);
 	const bool too_large = sz.Width() > RT->WIDTH || sz.Height() > RT->HEIGHT;
 
 	RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();
@@ -69,7 +69,7 @@ RenderReturn DrawPingPong::Draw(const SprConstPtr& spr, const RenderParams& rp) 
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const SprConstPtr& spr, 
+RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const Sprite* spr, 
 										 const RenderParams& rp, bool too_large) const
 {
 	RenderReturn ret = RENDER_OK;
@@ -81,7 +81,7 @@ RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const SprConstPtr& spr,
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr, 
+RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
 											  const RenderParams& rp, bool reset_color) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -117,7 +117,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 	} else {
 		RenderColor* col = RenderColorPool::Instance()->Pop();
-		Utility::PrepareColor(rp.color, spr, rp.actor, *col);
+		Utility::PrepareColor(rp.color, spr, rp.actor.get(), *col);
 		shader->SetColor(col->GetMulABGR(), col->GetAddABGR());
 		shader->SetColorMap(col->GetRMapABGR(),col->GetGMapABGR(), col->GetBMapABGR());
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
@@ -127,7 +127,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const SprConstPtr& spr
 	return RENDER_OK;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const SprConstPtr& spr,
+RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
@@ -153,7 +153,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const SprConstPtr& spr
 		shader->DrawQuad(vertices, texcoords, tex_id);
 	} else {
 		RenderColor* col = RenderColorPool::Instance()->Pop();
-		Utility::PrepareColor(rp.color, spr, rp.actor, *col);
+		Utility::PrepareColor(rp.color, spr, rp.actor.get(), *col);
 		shader->SetColor(col->GetMulABGR(), col->GetAddABGR());
 		shader->SetColorMap(col->GetRMapABGR(),col->GetGMapABGR(), col->GetBMapABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);

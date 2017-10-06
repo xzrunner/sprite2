@@ -54,7 +54,7 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr) const
+RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
@@ -79,7 +79,7 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 
 	float process = 1;
 	if (spr) {
-		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
+		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
 	RenderReturn ret = m_icon->Draw(*rp_child, process);
 
@@ -88,7 +88,7 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const SprConstPtr& spr
 	return ret;
 }
 
-RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const SprConstPtr& spr, ft::FTList& ft, int pos) const
+RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_icon) {
 		return RENDER_NO_DATA;
@@ -101,12 +101,12 @@ RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 
 	float process = 1;
 	if (spr) {
-		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
+		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
 	return m_icon->Draw(rp, process);
 }
 
-sm::rect IconSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr& actor, bool cache) const
+sm::rect IconSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	sm::rect r;
 	if (!m_icon) {
@@ -115,7 +115,7 @@ sm::rect IconSymbol::GetBoundingImpl(const SprConstPtr& spr, const ActorConstPtr
 
 	float process = 1;
 	if (spr) {
-		process = S2_VI_PTR_DOWN_CAST<const IconSprite>(spr)->GetProcess();
+		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
 	return m_icon->GetRegion(process);
 }

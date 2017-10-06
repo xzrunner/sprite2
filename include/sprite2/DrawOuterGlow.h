@@ -17,7 +17,7 @@ class RenderParams;
 class DrawOuterGlow
 {
 public:
-	static RenderReturn Draw(const SprConstPtr& spr, const RenderParams& rp, int iterations);
+	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, int iterations);
 
 }; // DrawOuterGlow
 

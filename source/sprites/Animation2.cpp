@@ -22,7 +22,7 @@ Animation2::Animation2()
 static void
 render_func(void* sym, float* mat, const void* ud) 
 {
-	SymPtr s2_sym(static_cast<Symbol*>(sym));
+	Symbol* s2_sym(static_cast<Symbol*>(sym));
 
 	const RenderParams* params = static_cast<const RenderParams*>(ud);
 
@@ -39,7 +39,7 @@ render_func(void* sym, float* mat, const void* ud)
 	memcpy(m.x, mat, sizeof(m.x));
 #endif // S2_MATRIX_FIX
 
-	DrawNode::Draw(s2_sym, *params, m);
+	DrawNode::Draw(*s2_sym, *params, m);
 }
 
 static void
@@ -54,18 +54,18 @@ debug_draw_func(float x, float y, uint32_t color)
 static void
 update_skin_func(void* sym, const rg_skeleton_pose* sk_pose) 
 {
-	SymPtr s2_sym(static_cast<Symbol*>(sym));
+	auto s2_sym = static_cast<Symbol*>(sym);
 	if (s2_sym->Type() == SYM_MESH) {
-		S2_VI_PTR_DOWN_CAST<MeshSymbol>(s2_sym)->UpdateMesh(sk_pose);
+		S2_VI_DOWN_CAST<MeshSymbol*>(s2_sym)->UpdateMesh(sk_pose);
 	}
 }
 
 static void
 update_mesh_func(void* sym, const rg_tl_deform_state* deform_state, const float* vertices) 
 {
-	SymPtr s2_sym(static_cast<Symbol*>(sym));
+	auto s2_sym = static_cast<Symbol*>(sym);
 	if (s2_sym->Type() == SYM_MESH) {
-		S2_VI_PTR_DOWN_CAST<MeshSymbol>(s2_sym)->UpdateMesh(deform_state, vertices);
+		S2_VI_DOWN_CAST<MeshSymbol*>(s2_sym)->UpdateMesh(deform_state, vertices);
 	}
 }
 

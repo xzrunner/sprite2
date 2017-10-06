@@ -77,7 +77,7 @@ bool ImageSprite::Update(const UpdateParams& up)
 	return false;
 }
 
-bool ImageSprite::AutoUpdate(const ActorConstPtr& actor)
+bool ImageSprite::AutoUpdate(const Actor* actor)
 {
 	// todo
 	return false;

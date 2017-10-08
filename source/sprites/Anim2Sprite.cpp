@@ -68,6 +68,15 @@ bool Anim2Sprite::Update(const UpdateParams& up)
 	return ret;
 }
 
+bool Anim2Sprite::AutoUpdate(const Actor* actor)
+{
+	bool ret = m_curr.Update();
+	if (ret) {
+		SetBoundingDirty(true);
+	}
+	return ret;
+}
+
 void Anim2Sprite::SetStaticTime(const UpdateParams& up, int static_time)
 {
 	if (!up.IsForce() && !IsInheritUpdate()) {

@@ -26,8 +26,9 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
 	void SetShape(std::unique_ptr<Shape> shape) { m_shape = std::move(shape); }
-	const std::unique_ptr<Shape>& GetShape() const { return m_shape; }
-	
+	const auto& GetShape() const { return m_shape; }
+	auto& GetShape() { return m_shape; }
+
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 

@@ -21,6 +21,8 @@ public:
 	 *    Sprite
 	 */
 	virtual bool Update(const UpdateParams& up);
+	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return true; }
+	virtual bool AutoUpdate(const Actor* actor);
 
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 

@@ -23,7 +23,9 @@ void AnchorActor::SetAnchor(const ActorPtr& anchor)
 		}
 		m_anchor.actor = anchor;
 		// cache spr
-		m_anchor.spr = anchor->GetSpr();
+		if (anchor) {
+			m_anchor.spr = anchor->GetSpr();
+		}
 	}
 
 	if (anchor) 

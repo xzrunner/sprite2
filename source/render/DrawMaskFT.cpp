@@ -34,13 +34,13 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 
 	ActorConstPtr base_actor = nullptr;
 	if (ft_base->IsDataSpr()) {
-		SprConstPtr spr(static_cast<const Sprite*>(ft_base->GetData()));
+		auto spr(ft_base->GetSpr());
 		if (!spr->IsVisible()) {
 			return RENDER_INVISIBLE;
 		}
 	} else {
-		ActorConstPtr actor(static_cast<const Actor*>(ft_base->GetData()));
-		if (!base_actor->IsVisible()) {
+		auto actor(ft_base->GetActor());
+		if (!actor->IsVisible()) {
 			return RENDER_INVISIBLE;
 		} else {
 			base_actor = actor;
@@ -49,13 +49,13 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 
 	ActorConstPtr mask_actor = nullptr;
 	if (ft_mask->IsDataSpr()) {
-		SprConstPtr spr(static_cast<const Sprite*>(ft_mask->GetData()));
+		auto spr(ft_mask->GetSpr());
 		if (!spr->IsVisible()) {
 			return RENDER_INVISIBLE;
 		}
 	} else {
-		ActorConstPtr actor(static_cast<const Actor*>(ft_mask->GetData()));
-		if (!mask_actor->IsVisible()) {
+		auto actor(ft_mask->GetActor());
+		if (!actor->IsVisible()) {
 			return RENDER_INVISIBLE;
 		} else {
 			mask_actor = actor;
@@ -175,9 +175,9 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_
 
 	const Symbol* sym = nullptr;
 	if (ft_n->IsDataSpr()) {
-		sym = static_cast<const Sprite*>(ft_n->GetData())->GetSymbol().get();
+		sym = ft_n->GetSpr()->GetSymbol().get();
 	} else {
-		sym = static_cast<const Actor*>(ft_n->GetData())->GetSpr()->GetSymbol().get();
+		sym = ft_n->GetActor()->GetSpr()->GetSymbol().get();
 	}
 
 	sm::vec2 vertices[4];

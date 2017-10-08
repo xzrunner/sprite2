@@ -603,6 +603,20 @@ void s2_spr_p3d_gc()
 }
 
 extern "C"
+void s2_spr_proxy_get_children(const void* actor, void* children[], int children_cap, int* count)
+{
+	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
+
+	std::vector<ActorPtr> actors;
+	ProxyHelper::SprGetProxyChildren(s2_actor->GetSpr(), actors);
+	int n = std::min(children_cap, static_cast<int>(actors.size()));
+	for (int i = 0; i < n; ++i) {
+		children[i] = ActorProxyPool::Instance()->Create(actors[i]);
+	}
+	*count = n;
+}
+
+extern "C"
 void s2_spr_set_dtex_enable(void* actor, bool enable)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);

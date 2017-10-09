@@ -26,51 +26,51 @@ public:
 	/* sprite                                                               */
 	/************************************************************************/
 
-	static bool SprGetPos(const SprPtr& spr, sm::vec2& pos);
-	static bool SprGetAngle(const SprPtr& spr, float& angle);
-	static bool SprGetScale(const SprPtr& spr, sm::vec2& scale);
+	static bool SprGetPos(const Sprite& spr, sm::vec2& pos);
+	static bool SprGetAngle(const Sprite& spr, float& angle);
+	static bool SprGetScale(const Sprite& spr, sm::vec2& scale);
 
-	static bool SprGetSymID(const SprPtr& spr, int& id);
-	static bool SprGetSymType(const SprPtr& spr, int& type);
+	static bool SprGetSymID(const Sprite& spr, int& id);
+	static bool SprGetSymType(const Sprite& spr, int& type);
 
-	static bool SprPointTest(const SprPtr& spr, const sm::vec2& pos);
-	static ActorConstPtr SprPointQuery(const SprPtr& spr, const sm::vec2& pos, float mat[6]);
+	static bool SprPointTest(const Sprite& spr, const sm::vec2& pos);
+	static ActorConstPtr SprPointQuery(const Sprite& spr, const sm::vec2& pos, float mat[6]);
 
-	static bool SprGetForceUpdate(const SprPtr& spr, bool& force);
-	static void SprSetForceUpdate(const SprPtr& spr, bool force);
+	static bool SprGetForceUpdate(const Sprite& spr, bool& force);
+	static void SprSetForceUpdate(const Sprite& spr, bool force);
 
-	static void SprSetInheritUpdate(const SprPtr& spr, bool inherit);
+	static void SprSetInheritUpdate(const Sprite& spr, bool inherit);
 	// ret: -1 unknown, 0 false, 1 true
-	static int  SprGetInheritUpdate(const SprPtr& spr);
+	static int  SprGetInheritUpdate(const Sprite& spr);
 
 	// anim
-	static bool SprGetFrameCount(const SprPtr& spr, int& count);
-	static void SprAnimSetLoop(const SprPtr& spr, bool loop);
+	static bool SprGetFrameCount(const Sprite& spr, int& count);
+	static void SprAnimSetLoop(const Sprite& spr, bool loop);
 
 	// complex
 	static bool SprHasAction(const SprPtr& spr, const std::string& action);
 
 	// textbox
-	static void SprTextboxResetTime(const SprPtr& spr);
-	static void SprTextboxSetFontColor(const SprPtr& spr, uint32_t abgr);
-	static void SprTextboxSetEdgeColor(const SprPtr& spr, uint32_t abgr);
+	static void SprTextboxResetTime(const Sprite& spr);
+	static void SprTextboxSetFontColor(const Sprite& spr, uint32_t abgr);
+	static void SprTextboxSetEdgeColor(const Sprite& spr, uint32_t abgr);
 
 	// anim2
-	static void SprAnim2SetStaticTime(const SprPtr& spr, int time);
+	static void SprAnim2SetStaticTime(const Sprite& spr, int time);
 
 	// particle3d
-	static void SprP3dSetLocal(const SprPtr& spr, bool local);
-	static void SprP3dSetLoop(const SprPtr& spr, bool loop);
-	static bool SprP3dIsFinished(const SprPtr& spr);
-	static void SprP3dUpdate(const SprPtr& spr, float dt);
+	static void SprP3dSetLocal(const Sprite& spr, bool local);
+	static void SprP3dSetLoop(const Sprite& spr, bool loop);
+	static bool SprP3dIsFinished(const Sprite& spr);
+	static void SprP3dUpdate(const Sprite& spr, float dt);
 
 	// proxy
-	static void SprGetProxyChildren(const SprConstPtr& spr, std::vector<ActorPtr>& actors);
+	static void SprGetProxyChildren(const Sprite& spr, std::vector<ActorPtr>& actors);
 	
 	// dtex
-	static void SetDTexEnable(const SprPtr& spr, bool enable);
-	static void SetDTexForceCached(const SprPtr& spr, bool cache);
-	static void SetDTexForceCachedDirty(const SprPtr& spr, bool dirty);
+	static void SetDTexEnable(const Sprite& spr, bool enable);
+	static void SetDTexForceCached(const Sprite& spr, bool cache);
+	static void SetDTexForceCachedDirty(const Sprite& spr, bool dirty);
 	
 	/************************************************************************/
 	/* actor                                                                */

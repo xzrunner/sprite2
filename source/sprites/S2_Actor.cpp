@@ -19,10 +19,12 @@ namespace s2
 static int ALL_ACTOR_COUNT = 0;
 
 Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
-	: m_geo(ActorDefault::Instance()->Geo())
+	: m_spr(std::const_pointer_cast<Sprite>(spr).get())
+	, m_geo(ActorDefault::Instance()->Geo())
 	, m_render(SprDefault::Instance()->Render())
 {
-	m_spr = spr;
+	m_spr_ptr = spr;
+
 	m_parent = parent;
 
 	++ALL_ACTOR_COUNT;

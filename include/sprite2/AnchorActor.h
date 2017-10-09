@@ -13,7 +13,8 @@ public:
 		: Actor(spr, parent) {}
 
 	void SetAnchor(const ActorPtr& anchor);
-	const ActorPtr& GetAnchor() const { return m_anchor.actor; }
+	const Actor* GetAnchor() const { return m_anchor.actor.get(); }
+	const ActorPtr& GetAnchorPtr() const { return m_anchor.actor; }
 
 private:
 	void Clear();

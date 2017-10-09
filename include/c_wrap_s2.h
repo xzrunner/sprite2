@@ -133,7 +133,7 @@ void  s2_spr_p3d_gc();
 // proxy
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_spr_proxy_get_children(const void* spr, void* children[], int children_cap, int* count);
+void  s2_spr_proxy_get_children(const void* actor, void* children[], int children_cap, int* count);
 
 //////////////////////////////////////////////////////////////////////////
 // dtex

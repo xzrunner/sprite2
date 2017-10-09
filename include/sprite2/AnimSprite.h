@@ -25,7 +25,7 @@ public:
 	 */
 	virtual void OnMessage(const UpdateParams& up, Message msg);
 	virtual bool Update(const UpdateParams& up);
-	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return true; }
+	virtual bool NeedAutoUpdate(const Actor* actor) const { return true; }
 	virtual bool AutoUpdate(const Actor* actor);
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	virtual SprPtr FetchChildByIdx(int idx, const ActorConstPtr& actor) const;

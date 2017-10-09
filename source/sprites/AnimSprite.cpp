@@ -78,12 +78,12 @@ void AnimSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	AnimCurr& curr = GetOriginCurr(up.GetActor().get());
-	curr.OnMessage(up, shared_from_this(), msg);
+	AnimCurr& curr = GetOriginCurr(up.GetActor());
+	curr.OnMessage(up, this, msg);
 	switch (msg)
 	{
 	case MSG_START: case MSG_TRIGGER:
-		curr.Start(up, shared_from_this());
+		curr.Start(up, this);
 		if (m_start_random) {
 			RandomStartTime(up);
 		}
@@ -101,20 +101,20 @@ bool AnimSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
 	}
 
-	AnimCurr& curr = GetUpdateCurr(up.GetActor().get());
-	return curr.Update(up, GetSymbol(), shared_from_this(), m_loop, m_interval, m_fps);
+	AnimCurr& curr = GetUpdateCurr(up.GetActor());
+	return curr.Update(up, m_sym.get(), this, m_loop, m_interval, m_fps);
 }
 
 bool AnimSprite::AutoUpdate(const Actor* actor)
 {
 	AnimCurr& curr = GetUpdateCurr(actor);
-	return curr.Update(UpdateParams(), GetSymbol(), shared_from_this(), m_loop, m_interval, m_fps);
+	return curr.Update(UpdateParams(), m_sym.get(), this, m_loop, m_interval, m_fps);
 }
 
 SprPtr AnimSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
@@ -208,8 +208,8 @@ bool AnimSprite::SetFrame(const UpdateParams& up, int frame)
 		return false;
 	}
 
-	AnimCurr& curr = GetUpdateCurr(up.GetActor().get());
-	return curr.SetFrame(up, shared_from_this(), frame, m_fps);
+	AnimCurr& curr = GetUpdateCurr(up.GetActor());
+	return curr.SetFrame(up, this, frame, m_fps);
 }
 
 void AnimSprite::SetActive(bool active, const ActorConstPtr& actor)
@@ -224,8 +224,8 @@ void AnimSprite::RandomStartTime(const UpdateParams& up)
 	float p = (rand() / static_cast<float>(RAND_MAX));
 	start = static_cast<int>(start * p);
 
-	AnimCurr& curr = GetOriginCurr(up.GetActor().get());
-	curr.SetFrame(up, shared_from_this(), start, m_fps);
+	AnimCurr& curr = GetOriginCurr(up.GetActor());
+	curr.SetFrame(up, this, start, m_fps);
 }
 
 }

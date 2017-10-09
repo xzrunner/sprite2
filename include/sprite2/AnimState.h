@@ -20,7 +20,7 @@ public:
 
 	void Init(const std::shared_ptr<AnimCopy>& copy);
 
-	void Start(const SprConstPtr& spr);
+	void Start(const Sprite* spr);
 
 	AnimCurr& GetOrigin() { return *m_origin; }
 #ifdef S2_MULTITHREAD

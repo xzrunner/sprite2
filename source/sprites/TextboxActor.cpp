@@ -39,7 +39,7 @@ void TextboxActor::SetText(const std::string& text)
 
 	m_text = text;
 
-	auto& text_spr = S2_VI_PTR_DOWN_CAST<const TextboxSprite>(GetSpr());
+	auto text_spr = S2_VI_DOWN_CAST<const TextboxSprite*>(GetSpr());
 	const Textbox& tb = text_spr->GetTextbox();
 	sm::rect rect = CalcAABB(tb, GetSpr()->GetSymbol()->GetBounding(), m_text);
 

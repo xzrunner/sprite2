@@ -20,7 +20,7 @@ public:
 	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
     virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 
-	ActorConstPtr QueryAnchor(const ActorConstPtr& actor) const;
+	const Actor* QueryAnchor(const Actor* actor) const;
 
 	SPRITE_CLONE_FUNC(AnchorSprite)
 

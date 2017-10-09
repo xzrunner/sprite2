@@ -31,7 +31,7 @@ public:
 private:
 	bool VisitChild(SpriteVisitor& visitor, const SprVisitorParams& params, const SprPtr& child, VisitResult& ret) const;
 
-	int GetAction(const ActorConstPtr& actor) const;
+	int GetAction(const Actor* actor) const;
 
 protected:
 	int m_action;

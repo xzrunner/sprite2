@@ -20,7 +20,7 @@ public:
 	 *    Sprite
 	 */
 	virtual bool Update(const UpdateParams& up);
-	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return false; }	// todo
+	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }	// todo
 	virtual bool AutoUpdate(const Actor* actor);
 
 	SPRITE_CLONE_FUNC(ImageSprite)

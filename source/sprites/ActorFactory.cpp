@@ -18,12 +18,11 @@
 namespace s2
 {
 
-ActorPtr ActorFactory::Create(const ActorConstPtr& parent,
-	                                        const SprConstPtr& child)
+ActorPtr ActorFactory::Create(const ActorConstPtr& parent, const SprConstPtr& child)
 {
 	assert(child);
 
-	auto actor = child->QueryActor(parent.get());
+	auto actor = child->QueryActorRef(parent.get());
 	if (actor) {
 		return actor;
 	}

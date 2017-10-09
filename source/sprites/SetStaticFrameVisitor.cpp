@@ -45,7 +45,7 @@ VisitResult SetStaticFrameVisitor::Visit(const SprConstPtr& spr, const SprVisito
 	case SYM_ANIMATION:
 		{
 			auto& anim_spr = std::const_pointer_cast<AnimSprite>(S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr));
-			anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
+			anim_spr->SetFrame(UpdateParams(actor.get()), m_static_frame);
 		}
 		break;
 	case SYM_ANIM2:

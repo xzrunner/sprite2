@@ -66,7 +66,7 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 		*rp_child = rp;
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			ret = std::static_pointer_cast<const Scale9Actor>(rp.actor)->GetScale9().Draw(*rp_child);
+			ret = S2_VI_DOWN_CAST<const Scale9Actor*>(rp.actor)->GetScale9().Draw(*rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}

@@ -109,8 +109,8 @@ void Particle3dSprite::OnMessage(const UpdateParams& up, Message msg)
 		et = m_et;
 		break;
 	case REUSE_NONE:
-		if (auto& actor = up.GetActor()) {
-			et = std::static_pointer_cast<const Particle3dActor>(actor)->GetEmitter();
+		if (auto actor = up.GetActor()) {
+			et = S2_VI_DOWN_CAST<const Particle3dActor*>(actor)->GetEmitter();
 		}
 		break;
 	}
@@ -148,7 +148,7 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -172,10 +172,10 @@ bool Particle3dSprite::Update(const UpdateParams& up)
 		break;
 	case REUSE_NONE:
 		{
-			auto& actor = up.GetActor();
+			auto actor = up.GetActor();
 			if (actor) {
-				auto& a = std::static_pointer_cast<const Particle3dActor>(actor);
-				auto& ac = std::const_pointer_cast<Particle3dActor>(a);
+				auto a = S2_VI_DOWN_CAST<const Particle3dActor*>(actor);
+				auto ac = const_cast<Particle3dActor*>(a);
 				ret = UpdateEmitter(up, ac->GetEmitter());
 			}
 		}
@@ -355,7 +355,7 @@ bool Particle3dSprite::UpdateEmitter(const UpdateParams& up, const std::shared_p
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(shared_from_this());
+	up_child->Push(this);
 
 	float mt[6];
 	const S2_MAT& world_mat = up_child->GetPrevMat();

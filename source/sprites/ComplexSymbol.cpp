@@ -84,7 +84,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 		return RENDER_INVISIBLE;
 	}
 
-	int action = GetAction(spr, rp.actor.get());
+	int action = GetAction(spr, rp.actor);
 
 	sm::vec2 scissor_sz = m_scissor.Size();
 	bool scissor = scissor_sz.x > 0 && scissor_sz.y > 0;
@@ -111,7 +111,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	if (rp.IsDisableCulling()) {
 		for (auto& child : children) 
 		{
-			rp_child->actor = child->QueryActor(rp.actor.get());
+			rp_child->actor = child->QueryActor(rp.actor);
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
@@ -121,7 +121,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	} else {
 		for (auto& child : children)
 		{
-			rp_child->actor = child->QueryActor(rp.actor.get());
+			rp_child->actor = child->QueryActor(rp.actor);
 #ifndef S2_DISABLE_STATISTICS
 			rp_child->parent_id = id;
 			rp_child->level = rp.level + 1;
@@ -156,7 +156,7 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	*up_child = up;
 	for (auto& child : m_children) 
 	{
-		up_child->SetActor(child->QueryActor(up.GetActor().get()));
+		up_child->SetActor(child->QueryActor(up.GetActor()));
 		if (child->Update(*up_child)) {
 			ret = true;
 		}

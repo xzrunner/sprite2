@@ -27,9 +27,9 @@ public:
 
 private:
 	static RenderReturn DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base, 
-		const ActorConstPtr& actor, const RenderParams& rp);
+		const Actor* actor, const RenderParams& rp);
 	static RenderReturn DrawMaskToRT(RenderTarget* rt, ft::FTList& ft, int mask, 
-		const ActorConstPtr& actor, const RenderParams& rp);
+		const Actor* actor, const RenderParams& rp);
 
 	static RenderReturn DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt);
 

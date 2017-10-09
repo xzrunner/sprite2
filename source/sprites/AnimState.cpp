@@ -36,7 +36,7 @@ void AnimState::Init(const std::shared_ptr<AnimCopy>& copy)
 #endif // S2_MULTITHREAD
 }
 
-void AnimState::Start(const SprConstPtr& spr)
+void AnimState::Start(const Sprite* spr)
 {
 	UpdateParams up;
 	m_origin->Start(up, spr);

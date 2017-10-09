@@ -9,8 +9,8 @@ namespace s2
 
 void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	auto& actor = up.GetActor();
-	auto& anchor = QueryAnchor(actor);
+	auto actor = up.GetActor();
+	auto anchor = QueryAnchor(actor);
 	if (!anchor) {
 		return;
 	}
@@ -18,30 +18,30 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
 
-	up_child->Push(shared_from_this());
-	auto& anchor_spr = anchor->GetSpr();
-	up_child->SetActor(anchor_spr->QueryActor(actor.get()));
-	std::const_pointer_cast<Sprite>(anchor_spr)->OnMessage(*up_child, msg);
+	up_child->Push(this);
+	auto anchor_spr = anchor->GetSpr();
+	up_child->SetActor(anchor_spr->QueryActor(actor));
+	const_cast<Sprite*>(anchor_spr)->OnMessage(*up_child, msg);
 
 	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool AnchorSprite::Update(const UpdateParams& up)
 {
-	auto& actor = up.GetActor();
-	auto& anchor = QueryAnchor(actor);
+	auto actor = up.GetActor();
+	auto anchor = QueryAnchor(actor);
 	if (!anchor) {
 		return false;
 	}
 
-	auto& spr_real = anchor->GetSpr();
+	auto spr_real = anchor->GetSpr();
 
 	// update inherit
 	if (!up.IsForce() && !spr_real->IsInheritUpdate()) {
 		return false;
 	}
 
-	auto& actor_real = spr_real->QueryActor(actor.get());
+	auto actor_real = spr_real->QueryActor(actor);
 	
 	// visible
 	bool visible = actor_real ? actor_real->IsVisible() : spr_real->IsVisible();
@@ -52,9 +52,9 @@ bool AnchorSprite::Update(const UpdateParams& up)
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
 
-	up_child->Push(shared_from_this());
+	up_child->Push(this);
 	up_child->SetActor(actor_real);
-	bool ret = std::const_pointer_cast<Sprite>(spr_real)->Update(*up_child);
+	bool ret = const_cast<Sprite*>(spr_real)->Update(*up_child);
 
 	UpdateParamsPool::Instance()->Push(up_child); 
 
@@ -63,10 +63,10 @@ bool AnchorSprite::Update(const UpdateParams& up)
 
 SprPtr AnchorSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	auto& anchor = QueryAnchor(actor);
+	auto anchor = QueryAnchor(actor.get());
 	if (anchor) {
-		auto& anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActor(actor.get()));
+		auto anchor_spr = anchor->GetSpr();
+		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActorRef(actor.get()));
 	} else {
 		return nullptr;
 	}
@@ -74,10 +74,10 @@ SprPtr AnchorSprite::FetchChildByName(int name, const ActorConstPtr& actor) cons
 
 SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 {
-	auto& anchor = QueryAnchor(actor);
+	auto anchor = QueryAnchor(actor.get());
 	if (anchor) {
-		auto& anchor_spr = anchor->GetSpr();
-		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActor(actor.get()));
+		auto anchor_spr = anchor->GetSpr();
+		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActorRef(actor.get()));
 	} else {
 		return nullptr;
 	}
@@ -86,7 +86,7 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	auto& actor = params.actor;
-	auto& anchor = QueryAnchor(actor);
+	auto anchor = actor ? S2_VI_PTR_DOWN_CAST<const AnchorActor>(actor)->GetAnchorPtr() : nullptr;
 	if (anchor) {
 		SprVisitorParams cp = params;
 		cp.actor = anchor;
@@ -96,13 +96,9 @@ VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 	}
 }
 
-ActorConstPtr AnchorSprite::QueryAnchor(const ActorConstPtr& actor) const
+const Actor* AnchorSprite::QueryAnchor(const Actor* actor) const
 {
-	if (actor) {
-		return std::static_pointer_cast<const AnchorActor>(actor)->GetAnchor();
-	} else {
-		return nullptr;
-	}
+	return actor ? S2_VI_DOWN_CAST<const AnchorActor*>(actor)->GetAnchor() : nullptr;
 }
 
 }

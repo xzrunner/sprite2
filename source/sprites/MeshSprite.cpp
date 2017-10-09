@@ -82,7 +82,7 @@ bool MeshSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -90,7 +90,7 @@ bool MeshSprite::Update(const UpdateParams& up)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(shared_from_this());
+	up_child->Push(this);
 	bool ret;
 	if (m_base) {
 		ret = std::const_pointer_cast<Symbol>(m_base)->Update(*up_child, 0);

@@ -14,12 +14,12 @@ sm::rect AABBHelper::CalcAABB(const std::vector<SprPtr>& children, const Actor* 
 
 	for (auto& c_spr : children) 
 	{
-		auto& c_actor = c_spr->QueryActor(parent);
+		auto c_actor = c_spr->QueryActor(parent);
 		bool visible = c_actor ? c_actor->IsVisible() : c_spr->IsVisible();
 		if (!visible) {
 			continue;
 		}
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor.get());
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor);
 		if (!c_aabb.IsValid()) {
 			continue;
 		}
@@ -48,7 +48,7 @@ void AABBHelper::UpdateChildrenAABBTight(const std::vector<SprPtr>& children,
 	}
 	for (auto& c_spr : children)
 	{
-		auto& c_actor = c_spr->QueryActor(parent);
+		auto c_actor = c_spr->QueryActor(parent);
 		if (!c_actor) {
 			continue;
 		}
@@ -58,7 +58,7 @@ void AABBHelper::UpdateChildrenAABBTight(const std::vector<SprPtr>& children,
 			c_actor->SetAABBTight(false);
 			continue;
 		}
-		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor.get());
+		sm::rect c_aabb = c_spr->GetSymbol()->GetBounding(c_spr.get(), c_actor);
 		if (!c_aabb.IsValid()) {
 			c_actor->SetAABBTight(false);
 			continue;

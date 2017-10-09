@@ -64,9 +64,9 @@ TextboxSprite::~TextboxSprite()
 
 const std::string& TextboxSprite::GetText(const UpdateParams& up) const 
 { 
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	if (actor) {
-		return std::static_pointer_cast<const TextboxActor>(actor)->GetText();
+		return S2_VI_DOWN_CAST<const TextboxActor*>(actor)->GetText();
 	} else {
 		return m_text;
 	}
@@ -74,10 +74,10 @@ const std::string& TextboxSprite::GetText(const UpdateParams& up) const
 
 void TextboxSprite::SetText(const UpdateParams& up, const std::string& text) 
 {
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	if (actor) {
-		std::const_pointer_cast<TextboxActor>(
-			std::static_pointer_cast<const TextboxActor>(actor))->SetText(text);
+		const_cast<TextboxActor*>(
+			S2_VI_DOWN_CAST<const TextboxActor*>(actor))->SetText(text);
 	} else {
 		m_text = text;
 	}

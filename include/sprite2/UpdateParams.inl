@@ -20,7 +20,7 @@ UpdateParams::UpdateParams()
 }
 
 inline
-UpdateParams::UpdateParams(const ActorConstPtr& actor)
+UpdateParams::UpdateParams(const Actor* actor)
 	: m_prev_filter(FM_NULL)
 	, m_actor(actor)
 	, m_force(false)
@@ -48,14 +48,14 @@ UpdateParams& UpdateParams::operator = (const UpdateParams& params)
 }
 
 inline
-void UpdateParams::Push(const SprConstPtr& spr)
+void UpdateParams::Push(const Sprite* spr)
 {
 	if (!spr) {
 		return;
 	}
 
 	S2_MAT mt;
-	Utility::PrepareMat(m_prev_mat, spr.get(), m_actor.get(), mt);
+	Utility::PrepareMat(m_prev_mat, spr, m_actor, mt);
 	m_prev_mat = mt;
 
 	const RenderFilter* filter = spr->GetShader().GetFilter();
@@ -100,7 +100,6 @@ void UpdateParams::Init()
 inline
 void UpdateParams::Term()
 {
-	m_actor.reset();
 }
 
 }

@@ -53,14 +53,14 @@ void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(shared_from_this());
+	up_child->Push(this);
 
 	if (auto& base = sym->GetBase()) {
-		up_child->SetActor(base->QueryActor(up.GetActor().get()));
+		up_child->SetActor(base->QueryActor(up.GetActor()));
 		std::const_pointer_cast<Sprite>(base)->OnMessage(*up_child, msg);
 	}
 	if (auto& mask = sym->GetMask()) {
-		up_child->SetActor(mask->QueryActor(up.GetActor().get()));
+		up_child->SetActor(mask->QueryActor(up.GetActor()));
 		std::const_pointer_cast<Sprite>(mask)->OnMessage(*up_child, msg);
 	}
 
@@ -75,7 +75,7 @@ bool MaskSprite::Update(const UpdateParams& up)
 	}
 
 	// visible
-	auto& actor = up.GetActor();
+	auto actor = up.GetActor();
 	bool visible = actor ? actor->IsVisible() : IsVisible();
 	if (!visible) {
 		return false;
@@ -85,17 +85,17 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
 	*up_child = up;
-	up_child->Push(shared_from_this());
+	up_child->Push(this);
 
 	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 	if (auto& base = sym->GetBase()) {
-		up_child->SetActor(base->QueryActor(up.GetActor().get()));
+		up_child->SetActor(base->QueryActor(up.GetActor()));
 		if (std::const_pointer_cast<Sprite>(base)->Update(*up_child)) {
 			dirty = true;
 		}
 	}
 	if (auto& mask = sym->GetMask()) {
-		up_child->SetActor(mask->QueryActor(up.GetActor().get()));
+		up_child->SetActor(mask->QueryActor(up.GetActor()));
 		if (std::const_pointer_cast<Sprite>(mask)->Update(*up_child)) {
 			dirty = true;
 		}
@@ -123,14 +123,14 @@ VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisito
 	auto& base = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetBase();
 	if (base) {
 		SprVisitorParams cp = params;
-		cp.actor = base->QueryActor(params.actor.get());
+		cp.actor = base->QueryActorRef(params.actor.get());
 		if (!SpriteVisitor::VisitChild(visitor, cp, base, ret))
 			return ret;
 	}
 	auto& mask = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetMask();
 	if (mask) {
 		SprVisitorParams cp = params;
-		cp.actor = mask->QueryActor(params.actor.get());
+		cp.actor = mask->QueryActorRef(params.actor.get());
 		if (!SpriteVisitor::VisitChild(visitor, cp, mask, ret))
 			return ret;
 	}

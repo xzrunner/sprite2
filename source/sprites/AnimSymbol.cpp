@@ -92,7 +92,7 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 #endif // S2_DISABLE_STATISTICS
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
 		auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
-		const AnimCurr& curr = anim->GetOriginCurr(rp.actor.get());
+		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
 		ret = curr.Draw(*rp_child);
 	}
 	RenderParamsPool::Instance()->Push(rp_child); 

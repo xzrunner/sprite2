@@ -39,7 +39,8 @@ public:
 
 	virtual void Init();
 
-	SprPtr GetSpr() const { assert(!m_spr.expired()); return m_spr.lock(); }
+	const Sprite* GetSpr() const { return m_spr; }
+	SprPtr GetSprPtr() const { return m_spr_ptr.lock(); }
 
 	ActorPtr GetParent() const { return m_parent.lock(); }
 	void SetParent(const ActorConstPtr& parent) { m_parent = parent; }
@@ -107,7 +108,9 @@ private:
 	};
 
 private:
-	std::weak_ptr<Sprite> m_spr;
+	Sprite* m_spr;
+	std::weak_ptr<Sprite> m_spr_ptr;
+
 	std::weak_ptr<Actor>  m_parent;
 
 	ActorGeo*         m_geo;

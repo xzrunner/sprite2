@@ -43,10 +43,6 @@ public:
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
-#ifdef S2_DEBUG
-	virtual bool IsProxyImg() const = 0;
-#endif // S2_DEBUG
-
 private:
 	void DrawBlend(const RenderParams& rp, float* vertices, const float* texcoords, int tex_id) const;
 	void DrawOrtho(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;

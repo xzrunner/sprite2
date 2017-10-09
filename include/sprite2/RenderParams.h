@@ -34,7 +34,7 @@ public:
 
 	RenderCamera camera;
 	
-	ActorConstPtr actor;
+	const Actor* actor;
 
 	int min_edge;
 

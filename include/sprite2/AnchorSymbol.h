@@ -28,7 +28,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 private:
-	static ActorConstPtr GetRealActor(const Sprite* spr, const Actor* actor);
+	static const Actor* GetRealActor(const Sprite* spr, const Actor* actor);
 
 }; // AnchorSymbol
 

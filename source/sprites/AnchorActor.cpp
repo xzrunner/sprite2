@@ -24,7 +24,7 @@ void AnchorActor::SetAnchor(const ActorPtr& anchor)
 		m_anchor.actor = anchor;
 		// cache spr
 		if (anchor) {
-			m_anchor.spr = anchor->GetSpr();
+			m_anchor.spr = std::const_pointer_cast<Sprite>(anchor->GetSprPtr());
 		}
 	}
 

@@ -32,14 +32,14 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 		return RENDER_NO_DATA;
 	}
 
-	ActorConstPtr base_actor = nullptr;
+	const Actor* base_actor = nullptr;
 	if (ft_base->IsDataSpr()) {
-		auto spr(ft_base->GetSpr());
+		auto spr(static_cast<const s2::Sprite*>(ft_base->GetData()));
 		if (!spr->IsVisible()) {
 			return RENDER_INVISIBLE;
 		}
 	} else {
-		auto actor(ft_base->GetActor());
+		auto actor(static_cast<const s2::Actor*>(ft_base->GetData()));
 		if (!actor->IsVisible()) {
 			return RENDER_INVISIBLE;
 		} else {
@@ -47,14 +47,14 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 		}
 	}
 
-	ActorConstPtr mask_actor = nullptr;
+	const Actor* mask_actor = nullptr;
 	if (ft_mask->IsDataSpr()) {
-		auto spr(ft_mask->GetSpr());
+		auto spr(static_cast<const s2::Sprite*>(ft_mask->GetData()));
 		if (!spr->IsVisible()) {
 			return RENDER_INVISIBLE;
 		}
 	} else {
-		auto actor(ft_mask->GetActor());
+		auto actor(static_cast<const s2::Actor*>(ft_mask->GetData()));
 		if (!actor->IsVisible()) {
 			return RENDER_INVISIBLE;
 		} else {
@@ -106,8 +106,7 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 }
 
 RenderReturn DrawMaskFT::DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base, 
-	                                  const ActorConstPtr& actor, 
-	                                  const RenderParams& rp)
+	                                  const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -135,8 +134,7 @@ RenderReturn DrawMaskFT::DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base
 }
 
 RenderReturn DrawMaskFT::DrawMaskToRT(RenderTarget* rt, ft::FTList& ft, int mask,
-	                                  const ActorConstPtr& actor, 
-	                                  const RenderParams& rp)
+	                                  const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -175,9 +173,9 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_
 
 	const Symbol* sym = nullptr;
 	if (ft_n->IsDataSpr()) {
-		sym = ft_n->GetSpr()->GetSymbol().get();
+		sym = static_cast<const s2::Sprite*>(ft_n->GetData())->GetSymbol().get();
 	} else {
-		sym = ft_n->GetActor()->GetSpr()->GetSymbol().get();
+		sym = static_cast<const s2::Actor*>(ft_n->GetData())->GetSpr()->GetSymbol().get();
 	}
 
 	sm::vec2 vertices[4];

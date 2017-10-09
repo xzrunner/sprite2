@@ -36,13 +36,13 @@ public:
 
 	void AssignSameStruct(const AnimCurr& src);
 
-	bool Update(const UpdateParams& up, const SymConstPtr& sym, const SprConstPtr& spr,
+	bool Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
 		bool loop = true, float interval = 0, int fps = 30);
-	bool SetFrame(const UpdateParams& up, const SprConstPtr& spr, int frame, int fps);
+	bool SetFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 
-	void Start(const UpdateParams& up, const SprConstPtr& spr);
+	void Start(const UpdateParams& up, const Sprite* spr);
 
-	void OnMessage(const UpdateParams& up, const SprConstPtr& spr, Message msg);
+	void OnMessage(const UpdateParams& up, const Sprite* spr, Message msg);
 
 	SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	SprPtr FetchChildByIdx(int idx) const;
@@ -73,12 +73,12 @@ private:
 
 	void ResetLayerCursor();
 
-	void LoadCurrSprites(const UpdateParams& up, const SprConstPtr& spr);
+	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr);
 	void UpdateCursor();
-	void LoadCurrSpritesImpl(const UpdateParams& up, const SprConstPtr& spr);
-	bool UpdateChildren(const UpdateParams& up, const SprConstPtr& spr);
+	void LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr);
+	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
-	void SetChildrenFrame(const UpdateParams& up, const SprConstPtr& spr, int frame, int fps);
+	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);
 
 	void UpdateSlotsVisible();
 		

@@ -81,15 +81,15 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	}
 
 	if (rp.min_edge > 0) {
-		if (IsSmall(spr, actor.get(), rp.min_edge)) {
+		if (IsSmall(spr, actor, rp.min_edge)) {
 			return false;
 		}
 	}
 
 	child = rp;
 
-	Utility::PrepareColor(rp.color, spr, actor.get(), child.color);
-	Utility::PrepareMat(rp.mt, spr, actor.get(), child.mt);
+	Utility::PrepareColor(rp.color, spr, actor, child.color);
+	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
 
 	if (PREPARE_REDNER_PARAMS) {
 		PREPARE_REDNER_PARAMS(rp, spr, child);
@@ -224,7 +224,7 @@ RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const
 	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
 
 	std::vector<sm::vec2> vertices(4);
-	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
+	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
 	vertices[1] = sm::vec2(rect.xmin, rect.ymax);
 	vertices[2] = sm::vec2(rect.xmax, rect.ymax);
@@ -256,11 +256,11 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 
 	sm::vec2 r_min, r_max;
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	r_min.Set(r.xmin, r.ymin);
 	r_max.Set(r.xmax, r.ymax);
 	S2_MAT mat;
-	Utility::PrepareMat(rp.mt, spr, rp.actor.get(), mat);
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mat);
 	r_min = mat * r_min;
 	r_max = mat * r_max;
 
@@ -322,13 +322,13 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, Re
 RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(r.xmin, r.ymin);
 	vertices[1] = sm::vec2(r.xmax, r.ymin);
 	vertices[2] = sm::vec2(r.xmax, r.ymax);
 	vertices[3] = sm::vec2(r.xmin, r.ymax);
 	S2_MAT mt;
-	Utility::PrepareMat(rp.mt, spr, rp.actor.get(), mt);
+	Utility::PrepareMat(rp.mt, spr, rp.actor, mt);
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = mt * vertices[i];
 	}
@@ -424,8 +424,8 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 
 	if (loading_finished) 
 	{
-		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor.get()) : GET_SPR_UID(spr);
-		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor.get());
+		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
+		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor);
 		DTEX_SYM_INSERT(uid, bounding, rt->GetTexID(), rt->Width(), rt->Height());
 		ret |= RENDER_UNKNOWN;
 	}
@@ -442,7 +442,7 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
 	int tex_id, block_id;
-	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor.get()) : GET_SPR_UID(spr);
+	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
 	const float* texcoords = DTEX_SYM_QUERY(uid, tex_id, block_id);
 	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {

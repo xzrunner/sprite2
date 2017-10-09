@@ -28,6 +28,34 @@ void SprActors::Del(const ActorPtr& actor)
 	}
 }
 
+Actor* SprActors::Query(const Actor* prev) const
+{
+	for (auto& actor : m_actors)
+	{
+		if (actor) {
+			auto sp_p = actor->GetParent();
+			if (sp_p && sp_p.get() == prev) {
+				return actor.get();
+			}
+		}
+	}
+	return nullptr;
+}
+
+ActorPtr SprActors::QueryPtr(const Actor* prev) const
+{
+	for (auto& actor : m_actors) 
+	{
+		if (actor) {
+			auto sp_p = actor->GetParent();
+			if (sp_p && sp_p.get() == prev) {
+				return actor;
+			}
+		}
+	}
+	return nullptr;
+}
+
 void SprActors::Clear()
 {
 	m_actors.clear();

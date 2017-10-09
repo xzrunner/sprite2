@@ -77,10 +77,10 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 //		ret = DrawMask::DrawByStencil(m_base, m_mask, *rp_child);
 	} else {
 		if (m_base) {
-			rp_child->actor = m_base->QueryActor(rp.actor.get());
+			rp_child->actor = m_base->QueryActor(rp.actor);
 			ret = DrawNode::Draw(m_base.get(), *rp_child);
 		} else if (m_mask) {
-			rp_child->actor = m_mask->QueryActor(rp.actor.get());
+			rp_child->actor = m_mask->QueryActor(rp.actor);
 			ret = DrawNode::Draw(m_mask.get(), *rp_child);
 		}
 	}

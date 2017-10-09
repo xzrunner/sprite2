@@ -166,7 +166,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 	case Particle3dSprite::REUSE_NONE:
 	{
 		if (rp.actor) {
-			auto& actor = std::static_pointer_cast<const Particle3dActor>(rp.actor);
+			auto actor = S2_VI_DOWN_CAST<const Particle3dActor*>(rp.actor);
 			ret = DrawEmitter(rp, spr, actor->GetEmitter());
 		}
 		else {

@@ -21,8 +21,7 @@ void ActorAABB::Init(const ActorConstPtr& curr)
 	}
 
 	// not pass actor, in ctor
-	SprPtr spr = curr->GetSpr();
-	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr().get());
+	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr());
 
 	UpdateTight(curr);
 }
@@ -147,8 +146,8 @@ bool ActorAABB::IsRectTight(const sm::rect& inner, const sm::rect& outer)
 
 sm::rect ActorAABB::Build(const ActorConstPtr& curr)
 {
-	const SprConstPtr& spr = curr->GetSpr();
-	sm::rect r = spr->GetSymbol()->GetBounding(spr.get(), curr.get(), false);
+	auto spr = curr->GetSpr();
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, curr.get(), false);
 	return r;
 }
 

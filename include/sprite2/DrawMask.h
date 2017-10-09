@@ -26,9 +26,9 @@ public:
 
 private:
 	static RenderReturn DrawBaseToRT(RenderTarget* rt, const Sprite* base,
-		const ActorConstPtr& actor, const RenderParams& rp);
+		const Actor* actor, const RenderParams& rp);
 	static RenderReturn DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
-		const ActorConstPtr& actor, const RenderParams& rp);
+		const Actor* actor, const RenderParams& rp);
 
 	static RenderReturn DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, const Sprite* mask, const S2_MAT& mt);
 

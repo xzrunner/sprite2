@@ -47,7 +47,7 @@ public:
 	
  	virtual bool Update(const UpdateParams& up) { return false; }
 
-	virtual bool NeedAutoUpdate(const ActorConstPtr& actor) const { return false; }
+	virtual bool NeedAutoUpdate(const Actor* actor) const { return false; }
 	virtual bool AutoUpdate(const Actor* actor) { return false; }
 
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const { return nullptr; }
@@ -111,8 +111,11 @@ public:
 
 	void AddActor(const ActorPtr& actor) const;
 	void DelActor(const ActorPtr& actor) const;
-	ActorPtr QueryActor(const Actor* prev) const {
+	Actor* QueryActor(const Actor* prev) const {
 		return (m_actors && prev) ? m_actors->Query(prev) : nullptr;
+	}
+	ActorPtr QueryActorRef(const Actor* prev) const {
+		return (m_actors && prev) ? m_actors->QueryPtr(prev) : nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
 	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }

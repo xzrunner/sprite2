@@ -125,7 +125,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 
 	const std::string* text = nullptr;
 	if (rp.actor) {
-		text = &std::static_pointer_cast<const TextboxActor>(rp.actor)->GetText();
+		text = &S2_VI_DOWN_CAST<const TextboxActor*>(rp.actor)->GetText();
 	}
 
 	auto tb_spr = S2_VI_DOWN_CAST<const TextboxSprite*>(spr);

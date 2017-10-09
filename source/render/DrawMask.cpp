@@ -25,12 +25,12 @@ namespace s2
 
 RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 {
-	auto base_actor = base->QueryActor(rp.actor.get());
+	auto base_actor = base->QueryActor(rp.actor);
 	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
 	}
-	auto mask_actor = mask->QueryActor(rp.actor.get());
+	auto mask_actor = mask->QueryActor(rp.actor);
 	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 	if (!visible) {
 		return RENDER_INVISIBLE;
@@ -81,12 +81,12 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 
 //RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 //{
-//	const Actor* base_actor = base->QueryActor(rp.actor.get());
+//	const Actor* base_actor = base->QueryActor(rp.actor);
 //	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
 //	}
-//	const Actor* mask_actor = mask->QueryActor(rp.actor.get());
+//	const Actor* mask_actor = mask->QueryActor(rp.actor);
 //	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
@@ -128,12 +128,12 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 
 //RenderReturn DrawMask::DrawByStencil(const Sprite* base, const Sprite* mask, const RenderParams& rp)
 //{
-//	const Actor* base_actor = base->QueryActor(rp.actor.get());
+//	const Actor* base_actor = base->QueryActor(rp.actor);
 //	bool visible = base_actor ? base_actor->IsVisible() : base->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
 //	}
-//	const Actor* mask_actor = mask->QueryActor(rp.actor.get());
+//	const Actor* mask_actor = mask->QueryActor(rp.actor);
 //	visible = mask_actor ? mask_actor->IsVisible() : mask->IsVisible();
 //	if (!visible) {
 //		return RENDER_INVISIBLE;
@@ -183,8 +183,7 @@ RenderReturn DrawMask::Draw(const Sprite* base, const Sprite* mask, const Render
 //}
 
 RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
-									const ActorConstPtr& actor, 
-	                                const RenderParams& rp)
+									const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -212,8 +211,7 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 }
 
 RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
-									const ActorConstPtr& actor, 
-	                                const RenderParams& rp)
+									const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 

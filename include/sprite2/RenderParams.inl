@@ -72,8 +72,6 @@ void RenderParams::Reset()
 	shader.Init();
 	camera.Init();
 
-	actor.reset();
-
 	m_flags = 0;
 
 	SetChangeShader(true);
@@ -119,8 +117,6 @@ void RenderParams::Init()
 inline
 void RenderParams::Term()
 {
-	actor.reset();
-
 	color.Term();
 	shader.Term();
 	camera.Term();

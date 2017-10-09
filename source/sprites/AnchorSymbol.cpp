@@ -29,13 +29,13 @@ RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
-	rp_child->actor = GetRealActor(spr, rp.actor.get());
+	rp_child->actor = GetRealActor(spr, rp.actor);
 	if (rp_child->actor) {
 		S2_MAT m;
 		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, m);
 		rp_child->mt = m;
 //		rp_child->SetDisableCulling(true);
-		ret = DrawNode::Draw(rp_child->actor->GetSpr().get(), *rp_child);
+		ret = DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
 	} else {
 		ret = RENDER_NO_DATA;
 	}
@@ -53,13 +53,13 @@ sm::rect AnchorSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bo
 {
 	auto real_actor = GetRealActor(spr, actor);
 	if (real_actor) {
-		return real_actor->GetSpr()->GetBounding(real_actor.get())->GetSize();
+		return real_actor->GetSpr()->GetBounding(real_actor)->GetSize();
 	} else {
 		return sm::rect(); // empty
 	}
 }
 
-ActorConstPtr AnchorSymbol::GetRealActor(const Sprite* spr, const Actor* actor)
+const Actor* AnchorSymbol::GetRealActor(const Sprite* spr, const Actor* actor)
 {
 	if (spr && actor) 
 	{
@@ -70,7 +70,7 @@ ActorConstPtr AnchorSymbol::GetRealActor(const Sprite* spr, const Actor* actor)
 
 		auto anchor_actor = spr->QueryActor(parent.get());
 		if (anchor_actor) {
-			return std::static_pointer_cast<const AnchorActor>(anchor_actor)->GetAnchor();
+			return S2_VI_DOWN_CAST<const AnchorActor*>(anchor_actor)->GetAnchor();
 		}
 	}	
 	return nullptr;

@@ -52,7 +52,7 @@ SprPtr ProxySprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {
-			auto real_actor = item.second->QueryActor(item.first.get());
+			auto real_actor = item.second->QueryActorRef(item.first.get());
 			auto child = item.second->FetchChildByName(name, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
@@ -75,7 +75,7 @@ SprPtr ProxySprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {
-			auto real_actor = item.second->QueryActor(item.first.get());
+			auto real_actor = item.second->QueryActorRef(item.first.get());
 			auto child = item.second->FetchChildByIdx(idx, real_actor);
 			if (child) {
 				group.push_back(std::make_pair(real_actor, child));
@@ -154,8 +154,7 @@ VisitResult ProxySprite::TraverseChildren(SpriteVisitor& visitor, const SprVisit
 	SprVisitorParams cp = params;
 	for (auto& item : items) 
 	{
-		auto real_actor = item.second->QueryActor(item.first.get());
-		cp.actor = real_actor;
+		cp.actor = item.second->QueryActorRef(item.first.get());;
 		VisitResult ret = item.second->TraverseChildren(visitor, cp);
 		if (ret == VISIT_STOP) {
 			return ret;

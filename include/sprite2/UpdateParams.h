@@ -21,19 +21,19 @@ class UpdateParams
 {
 public:
 	UpdateParams();
-	UpdateParams(const ActorConstPtr& actor);
+	UpdateParams(const Actor* actor);
 	UpdateParams(const UpdateParams& params);
 	UpdateParams& operator = (const UpdateParams& params);
 
-	void Push(const SprConstPtr& spr);
+	void Push(const Sprite* spr);
 
 	void SetPrevMat(const S2_MAT& mat);
 	const S2_MAT& GetPrevMat() const;
 
 	FilterMode    GetPrevFilter() const;
 	
-	void SetActor(const ActorPtr& actor) { m_actor = actor; }
-	const ActorConstPtr& GetActor() const { return m_actor; }
+	void SetActor(const Actor* actor) { m_actor = actor; }
+	const Actor* GetActor() const { return m_actor; }
 
 	void SetForce(bool force) { m_force = force; }
 	bool IsForce() const { return m_force; }
@@ -51,7 +51,7 @@ private:
 	S2_MAT        m_prev_mat;
 	FilterMode    m_prev_filter;
 
-	ActorConstPtr m_actor;
+	const Actor*  m_actor;
 
 	bool          m_force;
 

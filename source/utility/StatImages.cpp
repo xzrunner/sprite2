@@ -101,7 +101,7 @@ int StatImages::GetTexBPP(int type)
 		if (rc->IsSupportETC2()) {
 			bpp = 8;
 		} else {
-			bpp = 32;
+			bpp = 16;
 		}
 #else
 		bpp = 32;

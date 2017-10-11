@@ -192,7 +192,7 @@ void DrawRT::StoreToFile(const std::string& filepath, int width, int height, int
 		return;
 	}
 
-	GIMG_PIXEL_FORMAT fmt = channels == 3 ? GPF_RGB : GPF_RGBA;
+	GIMG_PIXEL_FORMAT fmt = channels == 3 ? GPF_RGB : GPF_RGBA8;
 	gimg_export(filepath.c_str(), pixels, width, height, fmt, false);
 
 	delete[] pixels;

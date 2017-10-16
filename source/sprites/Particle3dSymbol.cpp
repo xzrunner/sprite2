@@ -192,14 +192,15 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 		}
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 #ifndef S2_DISABLE_STATISTICS
 	rp_child->parent_id = spr ? spr->GetSymbol()->GetID() : -1;
 	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -218,8 +219,6 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	}
 	RenderReturn ret = m_et->Draw(p3d_rp, false);
 
-	RenderParamsPool::Instance()->Push(rp_child); 
-
 	return ret;
 }
 
@@ -232,8 +231,10 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 #ifndef S2_DISABLE_STATISTICS
 	rp_child->parent_id = spr ? spr->GetSymbol()->GetID() : -1;
 	rp_child->level = rp.level + 1;
@@ -278,8 +279,6 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 //		p3d->mat[5] = mt.x[13];
 //#endif // S2_MATRIX_FIX
 
-		RenderParamsPool::Instance()->Push(rp_child); 
-
 		return RENDER_NO_DATA;
 	}
 
@@ -303,8 +302,6 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	p3d_rp.flags       = rp.GetFlags();
 
 	RenderReturn ret = et->Draw(p3d_rp, false);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

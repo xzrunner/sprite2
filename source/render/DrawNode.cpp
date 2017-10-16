@@ -2,7 +2,6 @@
 #include "S2_Symbol.h"
 #include "S2_Sprite.h"
 #include "S2_Actor.h"
-#include "RenderFilter.h"
 #include "DrawBlend.h"
 #include "RFGaussianBlur.h"
 #include "RFEdgeDetection.h"
@@ -20,6 +19,7 @@
 #include "BoundingBox.h"
 #include "DrawIntegrate.h"
 
+#include <memmgr/Allocator.h>
 #include <SM_Calc.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -134,8 +134,9 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 	mt.SetTransformation(pos.x, pos.y, angle, scale.x, scale.y, 0, 0, shear.x, shear.y);
 	mt = mt * rp.mt;
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
  	rp_child->mt = mt;
  
@@ -166,8 +167,6 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  
  	RenderReturn ret = sym.DrawTree(*rp_child);
 
-	RenderParamsPool::Instance()->Push(rp_child); 
-
 	return ret;
 }
 
@@ -175,8 +174,9 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 {
 	S2_MAT mt = _mt * rp.mt;
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->mt = mt;
 
@@ -207,17 +207,16 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 
 	RenderReturn ret = sym.DrawTree(*rp_child);
 
-	RenderParamsPool::Instance()->Push(rp_child); 
-
 	return ret;
 }
 
 RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
 {
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_INVISIBLE;
 	}
 
@@ -237,8 +236,6 @@ RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const
 	RVG::Polyline(vertices, true);
 
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return RENDER_OK;
 }
@@ -300,8 +297,9 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, Re
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (rp.actor) {
 		rp_child->mt = rp.actor->GetLocalMat().Inverted() * spr->GetLocalMat().Inverted();
@@ -313,8 +311,6 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, Re
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
 	rt->Unbind();
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }
@@ -350,7 +346,8 @@ RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, RenderTarget* rt)
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp = rp_proxy.obj;
 	rp->Reset();
 
 	RenderReturn ret = Draw(sym, *rp, S2_MAT());
@@ -358,8 +355,6 @@ RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, RenderTarget* rt)
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
 	rt->Unbind();
-
-	RenderParamsPool::Instance()->Push(rp); 
 
 	return ret;
 }
@@ -518,21 +513,22 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	} 
 	else if (filter != FM_NULL) 
 	{
-		const RenderFilter* rf = rs.GetFilter();
+		auto& rf = rs.GetFilter();
 
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
+		RenderParamsProxy rp_proxy;
+	    RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
 
 		rp_child->shader.SetFilter(rf);
 		rp_child->camera = rc;
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
-			int itrs = static_cast<const RFGaussianBlur*>(rf)->GetIterations();
+			int itrs = static_cast<RFGaussianBlur*>(rf)->GetIterations();
 			ret = DrawGaussianBlur::Draw(spr, *rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
-			int itrs = static_cast<const RFOuterGlow*>(rf)->GetIterations();
+			int itrs = static_cast<RFOuterGlow*>(rf)->GetIterations();
 			ret = DrawOuterGlow::Draw(spr, *rp_child, itrs);
 		} 
 		else 
@@ -546,7 +542,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 			{
 			case FM_EDGE_DETECTION:
 				{
-					const RFEdgeDetection* ed = static_cast<const RFEdgeDetection*>(rf);
+					auto ed = static_cast<RFEdgeDetection*>(rf);
 					sl::EdgeDetectProg* prog = static_cast<sl::EdgeDetectProg*>(shader->GetProgram(sl::FM_EDGE_DETECTION));
 					prog->SetBlend(ed->GetBlend());
 				}
@@ -554,8 +550,6 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 			}
 			ret = DrawSprImplFinal(spr, *rp_child);
 		}
-
-		RenderParamsPool::Instance()->Push(rp_child); 
 	} 
 	else 
 	{
@@ -563,11 +557,12 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 			mgr->SetShader(sl::SPRITE2);
 		}
 
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
+		RenderParamsProxy rp_proxy;
+	    RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
+
 		rp_child->camera = rc;
 		ret = DrawSprImplFinal(spr, *rp_child);
-		RenderParamsPool::Instance()->Push(rp_child); 
 	}
 
 	return ret;

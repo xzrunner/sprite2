@@ -8,6 +8,8 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -52,8 +54,11 @@ RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	}
 
 	RenderReturn ret = RENDER_OK;
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
 		// todo: shape's render ret
 		m_shape->Draw(*rp_child);
@@ -61,7 +66,7 @@ RenderReturn ShapeSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	} else {
 		ret = RENDER_INVISIBLE;
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
+
 	return ret;
 }
 

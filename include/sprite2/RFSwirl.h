@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_SWIRL) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFSwirl(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFSwirl(*this);
+	}
 
 }; // RFSwirl
 

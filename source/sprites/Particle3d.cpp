@@ -13,6 +13,7 @@
 #include "Particle3dSymbol.h"
 #include "Particle3dSprite.h"
 
+#include <memmgr/Allocator.h>
 #include <ps_3d.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -88,7 +89,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	memcpy(&mul, mul_col, sizeof(mul));
 	memcpy(&add, add_col, sizeof(add));
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
 	rp_child->Reset();
 
 	if (rp->flags != 0xffffffff) {
@@ -139,8 +141,6 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	// 		sm::vec2 fixed = _mt * pos;
 	// 		curr_record->AddItem(sym->GetFilepath(), fixed.x, fixed.y, p->angle, s, mul_col, add_col);
 	// 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 }
 
 static void

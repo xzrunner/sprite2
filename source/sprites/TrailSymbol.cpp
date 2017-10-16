@@ -11,6 +11,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <mt_2d.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -60,8 +61,9 @@ RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->mt.x[4] = rp_child->mt.x[5] = 0;
 	rp_child->color = spr->GetColor() * rp.color;
@@ -74,8 +76,6 @@ RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	auto t2d_spr = S2_VI_DOWN_CAST<const TrailSprite*>(spr);
 	// todo: return trail's render ret
 	t2d_spr->Draw(*rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return RENDER_OK;
 }

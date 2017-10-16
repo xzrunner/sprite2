@@ -6,6 +6,7 @@
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
 #endif // S2_DISABLE_FLATTEN
+#include <memmgr/Allocator.h>
 
 namespace s2
 {
@@ -22,9 +23,11 @@ void Actor::SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos)
 inline
 void Actor::CreateFlatten()
 {
+#ifndef S2_DISABLE_FLATTEN
 	assert(!m_flatten.list);
-	m_flatten.list = std::make_shared<ft::FTList>(shared_from_this());
+	m_flatten.list = mm::allocate_shared<ft::FTList>(shared_from_this());
 	m_flatten.pos = 0;
+#endif // S2_DISABLE_FLATTEN
 }
 
 inline

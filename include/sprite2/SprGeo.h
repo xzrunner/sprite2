@@ -2,7 +2,6 @@
 #define _SPRITE2_SPR_GEO_H_
 
 #include "pre_defined.h"
-#include "ObjectPool2.h"
 #include "SprSRT.h"
 
 #include <SM_Vector.h>
@@ -18,6 +17,8 @@ public:
 	SprGeo(const SprGeo& geo);
 	SprGeo& operator = (const SprGeo& geo);
 	~SprGeo();
+
+	void Reset();
 
 	const sm::vec2& GetPosition() const;
 	void SetPosition(const sm::vec2& pos);
@@ -45,13 +46,6 @@ public:
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 	const S2_MAT& GetMatrix() const { return m_mat; }
-
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term();
 
 private:
 	void UpdateCenter();
@@ -90,7 +84,7 @@ private:
 
 		SRT();
 
-		void Init();
+		void Reset();
 
 	}; // SRT
 
@@ -98,8 +92,6 @@ private:
 	S2_MAT m_mat;
 
 }; // SprGeo
-
-typedef ObjectPool2<SprGeo> SprGeoPool;
 
 }
 

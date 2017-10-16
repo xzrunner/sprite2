@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_NULL) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFNull(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFNull(*this);
+	}
 
 }; // RFNull
 

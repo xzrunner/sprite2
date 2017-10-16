@@ -1259,7 +1259,7 @@ void ProxyHelper::ActorSetFilter(ActorPtr& actor, int mode)
 	} 
 	else
 	{
-		const RenderFilter* filter = actor->GetShader().GetFilter();
+		auto& filter = actor->GetShader().GetFilter();
 		FilterMode ori = FM_NULL;
 		if (filter) {
 			ori = filter->GetMode();

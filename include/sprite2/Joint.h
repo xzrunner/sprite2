@@ -19,7 +19,6 @@ namespace s2
 class Skin;
 class Sprite;
 class RenderParams;
-class BoundingBox;
 
 class Joint : private cu::Uncopyable
 {

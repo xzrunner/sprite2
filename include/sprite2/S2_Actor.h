@@ -6,11 +6,14 @@
 #include "ActorAABB.h"
 #include "ActorGeo.h"
 #include "ActorDefault.h"
+#include "SprDefault.h"
+#include "SprRender.h"
 
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include S2_MAT_HEADER
+#include <memmgr/Allocator.h>
 
 #include <memory>
 
@@ -53,14 +56,14 @@ public:
 	const sm::vec2& GetScale() const { return m_geo->GetScale(); }
 	
 	const S2_MAT& GetLocalMat() const { return m_geo->GetMatrix(); }
-	bool IsGeoDirty() const { return m_geo != ActorDefault::Instance()->Geo(); }
+	bool IsGeoDirty() const { return m_geo.get() != ActorDefault::Instance()->Geo(); }
 
 	ActorAABB& GetAABB() { return m_aabb; }
 	const ActorAABB& GetAABB() const { return m_aabb; }
 
-	const RenderColor&	GetColor() const;
-	const RenderShader& GetShader() const;
-	const RenderCamera& GetCamera() const;
+	const RenderColor&	GetColor() const { return *m_render->GetColor(); }
+	const RenderShader& GetShader() const { return *m_render->GetShader(); }
+	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
@@ -113,10 +116,23 @@ private:
 
 	std::weak_ptr<Actor>  m_parent;
 
-	ActorGeo*         m_geo;
-	mutable ActorAABB m_aabb;
-	SprRender*        m_render;
-	mutable uint32_t  m_flags;
+	static void geo_deleter(ActorGeo* geo) {
+		if (geo != ActorDefault::Instance()->Geo()) {
+			mm::AllocHelper::Free(geo, sizeof(ActorGeo));
+		}
+	};
+	std::unique_ptr<ActorGeo, decltype(&geo_deleter)>  m_geo;
+
+	mutable ActorAABB          m_aabb;
+
+	static void render_deleter(SprRender* render) {
+		if (render != SprDefault::Instance()->Render()) {
+			mm::AllocHelper::Free(render, sizeof(SprRender));
+		}
+	};
+	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
+
+	mutable uint32_t           m_flags;
 
 #ifndef S2_DISABLE_FLATTEN
 	Flatten           m_flatten;

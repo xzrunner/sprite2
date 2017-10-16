@@ -7,7 +7,7 @@ namespace s2
 
 SprGeo::SprGeo() 
 { 
-	Init();
+	Reset();
 }
 
 SprGeo::SprGeo(const SprGeo& geo) 
@@ -25,14 +25,10 @@ SprGeo::~SprGeo()
 {
 }
 
-void SprGeo::Init()
+void SprGeo::Reset()
 {
-	m_srt.Init();
+	m_srt.Reset();
 	m_mat.Identity();
-}
-
-void SprGeo::Term()
-{
 }
 
 }

@@ -1,7 +1,6 @@
 #include "ImageSprite.h"
 #include "FilterMode.h"
 #include "RenderShader.h"
-#include "RenderFilter.h"
 #include "RenderShader.h"
 #include "UpdateParams.h"
 #include "S2_Symbol.h"
@@ -66,7 +65,7 @@ bool ImageSprite::Update(const UpdateParams& up)
 	}
 
 	FilterMode filter_mode = up.GetPrevFilter();
-	const RenderFilter* filter = GetShader().GetFilter();
+	auto& filter = GetShader().GetFilter();
 	if (filter && filter->GetMode() != FM_NULL) {
 		filter_mode = filter->GetMode();
 	}

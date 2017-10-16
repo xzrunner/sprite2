@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_OUTLINE) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFOutline(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFOutline(*this);
+	}
 
 }; // RFOutline
 

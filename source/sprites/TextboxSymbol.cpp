@@ -2,7 +2,6 @@
 #include "SymType.h"
 #include "TextboxSprite.h"
 #include "RenderParams.h"
-#include "RenderFilter.h"
 #include "TextboxActor.h"
 #include "DrawNode.h"
 #include "UpdateParams.h"
@@ -12,6 +11,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <gtxt_label.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterMode.h>
@@ -63,16 +63,15 @@ RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_INVISIBLE;
 	}
 
 	RenderReturn ret = DrawImpl(nullptr, *rp_child, spr);
-
-	RenderParamsPool::Instance()->Push(rp_child);
 
 	return ret;
 }

@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_GRAY) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFGray(); }
+	virtual RenderFilter* Clone() const override {
+		return new RFGray(*this);
+	}
 
 }; // RFGray
 

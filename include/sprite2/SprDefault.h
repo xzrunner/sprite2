@@ -15,13 +15,13 @@ class RenderCamera;
 class SprDefault
 {
 public:
-	SprGeo* Geo() { return m_geo; }
+	auto& Geo() { return m_geo; }
 
-	SprRender* Render() { return m_render; }
+	auto& Render() { return m_render; }
 
-	RenderColor*  Color() { return m_color; }
-	RenderShader* Shader() { return m_shader; }
-	RenderCamera* Camera() { return m_camera; }
+	auto& Color() { return m_color; }
+	auto& Shader() { return m_shader; }
+	auto& Camera() { return m_camera; }
 
 private:
 	SprGeo*       m_geo;

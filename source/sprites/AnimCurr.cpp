@@ -18,6 +18,8 @@
 #include "SetStaticFrameVisitor.h"
 #include "AABBHelper.h"
 
+#include <memmgr/Allocator.h>
+
 #include <algorithm>
 #include <climits>
 #include <map>
@@ -31,7 +33,6 @@ namespace s2
 
 AnimCurr::AnimCurr()
 	: m_copy(nullptr)
-	, m_curr(nullptr)
 {
 	ResetLayerCursor();
 }
@@ -41,10 +42,8 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_layer_cursor(curr.m_layer_cursor)
 	, m_layer_cursor_update(curr.m_layer_cursor_update)
 	, m_slots(curr.m_slots)
-	, m_curr_num(curr.m_curr_num)
+	, m_curr(curr.m_curr)
 {
-	m_curr = new int[curr.m_copy->m_max_item_num];
-	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
 }
 
 AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
@@ -53,19 +52,12 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	m_layer_cursor = curr.m_layer_cursor;
 	m_layer_cursor_update = curr.m_layer_cursor_update;
 	m_slots = curr.m_slots;
-	m_curr_num = curr.m_curr_num;
-	m_curr = new int[curr.m_copy->m_max_item_num];
-	memcpy(m_curr, curr.m_curr, curr.m_curr_num * sizeof(int));
+	m_curr = curr.m_curr;
 	m_ctrl = curr.m_ctrl;
 	return *this;
 }
 
-AnimCurr::~AnimCurr()
-{
-	delete m_curr;
-}
-
-std::unique_ptr<AnimCurr> AnimCurr::Clone() const
+AnimCurr::AnimCurrPtr AnimCurr::Clone() const
 {
 	return std::make_unique<AnimCurr>(*this);
 }
@@ -93,9 +85,7 @@ void AnimCurr::AssignSameStruct(const AnimCurr& src)
 		(*s)->SetVisible((*d)->IsVisible());
 	}
 
-	assert(m_curr && src.m_curr);
-	memcpy(m_curr, src.m_curr, sizeof(int) * m_copy->m_max_item_num);
-	m_curr_num = src.m_curr_num;
+	m_curr = src.m_curr;
 }
 
 bool AnimCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* spr,
@@ -161,21 +151,19 @@ void AnimCurr::Start(const UpdateParams& up, const Sprite* spr)
 
 void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 {
-	if (m_curr_num == 0) {
+	if (m_curr.empty()) {
 		return;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(spr);
+	UpdateParams up_child(up);
+	up_child.Push(spr);
 	int* curr = &m_curr[0];
-	for (int i = 0; i < m_curr_num; ++i, ++curr) 
+	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) 
 	{
 		auto& child = m_slots[*curr];
-		up_child->SetActor(child->QueryActor(up.GetActor()));
-		child->OnMessage(*up_child, msg);
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(up_child, msg);
 	}
-	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 SprPtr AnimCurr::FetchChildByName(int name, const ActorConstPtr& actor) const
@@ -236,7 +224,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 //VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const
 //{
 //	VisitResult ret = VISIT_OVER;
-//	if (m_curr_num == 0) {
+//	if (m_curr.empty()) {
 //		return ret;
 //	}
 //
@@ -267,27 +255,30 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 
 RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 {
-	if (m_curr_num == 0) {
+	if (m_curr.empty()) {
 		return RENDER_NO_DATA;
 	}
 
 	RenderReturn ret = RENDER_OK;
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	int* curr = &m_curr[0];
-	for (int i = 0; i < m_curr_num; ++i, ++curr) {
+
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
+	const int* curr = &m_curr[0];
+	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) {
 		const SprPtr& child = m_slots[*curr];
 		rp_child->actor = child->QueryActor(rp.actor);
 		ret |= DrawNode::Draw(child.get(), *rp_child);
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
+
 	return ret;
 }
 
 void AnimCurr::Clear()
 {
 	m_ctrl.Clear();
-	m_curr_num = 0;
+	m_curr.clear();
 	UpdateSlotsVisible();
 }
 
@@ -304,9 +295,8 @@ void AnimCurr::SetAnimCopy(const std::shared_ptr<AnimCopy>& copy)
 
 	m_copy = copy;
 
-	delete[] m_curr;
-	m_curr = new int[copy->m_max_item_num];
-	m_curr_num = 0;
+	m_curr.clear();
+	m_curr.reserve(copy->m_max_item_num);
 
 	ResetLayerCursor();
 
@@ -443,13 +433,12 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 		return;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(spr);
+	UpdateParams up_child(up);
+	up_child.Push(spr);
 
 	int ctrl_frame = m_ctrl.GetFrame();
 
-	m_curr_num = 0;
+	m_curr.clear();
 	int* layer_cursor_ptr = &m_layer_cursor[0];
 	int* layer_cursor_update_ptr = &m_layer_cursor_update[0];
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i, ++layer_cursor_ptr, ++layer_cursor_update_ptr)
@@ -462,7 +451,7 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 		const AnimCopy::Frame& frame = layer.frames[cursor];
 		for (auto& actor : frame.items)
 		{
-			m_curr[m_curr_num++] = actor.slot;
+			m_curr.push_back(actor.slot);
 			if (actor.next != -1) 
 			{
 				assert(actor.lerp != -1);
@@ -514,37 +503,33 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 			if (!last_frame && *layer_cursor_update_ptr && actor.prev == -1)
 			{
 				SprPtr& child = m_slots[actor.slot];
-				up_child->SetActor(child->QueryActor(up.GetActor()));
-				child->OnMessage(*up_child, MSG_TRIGGER);
+				up_child.SetActor(child->QueryActor(up.GetActor()));
+				child->OnMessage(up_child, MSG_TRIGGER);
 			}
 		}
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 
 	UpdateSlotsVisible();
 }
 
 bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 {
-	if (m_curr_num == 0) {
+	if (m_curr.empty()) {
 		return false;
 	}
 
 	bool dirty = false;
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(spr);
+	UpdateParams up_child(up);
+	up_child.Push(spr);
 	int* curr = &m_curr[0];
-	for (int i = 0; i < m_curr_num; ++i, ++curr) 
+	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) 
 	{
 		SprPtr& child = m_slots[*curr];
-		up_child->SetActor(child->QueryActor(up.GetActor()));
-		if (child->Update(*up_child)) {
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(up_child)) {
 			dirty = true;
 		}
 	}
-	UpdateParamsPool::Instance()->Push(up_child); 
 	return dirty;
 }
 
@@ -591,12 +576,12 @@ void AnimCurr::UpdateSlotsVisible()
 		spr->SetVisible(false);
 	}
 
-	if (m_curr_num == 0) {
+	if (m_curr.empty()) {
 		return;
 	}
 
 	int* curr = &m_curr[0];
-	for (int i = 0; i < m_curr_num; ++i, ++curr) {
+	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) {
 		m_slots[*curr]->SetVisible(true);
 	}
 }

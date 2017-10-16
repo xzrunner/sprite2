@@ -6,6 +6,7 @@
 #include "DrawNode.h"
 #include "S2_RenderTargetMgr.h"
 
+#include <memmgr/Allocator.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
@@ -30,8 +31,9 @@ RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bo
 	BlendMode mode = spr->GetShader().GetBlend();
 	shader->SetMode(mode);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->SetChangeShader(false);
 	rp_child->SetDisableBlend(true);
@@ -41,8 +43,6 @@ RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bo
 		rp_child->vertex_offset = - (rp_child->mt * spr->GetPosition());
 	}
 	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	shader->Commit();
 

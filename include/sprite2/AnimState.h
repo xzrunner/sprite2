@@ -4,6 +4,8 @@
 #include "sprite2/s2_config.h"
 #include "s2_typedef.h"
 
+#include <memmgr/Allocator.h>
+
 #include <memory>
 
 namespace s2
@@ -39,8 +41,9 @@ public:
 #endif // S2_MULTITHREAD
 
 private:
-	void Init(std::unique_ptr<AnimCurr>& dst, 
-		const std::shared_ptr<AnimCopy>& copy);
+//	using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
+	using AnimCurrPtr = std::unique_ptr<AnimCurr>;
+	void Init(AnimCurrPtr& dst, const std::shared_ptr<AnimCopy>& copy);
 
 	bool IsVaild() const {
 #ifdef S2_MULTITHREAD
@@ -51,10 +54,10 @@ private:
 	}
 
 private:
-	std::unique_ptr<AnimCurr> m_origin;
+	AnimCurrPtr m_origin;
 #ifdef S2_MULTITHREAD
-	std::unique_ptr<AnimCurr> m_update;
-	std::unique_ptr<AnimCurr> m_draw;
+	AnimCurrPtr m_update;
+	AnimCurrPtr m_draw;
 #endif // S2_MULTITHREAD
 
 }; // AnimState

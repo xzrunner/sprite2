@@ -51,20 +51,17 @@ void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 {
 	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(this);
+	UpdateParams up_child(up);
+	up_child.Push(this);
 
 	if (auto& base = sym->GetBase()) {
-		up_child->SetActor(base->QueryActor(up.GetActor()));
-		std::const_pointer_cast<Sprite>(base)->OnMessage(*up_child, msg);
+		up_child.SetActor(base->QueryActor(up.GetActor()));
+		std::const_pointer_cast<Sprite>(base)->OnMessage(up_child, msg);
 	}
 	if (auto& mask = sym->GetMask()) {
-		up_child->SetActor(mask->QueryActor(up.GetActor()));
-		std::const_pointer_cast<Sprite>(mask)->OnMessage(*up_child, msg);
+		up_child.SetActor(mask->QueryActor(up.GetActor()));
+		std::const_pointer_cast<Sprite>(mask)->OnMessage(up_child, msg);
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool MaskSprite::Update(const UpdateParams& up)
@@ -83,25 +80,22 @@ bool MaskSprite::Update(const UpdateParams& up)
 
 	bool dirty = false;
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(this);
+	UpdateParams up_child(up);
+	up_child.Push(this);
 
 	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 	if (auto& base = sym->GetBase()) {
-		up_child->SetActor(base->QueryActor(up.GetActor()));
-		if (std::const_pointer_cast<Sprite>(base)->Update(*up_child)) {
+		up_child.SetActor(base->QueryActor(up.GetActor()));
+		if (std::const_pointer_cast<Sprite>(base)->Update(up_child)) {
 			dirty = true;
 		}
 	}
 	if (auto& mask = sym->GetMask()) {
-		up_child->SetActor(mask->QueryActor(up.GetActor()));
-		if (std::const_pointer_cast<Sprite>(mask)->Update(*up_child)) {
+		up_child.SetActor(mask->QueryActor(up.GetActor()));
+		if (std::const_pointer_cast<Sprite>(mask)->Update(up_child)) {
 			dirty = true;
 		}
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 
 	return dirty;
 }

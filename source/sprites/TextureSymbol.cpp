@@ -8,6 +8,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
@@ -64,10 +65,11 @@ RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 //	StatSymDraw::DrawCostCP cp(STAT_SYM_TEXTURE);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -82,8 +84,6 @@ RenderReturn TextureSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
 		m_polygons[i]->Draw(*rp_child);
 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

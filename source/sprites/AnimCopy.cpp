@@ -55,7 +55,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 		dst_layer.frames.resize(src_layer->frames.size());
 		for (int iframe = 0, nframe = src_layer->frames.size(); iframe < nframe; ++iframe)
 		{
-			const std::unique_ptr<AnimSymbol::Frame>& src_frame = src_layer->frames[iframe];
+			const auto& src_frame = src_layer->frames[iframe];
 			Frame& dst_frame = dst_layer.frames[iframe];
 			dst_frame.time = src_frame->index;
 

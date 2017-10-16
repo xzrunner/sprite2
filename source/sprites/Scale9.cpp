@@ -252,13 +252,13 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 
 	spr->SetPosition(center);
 
-	int src_w, src_h;
+	float src_w, src_h;
 	sm::vec2 sz = img_sym->GetNoTrimedSize();
 	if (sz.x == 0 || sz.y == 0) {
 		return;
 	}
-	src_w = static_cast<int>(sz.x);
-	src_h = static_cast<int>(sz.y);
+	src_w = sz.x;
+	src_h = sz.y;
 
 	const float times = spr->GetAngle() / SM_PI;
 	bool rotate = fabs(times - (int)times) > 0.1f;
@@ -269,32 +269,32 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 			switch (idx)
 			{
 			case S9_DOWN_LEFT:
-				src_h = m_sz_left;
-				src_w = m_sz_down;
+				src_h = static_cast<float>(m_sz_left);
+				src_w = static_cast<float>(m_sz_down);
 				break;
 			case S9_DOWN_CENTER:
-				src_w = m_sz_down;
+				src_w = static_cast<float>(m_sz_down);
 				break;
 			case S9_DOWN_RIGHT:
-				src_h = m_sz_right;
-				src_w = m_sz_down;
+				src_h = static_cast<float>(m_sz_right);
+				src_w = static_cast<float>(m_sz_down);
 				break;
 			case S9_MID_LEFT:
-				src_h = m_sz_left;
+				src_h = static_cast<float>(m_sz_left);
 				break;
 			case S9_MID_RIGHT:
-				src_h = m_sz_right;
+				src_h = static_cast<float>(m_sz_right);
 				break;
 			case S9_TOP_LEFT:
-				src_h = m_sz_left;
-				src_w = m_sz_top;
+				src_h = static_cast<float>(m_sz_left);
+				src_w = static_cast<float>(m_sz_top);
 				break;
 			case S9_TOP_CENTER:
-				src_w = m_sz_top;			
+				src_w = static_cast<float>(m_sz_top);
 				break;
 			case S9_TOP_RIGHT:
-				src_h = m_sz_right;
-				src_w = m_sz_top;
+				src_h = static_cast<float>(m_sz_right);
+				src_w = static_cast<float>(m_sz_top);
 				break;
 			default:
 				break;
@@ -305,32 +305,32 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 			switch (idx)
 			{
 			case S9_DOWN_LEFT:
-				src_w = m_sz_left;
-				src_h = m_sz_down;
+				src_w = static_cast<float>(m_sz_left);
+				src_h = static_cast<float>(m_sz_down);
 				break;
 			case S9_DOWN_CENTER:
-				src_h = m_sz_down;
+				src_h = static_cast<float>(m_sz_down);
 				break;
 			case S9_DOWN_RIGHT:
-				src_w = m_sz_right;
-				src_h = m_sz_down;
+				src_w = static_cast<float>(m_sz_right);
+				src_h = static_cast<float>(m_sz_down);
 				break;
 			case S9_MID_LEFT:
-				src_w = m_sz_left;
+				src_w = static_cast<float>(m_sz_left);
 				break;
 			case S9_MID_RIGHT:
-				src_w = m_sz_right;
+				src_w = static_cast<float>(m_sz_right);
 				break;
 			case S9_TOP_LEFT:
-				src_w = m_sz_left;
-				src_h = m_sz_top;
+				src_w = static_cast<float>(m_sz_left);
+				src_h = static_cast<float>(m_sz_top);
 				break;
 			case S9_TOP_CENTER:
-				src_h = m_sz_top;			
+				src_h = static_cast<float>(m_sz_top);
 				break;
 			case S9_TOP_RIGHT:
-				src_w = m_sz_right;
-				src_h = m_sz_top;
+				src_w = static_cast<float>(m_sz_right);
+				src_h = static_cast<float>(m_sz_top);
 				break;
 			default:
 				break;

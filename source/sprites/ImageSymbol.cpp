@@ -15,6 +15,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #ifdef S2_DEBUG
 #include <logger.h>
 #endif // S2_DEBUG
@@ -77,16 +78,16 @@ RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 		return RENDER_ON_LOADING;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
 	float vertices[8];
 	if (!CalcVertices(*rp_child, vertices)) {
-		RenderParamsPool::Instance()->Push(rp_child);
 		return RENDER_OUTSIDE;
 	}
 
@@ -113,8 +114,6 @@ RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
 		//}
 	}
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return RENDER_OK;
 }

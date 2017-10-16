@@ -20,6 +20,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <SM_Test.h>
 
 #include <map>
@@ -77,10 +78,11 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 //	StatSymDraw::DrawCostCP cp2(STAT_SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -138,8 +140,6 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 		RenderScissor::Instance()->Pop();
 	}
 
-	RenderParamsPool::Instance()->Push(rp_child); 
-
 	return ret;
 }
 
@@ -152,21 +152,19 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 {
 	bool ret = false;
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
+	UpdateParams up_child(up);
 	for (auto& child : m_children) 
 	{
-		up_child->SetActor(child->QueryActor(up.GetActor()));
-		if (child->Update(*up_child)) {
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		if (child->Update(up_child)) {
 			ret = true;
 		}
 	}
-	UpdateParamsPool::Instance()->Push(up_child); 
 
 	return ret;
 }
 
-const std::vector<SprPtr>& ComplexSymbol::GetActionChildren(int action) const
+const mm::AllocVector<SprPtr>& ComplexSymbol::GetActionChildren(int action) const
 {
 	if (action < 0 || action >= static_cast<int>(m_actions.size())) {
 		return m_children;

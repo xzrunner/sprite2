@@ -116,12 +116,11 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr,
 		shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 	} else {
-		RenderColor* col = RenderColorPool::Instance()->Pop();
-		Utility::PrepareColor(rp.color, spr, rp.actor, *col);
-		shader->SetColor(col->GetMulABGR(), col->GetAddABGR());
-		shader->SetColorMap(col->GetRMapABGR(),col->GetGMapABGR(), col->GetBMapABGR());
+		RenderColor col;
+		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
-		RenderColorPool::Instance()->Push(col);
 	}
 
 	return RENDER_OK;
@@ -152,12 +151,11 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
 		shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 		shader->DrawQuad(vertices, texcoords, tex_id);
 	} else {
-		RenderColor* col = RenderColorPool::Instance()->Pop();
-		Utility::PrepareColor(rp.color, spr, rp.actor, *col);
-		shader->SetColor(col->GetMulABGR(), col->GetAddABGR());
-		shader->SetColorMap(col->GetRMapABGR(),col->GetGMapABGR(), col->GetBMapABGR());
+		RenderColor col;
+		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);
-		RenderColorPool::Instance()->Push(col);
 	}
 
 	RenderCtxStack::Instance()->Pop();

@@ -8,7 +8,7 @@ CU_SINGLETON_DEFINITION(ActorDefault);
 
 ActorDefault::ActorDefault()
 {
-	m_geo = ActorGeoPool::Instance()->Pop();
+	m_geo = new ActorGeo();
 }
 
 }

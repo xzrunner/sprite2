@@ -5,6 +5,13 @@ namespace s2
 {
 
 inline
+void ActorGeo::Reset()
+{
+	m_srt.Reset();
+	m_mat.Identity();
+}
+
+inline
 void ActorGeo::SetPosition(const sm::vec2& pos) 
 { 
 	m_srt.position = pos;
@@ -39,11 +46,11 @@ void ActorGeo::UpdateMatrix()
 inline
 ActorGeo::SRT::SRT()
 {
-	Init();
+	Reset();
 }
 
 inline
-void ActorGeo::SRT::Init()
+void ActorGeo::SRT::Reset()
 {
 	position.Set(0, 0);
 	angle = 0;

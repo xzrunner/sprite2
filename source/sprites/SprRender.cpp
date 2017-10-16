@@ -2,86 +2,74 @@
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
+#include "SprDefault.h"
+
+#include <memmgr/Allocator.h>
 
 namespace s2
 {
 
 SprRender::SprRender()
+	: m_color(SprDefault::Instance()->Color())
+	, m_shader(SprDefault::Instance()->Shader())
+	, m_camera(SprDefault::Instance()->Camera())
 {
-	Init();
-
-	//////////////////////////////////////////////////////////////////////////
-
-//	m_state.shader.filter = FilterFactory::Instance()->Create(FM_NULL);
-
-// 	FilterMode fm = FM_NULL;
-// 	if (spr.Shader().filter) {
-// 		fm = spr.Shader().filter->GetMode();
-// 	}
-// 	m_state.shader.filter = FilterFactory::Instance()->Create(fm);
 }
 
-SprRender::SprRender(RenderColor* color, RenderShader* shader, 
-					 RenderCamera* camera)
+SprRender::SprRender(RenderColor* color, RenderShader* shader, RenderCamera* camera)
+	: m_color(color)
+	, m_shader(shader)
+	, m_camera(camera)
 {
-	m_state.color  = color;
-	m_state.shader = shader;
-	m_state.camera = camera;
 }
 
 SprRender::~SprRender()
 {
-	Term();
+	if (m_color != SprDefault::Instance()->Color()) {
+		mm::AllocHelper::Delete(m_color);
+	}
+	if (m_shader != SprDefault::Instance()->Shader()) {
+		mm::AllocHelper::Delete(m_shader);
+	}
+	if (m_camera != SprDefault::Instance()->Camera()) {
+		mm::AllocHelper::Delete(m_camera);
+	}
 }
 
 void SprRender::SetColor(const RenderColor& color)
 {
-	if (m_state.color) {
-		RenderColorPool::Instance()->Push(m_state.color);
+	if (*m_color == color) {
+		return;
 	}
-	m_state.color = RenderColorPool::Instance()->Pop();
-	*m_state.color = color;
+	if (m_color == SprDefault::Instance()->Color()) {
+		m_color = mm::AllocHelper::New<RenderColor>(color);
+	} else {
+		*m_color = color;
+	}
 }
 
 void SprRender::SetShader(const RenderShader& shader)
 {
-	if (m_state.shader) {
-		RenderShaderPool::Instance()->Push(m_state.shader);
+	if (*m_shader == shader) {
+		return;
 	}
-	m_state.shader = RenderShaderPool::Instance()->Pop();
-	*m_state.shader = shader;
+	if (m_shader == SprDefault::Instance()->Shader()) {
+		m_shader = mm::AllocHelper::New<RenderShader>(shader);
+	} else {
+		*m_shader = shader;
+	}
 }
 
 void SprRender::SetCamera(const RenderCamera& camera)
 {
-	if (m_state.camera) {
-		RenderCameraPool::Instance()->Push(m_state.camera);
+	if (*m_camera == camera) {
+		return;
 	}
-	m_state.camera = RenderCameraPool::Instance()->Pop();
-	*m_state.camera = camera;
-}
-
-void SprRender::Term()
-{
-	if (m_state.color) {
-		RenderColorPool::Instance()->Push(m_state.color);
-		m_state.color  = nullptr;
+	if (m_camera == SprDefault::Instance()->Camera()) {
+		m_camera = mm::AllocHelper::New<RenderCamera>(camera);
+	} else {
+		*m_camera = camera;
 	}
-	if (m_state.shader) {
-		RenderShaderPool::Instance()->Push(m_state.shader);
-		m_state.shader = nullptr;
-	}
-	if (m_state.camera) {
-		RenderCameraPool::Instance()->Push(m_state.camera);
-		m_state.camera = nullptr;
-	}
-}
-
-void SprRender::Init()
-{
-	m_state.color  = nullptr;
-	m_state.shader = nullptr;
-	m_state.camera = nullptr;
 }
 
 }

@@ -12,6 +12,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <flatten/FTNode.h>
 
 namespace s2
@@ -65,10 +66,11 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 //	StatSymDraw::DrawCostCP cp(STAT_SYM_MASK);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 	RenderReturn ret = RENDER_OK;
@@ -84,7 +86,7 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 			ret = DrawNode::Draw(m_mask.get(), *rp_child);
 		}
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
+
 	return ret;
 }
 

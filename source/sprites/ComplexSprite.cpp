@@ -62,18 +62,15 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
+	UpdateParams up_child(up);
 
-	up_child->Push(this);
+	up_child.Push(this);
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetActionChildren(GetAction(up.GetActor()));
 	for (auto& child : children) {
-		up_child->SetActor(child->QueryActor(up.GetActor()));
-		child->OnMessage(*up_child, msg);
+		up_child.SetActor(child->QueryActor(up.GetActor()));
+		child->OnMessage(up_child, msg);
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 }
 
 bool ComplexSprite::Update(const UpdateParams& up)
@@ -92,21 +89,18 @@ bool ComplexSprite::Update(const UpdateParams& up)
 
 	bool dirty = false;
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
+	UpdateParams up_child(up);
 
-	up_child->Push(this);
+	up_child.Push(this);
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetActionChildren(GetAction(actor));
 	for (auto& child : children) 
 	{
-		up_child->SetActor(child->QueryActor(actor));
-		if (child->Update(*up_child)) {
+		up_child.SetActor(child->QueryActor(actor));
+		if (child->Update(up_child)) {
 			dirty = true;
 		}
 	}
-
-	UpdateParamsPool::Instance()->Push(up_child); 
 
 	return dirty;
 }

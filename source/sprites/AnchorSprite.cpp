@@ -15,15 +15,12 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 		return;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
+	UpdateParams up_child(up);
 
-	up_child->Push(this);
+	up_child.Push(this);
 	auto anchor_spr = anchor->GetSpr();
-	up_child->SetActor(anchor_spr->QueryActor(actor));
-	const_cast<Sprite*>(anchor_spr)->OnMessage(*up_child, msg);
-
-	UpdateParamsPool::Instance()->Push(up_child); 
+	up_child.SetActor(anchor_spr->QueryActor(actor));
+	const_cast<Sprite*>(anchor_spr)->OnMessage(up_child, msg);
 }
 
 bool AnchorSprite::Update(const UpdateParams& up)
@@ -49,14 +46,11 @@ bool AnchorSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
+	UpdateParams up_child(up);
 
-	up_child->Push(this);
-	up_child->SetActor(actor_real);
-	bool ret = const_cast<Sprite*>(spr_real)->Update(*up_child);
-
-	UpdateParamsPool::Instance()->Push(up_child); 
+	up_child.Push(this);
+	up_child.SetActor(actor_real);
+	bool ret = const_cast<Sprite*>(spr_real)->Update(up_child);
 
 	return ret;
 }

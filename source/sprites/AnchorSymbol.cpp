@@ -7,6 +7,7 @@
 #include "S2_Sprite.h"
 #include "BoundingBox.h"
 
+#include <memmgr/Allocator.h>
 #include <assert.h>
 
 namespace s2
@@ -27,8 +28,10 @@ RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 
 	RenderReturn ret = RENDER_OK;
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	rp_child->actor = GetRealActor(spr, rp.actor);
 	if (rp_child->actor) {
 		S2_MAT m;
@@ -39,7 +42,6 @@ RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 	} else {
 		ret = RENDER_NO_DATA;
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

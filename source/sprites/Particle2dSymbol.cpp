@@ -8,6 +8,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <ps_2d.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -59,10 +60,11 @@ RenderReturn Particle2dSymbol::DrawTree(const RenderParams& rp, const Sprite* sp
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -75,8 +77,6 @@ RenderReturn Particle2dSymbol::DrawTree(const RenderParams& rp, const Sprite* sp
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 
 	RenderReturn ret = p2d_spr->Draw(*rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

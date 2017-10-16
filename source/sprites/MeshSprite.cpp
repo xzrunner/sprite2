@@ -88,17 +88,15 @@ bool MeshSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-	*up_child = up;
-	up_child->Push(this);
+	UpdateParams up_child(up);
+	up_child.Push(this);
 	bool ret;
 	if (m_base) {
-		ret = std::const_pointer_cast<Symbol>(m_base)->Update(*up_child, 0);
+		ret = std::const_pointer_cast<Symbol>(m_base)->Update(up_child, 0);
 	} else {
 		const auto& mesh = S2_VI_PTR_DOWN_CAST<MeshSymbol>(m_sym)->GetMesh();
-		ret = std::const_pointer_cast<Symbol>(mesh->GetBaseSymbol())->Update(*up_child, 0);
+		ret = std::const_pointer_cast<Symbol>(mesh->GetBaseSymbol())->Update(up_child, 0);
 	}
-	UpdateParamsPool::Instance()->Push(up_child); 
 	return ret;
 }
 

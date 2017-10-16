@@ -21,6 +21,8 @@
 #include "sprite2/AnimCurr.h"
 #include "sprite2/UpdateParams.h"
 
+#include <memmgr/Allocator.h>
+
 #include <assert.h>
 
 namespace s2
@@ -62,7 +64,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) {
 		const std::unique_ptr<Layer>& layer = m_layers[ilayer];
 		for (int iframe = 0, nframe = layer->frames.size(); iframe < nframe; ++iframe) {
-			const std::unique_ptr<Frame>& frame = layer->frames[iframe];
+			const auto& frame = layer->frames[iframe];
 			for (int ispr = 0, nspr = frame->sprs.size(); ispr < nspr; ++ispr) {
 				visitor.Visit(frame->sprs[ispr]);
 			}
@@ -84,8 +86,11 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 #endif // S2_DISABLE_STATISTICS
 
 	RenderReturn ret = RENDER_OK;
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 #ifndef S2_DISABLE_STATISTICS
 	rp_child->parent_id = id;
 	rp_child->level = rp.level + 1;
@@ -95,7 +100,7 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
 		ret = curr.Draw(*rp_child);
 	}
-	RenderParamsPool::Instance()->Push(rp_child); 
+
 	return ret;
 }
 
@@ -115,7 +120,7 @@ int AnimSymbol::GetMaxFrameIdx() const
 	return index;
 }
 
-void AnimSymbol::CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const
+void AnimSymbol::CreateFrameSprites(int frame, mm::AllocVector<SprPtr>& sprs) const
 {
 	for (auto& layer : m_layers)
 	{
@@ -124,7 +129,7 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const
 		if (curr < 0) {
 			continue;
 		}
-		const std::unique_ptr<Frame>& curr_f = layer->frames[curr];
+		const auto& curr_f = layer->frames[curr];
 		if (!curr_f->tween || next < 0)
 		{
 			for (auto& spr : curr_f->sprs) {
@@ -133,7 +138,7 @@ void AnimSymbol::CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const
 		}
 		else
 		{
-			const std::unique_ptr<Frame>& next_f = layer->frames[next];
+			const auto& next_f = layer->frames[next];
 			assert(frame >= curr_f->index && frame < next_f->index);
 			AnimLerp::Lerp(curr_f->sprs, next_f->sprs, sprs, frame - curr_f->index,
 				next_f->index - curr_f->index, curr_f->lerps);
@@ -196,7 +201,7 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		return anim_actor->GetState().GetOrigin().CalcAABB(actor);
 	}
 
-	std::vector<SprPtr> children;
+	mm::AllocVector<SprPtr> children;
 	int num = 0;
 	for (auto& layer : m_layers) {
 		for (auto& frame : layer->frames) {

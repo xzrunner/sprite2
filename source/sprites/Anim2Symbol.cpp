@@ -9,6 +9,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <rigging.h>
 
 #include <assert.h>
@@ -61,10 +62,11 @@ RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -72,8 +74,6 @@ RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	const Anim2Curr& curr = const_cast<Anim2Sprite*>(anim_spr)->GetAnimCurr();
 	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return RENDER_OK;
 }

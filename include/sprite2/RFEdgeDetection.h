@@ -15,11 +15,13 @@ public:
 	{}
 
 	virtual bool operator == (const RenderFilter& rf) const {
-		return GetMode() == rf.GetMode() &&
+		return RenderFilter::operator == (rf) &&
 			   m_blend == static_cast<const RFEdgeDetection&>(rf).m_blend;
 	}
 
-	virtual RenderFilter* Clone() const { return new RFEdgeDetection(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFEdgeDetection(*this);
+	}
 
 	float GetBlend() const { return m_blend; }
 	void SetBlend(float blend) { m_blend = blend; }

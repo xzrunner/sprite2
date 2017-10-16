@@ -25,11 +25,11 @@ ActorProxy* ActorProxyPool::Create(const ActorPtr& actor)
 {
 	auto itr = m_hash.find(actor.get());
 	if (itr != m_hash.end()) {
-		return itr->second;
+		return itr->second.get();
 	} else {
-		ActorProxy* new_p = new ActorProxy(actor);
+		auto new_p = mm::allocate_shared<ActorProxy>(actor);
 		m_hash.insert(std::make_pair(actor.get(), new_p));
-		return new_p;
+		return new_p.get();
 	}
 }
 
@@ -37,9 +37,7 @@ void ActorProxyPool::Delete(const ActorPtr& actor)
 {
 	auto itr = m_hash.find(actor.get());
 	assert(itr != m_hash.end());
-	ActorProxy* proxy = itr->second;
 	m_hash.erase(itr);
-	delete proxy;
 }
 
 }

@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_BLUR) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFBlur(); }
+	virtual RenderFilter* Clone() const override {
+		return new RFBlur(*this);
+	}
 
 }; // RFBlur
 

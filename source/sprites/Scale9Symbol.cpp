@@ -11,6 +11,8 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
+
 #include <assert.h>
 
 namespace s2
@@ -63,23 +65,25 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 
 	RenderReturn ret = RENDER_OK;
 	if (rp.actor) {
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
+		RenderParamsProxy rp_proxy;
+	    RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
+
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			ret = S2_VI_DOWN_CAST<const Scale9Actor*>(rp.actor)->GetScale9().Draw(*rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
-		RenderParamsPool::Instance()->Push(rp_child); 
 	} else if (spr) {
-		RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-		*rp_child = rp;
+		RenderParamsProxy rp_proxy;
+	    RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
+
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			ret = S2_VI_DOWN_CAST<const Scale9Sprite*>(spr)->GetScale9().Draw(*rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
-		RenderParamsPool::Instance()->Push(rp_child); 
 	} else {
 		ret = m_s9.Draw(rp);
 	}

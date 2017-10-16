@@ -172,11 +172,11 @@ void SprGeo::UpdateMatrix()
 inline
 SprGeo::SRT::SRT()
 {
-	Init();
+	Reset();
 }
 
 inline
-void SprGeo::SRT::Init()
+void SprGeo::SRT::Reset()
 {
 	position.Set(0, 0);
 	angle = 0;

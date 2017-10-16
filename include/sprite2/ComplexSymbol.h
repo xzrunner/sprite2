@@ -3,6 +3,8 @@
 
 #include "S2_Symbol.h"
 
+#include <memmgr/Allocator.h>
+
 #include <vector>
 #include <string>
 
@@ -26,8 +28,8 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
-	const std::vector<SprPtr>& GetActionChildren(int action) const;
-	const std::vector<SprPtr>& GetAllChildren() const { return m_children; }
+	const mm::AllocVector<SprPtr>& GetActionChildren(int action) const;
+	const mm::AllocVector<SprPtr>& GetAllChildren() const { return m_children; }
 
 	const sm::rect& GetScissor() const { return m_scissor; }
 	void SetScissor(const sm::rect& scissor);
@@ -50,11 +52,11 @@ public:
 	struct Action
 	{
 		std::string name;
-		std::vector<SprPtr> sprs;
+		mm::AllocVector<SprPtr> sprs;
 	};
 
-	const std::vector<Action>& GetActions() const { return m_actions; }
-	void SetActions(const std::vector<Action>& actions) { m_actions = actions; }
+	const auto& GetActions() const { return m_actions; }
+	void SetActions(const mm::AllocVector<Action>& actions) { m_actions = actions; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
@@ -65,9 +67,9 @@ private:
 	int GetAction(const Sprite* spr, const Actor* actor) const;
 
 protected:
-	std::vector<SprPtr> m_children;
+	mm::AllocVector<SprPtr> m_children;
 
-	std::vector<Action> m_actions;
+	mm::AllocVector<Action> m_actions;
 
 	sm::rect m_scissor;
 

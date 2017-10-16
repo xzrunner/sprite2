@@ -7,7 +7,6 @@
 #include S2_MAT_HEADER
 
 #include "FilterMode.h"
-#include "ObjectPool3.h"
 
 #include <memory>
 
@@ -25,6 +24,8 @@ public:
 	UpdateParams(const UpdateParams& params);
 	UpdateParams& operator = (const UpdateParams& params);
 
+	void Reset();
+
 	void Push(const Sprite* spr);
 
 	void SetPrevMat(const S2_MAT& mat);
@@ -38,15 +39,6 @@ public:
 	void SetForce(bool force) { m_force = force; }
 	bool IsForce() const { return m_force; }
 
-	/**
-	 *  @interface
-	 *    ObjectPool3
-	 */
-	void Init();
-	void Term();
-	UpdateParams* GetNext() const { return m_next; }
-	void SetNext(UpdateParams* next) { m_next = next; }
-
 private:
 	S2_MAT        m_prev_mat;
 	FilterMode    m_prev_filter;
@@ -55,11 +47,7 @@ private:
 
 	bool          m_force;
 
-	UpdateParams* m_next;
-
 }; // UpdateParams
-
-typedef ObjectPool3<UpdateParams> UpdateParamsPool;
 
 }
 

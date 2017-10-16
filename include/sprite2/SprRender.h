@@ -1,8 +1,6 @@
 #ifndef _SPRITE2_SPR_RENDER_H_
 #define _SPRITE2_SPR_RENDER_H_
 
-#include "ObjectPool.h"
-
 namespace s2
 {
 
@@ -14,44 +12,24 @@ class SprRender
 {
 public:
 	SprRender();
-	SprRender(RenderColor* color, RenderShader* shader, 
+	SprRender(RenderColor* color, RenderShader* shader,
 		RenderCamera* camera);
 	~SprRender();
 
-	const RenderColor*  GetColor() const { return m_state.color; }
-	const RenderShader* GetShader() const { return m_state.shader; }
-	const RenderCamera* GetCamera() const { return m_state.camera; }
+	const auto& GetColor() const  { return m_color; }
+	const auto& GetShader() const { return m_shader; }
+	const auto& GetCamera() const { return m_camera; }
 
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term();
-	SprRender* GetNext() const { return m_state.next; }
-	void SetNext(SprRender* next) { m_state.next = next; }
-
 private:
-	union
-	{
-		struct
-		{
-			RenderColor*  color;
-			RenderShader* shader;
-			RenderCamera* camera;
-		};
-
-		SprRender* next;
-
-	} m_state;
+	RenderColor*  m_color;
+	RenderShader* m_shader;
+	RenderCamera* m_camera;
 
 }; // SprRender
-
-typedef ObjectPool<SprRender> SprRenderPool;
 
 }
 

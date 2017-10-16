@@ -7,10 +7,14 @@
 #include "s2_typedef.h"
 #include "VisitResult.h"
 #include "SprActors.h"
+#include "SprRender.h"
+#include "SprDefault.h"
+#include "SprGeo.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
+#include <memmgr/Allocator.h>
 
 #include <string>
 
@@ -23,10 +27,8 @@ class UpdateParams;
 class Symbol;
 class BoundingBox;
 class SprGeo;
-class SprRender;
 class RenderColor;
 class RenderShader;
-class RenderCamera;
 class SpriteVisitor;
 class Actor;
 class SprVisitorParams;
@@ -91,9 +93,9 @@ public:
 	const sm::vec2& GetShear() const;
 	const sm::vec2& GetOffset() const;
 
-	const RenderColor&	GetColor() const;
-	const RenderShader& GetShader() const;
-	const RenderCamera& GetCamera() const;
+	const RenderColor&	GetColor() const { return *m_render->GetColor(); }
+	const RenderShader& GetShader() const { return *m_render->GetShader(); }
+	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
 	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
@@ -197,25 +199,36 @@ protected:
 	/************************************************************************/
 	/* info                                                                 */
 	/************************************************************************/
-	int                     m_name;
+	int m_name;
 
 	/************************************************************************/
 	/* geometry                                                             */
 	/************************************************************************/
-	mutable SprGeo*         m_geo;
-	mutable BoundingBox*	m_bounding;
+	static void geo_deleter(SprGeo* geo) { 
+		if (geo != SprDefault::Instance()->Geo()) {
+			mm::AllocHelper::Free(geo, sizeof(SprGeo));
+		}
+	};
+	mutable std::unique_ptr<SprGeo, decltype(&geo_deleter)> m_geo;
+
+	mutable std::unique_ptr<BoundingBox> m_bounding;
 
 	/************************************************************************/
 	/* draw                                                                 */
 	/************************************************************************/
-	SprRender*              m_render;
+	static void render_deleter(SprRender* render) {
+		if (render != SprDefault::Instance()->Render()) {
+			mm::AllocHelper::Free(render, sizeof(SprRender));
+		}
+	};
+	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
 
 	/************************************************************************/
 	/* extend                                                               */
 	/************************************************************************/
-	mutable uint32_t		m_flags;
+	mutable uint32_t m_flags;
 
-	mutable SprActors*      m_actors;
+	mutable SprActors* m_actors = nullptr;
 
 private:
 	int m_id;

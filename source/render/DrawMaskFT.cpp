@@ -13,8 +13,8 @@
 #include "sprite2/Blackboard.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <flatten/FTNode.h>
-
 #include <SM_Rect.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -116,15 +116,16 @@ RenderReturn DrawMaskFT::DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	rp_child->Reset();
+
 	rp_child->color = rp.color;
 	rp_child->actor = actor;
 	rp_child->SetDisableDTexC2(rp.IsDisableDTexC2());
 //	rp_child->mt = rp.mt;
 
 	ft.DrawForward(base, *rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	shader->Commit();
 
@@ -144,15 +145,16 @@ RenderReturn DrawMaskFT::DrawMaskToRT(RenderTarget* rt, ft::FTList& ft, int mask
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	rp_child->Reset();
+
 	rp_child->SetChangeShader(false);
 	rp_child->actor = actor;
 	rp_child->SetDisableDTexC2(rp.IsDisableDTexC2());
 //	rp_child->mt = rp.mt;
 
 	ft.DrawForward(mask, *rp_child);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	shader->Commit();
 

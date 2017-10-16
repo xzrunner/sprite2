@@ -21,11 +21,9 @@ void ProxySprite::OnMessage(const UpdateParams& up, Message msg)
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	for (auto& item : items) 
 	{
-		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-		*up_child = up;
-		up_child->SetActor(item.second->QueryActor(item.first.get()));
-		item.second->OnMessage(*up_child, msg);
-		UpdateParamsPool::Instance()->Push(up_child); 
+		UpdateParams up_child(up);
+		up_child.SetActor(item.second->QueryActor(item.first.get()));
+		item.second->OnMessage(up_child, msg);
 	}
 }
 
@@ -35,13 +33,11 @@ bool ProxySprite::Update(const UpdateParams& up)
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	for (auto& item : items) 
 	{
-		UpdateParams* up_child = UpdateParamsPool::Instance()->Pop();
-		*up_child = up;
-		up_child->SetActor(item.second->QueryActor(item.first.get()));
-		if (item.second->Update(*up_child)) {
+		UpdateParams up_child(up);
+		up_child.SetActor(item.second->QueryActor(item.first.get()));
+		if (item.second->Update(up_child)) {
 			ret = true;
 		}
-		UpdateParamsPool::Instance()->Push(up_child); 
 	}
 	return ret;
 }

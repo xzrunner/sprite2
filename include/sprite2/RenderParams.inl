@@ -4,7 +4,7 @@
 namespace s2
 {
 
-//static RenderParams IDENTITY;
+static RenderParams DEFAULT_RP;
 
 inline
 RenderParams::RenderParams()
@@ -12,7 +12,6 @@ RenderParams::RenderParams()
 	, actor(nullptr)
 	, min_edge(0)
 	, m_flags(0)
-	, m_next(nullptr)
 #ifndef S2_DISABLE_STATISTICS
 	, level(0)
 	, parent_id(0)
@@ -23,65 +22,21 @@ RenderParams::RenderParams()
 
 inline
 RenderParams::RenderParams(const RenderParams& params)
-	: vertex_offset(params.vertex_offset)
-	, view_region(params.view_region)
-	, mt(params.mt)
-	, color(params.color)
-	, shader(params.shader)
-	, camera(params.camera)
-	, actor(params.actor)
-	, min_edge(params.min_edge)
-	, m_flags(params.m_flags)
-	, m_next(nullptr)
-#ifndef S2_DISABLE_STATISTICS
-	, level(params.level)
-	, parent_id(params.parent_id)
-#endif // S2_DISABLE_STATISTICS
 {
+	memcpy(this, &params, sizeof(params));
 }
 
 inline
 RenderParams& RenderParams::operator = (const RenderParams& params)
 {
-	vertex_offset = params.vertex_offset;
-	view_region   = params.view_region;
-	mt            = params.mt;
-	color         = params.color;
-	shader        = params.shader;
-	camera        = params.camera;
-	actor         = params.actor;
-	m_flags       = params.m_flags;
-	min_edge      = params.min_edge;
-#ifndef S2_DISABLE_STATISTICS
-	level         = params.level;
-	parent_id     = params.parent_id;
-#endif // S2_DISABLE_STATISTICS
+	memcpy(this, &params, sizeof(params));
 	return *this;
 }
 
 inline
 void RenderParams::Reset()
 {
-	vertex_offset.Set(0, 0);
-
-	view_region.MakeEmpty();
-
-	mt.Identity();
-
-	color.Init();
-	shader.Init();
-	camera.Init();
-
-	m_flags = 0;
-
-	SetChangeShader(true);
-
-	min_edge = 0;
-
-#ifndef S2_DISABLE_STATISTICS
-	level = 0;
-	parent_id = 0;
-#endif // S2_DISABLE_STATISTICS
+	memcpy(this, &DEFAULT_RP, sizeof(DEFAULT_RP));
 }
 
 inline
@@ -106,20 +61,6 @@ void RenderParams::ClearViewRegion()
 {
 	view_region.MakeEmpty();
 	SetViewRegionValid(false);
-}
-
-inline
-void RenderParams::Init()
-{
-	Reset();
-}
-
-inline
-void RenderParams::Term()
-{
-	color.Term();
-	shader.Term();
-	camera.Term();
 }
 
 }

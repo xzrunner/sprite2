@@ -16,6 +16,7 @@
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -321,8 +322,10 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	rp_child->mt.Identity();
 
 	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
@@ -330,8 +333,6 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	mgr->FlushShader();
 
 	rt->Unbind();
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

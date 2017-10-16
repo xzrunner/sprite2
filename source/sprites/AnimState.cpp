@@ -54,8 +54,7 @@ void AnimState::Flush()
 }
 #endif // S2_MULTITHREAD
 
-void AnimState::Init(std::unique_ptr<AnimCurr>& dst, 
-	                 const std::shared_ptr<AnimCopy>& copy)
+void AnimState::Init(AnimCurrPtr& dst, const std::shared_ptr<AnimCopy>& copy)
 {
 	dst = std::make_unique<AnimCurr>();
 	dst->SetAnimCopy(copy);

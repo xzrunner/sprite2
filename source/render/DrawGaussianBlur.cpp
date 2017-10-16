@@ -13,6 +13,7 @@
 #include "sprite2/StatOverdraw.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -110,8 +111,9 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
 
 	const sm::vec2& offset = spr->GetPosition();
 	rp_child->mt.Translate(-offset.x, -offset.y);
@@ -123,8 +125,6 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
 
 	rt->Unbind();
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

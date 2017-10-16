@@ -14,11 +14,13 @@ public:
 	{}
 
 	virtual bool operator == (const RenderFilter& rf) const {
-		return GetMode() == rf.GetMode() &&
+		return RenderFilter::operator == (rf) &&
 			   m_filepath == static_cast<const RFColGrading&>(rf).GetFilepath();
 	}
 
-	virtual RenderFilter* Clone() const { return new RFColGrading(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFColGrading(*this);
+	}
 
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }

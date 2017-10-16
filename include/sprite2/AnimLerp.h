@@ -1,10 +1,12 @@
 #ifndef _SPRITE2_ANIM_LERP_H_
 #define _SPRITE2_ANIM_LERP_H_
 
+#include "sprite2/ILerp.h"
+
+#include <memmgr/Allocator.h>
+
 #include <vector>
 #include <memory>
-
-#include "sprite2/ILerp.h"
 
 namespace s2
 {
@@ -22,8 +24,8 @@ public:
 	};
 
 public:
-	static void Lerp(const std::vector<SprPtr>& begin, const std::vector<SprPtr>& end,
-		std::vector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);
+	static void Lerp(const mm::AllocVector<SprPtr>& begin, const mm::AllocVector<SprPtr>& end,
+		mm::AllocVector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);
 
 	static void Lerp(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time,
 		const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps);	

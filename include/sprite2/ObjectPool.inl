@@ -7,7 +7,7 @@ namespace s2
 {
 
 template <typename T>
-ObjectPool<T>* ObjectPool<T>::m_instance = nullptr;
+ObjectPool<T>* ObjectPool<T>::m_instance = NULL;
 
 template <typename T>
 ObjectPool<T>* ObjectPool<T>::Instance()
@@ -21,18 +21,25 @@ ObjectPool<T>* ObjectPool<T>::Instance()
 template <typename T>
 ObjectPool<T>::ObjectPool()
 {
-	m_freelist = nullptr;
+	m_freelist = NULL;
+}
+
+template <typename T>
+ObjectPool<T>::~ObjectPool()
+{
+	// todo
 }
 
 template <typename T>
 T* ObjectPool<T>::Pop()
 {
 	if (m_freelist) {
-		T* ret = m_freelist;
-		m_freelist = m_freelist->GetNext();
-		ret->Init();
+		T* ret = reinterpret_cast<T*>(m_freelist);
+		m_freelist = m_freelist->next;
+		--m_free_count;
 		return ret;
 	} else {
+		++m_tot_count;
 		return new T();
 	}
 }
@@ -40,13 +47,14 @@ T* ObjectPool<T>::Pop()
 template <typename T>
 void ObjectPool<T>::Push(T* obj)
 {
-	obj->Term();
+	FreeNode* freenode = reinterpret_cast<FreeNode*>(obj);
 	if (m_freelist) {
-		obj->SetNext(m_freelist);
+		freenode->next = m_freelist;
 	} else {
-		obj->SetNext(nullptr);
+		freenode->next = nullptr;
 	}
-	m_freelist = obj;
+	m_freelist = freenode;
+	++m_free_count;
 }
 
 }

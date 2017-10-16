@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_FILTER_FACTORY_H_
 #define _SPRITE2_FILTER_FACTORY_H_
 
-#include <cu/cu_macro.h>
-
 #include "FilterMode.h"
+
+#include <cu/cu_macro.h>
 
 namespace s2
 {

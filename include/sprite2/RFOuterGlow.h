@@ -15,11 +15,13 @@ public:
 	{}
 
 	virtual bool operator == (const RenderFilter& rf) const {
-		return GetMode() == rf.GetMode() &&
+		return RenderFilter::operator == (rf) &&
 			   m_iterations == static_cast<const RFOuterGlow&>(rf).m_iterations;
 	}
 
-	virtual RenderFilter* Clone() const { return new RFOuterGlow(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFOuterGlow(*this);
+	}
 
 	int GetIterations() const { return m_iterations; }
 	void SetIterations(int iterations) { m_iterations = iterations; }

@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_RELIEF) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFRelief(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFRelief(*this);
+	}
 
 }; // RFRelief
 

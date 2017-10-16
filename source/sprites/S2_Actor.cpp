@@ -1,9 +1,7 @@
 #include "S2_Actor.h"
 #include "S2_Sprite.h"
 #include "SprVisitorParams.h"
-#include "SprDefault.h"
 #include "SprSRT.h"
-#include "SprRender.h"
 
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
@@ -20,8 +18,8 @@ static int ALL_ACTOR_COUNT = 0;
 
 Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: m_spr(std::const_pointer_cast<Sprite>(spr).get())
-	, m_geo(ActorDefault::Instance()->Geo())
-	, m_render(SprDefault::Instance()->Render())
+	, m_geo(ActorDefault::Instance()->Geo(), geo_deleter)
+	, m_render(SprDefault::Instance()->Render(), render_deleter)
 {
 	m_spr_ptr = spr;
 
@@ -45,13 +43,6 @@ Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 Actor::~Actor()
 {
 	--ALL_ACTOR_COUNT;
-
-	if (m_geo != ActorDefault::Instance()->Geo()) {
-		ActorGeoPool::Instance()->Push(m_geo);
-	}
-	if (m_render != SprDefault::Instance()->Render()) {
-		SprRenderPool::Instance()->Push(m_render);
-	}
 }
 
 void Actor::Init()
@@ -65,8 +56,8 @@ void Actor::SetPosition(const sm::vec2& pos)
 		return;
 	}
 
-	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = ActorGeoPool::Instance()->Pop();
+	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
 	}
 	m_geo->SetPosition(pos);
 
@@ -80,8 +71,8 @@ void Actor::SetAngle(float angle)
 		return;
 	}
 
-	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = ActorGeoPool::Instance()->Pop();
+	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
 	}
 	m_geo->SetAngle(angle);
 
@@ -95,8 +86,8 @@ void Actor::SetScale(const sm::vec2& scale)
 		return;
 	}
 
-	if (m_geo == ActorDefault::Instance()->Geo()) {
-		m_geo = ActorGeoPool::Instance()->Pop();
+	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
 	}
 	m_geo->SetScale(scale);
 
@@ -104,37 +95,10 @@ void Actor::SetScale(const sm::vec2& scale)
 	m_aabb.Update(shared_from_this());
 }
 
-const RenderColor& Actor::GetColor() const
-{
-	if (!m_render || (m_render && !m_render->GetColor())) {
-		return *SprDefault::Instance()->Render()->GetColor();
-	} else {
-		return *m_render->GetColor();
-	}
-}
-
-const RenderShader& Actor::GetShader() const
-{
-	if (!m_render || (m_render && !m_render->GetShader())) {
-		return *SprDefault::Instance()->Render()->GetShader();
-	} else {
-		return *m_render->GetShader();
-	}
-}
-
-const RenderCamera& Actor::GetCamera() const
-{
-	if (!m_render || (m_render && !m_render->GetCamera())) {
-		return *SprDefault::Instance()->Render()->GetCamera();
-	} else {
-		return *m_render->GetCamera();
-	}
-}
-
 void Actor::SetColor(const RenderColor& color)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetColor(color);
 
@@ -143,16 +107,16 @@ void Actor::SetColor(const RenderColor& color)
 
 void Actor::SetShader(const RenderShader& shader)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetShader(shader);
 }
 
 void Actor::SetCamera(const RenderCamera& camera)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetCamera(camera);
 }

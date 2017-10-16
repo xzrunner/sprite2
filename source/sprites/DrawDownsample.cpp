@@ -11,6 +11,7 @@
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -59,8 +60,10 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	rp_child->mt.Identity();
 	rp_child->mt.Scale(downsample, downsample);
 	rp_child->ClearViewRegion();
@@ -68,8 +71,6 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	spr->SetMatDisable(true);
 	spr->GetSymbol()->DrawTree(*rp_child, spr);
 	spr->SetMatDisable(false);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	mgr->FlushShader();
 

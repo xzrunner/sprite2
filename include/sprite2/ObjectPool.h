@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_OBJECT_POOL_H_
 #define _SPRITE2_OBJECT_POOL_H_
 
+#include "assert.h"
+
 namespace s2
 {
 
@@ -18,11 +20,36 @@ private:
 	~ObjectPool();
 
 private:
-	T* m_freelist;
+	struct FreeNode
+	{
+		FreeNode* next;
+	};
+
+private:
+	FreeNode* m_freelist;
+
+	int m_free_count = 0;
+	int m_tot_count = 0;
 
 	static ObjectPool<T>* m_instance;
 
 }; // ObjectPool
+
+template <typename T>
+class ObjProxy
+{
+public:
+	ObjProxy()
+		: obj(ObjectPool<T>::Instance()->Pop())
+	{}
+	~ObjProxy() {
+		assert(obj);
+		ObjectPool<T>::Instance()->Push(obj);
+	}
+
+	T* obj;
+
+}; // ObjProxy
 
 }
 

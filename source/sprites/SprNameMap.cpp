@@ -17,8 +17,7 @@ SprNameMap::SprNameMap()
 
 int SprNameMap::StrToID(const std::string& str)
 {
-	std::map<std::string, int>::iterator itr 
-		= m_str2id.find(str);
+	auto itr = m_str2id.find(str.c_str());
 	if (itr != m_str2id.end()) {
 		return itr->second;
 	} else {
@@ -28,10 +27,9 @@ int SprNameMap::StrToID(const std::string& str)
 
 bool SprNameMap::IDToStr(int id, std::string& str)
 {
-	std::map<int, std::string>::iterator itr 
-		= m_id2str.find(id);
+	auto itr = m_id2str.find(id);
 	if (itr != m_id2str.end()) {
-		str = itr->second;
+		mm::AllocString(str.c_str()) = itr->second;
 		return true;
 	} else {
 		return false;
@@ -40,8 +38,7 @@ bool SprNameMap::IDToStr(int id, std::string& str)
 
 int SprNameMap::QueryID(const std::string& str)
 {
-	std::map<std::string, int>::iterator itr 
-		= m_str2id.find(str);
+	auto itr = m_str2id.find(str.c_str());
 	if (itr != m_str2id.end()) {
 		return itr->second;
 	} else {
@@ -98,8 +95,9 @@ int SprNameMap::Insert(const std::string& str, NameType type)
 
 void SprNameMap::Insert(const std::string& str, int id)
 {
-	m_str2id.insert(std::make_pair(str, id));
-	m_id2str.insert(std::make_pair(id, str));
+	mm::AllocString alloc_str(str.c_str());
+	m_str2id.insert(std::make_pair(alloc_str, id));
+	m_id2str.insert(std::make_pair(id, alloc_str));
 }
 
 }

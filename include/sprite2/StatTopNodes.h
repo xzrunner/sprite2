@@ -2,6 +2,7 @@
 #define _SPRITE2_STAT_TOP_NODES_H_
 
 #include <cu/cu_macro.h>
+#include <memmgr/Allocator.h>
 
 #include <list>
 #include <string>
@@ -48,7 +49,7 @@ public:
 	}; // Checkpoint
 
 private:
-	std::list<DrawNode> m_nodes;
+	std::list<DrawNode, mm::Allocator<DrawNode>> m_nodes;
 	uint32_t m_min_time;
 
 	CU_SINGLETON_DECLARATION(StatTopNodes);

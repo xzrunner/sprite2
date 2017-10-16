@@ -4,6 +4,8 @@
 #include "S2_Symbol.h"
 #include "AnimLerp.h"
 
+#include <memmgr/Allocator.h>
+
 #include <vector>
 #include <string>
 #include <memory>
@@ -20,7 +22,7 @@ public:
 	{
 	public:
 		int index;
-		std::vector<SprPtr> sprs;
+		mm::AllocVector<SprPtr> sprs;
 
 		bool tween;
 		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
@@ -30,11 +32,14 @@ public:
 
 	}; // Frame
 
+	using FramePtr = std::unique_ptr<Frame, mm::alloc_deleter<mm::Allocator<Frame>>>;
+//	using FramePtr = std::unique_ptr<Frame>;
+
 	class Layer
 	{
 	public:
 		std::string name;
-		std::vector<std::unique_ptr<Frame>> frames;
+		std::vector<FramePtr> frames;
 
 	public:
 		int GetCurrFrame(int index) const;
@@ -59,7 +64,7 @@ public:
 	const std::vector<std::unique_ptr<Layer>>& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
 
-	void CreateFrameSprites(int frame, std::vector<SprPtr>& sprs) const;
+	void CreateFrameSprites(int frame, mm::AllocVector<SprPtr>& sprs) const;
 
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }

@@ -6,8 +6,8 @@
 #include "RenderShader.h"
 #include "RenderCamera.h"
 #include "pre_defined.h"
-#include "ObjectPool3.h"
 #include "s2_typedef.h"
+#include "ObjectPool.h"
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
@@ -61,15 +61,6 @@ public:
 	void ClearViewRegion();
 	const sm::rect& GetViewRegion() const { return view_region; }
 
-	/**
-	 *  @interface
-	 *    ObjectPool3
-	 */
-	void Init();
-	void Term();
-	RenderParams* GetNext() const { return m_next; }
-	void SetNext(RenderParams* next) { m_next = next; }
-
 private:
 	static const uint32_t FLAG_CHANGE_SHADER        = 0x00000001;
 	static const uint32_t FLAG_DISABLE_RENDER_DRAW  = 0x00000002;
@@ -103,11 +94,10 @@ public:
 private:
 	mutable uint32_t m_flags;
 
-	RenderParams* m_next;
-
 }; // RenderParams
 
-typedef ObjectPool3<RenderParams> RenderParamsPool;
+using RenderParamsPool  = ObjectPool<RenderParams>;
+using RenderParamsProxy = ObjProxy<RenderParams>;
 
 }
 

@@ -11,11 +11,8 @@ class OBB : public BoundingBox
 public:
 	OBB();
 
-	/**
-	 *  @interface
-	 *    cu::Cloneable
-	 */
-	virtual OBB* Clone() const { return new OBB(*this); }	
+	virtual BoundingBox* Clone() const override {
+		return new OBB(*this); }
 
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsContain(const sm::rect& rect) const;

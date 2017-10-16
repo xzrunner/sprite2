@@ -11,7 +11,6 @@
 #include "RenderParams.h"
 #include "UpdateParams.h"
 #include "DrawNode.h"
-#include "RenderFilter.h"
 #include "BoundingBox.h"
 #include "S2_RVG.h"
 #include "SprTimer.h"
@@ -46,6 +45,7 @@
 #include "ProxySprite.h"
 #include "ProxyHelper.h"
 
+#include <memmgr/Allocator.h>
 #include <logger.h>
 #include <SM_Math.h>
 #include <shaderlab/ShaderMgr.h>
@@ -185,7 +185,8 @@ extern "C"
 void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				 float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
 {
-	RenderParams* rp = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp = rp_proxy.obj;
 	rp->Reset();
 
 	ActorConstPtr s2_actor(*static_cast<const ActorConstPtr*>(actor));
@@ -222,8 +223,6 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	}
 
 	DrawNode::Draw(s2_actor->GetSpr(), *rp);
-
-	RenderParamsPool::Instance()->Push(rp); 
 }
 
 extern "C"
@@ -241,7 +240,8 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 	//	return s2_spr_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax, flag, min_edge);
 	//}
 
-	RenderParams* rp = RenderParamsPool::Instance()->Pop();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp = rp_proxy.obj;
 	rp->Reset();
 
 	float* m = rp->mt.x;
@@ -274,8 +274,6 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 	rp->SetEnableDrawlist(Blackboard::Instance()->IsDlistEnable());
 
 	s2_actor->FlattenDraw(*rp);
-
-	RenderParamsPool::Instance()->Push(rp);
 }
 
 extern "C"
@@ -706,8 +704,10 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		curr = curr->GetParent();
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	while (path.size() > 1) {
 		auto curr = path.top();
 		path.pop();
@@ -722,8 +722,6 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	rp.actor = s2_actor.get();
 	rp.mt = mt * rp.mt;
 	DrawNode::Draw(s2_spr, rp);
-
-	RenderParamsPool::Instance()->Push(rp_child);
 }
 
 extern "C"
@@ -752,8 +750,10 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 		curr = curr->GetParent();
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	while (path.size() > 1) {
 		auto curr = path.top();
 		path.pop();
@@ -771,8 +771,6 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 	rp.mt = mt * rp.mt;
 
 	s2_actor->FlattenDraw(rp);
-
-	RenderParamsPool::Instance()->Push(rp_child);
 }
 
 static S2_MAT 
@@ -962,9 +960,6 @@ _actor_mount(const ActorConstPtr& parent, const SprPtr& old_child, const ActorPt
 // ret: 0 ok, -1 no child with name, -2 child isn't anchor
 extern "C"
 int s2_actor_mount(const void* parent, const char* name, const void* child) {
-	if (child == NULL) {
-		int zz = 0;
-	}
 	const ActorPtr& s2_parent(static_cast<const ActorProxy*>(parent)->actor);
 	const ActorPtr& s2_child(child ? static_cast<const ActorProxy*>(child)->actor : nullptr);
 

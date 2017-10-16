@@ -30,9 +30,10 @@ public:
 	AnimCurr();
 	AnimCurr(const AnimCurr& curr);
 	AnimCurr& operator = (const AnimCurr& curr);
-	~AnimCurr();
 
-	std::unique_ptr<AnimCurr> Clone() const;
+//	using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
+	using AnimCurrPtr = std::unique_ptr<AnimCurr>;
+	AnimCurrPtr Clone() const;
 
 	void AssignSameStruct(const AnimCurr& src);
 
@@ -87,13 +88,15 @@ private:
 
 	AnimCtrl m_ctrl;
 
-	std::vector<int> m_layer_cursor;
-	std::vector<int> m_layer_cursor_update;
+	mm::AllocVector<int> m_layer_cursor;
+	mm::AllocVector<int> m_layer_cursor_update;
 
-	std::vector<SprPtr> m_slots;
+	mm::AllocVector<SprPtr> m_slots;
 
-	int* m_curr;
-	int  m_curr_num;
+	mm::AllocVector<int> m_curr;
+
+	//int* m_curr;
+	//int  m_curr_num;
 
 }; // AnimCurr
 

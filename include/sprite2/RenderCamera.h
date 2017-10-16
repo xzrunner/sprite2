@@ -2,9 +2,6 @@
 #define _SPRITE2_RENDER_CAMERA_H_
 
 #include "CameraMode.h"
-#include "ObjectPool.h"
-
-#include <SM_Vector.h>
 
 namespace s2
 {
@@ -14,40 +11,23 @@ class RenderCamera
 public:
 	RenderCamera();
 
+	void Reset();
+
 	bool operator == (const RenderCamera& cam) const;
+	bool operator != (const RenderCamera& cam) const;
 
 	RenderCamera operator * (const RenderCamera& rc) const;
 
 	void CalculateZ(float cam_angle, const float vertices[8], float z[4]) const;
 
-	CameraMode GetMode() const { return m_state.mode; }
-	void SetMode(CameraMode mode) { m_state.mode = mode; }
-
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term() {}
-	RenderCamera* GetNext() const { return m_state.next; }
-	void SetNext(RenderCamera* next) { m_state.next = next; }
+	CameraMode GetMode() const { return m_mode; }
+	void SetMode(CameraMode mode) { m_mode = mode; }
 
 private:
-	union
-	{
-		struct 
-		{
-			CameraMode	mode;
-			float		base_y;	
-		};
-
-		RenderCamera* next;
-
-	} m_state;
+	CameraMode m_mode;
+	float      m_base_y;
 
 }; // RenderCamera
-
-typedef ObjectPool<RenderCamera> RenderCameraPool;
 
 }
 

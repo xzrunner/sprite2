@@ -1,10 +1,8 @@
 #include "RenderCamera.h"
 
-#include <sm_const.h>
 #include <SM_Math.h>
 
 #include <string.h>
-#include <vector>
 #include <float.h>
 
 namespace s2
@@ -13,27 +11,39 @@ namespace s2
 static const float HEIGHT_VAL = 1.414f;
 
 RenderCamera::RenderCamera()
+	: m_mode(CM_ORTHO)
+	, m_base_y(0)
 {
-	Init();
+}
+
+void RenderCamera::Reset()
+{
+	m_mode = CM_ORTHO;
+	m_base_y = 0;
 }
 
 bool RenderCamera::operator == (const RenderCamera& cam) const
 {
-	return m_state.mode == cam.m_state.mode
-		&& m_state.base_y == cam.m_state.base_y;
+	return m_mode == cam.m_mode
+		&& m_base_y == cam.m_base_y;
+}
+
+bool RenderCamera::operator != (const RenderCamera& cam) const
+{
+	return !(this->operator == (cam));
 }
 
 RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 {
 	RenderCamera ret;
-	if (rc.m_state.mode != CM_ORTHO) {
-		ret.m_state.mode = rc.m_state.mode;
+	if (rc.m_mode != CM_ORTHO) {
+		ret.m_mode = rc.m_mode;
 	} else {
-		ret.m_state.mode = m_state.mode;
+		ret.m_mode = m_mode;
 	}
-	if (ret.m_state.mode == CM_PERSPECTIVE_AUTO_HEIGHT) {
-		if (rc.m_state.base_y == FLT_MAX) {
-			ret.m_state.base_y = rc.m_state.base_y;
+	if (ret.m_mode == CM_PERSPECTIVE_AUTO_HEIGHT) {
+		if (rc.m_base_y == FLT_MAX) {
+			ret.m_base_y = rc.m_base_y;
 			// todo pass spr
 // 			std::vector<sm::vec2> bound;
 // 			spr->GetBounding()->GetBoundPos(bound);
@@ -43,7 +53,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 // 				}
 // 			}
 		} else {
-			ret.m_state.base_y = rc.m_state.base_y;
+			ret.m_base_y = rc.m_base_y;
 		}
 	}
 	return ret;
@@ -51,7 +61,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 
 void RenderCamera::CalculateZ(float cam_angle, const float vertices[8], float z[4]) const
 {
-	if (m_state.mode == CM_ORTHO || m_state.mode == CM_PERSPECTIVE_NO_HEIGHT) {
+	if (m_mode == CM_ORTHO || m_mode == CM_PERSPECTIVE_NO_HEIGHT) {
 		memset(z, 0, sizeof(float) * 4);
 		return;
 	}
@@ -66,11 +76,11 @@ void RenderCamera::CalculateZ(float cam_angle, const float vertices[8], float z[
 	}
 
 	//	float zoff = 0;
-	if (m_state.base_y != FLT_MAX) {
+	if (m_base_y != FLT_MAX) {
 		// 		assert(ymin >= base_y);
 		// 		zoff = (ymin - base_y) * HEIGHT_VAL;
 
-		ymin -= (ymin - m_state.base_y);
+		ymin -= (ymin - m_base_y);
 	}
 
 	float height = (ymax - ymin) * HEIGHT_VAL;
@@ -79,12 +89,6 @@ void RenderCamera::CalculateZ(float cam_angle, const float vertices[8], float z[
 		float y = vertices[i * 2 + 1];
 		z[i] = -(y - ymin) / (ymax - ymin) * height * zs;
 	}
-}
-
-void RenderCamera::Init()
-{
-	m_state.mode = CM_ORTHO;
-	m_state.base_y = 0;
 }
 
 }

@@ -4,6 +4,7 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <memmgr/Allocator.h>
 
 #include <vector>
 #include <memory>
@@ -15,10 +16,7 @@ class Actor;
 
 class SprActors : private cu::Uncopyable
 {
-public:
-	SprActors();
-	~SprActors();
-	
+public:	
 	void Add(const ActorPtr& actor);
 	void Del(const ActorPtr& actor);
 
@@ -32,10 +30,10 @@ public:
 
 	void Connect(const ActorPtr& prev);
 
-	const std::vector<ActorPtr>& GetActors() const { return m_actors; }
+	const auto& GetActors() const { return m_actors; }
 
 private:
-	std::vector<ActorPtr> m_actors;
+	mm::AllocVector<ActorPtr> m_actors;
 
 }; // SprActors
 

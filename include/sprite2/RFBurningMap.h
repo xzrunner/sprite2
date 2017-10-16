@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_BURNING_MAP) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFBurningMap(); }
+	virtual RenderFilter* Clone() const override {
+		return new RFBurningMap(*this);
+	}
 
 }; // RFBurningMap
 

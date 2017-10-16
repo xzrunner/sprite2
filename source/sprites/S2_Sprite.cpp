@@ -1,11 +1,7 @@
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
 #include "OBB.h"
-#include "RenderFilter.h"
 #include "FilterFactory.h"
-#include "SprGeo.h"
-#include "SprRender.h"
-#include "SprDefault.h"
 #include "RenderColor.h"
 #include "RenderShader.h"
 #include "RenderCamera.h"
@@ -37,11 +33,10 @@ static void (*INIT_FLAGS)(const SprPtr& spr);
 Sprite::Sprite()
 	: m_sym(nullptr)
 	, m_name(-1)
-	, m_geo(SprDefault::Instance()->Geo())
+	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(new OBB())
-	, m_render(SprDefault::Instance()->Render())
+	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
-	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -52,11 +47,10 @@ Sprite::Sprite()
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(nullptr)
 	, m_name(-1)
-	, m_geo(SprDefault::Instance()->Geo())
+	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr)
-	, m_render(SprDefault::Instance()->Render())
+	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
-	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -73,11 +67,10 @@ Sprite& Sprite::operator = (const Sprite& spr)
 Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
-	, m_geo(SprDefault::Instance()->Geo())
+	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(new OBB())
-	, m_render(SprDefault::Instance()->Render())
+	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
-	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -90,19 +83,7 @@ Sprite::~Sprite()
 	--ALL_SPR_COUNT;
 
 	if (m_actors) {
-		delete m_actors;
-	}
-
-	if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
-		SprGeoPool::Instance()->Push(m_geo);
-	}
-
-	if (m_bounding) {
-		delete m_bounding;
-	}
-
-	if (m_render != SprDefault::Instance()->Render()) {
-		SprRenderPool::Instance()->Push(m_render);
+		mm::AllocHelper::Delete(m_actors);
 	}
 }
 
@@ -134,8 +115,8 @@ void Sprite::SetPosition(const sm::vec2& pos)
 	if (m_geo->GetPosition() == pos) {
 		return;
 	}
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -156,8 +137,8 @@ void Sprite::SetAngle(float angle)
 	if (m_geo->GetAngle() == angle) {
 		return;
 	}
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -178,8 +159,8 @@ void Sprite::SetScale(const sm::vec2& scale)
 	if (m_geo->GetScale() == scale) {
 		return;
 	}
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -212,8 +193,8 @@ void Sprite::SetShear(const sm::vec2& shear)
 	if (m_geo->GetShear() == shear) {
 		return;
 	}
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -249,8 +230,8 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	if (m_geo->GetOffset() == offset) {
 		return;
 	}
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -326,7 +307,7 @@ const BoundingBox* Sprite::GetBounding(const Actor* actor) const
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
 	}
-	return m_bounding; 
+	return m_bounding.get(); 
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
@@ -420,37 +401,10 @@ const sm::vec2& Sprite::GetOffset() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-const RenderColor& Sprite::GetColor() const
-{
-	if (!m_render || (m_render && !m_render->GetColor())) {
-		return *SprDefault::Instance()->Render()->GetColor();
-	} else {
-		return *m_render->GetColor();
-	}
-}
-
-const RenderShader& Sprite::GetShader() const
-{
-	if (!m_render || (m_render && !m_render->GetShader())) {
-		return *SprDefault::Instance()->Render()->GetShader();
-	} else {
-		return *m_render->GetShader();
-	}
-}
-
-const RenderCamera& Sprite::GetCamera() const
-{
-	if (!m_render || (m_render && !m_render->GetCamera())) {
-		return *SprDefault::Instance()->Render()->GetCamera();
-	} else {
-		return *m_render->GetCamera();
-	}
-}
-
 void Sprite::SetColor(const RenderColor& color)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetColor(color);
 	SetDirty(true);
@@ -458,8 +412,8 @@ void Sprite::SetColor(const RenderColor& color)
 
 void Sprite::SetShader(const RenderShader& shader)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetShader(shader);
 	SetDirty(true);
@@ -467,8 +421,8 @@ void Sprite::SetShader(const RenderShader& shader)
 
 void Sprite::SetCamera(const RenderCamera& camera)
 {
-	if (m_render == SprDefault::Instance()->Render() || !m_render) {
-		m_render = SprRenderPool::Instance()->Pop();
+	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 	}
 	m_render->SetCamera(camera);
 	SetDirty(true);
@@ -481,8 +435,8 @@ void Sprite::GetLocalSRT(SprSRT& srt) const
 
 void Sprite::SetLocalSRT(const SprSRT& srt)
 {
-	if (m_geo == SprDefault::Instance()->Geo()) {
-		m_geo = SprGeoPool::Instance()->Pop();
+	if (m_geo.get() == SprDefault::Instance()->Geo()) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
 	}
 	m_geo->SetSRT(srt);
 
@@ -581,7 +535,7 @@ void Sprite::CacheLocalMat()
 void Sprite::AddActor(const ActorPtr& actor) const
 {
 	if (!m_actors) {
-		m_actors = new SprActors();
+		m_actors = mm::AllocHelper::New<SprActors>();
 	}
 	m_actors->Add(actor);
 }
@@ -633,51 +587,47 @@ void Sprite::InitFromSpr(const Sprite& spr)
 
 	if (m_geo != spr.m_geo) 
 	{
- 		if (m_geo && m_geo != SprDefault::Instance()->Geo()) {
- 			SprGeoPool::Instance()->Push(m_geo);
-			m_geo = nullptr;
- 		}
- 		if (spr.m_geo == SprDefault::Instance()->Geo()) {
- 			m_geo = SprDefault::Instance()->Geo();
+ 		if (spr.m_geo.get() == SprDefault::Instance()->Geo()) {
+ 			m_geo.reset(SprDefault::Instance()->Geo());
  		} else {
- 			m_geo = SprGeoPool::Instance()->Pop();
+			if (m_geo.get() == SprDefault::Instance()->Geo()) {
+				m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
+			}
  			*m_geo = *spr.m_geo;
  		}
 	}
 
 	assert(spr.m_bounding);
 	if (m_bounding) {
-		*m_bounding	 = *spr.m_bounding;
+		*m_bounding	= *spr.m_bounding;
 	} else {
-		m_bounding	 = spr.m_bounding->Clone();
+		m_bounding.reset(spr.m_bounding->Clone());
 	}
 
 	if (m_render != spr.m_render) 
 	{
-		if (m_render && m_render != SprDefault::Instance()->Render()) {
-			SprRenderPool::Instance()->Push(m_render);
-			m_render = nullptr;
-		}
-		if (spr.m_render == SprDefault::Instance()->Render()) 
+		if (spr.m_render.get() == SprDefault::Instance()->Render()) 
 		{
-			m_render = SprDefault::Instance()->Render();
+			m_render.reset(SprDefault::Instance()->Render());
 		} 
 		else 
 		{
-			m_render = SprRenderPool::Instance()->Pop();
+			if (m_render.get() == SprDefault::Instance()->Render()) {
+				m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+			}
 
-			const RenderColor* src_color = spr.m_render->GetColor();
-			if (src_color && src_color != SprDefault::Instance()->Color()) {
+			auto& src_color = spr.m_render->GetColor();
+			if (src_color && *src_color != *SprDefault::Instance()->Color()) {
 				m_render->SetColor(*src_color);
 			}
 
-			const RenderShader* src_shader = spr.m_render->GetShader();
-			if (src_shader && src_shader != SprDefault::Instance()->Shader()) {
+			auto& src_shader = spr.m_render->GetShader();
+			if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
 				m_render->SetShader(*src_shader);
 			}
 
-			const RenderCamera* src_camera = spr.m_render->GetCamera();
-			if (src_camera && src_camera != SprDefault::Instance()->Camera()) {
+			auto& src_camera = spr.m_render->GetCamera();
+			if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
 				m_render->SetCamera(*src_camera);
 			}
 		}
@@ -685,7 +635,10 @@ void Sprite::InitFromSpr(const Sprite& spr)
 
 	m_flags = spr.m_flags;
 
-	m_actors = nullptr;
+	if (m_actors) {
+		mm::AllocHelper::Delete(m_actors);
+		m_actors = nullptr;
+	}
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

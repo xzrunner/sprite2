@@ -13,7 +13,9 @@ public:
 		: RenderFilter(FM_SHOCK_WAVE) 
 	{}
 
-	virtual RenderFilter* Clone() const { return new RFShockWave(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFShockWave(*this);
+	}
 
 }; // RFShockWave
 

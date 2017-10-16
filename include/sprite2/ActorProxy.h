@@ -3,6 +3,8 @@
 
 #include "s2_typedef.h"
 
+#include <memmgr/Allocator.h>
+
 #include <cu/cu_macro.h>
 
 #include <unordered_map>
@@ -13,12 +15,12 @@ namespace s2
 class ActorProxy
 {
 public:
+	ActorProxy(const ActorPtr& actor);
+
 	ActorPtr actor;
 	SprPtr   spr;
 
-private:
-	ActorProxy(const ActorPtr& actor);
-	
+private:	
 	friend class ActorProxyPool;
 
 }; // ActorProxy
@@ -30,7 +32,7 @@ public:
 	void Delete(const ActorPtr& actor);
 
 private:
-	std::unordered_map<void*, ActorProxy*> m_hash;
+	std::unordered_map<void*, std::shared_ptr<ActorProxy>> m_hash;
 
 	CU_SINGLETON_DECLARATION(ActorProxyPool)
 

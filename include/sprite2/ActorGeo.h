@@ -2,7 +2,6 @@
 #define _SPRITE2_ACTOR_GEO_H_
 
 #include "pre_defined.h"
-#include "ObjectPool2.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -13,6 +12,8 @@ namespace s2
 class ActorGeo
 {
 public:
+	void Reset();
+
 	const sm::vec2& GetPosition() const { return m_srt.position; }
 	void SetPosition(const sm::vec2& pos);
 
@@ -23,13 +24,6 @@ public:
 	void SetScale(const sm::vec2& scale);
 
 	const S2_MAT& GetMatrix() const { return m_mat; }
-
-	/**
-	 *  @interface
-	 *    ObjectPool
-	 */
-	void Init();
-	void Term();
 
 private:
 	void UpdateMatrix();
@@ -43,7 +37,7 @@ private:
 
 		SRT();
 
-		void Init();
+		void Reset();
 
 	}; // SRT
 
@@ -52,8 +46,6 @@ private:
 	S2_MAT m_mat;
 
 }; // ActorGeo
-
-typedef ObjectPool2<ActorGeo> ActorGeoPool;
 
 }
 

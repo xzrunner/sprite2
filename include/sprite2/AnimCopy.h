@@ -6,6 +6,7 @@
 #include "AnimLerp.h"
 
 #include <SM_Vector.h>
+#include <memmgr/Allocator.h>
 
 #include <vector>
 #include <string>
@@ -58,14 +59,14 @@ private:
 	struct Frame
 	{
 		int time;
-		std::vector<Item> items;
+		mm::AllocVector<Item> items;
 
 		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 	};
 
 	struct Layer
 	{
-		std::vector<Frame> frames;
+		mm::AllocVector<Frame> frames;
 	};
 
 private:

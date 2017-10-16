@@ -9,12 +9,9 @@ namespace s2
 class AABB : public BoundingBox
 { 
 public:
-
-	/**
-	 *  @interface
-	 *    cu::Cloneable
-	 */
-	virtual AABB* Clone() const { return new AABB(*this); }	
+	virtual BoundingBox* Clone() const override {
+		return new AABB(*this);
+	}
 
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsContain(const sm::rect& rect) const;

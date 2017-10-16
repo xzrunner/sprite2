@@ -61,51 +61,51 @@ FilterFactory::~FilterFactory()
 
 RenderFilter* FilterFactory::Create(FilterMode mode)
 {
-	RenderFilter* filter = nullptr;	
+	RenderFilter* filter = nullptr;
 	switch (mode)
 	{
 	case FM_NULL:
-		filter = new RFNull;
+		filter = new RFNull();
 		break;
 
 	case FM_EDGE_DETECTION:
-		filter = new RFEdgeDetection;
+		filter = new RFEdgeDetection();
 		break;
 	case FM_RELIEF:
-		filter = new RFRelief;
+		filter = new RFRelief();
 		break;
 	case FM_OUTLINE:
-		filter = new RFOutline;
+		filter = new RFOutline();
 		break;
 	case FM_OUTER_GLOW:
-		filter = new RFOuterGlow;
+		filter = new RFOuterGlow();
 		break;
 
 	case FM_GRAY:
-		filter = new RFGray;
+		filter = new RFGray();
 		break;
 	case FM_BLUR:
-		filter = new RFBlur;
+		filter = new RFBlur();
 		break;
 	case FM_GAUSSIAN_BLUR:
-		filter = new RFGaussianBlur;
+		filter = new RFGaussianBlur();
 		break;
 
 	case FM_HEAT_HAZE:
-		filter = new RFHeatHaze;
+		filter = new RFHeatHaze();
 		break;
 	case FM_SHOCK_WAVE:
-		filter = new RFShockWave;
+		filter = new RFShockWave();
 		break;
 	case FM_SWIRL:
-		filter = new RFSwirl;
+		filter = new RFSwirl();
 		break;
 	case FM_BURNING_MAP:
-		filter = new RFBurningMap;
+		filter = new RFBurningMap();
 		break;
 
 	case FM_COL_GRADING:
-		filter = new RFColGrading;
+		filter = new RFColGrading();
 		break;
 
 	default:

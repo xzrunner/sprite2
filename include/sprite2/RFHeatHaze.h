@@ -19,13 +19,15 @@ public:
 
 	virtual bool operator == (const RenderFilter& rf) const {
 		const RFHeatHaze& rf_hh = static_cast<const RFHeatHaze&>(rf);
-		return GetMode() == rf.GetMode() &&
+		return RenderFilter::operator == (rf) &&
 			   m_filepath == rf_hh.m_filepath &&
 			   m_distortion_factor == rf_hh.m_distortion_factor &&
 			   m_rise_factor == rf_hh.m_rise_factor;
 	}
 
-	virtual RenderFilter* Clone() const { return new RFHeatHaze(*this); }
+	virtual RenderFilter* Clone() const override {
+		return new RFHeatHaze(*this);
+	}
 
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }

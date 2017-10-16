@@ -3,14 +3,6 @@
 namespace s2
 {
 
-SprActors::SprActors()
-{
-}
-
-SprActors::~SprActors()
-{
-}
-
 void SprActors::Add(const ActorPtr& actor)
 {
 	m_actors.push_back(actor);

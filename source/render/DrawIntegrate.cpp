@@ -5,6 +5,7 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 
+#include <memmgr/Allocator.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
@@ -21,10 +22,12 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
-	rp_child->color.Init();
-	rp_child->shader.Init();
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
+	rp_child->color.Reset();
+	rp_child->shader.Reset();
 	rp_child->mt.Identity();
 	rp_child->ClearViewRegion();
 
@@ -35,8 +38,6 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	DrawNode::Draw(spr, *rp_child);
 	spr->SetColorDisable(false);
 //	spr->SetMatDisable(false);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	mgr->FlushShader();
 

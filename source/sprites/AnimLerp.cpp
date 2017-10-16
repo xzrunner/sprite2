@@ -21,8 +21,8 @@
 namespace s2
 {
 
-void AnimLerp::Lerp(const std::vector<SprPtr>& begin, const std::vector<SprPtr>& end,
-					std::vector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
+void AnimLerp::Lerp(const mm::AllocVector<SprPtr>& begin, const mm::AllocVector<SprPtr>& end,
+					mm::AllocVector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	for (auto& start_spr : begin)
 	{

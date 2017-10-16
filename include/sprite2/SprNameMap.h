@@ -2,6 +2,7 @@
 #define _SPRITE2_SPR_NAME_MAP_H_
 
 #include <cu/cu_macro.h>
+#include <memmgr/Allocator.h>
 
 #include <string>
 #include <map>
@@ -48,8 +49,8 @@ private:
 	static const int MAX_TMP_ID    = 65536;
 
 private:
-	std::map<std::string, int> m_str2id;
-	std::map<int, std::string> m_id2str;
+	std::map<mm::AllocString, int> m_str2id;
+	std::map<int, mm::AllocString> m_id2str;
 
 	int m_next_static_id, m_next_tmp_id, m_next_normal_id;
 

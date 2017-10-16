@@ -8,6 +8,7 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <memmgr/Allocator.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 
@@ -65,10 +66,11 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 		return RENDER_NO_DATA;
 	}
 
-	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
-	*rp_child = rp;
+	RenderParamsProxy rp_proxy;
+	RenderParams* rp_child = rp_proxy.obj;
+	memcpy(rp_child, &rp, sizeof(rp));
+
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		RenderParamsPool::Instance()->Push(rp_child); 
 		return RENDER_INVISIBLE;
 	}
 
@@ -82,8 +84,6 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
 	RenderReturn ret = m_icon->Draw(*rp_child, process);
-
-	RenderParamsPool::Instance()->Push(rp_child); 
 
 	return ret;
 }

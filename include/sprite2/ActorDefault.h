@@ -11,7 +11,7 @@ class ActorGeo;
 class ActorDefault
 {
 public:	
-	ActorGeo* Geo() { return m_geo; }
+	auto& Geo() { return m_geo; }
 
 private:
 	ActorGeo* m_geo;

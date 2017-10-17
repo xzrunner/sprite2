@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -19,8 +21,10 @@ public:
 	}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFColGrading(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFColGrading(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFColGrading); }
 
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }

@@ -3,6 +3,8 @@
 
 #include "FilterMode.h"
 
+#include <memory>
+
 namespace s2
 {
 
@@ -24,12 +26,18 @@ public:
 
 	virtual RenderFilter* Clone() const = 0;
 
-	FilterMode GetMode() const { return m_mode; }
+	virtual size_t Size() const = 0;
+
+	FilterMode GetMode() const { return m_mode; }	
+
+	static void Deleter(RenderFilter* filter);
 
 private:
 	FilterMode m_mode;
 
 }; // RenderFilter
+
+using RenderFilterPtr = std::unique_ptr<RenderFilter, decltype(&RenderFilter::Deleter)>;
 
 }
 

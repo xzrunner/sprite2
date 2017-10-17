@@ -142,12 +142,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  
 	BlendMode blend = BM_NULL;
 	if (!rp.IsDisableBlend()) {
-		blend = rp.shader.GetBlend();
+		blend = rp.render_blend;
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!rp.IsDisableFilter() && rp.shader.GetFilter()) {
-		filter = rp.shader.GetFilter()->GetMode();
+	if (!rp.IsDisableFilter() && rp.render_filter) {
+		filter = rp.render_filter->GetMode();
 	}
 
  	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -182,12 +182,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 
 	BlendMode blend = BM_NULL;
 	if (!rp.IsDisableBlend()) {
-		blend = rp.shader.GetBlend();
+		blend = rp.render_blend;
 	}
 
 	FilterMode filter = FM_NULL;
-	if (!rp.IsDisableFilter() && rp.shader.GetFilter()) {
-		filter = rp.shader.GetFilter()->GetMode();
+	if (!rp.IsDisableFilter() && rp.render_filter) {
+		filter = rp.render_filter->GetMode();
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -463,14 +463,14 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		rs = *SprDefault::Instance()->Shader();
 		rc = *SprDefault::Instance()->Camera();
 	} else if (spr->HaveActor()) {
-		rs = spr->GetShader() * rp.shader;
+		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);
 		rc = spr->GetCamera() * rp.camera;
 		if (rp.actor) {
 			rs = rp.actor->GetShader() * rs;
 			rc = rp.actor->GetCamera() * rc;
 		}
 	} else {
-		rs = spr->GetShader() * rp.shader;
+		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);
 		rc = spr->GetCamera() * rp.camera;
 	}
 
@@ -519,16 +519,16 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	    RenderParams* rp_child = rp_proxy.obj;
 		memcpy(rp_child, &rp, sizeof(rp));
 
-		rp_child->shader.SetFilter(rf);
+		rp_child->render_filter = rf.get();
 		rp_child->camera = rc;
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
-			int itrs = static_cast<RFGaussianBlur*>(rf)->GetIterations();
+			int itrs = static_cast<RFGaussianBlur*>(rf.get())->GetIterations();
 			ret = DrawGaussianBlur::Draw(spr, *rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
-			int itrs = static_cast<RFOuterGlow*>(rf)->GetIterations();
+			int itrs = static_cast<RFOuterGlow*>(rf.get())->GetIterations();
 			ret = DrawOuterGlow::Draw(spr, *rp_child, itrs);
 		} 
 		else 
@@ -542,7 +542,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 			{
 			case FM_EDGE_DETECTION:
 				{
-					auto ed = static_cast<RFEdgeDetection*>(rf);
+					auto ed = static_cast<RFEdgeDetection*>(rf.get());
 					sl::EdgeDetectProg* prog = static_cast<sl::EdgeDetectProg*>(shader->GetProgram(sl::FM_EDGE_DETECTION));
 					prog->SetBlend(ed->GetBlend());
 				}

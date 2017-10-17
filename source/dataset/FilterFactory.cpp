@@ -1,7 +1,5 @@
 #include "FilterFactory.h"
 
-#include "RFNull.h"
-
 #include "RFEdgeDetection.h"
 #include "RFRelief.h"
 #include "RFOutline.h"
@@ -31,8 +29,6 @@ FilterFactory::FilterFactory()
 {
 	memset(m_temps, 0, sizeof(m_temps));
 
-	m_temps[FM_NULL]			= new RFNull;
-
 	m_temps[FM_EDGE_DETECTION]	= new RFEdgeDetection;
 	m_temps[FM_RELIEF]			= new RFRelief;
 	m_temps[FM_OUTLINE]			= new RFOutline;
@@ -59,59 +55,59 @@ FilterFactory::~FilterFactory()
 	}
 }
 
-RenderFilter* FilterFactory::Create(FilterMode mode)
+RenderFilterPtr FilterFactory::Create(FilterMode mode)
 {
 	RenderFilter* filter = nullptr;
 	switch (mode)
 	{
 	case FM_NULL:
-		filter = new RFNull();
 		break;
 
 	case FM_EDGE_DETECTION:
-		filter = new RFEdgeDetection();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFEdgeDetection))) RFEdgeDetection();
 		break;
 	case FM_RELIEF:
-		filter = new RFRelief();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFRelief))) RFRelief();
 		break;
 	case FM_OUTLINE:
-		filter = new RFOutline();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFOutline))) RFOutline();
 		break;
 	case FM_OUTER_GLOW:
-		filter = new RFOuterGlow();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFOuterGlow))) RFOuterGlow();
 		break;
 
 	case FM_GRAY:
-		filter = new RFGray();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFGray))) RFGray();
 		break;
 	case FM_BLUR:
-		filter = new RFBlur();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFBlur))) RFBlur();
 		break;
 	case FM_GAUSSIAN_BLUR:
-		filter = new RFGaussianBlur();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFGaussianBlur))) RFGaussianBlur();
 		break;
 
 	case FM_HEAT_HAZE:
-		filter = new RFHeatHaze();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFHeatHaze))) RFHeatHaze();
 		break;
 	case FM_SHOCK_WAVE:
-		filter = new RFShockWave();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFShockWave))) RFShockWave();
 		break;
 	case FM_SWIRL:
-		filter = new RFSwirl();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFSwirl))) RFSwirl();
 		break;
 	case FM_BURNING_MAP:
-		filter = new RFBurningMap();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFBurningMap))) RFBurningMap();
 		break;
 
 	case FM_COL_GRADING:
-		filter = new RFColGrading();
+		filter = new (mm::AllocHelper::Allocate(sizeof(RFColGrading))) RFColGrading();
 		break;
 
 	default:
 		assert(0);
 	}
-	return filter;
+
+	return RenderFilterPtr(filter, RenderFilter::Deleter);
 }
 
 }

@@ -40,6 +40,15 @@ void RenderParams::Reset()
 }
 
 inline
+void RenderParams::ResetRender()
+{
+	render_filter = nullptr;
+	render_blend = BM_NULL;
+	render_fast_blend = FBM_NULL;
+	render_downsample = 1;
+}
+
+inline
 void RenderParams::SetViewRegion(float xmin, float ymin, float xmax, float ymax)
 {
 	view_region.xmin = xmin;

@@ -11,8 +11,9 @@ class OBB : public BoundingBox
 public:
 	OBB();
 
-	virtual BoundingBox* Clone() const override {
-		return new OBB(*this); }
+	virtual BoundingBox* Clone() const override;
+
+	virtual size_t Size() const override { return sizeof(OBB); }
 
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsContain(const sm::rect& rect) const;

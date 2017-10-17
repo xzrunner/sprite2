@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -20,8 +22,10 @@ public:
 	}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFOuterGlow(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFOuterGlow(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFOuterGlow); }
 
 	int GetIterations() const { return m_iterations; }
 	void SetIterations(int iterations) { m_iterations = iterations; }

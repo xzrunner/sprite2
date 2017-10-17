@@ -2,18 +2,19 @@
 #define _SPRITE2_FILTER_FACTORY_H_
 
 #include "FilterMode.h"
+#include "sprite2/RenderFilter.h"
 
 #include <cu/cu_macro.h>
+
+#include <memory>
 
 namespace s2
 {
 
-class RenderFilter;
-
 class FilterFactory
 {
 public:
-	RenderFilter* Create(FilterMode mode);
+	RenderFilterPtr Create(FilterMode mode);
 
 	RenderFilter* GetTemp(FilterMode mode) {
 		return m_temps[mode];

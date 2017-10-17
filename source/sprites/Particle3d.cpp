@@ -100,7 +100,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	rp_child->color.SetMul(mul * rp->rc.GetMul());
 	rp_child->color.SetAdd(add + rp->rc.GetAdd());
 
-	rp_child->shader.SetFastBlend(static_cast<FastBlendMode>(fast_blend));
+	rp_child->render_fast_blend = static_cast<FastBlendMode>(fast_blend);
 
 	rp_child->SetViewRegion(rp->view_region);
 

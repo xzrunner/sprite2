@@ -1,6 +1,5 @@
 #include "S2_Sprite.h"
 #include "S2_Symbol.h"
-#include "OBB.h"
 #include "FilterFactory.h"
 #include "RenderColor.h"
 #include "RenderShader.h"
@@ -34,7 +33,7 @@ Sprite::Sprite()
 	: m_sym(nullptr)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
-	, m_bounding(new OBB())
+	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -48,7 +47,7 @@ Sprite::Sprite(const Sprite& spr)
 	: m_sym(nullptr)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
-	, m_bounding(nullptr)
+	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
 	, m_id(NEXT_ID++)
@@ -68,7 +67,7 @@ Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
-	, m_bounding(new OBB())
+	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -217,6 +216,9 @@ void Sprite::SetShear(const sm::vec2& shear)
 	m_geo->SetShear(shear);
 
 	// immediately
+	if (!m_bounding) {
+		CreateBounding();
+	}
 	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
 
 	// 	// lazy
@@ -245,6 +247,9 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	m_geo->SetPosition(m_geo->GetPosition() + old_center - new_center);
 
 	// immediately
+	if (!m_bounding) {
+		CreateBounding();
+	}
 	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
 
 	// 	// lazy
@@ -326,6 +331,9 @@ void Sprite::UpdateBounding(const Actor* actor) const
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
+	if (!m_bounding) {
+		CreateBounding();
+	}
 	m_bounding->Build(rect, m_geo->GetPosition(), m_geo->GetAngle(), m_geo->GetScale(), 
 		m_geo->GetShear(), m_geo->GetOffset());
 
@@ -597,11 +605,13 @@ void Sprite::InitFromSpr(const Sprite& spr)
  		}
 	}
 
-	assert(spr.m_bounding);
-	if (m_bounding) {
-		*m_bounding	= *spr.m_bounding;
+	if (spr.m_bounding) {
+		if (!m_bounding) {
+			CreateBounding();
+		}
+		*m_bounding = *spr.m_bounding;
 	} else {
-		m_bounding.reset(spr.m_bounding->Clone());
+		m_bounding.reset();
 	}
 
 	if (m_render != spr.m_render) 

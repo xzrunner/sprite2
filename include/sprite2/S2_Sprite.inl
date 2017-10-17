@@ -2,6 +2,7 @@
 #define _SPRITE2_SPRITE_INL_
 
 #include "SprNameMap.h"
+#include "OBB.h"
 
 namespace s2
 {
@@ -23,6 +24,14 @@ void Sprite::UpdateInheritUpdate() const
 		SprNameMap::Instance()->IDToStr(m_name, name);
 		SetInheritUpdate(IsForceUpdate() || name.empty() || name[0] == '_');
 	}
+}
+
+inline
+void Sprite::CreateBounding() const
+{
+	void* ptr = mm::AllocHelper::Allocate(sizeof(OBB));
+	BoundingBox* bb = new (ptr) OBB();
+	m_bounding.reset(bb);
 }
 
 inline

@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -20,8 +22,10 @@ public:
 	}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFEdgeDetection(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFEdgeDetection(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFEdgeDetection); }
 
 	float GetBlend() const { return m_blend; }
 	void SetBlend(float blend) { m_blend = blend; }

@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -14,8 +16,10 @@ public:
 	{}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFRelief(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFRelief(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFRelief); }
 
 }; // RFRelief
 

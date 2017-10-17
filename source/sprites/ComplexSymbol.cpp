@@ -73,7 +73,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	if (spr) {
 		id = spr->GetSymbol()->GetID();
 	}
-	StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
+	//StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_COMPLEX);
 //	StatSymDraw::DrawCostCP cp2(STAT_SYM_COMPLEX);
 #endif // S2_DISABLE_STATISTICS

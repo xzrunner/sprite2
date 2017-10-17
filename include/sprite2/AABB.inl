@@ -45,10 +45,10 @@ void AABB::Build(const sm::rect& r, const sm::vec2& pos, float angle,
 {
 	m_rect = r;
 	if (scale != sm::vec2(1, 1)) {
-		m_rect.Scale(scale.x, scale.y);
+		m_rect.Scale(scale);
 	}
 	if (shear != sm::vec2(0, 0)) {
-		m_rect.Shear(shear.x, shear.y);
+		m_rect.Shear(shear);
 	}
 	m_position = pos;
 	if (offset != sm::vec2(0, 0)) {

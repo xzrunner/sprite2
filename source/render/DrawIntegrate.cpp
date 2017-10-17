@@ -27,7 +27,7 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->color.Reset();
-	rp_child->shader.Reset();
+	rp_child->ResetRender();
 	rp_child->mt.Identity();
 	rp_child->ClearViewRegion();
 

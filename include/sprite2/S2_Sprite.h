@@ -10,6 +10,7 @@
 #include "SprRender.h"
 #include "SprDefault.h"
 #include "SprGeo.h"
+#include "BoundingBox.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
@@ -133,6 +134,8 @@ private:
 
 	void UpdateInheritUpdate() const;
 
+	void CreateBounding() const;
+
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
 	static const uint32_t FLAG_EDITABLE       = 0x00000002;
@@ -206,19 +209,19 @@ protected:
 	/************************************************************************/
 	static void geo_deleter(SprGeo* geo) { 
 		if (geo != SprDefault::Instance()->Geo()) {
-			mm::AllocHelper::Free(geo, sizeof(SprGeo));
+			mm::AllocHelper::Delete(geo);
 		}
 	};
 	mutable std::unique_ptr<SprGeo, decltype(&geo_deleter)> m_geo;
 
-	mutable std::unique_ptr<BoundingBox> m_bounding;
+	mutable std::unique_ptr<BoundingBox, decltype(&BoundingBox::Deleter)> m_bounding;
 
 	/************************************************************************/
 	/* draw                                                                 */
 	/************************************************************************/
 	static void render_deleter(SprRender* render) {
 		if (render != SprDefault::Instance()->Render()) {
-			mm::AllocHelper::Free(render, sizeof(SprRender));
+			mm::AllocHelper::Delete(render);
 		}
 	};
 	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;

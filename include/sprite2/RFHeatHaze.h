@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 #include <string>
 
 namespace s2
@@ -26,8 +28,10 @@ public:
 	}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFHeatHaze(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFHeatHaze(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFHeatHaze); }
 
 	const std::string& GetFilepath() const { return m_filepath; }
 	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }

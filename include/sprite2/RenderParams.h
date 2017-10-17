@@ -30,7 +30,11 @@ public:
 
 	RenderColor	color;
 	
-	RenderShader shader;
+//	RenderShader shader;
+	RenderFilter* render_filter = nullptr;
+	BlendMode     render_blend = BM_NULL;
+	FastBlendMode render_fast_blend = FBM_NULL;
+	float         render_downsample = 1;
 
 	RenderCamera camera;
 	
@@ -52,6 +56,7 @@ public:
 	RenderParams& operator = (const RenderParams& params);
 
 	void Reset();
+	void ResetRender();
 
 	uint32_t GetFlags() const { return m_flags; }
 	void SetFlags(uint32_t flags) { m_flags = flags; }

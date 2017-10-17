@@ -137,7 +137,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	if (rp.shader.GetFilter() && sl::FILTER_MODE(rp.shader.GetFilter()->GetMode()) == sl::FM_GRAY) {
+	if (rp.render_filter && sl::FILTER_MODE(rp.render_filter->GetMode()) == sl::FM_GRAY) {
 		mgr->SetShader(sl::FILTER);
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 		shader->SetMode(sl::FM_GRAY);

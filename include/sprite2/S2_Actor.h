@@ -118,16 +118,16 @@ private:
 
 	static void geo_deleter(ActorGeo* geo) {
 		if (geo != ActorDefault::Instance()->Geo()) {
-			mm::AllocHelper::Free(geo, sizeof(ActorGeo));
+			mm::AllocHelper::Delete(geo);
 		}
 	};
 	std::unique_ptr<ActorGeo, decltype(&geo_deleter)>  m_geo;
 
-	mutable ActorAABB          m_aabb;
+	mutable ActorAABB m_aabb;
 
 	static void render_deleter(SprRender* render) {
 		if (render != SprDefault::Instance()->Render()) {
-			mm::AllocHelper::Free(render, sizeof(SprRender));
+			mm::AllocHelper::Delete(render);
 		}
 	};
 	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;

@@ -16,6 +16,8 @@ public:
 
 	virtual BoundingBox* Clone() const = 0;
 
+	virtual size_t Size() const = 0;
+
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsContain(const sm::rect& rect) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
@@ -33,6 +35,8 @@ public:
 		CombineTo(r);
 		return r;
 	}
+
+	static void Deleter(BoundingBox* bb);
 
 }; // BoundingBox
 

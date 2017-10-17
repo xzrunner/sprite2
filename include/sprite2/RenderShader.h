@@ -6,6 +6,8 @@
 #include "FilterMode.h"
 #include "RenderFilter.h"
 
+#include <memory>
+
 #include <stddef.h>
 
 namespace s2
@@ -24,6 +26,8 @@ public:
 	void Reset();
 
 	RenderShader operator * (const RenderShader& rs) const;
+	RenderShader Multiply(const RenderFilter* filter,
+		BlendMode blend, FastBlendMode fast_blend, float downsample) const;
 
 	auto& GetFilter() const { return m_filter; }
 	BlendMode GetBlend() const { return m_blend; }
@@ -37,12 +41,10 @@ public:
 	void SetDownsample(float downsample) { m_downsample = downsample; }
 
 private:
-	// todo allocator
-	RenderFilter* m_filter;
-
-	BlendMode     m_blend;
-	FastBlendMode m_fast_blend;
-	float         m_downsample;
+	RenderFilterPtr m_filter;
+	BlendMode       m_blend;
+	FastBlendMode   m_fast_blend;
+	float           m_downsample;
 
 }; // RenderShader
 

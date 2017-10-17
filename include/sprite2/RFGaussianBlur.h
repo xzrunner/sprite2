@@ -3,6 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <memmgr/Allocator.h>
+
 namespace s2
 {
 
@@ -20,8 +22,10 @@ public:
 	}
 
 	virtual RenderFilter* Clone() const override {
-		return new RFGaussianBlur(*this);
+		return new (mm::AllocHelper::Allocate(Size())) RFGaussianBlur(*this);
 	}
+
+	virtual size_t Size() const override { return sizeof(RFGaussianBlur); }
 
 	int GetIterations() const { return m_iterations; }
 	void SetIterations(int iterations) { m_iterations = iterations; }

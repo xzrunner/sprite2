@@ -502,35 +502,6 @@ bool s2_spr_has_action(const void* spr, const char* name) {
 }
 
 extern "C"
-bool s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax)
-{
-	const Sprite* s2_spr = static_cast<const Sprite*>(spr);
-	sm::rect r;
-	if (ProxyHelper::SprGetScissor(s2_spr, r)) {
-		*xmin = r.xmin;
-		*ymin = r.ymin;
-		*xmax = r.xmax;
-		*ymax = r.ymax;
-		return true;
-	} else {
-		LOGW("s2_spr_get_scissor fail, sym_id %d", s2_spr->GetSymbol()->GetID());
-		return false;
-	}
-}
-
-extern "C"
-void s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax)
-{
-	Sprite* s2_spr = static_cast<Sprite*>(spr);
-	sm::rect r;
-	r.xmin = xmin;
-	r.ymin = ymin;
-	r.xmax = xmax;
-	r.ymax = ymax;
-	ProxyHelper::SprSetScissor(s2_spr, r);
-}
-
-extern "C"
 void s2_spr_textbox_reset_time(void* spr)
 {
 	Sprite* s2_spr = static_cast<Sprite*>(spr);
@@ -1132,6 +1103,36 @@ extern "C"
 void s2_actor_set_action(void* actor, const char* action) {
 	Actor* s2_actor = static_cast<Actor*>(actor);
 	ProxyHelper::ActorSetAction(s2_actor, _char2string(action));
+}
+
+extern "C"
+bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xmax, float* ymax)
+{
+	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	sm::rect r;
+	if (ProxyHelper::ActorGetScissor(s2_actor, r)) {
+		*xmin = r.xmin;
+		*ymin = r.ymin;
+		*xmax = r.xmax;
+		*ymax = r.ymax;
+		return true;
+	}
+	else {
+		LOGW("s2_actor_get_scissor fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		return false;
+	}
+}
+
+extern "C"
+void s2_actor_set_scissor(void* actor, float xmin, float ymin, float xmax, float ymax)
+{
+	Actor* s2_actor = static_cast<Actor*>(actor);
+	sm::rect r;
+	r.xmin = xmin;
+	r.ymin = ymin;
+	r.xmax = xmax;
+	r.ymax = ymax;
+	ProxyHelper::ActorSetScissor(s2_actor, r);
 }
 
 extern "C"

@@ -454,61 +454,6 @@ bool ProxyHelper::SprHasAction(const Sprite* spr, const std::string& action)
 	}
 }
 
-bool ProxyHelper::SprGetScissor(const Sprite* spr, sm::rect& rect)
-{
-	const Symbol* sym = spr->GetSymbol();
-	int type = sym->Type();
-	if (type == SYM_PROXY) 
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		if (items.empty()) {
-			return false;
-		}
-		sm::rect ret;
-		if (!SprGetScissor(items[0].second, ret)) {
-			return false;
-		}
-		for (int i = 1, n = items.size(); i < n; ++i) {
-			sm::rect crect;
-			if (!SprGetScissor(items[i].second, crect) || crect != ret) {
-				return false;
-			}
-		}
-		rect = ret;
-		return true;
-	} 
-	else if (type == SYM_COMPLEX)
-	{
-		const ComplexSymbol* sym = VI_DOWNCASTING<const ComplexSymbol*>(spr->GetSymbol());
-		rect = sym->GetScissor();
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void ProxyHelper::SprSetScissor(Sprite* spr, const sm::rect& rect)
-{
-	const Symbol* sym = spr->GetSymbol();
-	int type = sym->Type();
-	if (type == SYM_PROXY) 
-	{
-		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
-		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
-		for (int i = 0, n = items.size(); i < n; ++i) {
-			SprSetScissor(items[i].second, rect);
-		}
-	}
-	else if (type == SYM_COMPLEX)
-	{
-		const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(sym);
-		const_cast<ComplexSymbol*>(sym_complex)->SetScissor(rect);
-	}
-}
-
 void ProxyHelper::SprTextboxResetTime(Sprite* spr)
 {
 	const Symbol* sym = spr->GetSymbol();
@@ -1498,6 +1443,67 @@ void ProxyHelper::ActorSetAction(Actor* actor, const std::string& action)
 		ComplexActor* actor_complex = static_cast<ComplexActor*>(actor);
 		int action_idx = sym_complex->GetActionIdx(action);
 		actor_complex->SetAction(action_idx);
+	}
+}
+
+bool ProxyHelper::ActorGetScissor(const Actor* actor, sm::rect& rect)
+{
+	const Symbol* sym = actor->GetSpr()->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY)
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		if (items.empty()) {
+			return false;
+		}
+		sm::rect ret;
+		if (!ActorGetScissor(items[0].second->QueryActor(items[0].first), ret)) {
+			return false;
+		}
+		for (int i = 1, n = items.size(); i < n; ++i) {
+			sm::rect crect;
+			if (!ActorGetScissor(items[i].second->QueryActor(items[i].first), crect) || crect != ret) {
+				return false;
+			}
+		}
+		rect = ret;
+		return true;
+	}
+	else if (type == SYM_COMPLEX)
+	{
+		const ComplexSymbol* complex = VI_DOWNCASTING<const ComplexSymbol*>(sym);
+		rect = complex->GetScissor();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void ProxyHelper::ActorSetScissor(Actor* actor, const sm::rect& rect)
+{
+	const Symbol* sym = actor->GetSpr()->GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY)
+	{
+		const ProxySymbol* proxy_sym = VI_DOWNCASTING<const ProxySymbol*>(sym);
+		const std::vector<std::pair<const Actor*, Sprite*> >& items = proxy_sym->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			const Actor* child_actor = items[i].second->QueryActor(items[i].first);
+			ActorSetScissor(const_cast<Actor*>(child_actor), rect);
+		}
+	}
+	else if (type == SYM_COMPLEX)
+	{
+		const ComplexSymbol* sym_complex = VI_DOWNCASTING<const ComplexSymbol*>(sym);
+		const_cast<ComplexSymbol*>(sym_complex)->SetScissor(rect);
+		
+		// update aabb
+		ActorAABB& aabb = actor->GetAABB();
+		aabb.SetStaticRect(rect);
+		aabb.UpdateParent(actor);
 	}
 }
 

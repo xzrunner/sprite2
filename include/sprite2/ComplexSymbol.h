@@ -33,7 +33,7 @@ public:
 	const std::vector<Sprite*>& GetAllChildren() const { return m_children; }
 
 	const sm::rect& GetScissor() const { return m_scissor; }
-	void SetScissor(const sm::rect& scissor) { m_scissor = scissor; }
+	void SetScissor(const sm::rect& scissor);
 
 	int GetActionIdx(const std::string& name) const;
 

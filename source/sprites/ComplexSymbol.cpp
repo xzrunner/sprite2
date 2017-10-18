@@ -184,6 +184,12 @@ const std::vector<Sprite*>& ComplexSymbol::GetActionChildren(int action) const
 	}
 }
 
+void ComplexSymbol::SetScissor(const sm::rect& scissor) 
+{ 
+	m_scissor = scissor; 
+	m_aabb = scissor;
+}
+
 int ComplexSymbol::GetActionIdx(const std::string& name) const
 {
 	int idx = -1;

@@ -46,8 +46,6 @@ public:
 
 	// complex
 	static bool SprHasAction(const Sprite* spr, const std::string& action);
-	static bool SprGetScissor(const Sprite* spr, sm::rect& rect);
-	static void SprSetScissor(Sprite* spr, const sm::rect& rect);
 
 	// textbox
 	static void SprTextboxResetTime(Sprite* spr);
@@ -110,6 +108,8 @@ public:
 
 	// complex
 	static void ActorSetAction(Actor* actor, const std::string& action);
+	static bool ActorGetScissor(const Actor* actor, sm::rect& rect);
+	static void ActorSetScissor(Actor* actor, const sm::rect& rect);
 
 	// textbox
 	static bool ActorGetText(const Actor* actor, std::string& text);

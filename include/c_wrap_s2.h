@@ -107,9 +107,6 @@ void  s2_spr_anim_set_loop(void* spr, bool loop);
 
 bool  s2_spr_has_action(const void* spr, const char* name);
 
-bool  s2_spr_get_scissor(const void* spr, float* xmin, float* ymin, float* xmax, float* ymax);
-void  s2_spr_set_scissor(void* spr, float xmin, float ymin, float xmax, float ymax);
-
 //////////////////////////////////////////////////////////////////////////
 // textbox
 //////////////////////////////////////////////////////////////////////////
@@ -229,7 +226,10 @@ void  s2_actor_set_filter(void* actor, int mode);
 // complex
 //////////////////////////////////////////////////////////////////////////
 
-void  s2_actor_set_action(void* spr, const char* action);
+void  s2_actor_set_action(void* actor, const char* action);
+
+bool  s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xmax, float* ymax);
+void  s2_actor_set_scissor(void* actor, float xmin, float ymin, float xmax, float ymax);
 
 //////////////////////////////////////////////////////////////////////////
 // text

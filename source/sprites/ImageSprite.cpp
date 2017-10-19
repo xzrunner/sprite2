@@ -66,9 +66,13 @@ bool ImageSprite::Update(const UpdateParams& up)
 
 	FilterMode filter_mode = up.GetPrevFilter();
 	auto& filter = GetShader().GetFilter();
+#ifdef S2_FILTER_FULL
 	if (filter && filter->GetMode() != FM_NULL) {
 		filter_mode = filter->GetMode();
 	}
+#else
+	filter_mode = filter;
+#endif // S2_FILTER_FULL
 	return filter_mode == FM_HEAT_HAZE 
 		|| filter_mode == FM_SHOCK_WAVE 
 		|| filter_mode == FM_SWIRL

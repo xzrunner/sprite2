@@ -31,7 +31,11 @@ public:
 	RenderColor	color;
 	
 //	RenderShader shader;
+#ifdef S2_FILTER_FULL
 	RenderFilter* render_filter = nullptr;
+#else
+	FilterMode    render_filter = FM_NULL;
+#endif // S2_FILTER_FULL
 	BlendMode     render_blend = BM_NULL;
 	FastBlendMode render_fast_blend = FBM_NULL;
 	float         render_downsample = 1;

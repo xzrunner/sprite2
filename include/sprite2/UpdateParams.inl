@@ -64,6 +64,7 @@ void UpdateParams::Push(const Sprite* spr)
 	m_prev_mat = mt;
 
 	auto& filter = spr->GetShader().GetFilter();
+#ifdef S2_FILTER_FULL
 	if (filter && filter->GetMode() != FM_NULL) {
 		m_prev_filter = filter->GetMode();
 	}
@@ -73,6 +74,17 @@ void UpdateParams::Push(const Sprite* spr)
 			m_prev_filter = filter->GetMode();
 		}
 	}
+#else
+	if (filter != FM_NULL) {
+		m_prev_filter = FM_NULL;
+	}
+	if (m_actor) {
+		auto& filter = m_actor->GetShader().GetFilter();
+		if (filter != FM_NULL) {
+			m_prev_filter = filter;
+		}
+	}
+#endif // S2_FILTER_FULL
 }
 
 inline

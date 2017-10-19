@@ -146,9 +146,13 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 	}
 
 	FilterMode filter = FM_NULL;
+#ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rp.render_filter) {
 		filter = rp.render_filter->GetMode();
 	}
+#else
+	filter = rp.render_filter;
+#endif // S2_FILTER_FULL
 
  	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
  	if (blend != BM_NULL) {
@@ -186,9 +190,13 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 	}
 
 	FilterMode filter = FM_NULL;
+#ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rp.render_filter) {
 		filter = rp.render_filter->GetMode();
 	}
+#else
+	filter = rp.render_filter;
+#endif // S2_FILTER_FULL
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (blend != BM_NULL) {
@@ -498,9 +506,13 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	}
 
 	FilterMode filter = FM_NULL;
+#ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rs.GetFilter()) {
 		filter = rs.GetFilter()->GetMode();
 	}
+#else
+	filter = rs.GetFilter();
+#endif // S2_FILTER_FULL
 
 	RenderReturn ret = RENDER_OK;
 
@@ -514,6 +526,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 	} 
 	else if (filter != FM_NULL) 
 	{
+#ifdef S2_FILTER_FULL
 		auto& rf = rs.GetFilter();
 
 		RenderParamsProxy rp_proxy;
@@ -551,6 +564,20 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 			}
 			ret = DrawSprImplFinal(spr, *rp_child);
 		}
+#else
+		auto& rf = rs.GetFilter();
+
+		RenderParamsProxy rp_proxy;
+		RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
+
+		rp_child->render_filter = rf;
+		rp_child->camera = rc;
+
+		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+		shader->SetMode(sl::FILTER_MODE(filter));
+		ret = DrawSprImplFinal(spr, *rp_child);
+#endif // S2_FILTER_FULL
 	} 
 	else 
 	{

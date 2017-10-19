@@ -18,4 +18,6 @@
 #define	S2_DEBUG
 #endif // _WIN32
 
+//#define S2_FILTER_FULL
+
 //#define S2_MULTITHREAD

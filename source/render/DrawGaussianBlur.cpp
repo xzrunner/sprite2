@@ -118,7 +118,11 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	const sm::vec2& offset = spr->GetPosition();
 	rp_child->mt.Translate(-offset.x, -offset.y);
 	rp_child->SetChangeShader(false);
+#ifdef S2_FILTER_FULL
 	rp_child->render_filter = nullptr;
+#else
+	rp_child->render_filter = FM_NULL;
+#endif // S2_FILTER_FULL
 	rp_child->SetDisableFilter(true);
 
 	mgr->SetShader(sl::SPRITE2);

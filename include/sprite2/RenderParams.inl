@@ -42,7 +42,11 @@ void RenderParams::Reset()
 inline
 void RenderParams::ResetRender()
 {
+#ifdef S2_FILTER_FULL
 	render_filter = nullptr;
+#else
+	render_filter = FM_NULL;
+#endif // S2_FILTER_FULL
 	render_blend = BM_NULL;
 	render_fast_blend = FBM_NULL;
 	render_downsample = 1;

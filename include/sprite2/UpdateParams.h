@@ -4,6 +4,7 @@
 #include "s2_typedef.h"
 
 #include "sprite2/pre_defined.h"
+#include "sprite2/s2_config.h"
 #include S2_MAT_HEADER
 
 #include "FilterMode.h"

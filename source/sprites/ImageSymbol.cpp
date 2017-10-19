@@ -68,6 +68,10 @@ int ImageSymbol::Type() const
 
 RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
+	if (!m_tex) {
+		return RENDER_NO_DATA;
+	}
+
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_IMAGE);
 //	StatSymDraw::DrawCostCP cp(STAT_SYM_IMAGE);

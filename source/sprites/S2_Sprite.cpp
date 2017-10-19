@@ -312,6 +312,9 @@ const BoundingBox* Sprite::GetBounding(const Actor* actor) const
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
 	}
+	if (!m_bounding) {
+		CreateBounding();
+	}
 	return m_bounding.get(); 
 }
 

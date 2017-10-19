@@ -4,8 +4,7 @@
 #include "S2_RenderContext.h"
 
 #include <cu/cu_macro.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -27,7 +26,7 @@ private:
 	static void BindCtx(const RenderContext& ctx);
 
 private:
-	std::vector<RenderContext> m_stack;
+	CU_VEC<RenderContext> m_stack;
 
 	CU_SINGLETON_DECLARATION(RenderCtxStack)
 

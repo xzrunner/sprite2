@@ -12,8 +12,8 @@
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-#include S2_MAT_HEADER
 #include <memmgr/Allocator.h>
+#include S2_MAT_HEADER
 
 #include <memory>
 

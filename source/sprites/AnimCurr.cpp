@@ -18,11 +18,10 @@
 #include "SetStaticFrameVisitor.h"
 #include "AABBHelper.h"
 
-#include <memmgr/Allocator.h>
+#include <cu/cu_stl.h>
 
 #include <algorithm>
 #include <climits>
-#include <map>
 
 #include <assert.h>
 #include <string.h>
@@ -57,10 +56,10 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	return *this;
 }
 
-AnimCurr::AnimCurrPtr AnimCurr::Clone() const
-{
-	return std::make_unique<AnimCurr>(*this);
-}
+//AnimCurr::AnimCurrPtr AnimCurr::Clone() const
+//{
+//	return std::make_unique<AnimCurr>(*this);
+//}
 
 void AnimCurr::AssignSameStruct(const AnimCurr& src)
 {
@@ -168,7 +167,7 @@ void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 
 SprPtr AnimCurr::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	std::vector<std::pair<const ActorConstPtr, SprPtr>> group;
+	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> group;
 	for (auto& child : m_slots) {
 		if (child->GetName() == name) {
 			group.push_back(std::make_pair(actor, child));
@@ -199,7 +198,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		const SprPtr* ptr = &m_slots[0];
 		for (int i = 0, n = m_slots.size(); i < n; ++i, ++ptr) 
 		{
-			std::string str;
+			CU_STR str;
 			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);			
 			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, *ptr, ret)) {
@@ -210,7 +209,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 	else {
 		const SprPtr* ptr = &m_slots[m_slots.size() - 1];
 		for (int i = 0, n = m_slots.size(); i < n; ++i, --ptr) {
-			std::string str;
+			CU_STR str;
 			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);
 			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
 			if (!SpriteVisitor::VisitChild(visitor, cp, *ptr, ret)) {

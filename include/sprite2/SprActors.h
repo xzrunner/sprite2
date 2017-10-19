@@ -4,9 +4,8 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
-#include <memmgr/Allocator.h>
+#include <cu/cu_stl.h>
 
-#include <vector>
 #include <memory>
 
 namespace s2
@@ -33,7 +32,7 @@ public:
 	const auto& GetActors() const { return m_actors; }
 
 private:
-	mm::AllocVector<ActorPtr> m_actors;
+	CU_VEC<ActorPtr> m_actors;
 
 }; // SprActors
 

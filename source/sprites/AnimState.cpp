@@ -5,6 +5,20 @@
 namespace s2
 {
 
+#ifdef S2_MULTITHREAD
+AnimState::AnimState()
+	: m_origin(mm::allocate_unique<AnimCurr>()),
+	, m_origin(mm::allocate_unique<AnimCurr>()),
+	, m_origin(mm::allocate_unique<AnimCurr>()),
+{
+}
+#else
+AnimState::AnimState()
+	: m_origin(mm::allocate_unique<AnimCurr>())
+{
+}
+#endif // S2_MULTITHREAD
+
 void AnimState::Assign(const AnimState& src, bool same_struct)
 {
 	assert(src.m_origin);
@@ -12,17 +26,17 @@ void AnimState::Assign(const AnimState& src, bool same_struct)
 	assert(src.m_update && src.m_draw);
 #endif // S2_MULTITHREAD
 
-	if (same_struct && IsVaild()) {
+	if (same_struct) {
 		m_origin->AssignSameStruct(*src.m_origin);
 #ifdef S2_MULTITHREAD
 		m_update->AssignSameStruct(*src.m_update);
 		m_draw->AssignSameStruct(*src.m_draw);
 #endif // S2_MULTITHREAD
 	} else {
-		m_origin = src.m_origin->Clone();
+		m_origin = mm::allocate_unique<AnimCurr>(*src.m_origin);;
 #ifdef S2_MULTITHREAD
-		m_update = src.m_update->Clone();
-		m_draw = src.m_draw->Clone();
+		m_update = mm::allocate_unique<AnimCurr>(*src.m_update);
+		m_draw = mm::allocate_unique<AnimCurr>(*src.m_draw);
 #endif // S2_MULTITHREAD
 	}
 }
@@ -56,7 +70,7 @@ void AnimState::Flush()
 
 void AnimState::Init(AnimCurrPtr& dst, const std::shared_ptr<AnimCopy>& copy)
 {
-	dst = std::make_unique<AnimCurr>();
+	dst = mm::allocate_unique<AnimCurr>();
 	dst->SetAnimCopy(copy);
 }
 

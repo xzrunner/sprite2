@@ -16,7 +16,7 @@ ColorPolygon::ColorPolygon(const Color& color)
 
 void ColorPolygon::Draw(const RenderParams& rp) const
 {
-	std::vector<sm::vec2> tris;
+	CU_VEC<sm::vec2> tris;
 	sm::trans_vertices(rp.mt, m_tris, tris);
 	RVG::SetColor(m_color * rp.color.GetMul());
 	RVG::Triangles(tris);
@@ -26,7 +26,7 @@ void ColorPolygon::Build()
 {
 	m_tris.clear();
 
-	std::vector<sm::vec2> outline;
+	CU_VEC<sm::vec2> outline;
 	sm::rm_duplicate_nodes(m_outline, outline);
 
 	if (!m_segments.empty()) {

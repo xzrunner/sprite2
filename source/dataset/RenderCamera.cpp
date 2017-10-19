@@ -45,7 +45,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 		if (rc.m_base_y == FLT_MAX) {
 			ret.m_base_y = rc.m_base_y;
 			// todo pass spr
-// 			std::vector<sm::vec2> bound;
+// 			CU_VEC<sm::vec2> bound;
 // 			spr->GetBounding()->GetBoundPos(bound);
 // 			for (int i = 0, n = bound.size(); i < n; ++i) {
 // 				if (bound[i].y < ret.base_y) {

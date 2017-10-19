@@ -4,6 +4,7 @@
 #include "RenderReturn.h"
 
 #include <cu/uncopyable.h>
+#include <memmgr/Allocator.h>
 
 #include <memory>
 
@@ -60,6 +61,8 @@ private:
 	bool m_loop;
 
 }; // Particle3dEmitter
+
+using Particle3dEmitterPtr = std::unique_ptr<Particle3dEmitter, mm::alloc_deleter<mm::Allocator<Particle3dEmitter>>>;
 
 }
 

@@ -19,7 +19,7 @@ const PolygonShape& PolygonShape::operator = (const PolygonShape& ps)
 	return *this;
 }
 
-PolygonShape::PolygonShape(const std::vector<sm::vec2>& vertices)
+PolygonShape::PolygonShape(const CU_VEC<sm::vec2>& vertices)
 	: PolylineShape(vertices, true)
 {
 }
@@ -49,7 +49,7 @@ void PolygonShape::SetPolygon(std::unique_ptr<Polygon> poly)
 
 	m_bounding.MakeEmpty();
 	if (poly) {
-		const std::vector<sm::vec2>& tris = poly->GetTriangles();
+		const CU_VEC<sm::vec2>& tris = poly->GetTriangles();
 		for (int i = 0, n = tris.size(); i < n; ++i) {
 			m_bounding.Combine(tris[i]);
 		}

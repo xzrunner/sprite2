@@ -5,8 +5,7 @@
 #include "LerpType.h"
 
 #include <SM_Vector.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -32,7 +31,7 @@ private:
 	float m_freq;	// frequency
 	float m_amp;	// amplitude
 
-	mutable std::vector<float> m_rands;
+	mutable CU_VEC<float> m_rands;
 
 }; // LerpWiggle
 

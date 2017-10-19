@@ -13,7 +13,7 @@ StatSprCount::StatSprCount()
 	memset(m_counts, 0, sizeof(m_counts));
 }
 
-void StatSprCount::Print(std::string& str) const
+void StatSprCount::Print(CU_STR& str) const
 {
 	static char buf[512];
 	sprintf(buf, "SPR: img %d, complex %d, anim %d\n", 

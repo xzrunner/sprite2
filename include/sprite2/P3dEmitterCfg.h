@@ -4,8 +4,8 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
-#include <vector>
 #include <memory>
 
 struct p3d_emitter_cfg;
@@ -31,7 +31,7 @@ public:
 private:
 	p3d_emitter_cfg* m_impl;
 
-	std::vector<SymPtr> m_cached_sym;
+	CU_VEC<SymPtr> m_cached_sym;
 
 }; // P3dEmitterCfg
 

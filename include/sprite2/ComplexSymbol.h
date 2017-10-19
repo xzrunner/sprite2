@@ -3,10 +3,7 @@
 
 #include "S2_Symbol.h"
 
-#include <memmgr/Allocator.h>
-
-#include <vector>
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -28,13 +25,13 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 	virtual bool Update(const UpdateParams& up, float time);
 
-	const mm::AllocVector<SprPtr>& GetActionChildren(int action) const;
-	const mm::AllocVector<SprPtr>& GetAllChildren() const { return m_children; }
+	const CU_VEC<SprPtr>& GetActionChildren(int action) const;
+	const CU_VEC<SprPtr>& GetAllChildren() const { return m_children; }
 
 	const sm::rect& GetScissor() const { return m_scissor; }
 	void SetScissor(const sm::rect& scissor);
 
-	int GetActionIdx(const std::string& name) const;
+	int GetActionIdx(const CU_STR& name) const;
 
 	/************************************************************************/
 	/* api for dynamic change                                               */
@@ -42,21 +39,21 @@ public:
 	// todo up action
 	bool Add(const SprPtr& spr, int idx = -1);
 	bool Remove(const Sprite& spr);
-//	bool Change(const SprTreePath& path, const std::string& name, Sprite* dst);
+//	bool Change(const SprTreePath& path, const CU_STR& name, Sprite* dst);
 	bool Clear();
 	bool ResetOrder(const Sprite& spr, bool up);
 	bool ResetOrderMost(const Sprite& spr, bool up);
-//	bool Sort(std::vector<Sprite*>& sprs);
+//	bool Sort(CU_VEC<Sprite*>& sprs);
 
 public:
 	struct Action
 	{
-		std::string name;
-		mm::AllocVector<SprPtr> sprs;
+		CU_STR name;
+		CU_VEC<SprPtr> sprs;
 	};
 
 	const auto& GetActions() const { return m_actions; }
-	void SetActions(const mm::AllocVector<Action>& actions) { m_actions = actions; }
+	void SetActions(const CU_VEC<Action>& actions) { m_actions = actions; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
@@ -67,9 +64,9 @@ private:
 	int GetAction(const Sprite* spr, const Actor* actor) const;
 
 protected:
-	mm::AllocVector<SprPtr> m_children;
+	CU_VEC<SprPtr> m_children;
 
-	mm::AllocVector<Action> m_actions;
+	CU_VEC<Action> m_actions;
 
 	sm::rect m_scissor;
 

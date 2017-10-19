@@ -49,7 +49,7 @@ void RVG::Point(const sm::vec2& vertex)
 	}
 }
 
-void RVG::Points(const std::vector<sm::vec2>& vertices)
+void RVG::Points(const CU_VEC<sm::vec2>& vertices)
 {
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE2);
@@ -113,7 +113,7 @@ void RVG::DotDashLine(const sm::vec2& p0, const sm::vec2& p1)
 	}
 }
 
-void RVG::Lines(const std::vector<sm::vec2>& vertices)
+void RVG::Lines(const CU_VEC<sm::vec2>& vertices)
 {
 	if (vertices.size() < 2) {
 		return;
@@ -125,7 +125,7 @@ void RVG::Lines(const std::vector<sm::vec2>& vertices)
 		rvg_lines(&vertices[0].x, vertices.size());
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
-		std::vector<sm::vec3> vertices3;
+		CU_VEC<sm::vec3> vertices3;
 		for (int i = 0, n = vertices.size(); i < n; ++i) {
 			vertices3.push_back(sm::vec3(vertices[i].x, vertices[i].y, 0));
 		}
@@ -133,7 +133,7 @@ void RVG::Lines(const std::vector<sm::vec2>& vertices)
 	}
 }
 
-void RVG::Polyline(const std::vector<sm::vec2>& vertices, bool loop)
+void RVG::Polyline(const CU_VEC<sm::vec2>& vertices, bool loop)
 {
 	if (vertices.size() < 2) {
 		return;
@@ -145,7 +145,7 @@ void RVG::Polyline(const std::vector<sm::vec2>& vertices, bool loop)
 		rvg_polyline(&vertices[0].x, vertices.size(), loop);
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
-		std::vector<sm::vec3> vertices3;
+		CU_VEC<sm::vec3> vertices3;
 		for (int i = 0, n = vertices.size(); i < n; ++i) {
 			vertices3.push_back(sm::vec3(vertices[i].x, vertices[i].y, 0));
 		}
@@ -165,7 +165,7 @@ void RVG::Polyline(const float* vertices, int count, bool loop)
 		rvg_polyline(vertices, count, loop);
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
-		std::vector<sm::vec3> vertices3;
+		CU_VEC<sm::vec3> vertices3;
 		vertices3.reserve(count);
 		for (int i = 0; i < count; ++i) {
 			vertices3.push_back(sm::vec3(vertices[i * 2], vertices[i * 2 + 1], 0));
@@ -174,7 +174,7 @@ void RVG::Polyline(const float* vertices, int count, bool loop)
 	}
 }
 
-void RVG::Triangles(const std::vector<sm::vec2>& triangles)
+void RVG::Triangles(const CU_VEC<sm::vec2>& triangles)
 {
 	if (triangles.size() < 3) return;
 
@@ -183,7 +183,7 @@ void RVG::Triangles(const std::vector<sm::vec2>& triangles)
 		rvg_triangles(&triangles[0].x, triangles.size());
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
-		std::vector<sm::vec3> triangles3;
+		CU_VEC<sm::vec3> triangles3;
 		for (int i = 0, n = triangles.size(); i < n; ++i) {
 			triangles3.push_back(sm::vec3(triangles[i].x, triangles[i].y, 0));
 		}
@@ -191,12 +191,12 @@ void RVG::Triangles(const std::vector<sm::vec2>& triangles)
 	}
 }
 
-void RVG::Triangles(const std::vector<sm::vec2>& triangles, const std::vector<Color>& colors)
+void RVG::Triangles(const CU_VEC<sm::vec2>& triangles, const CU_VEC<Color>& colors)
 {
 	// todo
 }
 
-void RVG::TriangleStrip(const std::vector<sm::vec2>& triangles)
+void RVG::TriangleStrip(const CU_VEC<sm::vec2>& triangles)
 {
 	if (triangles.size() < 3) return;
 
@@ -205,7 +205,7 @@ void RVG::TriangleStrip(const std::vector<sm::vec2>& triangles)
 		rvg_triangle_strip(&triangles[0].x, triangles.size());
 	} else {
 		sl::ShaderMgr::Instance()->SetShader(sl::SHAPE3);
-		std::vector<sm::vec3> triangles3;
+		CU_VEC<sm::vec3> triangles3;
 		for (int i = 0, n = triangles.size(); i < n; ++i) {
 			triangles3.push_back(sm::vec3(triangles[i].x, triangles[i].y, 0));
 		}
@@ -246,7 +246,7 @@ void RVG::Circle(const sm::vec2& center, float radius, bool filling, int segment
 	}
 }
 
-void RVG::Circles(const std::vector<sm::vec2>& circles, float radius, bool filling, int segments)
+void RVG::Circles(const CU_VEC<sm::vec2>& circles, float radius, bool filling, int segments)
 {
 	for (int i = 0, n = circles.size(); i < n; ++i) {
 		Circle(circles[i], radius, filling, segments);

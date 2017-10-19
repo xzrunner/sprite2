@@ -16,10 +16,10 @@ StatTopNodes::StatTopNodes()
 {
 }
 
-void StatTopNodes::Print(std::string& str) const
+void StatTopNodes::Print(CU_STR& str) const
 {
 	static char buf[512];
-	std::list<DrawNode>::const_iterator itr = m_nodes.begin();
+	CU_LIST<DrawNode>::const_iterator itr = m_nodes.begin();
 	for ( ; itr != m_nodes.end(); ++itr) {
 		const DrawNode& n = *itr;
 		sprintf(buf, "cost: %d, id: %u, pid: %u, level %d\n", n.cost, n.id, n.parent_id, n.level);
@@ -53,7 +53,7 @@ void StatTopNodes::Insert(const DrawNode& node)
 		return;
 	}
 
-	std::list<DrawNode>::iterator itr = m_nodes.begin();
+	CU_LIST<DrawNode>::iterator itr = m_nodes.begin();
 	for ( ; itr != m_nodes.end(); ++itr) 
 	{
 		const DrawNode& n = *itr;

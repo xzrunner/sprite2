@@ -2,9 +2,9 @@
 #define _SPRITE2_PARTICLE3D_BUFFER_H_
 
 #include <cu/cu_macro.h>
+#include <cu/cu_stl.h>
 #include <SM_Vector.h>
 
-#include <list>
 #include <memory>
 
 namespace s2
@@ -25,7 +25,7 @@ public:
 	static void InitCB(void (*update_srt_func)(void* params, float x, float y, float scale), void (*remove_func)(Particle3dEmitter*));
 
 private:
-	std::list<std::weak_ptr<Particle3dEmitter>> m_emitters;
+	CU_LIST<std::weak_ptr<Particle3dEmitter>> m_emitters;
 
 	CU_SINGLETON_DECLARATION(Particle3dBuffer)
 

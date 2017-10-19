@@ -5,8 +5,8 @@
 #include "s2_typedef.h"
 
 #include <SM_Vector.h>
+#include <cu/cu_stl.h>
 
-#include <vector>
 #include <memory>
 
 namespace cooking { class DisplayList; }
@@ -57,7 +57,7 @@ public:
 	void Build(SCALE9_TYPE type, int w, int h, SprPtr grids[9],
 		int sz_left, int sz_right, int sz_top, int sz_down);
 
-	void GetGrids(std::vector<SprPtr>& grids) const;
+	void GetGrids(CU_VEC<SprPtr>& grids) const;
 	const SprPtr& GetGrid(SCALE9_IDX idx) const { return m_grids[idx]; }
 
 	SCALE9_TYPE GetType() const { return m_type; }

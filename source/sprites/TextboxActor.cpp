@@ -31,7 +31,7 @@ _init_gtxt_label_style(struct gtxt_label_style* dst, const Textbox& src) {
 	dst->overflow = src.overflow;
 }
 
-void TextboxActor::SetText(const std::string& text)
+void TextboxActor::SetText(const CU_STR& text)
 {
 	if (m_text == text) {
 		return;
@@ -48,7 +48,7 @@ void TextboxActor::SetText(const std::string& text)
 	aabb.UpdateParent(shared_from_this());
 }
 
-sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const std::string& text)
+sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const CU_STR& text)
 {
 	sm::rect ret = rect;
 

@@ -222,7 +222,8 @@ RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const
 
 	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
 
-	std::vector<sm::vec2> vertices(4);
+	CU_VEC<sm::vec2> vertices;
+	vertices.resize(4);
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr, rp.actor);
 	vertices[0] = sm::vec2(rect.xmin, rect.ymin);
 	vertices[1] = sm::vec2(rect.xmin, rect.ymax);

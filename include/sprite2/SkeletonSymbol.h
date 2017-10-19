@@ -4,7 +4,7 @@
 #include "S2_Symbol.h"
 #include "Skeleton.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {

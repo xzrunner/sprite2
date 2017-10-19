@@ -3,8 +3,7 @@
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -28,7 +27,7 @@ public:
 		const sm::vec2& scale, const sm::vec2& shear, const sm::vec2& offset) = 0;
 	virtual void SetTransform(const sm::vec2& position, const sm::vec2& offset, float angle) = 0;
 
-	virtual void GetBoundPos(std::vector<sm::vec2>& bound) const = 0;
+	virtual void GetBoundPos(CU_VEC<sm::vec2>& bound) const = 0;
 
 	sm::rect GetSize() const {
 		sm::rect r;

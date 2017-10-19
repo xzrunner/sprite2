@@ -30,7 +30,7 @@
 namespace s2
 {
 
-SprPtr ProxyHelper::BuildGroup(const std::vector<std::pair<const ActorConstPtr, SprPtr>>& items, bool force_group)
+SprPtr ProxyHelper::BuildGroup(const CU_VEC<std::pair<const ActorConstPtr, SprPtr>>& items, bool force_group)
 {
 	SprPtr ret = nullptr;
 	if (!force_group && items.size() == 1) 
@@ -39,8 +39,8 @@ SprPtr ProxyHelper::BuildGroup(const std::vector<std::pair<const ActorConstPtr, 
 	} 
 	else if (items.size() > 1) 
 	{
-		auto sym = std::make_shared<ProxySymbol>(items);
-		ret = std::make_shared<ProxySprite>(sym);
+		auto sym = mm::allocate_shared<ProxySymbol>(items);
+		ret = mm::allocate_shared<ProxySprite>(sym);
 	}
 	return ret;
 }
@@ -410,7 +410,7 @@ void ProxyHelper::SprAnimSetLoop(const Sprite& spr, bool loop)
 	}	
 }
 
-bool ProxyHelper::SprHasAction(const Sprite& spr, const std::string& action)
+bool ProxyHelper::SprHasAction(const Sprite& spr, const CU_STR& action)
 {
 	auto& sym = spr.GetSymbol();
 	int type = sym->Type();
@@ -592,7 +592,7 @@ void ProxyHelper::SprP3dUpdate(const Sprite& spr, float dt)
 	}
 }
 
-void ProxyHelper::SprGetProxyChildren(const Sprite& spr, std::vector<ActorPtr>& actors)
+void ProxyHelper::SprGetProxyChildren(const Sprite& spr, CU_VEC<ActorPtr>& actors)
 {
 	auto& sym = spr.GetSymbol();
 	int type = sym->Type();
@@ -1383,7 +1383,7 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 	}
 }
 
-void ProxyHelper::ActorSetAction(ActorPtr& actor, const std::string& action)
+void ProxyHelper::ActorSetAction(ActorPtr& actor, const CU_STR& action)
 {
 	auto& sym = actor->GetSpr()->GetSymbol();
 	int type = sym->Type();
@@ -1465,7 +1465,7 @@ void ProxyHelper::ActorSetScissor(ActorPtr& actor, const sm::rect& rect)
 	}
 }
 
-bool ProxyHelper::ActorGetText(const Actor* actor, std::string& text)
+bool ProxyHelper::ActorGetText(const ActorPtr& actor, CU_STR& text)
 {
 	auto& sym = actor->GetSpr()->GetSymbol();
 	int type = sym->Type();
@@ -1476,12 +1476,12 @@ bool ProxyHelper::ActorGetText(const Actor* actor, std::string& text)
 		if (items.empty()) {
 			return false;
 		}
-		std::string ret;
+		CU_STR ret;
 		if (!ActorGetText(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
-			std::string ctext;
+			CU_STR ctext;
 			if (!ActorGetText(items[i].second->QueryActorRef(items[i].first.get()), ctext) || ctext != ret) {
 				return false;
 			}
@@ -1492,7 +1492,7 @@ bool ProxyHelper::ActorGetText(const Actor* actor, std::string& text)
 	else if (type == SYM_TEXTBOX)
 	{
 		auto& textbox = S2_VI_PTR_DOWN_CAST<TextboxActor>(actor);
-		text = textbox->GetText().c_str();
+		text = textbox->GetText();
 		return true;
 	}
 	else
@@ -1501,7 +1501,7 @@ bool ProxyHelper::ActorGetText(const Actor* actor, std::string& text)
 	}
 }
 
-void ProxyHelper::ActorSetText(ActorPtr& actor, const std::string& text)
+void ProxyHelper::ActorSetText(ActorPtr& actor, const CU_STR& text)
 {
 	auto& sym = actor->GetSpr()->GetSymbol();
 	int type = sym->Type();

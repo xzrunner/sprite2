@@ -3,7 +3,7 @@
 
 #include "S2_Symbol.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 struct rg_animation;
 
@@ -40,7 +40,7 @@ protected:
 
 private:
 	// cache anim used all symbol
-	std::vector<SymPtr> m_cached_syms;
+	CU_VEC<SymPtr> m_cached_syms;
 
 }; // Anim2Symbol
 

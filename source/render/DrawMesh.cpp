@@ -21,9 +21,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
-
-#include <set>
-#include <vector>
+#include <cu/cu_stl.h>
 
 #include <assert.h>
 
@@ -36,8 +34,8 @@ static Color BLUE	(102, 51, 204, 128);
 
 RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
 {
-	std::vector<sm::vec2> vertices, texcoords;
-	std::vector<int> triangles;
+	CU_VEC<sm::vec2> vertices, texcoords;
+	CU_VEC<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
@@ -48,7 +46,8 @@ RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MA
 
 	// lines
 	RVG::SetColor(RED);
-	std::vector<sm::vec2> lines(3);
+	CU_VEC<sm::vec2> lines;
+	lines.resize(3);
 	for (int i = 0, n = triangles.size(); i < n; ) {
 		for (int j = 0; j < 3; ++j, ++i) {
 			lines[j].x = (texcoords[triangles[i]].x - 0.5f) * w;
@@ -77,8 +76,8 @@ RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MA
 
 RenderReturn DrawMesh::DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
 {
-	std::vector<sm::vec2> vertices, texcoords;
-	std::vector<int> triangles;
+	CU_VEC<sm::vec2> vertices, texcoords;
+	CU_VEC<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
@@ -86,7 +85,8 @@ RenderReturn DrawMesh::DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MA
 
 	// lines
 	RVG::SetColor(RED);
-	std::vector<sm::vec2> lines(3);
+	CU_VEC<sm::vec2> lines;
+	lines.resize(3);
 	for (int i = 0, n = triangles.size(); i < n; ) {
 		for (int j = 0; j < 3; ++j, ++i) {
 			lines[j] = vertices[triangles[i]];
@@ -148,8 +148,8 @@ RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const Rend
 
 RenderReturn DrawMesh::DrawOnlyMesh(const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt, int tex_id)
 {
-	std::vector<sm::vec2> vertices, texcoords;
-	std::vector<int> triangles;
+	CU_VEC<sm::vec2> vertices, texcoords;
+	CU_VEC<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
@@ -208,8 +208,8 @@ RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const Rend
 		return RENDER_NO_DATA;
 	}
 
-	std::vector<sm::vec2> vertices, texcoords;
-	std::vector<int> triangles;
+	CU_VEC<sm::vec2> vertices, texcoords;
+	CU_VEC<int> triangles;
 	mesh->DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;

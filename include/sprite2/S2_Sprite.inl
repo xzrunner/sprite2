@@ -8,7 +8,7 @@ namespace s2
 {
 
 inline
-void Sprite::SetName(const std::string& name) 
+void Sprite::SetName(const CU_STR& name) 
 {
 	m_name = SprNameMap::Instance()->StrToID(name);	
 	UpdateInheritUpdate();
@@ -20,7 +20,7 @@ void Sprite::UpdateInheritUpdate() const
 	if (m_name == -1) {
 		SetInheritUpdate(false);
 	} else {
-		std::string name;
+		CU_STR name;
 		SprNameMap::Instance()->IDToStr(m_name, name);
 		SetInheritUpdate(IsForceUpdate() || name.empty() || name[0] == '_');
 	}

@@ -107,7 +107,7 @@ bool ComplexSprite::Update(const UpdateParams& up)
 
 SprPtr ComplexSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	std::vector<std::pair<const ActorConstPtr, SprPtr>> group;
+	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> group;
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetAllChildren();
 	for (auto& child : children) {

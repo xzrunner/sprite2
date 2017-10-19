@@ -14,7 +14,7 @@ StatPingPong::StatPingPong()
 	Reset();
 }
 
-void StatPingPong::Print(std::string& str) const
+void StatPingPong::Print(CU_STR& str) const
 {
 	static char buf[512];
 	sprintf(buf, "PingPong: mesh %d, mask %d, blend %d, \nblur %d, glow %d, downsample %d, integrate %d, out %d", 

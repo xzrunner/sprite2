@@ -4,9 +4,8 @@
 #include "s2_typedef.h"
 
 #include <SM_Rect.h>
-#include <memmgr/Allocator.h>
+#include <cu/cu_stl.h>
 
-#include <vector>
 #include <memory>
 
 namespace s2
@@ -18,10 +17,10 @@ class Actor;
 class AABBHelper
 {
 public:
-	static sm::rect CalcAABB(const mm::AllocVector<SprPtr>& children, const Actor* parent);
+	static sm::rect CalcAABB(const CU_VEC<SprPtr>& children, const Actor* parent);
 
 private:
-	static void UpdateChildrenAABBTight(const mm::AllocVector<SprPtr>& children,
+	static void UpdateChildrenAABBTight(const CU_VEC<SprPtr>& children,
 		const Actor* parent, const sm::rect& parent_aabb);
 
 }; // AABBHelper

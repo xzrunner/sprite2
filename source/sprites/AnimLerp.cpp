@@ -21,8 +21,8 @@
 namespace s2
 {
 
-void AnimLerp::Lerp(const mm::AllocVector<SprPtr>& begin, const mm::AllocVector<SprPtr>& end,
-					mm::AllocVector<SprPtr>& tween, int time, int tot_time, const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
+void AnimLerp::Lerp(const CU_VEC<SprPtr>& begin, const CU_VEC<SprPtr>& end,
+					CU_VEC<SprPtr>& tween, int time, int tot_time, const CU_VEC<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	for (auto& start_spr : begin)
 	{
@@ -55,7 +55,7 @@ Color color_interpolate(const Color& begin, const Color& end, float scale)
 }
 
 void AnimLerp::Lerp(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time,
-					const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
+					const CU_VEC<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	float process = static_cast<float>(time) / tot_time;
 
@@ -140,7 +140,7 @@ void AnimLerp::LerpSpecial(const Sprite& begin, const Sprite& end, SprPtr& tween
 }
 
 void AnimLerp::LerpExpression(const Sprite& begin, const Sprite& end, SprPtr& tween, int time, int tot_time,
-							  const std::vector<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
+							  const CU_VEC<std::pair<SprData, std::unique_ptr<ILerp>>>& lerps)
 {
 	float process = static_cast<float>(time) / tot_time;
 

@@ -13,7 +13,7 @@ StatSymDraw::StatSymDraw()
 {
 }
 
-void StatSymDraw::Print(std::string& str) const
+void StatSymDraw::Print(CU_STR& str) const
 {
 	m_items[STAT_SYM_IMAGE].Print(str, "img");
 	m_items[STAT_SYM_SCALE9].Print(str, "s9");
@@ -75,7 +75,7 @@ StatSymDraw::Item::Item()
 {
 }
 
-void StatSymDraw::Item::Print(std::string& str, const std::string& tag) const
+void StatSymDraw::Item::Print(CU_STR& str, const CU_STR& tag) const
 {
 	static char buf[512];
 	sprintf(buf, "%s: count %d, cost %d\n", tag.c_str(), m_draw_count, m_draw_cost);

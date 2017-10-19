@@ -290,7 +290,7 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, const float* vertices, co
 	float z[4];
 	rp.camera.CalculateZ(pcam->GetAngle(), vertices, z);
 
-	std::vector<sm::vec3> _vertices;
+	CU_VEC<sm::vec3> _vertices;
 	_vertices.push_back(sm::vec3(vertices[0], vertices[1], z[0]));
 	_vertices.push_back(sm::vec3(vertices[2], vertices[3], z[1]));
 	_vertices.push_back(sm::vec3(vertices[4], vertices[5], z[2]));
@@ -298,7 +298,7 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, const float* vertices, co
 	_vertices.push_back(sm::vec3(vertices[4], vertices[4], z[2]));
 	_vertices.push_back(sm::vec3(vertices[6], vertices[7], z[3]));
 
-	std::vector<sm::vec2> _texcoords;
+	CU_VEC<sm::vec2> _texcoords;
 	_texcoords.push_back(sm::vec2(texcoords[0], texcoords[1]));
 	_texcoords.push_back(sm::vec2(texcoords[2], texcoords[3]));
 	_texcoords.push_back(sm::vec2(texcoords[4], texcoords[5]));

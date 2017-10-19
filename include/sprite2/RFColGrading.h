@@ -3,6 +3,7 @@
 
 #include "RenderFilter.h"
 
+#include <cu/cu_stl.h>
 #include <memmgr/Allocator.h>
 
 namespace s2
@@ -26,11 +27,11 @@ public:
 
 	virtual size_t Size() const override { return sizeof(RFColGrading); }
 
-	const std::string& GetFilepath() const { return m_filepath; }
-	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }
+	const CU_STR& GetFilepath() const { return m_filepath; }
+	void SetFilepath(const CU_STR& filepath) { m_filepath = filepath; }
 
 private:
-	std::string m_filepath;		// color grading LUT texture
+	CU_STR m_filepath;		// color grading LUT texture
 
 }; // RFColGrading
 

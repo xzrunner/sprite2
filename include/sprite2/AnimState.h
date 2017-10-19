@@ -2,22 +2,22 @@
 #define _SPRITE2_ANIM_STATE_H_
 
 #include "sprite2/s2_config.h"
+#include "sprite2/AnimCurr.h"
 #include "s2_typedef.h"
-
-#include <memmgr/Allocator.h>
 
 #include <memory>
 
 namespace s2
 {
 
-class AnimCurr;
 class AnimCopy;
 class Sprite;
 
 class AnimState
 {
 public:
+	AnimState();
+
 	void Assign(const AnimState& src, bool same_struct);
 
 	void Init(const std::shared_ptr<AnimCopy>& copy);
@@ -41,17 +41,7 @@ public:
 #endif // S2_MULTITHREAD
 
 private:
-//	using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
-	using AnimCurrPtr = std::unique_ptr<AnimCurr>;
 	void Init(AnimCurrPtr& dst, const std::shared_ptr<AnimCopy>& copy);
-
-	bool IsVaild() const {
-#ifdef S2_MULTITHREAD
-		return m_origin && m_update && m_draw;
-#else
-		return m_origin != nullptr;
-#endif // S2_MULTITHREAD
-	}
 
 private:
 	AnimCurrPtr m_origin;

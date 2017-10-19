@@ -4,8 +4,7 @@
 #include "StatSymType.h"
 
 #include <cu/cu_macro.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -15,7 +14,7 @@ namespace s2
 class StatSymDraw
 {
 public:
-	void Print(std::string& str) const;
+	void Print(CU_STR& str) const;
 	void Reset();
 
 	void AddDrawCount(StatSymType type);
@@ -40,7 +39,7 @@ private:
 	public:
 		Item();
 
-		void Print(std::string& str, const std::string& tag) const;
+		void Print(CU_STR& str, const CU_STR& tag) const;
 
 		void Reset();
 

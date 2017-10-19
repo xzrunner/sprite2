@@ -4,7 +4,7 @@
 #include "Shape.h"
 #include "ShapeType.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -14,7 +14,7 @@ class PolylineShape : public VIRTUAL_INHERITANCE Shape
 public:
 	PolylineShape();
 	PolylineShape(const PolylineShape& polyline);
-	PolylineShape(const std::vector<sm::vec2>& vertices, bool closed = false);
+	PolylineShape(const CU_VEC<sm::vec2>& vertices, bool closed = false);
 
 	/**
 	 *  @interface
@@ -26,14 +26,14 @@ public:
 	virtual bool IsIntersect(const sm::rect& rect) const;
 	virtual void Draw(const RenderParams& rp) const;
 
-	const std::vector<sm::vec2>& GetVertices() const { return m_vertices; }
-	void SetVertices(const std::vector<sm::vec2>& vertices);
+	const CU_VEC<sm::vec2>& GetVertices() const { return m_vertices; }
+	void SetVertices(const CU_VEC<sm::vec2>& vertices);
 
 protected:
 	virtual void UpdateBounding();
 
 protected:
-	std::vector<sm::vec2> m_vertices;
+	CU_VEC<sm::vec2> m_vertices;
 	bool m_closed;
 
 	VI_DUMMY_FUNC

@@ -8,7 +8,7 @@
 namespace s2
 {
 
-sm::rect AABBHelper::CalcAABB(const mm::AllocVector<SprPtr>& children, const Actor* parent)
+sm::rect AABBHelper::CalcAABB(const CU_VEC<SprPtr>& children, const Actor* parent)
 {
 	sm::rect aabb;
 
@@ -39,7 +39,7 @@ sm::rect AABBHelper::CalcAABB(const mm::AllocVector<SprPtr>& children, const Act
 	return aabb;
 }
 
-void AABBHelper::UpdateChildrenAABBTight(const mm::AllocVector<SprPtr>& children,
+void AABBHelper::UpdateChildrenAABBTight(const CU_VEC<SprPtr>& children,
 	                                     const Actor* parent,
 										 const sm::rect& parent_aabb)
 {

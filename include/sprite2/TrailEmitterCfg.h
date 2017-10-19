@@ -4,9 +4,9 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <memory>
-#include <vector>
 
 struct t2d_emitter_cfg;
 
@@ -27,7 +27,7 @@ public:
 private:
 	t2d_emitter_cfg* m_impl;
 
-	std::vector<SymPtr> m_symbols;
+	CU_VEC<SymPtr> m_symbols;
 
 }; // TrailEmitterCfg
 

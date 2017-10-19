@@ -21,7 +21,7 @@ PolylineShape::PolylineShape(const PolylineShape& polyline)
 	UpdateBounding();
 }
 
-PolylineShape::PolylineShape(const std::vector<sm::vec2>& vertices, bool closed)
+PolylineShape::PolylineShape(const CU_VEC<sm::vec2>& vertices, bool closed)
 	: m_vertices(vertices)
 	, m_closed(closed)
 {
@@ -101,7 +101,7 @@ void PolylineShape::Draw(const RenderParams& rp) const
 	ShapeVertices::Draw(m_vertices, m_closed, rp);
 }
 
-void PolylineShape::SetVertices(const std::vector<sm::vec2>& vertices)
+void PolylineShape::SetVertices(const CU_VEC<sm::vec2>& vertices)
 {
 	m_vertices = vertices;
 	UpdateBounding();

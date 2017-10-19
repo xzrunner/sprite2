@@ -328,7 +328,7 @@ void Particle3dSprite::CreateSpr()
 		return;
 	}
 
-	m_et = std::make_shared<Particle3dEmitter>();
+	m_et = mm::allocate_shared<Particle3dEmitter>();
 	m_et->CreateEmitter(cfg);
 	m_et->Start();
 

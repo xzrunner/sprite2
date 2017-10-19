@@ -14,7 +14,7 @@ public:
 	PolygonShape() = default;
 	PolygonShape(const PolygonShape& ps);
 	const PolygonShape& operator = (const PolygonShape& ps);
-	PolygonShape(const std::vector<sm::vec2>& vertices);
+	PolygonShape(const CU_VEC<sm::vec2>& vertices);
 
 	/**
 	 *  @interface

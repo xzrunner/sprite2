@@ -3,7 +3,7 @@
 
 #include "S2_Actor.h"
 
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -16,13 +16,13 @@ public:
 	TextboxActor(const SprConstPtr& spr, const ActorConstPtr& parent) 
 		: Actor(spr, parent) {}
 
-	void SetText(const std::string& text);
-	const std::string& GetText() const { return m_text; }
+	void SetText(const CU_STR& text);
+	const auto& GetText() const { return m_text; }
 
-	static sm::rect CalcAABB(const Textbox& tb, const sm::rect& rect, const std::string& text);
+	static sm::rect CalcAABB(const Textbox& tb, const sm::rect& rect, const CU_STR& text);
 	
 private:
-	std::string m_text;
+	CU_STR m_text;
 
 }; // TextboxActor
 

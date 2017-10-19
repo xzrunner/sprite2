@@ -6,10 +6,7 @@
 #include "AnimLerp.h"
 
 #include <SM_Vector.h>
-#include <memmgr/Allocator.h>
-
-#include <vector>
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -59,24 +56,24 @@ private:
 	struct Frame
 	{
 		int time;
-		mm::AllocVector<Item> items;
+		CU_VEC<Item> items;
 
-		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
+		CU_VEC<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 	};
 
 	struct Layer
 	{
-		mm::AllocVector<Frame> frames;
+		CU_VEC<Frame> frames;
 	};
 
 private:
-	std::vector<Layer> m_layers;
+	CU_VEC<Layer> m_layers;
 
-	std::vector<SprConstPtr> m_slots;
+	CU_VEC<SprConstPtr> m_slots;
 
-	std::vector<Lerp> m_lerps;
+	CU_VEC<Lerp> m_lerps;
 
-	std::vector<SprConstPtr> m_sprites;
+	CU_VEC<SprConstPtr> m_sprites;
 
 	int m_max_frame_idx;
 	int m_max_item_num;

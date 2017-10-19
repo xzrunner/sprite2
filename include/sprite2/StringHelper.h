@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STRING_HELPER_H_
 #define _SPRITE2_STRING_HELPER_H_
 
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -9,7 +9,7 @@ namespace s2
 class StringHelper
 {
 public:
-	static std::string FromChar(const char* c_str);
+	static CU_STR FromChar(const char* c_str);
 
 }; // StringHelper
 

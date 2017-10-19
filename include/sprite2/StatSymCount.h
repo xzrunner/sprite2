@@ -4,8 +4,7 @@
 #include "StatSymType.h"
 
 #include <cu/cu_macro.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -13,7 +12,7 @@ namespace s2
 class StatSymCount
 {
 public:
-	void Print(std::string& str) const;
+	void Print(CU_STR& str) const;
 
 	void Add(StatSymType type);
 	void Subtract(StatSymType type);

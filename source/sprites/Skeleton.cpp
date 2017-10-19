@@ -11,7 +11,7 @@
 namespace s2
 {
 
-Skeleton::Skeleton(const std::shared_ptr<Joint>& root, const std::vector<std::shared_ptr<Joint>>& all_joints)
+Skeleton::Skeleton(const std::shared_ptr<Joint>& root, const CU_VEC<std::shared_ptr<Joint>>& all_joints)
 	: m_root(root)
 	, m_all_joints(all_joints)
 {

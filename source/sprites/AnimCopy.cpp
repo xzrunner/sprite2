@@ -50,7 +50,7 @@ void AnimCopy::FillingLayers(const AnimSymbol& sym)
 	m_layers.resize(layers.size());
 	for (int ilayer = 0, nlayer = layers.size(); ilayer < nlayer; ++ilayer) 
 	{
-		const std::unique_ptr<AnimSymbol::Layer>& src_layer = layers[ilayer];
+		auto& src_layer = layers[ilayer];
 		Layer& dst_layer = m_layers[ilayer];
 		dst_layer.frames.resize(src_layer->frames.size());
 		for (int iframe = 0, nframe = src_layer->frames.size(); iframe < nframe; ++iframe)
@@ -83,7 +83,7 @@ void AnimCopy::ConnectItems(const AnimSymbol& sym)
 		if (layer.frames.size() <= 1) {
 			continue;
 		}
-		const std::unique_ptr<AnimSymbol::Layer>& src_layer = layers[ilayer];
+		auto& src_layer = layers[ilayer];
 		for (int iframe = 0, nframe = layer.frames.size(); iframe < nframe - 1; ++iframe) 
 		{
 			if (!src_layer->frames[iframe]->tween) {

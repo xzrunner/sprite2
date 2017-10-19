@@ -14,7 +14,7 @@ StatOverdraw::StatOverdraw()
 	Reset();
 }
 
-void StatOverdraw::Print(std::string& str) const
+void StatOverdraw::Print(CU_STR& str) const
 {
 	static char buf[512];
 	sprintf(buf, "overdraw: %0.1f", m_area);

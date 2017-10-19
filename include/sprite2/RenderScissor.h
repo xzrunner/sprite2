@@ -2,9 +2,8 @@
 #define _SPRITE2_RENDER_SCISSOR_H_
 
 #include <cu/cu_macro.h>
+#include <cu/cu_stl.h>
 #include <SM_Rect.h>
-
-#include <vector>
 
 namespace s2
 {
@@ -45,7 +44,7 @@ private:
 	static void Intersection(const Rect& r, float& x, float& y, float& w, float& h);
 
 private:
-	std::vector<Rect> m_stack;
+	CU_VEC<Rect> m_stack;
 	
 	CU_SINGLETON_DECLARATION(RenderScissor)
 

@@ -2,8 +2,7 @@
 #define _SPRITE2_STAT_PINGPONG_H_
 
 #include <cu/cu_macro.h>
-
-#include <string>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -24,7 +23,7 @@ public:
 	};
 
 public:
-	void Print(std::string& str) const;
+	void Print(CU_STR& str) const;
 	void Reset();
 
 	void AddCount(Type type);

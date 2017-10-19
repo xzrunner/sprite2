@@ -3,11 +3,10 @@
 
 #include "s2_typedef.h"
 
+#include <cu/cu_stl.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 
-#include <vector>
-#include <string>
 #include <memory>
 
 namespace s2
@@ -20,7 +19,7 @@ class ProxyHelper
 {
 public:
 	// should be release outside
-	static SprPtr BuildGroup(const std::vector<std::pair<const ActorConstPtr, SprPtr>>& items, bool force_group = false);
+	static SprPtr BuildGroup(const CU_VEC<std::pair<const ActorConstPtr, SprPtr>>& items, bool force_group = false);
 
 	/************************************************************************/
 	/* sprite                                                               */
@@ -48,7 +47,7 @@ public:
 	static void SprAnimSetLoop(const Sprite& spr, bool loop);
 
 	// complex
-	static bool SprHasAction(const SprPtr& spr, const std::string& action);
+	static bool SprHasAction(const SprPtr& spr, const CU_STR& action);
 
 	// textbox
 	static void SprTextboxResetTime(const Sprite& spr);
@@ -65,7 +64,7 @@ public:
 	static void SprP3dUpdate(const Sprite& spr, float dt);
 
 	// proxy
-	static void SprGetProxyChildren(const Sprite& spr, std::vector<ActorPtr>& actors);
+	static void SprGetProxyChildren(const Sprite& spr, CU_VEC<ActorPtr>& actors);
 	
 	// dtex
 	static void SetDTexEnable(const Sprite& spr, bool enable);
@@ -110,13 +109,13 @@ public:
 	static bool ActorGetComponentCount(const ActorPtr& actor, int& count);
 
 	// complex
-	static void ActorSetAction(ActorPtr& actor, const std::string& action);
+	static void ActorSetAction(ActorPtr& actor, const CU_STR& action);
 	static bool ActorGetScissor(const ActorPtr& actor, sm::rect& rect);
 	static void ActorSetScissor(ActorPtr& actor, const sm::rect& rect);
 
 	// textbox
-	static bool ActorGetText(const ActorPtr& actor, std::string& text);
-	static void ActorSetText(ActorPtr& actor, const std::string& text);
+	static bool ActorGetText(const ActorPtr& actor, CU_STR& text);
+	static void ActorSetText(ActorPtr& actor, const CU_STR& text);
 
 	// scale9
 	static void ActorScale9Resize(ActorPtr& actor, int w, int h);

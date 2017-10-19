@@ -3,7 +3,8 @@
 
 #include "S2_Symbol.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
+
 #include <memory>
 
 namespace s2
@@ -14,7 +15,7 @@ class Sprite;
 class ProxySymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
-	ProxySymbol(const std::vector<std::pair<const ActorConstPtr, SprPtr>>& items);
+	ProxySymbol(const CU_VEC<std::pair<const ActorConstPtr, SprPtr>>& items);
 	
 	/**
 	 *  @interface
@@ -31,7 +32,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 private:
-	std::vector<std::pair<const ActorConstPtr, SprPtr>> m_items;
+	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> m_items;
 
 }; // ProxySymbol
 

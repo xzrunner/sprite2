@@ -29,17 +29,17 @@ public:
 	virtual void Draw(const RenderParams& rp) const;
 	virtual void Build();
 
-	const std::vector<sm::vec2>& GetTexcoords() const { return m_texcoords; }
+	const CU_VEC<sm::vec2>& GetTexcoords() const { return m_texcoords; }
 
 private:
-	void GetTexBoundarySegments(const sm::rect& rect, std::vector<sm::vec2>& segments);
+	void GetTexBoundarySegments(const sm::rect& rect, CU_VEC<sm::vec2>& segments);
 
 	void CalTexcoords(const sm::rect& rect);
 
 protected:
 	std::shared_ptr<const ImageSymbol> m_img;
 
-	std::vector<sm::vec2> m_texcoords;
+	CU_VEC<sm::vec2> m_texcoords;
 
 }; // TexturePolygon
 

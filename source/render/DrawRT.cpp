@@ -181,7 +181,7 @@ uint8_t* DrawRT::StoreToMemory(int width, int height, int channels)
 	return pixels;
 }
 
-void DrawRT::StoreToFile(const std::string& filepath, int width, int height, int channels)
+void DrawRT::StoreToFile(const CU_STR& filepath, int width, int height, int channels)
 {
 	if (channels != 3 && channels != 4) {
 		return;

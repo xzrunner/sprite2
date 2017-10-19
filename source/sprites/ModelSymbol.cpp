@@ -45,7 +45,7 @@ RenderReturn ModelSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::MODEL3);
 	sl::Model3Shader* shader = static_cast<sl::Model3Shader*>(mgr->GetShader());
-	const std::vector<m3::Mesh*>& meshes = m_model->GetAllMeshes();
+	const CU_VEC<m3::Mesh*>& meshes = m_model->GetAllMeshes();
 	for (int i = 0, n = meshes.size(); i < n; ++i) 
 	{
 		const m3::Mesh* mesh = meshes[i];

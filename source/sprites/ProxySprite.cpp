@@ -44,7 +44,7 @@ bool ProxySprite::Update(const UpdateParams& up)
 
 SprPtr ProxySprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 {
-	std::vector<std::pair<const ActorConstPtr, SprPtr>> group;
+	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> group;
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {
@@ -67,7 +67,7 @@ SprPtr ProxySprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 
 SprPtr ProxySprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 {
-	std::vector<std::pair<const ActorConstPtr, SprPtr>> group;
+	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> group;
 	auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(m_sym)->GetItems();
 	if (actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
 		for (auto& item : items) {

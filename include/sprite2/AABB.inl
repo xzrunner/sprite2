@@ -63,7 +63,7 @@ void AABB::SetTransform(const sm::vec2& position, const sm::vec2& offset, float 
 }
 
 inline
-void AABB::GetBoundPos(std::vector<sm::vec2>& bound) const
+void AABB::GetBoundPos(CU_VEC<sm::vec2>& bound) const
 {
 	bound.resize(4);
 	bound[0] = sm::vec2(m_rect.xmin, m_rect.ymin) + m_position;

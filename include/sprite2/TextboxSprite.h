@@ -4,8 +4,6 @@
 #include "S2_Sprite.h"
 #include "Textbox.h"
 
-#include <string>
-
 namespace s2
 {
 
@@ -21,8 +19,8 @@ public:
 	const Textbox& GetTextbox() const { return m_tb; }
 	Textbox& GetTextbox() { return m_tb; }
 
-	const std::string& GetText(const UpdateParams& up) const;
-	void SetText(const UpdateParams& up, const std::string& text);
+	const CU_STR& GetText(const UpdateParams& up) const;
+	void SetText(const UpdateParams& up, const CU_STR& text);
 
 	int GetTime() const { return m_time; }
 	void UpdateTime() const { ++m_time; }
@@ -31,7 +29,7 @@ public:
 protected:
 	Textbox m_tb;
 
-	std::string m_text;
+	CU_STR m_text;
 
 private:
 	// for dynamic draw

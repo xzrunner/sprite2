@@ -20,7 +20,7 @@ CosineShape::CosineShape(const CosineShape& cosine)
 	UpdatePolyline();
 }
 
-CosineShape::CosineShape(const std::vector<sm::vec2>& vertices)
+CosineShape::CosineShape(const CU_VEC<sm::vec2>& vertices)
 	: PolylineShape(vertices) 
 {
 	UpdatePolyline();
@@ -44,7 +44,7 @@ void CosineShape::UpdatePolyline()
 
 	m_mid_points.clear();
 
-	std::vector<sm::vec2> smooth;
+	CU_VEC<sm::vec2> smooth;
 	sm::cosine_smooth(m_vertices, SAMPLING_WIDTH, smooth);
 
 	sm::douglas_peucker(smooth, 0.75f, m_mid_points);

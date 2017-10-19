@@ -7,7 +7,7 @@
 
 #include S2_MAT_HEADER
 
-#include <string>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -42,7 +42,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 	virtual void DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const Color& mul,
-		const Color& add, const std::string& text, int time, bool richtext) const = 0;
+		const Color& add, const CU_STR& text, int time, bool richtext) const = 0;
 
 private:
 	RenderReturn DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const;

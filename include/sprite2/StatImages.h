@@ -2,9 +2,7 @@
 #define _SPRITE2_STAT_IMAGES_H_
 
 #include <cu/cu_macro.h>
-
-#include <string>
-#include <map>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -15,9 +13,9 @@ public:
 	void Add(int id, int width, int height, int type);
 	void Remove(int id, int width, int height, int type);
 
-	void Print(std::string& str) const;	
+	void Print(CU_STR& str) const;	
 
-	const std::map<int, float>& GetID2Mem() const { return m_id2mem; }
+	const CU_MAP<int, float>& GetID2Mem() const { return m_id2mem; }
 
 public:
 	static const int UNKNOWN_IMG_ID = -1;
@@ -30,7 +28,7 @@ private:
 	float m_memory;
 	int   m_4096_count;
 
-	std::map<int, float> m_id2mem;
+	CU_MAP<int, float> m_id2mem;
 
 	CU_SINGLETON_DECLARATION(StatImages);
 

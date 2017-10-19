@@ -2,8 +2,7 @@
 #define _SPRITE2_RENDER_TARGET_MGR_H_
 
 #include <cu/cu_macro.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -36,7 +35,7 @@ private:
 	};
 	
 private:
-	std::vector<Item> m_items;
+	CU_VEC<Item> m_items;
 
 	CU_SINGLETON_DECLARATION(RenderTargetMgr);
 

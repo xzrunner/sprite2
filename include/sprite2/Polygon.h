@@ -6,7 +6,8 @@
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
 
-#include <vector>
+#include <cu/cu_stl.h>
+
 #include <memory>
 
 namespace cooking { class DisplayList; }
@@ -27,23 +28,23 @@ public:
 	virtual void Draw(const RenderParams& rp) const = 0;
 	virtual void Build() = 0;
 
-	const std::vector<sm::vec2>& GetTriangles() const { return m_tris; }
+	const CU_VEC<sm::vec2>& GetTriangles() const { return m_tris; }
 
-	void SetOutline(const std::vector<sm::vec2>& outline) { m_outline = outline; }
-	void SetSegments(const std::vector<sm::vec2>& segments) { m_segments = segments; }
-	void SetHoles(const std::vector<std::vector<sm::vec2> >& holes) { m_holes = holes; }	
+	void SetOutline(const CU_VEC<sm::vec2>& outline) { m_outline = outline; }
+	void SetSegments(const CU_VEC<sm::vec2>& segments) { m_segments = segments; }
+	void SetHoles(const CU_VEC<CU_VEC<sm::vec2> >& holes) { m_holes = holes; }	
 
 	void Clear();
 
 	void DebugDraw(const S2_MAT& mt) const;
 
 protected:
-	std::vector<sm::vec2> m_tris;
+	CU_VEC<sm::vec2> m_tris;
 
 	// shape
-	std::vector<sm::vec2> m_outline;
-	std::vector<sm::vec2> m_segments;
-	std::vector<std::vector<sm::vec2> > m_holes;
+	CU_VEC<sm::vec2> m_outline;
+	CU_VEC<sm::vec2> m_segments;
+	CU_VEC<CU_VEC<sm::vec2> > m_holes;
 
 }; // Polygon
 

@@ -4,10 +4,8 @@
 #include "S2_Symbol.h"
 #include "AnimLerp.h"
 
-#include <memmgr/Allocator.h>
+#include <cu/cu_stl.h>
 
-#include <vector>
-#include <string>
 #include <memory>
 
 namespace s2
@@ -22,10 +20,10 @@ public:
 	{
 	public:
 		int index;
-		mm::AllocVector<SprPtr> sprs;
+		CU_VEC<SprPtr> sprs;
 
 		bool tween;
-		std::vector<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
+		CU_VEC<std::pair<AnimLerp::SprData, std::unique_ptr<ILerp>>> lerps;
 
 	public:
 		Frame() : index(0), tween(false) {}
@@ -33,19 +31,20 @@ public:
 	}; // Frame
 
 	using FramePtr = std::unique_ptr<Frame, mm::alloc_deleter<mm::Allocator<Frame>>>;
-//	using FramePtr = std::unique_ptr<Frame>;
 
 	class Layer
 	{
 	public:
-		std::string name;
-		std::vector<FramePtr> frames;
+		CU_STR name;
+		CU_VEC<FramePtr> frames;
 
 	public:
 		int GetCurrFrame(int index) const;
 		int GetNextFrame(int index) const;
 
 	}; // Layer
+
+	using LayerPtr = std::unique_ptr<Layer, mm::alloc_deleter<mm::Allocator<Layer>>>;
 
 public:
 	AnimSymbol();
@@ -61,10 +60,10 @@ public:
 	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
-	const std::vector<std::unique_ptr<Layer>>& GetLayers() const { return m_layers; }
+	auto& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
 
-	void CreateFrameSprites(int frame, mm::AllocVector<SprPtr>& sprs) const;
+	void CreateFrameSprites(int frame, CU_VEC<SprPtr>& sprs) const;
 
 	int GetFPS() const { return m_fps; }
 	void SetFPS(int fps) { m_fps = fps; }
@@ -75,7 +74,7 @@ public:
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/
-	void AddLayer(std::unique_ptr<Layer> layer, int idx = -1);
+	void AddLayer(LayerPtr& layer, int idx = -1);
 	bool Clear();
 
 protected:
@@ -86,7 +85,7 @@ private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;
 
 protected:
-	std::vector<std::unique_ptr<Layer>> m_layers;
+	CU_VEC<LayerPtr> m_layers;
 
 	int m_fps;
 

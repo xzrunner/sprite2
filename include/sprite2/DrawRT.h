@@ -4,10 +4,9 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
-
-#include <string>
 
 namespace s2
 {
@@ -30,7 +29,7 @@ public:
 	void Draw(const Shape* shape, bool clear = false, int width = -1, int height = -1);
 
 	uint8_t* StoreToMemory(int width = -1, int height = -1, int channels = 4);
-	void StoreToFile(const std::string& filepath, int width = -1, int height = -1, int channels = 4);
+	void StoreToFile(const CU_STR& filepath, int width = -1, int height = -1, int channels = 4);
 
 private:
 	enum SourceRT

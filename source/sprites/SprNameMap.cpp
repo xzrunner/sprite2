@@ -15,9 +15,9 @@ SprNameMap::SprNameMap()
 	m_next_static_id = MASK_ID + 1;
 }
 
-int SprNameMap::StrToID(const std::string& str)
+int SprNameMap::StrToID(const CU_STR& str)
 {
-	auto itr = m_str2id.find(str.c_str());
+	auto itr = m_str2id.find(str);
 	if (itr != m_str2id.end()) {
 		return itr->second;
 	} else {
@@ -25,20 +25,20 @@ int SprNameMap::StrToID(const std::string& str)
 	}
 }
 
-bool SprNameMap::IDToStr(int id, std::string& str)
+bool SprNameMap::IDToStr(int id, CU_STR& str)
 {
 	auto itr = m_id2str.find(id);
 	if (itr != m_id2str.end()) {
-		mm::AllocString(str.c_str()) = itr->second;
+		str = itr->second;
 		return true;
 	} else {
 		return false;
 	}
 }
 
-int SprNameMap::QueryID(const std::string& str)
+int SprNameMap::QueryID(const CU_STR& str)
 {
-	auto itr = m_str2id.find(str.c_str());
+	auto itr = m_str2id.find(str);
 	if (itr != m_str2id.end()) {
 		return itr->second;
 	} else {
@@ -61,7 +61,7 @@ bool SprNameMap::IsEmptyName(int id)
 	return id < 0;
 }
 
-int SprNameMap::Insert(const std::string& str)
+int SprNameMap::Insert(const CU_STR& str)
 {
 	if (str.empty()) {
 		return -1;
@@ -70,7 +70,7 @@ int SprNameMap::Insert(const std::string& str)
 	}
 }
 
-int SprNameMap::Insert(const std::string& str, NameType type)
+int SprNameMap::Insert(const CU_STR& str, NameType type)
 {
 	int id = -1;
 	switch (type)
@@ -93,9 +93,9 @@ int SprNameMap::Insert(const std::string& str, NameType type)
 	return id;
 }
 
-void SprNameMap::Insert(const std::string& str, int id)
+void SprNameMap::Insert(const CU_STR& str, int id)
 {
-	mm::AllocString alloc_str(str.c_str());
+	CU_STR alloc_str(str);
 	m_str2id.insert(std::make_pair(alloc_str, id));
 	m_id2str.insert(std::make_pair(id, alloc_str));
 }

@@ -178,7 +178,7 @@ void Scale9::Build(SCALE9_TYPE type, int w, int h, SprPtr grids[9],
 	SetSize(static_cast<float>(w), static_cast<float>(h));
 }
 
-void Scale9::GetGrids(std::vector<SprPtr>& grids) const
+void Scale9::GetGrids(CU_VEC<SprPtr>& grids) const
 {
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {

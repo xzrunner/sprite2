@@ -5,7 +5,7 @@
 #include "sprite2/AnimState.h"
 #include "sprite2/AnimCurr.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {

@@ -11,7 +11,7 @@ class CosineShape : public PolylineShape
 public:
 	CosineShape();
 	CosineShape(const CosineShape& cosine);
-	CosineShape(const std::vector<sm::vec2>& vertices);
+	CosineShape(const CU_VEC<sm::vec2>& vertices);
 
 	/**
 	 *  @interface
@@ -30,7 +30,7 @@ private:
 	void UpdatePolyline();
 
 protected:
-	std::vector<sm::vec2> m_mid_points;
+	CU_VEC<sm::vec2> m_mid_points;
 
 }; // CosineShape
 

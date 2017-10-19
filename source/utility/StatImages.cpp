@@ -33,7 +33,7 @@ void StatImages::Add(int id, int width, int height, int type)
 		++m_4096_count;
 	}
 
-	std::map<int, float>::iterator itr = m_id2mem.find(id);
+	CU_MAP<int, float>::iterator itr = m_id2mem.find(id);
 	if (itr == m_id2mem.end()) {
 		m_id2mem.insert(std::make_pair(id, mem));
 	} else {
@@ -53,7 +53,7 @@ void StatImages::Remove(int id, int width, int height, int type)
 		--m_4096_count;
 	}
 
-	std::map<int, float>::iterator itr = m_id2mem.find(id);
+	CU_MAP<int, float>::iterator itr = m_id2mem.find(id);
 	assert(itr != m_id2mem.end());
 	itr->second -= mem;
 	if (fabs(itr->second) < FLT_EPSILON) {
@@ -61,7 +61,7 @@ void StatImages::Remove(int id, int width, int height, int type)
 	}
 }
 
-void StatImages::Print(std::string& str) const
+void StatImages::Print(CU_STR& str) const
 {
 	static char buf[512];
 

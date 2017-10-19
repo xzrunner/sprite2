@@ -20,10 +20,8 @@
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
 
-#include <memmgr/Allocator.h>
+#include <cu/cu_stl.h>
 #include <SM_Test.h>
-
-#include <map>
 
 #include <assert.h>
 
@@ -164,7 +162,7 @@ bool ComplexSymbol::Update(const UpdateParams& up, float time)
 	return ret;
 }
 
-const mm::AllocVector<SprPtr>& ComplexSymbol::GetActionChildren(int action) const
+const CU_VEC<SprPtr>& ComplexSymbol::GetActionChildren(int action) const
 {
 	if (action < 0 || action >= static_cast<int>(m_actions.size())) {
 		return m_children;
@@ -183,7 +181,7 @@ void ComplexSymbol::SetScissor(const sm::rect& scissor)
 	m_aabb = scissor;
 }
 
-int ComplexSymbol::GetActionIdx(const std::string& name) const
+int ComplexSymbol::GetActionIdx(const CU_STR& name) const
 {
 	int idx = -1;
 	for (int i = 0, n = m_actions.size(); i < n; ++i) {
@@ -221,7 +219,7 @@ bool ComplexSymbol::Remove(const Sprite& spr)
 	return false;
 }
 
-//bool ComplexSymbol::Change(const SprTreePath& path, const std::string& name, SprPtr dst)
+//bool ComplexSymbol::Change(const SprTreePath& path, const CU_STR& name, SprPtr dst)
 //{
 //	int idx = -1;
 //	for (int i = 0, n = m_children.size(); i < n; ++i) {
@@ -318,9 +316,9 @@ bool ComplexSymbol::ResetOrderMost(const Sprite& spr, bool up)
 	return false;
 }
 
-//bool ComplexSymbol::Sort(std::vector<SprPtr>& sprs)
+//bool ComplexSymbol::Sort(CU_VEC<SprPtr>& sprs)
 //{
-//	std::map<int, SprPtr> order_sorted;
+//	CU_MAP<int, SprPtr> order_sorted;
 //	for (int i = 0, n = sprs.size(); i < n; ++i) {
 //		SprPtr obj = sprs[i];
 //		for (int j = 0, m = m_children.size(); j < m; ++j) {
@@ -334,9 +332,9 @@ bool ComplexSymbol::ResetOrderMost(const Sprite& spr, bool up)
 //		return false;
 //	}
 //
-//	std::vector<SprPtr> list_dst;
+//	CU_VEC<SprPtr> list_dst;
 //	list_dst.reserve(sprs.size());
-//	std::map<int, SprPtr>::iterator itr = order_sorted.begin();
+//	CU_MAP<int, SprPtr>::iterator itr = order_sorted.begin();
 //	for ( ; itr != order_sorted.end(); ++itr) {
 //		list_dst.push_back(itr->second);
 //	}

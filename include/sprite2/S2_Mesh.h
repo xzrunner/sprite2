@@ -4,11 +4,11 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include <polymesh/Mesh.h>
 
-#include <vector>
 #include <memory>
 
 namespace pm { class MeshTransform; }
@@ -34,8 +34,8 @@ public:
 
 	float GetNodeRadius() const { return m_node_radius; }
 
-	void DumpToTriangles(std::vector<sm::vec2>& vertices, std::vector<sm::vec2>& texcoords,
-		std::vector<int>& triangles) const;
+	void DumpToTriangles(CU_VEC<sm::vec2>& vertices, CU_VEC<sm::vec2>& texcoords,
+		CU_VEC<int>& triangles) const;
 
 	void LoadFromTransform(const pm::MeshTransform& transform);
 	void StoreToTransforom(pm::MeshTransform& transform) const;

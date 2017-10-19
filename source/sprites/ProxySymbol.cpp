@@ -9,7 +9,7 @@
 namespace s2
 {
 
-ProxySymbol::ProxySymbol(const std::vector<std::pair<const ActorConstPtr, SprPtr>>& items)
+ProxySymbol::ProxySymbol(const CU_VEC<std::pair<const ActorConstPtr, SprPtr>>& items)
 	: m_items(items)
 {
 }
@@ -22,8 +22,8 @@ int ProxySymbol::Type() const
 RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {
 	RenderReturn ret = RENDER_OK;
-	for (int i = 0, n = m_items.size(); i < n; ++i) {
-		ret |= DrawNode::Draw(m_items[i].second.get(), rp);
+	for (auto& item : m_items) {
+		ret |= DrawNode::Draw(item.second.get(), rp);
 	}
 	return ret;
 }

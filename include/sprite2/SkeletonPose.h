@@ -3,7 +3,7 @@
 
 #include "JointPose.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -21,13 +21,13 @@ public:
 
 	void Lerp(const SkeletonPose& begin, const SkeletonPose& end, float process);
 
-	const std::vector<JointPose>& GetJointPose() const { return m_joints_pose; }
-	void SetJointPose(const std::vector<JointPose>& pose) { m_joints_pose = pose; }
+	const CU_VEC<JointPose>& GetJointPose() const { return m_joints_pose; }
+	void SetJointPose(const CU_VEC<JointPose>& pose) { m_joints_pose = pose; }
 
 	void SetJointPose(int idx, const JointPose& pose);
 
 private:
-	std::vector<JointPose> m_joints_pose;
+	CU_VEC<JointPose> m_joints_pose;
 
 }; // SkeletonPose
 

@@ -3,8 +3,7 @@
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
-
-#include <vector>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -23,7 +22,7 @@ public:
 
 	// point
 	static void Point(const sm::vec2& vertex);
-	static void Points(const std::vector<sm::vec2>& vertices);
+	static void Points(const CU_VEC<sm::vec2>& vertices);
 
 	// line
 	static void Line(const sm::vec2& p0, const sm::vec2& p1);
@@ -31,21 +30,21 @@ public:
 	static void DashLine(const sm::vec2& p0, const sm::vec2& p1);
 	static void DotDashLine(const sm::vec2& p0, const sm::vec2& p1);
 
-	static void Lines(const std::vector<sm::vec2>& vertices);
-	static void Polyline(const std::vector<sm::vec2>& vertices, bool loop);
+	static void Lines(const CU_VEC<sm::vec2>& vertices);
+	static void Polyline(const CU_VEC<sm::vec2>& vertices, bool loop);
 	static void Polyline(const float* vertices, int count, bool loop);
 
 	// face
-	static void Triangles(const std::vector<sm::vec2>& triangles);
-	static void Triangles(const std::vector<sm::vec2>& triangles, const std::vector<Color>& colors);
-	static void TriangleStrip(const std::vector<sm::vec2>& triangles);
+	static void Triangles(const CU_VEC<sm::vec2>& triangles);
+	static void Triangles(const CU_VEC<sm::vec2>& triangles, const CU_VEC<Color>& colors);
+	static void TriangleStrip(const CU_VEC<sm::vec2>& triangles);
 
 	static void Rect(const sm::vec2& center, float hw, float hh, bool filling);
 	static void Rect(const sm::vec2& p0, const sm::vec2& p1, bool filling);
 	static void Rect(const sm::rect& r, bool filling);
 
 	static void Circle(const sm::vec2& center, float radius, bool filling, int segments = 16);
-	static void Circles(const std::vector<sm::vec2>& circles, float radius, bool filling, int segments = 16);
+	static void Circles(const CU_VEC<sm::vec2>& circles, float radius, bool filling, int segments = 16);
 
 	// compose
 	static void Cross(const sm::vec2& center, float edge);

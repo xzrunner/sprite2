@@ -26,9 +26,9 @@ Mesh::Mesh(const SymConstPtr& base)
 	m_node_radius = std::min(m_width * 0.1f, 5.0f);
 }
 
-void Mesh::DumpToTriangles(std::vector<sm::vec2>& vertices, 
-						   std::vector<sm::vec2>& texcoords,
-						   std::vector<int>& triangles) const
+void Mesh::DumpToTriangles(CU_VEC<sm::vec2>& vertices, 
+						   CU_VEC<sm::vec2>& texcoords,
+						   CU_VEC<int>& triangles) const
 {
 	if (m_mesh) {
 		m_mesh->Dump(vertices, texcoords, triangles);
@@ -56,8 +56,8 @@ sm::rect Mesh::GetRegion() const
 	}
 
 	sm::rect ret;
-	std::vector<sm::vec2> vertices, texcoords;
-	std::vector<int> triangles;
+	CU_VEC<sm::vec2> vertices, texcoords;
+	CU_VEC<int> triangles;
 	m_mesh->Dump(vertices, texcoords, triangles);
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		ret.Combine(vertices[i]);

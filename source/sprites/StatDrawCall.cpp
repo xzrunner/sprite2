@@ -14,7 +14,7 @@ StatDrawCall::StatDrawCall()
 	Reset();
 }
 
-void StatDrawCall::Print(std::string& str) const
+void StatDrawCall::Print(CU_STR& str) const
 {
 	static char buf[512];
 	sprintf(buf, "DC: scissor %d", m_scissor);

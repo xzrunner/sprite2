@@ -52,7 +52,7 @@ Scale9Sprite::~Scale9Sprite()
 VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	std::vector<SprPtr> grids;
+	CU_VEC<SprPtr> grids;
 	m_s9.GetGrids(grids);
 	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {

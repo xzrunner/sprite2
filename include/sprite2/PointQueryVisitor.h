@@ -8,8 +8,6 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 
-#include <vector>
-
 namespace s2
 {
 
@@ -51,8 +49,8 @@ private:
 
 	private:
 		SprTreePath m_impl;
-		std::vector<bool> m_editable;
-		std::vector<bool> m_visible;
+		CU_VEC<bool> m_editable;
+		CU_VEC<bool> m_visible;
 
 	}; // SprPath
 

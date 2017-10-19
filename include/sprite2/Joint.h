@@ -7,10 +7,9 @@
 #include "s2_typedef.h"
 
 #include <cu/uncopyable.h>
+#include <cu/cu_stl.h>
 #include <SM_Rect.h>
 
-#include <string>
-#include <vector>
 #include <memory>
 
 namespace s2
@@ -36,7 +35,7 @@ public:
 	void DeconnectParent();
 
 	std::shared_ptr<Joint> GetParent() const { return m_parent.lock(); }
-	const std::vector<std::shared_ptr<Joint>>& GetChildren() const { return m_children; }
+	const CU_VEC<std::shared_ptr<Joint>>& GetChildren() const { return m_children; }
 
 	const JointPose& GetWorldPose() const { return m_world_pose; }
 	const JointPose& GetLocalPose() const { return m_local_pose; }
@@ -47,8 +46,8 @@ public:
 
 	const SprPtr& GetSkinSpr() const { return m_skin.spr; }
 
-	void SetName(const std::string& name) { m_name = name; }
-	const std::string& GetName() const { return m_name; }
+	void SetName(const CU_STR& name) { m_name = name; }
+	const CU_STR& GetName() const { return m_name; }
 
 public:
 	static const float RADIUS;
@@ -66,10 +65,10 @@ private:
 	}; // Skin
 
 protected:
-	std::string m_name;
+	CU_STR m_name;
 
 	std::weak_ptr<Joint> m_parent;
-	std::vector<std::shared_ptr<Joint>> m_children;
+	CU_VEC<std::shared_ptr<Joint>> m_children;
 
 	JointPose m_world_pose, m_local_pose;
 

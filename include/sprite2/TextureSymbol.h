@@ -4,7 +4,7 @@
 #include "S2_Symbol.h"
 #include "PolygonShape.h"
 
-#include <vector>
+#include <cu/cu_stl.h>
 
 #include <stdint.h>
 
@@ -29,8 +29,8 @@ public:
 	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
 
-	const std::vector<std::unique_ptr<PolygonShape>>& GetPolygons() const { return m_polygons; }
-	std::vector<std::unique_ptr<PolygonShape>>& GetPolygons() { return m_polygons; }
+	const CU_VEC<std::unique_ptr<PolygonShape>>& GetPolygons() const { return m_polygons; }
+	CU_VEC<std::unique_ptr<PolygonShape>>& GetPolygons() { return m_polygons; }
 
 	void AddPolygon(std::unique_ptr<PolygonShape>& poly) {
 		m_polygons.push_back(std::move(poly));
@@ -42,7 +42,7 @@ protected:
 	void Clear();
 
 protected:
-	std::vector<std::unique_ptr<PolygonShape>> m_polygons;
+	CU_VEC<std::unique_ptr<PolygonShape>> m_polygons;
 
 }; // TextureSymbol
 

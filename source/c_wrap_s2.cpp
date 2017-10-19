@@ -60,10 +60,10 @@
 namespace s2
 {
 
-static std::string 
+static CU_STR 
 _char2string(const char* c_str) 
 {
-	std::string str;
+	CU_STR str;
 	if (c_str) {
 		str.assign(c_str);
 	}
@@ -119,7 +119,7 @@ void s2_get_screen_size(int* w, int* h)
 //	}
 //
 //	const ComplexSymbol* comp_sym = S2_VI_DOWN_CAST<const ComplexSymbol*>(s2_sym);
-//	const std::vector<Sprite*>& children = comp_sym->GetAllChildren();
+//	const CU_VEC<Sprite*>& children = comp_sym->GetAllChildren();
 //	if (child_idx >= 0 && child_idx < static_cast<int>(children.size())) {
 //		Sprite* child = children[child_idx];
 //		assert(child->GetSymbol()->GetID() == child_id);
@@ -379,7 +379,7 @@ extern "C"
 const char* s2_spr_get_name(void* actor) {
 	ActorConstPtr s2_actor(*static_cast<const ActorConstPtr*>(actor));
 
-	std::string name;
+	CU_STR name;
 	SprNameMap::Instance()->IDToStr(s2_actor->GetSpr()->GetName(), name);
 	char* cstr = (char*)malloc(name.length() + 1);
 	strcpy(cstr, name.c_str());
@@ -428,7 +428,8 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 	auto s2_spr = s2_actor->GetSpr();
 
 	sm::rect sz = s2_spr->GetSymbol()->GetBounding(s2_spr);
-	std::vector<sm::vec2> vertices(4);
+	CU_VEC<sm::vec2> vertices;
+	vertices.resize(4);
 	vertices[0] = sm::vec2(sz.xmin, sz.ymin);
 	vertices[1] = sm::vec2(sz.xmin, sz.ymax);
 	vertices[2] = sm::vec2(sz.xmax, sz.ymax);
@@ -605,7 +606,7 @@ void s2_spr_proxy_get_children(const void* actor, void* children[], int children
 {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 
-	std::vector<ActorPtr> actors;
+	CU_VEC<ActorPtr> actors;
 	ProxyHelper::SprGetProxyChildren(*s2_actor->GetSpr(), actors);
 	int n = std::min(children_cap, static_cast<int>(actors.size()));
 	for (int i = 0; i < n; ++i) {

@@ -13,7 +13,7 @@ StatSymCount::StatSymCount()
 	memset(m_counts, 0, sizeof(m_counts));
 }
 
-void StatSymCount::Print(std::string& str) const
+void StatSymCount::Print(CU_STR& str) const
 {
 	static char buf[512];
 	sprintf(buf, "SYM: img %d, complex %d, anim %d\n", 

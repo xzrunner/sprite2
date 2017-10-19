@@ -2,10 +2,7 @@
 #define _SPRITE2_SPR_NAME_MAP_H_
 
 #include <cu/cu_macro.h>
-#include <memmgr/Allocator.h>
-
-#include <string>
-#include <map>
+#include <cu/cu_stl.h>
 
 namespace s2
 {
@@ -22,10 +19,10 @@ public:
 	static const int MASK_ID = 1;
 
 public:
-	int  StrToID(const std::string& str);
-	bool IDToStr(int id, std::string& str);
+	int  StrToID(const CU_STR& str);
+	bool IDToStr(int id, CU_STR& str);
 
-	int QueryID(const std::string& str);
+	int QueryID(const CU_STR& str);
 
 	static bool IsTmpName(int id);
 	static bool IsNormalName(int id);
@@ -40,17 +37,17 @@ private:
 		NAME_NORMAL
 	};
 
-	int Insert(const std::string& str);
-	int Insert(const std::string& str, NameType type);
-	void Insert(const std::string& str, int id);
+	int Insert(const CU_STR& str);
+	int Insert(const CU_STR& str, NameType type);
+	void Insert(const CU_STR& str, int id);
 
 private:
 	static const int MAX_STATIC_ID = 1024;
 	static const int MAX_TMP_ID    = 65536;
 
 private:
-	std::map<mm::AllocString, int> m_str2id;
-	std::map<int, mm::AllocString> m_id2str;
+	CU_MAP<CU_STR, int> m_str2id;
+	CU_MAP<int, CU_STR> m_id2str;
 
 	int m_next_static_id, m_next_tmp_id, m_next_normal_id;
 

@@ -32,7 +32,9 @@ bool OBB::IsContain(const sm::rect& rect) const
 inline 
 bool OBB::IsIntersect(const sm::rect& rect) const
 {
-	std::vector<sm::vec2> convex0(4), convex1(4);
+	CU_VEC<sm::vec2> convex0, convex1;
+	convex0.resize(4);
+	convex1.resize(4);
 	convex0[0] = sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymin), m_angle) + m_position;
 	convex0[1] = sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymin), m_angle) + m_position;
 	convex0[2] = sm::rotate_vector(sm::vec2(m_rect.xmax, m_rect.ymax), m_angle) + m_position;
@@ -81,7 +83,7 @@ void OBB::SetTransform(const sm::vec2& position, const sm::vec2& offset, float a
 }
 
 inline
-void OBB::GetBoundPos(std::vector<sm::vec2>& bound) const
+void OBB::GetBoundPos(CU_VEC<sm::vec2>& bound) const
 {
 	bound.resize(4);
 	bound[0] = sm::rotate_vector(sm::vec2(m_rect.xmin, m_rect.ymin), m_angle) + m_position;

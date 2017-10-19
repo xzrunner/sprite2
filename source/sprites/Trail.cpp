@@ -3,14 +3,13 @@
 #include "RenderParams.h"
 #include "DrawNode.h"
 
+#include <cu/cu_stl.h>
 #include <memmgr/Allocator.h>
 #include <mt_2d.h>
 #include <sm_const.h>
 #include <unirender/UR_RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shape2Shader.h>
-
-#include <vector>
 
 #include <assert.h>
 #include <string.h>
@@ -60,7 +59,7 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 	assert(ud);
 	const TrailRenderParams* rp = (static_cast<const TrailRenderParams*>(ud));
 
-	std::vector<uint32_t> t_colors;
+	CU_VEC<uint32_t> t_colors;
 	t_colors.resize(count);
 	for (int i = 0; i < count; ++i) {
 		uint32_t col = colors[i];
@@ -93,7 +92,7 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 
 	shader->SetType(0x0005);	// todo from rvg_render.c
 
-	std::vector<sm::vec2> vertices;
+	CU_VEC<sm::vec2> vertices;
 	vertices.resize(count);
 	int ptr = 0;
 	for (int i = 0; i < count; ++i) {

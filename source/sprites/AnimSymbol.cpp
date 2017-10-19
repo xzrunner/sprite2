@@ -62,7 +62,7 @@ int AnimSymbol::Type() const
 void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 {
 	for (int ilayer = 0, nlayer = m_layers.size(); ilayer < nlayer; ++ilayer) {
-		const std::unique_ptr<Layer>& layer = m_layers[ilayer];
+		auto& layer = m_layers[ilayer];
 		for (int iframe = 0, nframe = layer->frames.size(); iframe < nframe; ++iframe) {
 			const auto& frame = layer->frames[iframe];
 			for (int ispr = 0, nspr = frame->sprs.size(); ispr < nspr; ++ispr) {
@@ -120,7 +120,7 @@ int AnimSymbol::GetMaxFrameIdx() const
 	return index;
 }
 
-void AnimSymbol::CreateFrameSprites(int frame, mm::AllocVector<SprPtr>& sprs) const
+void AnimSymbol::CreateFrameSprites(int frame, CU_VEC<SprPtr>& sprs) const
 {
 	for (auto& layer : m_layers)
 	{
@@ -149,7 +149,7 @@ void AnimSymbol::CreateFrameSprites(int frame, mm::AllocVector<SprPtr>& sprs) co
 const std::shared_ptr<AnimCopy>& AnimSymbol::GetCopy() const
 {
 	if (!m_copy) {
-		m_copy = std::make_shared<AnimCopy>();
+		m_copy = mm::allocate_shared<AnimCopy>();
 		m_copy->LoadFromSym(*this);
 	}
 	return m_copy;
@@ -158,12 +158,12 @@ const std::shared_ptr<AnimCopy>& AnimSymbol::GetCopy() const
 void AnimSymbol::LoadCopy()
 {
 	if (!m_copy) {
-		m_copy = std::make_shared<AnimCopy>();
+		m_copy = mm::allocate_shared<AnimCopy>();
 	}
 	m_copy->LoadFromSym(*this);
 }
 
-void AnimSymbol::AddLayer(std::unique_ptr<Layer> layer, int idx)
+void AnimSymbol::AddLayer(LayerPtr& layer, int idx)
 {
 	if (idx < 0) {
 		m_layers.push_back(std::move(layer));		
@@ -201,7 +201,7 @@ sm::rect AnimSymbol::CalcAABB(const Sprite* spr, const Actor* actor) const
 		return anim_actor->GetState().GetOrigin().CalcAABB(actor);
 	}
 
-	mm::AllocVector<SprPtr> children;
+	CU_VEC<SprPtr> children;
 	int num = 0;
 	for (auto& layer : m_layers) {
 		for (auto& frame : layer->frames) {

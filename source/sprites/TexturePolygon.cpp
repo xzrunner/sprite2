@@ -86,9 +86,9 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 	//	mgr->SetShader(sl::SPRITE3);
 	//	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
 	//	for (int i = 0, n = m_tris.size(); i < n; i += 3) {
-	//		std::vector<sm::vec3> vertices; 
+	//		CU_VEC<sm::vec3> vertices; 
 	//		vertices.resize(3);
-	//		std::vector<sm::vec2> texcoords;
+	//		CU_VEC<sm::vec2> texcoords;
 	//		texcoords.resize(3);
 	//		for (int j = 0; j < 3; ++j) {
 	//			sm::vec2 v = mt * m_tris[i+j];
@@ -105,7 +105,7 @@ void TexturePolygon::Build()
 	m_tris.clear();
 	m_texcoords.clear();
 
-	std::vector<sm::vec2> outline;
+	CU_VEC<sm::vec2> outline;
 	sm::rm_duplicate_nodes(m_outline, outline);
 
 	sm::rect r;
@@ -113,7 +113,7 @@ void TexturePolygon::Build()
 		r.Combine(outline[i]);
 	}
 
-	std::vector<sm::vec2> segments;
+	CU_VEC<sm::vec2> segments;
 	GetTexBoundarySegments(r, segments);
 	if (!m_segments.empty()) {
 		copy(m_segments.begin(), m_segments.end(), back_inserter(segments));
@@ -124,7 +124,7 @@ void TexturePolygon::Build()
 	CalTexcoords(r);
 }
 
-void TexturePolygon::GetTexBoundarySegments(const sm::rect& rect, std::vector<sm::vec2>& segments)
+void TexturePolygon::GetTexBoundarySegments(const sm::rect& rect, CU_VEC<sm::vec2>& segments)
 {
 	static const int EXTEND = 1;
 	sm::vec2 sz = m_img->GetNoTrimedSize();

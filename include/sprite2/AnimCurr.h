@@ -7,8 +7,8 @@
 #include "AnimCtrl.h"
 #include "RenderReturn.h"
 
-#include <vector>
-#include <string>
+#include <cu/cu_stl.h>
+
 #include <memory>
 
 namespace s2
@@ -30,10 +30,6 @@ public:
 	AnimCurr();
 	AnimCurr(const AnimCurr& curr);
 	AnimCurr& operator = (const AnimCurr& curr);
-
-//	using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
-	using AnimCurrPtr = std::unique_ptr<AnimCurr>;
-	AnimCurrPtr Clone() const;
 
 	void AssignSameStruct(const AnimCurr& src);
 
@@ -88,17 +84,19 @@ private:
 
 	AnimCtrl m_ctrl;
 
-	mm::AllocVector<int> m_layer_cursor;
-	mm::AllocVector<int> m_layer_cursor_update;
+	CU_VEC<int> m_layer_cursor;
+	CU_VEC<int> m_layer_cursor_update;
 
-	mm::AllocVector<SprPtr> m_slots;
+	CU_VEC<SprPtr> m_slots;
 
-	mm::AllocVector<int> m_curr;
+	CU_VEC<int> m_curr;
 
 	//int* m_curr;
 	//int  m_curr_num;
 
 }; // AnimCurr
+
+using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
 
 }
 

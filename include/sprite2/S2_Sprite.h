@@ -15,9 +15,6 @@
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
-#include <memmgr/Allocator.h>
-
-#include <string>
 
 #include <stdint.h>
 
@@ -78,7 +75,7 @@ public:
 	const SymPtr& GetSymbol() const { return m_sym; }
 
 	int  GetName() const { return m_name; }
-	void SetName(const std::string& name);
+	void SetName(const CU_STR& name);
 
 	const BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
 	void UpdateBounding(const Actor* actor = nullptr) const;

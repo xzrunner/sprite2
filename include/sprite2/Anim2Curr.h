@@ -1,7 +1,8 @@
 #ifndef _SPRITE2_ANIM2_CURR_H_
 #define _SPRITE2_ANIM2_CURR_H_
 
-#include <vector>
+#include <cu/cu_stl.h>
+
 #include <memory>
 
 #include <stdint.h>
@@ -50,7 +51,7 @@ private:
 
 	int m_frame;
 
-	std::vector<uint64_t> m_frames_ptr;
+	CU_VEC<uint64_t> m_frames_ptr;
 
 	float m_start_time, m_curr_time;
 

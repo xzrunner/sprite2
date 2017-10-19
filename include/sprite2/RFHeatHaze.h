@@ -3,9 +3,8 @@
 
 #include "RenderFilter.h"
 
+#include <cu/cu_stl.h>
 #include <memmgr/Allocator.h>
-
-#include <string>
 
 namespace s2
 {
@@ -33,8 +32,8 @@ public:
 
 	virtual size_t Size() const override { return sizeof(RFHeatHaze); }
 
-	const std::string& GetFilepath() const { return m_filepath; }
-	void SetFilepath(const std::string& filepath) { m_filepath = filepath; }
+	const CU_STR& GetFilepath() const { return m_filepath; }
+	void SetFilepath(const CU_STR& filepath) { m_filepath = filepath; }
 
 	void GetFactor(float& distortion, float& rise) const {
 		distortion = m_distortion_factor;
@@ -46,7 +45,7 @@ public:
 	}
 
 private:
-	std::string m_filepath;		// distortion map texture
+	CU_STR m_filepath;		// distortion map texture
 
 	float m_distortion_factor, m_rise_factor;
 

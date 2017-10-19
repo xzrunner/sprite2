@@ -47,7 +47,7 @@ int Scale9Symbol::Type() const
 
 void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 {
-	std::vector<SprPtr> grids;
+	CU_VEC<SprPtr> grids;
 	m_s9.GetGrids(grids);
 	for (int i = 0, n = grids.size(); i < n; ++i) {
 		if (grids[i]) {

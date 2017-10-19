@@ -62,7 +62,7 @@ TextboxSprite::~TextboxSprite()
 #endif // S2_DISABLE_STATISTICS	
 }
 
-const std::string& TextboxSprite::GetText(const UpdateParams& up) const 
+const CU_STR& TextboxSprite::GetText(const UpdateParams& up) const
 { 
 	auto actor = up.GetActor();
 	if (actor) {
@@ -72,7 +72,7 @@ const std::string& TextboxSprite::GetText(const UpdateParams& up) const
 	}
 }
 
-void TextboxSprite::SetText(const UpdateParams& up, const std::string& text) 
+void TextboxSprite::SetText(const UpdateParams& up, const CU_STR& text) 
 {
 	auto actor = up.GetActor();
 	if (actor) {

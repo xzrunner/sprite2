@@ -21,7 +21,8 @@ P3dEmitterCfg::P3dEmitterCfg(p3d_emitter_cfg* impl)
 P3dEmitterCfg::~P3dEmitterCfg()
 {
 	if (m_impl) {
-		delete m_impl;
+		int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * m_impl->sym_count;
+		mm::AllocHelper::Free(m_impl, sz);
 	}
 }
 

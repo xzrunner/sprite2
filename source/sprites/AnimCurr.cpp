@@ -448,8 +448,13 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 		}
 		const AnimCopy::Layer& layer = m_copy->m_layers[i];
 		const AnimCopy::Frame& frame = layer.frames[cursor];
-		for (auto& actor : frame.items)
+		if (frame.items.empty()) {
+			continue;
+		}
+		const AnimCopy::Item* actor_ptr = &frame.items[0];
+		for (int i = 0, n = frame.items.size(); i < n; ++i, ++actor_ptr)
 		{
+			const AnimCopy::Item& actor = *actor_ptr;
 			m_curr.push_back(actor.slot);
 			if (actor.next != -1) 
 			{
@@ -571,8 +576,11 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 
 void AnimCurr::UpdateSlotsVisible()
 {
-	for (auto& spr : m_slots) {
-		spr->SetVisible(false);
+	if (!m_slots.empty()) {
+		const SprPtr* slot_ptr = &m_slots[0];
+		for (int i = 0, n = m_slots.size(); i < n; ++i, ++slot_ptr) {
+			(*slot_ptr)->SetVisible(false);
+		}
 	}
 
 	if (m_curr.empty()) {

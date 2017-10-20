@@ -67,9 +67,13 @@ void ComplexSprite::OnMessage(const UpdateParams& up, Message msg)
 	up_child.Push(this);
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetActionChildren(GetAction(up.GetActor()));
-	for (auto& child : children) {
-		up_child.SetActor(child->QueryActor(up.GetActor()));
-		child->OnMessage(up_child, msg);
+	if (!children.empty())
+	{
+		const SprPtr* child_ptr = &children[0];
+		for (int i = 0, n = children.size(); i < n; ++i, ++child_ptr) {
+			up_child.SetActor((*child_ptr)->QueryActor(up.GetActor()));
+			(*child_ptr)->OnMessage(up_child, msg);
+		}
 	}
 }
 
@@ -94,11 +98,15 @@ bool ComplexSprite::Update(const UpdateParams& up)
 	up_child.Push(this);
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
 		GetActionChildren(GetAction(actor));
-	for (auto& child : children) 
+	if (!children.empty())
 	{
-		up_child.SetActor(child->QueryActor(actor));
-		if (child->Update(up_child)) {
-			dirty = true;
+		const SprPtr* child_ptr = &children[0];
+		for (int i = 0, n = children.size(); i < n; ++i, ++child_ptr)
+		{
+			up_child.SetActor((*child_ptr)->QueryActor(actor));
+			if ((*child_ptr)->Update(up_child)) {
+				dirty = true;
+			}
 		}
 	}
 

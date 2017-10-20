@@ -108,29 +108,34 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	RenderReturn ret = RENDER_OK;
 
 	auto& children = GetActionChildren(action);
-	if (rp.IsDisableCulling()) {
-		for (auto& child : children) 
-		{
-			rp_child->actor = child->QueryActor(rp.actor);
-#ifndef S2_DISABLE_STATISTICS
-			rp_child->parent_id = id;
-			rp_child->level = rp.level + 1;
-#endif // S2_DISABLE_STATISTICS
-			ret |= DrawNode::Draw(child.get(), *rp_child);
-		}
-	} else {
-		for (auto& child : children)
-		{
-			rp_child->actor = child->QueryActor(rp.actor);
-#ifndef S2_DISABLE_STATISTICS
-			rp_child->parent_id = id;
-			rp_child->level = rp.level + 1;
-#endif // S2_DISABLE_STATISTICS
-			if (!rp_child->IsDisableCulling() && 
-				DrawNode::CullingTestOutside(child.get(), *rp_child)) {
-				continue;
+	if (!children.empty())
+	{
+		if (rp.IsDisableCulling()) {
+			const SprPtr* child_ptr = &children[0];
+			for (int i = 0, n = children.size(); i < n; ++i, ++child_ptr)
+			{
+				rp_child->actor = (*child_ptr)->QueryActor(rp.actor);
+	#ifndef S2_DISABLE_STATISTICS
+				rp_child->parent_id = id;
+				rp_child->level = rp.level + 1;
+	#endif // S2_DISABLE_STATISTICS
+				ret |= DrawNode::Draw((*child_ptr).get(), *rp_child);
 			}
-			ret |= DrawNode::Draw(child.get(), *rp_child);
+		} else {
+			const SprPtr* child_ptr = &children[0];
+			for (int i = 0, n = children.size(); i < n; ++i, ++child_ptr)
+			{
+				rp_child->actor = (*child_ptr)->QueryActor(rp.actor);
+	#ifndef S2_DISABLE_STATISTICS
+				rp_child->parent_id = id;
+				rp_child->level = rp.level + 1;
+	#endif // S2_DISABLE_STATISTICS
+				if (!rp_child->IsDisableCulling() && 
+					DrawNode::CullingTestOutside((*child_ptr).get(), *rp_child)) {
+					continue;
+				}
+				ret |= DrawNode::Draw((*child_ptr).get(), *rp_child);
+			}
 		}
 	}
 

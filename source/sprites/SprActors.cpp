@@ -22,8 +22,14 @@ void SprActors::Del(const ActorPtr& actor)
 
 Actor* SprActors::Query(const Actor* prev) const
 {
-	for (auto& actor : m_actors)
+	if (m_actors.empty()) {
+		return nullptr;
+	}
+
+	const ActorPtr* ptr = &m_actors[0];
+	for (int i = 0, n = m_actors.size(); i < n; ++i, ++ptr)
 	{
+		const ActorPtr& actor = *ptr;
 		if (actor) {
 			auto sp_p = actor->GetParent();
 			if (sp_p && sp_p.get() == prev) {
@@ -36,8 +42,14 @@ Actor* SprActors::Query(const Actor* prev) const
 
 ActorPtr SprActors::QueryPtr(const Actor* prev) const
 {
-	for (auto& actor : m_actors) 
+	if (m_actors.empty()) {
+		return nullptr;
+	}
+
+	const ActorPtr* ptr = &m_actors[0];
+	for (int i = 0, n = m_actors.size(); i < n; ++i, ++ptr)
 	{
+		const ActorPtr& actor = *ptr;
 		if (actor) {
 			auto sp_p = actor->GetParent();
 			if (sp_p && sp_p.get() == prev) {

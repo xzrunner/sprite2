@@ -42,6 +42,7 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_layer_cursor_update(curr.m_layer_cursor_update)
 	, m_slots(curr.m_slots)
 	, m_curr(curr.m_curr)
+	, m_curr_num(curr.m_curr_num)
 {
 }
 
@@ -52,6 +53,7 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	m_layer_cursor_update = curr.m_layer_cursor_update;
 	m_slots = curr.m_slots;
 	m_curr = curr.m_curr;
+	m_curr_num = curr.m_curr_num;
 	m_ctrl = curr.m_ctrl;
 	return *this;
 }
@@ -157,7 +159,7 @@ void AnimCurr::OnMessage(const UpdateParams& up, const Sprite* spr, Message msg)
 	UpdateParams up_child(up);
 	up_child.Push(spr);
 	int* curr = &m_curr[0];
-	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) 
+	for (int i = 0; i < m_curr_num; ++i, ++curr) 
 	{
 		auto& child = m_slots[*curr];
 		up_child.SetActor(child->QueryActor(up.GetActor()));
@@ -220,10 +222,11 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 	return ret;
 }
 
+// todo: all slots, old is m_curr
 VisitResult AnimCurr::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
 {
 	VisitResult ret = VISIT_OVER;
-	if (m_slots.empty()) {
+	if (m_curr_num == 0) {
 		return ret;
 	}
 
@@ -300,7 +303,7 @@ RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	const int* curr = &m_curr[0];
-	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) {
+	for (int i = 0; i < m_curr_num; ++i, ++curr) {
 		const SprPtr& child = m_slots[*curr];
 		rp_child->actor = child->QueryActor(rp.actor);
 		ret |= DrawNode::Draw(child.get(), *rp_child);
@@ -312,7 +315,7 @@ RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 void AnimCurr::Clear()
 {
 	m_ctrl.Clear();
-	m_curr.clear();
+	m_curr_num = 0;
 	UpdateSlotsVisible();
 }
 
@@ -330,7 +333,8 @@ void AnimCurr::SetAnimCopy(const std::shared_ptr<AnimCopy>& copy)
 	m_copy = copy;
 
 	m_curr.clear();
-	m_curr.reserve(copy->m_max_item_num);
+	m_curr.resize(copy->m_max_item_num);
+	m_curr_num = 0;
 
 	ResetLayerCursor();
 
@@ -472,7 +476,7 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 
 	int ctrl_frame = m_ctrl.GetFrame();
 
-	m_curr.clear();
+	m_curr_num = 0;
 	int* layer_cursor_ptr = &m_layer_cursor[0];
 	int* layer_cursor_update_ptr = &m_layer_cursor_update[0];
 	for (int i = 0, n = m_layer_cursor.size(); i < n; ++i, ++layer_cursor_ptr, ++layer_cursor_update_ptr)
@@ -490,7 +494,7 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 		for (int i = 0, n = frame.items.size(); i < n; ++i, ++actor_ptr)
 		{
 			const AnimCopy::Item& actor = *actor_ptr;
-			m_curr.push_back(actor.slot);
+			m_curr[m_curr_num++] = actor.slot;
 			if (actor.next != -1) 
 			{
 				assert(actor.lerp != -1);
@@ -561,7 +565,7 @@ bool AnimCurr::UpdateChildren(const UpdateParams& up, const Sprite* spr)
 	UpdateParams up_child(up);
 	up_child.Push(spr);
 	int* curr = &m_curr[0];
-	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) 
+	for (int i = 0; i < m_curr_num; ++i, ++curr)
 	{
 		SprPtr& child = m_slots[*curr];
 		up_child.SetActor(child->QueryActor(up.GetActor()));
@@ -623,7 +627,7 @@ void AnimCurr::UpdateSlotsVisible()
 	}
 
 	int* curr = &m_curr[0];
-	for (int i = 0, n = m_curr.size(); i < n; ++i, ++curr) {
+	for (int i = 0; i < m_curr_num; ++i, ++curr) {
 		m_slots[*curr]->SetVisible(true);
 	}
 }

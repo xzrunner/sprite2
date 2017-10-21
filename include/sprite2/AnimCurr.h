@@ -93,6 +93,7 @@ private:
 	CU_VEC<SprPtr> m_slots;
 
 	CU_VEC<int> m_curr;
+	int         m_curr_num;
 
 	//int* m_curr;
 	//int  m_curr_num;

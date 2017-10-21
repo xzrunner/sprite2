@@ -141,13 +141,13 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 {
 	VisitResult ret = VISIT_OVER;
 	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
-		GetActionChildren(GetAction(params.actor.get()));
+		GetActionChildren(GetAction(params.actor));
 	SprVisitorParams cp = params;
 	if (visitor.GetOrder()) {
 		for (int i = 0, n = children.size(); i < n; ++i) 
 		{
 			auto& child = children[i];
-			cp.actor = child->QueryActorRef(params.actor.get());
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -156,8 +156,36 @@ VisitResult ComplexSprite::TraverseChildren(SpriteVisitor& visitor, const SprVis
 		for (int i = children.size() - 1; i >= 0; --i) 
 		{
 			auto& child = children[i];
-			cp.actor = child->QueryActorRef(params.actor.get());
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+VisitResult ComplexSprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	VisitResult ret = VISIT_OVER;
+	auto& children = S2_VI_PTR_DOWN_CAST<ComplexSymbol>(m_sym)->
+		GetActionChildren(GetAction(params.actor.get()));
+	SprVisitorParams2 cp = params;
+	if (visitor.GetOrder()) {
+		for (int i = 0, n = children.size(); i < n; ++i) 
+		{
+			auto& child = children[i];
+			cp.actor = child->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, child, ret)) {
+				break;
+			}
+		}
+	} else {
+		for (int i = children.size() - 1; i >= 0; --i) 
+		{
+			auto& child = children[i];
+			cp.actor = child->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}
@@ -176,7 +204,7 @@ int ComplexSprite::GetAction(const Actor* actor) const
 	if (!actor) {
 		return -1;
 	}
-	assert(actor->GetSpr()->GetSymbol()->Type() == SYM_COMPLEX);
+	assert(actor->GetSprRaw()->GetSymbol()->Type() == SYM_COMPLEX);
 	auto comp_actor = S2_VI_DOWN_CAST<const ComplexActor*>(actor);
 	return comp_actor->GetAction();
 }

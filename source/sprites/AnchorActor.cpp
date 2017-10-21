@@ -24,24 +24,24 @@ void AnchorActor::SetAnchor(const ActorPtr& anchor)
 		m_anchor.actor = anchor;
 		// cache spr
 		if (anchor) {
-			m_anchor.spr = std::const_pointer_cast<Sprite>(anchor->GetSprPtr());
+			m_anchor.spr = std::const_pointer_cast<Sprite>(anchor->GetSpr());
 		}
 	}
 
 	if (anchor) 
 	{
 		GetAABB().SetRect(anchor->GetAABB().GetRect());
-		anchor->GetSpr()->ConnectActors(shared_from_this());
+		anchor->GetSprRaw()->ConnectActors(shared_from_this());
 
 		auto& parent = anchor->GetParent();
 		if (parent) {
 			const_cast<ActorAABB&>(parent->GetAABB()).SetRect(sm::rect());	// make it empty
 		}
-		anchor->GetAABB().UpdateParent(anchor);
+		anchor->GetAABB().UpdateParent(anchor.get());
 	} 
 	else 
 	{
-		GetAABB().Update(shared_from_this());
+		GetAABB().Update(this);
 	}
 }
 

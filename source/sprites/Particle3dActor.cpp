@@ -32,7 +32,7 @@ Particle3dActor::~Particle3dActor()
 {
 	//// fixme: spr already released
 	//if (m_et) {
-	//	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(GetSpr());
+	//	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(GetSprRaw());
 	//	if (p3d_spr->IsAlone()) {
 	//		Particle3dBuffer::Instance()->Remove(m_et);
 	//	}

@@ -19,6 +19,7 @@ public:
 	virtual ~Scale9Sprite();
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	const Scale9& GetScale9() const { return m_s9; }
 

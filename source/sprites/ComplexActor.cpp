@@ -23,7 +23,7 @@ void ComplexActor::SetAction(int action)
 
 	m_action = action;
 
-	GetAABB().Update(shared_from_this());
+	GetAABB().Update(this);
 }
 
 int ComplexActor::GetAction() const 

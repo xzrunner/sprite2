@@ -30,6 +30,7 @@ public:
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	virtual SprPtr FetchChildByIdx(int idx, const ActorConstPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	AnimCurr& GetOriginCurr(const Actor* actor);
 	AnimCurr& GetUpdateCurr(const Actor* actor);
@@ -46,7 +47,7 @@ public:
 
 	void SetStartRandom(const UpdateParams& up, bool random);
 
-	int  GetFrame(const ActorConstPtr& actor) const;
+	int  GetFrame(const Actor* actor) const;
 	bool SetFrame(const UpdateParams& up, int frame);
 
 	void SetActive(bool active, const ActorConstPtr& actor);

@@ -4,6 +4,7 @@
 #include "SymType.h"
 #include "ProxySymbol.h"
 #include "ActorFactory.h"
+#include "ActorProxy.h"
 
 #include <assert.h>
 
@@ -24,38 +25,38 @@ ProxyActor::ProxyActor(const SprConstPtr& spr, const ActorConstPtr& parent)
 
 void ProxyActor::SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos)
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
-		std::const_pointer_cast<Actor, const Actor>(item.first)->SetFlatten(ft, pos);
+		std::const_pointer_cast<Actor>(item.first)->SetFlatten(ft, pos);
 	}
 }
 
 void ProxyActor::SetFlattenDirty()
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
-		std::const_pointer_cast<Actor, const Actor>(item.first)->SetFlattenDirty();
+		std::const_pointer_cast<Actor>(item.first)->SetFlattenDirty();
 	}
 }
 
 void ProxyActor::CreateFlatten()
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
-		std::const_pointer_cast<Actor, const Actor>(item.first)->CreateFlatten();
+		std::const_pointer_cast<Actor>(item.first)->CreateFlatten();
 	}
 }
 
 void ProxyActor::BuildFlatten()
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
 		if (!item.first->HasFlatten()) {
-			std::const_pointer_cast<Actor, const Actor>(item.first)->BuildFlatten();
+			std::const_pointer_cast<Actor>(item.first)->BuildFlatten();
 		}
 	}
 }
@@ -63,8 +64,8 @@ void ProxyActor::BuildFlatten()
 bool ProxyActor::HasFlatten() const
 {
 	bool ret = true;
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
 		if (!(item.first)->HasFlatten()) {
 			ret = false;
@@ -75,17 +76,17 @@ bool ProxyActor::HasFlatten() const
 
 void ProxyActor::FlattenUpdate(bool force)
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
-		std::const_pointer_cast<Actor, const Actor>(item.first)->FlattenUpdate(force);
+		std::const_pointer_cast<Actor>(item.first)->FlattenUpdate(force);
 	}
 }
 
 void ProxyActor::FlattenDraw(const RenderParams& rp) const
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
 		item.first->FlattenDraw(rp);
 	}
@@ -93,10 +94,10 @@ void ProxyActor::FlattenDraw(const RenderParams& rp) const
 
 void ProxyActor::FlattenSetFrame(int frame)
 {
-	assert(GetSpr()->GetSymbol()->Type() == SYM_PROXY);
-	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSpr()->GetSymbol())->GetItems();
+	assert(GetSprRaw()->GetSymbol()->Type() == SYM_PROXY);
+	auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(GetSprRaw()->GetSymbol())->GetItems();
 	for (auto& item : items) {
-		std::const_pointer_cast<Actor, const Actor>(item.first)->FlattenSetFrame(frame);
+		std::const_pointer_cast<Actor>(item.first)->FlattenSetFrame(frame);
 	}
 }
 

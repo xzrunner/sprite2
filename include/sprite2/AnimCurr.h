@@ -21,6 +21,8 @@ class Sprite;
 class AnimSymbol;
 class SpriteVisitor;
 class SprVisitorParams;
+class SpriteVisitor2;
+class SprVisitorParams2;
 class RenderParams;
 class UpdateParams;
 
@@ -45,6 +47,7 @@ public:
 	SprPtr FetchChildByIdx(int idx) const;
 
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	VisitResult Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	int GetSlotSize() const { return m_slots.size(); }
 

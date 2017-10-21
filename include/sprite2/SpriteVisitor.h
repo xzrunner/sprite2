@@ -13,6 +13,7 @@ namespace s2
 
 class Sprite;
 class SprVisitorParams;
+class SprVisitorParams2;
 
 class SpriteVisitor
 {
@@ -33,6 +34,26 @@ private:
 	bool m_order;
 
 }; // SpriteVisitor
+
+class SpriteVisitor2
+{
+public:
+	SpriteVisitor2(bool order = true);
+	virtual ~SpriteVisitor2() {}
+
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams2& params) = 0;
+
+	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams2& params) { return VISIT_OVER; }
+	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams2& params) { return VISIT_OVER; }
+
+	bool GetOrder() const { return m_order; }
+
+	static bool VisitChild(SpriteVisitor2& visitor, const SprVisitorParams2& params, const SprConstPtr& child, VisitResult& ret);
+
+private:
+	bool m_order;
+
+}; // SpriteVisitor2
 
 }
 

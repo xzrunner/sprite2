@@ -200,7 +200,7 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		{
 			CU_STR str;
 			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);			
-			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
+			cp.actor = (*ptr)->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, *ptr, ret)) {
 				break;
 			}
@@ -211,8 +211,43 @@ VisitResult AnimCurr::Traverse(SpriteVisitor& visitor, const SprVisitorParams& p
 		for (int i = 0, n = m_slots.size(); i < n; ++i, --ptr) {
 			CU_STR str;
 			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);
-			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
+			cp.actor = (*ptr)->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, *ptr, ret)) {
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+VisitResult AnimCurr::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	VisitResult ret = VISIT_OVER;
+	if (m_slots.empty()) {
+		return ret;
+	}
+
+	SprVisitorParams2 cp = params;
+	if (visitor.GetOrder()) 
+	{
+		const SprPtr* ptr = &m_slots[0];
+		for (int i = 0, n = m_slots.size(); i < n; ++i, ++ptr) 
+		{
+			CU_STR str;
+			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);			
+			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, *ptr, ret)) {
+				break;
+			}
+		}
+	}
+	else {
+		const SprPtr* ptr = &m_slots[m_slots.size() - 1];
+		for (int i = 0, n = m_slots.size(); i < n; ++i, --ptr) {
+			CU_STR str;
+			SprNameMap::Instance()->IDToStr((*ptr)->GetName(), str);
+			cp.actor = (*ptr)->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, *ptr, ret)) {
 				break;
 			}
 		}
@@ -568,7 +603,7 @@ void AnimCurr::SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int s
 
  			SetStaticFrameVisitor visitor(static_frame - first_time + 1);
 			SprVisitorParams vp;
-			vp.actor = child->QueryActorRef(up.GetActor());
+			vp.actor = child->QueryActor(up.GetActor());
 			child->Traverse(visitor, vp, false);
 		}
 	}

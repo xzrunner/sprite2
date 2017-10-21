@@ -42,11 +42,12 @@ public:
 
 	virtual void Init();
 
-	const Sprite* GetSpr() const { return m_spr; }
-	SprPtr GetSprPtr() const { return m_spr_ptr.lock(); }
+	SprPtr GetSpr() const { return m_spr.smart_ptr.lock(); }
+	const Sprite* GetSprRaw() const { return m_spr.raw_ptr; }
 
-	ActorPtr GetParent() const { return m_parent.lock(); }
-	void SetParent(const ActorConstPtr& parent) { m_parent = parent; }
+	ActorPtr GetParent() const { return m_parent.smart_ptr.lock(); }
+	Actor*   GetParentRaw() const { return m_parent.raw_ptr; }
+	void SetParent(const ActorConstPtr& parent) { m_parent.Set(parent); }
 
 	void SetPosition(const sm::vec2& pos);
 	const sm::vec2& GetPosition() const { return m_geo->GetPosition(); }
@@ -110,11 +111,38 @@ private:
 		int pos = -1;
 	};
 
-private:
-	Sprite* m_spr;
-	std::weak_ptr<Sprite> m_spr_ptr;
+	struct Spr
+	{
+		std::weak_ptr<Sprite> smart_ptr;
+		Sprite*               raw_ptr = nullptr;
 
-	std::weak_ptr<Actor>  m_parent;
+		Spr(const SprConstPtr& spr) 
+			: raw_ptr(std::const_pointer_cast<Sprite>(spr).get()) 
+		{
+			smart_ptr = spr;
+		}
+
+	}; // Spr
+
+	struct Parent
+	{
+		std::weak_ptr<Actor> smart_ptr;
+		Actor*               raw_ptr = nullptr;
+
+		Parent(const ActorConstPtr& parent) {
+			Set(parent);
+		}
+		void Set(const ActorConstPtr& parent) { 
+			smart_ptr = parent; 
+			raw_ptr = smart_ptr.lock().get();
+		}
+
+	}; // Parent
+
+private:
+	Spr m_spr;
+
+	Parent m_parent;
 
 	static void geo_deleter(ActorGeo* geo) {
 		if (geo != ActorDefault::Instance()->Geo()) {

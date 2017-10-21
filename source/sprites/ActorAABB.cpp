@@ -14,19 +14,19 @@ ActorAABB::ActorAABB()
 {
 }
 
-void ActorAABB::Init(const ActorConstPtr& curr)
+void ActorAABB::Init(const Actor* curr)
 {	
 	if (m_static) {
 		return;
 	}
 
 	// not pass actor, in ctor
-	m_rect = curr->GetSpr()->GetSymbol()->GetBounding(curr->GetSpr());
+	m_rect = curr->GetSprRaw()->GetSymbol()->GetBounding(curr->GetSprRaw());
 
 	UpdateTight(curr);
 }
 
-bool ActorAABB::Update(const ActorConstPtr& curr)
+bool ActorAABB::Update(const Actor* curr)
 {
 	if (m_static) {
 		return false;
@@ -43,7 +43,7 @@ bool ActorAABB::Update(const ActorConstPtr& curr)
 	return true;
 }
 
-bool ActorAABB::Combine(const ActorConstPtr& curr, const sm::rect& rect)
+bool ActorAABB::Combine(const Actor* curr, const sm::rect& rect)
 {
 	if (m_static) {
 		return false;
@@ -61,7 +61,7 @@ bool ActorAABB::Combine(const ActorConstPtr& curr, const sm::rect& rect)
 	return true;
 }
 
-void ActorAABB::UpdateParent(const ActorConstPtr& curr)
+void ActorAABB::UpdateParent(const Actor* curr)
 {
 	if (m_static) {
 		return;
@@ -80,14 +80,14 @@ void ActorAABB::UpdateParent(const ActorConstPtr& curr)
 	if (curr->IsAABBTight()) 
 	{
 		std::const_pointer_cast<Actor>(parent)->GetAABB().m_rect.MakeEmpty();
-		const_cast<ActorAABB&>(p_aabb).Update(parent);
+		const_cast<ActorAABB&>(p_aabb).Update(parent.get());
 		UpdateTight(curr);
 	} 
 	else 
 	{
 		sm::rect rect = UpdateTight(curr);
 		if (!sm::is_rect_contain_rect(p_aabb.GetRect(), rect)) {
-			const_cast<ActorAABB&>(p_aabb).Combine(parent, rect);
+			const_cast<ActorAABB&>(p_aabb).Combine(parent.get(), rect);
 		}
 	}
 }
@@ -105,7 +105,7 @@ void ActorAABB::SetStaticRect(const sm::rect& rect)
 	m_rect = rect;
 }
 
-sm::rect ActorAABB::UpdateTight(const ActorConstPtr& curr)
+sm::rect ActorAABB::UpdateTight(const Actor* curr)
 {
 	if (!m_rect.IsValid()) {
 		return m_rect;
@@ -120,7 +120,7 @@ sm::rect ActorAABB::UpdateTight(const ActorConstPtr& curr)
 
 	sm::rect trans_r;
 	S2_MAT mat;
-	sm::Matrix2D::Mul(curr->GetSpr()->GetLocalMat(), curr->GetLocalMat(), mat);
+	sm::Matrix2D::Mul(curr->GetSprRaw()->GetLocalMat(), curr->GetLocalMat(), mat);
 	for (int i = 0; i < 4; ++i) {
 		trans_r.Combine(mat * bounding[i]);
 	}
@@ -144,10 +144,10 @@ bool ActorAABB::IsRectTight(const sm::rect& inner, const sm::rect& outer)
 		|| inner.ymax == outer.ymax;
 }
 
-sm::rect ActorAABB::Build(const ActorConstPtr& curr)
+sm::rect ActorAABB::Build(const Actor* curr)
 {
-	auto spr = curr->GetSpr();
-	sm::rect r = spr->GetSymbol()->GetBounding(spr, curr.get(), false);
+	auto spr = curr->GetSprRaw();
+	sm::rect r = spr->GetSymbol()->GetBounding(spr, curr, false);
 	return r;
 }
 

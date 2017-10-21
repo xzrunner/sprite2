@@ -18,7 +18,7 @@ void AnchorSprite::OnMessage(const UpdateParams& up, Message msg)
 	UpdateParams up_child(up);
 
 	up_child.Push(this);
-	auto anchor_spr = anchor->GetSpr();
+	auto anchor_spr = anchor->GetSprRaw();
 	up_child.SetActor(anchor_spr->QueryActor(actor));
 	const_cast<Sprite*>(anchor_spr)->OnMessage(up_child, msg);
 }
@@ -31,7 +31,7 @@ bool AnchorSprite::Update(const UpdateParams& up)
 		return false;
 	}
 
-	auto spr_real = anchor->GetSpr();
+	auto spr_real = anchor->GetSprRaw();
 
 	// update inherit
 	if (!up.IsForce() && !spr_real->IsInheritUpdate()) {
@@ -59,7 +59,7 @@ SprPtr AnchorSprite::FetchChildByName(int name, const ActorConstPtr& actor) cons
 {
 	auto anchor = QueryAnchor(actor.get());
 	if (anchor) {
-		auto anchor_spr = anchor->GetSpr();
+		auto anchor_spr = anchor->GetSprRaw();
 		return anchor_spr->FetchChildByName(name, anchor_spr->QueryActorRef(actor.get()));
 	} else {
 		return nullptr;
@@ -70,7 +70,7 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 {
 	auto anchor = QueryAnchor(actor.get());
 	if (anchor) {
-		auto anchor_spr = anchor->GetSpr();
+		auto anchor_spr = anchor->GetSprRaw();
 		return anchor_spr->FetchChildByIdx(idx, anchor_spr->QueryActorRef(actor.get()));
 	} else {
 		return nullptr;
@@ -80,11 +80,24 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	auto& actor = params.actor;
-	auto anchor = actor ? S2_VI_PTR_DOWN_CAST<const AnchorActor>(actor)->GetAnchorPtr() : nullptr;
+	auto anchor = actor ? static_cast<const AnchorActor*>(actor)->GetAnchorPtr() : nullptr;
 	if (anchor) {
 		SprVisitorParams cp = params;
+		cp.actor = anchor.get();
+		return anchor->GetSprRaw()->TraverseChildren(visitor, cp);
+	} else {
+		return VISIT_OVER;
+	}
+}
+
+VisitResult AnchorSprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	auto& actor = params.actor;
+	auto anchor = actor ? S2_VI_PTR_DOWN_CAST<const AnchorActor>(actor)->GetAnchorPtr() : nullptr;
+	if (anchor) {
+		SprVisitorParams2 cp = params;
 		cp.actor = anchor;
-		return anchor->GetSpr()->TraverseChildren(visitor, cp);
+		return anchor->GetSprRaw()->TraverseChildren2(visitor, cp);
 	} else {
 		return VISIT_OVER;
 	}

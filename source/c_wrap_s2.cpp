@@ -107,7 +107,7 @@ void s2_get_screen_size(int* w, int* h)
 //
 //	ActorConstPtr s2_actor(*static_cast<const std::shared_ptr<Actor>*>(actor));
 //	rp.actor = s2_actor;
-//	DrawNode::Draw(s2_actor->GetSpr()->GetSymbol(), rp);
+//	DrawNode::Draw(s2_actor->GetSprRaw()->GetSymbol(), rp);
 //}
 //
 //extern "C"
@@ -218,11 +218,11 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	}
 	rp->min_edge = min_edge;
 
-	if (s2_actor->GetSpr()->IsDTexDisable()) {
+	if (s2_actor->GetSprRaw()->IsDTexDisable()) {
 		rp->SetDisableDTexC2(true);
 	}
 
-	DrawNode::Draw(s2_actor->GetSpr(), *rp);
+	DrawNode::Draw(s2_actor->GetSprRaw(), *rp);
 }
 
 extern "C"
@@ -279,7 +279,7 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 extern "C"
 void s2_spr_set_pos(void* actor, float x, float y) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	s2_spr->SetPosition(sm::vec2(x, y));
 }
@@ -287,7 +287,7 @@ void s2_spr_set_pos(void* actor, float x, float y) {
 extern "C"
 void s2_spr_set_angle(void* actor, float angle) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	s2_spr->SetAngle(angle);
 }
@@ -295,7 +295,7 @@ void s2_spr_set_angle(void* actor, float angle) {
 extern "C"
 void s2_spr_set_scale(void* actor, float sx, float sy) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	s2_spr->SetScale(sm::vec2(sx, sy));
 }
@@ -303,7 +303,7 @@ void s2_spr_set_scale(void* actor, float sx, float sy) {
 extern "C"
 void s2_spr_get_pos(const void* actor, float* x, float* y) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	sm::vec2 pos;
 	if (ProxyHelper::SprGetPos(*s2_spr, pos)) {
@@ -317,7 +317,7 @@ void s2_spr_get_pos(const void* actor, float* x, float* y) {
 extern "C"
 float s2_spr_get_angle(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	float angle = 0;
 	if (ProxyHelper::SprGetAngle(*s2_spr, angle)) {
@@ -331,7 +331,7 @@ float s2_spr_get_angle(const void* actor) {
 extern "C"
 void s2_spr_get_scale(const void* actor, float* sx, float* sy) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	sm::vec2 scale;
 	if (ProxyHelper::SprGetScale(*s2_spr, scale)) {
@@ -345,9 +345,9 @@ void s2_spr_get_scale(const void* actor, float* sx, float* sy) {
 //extern "C"
 //void s2_spr_set_col_mul(void* actor, uint32_t abgr) {
 //	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-//	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+//	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 //
-//	RenderColor rc = s2_actor->GetSpr()->GetColor();
+//	RenderColor rc = s2_actor->GetSprRaw()->GetColor();
 //	rc.SetMulABGR(abgr);
 //	s2_spr->SetColor(rc);
 //}
@@ -355,7 +355,7 @@ void s2_spr_get_scale(const void* actor, float* sx, float* sy) {
 //extern "C"
 //void s2_spr_set_col_add(void* actor, uint32_t abgr) {
 //	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-//	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+//	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 //
 //	RenderColor rc = s2_spr->GetColor();
 //	rc.SetAddABGR(abgr);
@@ -380,7 +380,7 @@ const char* s2_spr_get_name(void* actor) {
 	ActorConstPtr s2_actor(*static_cast<const ActorConstPtr*>(actor));
 
 	CU_STR name;
-	SprNameMap::Instance()->IDToStr(s2_actor->GetSpr()->GetName(), name);
+	SprNameMap::Instance()->IDToStr(s2_actor->GetSprRaw()->GetName(), name);
 	char* cstr = (char*)malloc(name.length() + 1);
 	strcpy(cstr, name.c_str());
 	return cstr;
@@ -389,7 +389,7 @@ const char* s2_spr_get_name(void* actor) {
 extern "C"
 int s2_spr_get_sym_id(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	int id = 0;
 	if (ProxyHelper::SprGetSymID(*s2_spr, id)) {
@@ -403,7 +403,7 @@ int s2_spr_get_sym_id(const void* actor) {
 extern "C"
 int s2_spr_get_sym_type(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	return s2_actor->GetSpr()->GetSymbol()->Type();
+	return s2_actor->GetSprRaw()->GetSymbol()->Type();
 }
 
 extern "C"
@@ -425,7 +425,7 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 	m = outer * m;
 
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = s2_actor->GetSpr();
+	auto s2_spr = s2_actor->GetSprRaw();
 
 	sm::rect sz = s2_spr->GetSymbol()->GetBounding(s2_spr);
 	CU_VEC<sm::vec2> vertices;
@@ -443,7 +443,7 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 extern "C"
 bool s2_spr_point_test(const void* actor, float x, float y) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	return ProxyHelper::SprPointTest(*s2_spr, sm::vec2(x, y));
 }
@@ -451,7 +451,7 @@ bool s2_spr_point_test(const void* actor, float x, float y) {
 extern "C"
 bool s2_spr_get_force_update(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	bool force = false;
 	if (ProxyHelper::SprGetForceUpdate(*s2_spr, force)) {
@@ -465,7 +465,7 @@ bool s2_spr_get_force_update(const void* actor) {
 extern "C"
 void s2_spr_set_force_update(void* actor, bool force) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprSetForceUpdate(*s2_spr, force);
 }
@@ -473,7 +473,7 @@ void s2_spr_set_force_update(void* actor, bool force) {
 extern "C"
 bool s2_spr_is_res_loaded(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	QueryLoadedVisitor visitor;
 	s2_spr->Traverse(visitor, SprVisitorParams());
@@ -483,7 +483,7 @@ bool s2_spr_is_res_loaded(const void* actor) {
 extern "C"
 int s2_spr_get_frame_count(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	int count = -1;
 	if (ProxyHelper::SprGetFrameCount(*s2_spr, count)) {
@@ -498,7 +498,7 @@ extern "C"
 void s2_spr_anim_set_loop(void* actor, bool loop)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprAnimSetLoop(*s2_spr, loop);
 }
@@ -507,14 +507,14 @@ extern "C"
 bool s2_spr_has_action(const void* actor, const char* name) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 
-	return ProxyHelper::SprHasAction(*s2_actor->GetSprPtr(), _char2string(name));
+	return ProxyHelper::SprHasAction(*s2_actor->GetSprRaw(), _char2string(name));
 }
 
 extern "C"
 void s2_spr_textbox_reset_time(void* actor)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprTextboxResetTime(*s2_spr);
 }
@@ -523,7 +523,7 @@ extern "C"
 void s2_spr_textbox_set_font_color(void* actor, uint32_t abgr)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprTextboxSetFontColor(*s2_spr, abgr);
 }
@@ -532,7 +532,7 @@ extern "C"
 void s2_spr_textbox_set_edge_color(void* actor, uint32_t abgr)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprTextboxSetEdgeColor(*s2_spr, abgr);
 }
@@ -541,7 +541,7 @@ extern "C"
 void s2_spr_anim2_set_static_time(void* actor, int time)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprAnim2SetStaticTime(*s2_spr, time);
 }
@@ -550,7 +550,7 @@ extern "C"
 void s2_spr_p3d_set_local(void* actor, bool local)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprP3dSetLocal(*s2_spr, local);
 }
@@ -559,7 +559,7 @@ extern "C"
 void s2_spr_p3d_set_loop(void* actor, bool loop)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprP3dSetLoop(*s2_spr, loop);
 }
@@ -568,7 +568,7 @@ extern "C"
 bool s2_spr_p3d_is_finished(const void* actor)
 {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	return ProxyHelper::SprP3dIsFinished(*s2_spr);
 }
@@ -577,7 +577,7 @@ extern "C"
 void s2_spr_p3d_update(void* actor, float dt)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SprP3dUpdate(*s2_spr, dt);
 }
@@ -606,7 +606,7 @@ void s2_spr_proxy_get_children(const void* actor, void* children[], int children
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 
 	CU_VEC<ActorPtr> actors;
-	ProxyHelper::SprGetProxyChildren(*s2_actor->GetSpr(), actors);
+	ProxyHelper::SprGetProxyChildren(*s2_actor->GetSprRaw(), actors);
 	int n = std::min(children_cap, static_cast<int>(actors.size()));
 	for (int i = 0; i < n; ++i) {
 		children[i] = ActorProxyPool::Instance()->Create(actors[i]);
@@ -618,7 +618,7 @@ extern "C"
 void s2_spr_set_dtex_enable(void* actor, bool enable)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SetDTexEnable(*s2_spr, enable);
 }
@@ -627,7 +627,7 @@ extern "C"
 void s2_spr_set_dtex_force_cached(void* actor, bool cache)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SetDTexForceCached(*s2_spr, cache);
 }
@@ -636,7 +636,7 @@ extern "C"
 void s2_spr_set_dtex_force_cached_dirty(void* actor, bool dirty)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	ProxyHelper::SetDTexForceCachedDirty(*s2_spr, dirty);
 }
@@ -695,7 +695,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 	RenderParams rp;
 	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
-	auto s2_spr = s2_actor->GetSpr();
+	auto s2_spr = s2_actor->GetSprRaw();
 
 	std::stack<ActorConstPtr> path;
 	auto curr = s2_actor;
@@ -712,7 +712,7 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 		auto curr = path.top();
 		path.pop();
 		rp.actor = curr.get();
-		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		DrawNode::Prepare(rp, curr->GetSprRaw(), *rp_child);
 		rp = *rp_child;
 	}
 
@@ -741,7 +741,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 	RenderParams rp;
 	rp.SetViewRegion(xmin, ymin, xmax, ymax);
 
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	std::stack<ActorConstPtr> path;
 	ActorConstPtr curr = s2_actor;
@@ -758,7 +758,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 		auto curr = path.top();
 		path.pop();
 		rp.actor = curr.get();
-		DrawNode::Prepare(rp, curr->GetSpr(), *rp_child);
+		DrawNode::Prepare(rp, curr->GetSprRaw(), *rp_child);
 		rp = *rp_child;
 	}
 
@@ -778,10 +778,10 @@ get_actor_world_mat(const ActorConstPtr& actor) {
 	S2_MAT mt;
 	auto curr = actor;
 	while (curr) {
-		if (curr->GetSpr()->GetSymbol()->Type() == SYM_MASK) {
+		if (curr->GetSprRaw()->GetSymbol()->Type() == SYM_MASK) {
 			break;
 		}
-		mt = mt * curr->GetLocalMat() * curr->GetSpr()->GetLocalMat();
+		mt = mt * curr->GetLocalMat() * curr->GetSprRaw()->GetLocalMat();
 		curr = curr->GetParent();
 	}
 	return mt;
@@ -790,7 +790,7 @@ get_actor_world_mat(const ActorConstPtr& actor) {
 extern "C"
 void s2_actor_update(void* actor, bool force) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	UpdateParams up(s2_actor.get());
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
@@ -830,7 +830,7 @@ static void actor_send_msg(void* actor, bool force, Message msg)
 	up.SetPrevMat(get_actor_world_mat(s2_actor->GetParent()));
 	up.SetForce(force);
 
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 	s2_spr->OnMessage(up, msg);
 }
 
@@ -857,7 +857,7 @@ void s2_actor_msg_clear(void* actor, bool force) {
 extern "C"
 void s2_actor_set_frame(void* actor, int frame) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetFrame(s2_actor, frame);
+	ProxyHelper::ActorSetFrame(s2_actor.get(), frame);
 }
 
 extern "C"
@@ -878,10 +878,10 @@ extern "C"
 int s2_actor_get_frame(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	int frame = -1;
-	if (ProxyHelper::ActorGetFrame(s2_actor, frame)) {
+	if (ProxyHelper::ActorGetFrame(s2_actor.get(), frame)) {
 		return frame;
 	} else {
-		LOGW("s2_actor_get_frame fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_frame fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return -1;
 	}
 }
@@ -890,10 +890,10 @@ extern "C"
 int s2_actor_get_component_count(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	int count = -1;
-	if (ProxyHelper::ActorGetComponentCount(s2_actor, count)) {
+	if (ProxyHelper::ActorGetComponentCount(s2_actor.get(), count)) {
 		return count;
 	} else {
-		// LOGW("s2_actor_get_component_count fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		// LOGW("s2_actor_get_component_count fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return -1;
 	}
 }
@@ -901,7 +901,7 @@ int s2_actor_get_component_count(void* actor) {
 extern "C"
 void* s2_actor_fetch_child(const void* actor, const char* name) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
 	auto child_spr = s2_spr->FetchChildByName(name_id, s2_actor);
@@ -916,7 +916,7 @@ void* s2_actor_fetch_child(const void* actor, const char* name) {
 extern "C"
 void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	auto child_spr = s2_spr->FetchChildByIdx(idx, s2_actor);
 	if (!child_spr) {
@@ -964,7 +964,7 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	const ActorPtr& s2_child(child ? static_cast<const ActorProxy*>(child)->actor : nullptr);
 
 	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
-	auto old_spr = s2_parent->GetSpr()->FetchChildByName(name_id, s2_parent);
+	auto old_spr = s2_parent->GetSprRaw()->FetchChildByName(name_id, s2_parent);
 	if (!old_spr) {
 		return -1;
 	}
@@ -974,7 +974,8 @@ int s2_actor_mount(const void* parent, const char* name, const void* child) {
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<ProxySymbol>(old_spr->GetSymbol())->GetItems();
 		int ret = 0;
-		for (auto& item : items) {
+		for (auto& item : items) 
+		{
 			int _ret = _actor_mount(item.first, item.second, s2_child);
 			if (_ret != 0) {
 				ret = _ret;
@@ -996,11 +997,11 @@ extern "C"
 void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat[6]) {
 	ActorPtr s2_parent(*static_cast<const ActorPtr*>(parent_actor));
 
-	SprVisitorParams params;
+	SprVisitorParams2 params;
 	params.actor = s2_parent;
 
 	PointQueryVisitor visitor(sm::vec2(x, y));
-	s2_parent->GetSpr()->Traverse(visitor, params);
+	s2_parent->GetSprRaw()->Traverse2(visitor, params);
 
 	const S2_MAT& selected_mat = visitor.GetSelectedMat();
 #ifdef S2_MATRIX_FIX
@@ -1027,7 +1028,7 @@ extern "C"
 void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::rect rect;
-	if (ProxyHelper::ActorGetAABB(s2_actor, rect)) {
+	if (ProxyHelper::ActorGetAABB(s2_actor.get(), rect)) {
 		if (rect.IsValid()) {
 			aabb[0] = rect.xmin;
 			aabb[1] = rect.ymin;
@@ -1035,42 +1036,42 @@ void s2_actor_get_aabb(const void* actor, float aabb[4]) {
 			aabb[3] = rect.ymax;
 		}
 	} else {
-		LOGW("s2_actor_get_aabb fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_aabb fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
 extern "C"
 void s2_actor_set_pos(void* actor, float x, float y) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetPos(s2_actor, sm::vec2(x, y));
+	ProxyHelper::ActorSetPos(s2_actor.get(), sm::vec2(x, y));
 }
 
 extern "C"
 void s2_actor_get_pos(const void* actor, float* x, float* y) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::vec2 pos;
-	if (ProxyHelper::ActorGetPos(s2_actor, pos)) {
+	if (ProxyHelper::ActorGetPos(s2_actor.get(), pos)) {
 		*x = pos.x;
 		*y = pos.y;
 	} else {
-		LOGW("s2_actor_get_pos fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_pos fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
 extern "C"
 void s2_actor_set_angle(void* actor, float angle) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetAngle(s2_actor, angle);
+	ProxyHelper::ActorSetAngle(s2_actor.get(), angle);
 }
 
 extern "C"
 float s2_actor_get_angle(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	float angle = 0;
-	if (ProxyHelper::ActorGetAngle(s2_actor, angle)) {
+	if (ProxyHelper::ActorGetAngle(s2_actor.get(), angle)) {
 		return angle;
 	} else {
-		LOGW("s2_actor_get_angle fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_angle fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return 0;
 	}
 }
@@ -1078,18 +1079,18 @@ float s2_actor_get_angle(const void* actor) {
 extern "C"
 void s2_actor_set_scale(void* actor, float sx, float sy) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetScale(s2_actor, sm::vec2(sx, sy));
+	ProxyHelper::ActorSetScale(s2_actor.get(), sm::vec2(sx, sy));
 }
 
 extern "C"
 void s2_actor_get_scale(const void* actor, float* sx, float* sy) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::vec2 scale;
-	if (ProxyHelper::ActorGetScale(s2_actor, scale)) {
+	if (ProxyHelper::ActorGetScale(s2_actor.get(), scale)) {
 		*sx = scale.x;
 		*sy = scale.y;
 	} else {
-		LOGW("s2_actor_get_scale fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_scale fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
@@ -1097,11 +1098,11 @@ extern "C"
 void s2_actor_get_world_pos(const void* actor, float* x, float* y) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::vec2 pos;
-	if (ProxyHelper::ActorGetWorldPos(s2_actor, pos)) {
+	if (ProxyHelper::ActorGetWorldPos(s2_actor.get(), pos)) {
 		*x = pos.x;
 		*y = pos.y;
 	} else {
-		LOGW("s2_actor_get_world_pos fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_world_pos fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
@@ -1109,10 +1110,10 @@ extern "C"
 float s2_actor_get_world_angle(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	float angle = 0;
-	if (ProxyHelper::ActorGetWorldAngle(s2_actor, angle)) {
+	if (ProxyHelper::ActorGetWorldAngle(s2_actor.get(), angle)) {
 		return angle;
 	} else {
-		LOGW("s2_actor_get_world_angle fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_world_angle fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return 0;
 	}
 }
@@ -1121,11 +1122,11 @@ extern "C"
 void s2_actor_get_world_scale(const void* actor, float* sx, float* sy) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::vec2 scale;
-	if (ProxyHelper::ActorGetWorldScale(s2_actor, scale)) {
+	if (ProxyHelper::ActorGetWorldScale(s2_actor.get(), scale)) {
 		*sx = scale.x;
 		*sy = scale.y;
 	} else {
-		LOGW("s2_actor_get_world_scale fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_world_scale fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
@@ -1140,10 +1141,10 @@ extern "C"
 bool s2_actor_get_visible(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	bool visible = true;
-	if (ProxyHelper::ActorGetVisible(s2_actor, visible)) {
+	if (ProxyHelper::ActorGetVisible(s2_actor.get(), visible)) {
 		return visible;
 	} else {
-		LOGW("s2_actor_get_visible fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_visible fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return true;
 	}
 }
@@ -1151,17 +1152,17 @@ bool s2_actor_get_visible(void* actor) {
 extern "C"
 void s2_actor_set_visible(void* actor, bool visible) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetVisible(s2_actor, visible);
+	ProxyHelper::ActorSetVisible(s2_actor.get(), visible);
 }
 
 extern "C"
 bool s2_actor_get_editable(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	bool editable = true;
-	if (ProxyHelper::ActorGetEditable(s2_actor, editable)) {
+	if (ProxyHelper::ActorGetEditable(s2_actor.get(), editable)) {
 		return editable;
 	} else {
-		LOGW("s2_actor_get_editable fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_editable fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return true;
 	}
 }
@@ -1169,17 +1170,17 @@ bool s2_actor_get_editable(void* actor) {
 extern "C"
 void s2_actor_set_editable(void* actor, bool editable) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetEditable(s2_actor, editable);
+	ProxyHelper::ActorSetEditable(s2_actor.get(), editable);
 }
 
 extern "C"
 uint32_t s2_actor_get_col_mul(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	uint32_t mul;
-	if (ProxyHelper::ActorGetColMul(s2_actor, mul)) {
+	if (ProxyHelper::ActorGetColMul(s2_actor.get(), mul)) {
 		return mul;
 	} else {
-		LOGW("s2_actor_get_col_mul fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_col_mul fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return 0xffffffff;
 	}
 }
@@ -1187,17 +1188,17 @@ uint32_t s2_actor_get_col_mul(void* actor) {
 extern "C"
 void s2_actor_set_col_mul(void* actor, uint32_t abgr) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetColMul(s2_actor, abgr);
+	ProxyHelper::ActorSetColMul(s2_actor.get(), abgr);
 }
 
 extern "C"
 uint32_t s2_actor_get_col_add(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	uint32_t add;
-	if (ProxyHelper::ActorGetColAdd(s2_actor, add)) {
+	if (ProxyHelper::ActorGetColAdd(s2_actor.get(), add)) {
 		return add;
 	} else {
-		LOGW("s2_actor_get_col_add fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_col_add fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return 0;
 	}
 }
@@ -1205,39 +1206,39 @@ uint32_t s2_actor_get_col_add(void* actor) {
 extern "C"
 void s2_actor_set_col_add(void* actor, uint32_t abgr) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetColAdd(s2_actor, abgr);
+	ProxyHelper::ActorSetColAdd(s2_actor.get(), abgr);
 }
 
 extern "C"
 void s2_actor_get_col_map(void* actor, uint32_t* rmap, uint32_t* gmap, uint32_t* bmap) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	uint32_t r, g, b;
-	if (ProxyHelper::ActorGetColMap(s2_actor, r, g, b)) {
+	if (ProxyHelper::ActorGetColMap(s2_actor.get(), r, g, b)) {
 		*rmap = r;
 		*gmap = g;
 		*bmap = b;
 	} else {
-		LOGW("s2_actor_get_col_map fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_col_map fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 	}
 }
 
 extern "C"
 void s2_actor_set_col_map(void* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetColMap(s2_actor, rmap, gmap, bmap);
+	ProxyHelper::ActorSetColMap(s2_actor.get(), rmap, gmap, bmap);
 }
 
 extern "C"
 void s2_actor_set_filter(void* actor, int mode) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetFilter(s2_actor, mode);
+	ProxyHelper::ActorSetFilter(s2_actor.get(), mode);
 }
 
 extern "C"
 void s2_actor_set_action(void* actor, const char* action) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 
-	ProxyHelper::ActorSetAction(s2_actor, _char2string(action));
+	ProxyHelper::ActorSetAction(s2_actor.get(), _char2string(action));
 }
 
 extern "C"
@@ -1245,7 +1246,7 @@ bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xm
 {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::rect r;
-	if (ProxyHelper::ActorGetScissor(s2_actor, r)) {
+	if (ProxyHelper::ActorGetScissor(s2_actor.get(), r)) {
 		*xmin = r.xmin;
 		*ymin = r.ymin;
 		*xmax = r.xmax;
@@ -1253,7 +1254,7 @@ bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xm
 		return true;
 	}
 	else {
-		LOGW("s2_actor_get_scissor fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
+		LOGW("s2_actor_get_scissor fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
 		return false;
 	}
 }
@@ -1267,13 +1268,13 @@ void s2_actor_set_scissor(void* actor, float xmin, float ymin, float xmax, float
 	r.ymin = ymin;
 	r.xmax = xmax;
 	r.ymax = ymax;
-	ProxyHelper::ActorSetScissor(s2_actor, r);
+	ProxyHelper::ActorSetScissor(s2_actor.get(), r);
 }
 
 extern "C"
 const char* s2_actor_get_text(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+	if (s2_actor->GetSprRaw()->GetSymbol()->Type() != SYM_TEXTBOX) {
 		return nullptr;
 	} else {
 		return std::static_pointer_cast<TextboxActor>(s2_actor)->GetText().c_str();
@@ -1283,20 +1284,20 @@ const char* s2_actor_get_text(void* actor) {
 extern "C"
 void s2_actor_set_text(void* actor, const char* text) {	
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorSetText(s2_actor, _char2string(text));
+	ProxyHelper::ActorSetText(s2_actor.get(), _char2string(text));
 }
 
 extern "C"
 bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_TEXTBOX) {
+	if (s2_actor->GetSprRaw()->GetSymbol()->Type() != SYM_TEXTBOX) {
 		return false;
 	}
 
 	const sm::rect& src = s2_actor->GetAABB().GetRect();
 	sm::vec2 min(src.xmin, src.ymin),
 		     max(src.xmax, src.ymax);
-	S2_MAT mat = s2_actor->GetLocalMat() * s2_actor->GetSpr()->GetLocalMat();
+	S2_MAT mat = s2_actor->GetLocalMat() * s2_actor->GetSprRaw()->GetLocalMat();
 	min = mat * min;
 	max = mat * max;
 
@@ -1309,7 +1310,7 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 extern "C"
 void* s2_actor_get_anchor_real_for_fetch(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	if (s2_actor->GetSpr()->GetSymbol()->Type() != SYM_ANCHOR) {
+	if (s2_actor->GetSprRaw()->GetSymbol()->Type() != SYM_ANCHOR) {
 		return actor;
 	}
 
@@ -1326,8 +1327,8 @@ extern "C"
 void s2_actor_anchor_deconnect(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	auto parent = s2_actor->GetParent();
-	if (parent && parent->GetSpr()->GetSymbol()->Type() == SYM_ANCHOR) {
-		parent->GetSpr()->DelActor(s2_actor);
+	if (parent && parent->GetSprRaw()->GetSymbol()->Type() == SYM_ANCHOR) {
+		parent->GetSprRaw()->DelActor(s2_actor);
 		s2_actor->SetParent(nullptr);
 	}
 }
@@ -1335,7 +1336,7 @@ void s2_actor_anchor_deconnect(void* actor) {
 extern "C"
 void s2_actor_scale9_resize(void* actor, int w, int h) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	ProxyHelper::ActorScale9Resize(s2_actor, w, h);
+	ProxyHelper::ActorScale9Resize(s2_actor.get(), w, h);
 }
 
 /************************************************************************/

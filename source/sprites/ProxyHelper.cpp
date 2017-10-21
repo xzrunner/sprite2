@@ -239,8 +239,8 @@ ActorConstPtr ProxyHelper::SprPointQuery(const Sprite& spr, const sm::vec2& pos,
 	{
 		PointQueryVisitor visitor(pos);
 
-		SprVisitorParams params;
-		spr.Traverse(visitor, params);
+		SprVisitorParams2 params;
+		spr.Traverse2(visitor, params);
 		auto ret = visitor.GetSelectedActor();
 		if (!ret) {
 			return nullptr;
@@ -606,8 +606,8 @@ void ProxyHelper::SprGetProxyChildren(const Sprite& spr, CU_VEC<ActorPtr>& actor
 	for (int i = 0, n = items.size(); i < n; ++i) 
 	{
 		auto child_actor = items[i].second->QueryActorRef(items[i].first.get());
-		if (child_actor->GetSpr()->GetSymbol()->Type() == SYM_PROXY) {
-			SprGetProxyChildren(*child_actor->GetSpr(), actors);
+		if (child_actor->GetSprRaw()->GetSymbol()->Type() == SYM_PROXY) {
+			SprGetProxyChildren(*child_actor->GetSprRaw(), actors);
 		} else {
 			actors.push_back(child_actor);
 		}
@@ -672,9 +672,9 @@ void ProxyHelper::SetDTexForceCachedDirty(const Sprite& spr, bool dirty)
 /* actor                                                                */
 /************************************************************************/	
 
-bool ProxyHelper::ActorGetAABB(const ActorPtr& actor, sm::rect& aabb)
+bool ProxyHelper::ActorGetAABB(const Actor* actor, sm::rect& aabb)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -684,12 +684,12 @@ bool ProxyHelper::ActorGetAABB(const ActorPtr& actor, sm::rect& aabb)
 			return false;
 		}
 		sm::rect ret;
-		if (!ActorGetAABB(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetAABB(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::rect caabb;
-			if (!ActorGetAABB(items[i].second->QueryActorRef(items[i].first.get()), caabb) || caabb != ret) {
+			if (!ActorGetAABB(items[i].second->QueryActor(items[i].first.get()), caabb) || caabb != ret) {
 				return false;
 			}
 		}
@@ -702,7 +702,7 @@ bool ProxyHelper::ActorGetAABB(const ActorPtr& actor, sm::rect& aabb)
 
 		sm::vec2 min(src.xmin, src.ymin),
 			     max(src.xmax, src.ymax);
-		S2_MAT mat = actor->GetLocalMat() * actor->GetSpr()->GetLocalMat();
+		S2_MAT mat = actor->GetLocalMat() * actor->GetSprRaw()->GetLocalMat();
 		min = mat * min;
 		max = mat * max;
 
@@ -715,9 +715,9 @@ bool ProxyHelper::ActorGetAABB(const ActorPtr& actor, sm::rect& aabb)
 	}
 }
 
-bool ProxyHelper::ActorGetPos(const ActorPtr& actor, sm::vec2& pos)
+bool ProxyHelper::ActorGetPos(const Actor* actor, sm::vec2& pos)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -727,12 +727,12 @@ bool ProxyHelper::ActorGetPos(const ActorPtr& actor, sm::vec2& pos)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetPos(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetPos(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cpos;
-			if (!ActorGetPos(items[i].second->QueryActorRef(items[i].first.get()), cpos) || cpos != ret) {
+			if (!ActorGetPos(items[i].second->QueryActor(items[i].first.get()), cpos) || cpos != ret) {
 				return false;
 			}
 		}
@@ -746,16 +746,16 @@ bool ProxyHelper::ActorGetPos(const ActorPtr& actor, sm::vec2& pos)
 	}
 }
 
-void ProxyHelper::ActorSetPos(ActorPtr& actor, const sm::vec2& pos)
+void ProxyHelper::ActorSetPos(Actor* actor, const sm::vec2& pos)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetPos(const_cast<ActorPtr&>(child_actor), pos);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetPos(child_actor, pos);
 		}
 	} 
 	else
@@ -764,9 +764,9 @@ void ProxyHelper::ActorSetPos(ActorPtr& actor, const sm::vec2& pos)
 	}
 }
 
-bool ProxyHelper::ActorGetAngle(const ActorPtr& actor, float& angle)
+bool ProxyHelper::ActorGetAngle(const Actor* actor, float& angle)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -776,12 +776,12 @@ bool ProxyHelper::ActorGetAngle(const ActorPtr& actor, float& angle)
 			return false;
 		}
 		float ret;
-		if (!ActorGetAngle(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetAngle(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			float cangle;
-			if (!ActorGetAngle(items[i].second->QueryActorRef(items[i].first.get()), cangle) || cangle != ret) {
+			if (!ActorGetAngle(items[i].second->QueryActor(items[i].first.get()), cangle) || cangle != ret) {
 				return false;
 			}
 		}
@@ -795,16 +795,16 @@ bool ProxyHelper::ActorGetAngle(const ActorPtr& actor, float& angle)
 	}
 }
 
-void ProxyHelper::ActorSetAngle(ActorPtr& actor, float angle)
+void ProxyHelper::ActorSetAngle(Actor* actor, float angle)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetAngle(const_cast<ActorPtr&>(child_actor), angle);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetAngle(child_actor, angle);
 		}
 	} 
 	else
@@ -813,9 +813,9 @@ void ProxyHelper::ActorSetAngle(ActorPtr& actor, float angle)
 	}
 }
 
-bool ProxyHelper::ActorGetScale(const ActorPtr& actor, sm::vec2& scale)
+bool ProxyHelper::ActorGetScale(const Actor* actor, sm::vec2& scale)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -825,12 +825,12 @@ bool ProxyHelper::ActorGetScale(const ActorPtr& actor, sm::vec2& scale)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetScale(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetScale(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cscale;
-			if (!ActorGetScale(items[i].second->QueryActorRef(items[i].first.get()), cscale) || cscale != ret) {
+			if (!ActorGetScale(items[i].second->QueryActor(items[i].first.get()), cscale) || cscale != ret) {
 				return false;
 			}
 		}
@@ -844,16 +844,16 @@ bool ProxyHelper::ActorGetScale(const ActorPtr& actor, sm::vec2& scale)
 	}
 }
 
-void ProxyHelper::ActorSetScale(ActorPtr& actor, const sm::vec2& scale)
+void ProxyHelper::ActorSetScale(Actor* actor, const sm::vec2& scale)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetScale(const_cast<ActorPtr&>(child_actor), scale);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetScale(child_actor, scale);
 		}
 	} 
 	else
@@ -863,21 +863,21 @@ void ProxyHelper::ActorSetScale(ActorPtr& actor, const sm::vec2& scale)
 }
 
 static S2_MAT 
-_get_actor_world_mat(const ActorPtr& actor) 
+_get_actor_world_mat(const Actor* actor) 
 {
 	S2_MAT mat;
-	ActorConstPtr curr = actor;
+	const Actor* curr = actor;
 	while (curr) {
-		mat = mat * actor->GetSpr()->GetLocalMat();
+		mat = mat * actor->GetSprRaw()->GetLocalMat();
 		mat = curr->GetLocalMat() * mat;
-		curr = curr->GetParent();
+		curr = curr->GetParent().get();
 	}
 	return mat;
 }
 
-bool ProxyHelper::ActorGetWorldPos(const ActorPtr& actor, sm::vec2& pos)
+bool ProxyHelper::ActorGetWorldPos(const Actor* actor, sm::vec2& pos)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -887,13 +887,13 @@ bool ProxyHelper::ActorGetWorldPos(const ActorPtr& actor, sm::vec2& pos)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetWorldPos(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetWorldPos(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		// FIXME
 		// for (int i = 1, n = items.size(); i < n; ++i) {
 		// 	sm::vec2 cpos;
-		// 	if (!ActorGetWorldPos(items[i].second->QueryActorRef(items[i].first.get()), cpos) || cpos != ret) {
+		// 	if (!ActorGetWorldPos(items[i].second->QueryActor(items[i].first.get()), cpos) || cpos != ret) {
 		// 		return false;
 		// 	}
 		// }
@@ -908,9 +908,9 @@ bool ProxyHelper::ActorGetWorldPos(const ActorPtr& actor, sm::vec2& pos)
 	}
 }
 
-bool ProxyHelper::ActorGetWorldAngle(const ActorPtr& actor, float& angle)
+bool ProxyHelper::ActorGetWorldAngle(const Actor* actor, float& angle)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -920,12 +920,12 @@ bool ProxyHelper::ActorGetWorldAngle(const ActorPtr& actor, float& angle)
 			return false;
 		}
 		float ret;
-		if (!ActorGetWorldAngle(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetWorldAngle(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			float cangle;
-			if (!ActorGetWorldAngle(items[i].second->QueryActorRef(items[i].first.get()), cangle) || cangle != ret) {
+			if (!ActorGetWorldAngle(items[i].second->QueryActor(items[i].first.get()), cangle) || cangle != ret) {
 				return false;
 			}
 		}
@@ -942,9 +942,9 @@ bool ProxyHelper::ActorGetWorldAngle(const ActorPtr& actor, float& angle)
 	}
 }
 
-bool ProxyHelper::ActorGetWorldScale(const ActorPtr& actor, sm::vec2& scale)
+bool ProxyHelper::ActorGetWorldScale(const Actor* actor, sm::vec2& scale)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -954,12 +954,12 @@ bool ProxyHelper::ActorGetWorldScale(const ActorPtr& actor, sm::vec2& scale)
 			return false;
 		}
 		sm::vec2 ret;
-		if (!ActorGetWorldScale(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetWorldScale(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::vec2 cscale;
-			if (!ActorGetWorldScale(items[i].second->QueryActorRef(items[i].first.get()), cscale) || cscale != ret) {
+			if (!ActorGetWorldScale(items[i].second->QueryActor(items[i].first.get()), cscale) || cscale != ret) {
 				return false;
 			}
 		}
@@ -974,9 +974,9 @@ bool ProxyHelper::ActorGetWorldScale(const ActorPtr& actor, sm::vec2& scale)
 	}
 }
 
-bool ProxyHelper::ActorGetVisible(const ActorPtr& actor, bool& visible)
+bool ProxyHelper::ActorGetVisible(const Actor* actor, bool& visible)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -986,12 +986,12 @@ bool ProxyHelper::ActorGetVisible(const ActorPtr& actor, bool& visible)
 			return false;
 		}
 		bool ret;
-		if (!ActorGetVisible(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetVisible(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			bool cvisible;
-			if (!ActorGetVisible(items[i].second->QueryActorRef(items[i].first.get()), cvisible) || cvisible != ret) {
+			if (!ActorGetVisible(items[i].second->QueryActor(items[i].first.get()), cvisible) || cvisible != ret) {
 				return false;
 			}
 		}
@@ -1005,16 +1005,16 @@ bool ProxyHelper::ActorGetVisible(const ActorPtr& actor, bool& visible)
 	}
 }
 
-void ProxyHelper::ActorSetVisible(ActorPtr& actor, bool visible)
+void ProxyHelper::ActorSetVisible(Actor* actor, bool visible)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetVisible(const_cast<ActorPtr&>(child_actor), visible);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetVisible(child_actor, visible);
 		}
 	} 
 	else
@@ -1025,9 +1025,9 @@ void ProxyHelper::ActorSetVisible(ActorPtr& actor, bool visible)
 	}
 }
 
-bool ProxyHelper::ActorGetEditable(const ActorPtr& actor, bool& editable)
+bool ProxyHelper::ActorGetEditable(const Actor* actor, bool& editable)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1037,12 +1037,12 @@ bool ProxyHelper::ActorGetEditable(const ActorPtr& actor, bool& editable)
 			return false;
 		}
 		bool ret;
-		if (!ActorGetEditable(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetEditable(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			bool ceditable;
-			if (!ActorGetEditable(items[i].second->QueryActorRef(items[i].first.get()), ceditable) || ceditable != ret) {
+			if (!ActorGetEditable(items[i].second->QueryActor(items[i].first.get()), ceditable) || ceditable != ret) {
 				return false;
 			}
 		}
@@ -1056,16 +1056,16 @@ bool ProxyHelper::ActorGetEditable(const ActorPtr& actor, bool& editable)
 	}
 }
 
-void ProxyHelper::ActorSetEditable(ActorPtr& actor, bool editable)
+void ProxyHelper::ActorSetEditable(Actor* actor, bool editable)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetEditable(const_cast<ActorPtr&>(child_actor), editable);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetEditable(child_actor, editable);
 		}
 	} 
 	else
@@ -1074,9 +1074,9 @@ void ProxyHelper::ActorSetEditable(ActorPtr& actor, bool editable)
 	}
 }
 
-bool ProxyHelper::ActorGetColMul(const ActorPtr& actor, uint32_t& mul)
+bool ProxyHelper::ActorGetColMul(const Actor* actor, uint32_t& mul)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1086,12 +1086,12 @@ bool ProxyHelper::ActorGetColMul(const ActorPtr& actor, uint32_t& mul)
 			return false;
 		}
 		uint32_t ret;
-		if (!ActorGetColMul(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetColMul(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t cmul;
-			if (!ActorGetColMul(items[i].second->QueryActorRef(items[i].first.get()), cmul) || cmul != ret) {
+			if (!ActorGetColMul(items[i].second->QueryActor(items[i].first.get()), cmul) || cmul != ret) {
 				return false;
 			}
 		}
@@ -1105,16 +1105,16 @@ bool ProxyHelper::ActorGetColMul(const ActorPtr& actor, uint32_t& mul)
 	}
 }
 
-void ProxyHelper::ActorSetColMul(ActorPtr& actor, uint32_t mul)
+void ProxyHelper::ActorSetColMul(Actor* actor, uint32_t mul)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetColMul(const_cast<ActorPtr&>(child_actor), mul);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetColMul(child_actor, mul);
 		}
 	} 
 	else
@@ -1123,14 +1123,14 @@ void ProxyHelper::ActorSetColMul(ActorPtr& actor, uint32_t mul)
 		{
 			RenderColor rc = actor->GetColor();
 			rc.SetMulABGR(mul);
-			const_cast<ActorPtr&>(actor)->SetColor(rc);
+			actor->SetColor(rc);
 		}
 	}
 }
 
-bool ProxyHelper::ActorGetColAdd(const ActorPtr& actor, uint32_t& add)
+bool ProxyHelper::ActorGetColAdd(const Actor* actor, uint32_t& add)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1140,12 +1140,12 @@ bool ProxyHelper::ActorGetColAdd(const ActorPtr& actor, uint32_t& add)
 			return false;
 		}
 		uint32_t ret;
-		if (!ActorGetColAdd(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetColAdd(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t cadd;
-			if (!ActorGetColAdd(items[i].second->QueryActorRef(items[i].first.get()), cadd) || cadd != ret) {
+			if (!ActorGetColAdd(items[i].second->QueryActor(items[i].first.get()), cadd) || cadd != ret) {
 				return false;
 			}
 		}
@@ -1159,16 +1159,16 @@ bool ProxyHelper::ActorGetColAdd(const ActorPtr& actor, uint32_t& add)
 	}
 }
 
-void ProxyHelper::ActorSetColAdd(ActorPtr& actor, uint32_t add)
+void ProxyHelper::ActorSetColAdd(Actor* actor, uint32_t add)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetColAdd(const_cast<ActorPtr&>(child_actor), add);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetColAdd(child_actor, add);
 		}
 	} 
 	else
@@ -1177,14 +1177,14 @@ void ProxyHelper::ActorSetColAdd(ActorPtr& actor, uint32_t add)
 		{
 			RenderColor rc = actor->GetColor();
 			rc.SetAddABGR(add);
-			const_cast<ActorPtr&>(actor)->SetColor(rc);
+			actor->SetColor(rc);
 		}
 	}
 }
 
-bool ProxyHelper::ActorGetColMap(const ActorPtr& actor, uint32_t& rmap, uint32_t& gmap, uint32_t& bmap)
+bool ProxyHelper::ActorGetColMap(const Actor* actor, uint32_t& rmap, uint32_t& gmap, uint32_t& bmap)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1194,12 +1194,12 @@ bool ProxyHelper::ActorGetColMap(const ActorPtr& actor, uint32_t& rmap, uint32_t
 			return false;
 		}
 		uint32_t ret_r, ret_g, ret_b;
-		if (!ActorGetColMap(items[0].second->QueryActorRef(items[0].first.get()), ret_r, ret_g, ret_b)) {
+		if (!ActorGetColMap(items[0].second->QueryActor(items[0].first.get()), ret_r, ret_g, ret_b)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			uint32_t crmap, cgmap, cbmap;
-			if (!ActorGetColMap(items[i].second->QueryActorRef(items[i].first.get()), crmap, cgmap, cbmap) || 
+			if (!ActorGetColMap(items[i].second->QueryActor(items[i].first.get()), crmap, cgmap, cbmap) || 
 				crmap != ret_r || cgmap != ret_g || cbmap != ret_b) {
 				return false;
 			}
@@ -1218,16 +1218,16 @@ bool ProxyHelper::ActorGetColMap(const ActorPtr& actor, uint32_t& rmap, uint32_t
 	}
 }
 
-void ProxyHelper::ActorSetColMap(ActorPtr& actor, uint32_t rmap, uint32_t gmap, uint32_t bmap)
+void ProxyHelper::ActorSetColMap(Actor* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetColMap(const_cast<ActorPtr&>(child_actor), rmap, gmap, bmap);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetColMap(child_actor, rmap, gmap, bmap);
 		}
 	} 
 	else
@@ -1240,21 +1240,21 @@ void ProxyHelper::ActorSetColMap(ActorPtr& actor, uint32_t rmap, uint32_t gmap, 
 			rc.SetRMapABGR(rmap);
 			rc.SetGMapABGR(gmap);
 			rc.SetBMapABGR(bmap);
-			const_cast<ActorPtr&>(actor)->SetColor(rc);
+			actor->SetColor(rc);
 		}
 	}
 }
 
-void ProxyHelper::ActorSetFilter(ActorPtr& actor, int mode)
+void ProxyHelper::ActorSetFilter(Actor* actor, int mode)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetFilter(const_cast<ActorPtr&>(child_actor), mode);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetFilter(child_actor, mode);
 		}
 	} 
 	else
@@ -1274,13 +1274,13 @@ void ProxyHelper::ActorSetFilter(ActorPtr& actor, int mode)
 
 		RenderShader shader = actor->GetShader();
 		shader.SetFilter(FilterMode(mode));
-		const_cast<ActorPtr&>(actor)->SetShader(shader);
+		actor->SetShader(shader);
 	}
 }
 
-bool ProxyHelper::ActorGetFrame(const ActorPtr& actor, int& frame)
+bool ProxyHelper::ActorGetFrame(const Actor* actor, int& frame)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1290,12 +1290,12 @@ bool ProxyHelper::ActorGetFrame(const ActorPtr& actor, int& frame)
 			return false;
 		}
 		int ret;
-		if (!ActorGetFrame(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetFrame(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			int cframe;
-			if (!ActorGetFrame(items[i].second->QueryActorRef(items[i].first.get()), cframe) || cframe != ret) {
+			if (!ActorGetFrame(items[i].second->QueryActor(items[i].first.get()), cframe) || cframe != ret) {
 				return false;
 			}
 		}
@@ -1305,7 +1305,7 @@ bool ProxyHelper::ActorGetFrame(const ActorPtr& actor, int& frame)
 	else if (type == SYM_ANIMATION)
 	{
 		auto anim = S2_VI_DOWN_CAST<AnimSprite*>(
-			const_cast<Sprite*>(actor->GetSpr()));
+			const_cast<Sprite*>(actor->GetSprRaw()));
 		frame = anim->GetFrame(actor);
 		return true;
 	}
@@ -1315,21 +1315,21 @@ bool ProxyHelper::ActorGetFrame(const ActorPtr& actor, int& frame)
 	}
 }
 
-void ProxyHelper::ActorSetFrame(ActorPtr& actor, int frame)
+void ProxyHelper::ActorSetFrame(Actor* actor, int frame)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetFrame(const_cast<ActorPtr&>(child_actor), frame);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetFrame(child_actor, frame);
 		}
 	} 
 	else
 	{
-		const auto& spr = actor->GetSpr();
+		const auto& spr = actor->GetSprRaw();
 
 		SetStaticFrameVisitor visitor(frame);
 		SprVisitorParams vp;
@@ -1341,9 +1341,9 @@ void ProxyHelper::ActorSetFrame(ActorPtr& actor, int frame)
 	}
 }
 
-bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
+bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1353,12 +1353,12 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 			return false;
 		}
 		int ret;
-		if (!ActorGetComponentCount(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetComponentCount(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			int ccount;
-			if (!ActorGetComponentCount(items[i].second->QueryActorRef(items[i].first.get()), ccount) || ccount != ret) {
+			if (!ActorGetComponentCount(items[i].second->QueryActor(items[i].first.get()), ccount) || ccount != ret) {
 				return false;
 			}
 		}
@@ -1368,7 +1368,7 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 	else if (type == SYM_COMPLEX)
 	{
 		const auto& spr = S2_VI_DOWN_CAST<ComplexSprite*>(
-			const_cast<Sprite*>(actor->GetSpr()));
+			const_cast<Sprite*>(actor->GetSprRaw()));
 		auto& sym = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(spr->GetSymbol());
 		count = sym->GetActionChildren(spr->GetAction()).size();
 		return true;
@@ -1376,8 +1376,8 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 	else if (type == SYM_ANIMATION)
 	{
 		const auto& spr = S2_VI_DOWN_CAST<AnimSprite*>(
-			const_cast<Sprite*>(actor->GetSpr()));
-		const AnimCurr& curr = spr->GetOriginCurr(actor.get());
+			const_cast<Sprite*>(actor->GetSprRaw()));
+		const AnimCurr& curr = spr->GetOriginCurr(actor);
 		count = curr.GetSlotSize();
 		return true;
 	}
@@ -1387,30 +1387,30 @@ bool ProxyHelper::ActorGetComponentCount(const ActorPtr& actor, int& count)
 	}
 }
 
-void ProxyHelper::ActorSetAction(ActorPtr& actor, const CU_STR& action)
+void ProxyHelper::ActorSetAction(Actor* actor, const CU_STR& action)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetAction(const_cast<ActorPtr&>(child_actor), action);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetAction(child_actor, action);
 		}
 	} 
 	else if (type == SYM_COMPLEX)
 	{
 		auto& sym_complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
-		auto& actor_complex = std::static_pointer_cast<ComplexActor>(actor);
+		auto actor_complex = static_cast<ComplexActor*>(actor);
 		int action_idx = sym_complex->GetActionIdx(action);
 		actor_complex->SetAction(action_idx);
 	}
 }
 
-bool ProxyHelper::ActorGetScissor(const ActorPtr& actor, sm::rect& rect)
+bool ProxyHelper::ActorGetScissor(const Actor* actor, sm::rect& rect)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY)
 	{
@@ -1420,12 +1420,12 @@ bool ProxyHelper::ActorGetScissor(const ActorPtr& actor, sm::rect& rect)
 			return false;
 		}
 		sm::rect ret;
-		if (!ActorGetScissor(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetScissor(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			sm::rect crect;
-			if (!ActorGetScissor(items[i].second->QueryActorRef(items[i].first.get()), crect) || crect != ret) {
+			if (!ActorGetScissor(items[i].second->QueryActor(items[i].first.get()), crect) || crect != ret) {
 				return false;
 			}
 		}
@@ -1444,16 +1444,16 @@ bool ProxyHelper::ActorGetScissor(const ActorPtr& actor, sm::rect& rect)
 	}
 }
 
-void ProxyHelper::ActorSetScissor(ActorPtr& actor, const sm::rect& rect)
+void ProxyHelper::ActorSetScissor(Actor* actor, const sm::rect& rect)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY)
 	{
 		auto& proxy_sym = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym);
 		auto& items = proxy_sym->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			ActorSetScissor(items[i].second->QueryActorRef(items[i].first.get()), rect);
+			ActorSetScissor(items[i].second->QueryActor(items[i].first.get()), rect);
 		}
 	}
 	else if (type == SYM_COMPLEX)
@@ -1468,9 +1468,9 @@ void ProxyHelper::ActorSetScissor(ActorPtr& actor, const sm::rect& rect)
 	}
 }
 
-bool ProxyHelper::ActorGetText(const ActorPtr& actor, CU_STR& text)
+bool ProxyHelper::ActorGetText(const Actor* actor, CU_STR& text)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
@@ -1480,12 +1480,12 @@ bool ProxyHelper::ActorGetText(const ActorPtr& actor, CU_STR& text)
 			return false;
 		}
 		CU_STR ret;
-		if (!ActorGetText(items[0].second->QueryActorRef(items[0].first.get()), ret)) {
+		if (!ActorGetText(items[0].second->QueryActor(items[0].first.get()), ret)) {
 			return false;
 		}
 		for (int i = 1, n = items.size(); i < n; ++i) {
 			CU_STR ctext;
-			if (!ActorGetText(items[i].second->QueryActorRef(items[i].first.get()), ctext) || ctext != ret) {
+			if (!ActorGetText(items[i].second->QueryActor(items[i].first.get()), ctext) || ctext != ret) {
 				return false;
 			}
 		}
@@ -1494,8 +1494,7 @@ bool ProxyHelper::ActorGetText(const ActorPtr& actor, CU_STR& text)
 	} 
 	else if (type == SYM_TEXTBOX)
 	{
-		auto& textbox = S2_VI_PTR_DOWN_CAST<TextboxActor>(actor);
-		text = textbox->GetText();
+		text = static_cast<const TextboxActor*>(actor)->GetText();
 		return true;
 	}
 	else
@@ -1504,41 +1503,39 @@ bool ProxyHelper::ActorGetText(const ActorPtr& actor, CU_STR& text)
 	}
 }
 
-void ProxyHelper::ActorSetText(ActorPtr& actor, const CU_STR& text)
+void ProxyHelper::ActorSetText(Actor* actor, const CU_STR& text)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorSetText(const_cast<ActorPtr&>(child_actor), text);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorSetText(child_actor, text);
 		}
 	} 
 	else if (type == SYM_TEXTBOX)
 	{
-		auto& textbox = std::static_pointer_cast<TextboxActor>(actor);
-		textbox->SetText(text);
+		static_cast<TextboxActor*>(actor)->SetText(text);
 	}
 }
 
-void ProxyHelper::ActorScale9Resize(ActorPtr& actor, int w, int h)
+void ProxyHelper::ActorScale9Resize(Actor* actor, int w, int h)
 {
-	auto& sym = actor->GetSpr()->GetSymbol();
+	auto& sym = actor->GetSprRaw()->GetSymbol();
 	int type = sym->Type();
 	if (type == SYM_PROXY) 
 	{
 		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
-			const ActorPtr& child_actor = items[i].second->QueryActorRef(items[i].first.get());
-			ActorScale9Resize(const_cast<ActorPtr&>(child_actor), w, h);
+			auto child_actor = items[i].second->QueryActor(items[i].first.get());
+			ActorScale9Resize(child_actor, w, h);
 		}
 	} 
 	else if (type == SYM_SCALE9)
 	{
-		auto& s9_actor = std::static_pointer_cast<Scale9Actor>(actor);
-		s9_actor->Resize(static_cast<float>(w), static_cast<float>(h));
+		static_cast<Scale9Actor*>(actor)->Resize(static_cast<float>(w), static_cast<float>(h));
 	}
 }
 

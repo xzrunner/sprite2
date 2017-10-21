@@ -273,7 +273,7 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 	SprVisitorParams p;
 	p.actor = params.actor;
 	if (init_mat) {
-		Utility::PrepareMat(params.mt, this, params.actor.get(), p.mt);
+		Utility::PrepareMat(params.mt, this, params.actor, p.mt);
 	}
 
 	VisitResult ret = VISIT_OVER;
@@ -299,6 +299,45 @@ VisitResult Sprite::Traverse(SpriteVisitor& visitor, const SprVisitorParams& par
 			}
 		}
 		break;
+	default:
+		ret = v_ret;
+		break;
+	}
+
+	return ret;
+}
+
+VisitResult Sprite::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& params, bool init_mat) const
+{
+	SprVisitorParams2 p;
+	p.actor = params.actor;
+	if (init_mat) {
+		Utility::PrepareMat(params.mt, this, params.actor.get(), p.mt);
+	}
+
+	VisitResult ret = VISIT_OVER;
+
+	VisitResult v_ret = visitor.Visit(shared_from_this(), p);
+	switch (v_ret)
+	{
+	case VISIT_INTO:
+	{
+		visitor.VisitChildrenBegin(shared_from_this(), p);
+		VisitResult v = TraverseChildren2(visitor, p);
+		switch (v)
+		{
+		case VISIT_INTO:
+			assert(0);
+			break;
+		case VISIT_OVER:
+			ret = visitor.VisitChildrenEnd(shared_from_this(), p);
+			break;
+		case VISIT_OUT: case VISIT_STOP:
+			ret = v;
+			break;
+		}
+	}
+	break;
 	default:
 		ret = v_ret;
 		break;

@@ -177,7 +177,7 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_
 	if (ft_n->IsDataSpr()) {
 		sym = static_cast<const s2::Sprite*>(ft_n->GetData())->GetSymbol().get();
 	} else {
-		sym = static_cast<const s2::Actor*>(ft_n->GetData())->GetSpr()->GetSymbol().get();
+		sym = static_cast<const s2::Actor*>(ft_n->GetData())->GetSprRaw()->GetSymbol().get();
 	}
 
 	sm::vec2 vertices[4];

@@ -23,6 +23,7 @@ public:
 	virtual bool Update(const UpdateParams& up);
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	SPRITE_CLONE_FUNC(MaskSprite)
 

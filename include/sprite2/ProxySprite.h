@@ -33,6 +33,7 @@ public:
 	virtual void SetOffset(const sm::vec2& offset);
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	SPRITE_CLONE_FUNC(ProxySprite)
 

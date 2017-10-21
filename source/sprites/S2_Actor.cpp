@@ -17,28 +17,15 @@ namespace s2
 static int ALL_ACTOR_COUNT = 0;
 
 Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
-	: m_spr(std::const_pointer_cast<Sprite>(spr).get())
+	: m_spr(spr)
+	, m_parent(parent)
 	, m_geo(ActorDefault::Instance()->Geo(), geo_deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 {
-	m_spr_ptr = spr;
-
-	m_parent = parent;
-
 	++ALL_ACTOR_COUNT;
 
 	InitFlags();
 }
-
-//Actor::Actor()
-//	: m_spr(nullptr)
-//	, m_geo(ActorDefault::Instance()->Geo())
-//	, m_render(SprDefault::Instance()->Render())
-//{
-//	++ALL_ACTOR_COUNT;
-//
-//	InitFlags();
-//}
 
 Actor::~Actor()
 {
@@ -47,7 +34,7 @@ Actor::~Actor()
 
 void Actor::Init()
 {
-	m_aabb.Init(shared_from_this());
+	m_aabb.Init(this);
 }
 
 void Actor::SetPosition(const sm::vec2& pos)
@@ -62,7 +49,7 @@ void Actor::SetPosition(const sm::vec2& pos)
 	m_geo->SetPosition(pos);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(shared_from_this());
+	m_aabb.Update(this);
 }
 
 void Actor::SetAngle(float angle)
@@ -77,7 +64,7 @@ void Actor::SetAngle(float angle)
 	m_geo->SetAngle(angle);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(shared_from_this());
+	m_aabb.Update(this);
 }
 
 void Actor::SetScale(const sm::vec2& scale)
@@ -92,7 +79,7 @@ void Actor::SetScale(const sm::vec2& scale)
 	m_geo->SetScale(scale);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(shared_from_this());
+	m_aabb.Update(this);
 }
 
 void Actor::SetColor(const RenderColor& color)
@@ -131,7 +118,7 @@ void Actor::SetFlattenDirty()
 			break;
 		}
 
-		auto p = curr->m_parent.lock();
+		auto p = curr->m_parent.smart_ptr.lock();
 		if (p) {
 			curr = p.get();
 		} else {
@@ -147,14 +134,14 @@ void Actor::BuildFlatten()
 	{
 		if (curr->m_flatten.list) {
 			if (!curr->m_flatten.list->IsDirty()) {
-				printf("++++++ should be dirty %d\n", GetSpr()->GetSymbol()->GetID());
+				printf("++++++ should be dirty %d\n", GetSprRaw()->GetSymbol()->GetID());
 			} else {
 				curr->m_flatten.list->Build(curr->m_dlist);
 			}
 			break;
 		}
 
-		auto p = curr->m_parent.lock();
+		auto p = curr->m_parent.smart_ptr.lock();
 		if (p) {
 			curr = p.get();
 		} else {
@@ -186,7 +173,7 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 		m_flags &= ~FLAG_VISIBLE;
 	}
 	if (up_aabb) {
-		m_aabb.UpdateParent(shared_from_this());
+		m_aabb.UpdateParent(this);
 	}
 }
 

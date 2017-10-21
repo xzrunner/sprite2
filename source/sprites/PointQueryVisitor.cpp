@@ -9,6 +9,7 @@
 #include "ComplexSymbol.h"
 #include "ShapeSymbol.h"
 #include "Shape.h"
+#include "ActorProxy.h"
 
 #include <SM_Calc.h>
 
@@ -18,14 +19,14 @@ namespace s2
 {
 
 PointQueryVisitor::PointQueryVisitor(const sm::vec2& pos)
-	: SpriteVisitor(false)
+	: SpriteVisitor2(false)
 	, m_pos(pos)
 	, m_selected_spr(nullptr)
 	, m_finded(false)
 {
 }
 
-VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorParams2& params)
 {
 	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
 	if (!visible) {
@@ -39,9 +40,9 @@ VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorPar
 		auto& anchor_spr = S2_VI_PTR_DOWN_CAST<const AnchorSprite>(spr);
 		auto real = anchor_spr->QueryAnchor(params.actor.get());
 		if (real) {
-			SprVisitorParams cp = params;
-			cp.actor = real->GetSpr()->QueryActorRef(params.actor.get());
-			return Visit(real->GetSprPtr(), cp);
+			SprVisitorParams2 cp = params;
+			cp.actor = real->GetSprRaw()->QueryActorRef(params.actor.get());
+			return Visit(real->GetSpr(), cp);
 		} else {
 			return VISIT_OVER;
 		}
@@ -101,7 +102,7 @@ VisitResult PointQueryVisitor::Visit(const SprConstPtr& spr, const SprVisitorPar
 	}
 }
 
-VisitResult PointQueryVisitor::VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams2& params)
 {
 	bool editable = params.actor ? params.actor->IsEditable() : spr->IsEditable();
 	bool visible = params.actor ? params.actor->IsVisible() : spr->IsVisible();
@@ -109,7 +110,7 @@ VisitResult PointQueryVisitor::VisitChildrenBegin(const SprConstPtr& spr, const 
 	return VISIT_OVER;
 }
 
-VisitResult PointQueryVisitor::VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params)
+VisitResult PointQueryVisitor::VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams2& params)
 {
 	VisitResult ret = VISIT_OVER;
 
@@ -157,7 +158,7 @@ ActorConstPtr PointQueryVisitor::GetSelectedActor() const
 	}
 }
 
-bool PointQueryVisitor::QuerySprite(const SprConstPtr& spr, const SprVisitorParams& params) const
+bool PointQueryVisitor::QuerySprite(const SprConstPtr& spr, const SprVisitorParams2& params) const
 {
 	sm::rect rect = spr->GetSymbol()->GetBounding(spr.get(), params.actor.get());
 	if (rect.Width() == 0 || rect.Height() == 0 || !rect.IsValid()) {
@@ -178,7 +179,7 @@ bool PointQueryVisitor::QuerySprite(const SprConstPtr& spr, const SprVisitorPara
 	return false;
 }
 
-bool PointQueryVisitor::IsPointInScissor(const SprConstPtr& spr, const SprVisitorParams& params) const
+bool PointQueryVisitor::IsPointInScissor(const SprConstPtr& spr, const SprVisitorParams2& params) const
 {
 	SymType type = static_cast<SymType>(spr->GetSymbol()->Type());
 	if (type != SYM_COMPLEX) {

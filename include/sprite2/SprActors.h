@@ -8,7 +8,12 @@
 
 #include <memory>
 
-//#define	S2_SPR_ACTORS_QUERY_COUNT
+//#define S2_SPR_ACTORS_QUERY_COUNT
+#define S2_SPR_ACTORS_HASH
+
+#ifdef S2_SPR_ACTORS_HASH
+struct ds_hash;
+#endif // S2_SPR_ACTORS_HASH
 
 namespace s2
 {
@@ -18,11 +23,16 @@ class Actor;
 class SprActors : private cu::Uncopyable
 {
 public:	
+#ifdef S2_SPR_ACTORS_HASH
+	SprActors();
+	~SprActors();
+#endif // S2_SPR_ACTORS_HASH
+
 	void Add(const ActorPtr& actor);
 	void Del(const ActorPtr& actor);
 
 	Actor* Query(const Actor* prev) const;
-	ActorPtr QueryPtr(const Actor* prev) const;
+	const ActorPtr* QueryPtr(const Actor* prev) const;
 
 	bool IsEmpty() const;
 	int Size() const;
@@ -39,7 +49,14 @@ public:
 #endif // S2_SPR_ACTORS_QUERY_COUNT
 
 private:
+	int QueryFromVec(const Actor* prev) const;
+
+private:
 	CU_VEC<ActorPtr> m_actors;
+
+#ifdef S2_SPR_ACTORS_HASH
+	struct ds_hash* m_hash;
+#endif // S2_SPR_ACTORS_HASH
 
 #ifdef S2_SPR_ACTORS_QUERY_COUNT
 	static int m_query_count;

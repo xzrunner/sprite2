@@ -117,15 +117,35 @@ VisitResult MaskSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisito
 	auto& base = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetBase();
 	if (base) {
 		SprVisitorParams cp = params;
-		cp.actor = base->QueryActorRef(params.actor.get());
+		cp.actor = base->QueryActor(params.actor);
 		if (!SpriteVisitor::VisitChild(visitor, cp, base, ret))
 			return ret;
 	}
 	auto& mask = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetMask();
 	if (mask) {
 		SprVisitorParams cp = params;
-		cp.actor = mask->QueryActorRef(params.actor.get());
+		cp.actor = mask->QueryActor(params.actor);
 		if (!SpriteVisitor::VisitChild(visitor, cp, mask, ret))
+			return ret;
+	}
+	return ret;
+}
+
+VisitResult MaskSprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	VisitResult ret = VISIT_OVER;
+	auto& base = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetBase();
+	if (base) {
+		SprVisitorParams2 cp = params;
+		cp.actor = base->QueryActorRef(params.actor.get());
+		if (!SpriteVisitor2::VisitChild(visitor, cp, base, ret))
+			return ret;
+	}
+	auto& mask = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym)->GetMask();
+	if (mask) {
+		SprVisitorParams2 cp = params;
+		cp.actor = mask->QueryActorRef(params.actor.get());
+		if (!SpriteVisitor2::VisitChild(visitor, cp, mask, ret))
 			return ret;
 	}
 	return ret;

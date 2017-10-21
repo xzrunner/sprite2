@@ -132,8 +132,15 @@ SprPtr AnimSprite::FetchChildByIdx(int idx, const ActorConstPtr& actor) const
 VisitResult AnimSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
 	auto& actor = params.actor;
-	const AnimCurr& curr = GetOriginCurr(actor.get());
+	const AnimCurr& curr = GetOriginCurr(actor);
 	return curr.Traverse(visitor, params);
+}
+
+VisitResult AnimSprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	auto& actor = params.actor;
+	const AnimCurr& curr = GetOriginCurr(actor.get());
+	return curr.Traverse2(visitor, params);
 }
 
 AnimCurr& AnimSprite::GetOriginCurr(const Actor* actor)
@@ -196,9 +203,9 @@ void AnimSprite::SetStartRandom(const UpdateParams& up, bool random)
 	}
 }
 
-int AnimSprite::GetFrame(const ActorConstPtr& actor) const
+int AnimSprite::GetFrame(const Actor* actor) const
 { 
-	const AnimCurr& curr = GetOriginCurr(actor.get());
+	const AnimCurr& curr = GetOriginCurr(actor);
 	return curr.GetFrame();
 }
 

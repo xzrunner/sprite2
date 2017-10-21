@@ -13,7 +13,7 @@ CU_SINGLETON_DEFINITION(ActorProxyPool)
 
 ActorProxy::ActorProxy(const ActorPtr& actor)
 	: actor(actor)
-	, spr(std::const_pointer_cast<Sprite>(actor->GetSprPtr()))
+	, spr(std::const_pointer_cast<Sprite>(actor->GetSpr()))
 {
 }
 

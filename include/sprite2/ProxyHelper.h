@@ -75,50 +75,50 @@ public:
 	/* actor                                                                */
 	/************************************************************************/	
 
-	static bool ActorGetAABB(const ActorPtr& actor, sm::rect& aabb);
+	static bool ActorGetAABB(const Actor* actor, sm::rect& aabb);
 
- 	static bool ActorGetPos(const ActorPtr& actor, sm::vec2& pos);
-	static void ActorSetPos(ActorPtr& actor, const sm::vec2& pos);
-	static bool ActorGetAngle(const ActorPtr& actor, float& angle);
- 	static void ActorSetAngle(ActorPtr& actor, float angle);
- 	static bool ActorGetScale(const ActorPtr& actor, sm::vec2& scale);
-	static void ActorSetScale(ActorPtr& actor, const sm::vec2& scale);
+ 	static bool ActorGetPos(const Actor* actor, sm::vec2& pos);
+	static void ActorSetPos(Actor* actor, const sm::vec2& pos);
+	static bool ActorGetAngle(const Actor* actor, float& angle);
+ 	static void ActorSetAngle(Actor* actor, float angle);
+ 	static bool ActorGetScale(const Actor* actor, sm::vec2& scale);
+	static void ActorSetScale(Actor* actor, const sm::vec2& scale);
 
-	static bool ActorGetWorldPos(const ActorPtr& actor, sm::vec2& pos);
-	static bool ActorGetWorldAngle(const ActorPtr& actor, float& angle);
-	static bool ActorGetWorldScale(const ActorPtr& actor, sm::vec2& scale);
+	static bool ActorGetWorldPos(const Actor* actor, sm::vec2& pos);
+	static bool ActorGetWorldAngle(const Actor* actor, float& angle);
+	static bool ActorGetWorldScale(const Actor* actor, sm::vec2& scale);
 
-	static bool ActorGetVisible(const ActorPtr& actor, bool& visible);
-	static void ActorSetVisible(ActorPtr& actor, bool visible);
-	static bool ActorGetEditable(const ActorPtr& actor, bool& editable);
-	static void ActorSetEditable(ActorPtr& actor, bool editable);
+	static bool ActorGetVisible(const Actor* actor, bool& visible);
+	static void ActorSetVisible(Actor* actor, bool visible);
+	static bool ActorGetEditable(const Actor* actor, bool& editable);
+	static void ActorSetEditable(Actor* actor, bool editable);
 
-	static bool ActorGetColMul(const ActorPtr& actor, uint32_t& mul);
-	static void ActorSetColMul(ActorPtr& actor, uint32_t mul);
-	static bool ActorGetColAdd(const ActorPtr& actor, uint32_t& add);
-	static void ActorSetColAdd(ActorPtr& actor, uint32_t add);
-	static bool ActorGetColMap(const ActorPtr& actor, uint32_t& rmap, uint32_t& gmap, uint32_t& bmap);
-	static void ActorSetColMap(ActorPtr& actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
+	static bool ActorGetColMul(const Actor* actor, uint32_t& mul);
+	static void ActorSetColMul(Actor* actor, uint32_t mul);
+	static bool ActorGetColAdd(const Actor* actor, uint32_t& add);
+	static void ActorSetColAdd(Actor* actor, uint32_t add);
+	static bool ActorGetColMap(const Actor* actor, uint32_t& rmap, uint32_t& gmap, uint32_t& bmap);
+	static void ActorSetColMap(Actor* actor, uint32_t rmap, uint32_t gmap, uint32_t bmap);
 
-	static void ActorSetFilter(ActorPtr& actor, int mode);
+	static void ActorSetFilter(Actor* actor, int mode);
 
 	// anim
-	static bool ActorGetFrame(const ActorPtr& actor, int& frame);
-	static void ActorSetFrame(ActorPtr& actor, int frame);
+	static bool ActorGetFrame(const Actor* actor, int& frame);
+	static void ActorSetFrame(Actor* actor, int frame);
 
-	static bool ActorGetComponentCount(const ActorPtr& actor, int& count);
+	static bool ActorGetComponentCount(const Actor* actor, int& count);
 
 	// complex
-	static void ActorSetAction(ActorPtr& actor, const CU_STR& action);
-	static bool ActorGetScissor(const ActorPtr& actor, sm::rect& rect);
-	static void ActorSetScissor(ActorPtr& actor, const sm::rect& rect);
+	static void ActorSetAction(Actor* actor, const CU_STR& action);
+	static bool ActorGetScissor(const Actor* actor, sm::rect& rect);
+	static void ActorSetScissor(Actor* actor, const sm::rect& rect);
 
 	// textbox
-	static bool ActorGetText(const ActorPtr& actor, CU_STR& text);
-	static void ActorSetText(ActorPtr& actor, const CU_STR& text);
+	static bool ActorGetText(const Actor* actor, CU_STR& text);
+	static void ActorSetText(Actor* actor, const CU_STR& text);
 
 	// scale9
-	static void ActorScale9Resize(ActorPtr& actor, int w, int h);
+	static void ActorScale9Resize(Actor* actor, int w, int h);
 
 }; // ProxyHelper
 

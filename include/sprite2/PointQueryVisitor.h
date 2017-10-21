@@ -13,22 +13,22 @@ namespace s2
 
 class Actor;
 
-class PointQueryVisitor : public SpriteVisitor
+class PointQueryVisitor : public SpriteVisitor2
 {
 public:
 	PointQueryVisitor(const sm::vec2& pos);
 
-	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams2& params);
 
-	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params);
-	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams2& params);
+	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams2& params);
 
 	ActorConstPtr GetSelectedActor() const;
 	const S2_MAT& GetSelectedMat() const { return m_selected_params.mt; }
 	
 private:
-	bool QuerySprite(const SprConstPtr& spr, const SprVisitorParams& params) const;
-	bool IsPointInScissor(const SprConstPtr& spr, const SprVisitorParams& params) const;
+	bool QuerySprite(const SprConstPtr& spr, const SprVisitorParams2& params) const;
+	bool IsPointInScissor(const SprConstPtr& spr, const SprVisitorParams2& params) const;
 
 	bool IsPointInRect(const sm::rect& rect, const S2_MAT& mat) const;	
 
@@ -58,7 +58,7 @@ private:
 	sm::vec2 m_pos;
 
 	SprConstPtr m_selected_spr;
-	SprVisitorParams m_selected_params;
+	SprVisitorParams2 m_selected_params;
 
 	SprPath m_curr_path;
 	SprPath m_selected_path;

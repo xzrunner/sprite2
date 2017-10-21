@@ -19,6 +19,7 @@ public:
 	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
 	virtual SprPtr FetchChildByIdx(int idx, const ActorPtr& actor) const;
     virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
 	const Actor* QueryAnchor(const Actor* actor) const;
 

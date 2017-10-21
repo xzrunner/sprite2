@@ -22,7 +22,7 @@ VisitResult CreateActorsVisitor::VisitChildrenBegin(const SprConstPtr& spr, cons
 	if (spr->IsNeedActor() || spr->IsNeedActorForChild()) 
 	{
 		auto child = ActorFactory::Create(m_path.top(), spr);
-		const_cast<SprVisitorParams&>(params).actor = child;
+		const_cast<SprVisitorParams&>(params).actor = child.get();
 		m_path.push(child);
 	}
 	return VISIT_OVER;

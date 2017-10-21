@@ -14,8 +14,8 @@ AnimActor::AnimActor(const SprConstPtr& spr, const ActorConstPtr& parent)
 
 void AnimActor::Init()
 {
-	assert(GetSpr()->HaveActor());
-	m_state.Init(S2_VI_PTR_DOWN_CAST<const AnimSymbol>(GetSpr()->GetSymbol())->GetCopy());
+	assert(GetSprRaw()->HaveActor());
+	m_state.Init(S2_VI_PTR_DOWN_CAST<const AnimSymbol>(GetSprRaw()->GetSymbol())->GetCopy());
 }
 
 }

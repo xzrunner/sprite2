@@ -15,11 +15,11 @@ class ActorAABB
 public:
 	ActorAABB();
 
-	void Init(const ActorConstPtr& curr);
-	bool Update(const ActorConstPtr& curr);
-	bool Combine(const ActorConstPtr& curr, const sm::rect& rect);
+	void Init(const Actor* curr);
+	bool Update(const Actor* curr);
+	bool Combine(const Actor* curr, const sm::rect& rect);
 
-	void UpdateParent(const ActorConstPtr& curr);
+	void UpdateParent(const Actor* curr);
 
 	const sm::rect& GetRect() const { return m_rect; }
 	void SetRect(const sm::rect& rect);
@@ -27,10 +27,10 @@ public:
 	void SetStaticRect(const sm::rect& rect);
 
 private:
-	sm::rect UpdateTight(const ActorConstPtr& curr);
+	sm::rect UpdateTight(const Actor* curr);
 
 	static bool IsRectTight(const sm::rect& inner, const sm::rect& outer);
-	static sm::rect Build(const ActorConstPtr& curr);
+	static sm::rect Build(const Actor* curr);
 
 private:
 	sm::rect m_rect;

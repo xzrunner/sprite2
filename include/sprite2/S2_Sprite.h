@@ -28,8 +28,10 @@ class SprGeo;
 class RenderColor;
 class RenderShader;
 class SpriteVisitor;
+class SpriteVisitor2;
 class Actor;
 class SprVisitorParams;
+class SprVisitorParams2;
 class SprSRT;
 
 class Sprite : public std::enable_shared_from_this<Sprite>
@@ -63,6 +65,7 @@ public:
 	virtual void SetOffset(const sm::vec2& offset);
 
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const { return VISIT_OVER; }
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const { return VISIT_OVER; }
 
 //	static void InitHook(void (*init_flags)(const SprPtr& spr));
 
@@ -70,6 +73,7 @@ public:
 
 public:
 	VisitResult Traverse(SpriteVisitor& visitor, const SprVisitorParams& params, bool init_mat = true) const;
+	VisitResult Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& params, bool init_mat = true) const;
 
 	SymPtr& GetSymbol() { return m_sym; }
 	const SymPtr& GetSymbol() const { return m_sym; }
@@ -115,7 +119,13 @@ public:
 		return m_actors ? m_actors->Query(prev) : nullptr;
 	}
 	ActorPtr QueryActorRef(const Actor* prev) const {
-		return m_actors ? m_actors->QueryPtr(prev) : nullptr;
+		if (m_actors) {
+			const ActorPtr* ptr = m_actors->QueryPtr(prev);
+			if (ptr) {
+				return *ptr;
+			}
+		}
+		return nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
 	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }

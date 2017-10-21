@@ -17,12 +17,24 @@ class SprVisitorParams
 public:
 	S2_MAT mt;
 
-	ActorConstPtr actor;
+	Actor* actor;
 
 public:
 	SprVisitorParams() : actor(nullptr) {}
 
 }; // SprVisitorParams
+
+class SprVisitorParams2
+{
+public:
+	S2_MAT mt;
+
+	ActorConstPtr actor;
+
+public:
+	SprVisitorParams2() : actor(nullptr) {}
+
+}; // SprVisitorParams2
 
 }
 

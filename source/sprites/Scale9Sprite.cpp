@@ -59,7 +59,7 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 		for (int i = 0, n = grids.size(); i < n; ++i) 
 		{
 			auto& child = grids[i];
-			cp.actor = child->QueryActorRef(params.actor.get());
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
@@ -68,8 +68,36 @@ VisitResult Scale9Sprite::TraverseChildren(SpriteVisitor& visitor, const SprVisi
 		for (int i = grids.size() - 1; i >= 0; --i) 
 		{
 			auto& child = grids[i];
-			cp.actor = child->QueryActorRef(params.actor.get());
+			cp.actor = child->QueryActor(params.actor);
 			if (!SpriteVisitor::VisitChild(visitor, cp, child, ret)) {
+				break;
+			}
+		}
+	}
+	return ret;
+}
+
+VisitResult Scale9Sprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const
+{
+	VisitResult ret = VISIT_OVER;
+	CU_VEC<SprPtr> grids;
+	m_s9.GetGrids(grids);
+	SprVisitorParams2 cp = params;
+	if (visitor.GetOrder()) {
+		for (int i = 0, n = grids.size(); i < n; ++i) 
+		{
+			auto& child = grids[i];
+			cp.actor = child->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, child, ret)) {
+				break;
+			}
+		}
+	} else {
+		for (int i = grids.size() - 1; i >= 0; --i) 
+		{
+			auto& child = grids[i];
+			cp.actor = child->QueryActorRef(params.actor.get());
+			if (!SpriteVisitor2::VisitChild(visitor, cp, child, ret)) {
 				break;
 			}
 		}

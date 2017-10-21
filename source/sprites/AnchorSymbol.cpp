@@ -38,7 +38,7 @@ RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, m);
 		rp_child->mt = m;
 //		rp_child->SetDisableCulling(true);
-		ret = DrawNode::Draw(rp_child->actor->GetSpr(), *rp_child);
+		ret = DrawNode::Draw(rp_child->actor->GetSprRaw(), *rp_child);
 	} else {
 		ret = RENDER_NO_DATA;
 	}
@@ -55,7 +55,7 @@ sm::rect AnchorSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bo
 {
 	auto real_actor = GetRealActor(spr, actor);
 	if (real_actor) {
-		return real_actor->GetSpr()->GetBounding(real_actor)->GetSize();
+		return real_actor->GetSprRaw()->GetBounding(real_actor)->GetSize();
 	} else {
 		return sm::rect(); // empty
 	}

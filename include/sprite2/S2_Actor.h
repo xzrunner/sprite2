@@ -40,8 +40,6 @@ public:
 	Actor(const SprConstPtr& spr, const ActorConstPtr& parent);
 	virtual ~Actor();
 
-	virtual void Init();
-
 	SprPtr GetSpr() const { return m_spr.smart_ptr.lock(); }
 	const Sprite* GetSprRaw() const { return m_spr.raw_ptr; }
 

@@ -25,16 +25,13 @@ Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	++ALL_ACTOR_COUNT;
 
 	InitFlags();
+
+	m_aabb.Init(this);
 }
 
 Actor::~Actor()
 {
 	--ALL_ACTOR_COUNT;
-}
-
-void Actor::Init()
-{
-	m_aabb.Init(this);
 }
 
 void Actor::SetPosition(const sm::vec2& pos)

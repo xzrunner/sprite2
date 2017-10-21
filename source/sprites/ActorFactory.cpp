@@ -59,7 +59,6 @@ ActorPtr ActorFactory::Create(const ActorConstPtr& parent, const SprConstPtr& ch
 
 	if (actor) {
 		child->AddActor(actor);
-		actor->Init();
 	}
 
 	return actor;

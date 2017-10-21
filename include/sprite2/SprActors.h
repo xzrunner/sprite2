@@ -8,6 +8,8 @@
 
 #include <memory>
 
+//#define	S2_SPR_ACTORS_QUERY_COUNT
+
 namespace s2
 {
 
@@ -31,8 +33,17 @@ public:
 
 	const auto& GetActors() const { return m_actors; }
 
+#ifdef S2_SPR_ACTORS_QUERY_COUNT
+	static int GetCount() { return m_query_count; }
+	static void ResetCount() { m_query_count = 0; }
+#endif // S2_SPR_ACTORS_QUERY_COUNT
+
 private:
 	CU_VEC<ActorPtr> m_actors;
+
+#ifdef S2_SPR_ACTORS_QUERY_COUNT
+	static int m_query_count;
+#endif // S2_SPR_ACTORS_QUERY_COUNT
 
 }; // SprActors
 

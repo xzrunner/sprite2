@@ -112,10 +112,10 @@ public:
 	void AddActor(const ActorPtr& actor) const;
 	void DelActor(const ActorPtr& actor) const;
 	Actor* QueryActor(const Actor* prev) const {
-		return (m_actors && prev) ? m_actors->Query(prev) : nullptr;
+		return m_actors ? m_actors->Query(prev) : nullptr;
 	}
 	ActorPtr QueryActorRef(const Actor* prev) const {
-		return (m_actors && prev) ? m_actors->QueryPtr(prev) : nullptr;
+		return m_actors ? m_actors->QueryPtr(prev) : nullptr;
 	}
 	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
 	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }

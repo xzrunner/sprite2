@@ -47,7 +47,7 @@ public:
 	static void SprAnimSetLoop(const Sprite& spr, bool loop);
 
 	// complex
-	static bool SprHasAction(const SprPtr& spr, const CU_STR& action);
+	static bool SprHasAction(const Sprite& spr, const CU_STR& action);
 
 	// textbox
 	static void SprTextboxResetTime(const Sprite& spr);

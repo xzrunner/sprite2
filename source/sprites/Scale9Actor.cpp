@@ -24,7 +24,7 @@ void Scale9Actor::Resize(float width, float height)
 	// update aabb
 	ActorAABB& aabb = GetAABB();
 	aabb.SetRect(GetSpr()->GetSymbol()->GetBounding(GetSpr(), this, false));
-	aabb.UpdateParent(this);
+	aabb.UpdateParent(shared_from_this());
 }
 
 }

@@ -506,13 +506,12 @@ void s2_spr_anim_set_loop(void* actor, bool loop)
 extern "C"
 bool s2_spr_has_action(const void* actor, const char* name) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
 
-	return ProxyHelper::SprHasAction(*s2_spr, _char2string(name));
+	return ProxyHelper::SprHasAction(*s2_actor->GetSprPtr(), _char2string(name));
 }
 
 extern "C"
-void s2_spr_textbox_reset_time(void* spr)
+void s2_spr_textbox_reset_time(void* actor)
 {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSpr());
@@ -1244,7 +1243,7 @@ void s2_actor_set_action(void* actor, const char* action) {
 extern "C"
 bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xmax, float* ymax)
 {
-	const Actor* s2_actor = static_cast<const Actor*>(actor);
+	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	sm::rect r;
 	if (ProxyHelper::ActorGetScissor(s2_actor, r)) {
 		*xmin = r.xmin;
@@ -1262,7 +1261,7 @@ bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xm
 extern "C"
 void s2_actor_set_scissor(void* actor, float xmin, float ymin, float xmax, float ymax)
 {
-	Actor* s2_actor = static_cast<Actor*>(actor);
+	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	sm::rect r;
 	r.xmin = xmin;
 	r.ymin = ymin;

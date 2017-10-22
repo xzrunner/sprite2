@@ -609,7 +609,9 @@ void s2_spr_proxy_get_children(const void* actor, void* children[], int children
 	ProxyHelper::SprGetProxyChildren(*s2_actor->GetSprRaw(), actors);
 	int n = std::min(children_cap, static_cast<int>(actors.size()));
 	for (int i = 0; i < n; ++i) {
-		children[i] = ActorProxyPool::Instance()->Create(actors[i]);
+		ActorProxy* proxy;
+		ActorProxyPool::Instance()->Create(actors[i], proxy);
+		children[i] = proxy;
 	}
 	*count = n;
 }
@@ -866,7 +868,12 @@ void s2_actor_set_frame_ft(void* actor, int frame) {
 	if (!s2_actor->HasFlatten()) {
 		s2_actor->BuildFlatten();
 	}
+
+	//if (!s2_actor->HasFlatten()) {
+	//	s2_actor->BuildFlatten();
+	//}
 	assert(s2_actor->HasFlatten());
+
 	auto spr = s2_actor->GetSprRaw();
 	bool old_inherit_update = spr->IsInheritUpdate();
 	spr->SetInheritUpdate(true);
@@ -899,31 +906,37 @@ int s2_actor_get_component_count(void* actor) {
 }
 
 extern "C"
-void* s2_actor_fetch_child(const void* actor, const char* name) {
+void* s2_actor_fetch_child(const void* actor, const char* name, bool* is_new) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	int name_id = SprNameMap::Instance()->StrToID(StringHelper::FromChar(name));
 	auto child_spr = s2_spr->FetchChildByName(name_id, s2_actor);
 	if (!child_spr) {
+		*is_new = false;
 		return nullptr;
 	} else {
 		auto child_actor = ActorFactory::Create(s2_actor, child_spr);
-		return ActorProxyPool::Instance()->Create(child_actor);
+		ActorProxy* proxy;
+		*is_new = ActorProxyPool::Instance()->Create(child_actor, proxy);
+		return proxy;
 	}
 }
 
 extern "C"
-void* s2_actor_fetch_child_by_index(const void* actor, int idx) {
+void* s2_actor_fetch_child_by_index(const void* actor, int idx, bool* is_new) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
 	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	auto child_spr = s2_spr->FetchChildByIdx(idx, s2_actor);
 	if (!child_spr) {
+		*is_new = false;
 		return nullptr;
 	} else {
 		auto child_actor = ActorFactory::Create(s2_actor, child_spr);
-		return ActorProxyPool::Instance()->Create(child_actor);
+		ActorProxy* proxy;
+		*is_new = ActorProxyPool::Instance()->Create(child_actor, proxy);
+		return proxy;
 	}
 }
 
@@ -1015,8 +1028,13 @@ void* s2_point_query_actor(const void* parent_actor, float x, float y, float mat
 	memcpy(mat, selected_mat.x, sizeof(selected_mat.x));
 #endif // S2_MATRIX_FIX
 
-	auto ret = visitor.GetSelectedActor();
-	return ret ? ActorProxyPool::Instance()->Create(std::const_pointer_cast<s2::Actor>(ret)) : nullptr;
+	auto actor = visitor.GetSelectedActor();
+	if (actor) {
+		ActorProxy* proxy;
+		ActorProxyPool::Instance()->Create(std::const_pointer_cast<s2::Actor>(actor), proxy);
+		return proxy;
+	}
+	return nullptr;
 }
 
 extern "C"
@@ -1134,7 +1152,12 @@ extern "C"
 void* s2_actor_get_parent(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	auto parent = s2_actor->GetParent();
-	return parent ? ActorProxyPool::Instance()->Create(std::const_pointer_cast<Actor>(parent)) : nullptr;
+	if (parent) {
+		ActorProxy* proxy;
+		ActorProxyPool::Instance()->Create(std::const_pointer_cast<Actor>(parent), proxy);
+		return proxy;
+	}
+	return nullptr;
 }
 
 extern "C"
@@ -1308,7 +1331,7 @@ bool s2_actor_get_text_size(const void* actor, float* w, float* h) {
 }
 
 extern "C"
-void* s2_actor_get_anchor_real_for_fetch(void* actor) {
+void* s2_actor_get_anchor_real_for_fetch(void* actor, bool is_new) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	if (s2_actor->GetSprRaw()->GetSymbol()->Type() != SYM_ANCHOR) {
 		return actor;
@@ -1316,8 +1339,12 @@ void* s2_actor_get_anchor_real_for_fetch(void* actor) {
 
 	auto anchor = std::static_pointer_cast<AnchorActor>(s2_actor)->GetAnchorPtr();
 	if (anchor) {
-		ActorProxyPool::Instance()->Delete(s2_actor);
-		return ActorProxyPool::Instance()->Create(anchor);
+		if (is_new) {
+			ActorProxyPool::Instance()->Delete(s2_actor);
+		}
+		ActorProxy* proxy;
+		ActorProxyPool::Instance()->Create(anchor, proxy);
+		return proxy;
 	} else {
 		return actor;
 	}

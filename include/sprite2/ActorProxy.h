@@ -25,7 +25,8 @@ private:
 class ActorProxyPool
 {
 public:
-	ActorProxy* Create(const ActorPtr& actor);
+	// bool: if is new one
+	bool Create(const ActorPtr& actor, ActorProxy*& out_proxy);
 	void Delete(const ActorPtr& actor);
 
 private:

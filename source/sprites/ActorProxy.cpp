@@ -21,15 +21,17 @@ ActorProxyPool::ActorProxyPool()
 {
 }
 
-ActorProxy* ActorProxyPool::Create(const ActorPtr& actor)
+bool ActorProxyPool::Create(const ActorPtr& actor, ActorProxy*& out_proxy)
 {
 	auto itr = m_hash.find(actor.get());
 	if (itr != m_hash.end()) {
-		return itr->second.get();
+		out_proxy = itr->second.get();
+		return false;
 	} else {
 		auto new_p = mm::allocate_shared<ActorProxy>(actor);
 		m_hash.insert(std::make_pair(actor.get(), new_p));
-		return new_p.get();
+		out_proxy = new_p.get();
+		return true;
 	}
 }
 

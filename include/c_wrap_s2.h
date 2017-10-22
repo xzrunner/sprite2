@@ -176,8 +176,8 @@ int   s2_actor_get_frame(void* actor);
 
 int   s2_actor_get_component_count(void* actor);
 
-void* s2_actor_fetch_child(const void* actor, const char* name);
-void* s2_actor_fetch_child_by_index(const void* actor, int idx);
+void* s2_actor_fetch_child(const void* actor, const char* name, bool* is_new);
+void* s2_actor_fetch_child_by_index(const void* actor, int idx, bool* is_new);
 
 /**
  *  @return
@@ -240,7 +240,7 @@ bool  s2_actor_get_text_size(const void* actor, float* w, float* h);
 // anchor
 //////////////////////////////////////////////////////////////////////////
 
-void* s2_actor_get_anchor_real_for_fetch(void* actor);
+void* s2_actor_get_anchor_real_for_fetch(void* actor, bool is_new);
 void  s2_actor_anchor_deconnect(void* actor);
 
 //////////////////////////////////////////////////////////////////////////

@@ -511,7 +511,9 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		filter = rs.GetFilter()->GetMode();
 	}
 #else
-	filter = rs.GetFilter();
+	if (!rp.IsDisableFilter()) {
+		filter = rs.GetFilter();
+	}
 #endif // S2_FILTER_FULL
 
 	RenderReturn ret = RENDER_OK;
@@ -574,6 +576,9 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		rp_child->render_filter = rf;
 		rp_child->camera = rc;
 
+		if (rp.IsChangeShader()) {
+			mgr->SetShader(sl::FILTER);
+		}
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 		shader->SetMode(sl::FILTER_MODE(filter));
 		ret = DrawSprImplFinal(spr, *rp_child);

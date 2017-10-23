@@ -866,11 +866,10 @@ static S2_MAT
 _get_actor_world_mat(const Actor* actor) 
 {
 	S2_MAT mat;
-	const Actor* curr = actor;
-	while (curr) {
-		mat = mat * actor->GetSprRaw()->GetLocalMat();
-		mat = curr->GetLocalMat() * mat;
-		curr = curr->GetParent().get();
+	while (actor) {
+		mat = mat * actor->GetSpr()->GetLocalMat();
+		mat = actor->GetLocalMat() * mat;
+		actor = actor->GetParent().get();
 	}
 	return mat;
 }

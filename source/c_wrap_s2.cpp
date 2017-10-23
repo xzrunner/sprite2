@@ -869,10 +869,10 @@ void s2_actor_set_frame_ft(void* actor, int frame) {
 		s2_actor->BuildFlatten();
 	}
 
-	//if (!s2_actor->HasFlatten()) {
-	//	s2_actor->BuildFlatten();
-	//}
-	assert(s2_actor->HasFlatten());
+	if (!s2_actor->HasFlatten()) {
+		s2_actor->CreateFlatten();
+		s2_actor->BuildFlatten();
+	}
 
 	auto spr = s2_actor->GetSprRaw();
 	bool old_inherit_update = spr->IsInheritUpdate();

@@ -24,6 +24,8 @@ void ComplexActor::SetAction(int action)
 	m_action = action;
 
 	GetAABB().Update(this);
+
+	SetFlattenDirty();
 }
 
 int ComplexActor::GetAction() const 

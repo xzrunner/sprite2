@@ -8,10 +8,10 @@ LOCAL_MODULE := sprite2
 # LOCAL_CPPFLAGS += -frtti
 
 LOCAL_C_INCLUDES := \
+	${CLIB_PATH} \
 	${SPRITE2_SRC_PATH}/include \
 	${SPRITE2_SRC_PATH}/include/sprite2 \
 	${SM_SRC_PATH} \
-	${CU_SRC_PATH} \
 	${GTXT_SRC_PATH} \
 	${SHADERLAB_SRC_PATH}/include \
 	${UNIRENDER_SRC_PATH}/include \
@@ -29,11 +29,10 @@ LOCAL_C_INCLUDES := \
 	${COOKING_SRC_PATH}/include \
 	${MULTITASK_SRC_PATH}/include \
 	${FLATTEN_SRC_PATH}/include \
+	${MEMMGR_SRC_PATH}/include \
 
 LOCAL_SRC_FILES := \
 	$(subst $(LOCAL_PATH)/,,$(shell find $(LOCAL_PATH) -name "*.cpp" -print)) \
-
-LOCAL_CPPFLAGS  := -std=c++1y
 
 LOCAL_STATIC_LIBRARIES := \
 	sm \

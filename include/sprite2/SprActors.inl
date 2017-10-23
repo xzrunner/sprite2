@@ -37,7 +37,7 @@ const ActorPtr* SprActors::QueryPtr(const Actor* prev) const
 	int idx = -1;
 	if (m_hash) {
 		void* val = ds_hash_query(m_hash, const_cast<Actor*>(prev));
-		int v = reinterpret_cast<int>(val);
+		size_t v = reinterpret_cast<size_t>(val);
 		if (v > 0) {
 			idx = v - 1;
 			assert(idx >= 0 && static_cast<size_t>(idx) < m_actors.size());

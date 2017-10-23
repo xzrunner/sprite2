@@ -50,7 +50,7 @@ TextboxSprite::TextboxSprite(const SymPtr& sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_TEXTBOX);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& tb_sym = S2_VI_PTR_DOWN_CAST<TextboxSymbol>(sym);
+	auto tb_sym = S2_VI_PTR_DOWN_CAST<TextboxSymbol>(sym);
 	assert(tb_sym);
 	m_tb = tb_sym->GetTextbox();
 }

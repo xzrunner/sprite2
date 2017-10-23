@@ -18,7 +18,7 @@ VisitResult QueryLoadedVisitor::Visit(const SprConstPtr& spr, const SprVisitorPa
 		type == SYM_AUDIO) {
 		return VISIT_OVER;
 	} else if (type == SYM_IMAGE) {
-		auto& img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(spr->GetSymbol());
+		auto img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(spr->GetSymbol());
 		if (!img_sym->IsLoaded()) {
 			m_loaded = false;
 			return VISIT_STOP;

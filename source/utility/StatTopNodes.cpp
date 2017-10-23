@@ -53,7 +53,7 @@ void StatTopNodes::Insert(const DrawNode& node)
 		return;
 	}
 
-	CU_LIST<DrawNode>::iterator itr = m_nodes.begin();
+	auto itr = m_nodes.begin();
 	for ( ; itr != m_nodes.end(); ++itr) 
 	{
 		const DrawNode& n = *itr;

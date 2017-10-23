@@ -117,7 +117,7 @@ RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const Rend
 	auto& sym = base_sym ? base_sym : mesh->GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) 
 	{
-	 	auto& img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym);
+	 	auto img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym);
 	 	if(!img_sym->GetTexture()->IsLoadFinished()) {
 	 		return RENDER_ON_LOADING;
 	 	}

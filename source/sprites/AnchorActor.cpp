@@ -33,7 +33,7 @@ void AnchorActor::SetAnchor(const ActorPtr& anchor)
 		GetAABB().SetRect(anchor->GetAABB().GetRect());
 		anchor->GetSprRaw()->ConnectActors(shared_from_this());
 
-		auto& parent = anchor->GetParent();
+		auto parent = anchor->GetParent();
 		if (parent) {
 			const_cast<ActorAABB&>(parent->GetAABB()).SetRect(sm::rect());	// make it empty
 		}

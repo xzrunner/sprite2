@@ -46,7 +46,7 @@ public:
 	}; // Checkpoint
 
 private:
-	CU_LIST<DrawNode> m_nodes;
+	std::list<DrawNode> m_nodes;
 	uint32_t m_min_time;
 
 	CU_SINGLETON_DECLARATION(StatTopNodes);

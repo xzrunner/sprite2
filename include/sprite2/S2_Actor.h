@@ -117,7 +117,7 @@ private:
 		Spr(const SprConstPtr& spr) 
 			: raw_ptr(std::const_pointer_cast<Sprite>(spr).get()) 
 		{
-			smart_ptr = spr;
+			smart_ptr = std::const_pointer_cast<Sprite>(spr);
 		}
 
 	}; // Spr
@@ -131,7 +131,7 @@ private:
 			Set(parent);
 		}
 		void Set(const ActorConstPtr& parent) { 
-			smart_ptr = parent; 
+			smart_ptr = std::const_pointer_cast<Actor>(parent); 
 			raw_ptr = smart_ptr.lock().get();
 		}
 

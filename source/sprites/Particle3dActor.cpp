@@ -10,8 +10,8 @@ namespace s2
 Particle3dActor::Particle3dActor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: Actor(spr, parent)
 {
-	auto& p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
-	auto& p3d_sym = S2_VI_PTR_DOWN_CAST<const Particle3dSymbol>(spr->GetSymbol());
+	auto p3d_spr = S2_VI_PTR_DOWN_CAST<const Particle3dSprite>(spr);
+	auto p3d_sym = S2_VI_PTR_DOWN_CAST<const Particle3dSymbol>(spr->GetSymbol());
 	auto& cfg = p3d_sym->GetEmitterCfg();
 	if (cfg)
 	{

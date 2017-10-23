@@ -36,7 +36,7 @@ AnimSprite::AnimSprite(const SymPtr& sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& anim_sym = S2_VI_PTR_DOWN_CAST<AnimSymbol>(m_sym);
+	auto anim_sym = S2_VI_PTR_DOWN_CAST<AnimSymbol>(m_sym);
 	m_state.Init(anim_sym->GetCopy());
 }
 

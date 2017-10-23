@@ -56,7 +56,7 @@ bool Particle3dBuffer::Update(float time)
 	auto itr = m_emitters.begin();
 	for ( ; itr != m_emitters.end(); ) 
 	{
-		std::shared_ptr<Particle3dEmitter>& emitter = itr->lock();
+		auto emitter = itr->lock();
 		if (!emitter || emitter->IsFinished()) {
 			itr = m_emitters.erase(itr);
 		} else {

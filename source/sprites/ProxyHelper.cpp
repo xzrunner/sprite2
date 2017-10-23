@@ -1369,7 +1369,7 @@ bool ProxyHelper::ActorGetComponentCount(const Actor* actor, int& count)
 	{
 		const auto& spr = S2_VI_DOWN_CAST<ComplexSprite*>(
 			const_cast<Sprite*>(actor->GetSprRaw()));
-		auto& sym = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(spr->GetSymbol());
+		auto sym = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(spr->GetSymbol());
 		count = sym->GetActionChildren(spr->GetAction()).size();
 		return true;
 	}
@@ -1401,7 +1401,7 @@ void ProxyHelper::ActorSetAction(Actor* actor, const CU_STR& action)
 	} 
 	else if (type == SYM_COMPLEX)
 	{
-		auto& sym_complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
+		auto sym_complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
 		auto actor_complex = static_cast<ComplexActor*>(actor);
 		int action_idx = sym_complex->GetActionIdx(action);
 		actor_complex->SetAction(action_idx);
@@ -1414,7 +1414,7 @@ bool ProxyHelper::ActorGetScissor(const Actor* actor, sm::rect& rect)
 	int type = sym->Type();
 	if (type == SYM_PROXY)
 	{
-		auto& proxy_sym = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym);
+		auto proxy_sym = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym);
 		auto& items = proxy_sym->GetItems();
 		if (items.empty()) {
 			return false;
@@ -1434,7 +1434,7 @@ bool ProxyHelper::ActorGetScissor(const Actor* actor, sm::rect& rect)
 	}
 	else if (type == SYM_COMPLEX)
 	{
-		auto& complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
+		auto complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
 		rect = complex->GetScissor();
 		return true;
 	}
@@ -1450,7 +1450,7 @@ void ProxyHelper::ActorSetScissor(Actor* actor, const sm::rect& rect)
 	int type = sym->Type();
 	if (type == SYM_PROXY)
 	{
-		auto& proxy_sym = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym);
+		auto proxy_sym = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym);
 		auto& items = proxy_sym->GetItems();
 		for (int i = 0, n = items.size(); i < n; ++i) {
 			ActorSetScissor(items[i].second->QueryActor(items[i].first.get()), rect);
@@ -1458,7 +1458,7 @@ void ProxyHelper::ActorSetScissor(Actor* actor, const sm::rect& rect)
 	}
 	else if (type == SYM_COMPLEX)
 	{
-		auto& sym_complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
+		auto sym_complex = S2_VI_PTR_DOWN_CAST<const ComplexSymbol>(sym);
 		std::const_pointer_cast<ComplexSymbol>(sym_complex)->SetScissor(rect);
 		
 		// update aabb

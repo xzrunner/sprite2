@@ -44,13 +44,13 @@ VisitResult SetStaticFrameVisitor::Visit(const SprConstPtr& spr, const SprVisito
 	{
 	case SYM_ANIMATION:
 		{
-			auto& anim_spr = std::const_pointer_cast<AnimSprite>(S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr));
+			auto anim_spr = std::const_pointer_cast<AnimSprite>(S2_VI_PTR_DOWN_CAST<const AnimSprite>(spr));
 			anim_spr->SetFrame(UpdateParams(actor), m_static_frame);
 		}
 		break;
 	case SYM_ANIM2:
 		{
-			auto& anim2_spr = S2_VI_PTR_DOWN_CAST<const Anim2Sprite>(spr);
+			auto anim2_spr = S2_VI_PTR_DOWN_CAST<const Anim2Sprite>(spr);
 			if (anim2_spr->GetStaticTime() != m_static_frame) {
 				std::const_pointer_cast<Anim2Sprite>(anim2_spr)->SetStaticTime(UpdateParams(), m_static_frame);
 			}
@@ -61,7 +61,7 @@ VisitResult SetStaticFrameVisitor::Visit(const SprConstPtr& spr, const SprVisito
 		break;
 	case SYM_AUDIO:
 		{
-			auto& audio_sym = S2_VI_PTR_DOWN_CAST<const AudioSymbol>(spr->GetSymbol());
+			auto audio_sym = S2_VI_PTR_DOWN_CAST<const AudioSymbol>(spr->GetSymbol());
 			auto& source = std::const_pointer_cast<AudioSymbol>(audio_sym)->GetSource();
 			if (source) {
 				source->Seek(m_static_frame / FPS);

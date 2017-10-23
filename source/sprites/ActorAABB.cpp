@@ -67,7 +67,7 @@ void ActorAABB::UpdateParent(const Actor* curr)
 		return;
 	}
 
-	auto& parent = curr->GetParent();
+	auto parent = curr->GetParent();
 	if (!parent) {
 		return;
 	}
@@ -125,7 +125,7 @@ sm::rect ActorAABB::UpdateTight(const Actor* curr)
 		trans_r.Combine(mat * bounding[i]);
 	}
 
-	auto& parent = curr->GetParent();
+	auto parent = curr->GetParent();
 	if (!parent) {
 		return trans_r;
 	}

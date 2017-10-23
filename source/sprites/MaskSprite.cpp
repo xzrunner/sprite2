@@ -49,7 +49,7 @@ MaskSprite::~MaskSprite()
 
 void MaskSprite::OnMessage(const UpdateParams& up, Message msg)
 {
-	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
+	auto sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 
 	UpdateParams up_child(up);
 	up_child.Push(this);
@@ -83,7 +83,7 @@ bool MaskSprite::Update(const UpdateParams& up)
 	UpdateParams up_child(up);
 	up_child.Push(this);
 
-	auto& sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
+	auto sym = S2_VI_PTR_DOWN_CAST<MaskSymbol>(m_sym);
 	if (auto& base = sym->GetBase()) {
 		up_child.SetActor(base->QueryActor(up.GetActor()));
 		if (std::const_pointer_cast<Sprite>(base)->Update(up_child)) {

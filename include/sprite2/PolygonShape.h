@@ -2,11 +2,10 @@
 #define _SPRITE2_POLYGON_SHAPE_H_
 
 #include "PolylineShape.h"
+#include "Polygon.h"
 
 namespace s2
 {
-
-class Polygon;
 
 class PolygonShape : public PolylineShape
 {

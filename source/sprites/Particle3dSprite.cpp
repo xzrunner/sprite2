@@ -78,7 +78,7 @@ Particle3dSprite::Particle3dSprite(const SymPtr& sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_PARTICLE3D);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& p3d_sym = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(m_sym);
+	auto p3d_sym = S2_VI_PTR_DOWN_CAST<Particle3dSymbol>(m_sym);
 	m_loop  = p3d_sym->IsLoop();
 	m_local = p3d_sym->IsLocal();
 

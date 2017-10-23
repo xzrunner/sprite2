@@ -245,7 +245,7 @@ void Scale9::ResizeSprite(SCALE9_IDX idx, const sm::vec2& center, float dst_w, f
 	}
 
 	auto& spr = m_grids[idx];
-	auto& img_sym = S2_VI_PTR_DOWN_CAST<ImageSymbol>(spr->GetSymbol());
+	auto img_sym = S2_VI_PTR_DOWN_CAST<ImageSymbol>(spr->GetSymbol());
 
 	if (dst_w < 0) { dst_w = 1; }
 	if (dst_h < 0) { dst_h = 1; }

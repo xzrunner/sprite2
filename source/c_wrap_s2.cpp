@@ -225,16 +225,25 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	DrawNode::Draw(s2_actor->GetSprRaw(), *rp);
 }
 
+// todo: build flatten async
+static void check_and_build_flatten(const ActorPtr& actor)
+{
+	if (!actor->HasFlatten()) {
+		actor->BuildFlatten();
+	}
+	if (!actor->HasFlatten()) {
+		actor->CreateFlatten();
+		actor->BuildFlatten();
+	}
+	assert(actor->HasFlatten());
+}
+
 extern "C"
 void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 	                 float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
 {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	if (!s2_actor->HasFlatten()) {
-		s2_actor->BuildFlatten();
-	}
-	assert(s2_actor->HasFlatten());
-
+	check_and_build_flatten(s2_actor);
 	//// todo: build flatten async
 	//if (!s2_actor->HasFlatten()) {
 	//	return s2_spr_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax, flag, min_edge);
@@ -730,11 +739,7 @@ extern "C"
 void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 	                  float xmin, float ymin, float xmax, float ymax) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
-	if (!s2_actor->HasFlatten()) {
-		s2_actor->BuildFlatten();
-	}
-	assert(s2_actor->HasFlatten());
-
+	check_and_build_flatten(s2_actor);
 	//// todo: build flatten async
 	//if (!s2_actor->HasFlatten()) {
 	//	return s2_actor_draw(actor, x, y, angle, sx, sy, xmin, ymin, xmax, ymax);
@@ -811,10 +816,11 @@ void s2_actor_update(void* actor, bool force) {
 extern "C"
 void  s2_actor_update_ft(void* actor, bool force) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	if (!s2_actor->HasFlatten()) {
-		s2_actor->BuildFlatten();
-	}
-	assert(s2_actor->HasFlatten());
+	check_and_build_flatten(s2_actor);
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	return s2_actor_update()
+	//}
 
 	const Sprite& spr(*s2_actor->GetSpr());
 	int old_inherit_update = ProxyHelper::SprGetInheritUpdate(spr);
@@ -868,15 +874,11 @@ void s2_actor_set_frame(void* actor, int frame) {
 extern "C"
 void s2_actor_set_frame_ft(void* actor, int frame) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
-	if (!s2_actor->HasFlatten()) {
-		s2_actor->BuildFlatten();
-	}
-
-	if (!s2_actor->HasFlatten()) {
-		s2_actor->CreateFlatten();
-		s2_actor->BuildFlatten();
-	}
-	assert(s2_actor->HasFlatten());
+	check_and_build_flatten(s2_actor);
+	//// todo: build flatten async
+	//if (!s2_actor->HasFlatten()) {
+	//	return s2_actor_set_frame()
+	//}
 
 	auto spr = s2_actor->GetSprRaw();
 	bool old_inherit_update = spr->IsInheritUpdate();

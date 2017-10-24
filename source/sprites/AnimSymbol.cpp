@@ -74,39 +74,48 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 
 RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
 {	
-	if (!spr) {
-		return RENDER_NO_DATA;
-	}
-
-#ifndef S2_DISABLE_STATISTICS
-	int id = spr->GetSymbol()->GetID();
-	//StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
-	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIMATION);
-//	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
-#endif // S2_DISABLE_STATISTICS
-
 	RenderReturn ret = RENDER_OK;
+	if (spr)
+	{
+#ifndef S2_DISABLE_STATISTICS
+		int id = spr->GetSymbol()->GetID();
+		//StatTopNodes::Checkpoint cp(id, rp.parent_id, rp.level);
+		StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIMATION);
+		//	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
+#endif // S2_DISABLE_STATISTICS
 
-	RenderParamsProxy rp_proxy;
-	RenderParams* rp_child = rp_proxy.obj;
-	memcpy(rp_child, &rp, sizeof(rp));
+		RenderParamsProxy rp_proxy;
+		RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
 
 #ifndef S2_DISABLE_STATISTICS
-	rp_child->parent_id = id;
-	rp_child->level = rp.level + 1;
+		rp_child->parent_id = id;
+		rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
-	if (DrawNode::Prepare(rp, spr, *rp_child)) {
-		auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
-		const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
-		ret = curr.Draw(*rp_child);
-	}
 
+		if (DrawNode::Prepare(rp, spr, *rp_child)) {
+			auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
+			const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
+			ret = curr.Draw(*rp_child);
+		}
+	}
+	else
+	{
+		ret = m_state.GetOrigin().Draw(rp);
+	}
 	return ret;
 }
 
 RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return RENDER_SKIP;
+}
+
+bool AnimSymbol::Update(const UpdateParams& up, float time)
+{
+	auto& curr = m_state.GetOrigin();
+	curr.SetTime(time);
+	return curr.Update(up, this, NULL);
 }
 
 int AnimSymbol::GetMaxFrameIdx() const
@@ -163,6 +172,11 @@ void AnimSymbol::LoadCopy()
 	m_copy->LoadFromSym(*this);
 }
 
+void AnimSymbol::BuildCurr()
+{
+	m_state.Init(m_copy);
+}
+
 void AnimSymbol::AddLayer(LayerPtr& layer, int idx)
 {
 	if (idx < 0) {
@@ -178,6 +192,7 @@ bool AnimSymbol::Clear()
 {
 	bool dirty = false;
 	m_layers.clear();
+		
 	m_aabb.MakeEmpty();
 	return dirty;	
 }

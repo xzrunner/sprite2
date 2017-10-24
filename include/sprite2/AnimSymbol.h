@@ -3,6 +3,7 @@
 
 #include "S2_Symbol.h"
 #include "AnimLerp.h"
+#include "sprite2/AnimState.h"
 
 #include <cu/cu_stl.h>
 
@@ -59,6 +60,7 @@ public:
 	virtual void Traverse(const SymbolVisitor& visitor);
 	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual bool Update(const UpdateParams& up, float time);
 
 	auto& GetLayers() const { return m_layers; }
 	int GetMaxFrameIdx() const;
@@ -71,6 +73,8 @@ public:
 	const std::shared_ptr<AnimCopy>& GetCopy() const;
 	void LoadCopy();
 	
+	void BuildCurr();
+
 	/************************************************************************/
 	/* api for dynamic change                                               */
 	/************************************************************************/
@@ -92,6 +96,8 @@ protected:
 	mutable sm::rect m_aabb;
 
 	mutable std::shared_ptr<AnimCopy> m_copy;
+
+	AnimState m_state;
 
 }; // AnimSymbol
 

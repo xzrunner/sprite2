@@ -127,10 +127,9 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	}
 
 	if (spr) {
-		std::shared_ptr<Sprite> s2_spr(*static_cast<std::shared_ptr<Sprite>*>(spr));
-		DrawNode::Draw(s2_spr.get(), *rp_child);
+		DrawNode::Draw(static_cast<Sprite*>(spr), *rp_child);
 	} else if (sym) {
-		std::shared_ptr<Symbol> s2_sym(static_cast<Symbol*>(sym));
+		Symbol* s2_sym = static_cast<Symbol*>(sym);
 		DrawNode::Draw(*s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 		s2_sym->Update(UpdateParams(), time);
 	}
@@ -168,28 +167,28 @@ add_func(p3d_particle* p, void* ud)
 
 	//////////////////////////////////////////////////////////////////////////
 
-	assert(!p->ud);
+	//assert(!p->ud);
 
-	SprPtr spr = nullptr;
+	//SprPtr spr = nullptr;
 
-	SymPtr sym(static_cast<Symbol*>(p->cfg.sym->ud));
-	switch (sym->Type())
-	{
-	case SYM_TRAIL:
-		{
-			auto t_spr = std::make_shared<TrailSprite>(sym);
-			t_spr->SetInP3d();
-			spr = t_spr;
-		}
-		break;
-	case SYM_PARTICLE3D:
-		spr = std::make_shared<Particle3dSprite>(sym);
-		break;
-	}
+	//Symbol* sym(static_cast<Symbol*>(p->cfg.sym->ud));
+	//switch (sym->Type())
+	//{
+	//case SYM_TRAIL:
+	//	{
+	//		auto t_spr = std::make_shared<TrailSprite>(sym);
+	//		t_spr->SetInP3d();
+	//		spr = t_spr;
+	//	}
+	//	break;
+	//case SYM_PARTICLE3D:
+	//	spr = std::make_shared<Particle3dSprite>(sym);
+	//	break;
+	//}
 
-	if (spr) {
-		p->ud = new std::shared_ptr<Sprite>(spr);
-	}
+	//if (spr) {
+	//	p->ud = new std::shared_ptr<Sprite>(spr);
+	//}
 }
 
 static void 
@@ -202,10 +201,10 @@ remove_func(p3d_particle* p, void* ud)
 
 	//////////////////////////////////////////////////////////////////////////
 
-	if (p->ud) {
-		delete static_cast<std::shared_ptr<Sprite>*>(p->ud);
-		p->ud = nullptr;
-	}
+	//if (p->ud) {
+	//	delete static_cast<std::shared_ptr<Sprite>*>(p->ud);
+	//	p->ud = nullptr;
+	//}
 }
 
 void Particle3d::Init()

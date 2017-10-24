@@ -207,6 +207,7 @@ void Particle3dEmitter::SetMat(float* mat)
 
 void Particle3dEmitter::CreateEmitter(const std::shared_ptr<const P3dEmitterCfg>& cfg)
 {
+	m_cfg = cfg;
 	if (m_et) {
 		p3d_emitter_release(m_et);
 		m_et = 0;

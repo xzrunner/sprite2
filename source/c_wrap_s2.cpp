@@ -816,12 +816,15 @@ void  s2_actor_update_ft(void* actor, bool force) {
 	}
 	assert(s2_actor->HasFlatten());
 
-	s2_actor->FlattenUpdate(force);
-
-	//// todo: build flatten async
-	//if (!s2_actor->HasFlatten()) {
-	//	s2_actor_update(actor, force);
-	//}
+	const Sprite& spr(*s2_actor->GetSpr());
+	int old_inherit_update = ProxyHelper::SprGetInheritUpdate(spr);
+	if (old_inherit_update != -1) {
+		ProxyHelper::SprSetInheritUpdate(spr, true);
+		s2_actor->FlattenUpdate(force);
+		ProxyHelper::SprSetInheritUpdate(spr, old_inherit_update == 1);
+	} else {
+		s2_actor->FlattenUpdate(force);
+	}
 }
 
 static void actor_send_msg(void* actor, bool force, Message msg) 

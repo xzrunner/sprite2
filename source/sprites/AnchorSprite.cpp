@@ -3,6 +3,7 @@
 #include "SprVisitorParams.h"
 #include "ActorFactory.h"
 #include "UpdateParams.h"
+#include "SpriteVisitor.h"
 
 namespace s2
 {
@@ -79,15 +80,15 @@ SprPtr AnchorSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 
 VisitResult AnchorSprite::TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const
 {
+	VisitResult ret = VISIT_OVER;
 	auto& actor = params.actor;
 	auto anchor = actor ? static_cast<const AnchorActor*>(actor)->GetAnchorPtr() : nullptr;
 	if (anchor) {
 		SprVisitorParams cp = params;
 		cp.actor = anchor.get();
-		return anchor->GetSprRaw()->TraverseChildren(visitor, cp);
-	} else {
-		return VISIT_OVER;
+		SpriteVisitor::VisitChild(visitor, cp, anchor->GetSpr(), ret);
 	}
+	return ret;
 }
 
 VisitResult AnchorSprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const

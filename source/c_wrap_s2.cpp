@@ -273,6 +273,10 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 
 	rp->actor = nullptr;
 
+	if (s2_actor->GetSprRaw()->IsDTexDisable()) {
+		rp->SetDisableDTexC2(true);
+	}
+
 	//	rp->SetDisableCulling(true);
 
 	if ((flag & S2_DISABLE_DRAW_PARTICLE3D) == 1) {

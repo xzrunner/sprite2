@@ -53,6 +53,7 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
 #include <c_wrap_cooking.h>
+#include <cooking/DisplayList.h>
 
 #include <iostream>
 #include <stack>
@@ -222,9 +223,16 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 		rp->SetDisableDTexC2(true);
 	}
 
-	DrawNode::Draw(s2_actor->GetSprRaw(), *rp);
+#ifdef S2_DISABLE_DEFERRED
+	DrawNode::Draw(nullptr, s2_actor->GetSprRaw(), *rp);
+#else
+	cooking::DisplayList dlist;
+	DrawNode::Draw(&dlist, s2_actor->GetSprRaw(), *rp);
+	dlist.Replay(-1, -1);
+#endif // S2_DISABLE_DEFERRED
 }
 
+#ifndef S2_DISABLE_FLATTEN
 // todo: build flatten async
 static void check_and_build_flatten(const ActorPtr& actor)
 {
@@ -237,7 +245,9 @@ static void check_and_build_flatten(const ActorPtr& actor)
 	}
 	assert(actor->HasFlatten());
 }
+#endif // S2_DISABLE_FLATTEN
 
+#ifndef S2_DISABLE_FLATTEN
 extern "C"
 void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 	                 float xmin, float ymin, float xmax, float ymax, int flag, int min_edge)
@@ -288,6 +298,7 @@ void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx,
 
 	s2_actor->FlattenDraw(*rp);
 }
+#endif // S2_DISABLE_FLATTEN
 
 extern "C"
 void s2_spr_set_pos(void* actor, float x, float y) {
@@ -678,6 +689,7 @@ void s2_actor_release(void* actor) {
 	ActorProxyPool::Instance()->Delete(s2_actor);
 }
 
+#ifndef S2_DISABLE_FLATTEN
 extern "C"
 bool s2_actor_has_ft(const void* actor) {
 	const ActorPtr& s2_actor(static_cast<const ActorProxy*>(actor)->actor);
@@ -695,12 +707,15 @@ void s2_actor_set_ft_dirty(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	s2_actor->SetFlattenDirty();
 }
+#endif // S2_DISABLE_FLATTEN
 
+#ifndef S2_DISABLE_DEFERRED
 extern "C"
 void s2_actor_build_dlist(void* actor) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
 	s2_actor->BuildDisplayList();
 }
+#endif // S2_DISABLE_DEFERRED
 
 extern "C"
 void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
@@ -736,9 +751,10 @@ void s2_actor_draw(const void* actor, float x, float y, float angle, float sx, f
 
 	rp.actor = s2_actor.get();
 	rp.mt = mt * rp.mt;
-	DrawNode::Draw(s2_spr, rp);
+	DrawNode::Draw(nullptr, s2_spr, rp);
 }
 
+#ifndef S2_DISABLE_FLATTEN
 extern "C"
 void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 	                  float xmin, float ymin, float xmax, float ymax) {
@@ -783,6 +799,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 
 	s2_actor->FlattenDraw(rp);
 }
+#endif // S2_DISABLE_FLATTEN
 
 static S2_MAT 
 get_actor_world_mat(const ActorConstPtr& actor) {
@@ -817,6 +834,7 @@ void s2_actor_update(void* actor, bool force) {
 	}
 }
 
+#ifndef S2_DISABLE_FLATTEN
 extern "C"
 void  s2_actor_update_ft(void* actor, bool force) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
@@ -836,6 +854,7 @@ void  s2_actor_update_ft(void* actor, bool force) {
 		s2_actor->FlattenUpdate(force);
 	}
 }
+#endif // S2_DISABLE_FLATTEN
 
 static void actor_send_msg(void* actor, bool force, Message msg) 
 {
@@ -875,6 +894,7 @@ void s2_actor_set_frame(void* actor, int frame) {
 	ProxyHelper::ActorSetFrame(s2_actor.get(), frame);
 }
 
+#ifndef S2_DISABLE_FLATTEN
 extern "C"
 void s2_actor_set_frame_ft(void* actor, int frame) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
@@ -890,6 +910,7 @@ void s2_actor_set_frame_ft(void* actor, int frame) {
 	s2_actor->FlattenSetFrame(frame);
 	spr->SetInheritUpdate(old_inherit_update);
 }
+#endif // S2_DISABLE_FLATTEN
 
 extern "C"
 int s2_actor_get_frame(void* actor) {

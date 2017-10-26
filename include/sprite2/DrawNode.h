@@ -7,6 +7,8 @@
 
 #include <SM_Vector.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -27,7 +29,7 @@ public:
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp = RenderParams());
+	static RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp = RenderParams());
 
 	static RenderReturn Draw(const Symbol& sym,
 		                     const RenderParams& rp = RenderParams(),
@@ -59,9 +61,9 @@ private:
 	static RenderReturn DTexCacheSpr(const Sprite* spr, const RenderParams& rp);
 	static RenderReturn DTexQuerySpr(const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprImpl(const Sprite* spr, const RenderParams& rp);
+	static RenderReturn DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprImplFinal(const Sprite* spr, const RenderParams& rp);
+	static RenderReturn DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
 
 	static bool IsSmall(const Sprite* spr, const Actor* actor, int min_edge);
 

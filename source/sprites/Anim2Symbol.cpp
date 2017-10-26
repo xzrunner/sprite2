@@ -51,7 +51,7 @@ int Anim2Symbol::Type() const
 	return SYM_ANIM2;
 }
 
-RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
@@ -78,6 +78,7 @@ RenderReturn Anim2Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	return RENDER_OK;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_anim || !spr) {
@@ -91,6 +92,7 @@ RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 
 	return RENDER_OK;
 }
+#endif // S2_DISABLE_FLATTEN
 
 void Anim2Symbol::SetAnim(rg_animation* anim)
 {

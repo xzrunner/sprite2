@@ -105,6 +105,8 @@ void Actor::SetCamera(const RenderCamera& camera)
 	m_render->SetCamera(camera);
 }
 
+#ifndef S2_DISABLE_FLATTEN
+
 void Actor::SetFlattenDirty()
 {
 	const Actor* curr = this;
@@ -147,6 +149,8 @@ void Actor::BuildFlatten()
 	}
 }
 
+#endif // S2_DISABLE_FLATTEN
+
 void Actor::InitFlags()
 {
 	m_flags = 0;
@@ -174,10 +178,14 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 	}
 }
 
+#ifndef S2_DISABLE_DEFERRED
+
 void Actor::BuildDisplayList()
 {
-	m_dlist = std::make_shared<cooking::DisplayList>();
+	m_dlist = mm::allocate_shared<cooking::DisplayList>();
 }
+
+#endif // S2_DISABLE_DEFERRED
 
 int Actor::GetAllActorCount()
 {

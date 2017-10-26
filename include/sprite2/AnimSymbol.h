@@ -56,10 +56,12 @@ public:
 	 *  @interface
 	 *    Symbol
 	 */
-	virtual int Type() const;
-	virtual void Traverse(const SymbolVisitor& visitor);
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual int Type() const override;
+	virtual void Traverse(const SymbolVisitor& visitor) override;
+	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+#ifndef S2_DISABLE_FLATTEN
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
+#endif // S2_DISABLE_FLATTEN
 	virtual bool Update(const UpdateParams& up, float time);
 
 	auto& GetLayers() const { return m_layers; }

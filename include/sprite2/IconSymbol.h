@@ -22,10 +22,12 @@ public:
 	 *  @interface
 	 *    Symbol
 	 */
-	virtual int Type() const;
-	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const;
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const;
+	virtual int Type() const override;
+	virtual void Traverse(const SymbolVisitor& visitor) override {}
+	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+#ifndef S2_DISABLE_FLATTEN
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
+#endif // S2_DISABLE_FLATTEN
 
 	void SetIcon(std::unique_ptr<Icon>& icon) { m_icon = std::move(icon); }
 	const std::unique_ptr<Icon>& GetIcon() const { return m_icon; }

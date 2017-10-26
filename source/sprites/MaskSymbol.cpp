@@ -59,7 +59,7 @@ void MaskSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MaskSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MASK);
@@ -80,16 +80,17 @@ RenderReturn MaskSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	} else {
 		if (m_base) {
 			rp_child->actor = m_base->QueryActor(rp.actor);
-			ret = DrawNode::Draw(m_base.get(), *rp_child);
+			ret = DrawNode::Draw(dlist, m_base.get(), *rp_child);
 		} else if (m_mask) {
 			rp_child->actor = m_mask->QueryActor(rp.actor);
-			ret = DrawNode::Draw(m_mask.get(), *rp_child);
+			ret = DrawNode::Draw(dlist, m_mask.get(), *rp_child);
 		}
 	}
 
 	return ret;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, 
 	                              ft::FTList& ft, int pos) const
 {
@@ -107,6 +108,7 @@ RenderReturn MaskSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	}
 	return RENDER_OK;
 }
+#endif // S2_DISABLE_FLATTEN
 
 sm::rect MaskSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {

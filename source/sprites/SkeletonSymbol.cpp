@@ -44,7 +44,7 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn SkeletonSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
@@ -69,7 +69,7 @@ RenderReturn SkeletonSymbol::DrawTree(const RenderParams& rp, const Sprite* spr)
 			sk_spr->GetPose().StoreToSkeleton(*m_skeleton);
 		}
 	}
-	return m_skeleton->Draw(*rp_child);
+	return m_skeleton->Draw(dlist, *rp_child);
 }
 
 sm::rect SkeletonSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

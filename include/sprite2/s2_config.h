@@ -21,3 +21,6 @@
 //#define S2_FILTER_FULL
 
 //#define S2_MULTITHREAD
+
+#define S2_DISABLE_FLATTEN
+//#define S2_DISABLE_DEFERRED

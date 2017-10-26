@@ -49,7 +49,7 @@ int Particle2dSymbol::Type() const
 	return SYM_PARTICLE2D; 
 }
 
-RenderReturn Particle2dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE2D);
@@ -81,6 +81,7 @@ RenderReturn Particle2dSymbol::DrawTree(const RenderParams& rp, const Sprite* sp
 	return ret;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn Particle2dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!spr) {
@@ -97,6 +98,7 @@ RenderReturn Particle2dSymbol::DrawNode(cooking::DisplayList* dlist, const Rende
 
 	return p2d_spr->Draw(rp);
 }
+#endif // S2_DISABLE_FLATTEN
 
 sm::rect Particle2dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {

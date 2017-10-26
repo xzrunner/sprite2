@@ -19,10 +19,12 @@ public:
 	 *  @interface
 	 *    Symbol
 	 */
-	virtual int Type() const;
-	virtual void Traverse(const SymbolVisitor& visitor) {}
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const { return RENDER_NO_DATA; }
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const { return RENDER_SKIP; }
+	virtual int Type() const override;
+	virtual void Traverse(const SymbolVisitor& visitor) override {}
+	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override { return RENDER_NO_DATA; }
+#ifndef S2_DISABLE_FLATTEN
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
+#endif // S2_DISABLE_FLATTEN
 
 	void SetSource(const std::shared_ptr<ua::Source>& src) { m_source = src; }
 	const std::shared_ptr<ua::Source>& GetSource() { return m_source; }

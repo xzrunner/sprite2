@@ -14,6 +14,7 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
+#include <flatten/FTList.h>
 #include <flatten/FTNode.h>
 #include <SM_Rect.h>
 #include <unirender/UR_RenderContext.h>

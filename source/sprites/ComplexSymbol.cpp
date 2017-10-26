@@ -64,7 +64,7 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -119,7 +119,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 				rp_child->parent_id = id;
 				rp_child->level = rp.level + 1;
 	#endif // S2_DISABLE_STATISTICS
-				ret |= DrawNode::Draw((*child_ptr).get(), *rp_child);
+				ret |= DrawNode::Draw(dlist, (*child_ptr).get(), *rp_child);
 			}
 		} else {
 			const SprPtr* child_ptr = &children[0];
@@ -134,7 +134,7 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 					DrawNode::CullingTestOutside((*child_ptr).get(), *rp_child)) {
 					continue;
 				}
-				ret |= DrawNode::Draw((*child_ptr).get(), *rp_child);
+				ret |= DrawNode::Draw(dlist, (*child_ptr).get(), *rp_child);
 			}
 		}
 	}
@@ -144,11 +144,6 @@ RenderReturn ComplexSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 	}
 
 	return ret;
-}
-
-RenderReturn ComplexSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
-{
-	return RENDER_SKIP;
 }
 
 bool ComplexSymbol::Update(const UpdateParams& up, float time)

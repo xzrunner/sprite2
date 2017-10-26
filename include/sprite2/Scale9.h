@@ -49,7 +49,7 @@ public:
 	Scale9(const Scale9& s9);
 	Scale9& operator = (const Scale9& s9);
 
-	RenderReturn Draw(const RenderParams& rp) const;
+	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }

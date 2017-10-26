@@ -56,7 +56,7 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Scale9Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SCALE9);
@@ -70,7 +70,7 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		memcpy(rp_child, &rp, sizeof(rp));
 
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			ret = S2_VI_DOWN_CAST<const Scale9Actor*>(rp.actor)->GetScale9().Draw(*rp_child);
+			ret = S2_VI_DOWN_CAST<const Scale9Actor*>(rp.actor)->GetScale9().Draw(dlist, *rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
@@ -80,19 +80,14 @@ RenderReturn Scale9Symbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		memcpy(rp_child, &rp, sizeof(rp));
 
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
-			ret = S2_VI_DOWN_CAST<const Scale9Sprite*>(spr)->GetScale9().Draw(*rp_child);
+			ret = S2_VI_DOWN_CAST<const Scale9Sprite*>(spr)->GetScale9().Draw(dlist, *rp_child);
 		} else {
 			ret = RENDER_INVISIBLE;
 		}
 	} else {
-		ret = m_s9.Draw(rp);
+		ret = m_s9.Draw(dlist, rp);
 	}
 	return ret;
-}
-
-RenderReturn Scale9Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
-{
-	return RENDER_SKIP;
 }
 
 void Scale9Symbol::Resize(float width, float height)

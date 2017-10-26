@@ -31,7 +31,7 @@ int ModelSymbol::Type() const
 	return SYM_MODEL;
 }
 
-RenderReturn ModelSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 // 	if (!spr) {
 // 		return;

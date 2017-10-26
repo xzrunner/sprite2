@@ -61,8 +61,10 @@ static const uint32_t S2_DISABLE_DRAW_PARTICLE3D   = 0x00000001;
 
 void  s2_spr_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 				  float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
+#ifndef S2_DISABLE_FLATTEN
 void  s2_spr_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 				     float xmin, float ymin, float xmax, float ymax, int flag, int min_edge);
+#endif // S2_DISABLE_FLATTEN
 
 void  s2_spr_set_pos(void* actor, float x, float y);
 void  s2_spr_set_angle(void* actor, float angle);
@@ -152,18 +154,24 @@ void* s2_actor_get_real_ptr(void* actor);
 //void  s2_actor_retain(void* actor);
 void  s2_actor_release(void* actor);
 
+#ifndef S2_DISABLE_FLATTEN
 bool  s2_actor_has_ft(const void* actor);
 void  s2_actor_build_ft(void* actor);
 void  s2_actor_set_ft_dirty(void* actor);
+#endif // S2_DISABLE_FLATTEN
 
 void  s2_actor_build_dlist(void* actor);
 
 void  s2_actor_draw(const void* actor, float x, float y, float angle, float sx, float sy,
 					float xmin, float ymin, float xmax, float ymax);
+#ifndef S2_DISABLE_FLATTEN
 void  s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx, float sy,
 					   float xmin, float ymin, float xmax, float ymax);
+#endif // S2_DISABLE_FLATTEN
 void  s2_actor_update(void* actor, bool force);
+#ifndef S2_DISABLE_FLATTEN
 void  s2_actor_update_ft(void* actor, bool force);
+#endif // S2_DISABLE_FLATTEN
 
 void  s2_actor_msg_start(void* actor, bool force);
 void  s2_actor_msg_play(void* actor, bool force);
@@ -171,7 +179,9 @@ void  s2_actor_msg_stop(void* actor, bool force);
 void  s2_actor_msg_clear(void* actor, bool force);
 
 void  s2_actor_set_frame(void* actor, int frame);
+#ifndef S2_DISABLE_FLATTEN
 void  s2_actor_set_frame_ft(void* actor, int frame);
+#endif // S2_DISABLE_FLATTEN
 int   s2_actor_get_frame(void* actor);
 
 int   s2_actor_get_component_count(void* actor);

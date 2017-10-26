@@ -38,7 +38,7 @@ RenderReturn DrawOuterGlow::Draw(const Sprite* spr, const RenderParams& rp, int 
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
-	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
+	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	return ret;
 }

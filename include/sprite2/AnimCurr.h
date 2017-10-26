@@ -11,6 +11,8 @@
 
 #include <memory>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -51,7 +53,7 @@ public:
 
 	int GetSlotSize() const { return m_slots.size(); }
 
-	RenderReturn Draw(const RenderParams& rp) const;
+	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void Clear();
 

@@ -98,13 +98,18 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	return true;
 }
 
-RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 	if (!rp.IsDisableCulling() && CullingTestOutside(spr, rp)) {
 		return RENDER_OUTSIDE;
 	}
 	if (!spr->IsDTexForceCached()) {
-		return DrawSprImpl(spr, rp);
+		return DrawSprImpl(dlist, spr, rp);
+	}
+
+	// todo: not support deferred draw
+	if (dlist) {
+		return RENDER_SKIP;
 	}
 
 	RenderReturn ret = RENDER_OK;
@@ -114,7 +119,7 @@ RenderReturn DrawNode::Draw(const Sprite* spr, const RenderParams& rp)
 		if (spr->IsDTexCacheBegin()) {
 			ret = DTexCacheSpr(spr, rp);
 		} else {
-			ret = DrawSprImpl(spr, rp);
+			ret = DrawSprImpl(dlist, spr, rp);
 			spr->SetDTexCacheBegin(true);
 		}
 	} else {
@@ -169,7 +174,7 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  		}
  	}
  
- 	RenderReturn ret = sym.DrawTree(*rp_child);
+ 	RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
 
 	return ret;
 }
@@ -213,7 +218,7 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 		}
 	}
 
-	RenderReturn ret = sym.DrawTree(*rp_child);
+	RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
 
 	return ret;
 }
@@ -315,7 +320,7 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, Re
 	} else {
 		rp_child->mt = spr->GetLocalMat().Inverted();
 	}
-	RenderReturn ret = DrawSprImpl(spr, *rp_child);
+	RenderReturn ret = DrawSprImpl(nullptr, spr, *rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
@@ -450,7 +455,7 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 	const float* texcoords = DTEX_SYM_QUERY(uid, tex_id, block_id);
 	RenderReturn ret = RENDER_OK;
 	if (!texcoords) {
-		ret = DrawSprImpl(spr, rp);
+		ret = DrawSprImpl(nullptr, spr, rp);
 		spr->SetDTexForceCachedDirty(true);
 	} else {
 		ret = DrawSprFromRT(spr, rp, texcoords, tex_id);
@@ -458,7 +463,7 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 	const RenderShader& spr_s = spr->GetShader();
 
@@ -581,7 +586,7 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		}
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 		shader->SetMode(sl::FILTER_MODE(filter));
-		ret = DrawSprImplFinal(spr, *rp_child);
+		ret = DrawSprImplFinal(dlist, spr, *rp_child);
 #endif // S2_FILTER_FULL
 	} 
 	else 
@@ -595,13 +600,13 @@ RenderReturn DrawNode::DrawSprImpl(const Sprite* spr, const RenderParams& rp)
 		memcpy(rp_child, &rp, sizeof(rp));
 
 		rp_child->camera = rc;
-		ret = DrawSprImplFinal(spr, *rp_child);
+		ret = DrawSprImplFinal(dlist, spr, *rp_child);
 	}
 
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawNode::DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 // 	// for debug
 // 	if (spr->GetSymbol()->GetID() == 1079524) {
@@ -613,7 +618,7 @@ RenderReturn DrawNode::DrawSprImplFinal(const Sprite* spr, const RenderParams& r
 	if (fabs(ds - 1) > FLT_EPSILON) {
 		DrawDownsample::Draw(spr, rp, ds);
 	} else {
-		ret = spr->GetSymbol()->DrawTree(rp, spr);
+		ret = spr->GetSymbol()->DrawTree(dlist, rp, spr);
 	}
 	if (AFTER_SPR) {
 		AFTER_SPR(spr, rp);

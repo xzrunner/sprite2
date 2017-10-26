@@ -12,6 +12,8 @@
 
 #include <memory>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -28,7 +30,7 @@ public:
 	VIRTUAL_INHERITANCE void Rotate(float rot);
 	VIRTUAL_INHERITANCE void Scale(const sm::vec2& scale);
 
-	RenderReturn Draw(const RenderParams& rp) const;
+	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	void Update();
 
 	bool ConnectChild(const std::shared_ptr<Joint>& child);

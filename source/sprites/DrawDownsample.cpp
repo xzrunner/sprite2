@@ -69,7 +69,7 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	rp_child->ClearViewRegion();
 
 	spr->SetMatDisable(true);
-	spr->GetSymbol()->DrawTree(*rp_child, spr);
+	spr->GetSymbol()->DrawTree(nullptr, *rp_child, spr);
 	spr->SetMatDisable(false);
 
 	mgr->FlushShader();

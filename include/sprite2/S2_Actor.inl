@@ -66,11 +66,15 @@ void Actor::FlattenSetFrame(int frame)
 
 #endif // S2_DISABLE_FLATTEN
 
+#ifndef S2_DISABLE_DEFERRED
+
 inline
 void Actor::SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist)
 {
 	m_dlist = dlist;
 }
+
+#endif // S2_DISABLE_DEFERRED
 
 }
 

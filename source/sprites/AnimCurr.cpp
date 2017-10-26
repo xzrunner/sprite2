@@ -290,7 +290,7 @@ VisitResult AnimCurr::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2
 //	return ret;
 //}
 
-RenderReturn AnimCurr::Draw(const RenderParams& rp) const
+RenderReturn AnimCurr::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	if (m_curr.empty()) {
 		return RENDER_NO_DATA;
@@ -306,7 +306,7 @@ RenderReturn AnimCurr::Draw(const RenderParams& rp) const
 	for (int i = 0; i < m_curr_num; ++i, ++curr) {
 		const SprPtr& child = m_slots[*curr];
 		rp_child->actor = child->QueryActor(rp.actor);
-		ret |= DrawNode::Draw(child.get(), *rp_child);
+		ret |= DrawNode::Draw(dlist, child.get(), *rp_child);
 	}
 
 	return ret;

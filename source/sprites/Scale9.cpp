@@ -48,12 +48,12 @@ Scale9& Scale9::operator = (const Scale9& s9)
 	return *this;
 }
 
-RenderReturn Scale9::Draw(const RenderParams& rp) const
+RenderReturn Scale9::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	RenderReturn ret = RENDER_OK;
 	for (int i = 0; i < 9; ++i) {
 		if (m_grids[i]) {
-			ret |= DrawNode::Draw(m_grids[i].get(), rp);
+			ret |= DrawNode::Draw(dlist, m_grids[i].get(), rp);
 		}
 	}
 	return ret;

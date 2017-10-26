@@ -76,7 +76,7 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 	params.mt.Scale(scale, -scale);
 	params.mt.Translate(-dx, dy);
 	params.SetChangeShader(false);
-	DrawNode::Draw(spr, params);
+	DrawNode::Draw(nullptr, spr, params);
 
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	mgr->FlushShader();

@@ -79,8 +79,10 @@ public:
 	virtual void FlattenSetFrame(int frame);
 #endif // S2_DISABLE_FLATTEN
 
+#ifndef S2_DISABLE_DEFERRED
 	void BuildDisplayList();
 	void SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	static int GetAllActorCount();
 
@@ -158,13 +160,15 @@ private:
 	};
 	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
 
-	mutable uint32_t           m_flags;
+	mutable uint32_t m_flags;
 
 #ifndef S2_DISABLE_FLATTEN
-	Flatten           m_flatten;
+	Flatten m_flatten;
 #endif // S2_DISABLE_FLATTEN
 
+#ifndef S2_DISABLE_DEFERRED
 	mutable std::shared_ptr<cooking::DisplayList> m_dlist = nullptr;
+#endif // S2_DISABLE_DEFERRED
 
 }; // Actor
 

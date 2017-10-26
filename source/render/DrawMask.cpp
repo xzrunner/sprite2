@@ -203,7 +203,7 @@ RenderReturn DrawMask::DrawBaseToRT(RenderTarget* rt, const Sprite* base,
 	rp_child->SetDisableDTexC2(rp.IsDisableDTexC2());
 //	rp_child->mt = rp.mt;
 
-	RenderReturn ret = DrawNode::Draw(base, *rp_child);
+	RenderReturn ret = DrawNode::Draw(nullptr, base, *rp_child);
 
 	shader->Commit();
 
@@ -232,7 +232,7 @@ RenderReturn DrawMask::DrawMaskToRT(RenderTarget* rt, const Sprite* mask,
 	rp_child->SetDisableDTexC2(rp.IsDisableDTexC2());
 //	rp_child->mt = rp.mt;
 
-	RenderReturn ret = DrawNode::Draw(mask, *rp_child);
+	RenderReturn ret = DrawNode::Draw(nullptr, mask, *rp_child);
 
 	shader->Commit();
 

@@ -33,8 +33,12 @@ public:
 	virtual ~Symbol();
 	virtual int Type() const = 0;
 	virtual void Traverse(const SymbolVisitor& visitor) = 0;
-	virtual RenderReturn DrawTree(const RenderParams& rp, const Sprite* spr = nullptr) const = 0;
+	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const = 0;
+#ifdef S2_DISABLE_FLATTEN
+	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const final { return RENDER_SKIP; }
+#else
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const = 0;
+#endif // S2_DISABLE_FLATTEN
 	virtual bool Update(const UpdateParams& up, float time) { return false; }
 
 	int GetID() const { return m_id; }

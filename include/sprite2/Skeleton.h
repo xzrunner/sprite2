@@ -9,6 +9,8 @@
 
 #include <memory>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -20,7 +22,7 @@ class Skeleton : private cu::Uncopyable
 public:
 	Skeleton(const std::shared_ptr<Joint>& root, const CU_VEC<std::shared_ptr<Joint>>& all_joints);
 
-	RenderReturn Draw(const RenderParams& rp) const;
+	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	sm::rect GetBounding() const;
 
 	std::shared_ptr<Joint> QueryByPos(const sm::vec2& pos) const;

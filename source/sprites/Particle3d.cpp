@@ -127,7 +127,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	}
 
 	if (spr) {
-		DrawNode::Draw(static_cast<Sprite*>(spr), *rp_child);
+		DrawNode::Draw(nullptr, static_cast<Sprite*>(spr), *rp_child);
 	} else if (sym) {
 		Symbol* s2_sym = static_cast<Symbol*>(sym);
 		DrawNode::Draw(*s2_sym, *rp_child, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));

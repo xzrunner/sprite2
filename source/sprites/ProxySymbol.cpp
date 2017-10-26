@@ -19,11 +19,11 @@ int ProxySymbol::Type() const
 	return SYM_PROXY;
 }
 
-RenderReturn ProxySymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ProxySymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	RenderReturn ret = RENDER_OK;
 	for (auto& item : m_items) {
-		ret |= DrawNode::Draw(item.second.get(), rp);
+		ret |= DrawNode::Draw(dlist, item.second.get(), rp);
 	}
 	return ret;
 }

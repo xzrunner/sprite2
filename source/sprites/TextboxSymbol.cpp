@@ -57,7 +57,7 @@ int TextboxSymbol::Type() const
 	return SYM_TEXTBOX; 
 }
 
-RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TextboxSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
 		return RENDER_NO_DATA;
@@ -71,16 +71,18 @@ RenderReturn TextboxSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) 
 		return RENDER_INVISIBLE;
 	}
 
-	RenderReturn ret = DrawImpl(nullptr, *rp_child, spr);
+	RenderReturn ret = DrawImpl(dlist, *rp_child, spr);
 
 	return ret;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	assert(spr);
 	return DrawImpl(dlist, rp, spr);
 }
+#endif // S2_DISABLE_FLATTEN
 
 sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {

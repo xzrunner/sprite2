@@ -63,7 +63,7 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_tex) {
 		return RENDER_NO_DATA;
@@ -105,19 +105,26 @@ RenderReturn ImageSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) co
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (mgr->GetShaderType() == sl::BLEND) {
-		DrawBlend(*rp_child, vertices, texcoords, tex_id);
+		if (!dlist) {
+			DrawBlend(*rp_child, vertices, texcoords, tex_id);
+		}
 	} else {
 		//const Camera* cam = Blackboard::Instance()->GetCamera();
 		//if (cam && cam->Type() == CAM_PSEUDO3D) {
 		//	DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
 		//} else {
-			DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+			if (dlist) {
+				DrawOrthoDeferred(dlist, *rp_child, vertices, texcoords, tex_id);
+			} else {
+				DrawOrtho(*rp_child, vertices, texcoords, tex_id);
+			}
 		//}
 	}
 
 	return RENDER_OK;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 	                               const RenderParams& rp, 
 	                               const Sprite* spr,
@@ -169,6 +176,7 @@ RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 
 	return RENDER_OK;
 }
+#endif // S2_DISABLE_FLATTEN
 
 sm::vec2 ImageSymbol::GetNoTrimedSize() const
 {

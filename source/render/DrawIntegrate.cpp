@@ -35,7 +35,7 @@ RenderReturn DrawIntegrate::DrawSpr2RT(const Sprite* spr, const RenderParams& rp
 	spr->SetColorDisable(true);
 //	spr->GetSymbol()->Draw(*rp_child, spr);
 	rp_child->SetDisableIntegrate(true);
-	DrawNode::Draw(spr, *rp_child);
+	DrawNode::Draw(nullptr, spr, *rp_child);
 	spr->SetColorDisable(false);
 //	spr->SetMatDisable(false);
 

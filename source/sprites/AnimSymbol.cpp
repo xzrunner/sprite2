@@ -72,7 +72,7 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {	
 	RenderReturn ret = RENDER_OK;
 	if (spr)
@@ -96,19 +96,14 @@ RenderReturn AnimSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
 			const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
-			ret = curr.Draw(*rp_child);
+			ret = curr.Draw(dlist, *rp_child);
 		}
 	}
 	else
 	{
-		ret = m_state.GetOrigin().Draw(rp);
+		ret = m_state.GetOrigin().Draw(dlist, rp);
 	}
 	return ret;
-}
-
-RenderReturn AnimSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
-{
-	return RENDER_SKIP;
 }
 
 bool AnimSymbol::Update(const UpdateParams& up, float time)

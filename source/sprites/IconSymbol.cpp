@@ -55,7 +55,7 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
@@ -88,6 +88,7 @@ RenderReturn IconSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_icon) {
@@ -105,6 +106,7 @@ RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	}
 	return m_icon->Draw(rp, process);
 }
+#endif // S2_DISABLE_FLATTEN
 
 sm::rect IconSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {

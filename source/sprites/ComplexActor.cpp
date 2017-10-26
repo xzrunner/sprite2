@@ -25,7 +25,9 @@ void ComplexActor::SetAction(int action)
 
 	GetAABB().Update(this);
 
+#ifndef S2_DISABLE_FLATTEN
 	SetFlattenDirty();
+#endif // S2_DISABLE_FLATTEN
 }
 
 int ComplexActor::GetAction() const 

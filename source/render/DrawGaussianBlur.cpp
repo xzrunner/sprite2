@@ -126,7 +126,7 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	rp_child->SetDisableFilter(true);
 
 	mgr->SetShader(sl::SPRITE2);
-	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
+	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	rt->Unbind();
 

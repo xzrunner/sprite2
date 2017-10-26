@@ -42,7 +42,7 @@ RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bo
 	} else {
 		rp_child->vertex_offset = - (rp_child->mt * spr->GetPosition());
 	}
-	RenderReturn ret = DrawNode::Draw(spr, *rp_child);
+	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	shader->Commit();
 

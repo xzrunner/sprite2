@@ -18,7 +18,7 @@ int AnchorSymbol::Type() const
 	return SYM_ANCHOR; 
 }
 
-RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn AnchorSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	assert(spr);
 	auto anchor = S2_VI_DOWN_CAST<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
@@ -38,17 +38,12 @@ RenderReturn AnchorSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) c
 		sm::Matrix2D::Mul(spr->GetLocalMat(), rp_child->mt, m);
 		rp_child->mt = m;
 //		rp_child->SetDisableCulling(true);
-		ret = DrawNode::Draw(rp_child->actor->GetSprRaw(), *rp_child);
+		ret = DrawNode::Draw(dlist, rp_child->actor->GetSprRaw(), *rp_child);
 	} else {
 		ret = RENDER_NO_DATA;
 	}
 
 	return ret;
-}
-
-RenderReturn AnchorSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
-{
-	return RENDER_SKIP;
 }
 
 sm::rect AnchorSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

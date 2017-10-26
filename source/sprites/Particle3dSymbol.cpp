@@ -63,7 +63,7 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn Particle3dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -78,10 +78,12 @@ RenderReturn Particle3dSymbol::DrawTree(const RenderParams& rp, const Sprite* sp
 	return DrawImpl(rp, spr);
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return DrawImpl(rp, spr);
 }
+#endif // S2_DISABLE_FLATTEN
 
 bool Particle3dSymbol::Update(const UpdateParams& up, float time)
 {

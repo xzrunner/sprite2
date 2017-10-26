@@ -50,7 +50,7 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-RenderReturn TrailSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TRAIL);

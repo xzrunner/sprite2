@@ -49,7 +49,7 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) const
+RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
@@ -98,6 +98,7 @@ RenderReturn MeshSymbol::DrawTree(const RenderParams& rp, const Sprite* spr) con
 	return ret;
 }
 
+#ifndef S2_DISABLE_FLATTEN
 RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_mesh) {
@@ -118,6 +119,7 @@ RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	}
 	return ret;
 }
+#endif // S2_DISABLE_FLATTEN
 
 bool MeshSymbol::Update(const UpdateParams& up, float time)
 {

@@ -1,11 +1,11 @@
-#include "AnchorSymbol.h"
-#include "AnchorSprite.h"
-#include "AnchorActor.h"
-#include "SymType.h"
-#include "RenderParams.h"
-#include "DrawNode.h"
-#include "S2_Sprite.h"
-#include "BoundingBox.h"
+#include "sprite2/AnchorSymbol.h"
+#include "sprite2/AnchorSprite.h"
+#include "sprite2/AnchorActor.h"
+#include "sprite2/SymType.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/BoundingBox.h"
 
 #include <memmgr/Allocator.h>
 #include <assert.h>

@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_ANIM_STATE_H_
 #define _SPRITE2_ANIM_STATE_H_
 
-#include "sprite2/s2_config.h"
+#include "sprite2/config.h"
 #include "sprite2/AnimCurr.h"
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <memory>
 

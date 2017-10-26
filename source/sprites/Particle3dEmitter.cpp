@@ -1,7 +1,7 @@
-#include "Particle3dEmitter.h"
-#include "P3dRenderParams.h"
-#include "P3dEmitterCfg.h"
-#include "Particle3d.h"
+#include "sprite2/Particle3dEmitter.h"
+#include "sprite2/P3dRenderParams.h"
+#include "sprite2/P3dEmitterCfg.h"
+#include "sprite2/Particle3d.h"
 
 #include <ps_3d.h>
 

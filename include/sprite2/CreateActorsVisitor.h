@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_CREATE_ACTORS_VISITOR_H_
 #define _SPRITE2_CREATE_ACTORS_VISITOR_H_
 
-#include "SpriteVisitor.h"
+#include "sprite2/SpriteVisitor.h"
 
 #include <stack>
 

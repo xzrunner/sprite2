@@ -1,4 +1,4 @@
-#include "S2_Texture.h"
+#include "sprite2/Texture.h"
 
 namespace s2
 {

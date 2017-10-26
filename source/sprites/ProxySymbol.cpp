@@ -1,8 +1,8 @@
-#include "ProxySymbol.h"
-#include "SymType.h"
-#include "S2_Sprite.h"
-#include "S2_Actor.h"
-#include "DrawNode.h"
+#include "sprite2/ProxySymbol.h"
+#include "sprite2/SymType.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Actor.h"
+#include "sprite2/DrawNode.h"
 
 #include <assert.h>
 

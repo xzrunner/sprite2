@@ -1,21 +1,21 @@
-#include "Particle3d.h"
-#include "Particle3dBuffer.h"
-#include "FastBlendMode.h"
-#include "S2_Symbol.h"
-#include "S2_Sprite.h"
-#include "DrawNode.h"
-#include "SymType.h"
-#include "UpdateParams.h"
-#include "P3dRenderParams.h"
+#include "sprite2/Particle3d.h"
+#include "sprite2/Particle3dBuffer.h"
+#include "sprite2/FastBlendMode.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/SymType.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/P3dRenderParams.h"
 
-#include "TrailSymbol.h"
-#include "TrailSprite.h"
-#include "Particle3dSymbol.h"
-#include "Particle3dSprite.h"
+#include "sprite2/TrailSymbol.h"
+#include "sprite2/TrailSprite.h"
+#include "sprite2/Particle3dSymbol.h"
+#include "sprite2/Particle3dSprite.h"
 
 #include <memmgr/Allocator.h>
 #include <ps_3d.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>

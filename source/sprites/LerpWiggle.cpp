@@ -1,4 +1,4 @@
-#include "LerpWiggle.h"
+#include "sprite2/LerpWiggle.h"
 
 #include <cmath>
 

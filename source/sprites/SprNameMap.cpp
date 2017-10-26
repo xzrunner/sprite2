@@ -1,4 +1,4 @@
-#include "SprNameMap.h"
+#include "sprite2/SprNameMap.h"
 
 namespace s2
 {

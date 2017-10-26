@@ -1,5 +1,5 @@
-#include "S2_Mesh.h"
-#include "S2_Symbol.h"
+#include "sprite2/Mesh.h"
+#include "sprite2/Symbol.h"
 
 #include <polymesh/TrianglesMesh.h>
 #include <polymesh/Skin2Mesh.h>

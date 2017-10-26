@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_DRAW_PINGPONG_H_
 #define _SPRITE2_DRAW_PINGPONG_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
-#include "RenderReturn.h"
+#include "sprite2/RenderReturn.h"
 
 namespace s2
 {

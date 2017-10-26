@@ -1,6 +1,6 @@
-#include "MaskActor.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
+#include "sprite2/MaskActor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
 
 namespace s2
 {

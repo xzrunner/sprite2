@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RESET_ACTOR_FLAG_VISITOR_H_
 #define _SPRITE2_RESET_ACTOR_FLAG_VISITOR_H_
 
-#include "SpriteVisitor.h"
+#include "sprite2/SpriteVisitor.h"
 
 namespace s2
 {

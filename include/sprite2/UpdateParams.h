@@ -1,13 +1,13 @@
 #ifndef _SPRITE2_UPDATE_PARAMS_H_
 #define _SPRITE2_UPDATE_PARAMS_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include "sprite2/pre_defined.h"
-#include "sprite2/s2_config.h"
+#include "sprite2/config.h"
 #include S2_MAT_HEADER
 
-#include "FilterMode.h"
+#include "sprite2/FilterMode.h"
 
 #include <memory>
 
@@ -52,6 +52,6 @@ private:
 
 }
 
-#include "UpdateParams.inl"
+#include "sprite2/UpdateParams.inl"
 
 #endif // _SPRITE2_UPDATE_PARAMS_H_

@@ -1,4 +1,4 @@
-#include "SprGeo.h"
+#include "sprite2/SprGeo.h"
 
 #include <string.h>
 

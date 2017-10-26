@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_COLOR_POLYGON_H_
 #define _SPRITE2_COLOR_POLYGON_H_
 
-#include "pre_defined.h"
-#include "Polygon.h"
-#include "PolyType.h"
-#include "Color.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/Polygon.h"
+#include "sprite2/PolyType.h"
+#include "sprite2/Color.h"
 
 namespace s2
 {

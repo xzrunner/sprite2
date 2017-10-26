@@ -1,7 +1,7 @@
-#include "RenderScissor.h"
-#include "RenderScreen.h"
+#include "sprite2/RenderScissor.h"
+#include "sprite2/RenderScreen.h"
 
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <SM_Test.h>
 

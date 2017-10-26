@@ -1,7 +1,7 @@
-#include "AABBHelper.h"
-#include "S2_Symbol.h"
-#include "S2_Sprite.h"
-#include "S2_Actor.h"
+#include "sprite2/AABBHelper.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Actor.h"
 
 #include <SM_Test.h>
 

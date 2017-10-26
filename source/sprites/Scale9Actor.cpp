@@ -1,6 +1,6 @@
-#include "Scale9Actor.h"
-#include "Scale9Sprite.h"
-#include "sprite2/S2_Symbol.h"
+#include "sprite2/Scale9Actor.h"
+#include "sprite2/Scale9Sprite.h"
+#include "sprite2/Symbol.h"
 
 namespace s2
 {

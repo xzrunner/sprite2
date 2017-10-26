@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_PROXY_HELPER_H_
 #define _SPRITE2_PROXY_HELPER_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <cu/cu_stl.h>
 #include <SM_Vector.h>

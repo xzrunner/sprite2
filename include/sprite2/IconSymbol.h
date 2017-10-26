@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_ICON_SYMBOL_H_
 #define _SPRITE2_ICON_SYMBOL_H_
 
-#include "Icon.h"
-#include "S2_Symbol.h"
+#include "sprite2/Icon.h"
+#include "sprite2/Symbol.h"
 
 #include <stdint.h>
 

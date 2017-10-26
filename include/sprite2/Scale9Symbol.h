@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SCALE9_SYMBOL_H_
 #define _SPRITE2_SCALE9_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "Scale9.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Scale9.h"
 
 namespace s2
 {

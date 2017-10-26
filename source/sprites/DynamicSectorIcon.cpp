@@ -1,5 +1,5 @@
-#include "DynamicSectorIcon.h"
-#include "ImageSymbol.h"
+#include "sprite2/DynamicSectorIcon.h"
+#include "sprite2/ImageSymbol.h"
 
 #include <sm_const.h>
 

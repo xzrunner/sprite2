@@ -1,4 +1,4 @@
-#include "LerpCircle.h"
+#include "sprite2/LerpCircle.h"
 
 #include <SM_Calc.h>
 

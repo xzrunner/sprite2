@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_LERP_WIGGLE_H_
 #define _SPRITE2_LERP_WIGGLE_H_
 
-#include "ILerp.h"
-#include "LerpType.h"
+#include "sprite2/ILerp.h"
+#include "sprite2/LerpType.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>

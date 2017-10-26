@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_FILTER_FACTORY_H_
 #define _SPRITE2_FILTER_FACTORY_H_
 
-#include "FilterMode.h"
+#include "sprite2/FilterMode.h"
 #include "sprite2/RenderFilter.h"
 
 #include <cu/cu_macro.h>

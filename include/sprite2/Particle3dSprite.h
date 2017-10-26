@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_PARTICLE3D_SPRITE_H_
 #define _SPRITE2_PARTICLE3D_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "Particle3d.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Particle3d.h"
 
 namespace s2
 {

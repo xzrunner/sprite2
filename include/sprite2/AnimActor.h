@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ANIM_ACTOR_H_
 #define _SPRITE2_ANIM_ACTOR_H_
 
-#include "S2_Actor.h"
+#include "sprite2/Actor.h"
 #include "sprite2/AnimState.h"
 #include "sprite2/AnimCurr.h"
 

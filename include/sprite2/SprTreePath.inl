@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_TREE_PATH_INL_
 #define _SPRITE2_SPR_TREE_PATH_INL_
 
-#include "S2_Sprite.h"
+#include "sprite2/Sprite.h"
 
 #include <assert.h>
 #include <string.h>

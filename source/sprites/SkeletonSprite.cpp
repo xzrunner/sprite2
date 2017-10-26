@@ -1,6 +1,6 @@
-#include "SkeletonSprite.h"
-#include "SkeletonSymbol.h"
-#include "Skeleton.h"
+#include "sprite2/SkeletonSprite.h"
+#include "sprite2/SkeletonSymbol.h"
+#include "sprite2/Skeleton.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

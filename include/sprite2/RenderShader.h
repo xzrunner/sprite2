@@ -1,11 +1,11 @@
 #ifndef _SPRITE2_RENDER_SHADER_H_
 #define _SPRITE2_RENDER_SHADER_H_
 
-#include "s2_config.h"
-#include "BlendMode.h"
-#include "FastBlendMode.h"
-#include "FilterMode.h"
-#include "RenderFilter.h"
+#include "sprite2/config.h"
+#include "sprite2/BlendMode.h"
+#include "sprite2/FastBlendMode.h"
+#include "sprite2/FilterMode.h"
+#include "sprite2/RenderFilter.h"
 
 #include <memory>
 

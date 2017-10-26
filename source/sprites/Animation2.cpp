@@ -1,9 +1,9 @@
-#include "Animation2.h"
-#include "DrawNode.h"
-#include "S2_Symbol.h"
-#include "SymType.h"
-#include "MeshSymbol.h"
-#include "S2_RVG.h"
+#include "sprite2/Animation2.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/SymType.h"
+#include "sprite2/MeshSymbol.h"
+#include "sprite2/RVG.h"
 
 #include <rigging.h>
 

@@ -1,6 +1,6 @@
-#include "AnimActor.h"
-#include "AnimSprite.h"
-#include "AnimSymbol.h"
+#include "sprite2/AnimActor.h"
+#include "sprite2/AnimSprite.h"
+#include "sprite2/AnimSymbol.h"
 
 #include <assert.h>
 

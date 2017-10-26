@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_FILTER_H_
 #define _SPRITE2_RENDER_FILTER_H_
 
-#include "FilterMode.h"
+#include "sprite2/FilterMode.h"
 
 #include <memory>
 

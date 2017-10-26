@@ -1,13 +1,13 @@
-#include "Trail.h"
-#include "S2_Symbol.h"
-#include "RenderParams.h"
-#include "DrawNode.h"
+#include "sprite2/Trail.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/DrawNode.h"
 
 #include <cu/cu_stl.h>
 #include <memmgr/Allocator.h>
 #include <mt_2d.h>
 #include <sm_const.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shape2Shader.h>
 

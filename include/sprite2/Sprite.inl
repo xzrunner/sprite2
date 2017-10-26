@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SPRITE_INL_
 #define _SPRITE2_SPRITE_INL_
 
-#include "SprNameMap.h"
-#include "OBB.h"
+#include "sprite2/SprNameMap.h"
+#include "sprite2/OBB.h"
 
 namespace s2
 {

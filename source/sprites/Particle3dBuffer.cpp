@@ -1,6 +1,6 @@
-#include "Particle3dBuffer.h"
-#include "Particle3dEmitter.h"
-#include "P3dRenderParams.h"
+#include "sprite2/Particle3dBuffer.h"
+#include "sprite2/Particle3dEmitter.h"
+#include "sprite2/P3dRenderParams.h"
 
 namespace s2
 {

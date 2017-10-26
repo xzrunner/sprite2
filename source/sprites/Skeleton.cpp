@@ -1,8 +1,8 @@
-#include "Skeleton.h"
-#include "Joint.h"
-#include "RenderParams.h"
-#include "BoundingBox.h"
-#include "S2_Sprite.h"
+#include "sprite2/Skeleton.h"
+#include "sprite2/Joint.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/BoundingBox.h"
+#include "sprite2/Sprite.h"
 
 #include <SM_Calc.h>
 

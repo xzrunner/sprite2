@@ -1,9 +1,9 @@
-#include "MeshSprite.h"
-#include "MeshSymbol.h"
-#include "S2_Mesh.h"
-#include "UpdateParams.h"
-#include "SymbolVisitor.h"
-#include "S2_Actor.h"
+#include "sprite2/MeshSprite.h"
+#include "sprite2/MeshSymbol.h"
+#include "sprite2/Mesh.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/SymbolVisitor.h"
+#include "sprite2/Actor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

@@ -1,6 +1,6 @@
-#include "PolylineShape.h"
-#include "ShapeConfig.h"
-#include "ShapeVertices.h"
+#include "sprite2/PolylineShape.h"
+#include "sprite2/ShapeConfig.h"
+#include "sprite2/ShapeVertices.h"
 
 #include <SM_Test.h>
 #include <SM_Calc.h>

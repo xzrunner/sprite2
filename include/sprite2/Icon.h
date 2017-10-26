@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_ICON_H_
 #define _SPRITE2_ICON_H_
 
-#include "pre_defined.h"
-#include "RenderReturn.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/RenderReturn.h"
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>

@@ -1,20 +1,20 @@
-#include "FilterFactory.h"
+#include "sprite2/FilterFactory.h"
 
-#include "RFEdgeDetection.h"
-#include "RFRelief.h"
-#include "RFOutline.h"
-#include "RFOuterGlow.h"
+#include "sprite2/RFEdgeDetection.h"
+#include "sprite2/RFRelief.h"
+#include "sprite2/RFOutline.h"
+#include "sprite2/RFOuterGlow.h"
 
-#include "RFGray.h"
-#include "RFBlur.h"
-#include "RFGaussianBlur.h"
+#include "sprite2/RFGray.h"
+#include "sprite2/RFBlur.h"
+#include "sprite2/RFGaussianBlur.h"
 
-#include "RFHeatHaze.h"
-#include "RFShockWave.h"
-#include "RFSwirl.h"
-#include "RFBurningMap.h"
+#include "sprite2/RFHeatHaze.h"
+#include "sprite2/RFShockWave.h"
+#include "sprite2/RFSwirl.h"
+#include "sprite2/RFBurningMap.h"
 
-#include "RFColGrading.h"
+#include "sprite2/RFColGrading.h"
 
 #include <stddef.h>
 #include <assert.h>

@@ -1,5 +1,5 @@
-#include "SpriteVisitor.h"
-#include "S2_Sprite.h"
+#include "sprite2/SpriteVisitor.h"
+#include "sprite2/Sprite.h"
 
 #include <assert.h>
 

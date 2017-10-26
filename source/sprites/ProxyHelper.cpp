@@ -1,27 +1,27 @@
-#include "ProxyHelper.h"
-#include "ProxySymbol.h"
-#include "ProxySprite.h"
-#include "SymType.h"
-#include "S2_Sprite.h"
-#include "S2_Actor.h"
-#include "PointQueryVisitor.h"
-#include "BoundingBox.h"
-#include "UpdateParams.h"
-#include "RenderColor.h"
-#include "SetStaticFrameVisitor.h"
+#include "sprite2/ProxyHelper.h"
+#include "sprite2/ProxySymbol.h"
+#include "sprite2/ProxySprite.h"
+#include "sprite2/SymType.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Actor.h"
+#include "sprite2/PointQueryVisitor.h"
+#include "sprite2/BoundingBox.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/SetStaticFrameVisitor.h"
 
-#include "ComplexSymbol.h"
-#include "ComplexSprite.h"
-#include "ComplexActor.h"
-#include "AnimSymbol.h"
-#include "AnimCurr.h"
-#include "AnimSprite.h"
-#include "Anim2Sprite.h"
-#include "Particle3dSprite.h"
-#include "Particle3dEmitter.h"
-#include "TextboxSprite.h"
-#include "TextboxActor.h"
-#include "Scale9Actor.h"
+#include "sprite2/ComplexSymbol.h"
+#include "sprite2/ComplexSprite.h"
+#include "sprite2/ComplexActor.h"
+#include "sprite2/AnimSymbol.h"
+#include "sprite2/AnimCurr.h"
+#include "sprite2/AnimSprite.h"
+#include "sprite2/Anim2Sprite.h"
+#include "sprite2/Particle3dSprite.h"
+#include "sprite2/Particle3dEmitter.h"
+#include "sprite2/TextboxSprite.h"
+#include "sprite2/TextboxActor.h"
+#include "sprite2/Scale9Actor.h"
 
 #include <SM_Calc.h>
 
@@ -49,7 +49,7 @@ SprPtr ProxyHelper::BuildGroup(const CU_VEC<std::pair<const ActorConstPtr, SprPt
 /* sprite                                                               */
 /************************************************************************/
 
-#include "UpdateParams.h"
+#include "sprite2/UpdateParams.h"
 
 bool ProxyHelper::SprGetPos(const Sprite& spr, sm::vec2& pos)
 {

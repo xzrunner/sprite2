@@ -1,8 +1,8 @@
-#include "TexturePolygon.h"
-#include "ImageSymbol.h"
-#include "RenderParams.h"
-#include "S2_Texture.h"
-#include "TexcoordsMap.h"
+#include "sprite2/TexturePolygon.h"
+#include "sprite2/ImageSymbol.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/Texture.h"
+#include "sprite2/TexcoordsMap.h"
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>

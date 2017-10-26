@@ -1,4 +1,4 @@
-#include "TexcoordsMap.h"
+#include "sprite2/TexcoordsMap.h"
 
 namespace s2
 {

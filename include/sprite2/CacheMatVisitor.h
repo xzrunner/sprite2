@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_CACHE_MAT_VISITOR_H_
 #define _SPRITE2_CACHE_MAT_VISITOR_H_
 
-#include "SymbolVisitor.h"
+#include "sprite2/SymbolVisitor.h"
 
 namespace s2
 {

@@ -1,4 +1,4 @@
-#include "CameraMgr.h"
+#include "sprite2/CameraMgr.h"
 
 namespace s2
 {

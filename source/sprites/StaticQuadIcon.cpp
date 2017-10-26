@@ -1,7 +1,7 @@
-#include "StaticQuadIcon.h"
-#include "RenderParams.h"
-#include "ImageSymbol.h"
-#include "S2_Texture.h"
+#include "sprite2/StaticQuadIcon.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/ImageSymbol.h"
+#include "sprite2/Texture.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>

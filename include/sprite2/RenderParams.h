@@ -1,13 +1,13 @@
 #ifndef _SPRITE2_RENDER_PARAMS_H_
 #define _SPRITE2_RENDER_PARAMS_H_
 
-#include "s2_config.h"
-#include "RenderColor.h"
-#include "RenderShader.h"
-#include "RenderCamera.h"
-#include "pre_defined.h"
-#include "s2_typedef.h"
-#include "ObjectPool.h"
+#include "sprite2/config.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/RenderCamera.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/typedef.h"
+#include "sprite2/ObjectPool.h"
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
@@ -110,6 +110,6 @@ using RenderParamsProxy = ObjProxy<RenderParams>;
 
 }
 
-#include "RenderParams.inl"
+#include "sprite2/RenderParams.inl"
 
 #endif // _SPRITE2_RENDER_PARAMS_H_

@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_SYMBOL_H_
 #define _SPRITE2_SYMBOL_H_
 
-#include "pre_defined.h"
-#include "RenderReturn.h"
-#include "s2_typedef.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/RenderReturn.h"
+#include "sprite2/typedef.h"
 
 #include <cu/uncopyable.h>
 #include <SM_Rect.h>

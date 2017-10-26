@@ -1,9 +1,9 @@
-#include "SprDefault.h"
-#include "SprGeo.h"
-#include "SprRender.h"
-#include "RenderColor.h"
-#include "RenderShader.h"
-#include "RenderCamera.h"
+#include "sprite2/SprDefault.h"
+#include "sprite2/SprGeo.h"
+#include "sprite2/SprRender.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/RenderCamera.h"
 
 namespace s2
 {

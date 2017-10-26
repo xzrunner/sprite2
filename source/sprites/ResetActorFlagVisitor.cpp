@@ -1,5 +1,5 @@
-#include "ResetActorFlagVisitor.h"
-#include "S2_Sprite.h"
+#include "sprite2/ResetActorFlagVisitor.h"
+#include "sprite2/Sprite.h"
 
 namespace s2
 {

@@ -1,8 +1,8 @@
-#include "ModelSymbol.h"
+#include "sprite2/ModelSymbol.h"
 
 #ifndef S2_DISABLE_MODEL
 
-#include "SymType.h"
+#include "sprite2/SymType.h"
 
 #include <model3/Model.h>
 #include <model3/Mesh.h>

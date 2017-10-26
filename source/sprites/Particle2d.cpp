@@ -1,8 +1,8 @@
-#include "Particle2d.h"
-#include "S2_Symbol.h"
-#include "RenderParams.h"
-#include "Color.h"
-#include "DrawNode.h"
+#include "sprite2/Particle2d.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/Color.h"
+#include "sprite2/DrawNode.h"
 
 #include S2_MAT_HEADER
 #include <ps_2d.h>

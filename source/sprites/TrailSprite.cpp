@@ -1,10 +1,10 @@
-#include "TrailSprite.h"
-#include "TrailSymbol.h"
-#include "UpdateParams.h"
-#include "RenderParams.h"
-#include "Trail.h"
-#include "S2_Actor.h"
-#include "TrailEmitter.h"
+#include "sprite2/TrailSprite.h"
+#include "sprite2/TrailSymbol.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/Trail.h"
+#include "sprite2/Actor.h"
+#include "sprite2/TrailEmitter.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

@@ -1,5 +1,5 @@
-#include "CosineShape.h"
-#include "ShapeVertices.h"
+#include "sprite2/CosineShape.h"
+#include "sprite2/ShapeVertices.h"
 
 #include <SM_CosineSmooth.h>
 #include <SM_DouglasPeucker.h>

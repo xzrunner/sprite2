@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_COLOR_H_
 #define _SPRITE2_RENDER_COLOR_H_
 
-#include "Color.h"
+#include "sprite2/Color.h"
 
 namespace s2
 {

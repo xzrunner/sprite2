@@ -1,7 +1,7 @@
-#include "CreateActorsVisitor.h"
-#include "S2_Sprite.h"
-#include "ActorFactory.h"
-#include "SprVisitorParams.h"
+#include "sprite2/CreateActorsVisitor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/ActorFactory.h"
+#include "sprite2/SprVisitorParams.h"
 
 namespace s2
 {

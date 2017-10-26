@@ -1,7 +1,7 @@
-#include "QueryLoadedVisitor.h"
-#include "SymType.h"
-#include "S2_Sprite.h"
-#include "ImageSymbol.h"
+#include "sprite2/QueryLoadedVisitor.h"
+#include "sprite2/SymType.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/ImageSymbol.h"
 
 namespace s2
 {

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_COSINE_SHAPE_H_
 #define _SPRITE2_COSINE_SHAPE_H_
 
-#include "PolylineShape.h"
+#include "sprite2/PolylineShape.h"
 
 namespace s2
 {

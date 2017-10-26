@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SCALE9_H_
 #define _SPRITE2_SCALE9_H_
 
-#include "RenderReturn.h"
-#include "s2_typedef.h"
+#include "sprite2/RenderReturn.h"
+#include "sprite2/typedef.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>

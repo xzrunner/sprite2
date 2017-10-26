@@ -1,4 +1,4 @@
-#include "DynamicRectIcon.h"
+#include "sprite2/DynamicRectIcon.h"
 
 namespace s2
 {

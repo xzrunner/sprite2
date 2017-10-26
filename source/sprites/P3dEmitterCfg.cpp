@@ -1,5 +1,5 @@
-#include "P3dEmitterCfg.h"
-#include "S2_Symbol.h"
+#include "sprite2/P3dEmitterCfg.h"
+#include "sprite2/Symbol.h"
 
 #include <ps_3d.h>
 

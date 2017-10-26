@@ -1,6 +1,6 @@
-#include "Pseudo3DCamera.h"
-#include "S2_RenderContext.h"
-#include "RenderCtxStack.h"
+#include "sprite2/Pseudo3DCamera.h"
+#include "sprite2/RenderContext.h"
+#include "sprite2/RenderCtxStack.h"
 
 #include <c25_camera.h>
 #include <sm_c_vector.h>

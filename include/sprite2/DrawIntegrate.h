@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_DRAW_INTEGRATE_H_
 #define _SPRITE2_DRAW_INTEGRATE_H_
 
-#include "DrawPingPong.h"
+#include "sprite2/DrawPingPong.h"
 
 namespace s2
 {

@@ -1,8 +1,8 @@
-#include "ShapeSymbol.h"
-#include "SymType.h"
-#include "RenderParams.h"
-#include "S2_Sprite.h"
-#include "DrawNode.h"
+#include "sprite2/ShapeSymbol.h"
+#include "sprite2/SymType.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"

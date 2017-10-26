@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_OBJECT_POOL_H_
 #define _SPRITE2_OBJECT_POOL_H_
 
-#include "assert.h"
+#include <assert.h>
 
 namespace s2
 {
@@ -53,6 +53,6 @@ public:
 
 }
 
-#include "ObjectPool.inl"
+#include "sprite2/ObjectPool.inl"
 
 #endif // _SPRITE2_OBJECT_POOL_H_

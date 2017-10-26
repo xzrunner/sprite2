@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_SRT_INL_
 #define _SPRITE2_SPR_SRT_INL_
 
-#include "string.h"
+#include <string.h>
 
 #include <SM_Calc.h>
 

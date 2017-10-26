@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_POLYGON_SHAPE_H_
 #define _SPRITE2_POLYGON_SHAPE_H_
 
-#include "PolylineShape.h"
-#include "Polygon.h"
+#include "sprite2/PolylineShape.h"
+#include "sprite2/Polygon.h"
 
 namespace s2
 {

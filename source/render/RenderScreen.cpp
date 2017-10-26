@@ -1,7 +1,7 @@
-#include "RenderScreen.h"
-#include "RenderCtxStack.h"
+#include "sprite2/RenderScreen.h"
+#include "sprite2/RenderCtxStack.h"
 
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
 namespace s2

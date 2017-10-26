@@ -1,10 +1,10 @@
-#include "ImageSprite.h"
-#include "FilterMode.h"
-#include "RenderShader.h"
-#include "RenderShader.h"
-#include "UpdateParams.h"
-#include "S2_Symbol.h"
-#include "SprGeo.h"
+#include "sprite2/ImageSprite.h"
+#include "sprite2/FilterMode.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/SprGeo.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_TEXTBOX_SPRITE_H_
 #define _SPRITE2_TEXTBOX_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "Textbox.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Textbox.h"
 
 namespace s2
 {

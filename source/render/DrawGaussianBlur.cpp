@@ -1,20 +1,20 @@
-#include "DrawGaussianBlur.h"
-#include "S2_Sprite.h"
-#include "RenderCtxStack.h"
-#include "BoundingBox.h"
-#include "RenderParams.h"
-#include "FilterFactory.h"
-#include "DrawNode.h"
-#include "RenderScissor.h"
-#include "S2_RenderTargetMgr.h"
-#include "S2_RenderTarget.h"
+#include "sprite2/DrawGaussianBlur.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/RenderCtxStack.h"
+#include "sprite2/BoundingBox.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/FilterFactory.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/RenderScissor.h"
+#include "sprite2/RenderTargetMgr.h"
+#include "sprite2/RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #include "sprite2/StatOverdraw.h"
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>

@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_PSEUDO3D_CAMERA_H_
 #define _SPRITE2_PSEUDO3D_CAMERA_H_
 
-#include "Camera.h"
-#include "CameraType.h"
+#include "sprite2/Camera.h"
+#include "sprite2/CameraType.h"
 
 #include <SM_Vector.h>
 #include <SM_Matrix.h>

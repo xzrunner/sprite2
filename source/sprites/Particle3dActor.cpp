@@ -1,8 +1,8 @@
-#include "Particle3dActor.h"
-#include "Particle3dSprite.h"
-#include "Particle3dSymbol.h"
-#include "Particle3dEmitter.h"
-#include "Particle3dBuffer.h"
+#include "sprite2/Particle3dActor.h"
+#include "sprite2/Particle3dSprite.h"
+#include "sprite2/Particle3dSymbol.h"
+#include "sprite2/Particle3dEmitter.h"
+#include "sprite2/Particle3dBuffer.h"
 
 namespace s2
 {

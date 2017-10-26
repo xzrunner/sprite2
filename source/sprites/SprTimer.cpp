@@ -1,11 +1,11 @@
-#include "SprTimer.h"
-#include "Animation.h"
-#include "Animation2.h"
-#include "Particle2d.h"
-#include "Particle3d.h"
-#include "Trail.h"
+#include "sprite2/SprTimer.h"
+#include "sprite2/Animation.h"
+#include "sprite2/Animation2.h"
+#include "sprite2/Particle2d.h"
+#include "sprite2/Particle3d.h"
+#include "sprite2/Trail.h"
 
-#include "UpdateParams.h"
+#include "sprite2/UpdateParams.h"
 
 namespace s2
 {

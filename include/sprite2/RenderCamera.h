@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_CAMERA_H_
 #define _SPRITE2_RENDER_CAMERA_H_
 
-#include "CameraMode.h"
+#include "sprite2/CameraMode.h"
 
 namespace s2
 {

@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_SPRITE_VISITOR_H_
 #define _SPRITE2_SPRITE_VISITOR_H_
 
-#include "pre_defined.h"
+#include "sprite2/pre_defined.h"
 #include S2_MAT_HEADER
-#include "VisitResult.h"
-#include "s2_typedef.h"
+#include "sprite2/VisitResult.h"
+#include "sprite2/typedef.h"
 
 #include <memory>
 

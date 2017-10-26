@@ -1,5 +1,5 @@
-#include "TrailEmitterCfg.h"
-#include "S2_Symbol.h"
+#include "sprite2/TrailEmitterCfg.h"
+#include "sprite2/Symbol.h"
 
 #include <mt_2d.h>
 

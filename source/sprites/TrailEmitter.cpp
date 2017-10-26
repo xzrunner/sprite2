@@ -1,7 +1,7 @@
-#include "TrailEmitter.h"
-#include "RenderParams.h"
-#include "TrailEmitterCfg.h"
-#include "Trail.h"
+#include "sprite2/TrailEmitter.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/TrailEmitterCfg.h"
+#include "sprite2/Trail.h"
 
 #include <mt_2d.h>
 

@@ -1,7 +1,7 @@
-#include "StatImages.h"
+#include "sprite2/StatImages.h"
 
-#include <unirender/UR_RenderContext.h>
-#include <unirender/ur_typedef.h>
+#include <unirender/RenderContext.h>
+#include <unirender/typedef.h>
 #include <shaderlab/ShaderMgr.h>
 
 #include <assert.h>

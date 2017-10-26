@@ -1,4 +1,4 @@
-#include "StatPingPong.h"
+#include "sprite2/StatPingPong.h"
 
 
 #include <stdio.h>

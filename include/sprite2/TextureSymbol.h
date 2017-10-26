@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_TEXTURE_SYMBOL_H_
 #define _SPRITE2_TEXTURE_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "PolygonShape.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/PolygonShape.h"
 
 #include <cu/cu_stl.h>
 

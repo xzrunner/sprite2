@@ -1,4 +1,4 @@
-#include "StatSprCount.h"
+#include "sprite2/StatSprCount.h"
 
 #include <stdio.h>
 #include <string.h>

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STAT_SYM_COUNT_H_
 #define _SPRITE2_STAT_SYM_COUNT_H_
 
-#include "StatSymType.h"
+#include "sprite2/StatSymType.h"
 
 #include <cu/cu_macro.h>
 #include <cu/cu_stl.h>

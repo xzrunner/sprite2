@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_PARTICLE2D_SPRITE_H_
 #define _SPRITE2_PARTICLE2D_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "Particle2d.h"
-#include "RenderReturn.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Particle2d.h"
+#include "sprite2/RenderReturn.h"
 
 struct p2d_emitter;
 

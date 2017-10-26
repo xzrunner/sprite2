@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ACTOR_AABB_H_
 #define _SPRITE2_ACTOR_AABB_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <SM_Rect.h>
 

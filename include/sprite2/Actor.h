@@ -1,13 +1,13 @@
 #ifndef _SPRITE2_ACTOR_H_
 #define _SPRITE2_ACTOR_H_
 
-#include "pre_defined.h"
-#include "s2_typedef.h"
-#include "ActorAABB.h"
-#include "ActorGeo.h"
-#include "ActorDefault.h"
-#include "SprDefault.h"
-#include "SprRender.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/typedef.h"
+#include "sprite2/ActorAABB.h"
+#include "sprite2/ActorGeo.h"
+#include "sprite2/ActorDefault.h"
+#include "sprite2/SprDefault.h"
+#include "sprite2/SprRender.h"
 
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
@@ -174,6 +174,6 @@ private:
 
 }
 
-#include "S2_Actor.inl"
+#include "sprite2/Actor.inl"
 
 #endif // _SPRITE2_ACTOR_H_

@@ -1,12 +1,12 @@
-#include "ProxySprite.h"
-#include "ProxySymbol.h"
-#include "ProxyHelper.h"
-#include "S2_Actor.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "SymType.h"
-#include "UpdateParams.h"
-#include "SprVisitorParams.h"
+#include "sprite2/ProxySprite.h"
+#include "sprite2/ProxySymbol.h"
+#include "sprite2/ProxyHelper.h"
+#include "sprite2/Actor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/SymType.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/SprVisitorParams.h"
 
 namespace s2
 {

@@ -1,7 +1,7 @@
-#include "Scale9Sprite.h"
-#include "Scale9Symbol.h"
-#include "SpriteVisitor.h"
-#include "SprVisitorParams.h"
+#include "sprite2/Scale9Sprite.h"
+#include "sprite2/Scale9Symbol.h"
+#include "sprite2/SpriteVisitor.h"
+#include "sprite2/SprVisitorParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

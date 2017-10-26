@@ -1,5 +1,5 @@
-#include "AudioSymbol.h"
-#include "SymType.h"
+#include "sprite2/AudioSymbol.h"
+#include "sprite2/SymType.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS

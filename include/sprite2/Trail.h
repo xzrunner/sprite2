@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_TRAIL_H_
 #define _SPRITE2_TRAIL_H_
 
-#include "pre_defined.h"
-#include "RenderColor.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/RenderColor.h"
 #include S2_MAT_HEADER
 
 #include <cu/cu_macro.h>

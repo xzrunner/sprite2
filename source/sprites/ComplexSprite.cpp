@@ -1,16 +1,16 @@
-#include "ComplexSprite.h"
-#include "ComplexSymbol.h"
-#include "ComplexActor.h"
-#include "UpdateParams.h"
-#include "SpriteVisitor.h"
-#include "SprVisitorParams.h"
-#include "SymType.h"
-#include "ProxyHelper.h"
+#include "sprite2/ComplexSprite.h"
+#include "sprite2/ComplexSymbol.h"
+#include "sprite2/ComplexActor.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/SpriteVisitor.h"
+#include "sprite2/SprVisitorParams.h"
+#include "sprite2/SymType.h"
+#include "sprite2/ProxyHelper.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <assert.h>
 

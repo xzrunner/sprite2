@@ -1,6 +1,6 @@
-#include "RectShape.h"
-#include "S2_RVG.h"
-#include "RenderParams.h"
+#include "sprite2/RectShape.h"
+#include "sprite2/RVG.h"
+#include "sprite2/RenderParams.h"
 
 #include <SM_Test.h>
 

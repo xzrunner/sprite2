@@ -1,4 +1,4 @@
-#include "LerpSpiral.h"
+#include "sprite2/LerpSpiral.h"
 
 #include <SM_Calc.h>
 

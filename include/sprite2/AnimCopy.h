@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_ANIM_COPY_H_
 #define _SPRITE2_ANIM_COPY_H_
 
-#include "Color.h"
-#include "SprSRT.h"
-#include "AnimLerp.h"
+#include "sprite2/Color.h"
+#include "sprite2/SprSRT.h"
+#include "sprite2/AnimLerp.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>

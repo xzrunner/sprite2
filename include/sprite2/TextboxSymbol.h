@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_TEXTBOX_SYMBOL_H_
 #define _SPRITE2_TEXTBOX_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "Textbox.h"
-#include "pre_defined.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Textbox.h"
+#include "sprite2/pre_defined.h"
 
 #include S2_MAT_HEADER
 

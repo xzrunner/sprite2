@@ -1,11 +1,11 @@
 #ifndef _SPRITE2_ANIM_CURR_H_
 #define _SPRITE2_ANIM_CURR_H_
 
-#include "S2_Message.h"
-#include "AnimCopy.h"
-#include "VisitResult.h"
-#include "AnimCtrl.h"
-#include "RenderReturn.h"
+#include "sprite2/Message.h"
+#include "sprite2/AnimCopy.h"
+#include "sprite2/VisitResult.h"
+#include "sprite2/AnimCtrl.h"
+#include "sprite2/RenderReturn.h"
 
 #include <cu/cu_stl.h>
 

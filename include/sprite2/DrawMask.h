@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_DRAW_MASK_H_
 #define _SPRITE2_DRAW_MASK_H_
 
-#include "pre_defined.h"
-#include "s2_typedef.h"
-#include "RenderReturn.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/typedef.h"
+#include "sprite2/RenderReturn.h"
 
 #include S2_MAT_HEADER
 

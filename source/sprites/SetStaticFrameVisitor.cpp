@@ -1,12 +1,12 @@
-#include "SetStaticFrameVisitor.h"
-#include "SymType.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "AnimSprite.h"
-#include "SprVisitorParams.h"
-#include "UpdateParams.h"
-#include "Anim2Sprite.h"
-#include "AudioSymbol.h"
+#include "sprite2/SetStaticFrameVisitor.h"
+#include "sprite2/SymType.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/AnimSprite.h"
+#include "sprite2/SprVisitorParams.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/Anim2Sprite.h"
+#include "sprite2/AudioSymbol.h"
 
 #include <uniaudio/Source.h>
 

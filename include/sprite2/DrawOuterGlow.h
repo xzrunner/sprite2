@@ -1,12 +1,12 @@
 #ifndef _SPRITE2_DRAW_OUTER_GLOW_H_
 #define _SPRITE2_DRAW_OUTER_GLOW_H_
 
-#include "pre_defined.h"
-#include "RenderReturn.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/RenderReturn.h"
 
 #include S2_MAT_HEADER
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 namespace s2
 {

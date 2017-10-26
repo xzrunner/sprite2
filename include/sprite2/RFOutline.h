@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RF_OUTLINE_H_
 #define _SPRITE2_RF_OUTLINE_H_
 
-#include "RenderFilter.h"
+#include "sprite2/RenderFilter.h"
 
 #include <memmgr/Allocator.h>
 

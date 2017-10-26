@@ -1,6 +1,6 @@
-#include "SkeletonPose.h"
-#include "Skeleton.h"
-#include "Joint.h"
+#include "sprite2/SkeletonPose.h"
+#include "sprite2/Skeleton.h"
+#include "sprite2/Joint.h"
 
 #include <assert.h>
 

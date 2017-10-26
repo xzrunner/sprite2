@@ -1,8 +1,6 @@
-#include "AnchorActor.h"
-#include "S2_Sprite.h"
-
-#include <S2_Sprite.h>
-#include <S2_Symbol.h>
+#include "sprite2/AnchorActor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
 
 namespace s2
 {

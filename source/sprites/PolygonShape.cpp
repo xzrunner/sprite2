@@ -1,5 +1,5 @@
-#include "PolygonShape.h"
-#include "Polygon.h"
+#include "sprite2/PolygonShape.h"
+#include "sprite2/Polygon.h"
 
 #include <SM_Test.h>
 

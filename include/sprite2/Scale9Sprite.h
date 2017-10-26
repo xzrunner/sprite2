@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SCALE9_SPRITE_H_
 #define _SPRITE2_SCALE9_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "Scale9.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Scale9.h"
 
 namespace s2
 {

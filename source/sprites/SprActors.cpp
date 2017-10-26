@@ -1,4 +1,4 @@
-#include "SprActors.h"
+#include "sprite2/SprActors.h"
 
 namespace s2
 {

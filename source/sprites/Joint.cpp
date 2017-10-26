@@ -1,6 +1,6 @@
-#include "Joint.h"
-#include "S2_Sprite.h"
-#include "DrawNode.h"
+#include "sprite2/Joint.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/DrawNode.h"
 
 namespace s2
 {

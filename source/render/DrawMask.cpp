@@ -1,13 +1,13 @@
-#include "DrawMask.h"
-#include "S2_Actor.h"
-#include "RenderCtxStack.h"
-#include "RenderParams.h"
-#include "DrawNode.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "RenderScissor.h"
-#include "S2_RenderTargetMgr.h"
-#include "S2_RenderTarget.h"
+#include "sprite2/DrawMask.h"
+#include "sprite2/Actor.h"
+#include "sprite2/RenderCtxStack.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/RenderScissor.h"
+#include "sprite2/RenderTargetMgr.h"
+#include "sprite2/RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #include "sprite2/StatOverdraw.h"
@@ -16,7 +16,7 @@
 
 #include <memmgr/Allocator.h>
 #include <SM_Rect.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shader.h>
 #include <shaderlab/MaskShader.h>

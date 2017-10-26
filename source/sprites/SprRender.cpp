@@ -1,8 +1,8 @@
-#include "SprRender.h"
-#include "RenderColor.h"
-#include "RenderShader.h"
-#include "RenderCamera.h"
-#include "SprDefault.h"
+#include "sprite2/SprRender.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/RenderCamera.h"
+#include "sprite2/SprDefault.h"
 
 #include <memmgr/Allocator.h>
 

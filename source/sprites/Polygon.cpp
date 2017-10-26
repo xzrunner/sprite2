@@ -1,6 +1,6 @@
-#include "Polygon.h"
-#include "RenderParams.h"
-#include "S2_RVG.h"
+#include "sprite2/Polygon.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/RVG.h"
 
 #include <SM_Process.h>
 

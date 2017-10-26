@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_DYNAMIC_SECTOR_ICON_H_
 #define _SPRITE2_DYNAMIC_SECTOR_ICON_H_
 
-#include "Icon.h"
+#include "sprite2/Icon.h"
 
 namespace s2
 {

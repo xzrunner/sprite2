@@ -1,6 +1,6 @@
-#include "ShapeVertices.h"
-#include "S2_RVG.h"
-#include "RenderParams.h"
+#include "sprite2/ShapeVertices.h"
+#include "sprite2/RVG.h"
+#include "sprite2/RenderParams.h"
 
 namespace s2
 {

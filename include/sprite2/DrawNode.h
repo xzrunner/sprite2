@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_DRAW_NODE_H_
 #define _SPRITE2_DRAW_NODE_H_
 
-#include "pre_defined.h"
-#include "RenderParams.h"
-#include "RenderReturn.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/RenderReturn.h"
 
 #include <SM_Vector.h>
 

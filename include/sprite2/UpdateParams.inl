@@ -1,9 +1,9 @@
 #ifndef _SPRITE2_UPDATE_PARAMS_INL_
 #define _SPRITE2_UPDATE_PARAMS_INL_
 
-#include "S2_Sprite.h"
-#include "S2_Actor.h"
-#include "RenderShader.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Actor.h"
+#include "sprite2/RenderShader.h"
 #include "sprite2/Utility.h"
 
 namespace s2

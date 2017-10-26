@@ -1,6 +1,6 @@
-#include "RenderShader.h"
-#include "RenderFilter.h"
-#include "FilterFactory.h"
+#include "sprite2/RenderShader.h"
+#include "sprite2/RenderFilter.h"
+#include "sprite2/FilterFactory.h"
 
 namespace s2
 {

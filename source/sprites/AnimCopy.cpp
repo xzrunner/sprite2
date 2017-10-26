@@ -1,8 +1,8 @@
-#include "AnimCopy.h"
-#include "AnimSymbol.h"
-#include "S2_Sprite.h"
-#include "RenderColor.h"
-#include "ILerp.h"
+#include "sprite2/AnimCopy.h"
+#include "sprite2/AnimSymbol.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/ILerp.h"
 
 #include <assert.h>
 

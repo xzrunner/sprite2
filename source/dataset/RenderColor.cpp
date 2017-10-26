@@ -1,4 +1,4 @@
-#include "RenderColor.h"
+#include "sprite2/RenderColor.h"
 
 #include <string.h>
 

@@ -1,6 +1,6 @@
-#include "Anim2Sprite.h"
-#include "Anim2Symbol.h"
-#include "UpdateParams.h"
+#include "sprite2/Anim2Sprite.h"
+#include "sprite2/Anim2Symbol.h"
+#include "sprite2/UpdateParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

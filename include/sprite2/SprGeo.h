@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SPR_GEO_H_
 #define _SPRITE2_SPR_GEO_H_
 
-#include "pre_defined.h"
-#include "SprSRT.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/SprSRT.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -95,6 +95,6 @@ private:
 
 }
 
-#include "SprGeo.inl"
+#include "sprite2/SprGeo.inl"
 
 #endif // _SPRITE2_SPR_GEO_H_

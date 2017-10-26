@@ -1,8 +1,8 @@
-#include "AnimSprite.h"
-#include "AnimSymbol.h"
-#include "AnimActor.h"
-#include "UpdateParams.h"
-#include "SprVisitorParams.h"
+#include "sprite2/AnimSprite.h"
+#include "sprite2/AnimSymbol.h"
+#include "sprite2/AnimActor.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/SprVisitorParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_PRE_DEFINED_H_
 #define _SPRITE2_PRE_DEFINED_H_
 
-#include "s2_config.h"
+#include "sprite2/config.h"
 
 namespace s2
 {

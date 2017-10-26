@@ -1,6 +1,6 @@
-#include "OrthoCamera.h"
-#include "S2_RenderContext.h"
-#include "RenderCtxStack.h"
+#include "sprite2/OrthoCamera.h"
+#include "sprite2/RenderContext.h"
+#include "sprite2/RenderCtxStack.h"
 
 namespace s2
 {

@@ -1,9 +1,9 @@
-#include "AnchorSprite.h"
-#include "AnchorActor.h"
-#include "SprVisitorParams.h"
-#include "ActorFactory.h"
-#include "UpdateParams.h"
-#include "SpriteVisitor.h"
+#include "sprite2/AnchorSprite.h"
+#include "sprite2/AnchorActor.h"
+#include "sprite2/SprVisitorParams.h"
+#include "sprite2/ActorFactory.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/SpriteVisitor.h"
 
 namespace s2
 {

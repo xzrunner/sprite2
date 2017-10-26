@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_P3D_RENDER_PARAMS_H_
 #define _SPRITE2_P3D_RENDER_PARAMS_H_
 
-#include "pre_defined.h"
+#include "sprite2/pre_defined.h"
 
 #include S2_MAT_HEADER
-#include "RenderColor.h"
+#include "sprite2/RenderColor.h"
 
 #include <SM_Rect.h>
 

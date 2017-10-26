@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ILERP_H_
 #define _SPRITE2_ILERP_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <stddef.h>
 

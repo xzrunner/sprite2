@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_OBB_H_
 #define _SPRITE2_OBB_H_
 
-#include "BoundingBox.h"
+#include "sprite2/BoundingBox.h"
 
 namespace s2
 {
@@ -36,6 +36,6 @@ private:
 
 }
 
-#include "OBB.inl"
+#include "sprite2/OBB.inl"
 
 #endif // _SPRITE2_OBB_H_

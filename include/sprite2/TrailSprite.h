@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_TRAIL_SPRITE_H_
 #define _SPRITE2_TRAIL_SPRITE_H_
 
-#include "S2_Sprite.h"
+#include "sprite2/Sprite.h"
 
 namespace s2
 {

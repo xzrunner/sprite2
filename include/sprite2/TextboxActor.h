@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_TEXTBOX_ACTOR_H_
 #define _SPRITE2_TEXTBOX_ACTOR_H_
 
-#include "S2_Actor.h"
+#include "sprite2/Actor.h"
 
 #include <cu/cu_stl.h>
 

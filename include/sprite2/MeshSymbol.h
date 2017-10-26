@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_MESH_SYMBOL_H_
 #define _SPRITE2_MESH_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "S2_Mesh.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Mesh.h"
 
 #include <stdint.h>
 

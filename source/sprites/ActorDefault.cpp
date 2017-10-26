@@ -1,5 +1,5 @@
-#include "ActorDefault.h"
-#include "ActorGeo.h"
+#include "sprite2/ActorDefault.h"
+#include "sprite2/ActorGeo.h"
 
 namespace s2
 {

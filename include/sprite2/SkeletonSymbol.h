@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SKELETON_SYMBOL_H_
 #define _SPRITE2_SKELETON_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "Skeleton.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Skeleton.h"
 
 #include <cu/cu_stl.h>
 

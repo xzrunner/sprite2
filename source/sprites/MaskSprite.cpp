@@ -1,9 +1,9 @@
-#include "MaskSprite.h"
-#include "MaskSymbol.h"
-#include "UpdateParams.h"
-#include "S2_Actor.h"
-#include "SpriteVisitor.h"
-#include "SprVisitorParams.h"
+#include "sprite2/MaskSprite.h"
+#include "sprite2/MaskSymbol.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/Actor.h"
+#include "sprite2/SpriteVisitor.h"
+#include "sprite2/SprVisitorParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

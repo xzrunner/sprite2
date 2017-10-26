@@ -1,10 +1,10 @@
-#include "S2_Actor.h"
-#include "S2_Sprite.h"
-#include "SprVisitorParams.h"
-#include "SprSRT.h"
+#include "sprite2/Actor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/SprVisitorParams.h"
+#include "sprite2/SprSRT.h"
 
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
 
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>

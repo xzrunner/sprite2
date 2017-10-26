@@ -1,7 +1,7 @@
-#include "ColorPolygon.h"
-#include "S2_RVG.h"
-#include "RenderColor.h"
-#include "RenderParams.h"
+#include "sprite2/ColorPolygon.h"
+#include "sprite2/RVG.h"
+#include "sprite2/RenderColor.h"
+#include "sprite2/RenderParams.h"
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>

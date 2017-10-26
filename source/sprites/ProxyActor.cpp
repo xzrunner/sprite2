@@ -1,10 +1,10 @@
-#include "ProxyActor.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "SymType.h"
-#include "ProxySymbol.h"
-#include "ActorFactory.h"
-#include "ActorProxy.h"
+#include "sprite2/ProxyActor.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/SymType.h"
+#include "sprite2/ProxySymbol.h"
+#include "sprite2/ActorFactory.h"
+#include "sprite2/ActorProxy.h"
 
 #include <assert.h>
 

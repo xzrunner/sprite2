@@ -1,6 +1,6 @@
-#include "ComplexActor.h"
-#include "ComplexSymbol.h"
-#include "S2_Sprite.h"
+#include "sprite2/ComplexActor.h"
+#include "sprite2/ComplexSymbol.h"
+#include "sprite2/Sprite.h"
 
 namespace s2
 {

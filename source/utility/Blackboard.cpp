@@ -1,5 +1,5 @@
-#include "Blackboard.h"
-#include "Camera.h"
+#include "sprite2/Blackboard.h"
+#include "sprite2/Camera.h"
 
 namespace s2
 {

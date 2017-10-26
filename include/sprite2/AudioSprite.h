@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_AUDIO_SPRITE_H_
 #define _SPRITE2_AUDIO_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "s2_macro.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/macro.h"
 
 namespace s2
 {

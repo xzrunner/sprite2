@@ -1,6 +1,6 @@
-#include "Anim2Curr.h"
-#include "Anim2Symbol.h"
-#include "Animation.h"
+#include "sprite2/Anim2Curr.h"
+#include "sprite2/Anim2Symbol.h"
+#include "sprite2/Animation.h"
 
 #include <rigging.h>
 

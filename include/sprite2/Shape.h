@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SHAPE_H_
 #define _SPRITE2_SHAPE_H_
 
-#include "pre_defined.h"
+#include "sprite2/pre_defined.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>

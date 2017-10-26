@@ -1,10 +1,10 @@
-#include "Scale9.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "DrawNode.h"
-#include "ImageSymbol.h"
-#include "S2_Texture.h"
-#include "SymType.h"
+#include "sprite2/Scale9.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/ImageSymbol.h"
+#include "sprite2/Texture.h"
+#include "sprite2/SymType.h"
 
 #include <SM_Calc.h>
 

@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_DRAW_DOWNSAMPLE_H_
 #define _SPRITE2_DRAW_DOWNSAMPLE_H_
 
-#include "RenderReturn.h"
-#include "s2_typedef.h"
+#include "sprite2/RenderReturn.h"
+#include "sprite2/typedef.h"
 
 namespace s2
 {

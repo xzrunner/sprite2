@@ -1,11 +1,11 @@
 #ifndef _SPRITE2_MODEL_SYMBOL_H_
 #define _SPRITE2_MODEL_SYMBOL_H_
 
-#include "s2_config.h"
+#include "sprite2/config.h"
 
 #ifndef S2_DISABLE_MODEL
 
-#include "S2_Symbol.h"
+#include "sprite2/Symbol.h"
 
 #include <model3/AABB.h>
 

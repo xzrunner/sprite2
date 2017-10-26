@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_ANIM2_SPRITE_H_
 #define _SPRITE2_ANIM2_SPRITE_H_
 
-#include "S2_Sprite.h"
-#include "Anim2Curr.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Anim2Curr.h"
 
 namespace s2
 {

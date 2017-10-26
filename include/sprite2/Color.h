@@ -39,6 +39,6 @@ public:
 
 }
 
-#include "Color.inl"
+#include "sprite2/Color.inl"
 
 #endif // _SPRITE2_COLOR_H_

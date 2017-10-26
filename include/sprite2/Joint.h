@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_JOINT_H_
 #define _SPRITE2_JOINT_H_
 
-#include "pre_defined.h"
-#include "JointPose.h"
-#include "RenderReturn.h"
-#include "s2_typedef.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/JointPose.h"
+#include "sprite2/RenderReturn.h"
+#include "sprite2/typedef.h"
 
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>

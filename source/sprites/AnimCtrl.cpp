@@ -1,5 +1,5 @@
-#include "AnimCtrl.h"
-#include "Animation.h"
+#include "sprite2/AnimCtrl.h"
+#include "sprite2/Animation.h"
 
 #include <assert.h>
 

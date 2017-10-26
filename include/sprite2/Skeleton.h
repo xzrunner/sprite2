@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SKELETON_H_
 #define _SPRITE2_SKELETON_H_
 
-#include "RenderReturn.h"
+#include "sprite2/RenderReturn.h"
 
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>

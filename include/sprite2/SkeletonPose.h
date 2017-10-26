@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SKELETON_POSE_H_
 #define _SPRITE2_SKELETON_POSE_H_
 
-#include "JointPose.h"
+#include "sprite2/JointPose.h"
 
 #include <cu/cu_stl.h>
 

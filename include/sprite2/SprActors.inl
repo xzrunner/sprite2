@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_ACTORS_INL_
 #define _SPRITE2_SPR_ACTORS_INL_
 
-#include "S2_Actor.h"
+#include "sprite2/Actor.h"
 
 #ifdef S2_SPR_ACTORS_HASH
 #include <ds_hash.h>

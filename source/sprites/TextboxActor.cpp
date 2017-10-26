@@ -1,10 +1,9 @@
-#include "TextboxActor.h"
-#include "TextboxSprite.h"
+#include "sprite2/TextboxActor.h"
+#include "sprite2/TextboxSprite.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
 
 #include <gtxt_label.h>
-
-#include <S2_Sprite.h>
-#include <S2_Symbol.h>
 
 namespace s2
 {

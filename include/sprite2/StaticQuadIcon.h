@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_STATIC_QUAD_ICON_H_
 #define _SPRITE2_STATIC_QUAD_ICON_H_
 
-#include "Icon.h"
+#include "sprite2/Icon.h"
 
 namespace s2
 {

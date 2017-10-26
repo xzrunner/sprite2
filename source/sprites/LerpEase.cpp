@@ -1,4 +1,4 @@
-#include "LerpEase.h"
+#include "sprite2/LerpEase.h"
 
 #include <SM_Ease.h>
 

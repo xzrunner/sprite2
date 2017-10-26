@@ -1,4 +1,4 @@
-#include "JointPose.h"
+#include "sprite2/JointPose.h"
 
 #include <SM_Calc.h>
 

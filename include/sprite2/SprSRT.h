@@ -39,6 +39,6 @@ public:
 
 }
 
-#include "SprSRT.inl"
+#include "sprite2/SprSRT.inl"
 
 #endif // _SPRITE2_SPR_SRT_H_

@@ -1,12 +1,12 @@
-#include "DrawIntegrate.h"
+#include "sprite2/DrawIntegrate.h"
 #include "sprite2/StatPingPong.h"
-#include "S2_Sprite.h"
-#include "S2_Symbol.h"
-#include "RenderParams.h"
-#include "DrawNode.h"
+#include "sprite2/Sprite.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/DrawNode.h"
 
 #include <memmgr/Allocator.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 
 namespace s2

@@ -16,6 +16,6 @@ private:
 
 }
 
-#include "Matrix.inl"
+#include "sprite2/Matrix.inl"
 
 #endif // _SPRITE2_MATRIX_H_

@@ -1,9 +1,9 @@
-#include "S2_RenderTarget.h"
-#include "StatImages.h"
+#include "sprite2/RenderTarget.h"
+#include "sprite2/StatImages.h"
 
-#include <unirender/UR_RenderContext.h>
-#include <unirender/UR_RenderTarget.h>
-#include <unirender/UR_Texture.h>
+#include <unirender/RenderContext.h>
+#include <unirender/RenderTarget.h>
+#include <unirender/Texture.h>
 #include <shaderlab/ShaderMgr.h>
 
 namespace s2

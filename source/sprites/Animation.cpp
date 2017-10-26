@@ -1,4 +1,4 @@
-#include "Animation.h"
+#include "sprite2/Animation.h"
 
 namespace s2
 {

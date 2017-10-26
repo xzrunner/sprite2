@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_CIRCLE_SHAPE_H_
 #define _SPRITE2_CIRCLE_SHAPE_H_
 
-#include "Shape.h"
-#include "ShapeType.h"
+#include "sprite2/Shape.h"
+#include "sprite2/ShapeType.h"
 
 namespace s2
 {

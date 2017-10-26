@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_SCALE9_ACTOR_H_
 #define _SPRITE2_SCALE9_ACTOR_H_
 
-#include "S2_Actor.h"
-#include "Scale9.h"
+#include "sprite2/Actor.h"
+#include "sprite2/Scale9.h"
 
 namespace s2
 {

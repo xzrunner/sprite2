@@ -1,4 +1,4 @@
-#include "TextureSprite.h"
+#include "sprite2/TextureSprite.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

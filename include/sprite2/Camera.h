@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_CAMERA_H_
 #define _SPRITE2_CAMERA_H_
 
-#include "CameraType.h"
+#include "sprite2/CameraType.h"
 
 namespace s2
 {

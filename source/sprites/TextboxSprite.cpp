@@ -1,7 +1,7 @@
-#include "TextboxSprite.h"
-#include "TextboxSymbol.h"
-#include "UpdateParams.h"
-#include "TextboxActor.h"
+#include "sprite2/TextboxSprite.h"
+#include "sprite2/TextboxSymbol.h"
+#include "sprite2/UpdateParams.h"
+#include "sprite2/TextboxActor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

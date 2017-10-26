@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_MASK_SYMBOL_H_
 #define _SPRITE2_MASK_SYMBOL_H_
 
-#include "S2_Symbol.h"
+#include "sprite2/Symbol.h"
 
 namespace s2
 {

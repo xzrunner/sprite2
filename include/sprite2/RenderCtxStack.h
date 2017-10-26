@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_CONTEXT_STACK_H_
 #define _SPRITE2_RENDER_CONTEXT_STACK_H_
 
-#include "S2_RenderContext.h"
+#include "sprite2/RenderContext.h"
 
 #include <cu/cu_macro.h>
 #include <cu/cu_stl.h>

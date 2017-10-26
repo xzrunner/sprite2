@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ANIM2_SYMBOL_H_
 #define _SPRITE2_ANIM2_SYMBOL_H_
 
-#include "S2_Symbol.h"
+#include "sprite2/Symbol.h"
 
 #include <cu/cu_stl.h>
 

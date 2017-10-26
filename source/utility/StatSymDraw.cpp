@@ -1,4 +1,4 @@
-#include "StatSymDraw.h"
+#include "sprite2/StatSymDraw.h"
 
 #include <glp_loop.h>
 

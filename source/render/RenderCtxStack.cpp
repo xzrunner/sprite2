@@ -1,6 +1,6 @@
-#include "RenderCtxStack.h"
+#include "sprite2/RenderCtxStack.h"
 
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/SubjectMVP2.h>
 #include <shaderlab/ShaderMgr.h>
 

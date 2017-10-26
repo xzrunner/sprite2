@@ -1,14 +1,14 @@
-#include "DrawRT.h"
-#include "S2_RenderTargetMgr.h"
-#include "S2_RenderTarget.h"
-#include "RenderCtxStack.h"
-#include "RenderParams.h"
-#include "DrawNode.h"
-#include "S2_Symbol.h"
-#include "Shape.h"
+#include "sprite2/DrawRT.h"
+#include "sprite2/RenderTargetMgr.h"
+#include "sprite2/RenderTarget.h"
+#include "sprite2/RenderCtxStack.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/DrawNode.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/Shape.h"
 
 #include <SM_Rect.h>
-#include <unirender/UR_RenderContext.h>
+#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>

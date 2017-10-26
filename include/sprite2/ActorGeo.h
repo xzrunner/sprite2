@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_ACTOR_GEO_H_
 #define _SPRITE2_ACTOR_GEO_H_
 
-#include "pre_defined.h"
+#include "sprite2/pre_defined.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -49,6 +49,6 @@ private:
 
 }
 
-#include "ActorGeo.inl"
+#include "sprite2/ActorGeo.inl"
 
 #endif // _SPRITE2_ACTOR_GEO_H_

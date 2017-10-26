@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SPR_ACTORS_H_
 #define _SPRITE2_SPR_ACTORS_H_
 
-#include "s2_typedef.h"
+#include "sprite2/typedef.h"
 
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
@@ -66,6 +66,6 @@ private:
 
 }
 
-#include "SprActors.inl"
+#include "sprite2/SprActors.inl"
 
 #endif // _SPRITE2_SPR_ACTORS_H_

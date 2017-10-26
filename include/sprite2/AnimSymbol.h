@@ -1,8 +1,8 @@
 #ifndef _SPRITE2_ANIM_SYMBOL_H_
 #define _SPRITE2_ANIM_SYMBOL_H_
 
-#include "S2_Symbol.h"
-#include "AnimLerp.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/AnimLerp.h"
 #include "sprite2/AnimState.h"
 
 #include <cu/cu_stl.h>

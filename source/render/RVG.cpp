@@ -1,6 +1,6 @@
-#include "S2_RVG.h"
-#include "CameraMgr.h"
-#include "Color.h"
+#include "sprite2/RVG.h"
+#include "sprite2/CameraMgr.h"
+#include "sprite2/Color.h"
 
 #include <rvg.h>
 #include <SM_Calc.h>

@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_SHAPE_VERTICES_H_
 #define _SPRITE2_SHAPE_VERTICES_H_
 
-#include "pre_defined.h"
+#include "sprite2/pre_defined.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER

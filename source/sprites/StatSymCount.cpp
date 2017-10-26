@@ -1,4 +1,4 @@
-#include "StatSymCount.h"
+#include "sprite2/StatSymCount.h"
 
 #include <stdio.h>
 #include <string.h>

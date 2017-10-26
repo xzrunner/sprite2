@@ -1,7 +1,7 @@
-#include "BezierShape.h"
-#include "ShapeConfig.h"
-#include "S2_RVG.h"
-#include "RenderParams.h"
+#include "sprite2/BezierShape.h"
+#include "sprite2/ShapeConfig.h"
+#include "sprite2/RVG.h"
+#include "sprite2/RenderParams.h"
 
 #include <SM_Calc.h>
 

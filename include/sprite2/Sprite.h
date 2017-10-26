@@ -1,16 +1,16 @@
 #ifndef _SPRITE2_SPRITE_H_
 #define _SPRITE2_SPRITE_H_
 
-#include "pre_defined.h"
-#include "S2_Message.h"
-#include "s2_macro.h"
-#include "s2_typedef.h"
-#include "VisitResult.h"
-#include "SprActors.h"
-#include "SprRender.h"
-#include "SprDefault.h"
-#include "SprGeo.h"
-#include "BoundingBox.h"
+#include "sprite2/pre_defined.h"
+#include "sprite2/Message.h"
+#include "sprite2/macro.h"
+#include "sprite2/typedef.h"
+#include "sprite2/VisitResult.h"
+#include "sprite2/SprActors.h"
+#include "sprite2/SprRender.h"
+#include "sprite2/SprDefault.h"
+#include "sprite2/SprGeo.h"
+#include "sprite2/BoundingBox.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
@@ -247,6 +247,6 @@ private:
 
 }
 
-#include "S2_Sprite.inl"
+#include "sprite2/Sprite.inl"
 
 #endif // _SPRITE2_SPRITE_H_

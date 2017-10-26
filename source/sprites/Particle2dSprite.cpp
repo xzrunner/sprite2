@@ -1,8 +1,8 @@
-#include "Particle2dSprite.h"
-#include "Particle2dSymbol.h"
-#include "S2_Symbol.h"
-#include "RenderParams.h"
-#include "UpdateParams.h"
+#include "sprite2/Particle2dSprite.h"
+#include "sprite2/Particle2dSymbol.h"
+#include "sprite2/Symbol.h"
+#include "sprite2/RenderParams.h"
+#include "sprite2/UpdateParams.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

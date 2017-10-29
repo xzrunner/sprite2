@@ -32,17 +32,17 @@ static Color RED	(204, 51, 102, 128);
 static Color GREEN	(102, 204, 51, 128);
 static Color BLUE	(102, 51, 204, 128);
 
-RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoUV(const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
-	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
 	}
 	
-	float w = mesh->GetWidth(),
-		  h = mesh->GetHeight();
+	float w = mesh.GetWidth(),
+		  h = mesh.GetHeight();
 
 	// lines
 	RVG::SetColor(RED);
@@ -68,17 +68,17 @@ RenderReturn DrawMesh::DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MA
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(p, mesh->GetNodeRadius(), true);
+		RVG::Circle(p, mesh.GetNodeRadius(), true);
 	}
 
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoXY(const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
-	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
 	}
@@ -104,17 +104,17 @@ RenderReturn DrawMesh::DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MA
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(p, mesh->GetNodeRadius(), true);
+		RVG::Circle(p, mesh.GetNodeRadius(), true);
 	}
 
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp,
+RenderReturn DrawMesh::DrawTexture(const Mesh& mesh, const RenderParams& rp,
 	                               const SymConstPtr& base_sym)
 {
 	RenderReturn ret = RENDER_OK;
-	auto& sym = base_sym ? base_sym : mesh->GetBaseSymbol();
+	auto& sym = base_sym ? base_sym : mesh.GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) 
 	{
 	 	auto img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym);
@@ -146,11 +146,11 @@ RenderReturn DrawMesh::DrawTexture(const std::unique_ptr<Mesh>& mesh, const Rend
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawOnlyMesh(const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt, int tex_id)
+RenderReturn DrawMesh::DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_id)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
-	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
 	}
@@ -163,8 +163,8 @@ RenderReturn DrawMesh::DrawOnlyMesh(const std::unique_ptr<Mesh>& mesh, const S2_
 
 	int w = RenderTargetMgr::Instance()->WIDTH,
 		h = RenderTargetMgr::Instance()->HEIGHT;
-	float ori_w = mesh->GetWidth(),
-		  ori_h = mesh->GetHeight();
+	float ori_w = mesh.GetWidth(),
+		  ori_h = mesh.GetHeight();
 	for (int i = 0, n = triangles.size(); i < n; )
 	{
 		sm::vec2 _vertices[4], _texcoords[4];
@@ -200,7 +200,7 @@ static void draw_filter(const float* positions, const float* texcoords, int tex_
 	shader->Draw(positions, texcoords, tex_id);
 }
 
-RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::ShaderType type = mgr->GetShaderType();
@@ -210,7 +210,7 @@ RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const Rend
 
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
-	mesh->DumpToTriangles(vertices, texcoords, triangles);
+	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
 		return RENDER_NO_DATA;
 	}
@@ -283,7 +283,7 @@ RenderReturn DrawMesh::DrawOnePass(const std::unique_ptr<Mesh>& mesh, const Rend
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const Symbol& sym)
+RenderReturn DrawMesh::DrawTwoPass(const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -337,7 +337,7 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt)
+RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
 {
 	return DrawOnlyMesh(mesh, mt, rt->GetTexID());
 }

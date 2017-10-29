@@ -7,8 +7,6 @@
 
 #include S2_MAT_HEADER
 
-#include <memory>
-
 #include <stddef.h>
 
 namespace s2
@@ -22,20 +20,20 @@ class RenderTarget;
 class DrawMesh
 {
 public:
-	static RenderReturn DrawInfoUV(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt = nullptr);
-	static RenderReturn DrawInfoXY(const std::unique_ptr<Mesh>& mesh, const S2_MAT* mt = nullptr);
+	static RenderReturn DrawInfoUV(const Mesh& mesh, const S2_MAT* mt = nullptr);
+	static RenderReturn DrawInfoXY(const Mesh& mesh, const S2_MAT* mt = nullptr);
 
-	static RenderReturn DrawTexture(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, 
+	static RenderReturn DrawTexture(const Mesh& mesh, const RenderParams& rp, 
 		const SymConstPtr& base_sym = nullptr);
 
-	static RenderReturn DrawOnlyMesh(const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt, int tex_id);
+	static RenderReturn DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_id);
 
 private:
-	static RenderReturn DrawOnePass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
+	static RenderReturn DrawOnePass(const Mesh& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
-	static RenderReturn DrawTwoPass(const std::unique_ptr<Mesh>& mesh, const RenderParams& rp, const Symbol& sym);
+	static RenderReturn DrawTwoPass(const Mesh& mesh, const RenderParams& rp, const Symbol& sym);
 	static RenderReturn DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
-	static RenderReturn DrawRT2Screen(RenderTarget* rt, const std::unique_ptr<Mesh>& mesh, const S2_MAT& mt);
+	static RenderReturn DrawRT2Screen(RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt);
 
 }; // DrawMesh
 

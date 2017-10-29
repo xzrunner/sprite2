@@ -29,7 +29,7 @@ void SkeletonPose::StoreToSkeleton(const Skeleton& skeleton) const
 	for (int i = 0, n = joints.size(); i < n; ++i) {
 		joints[i]->SetLocalPose(m_joints_pose[i]);
 	}
-	for (auto joint : joints) {
+	for (auto& joint : joints) {
 		auto parent = joint->GetParent();
 		if (!parent) {
 			joint->Update();

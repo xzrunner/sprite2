@@ -26,6 +26,9 @@ class Mesh : private cu::Uncopyable
 public:
 	Mesh();
 	Mesh(const SymConstPtr& base);
+#ifdef S2_EDITOR
+	virtual ~Mesh() {}
+#endif // S2_EDITOR
 
 	const SymConstPtr& GetBaseSymbol() const { return m_base; }
 

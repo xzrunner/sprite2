@@ -52,7 +52,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -66,7 +66,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\include\sprite2;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src\cu;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\shaderlab\include\;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\model3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -76,17 +76,22 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\AABB.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\BoundingBox.cpp" />
     <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\Package.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\OBB.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\S2_Texture.cpp" />
+    <ClCompile Include="..\..\..\source\dataset\Texture.cpp" />
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawBlend.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawMask.cpp" />
+    <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawMesh.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawNode.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp" />
@@ -97,15 +102,16 @@
     <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp" />
     <ClCompile Include="..\..\..\source\render\RenderScissor.cpp" />
     <ClCompile Include="..\..\..\source\render\RenderScreen.cpp" />
-    <ClCompile Include="..\..\..\source\render\S2_RenderContext.cpp" />
-    <ClCompile Include="..\..\..\source\render\S2_RenderTarget.cpp" />
-    <ClCompile Include="..\..\..\source\render\S2_RenderTargetMgr.cpp" />
-    <ClCompile Include="..\..\..\source\render\S2_RVG.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderContext.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderTarget.cpp" />
+    <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp" />
+    <ClCompile Include="..\..\..\source\render\RVG.cpp" />
+    <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\ActorGeo.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnchorActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnchorSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnchorSymbol.cpp" />
@@ -117,16 +123,17 @@
     <ClCompile Include="..\..\..\source\sprites\Animation2.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnimCopy.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnimCtrl.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\AnimCurr.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnimLerp.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnimSprite.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\AnimState.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnimSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\AnimCurr.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AudioContext.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AudioSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AudioSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\BezierShape.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CacheMatVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CircleShape.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\ClearActorsVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ColorPolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSprite.cpp" />
@@ -173,12 +180,13 @@
     <ClCompile Include="..\..\..\source\sprites\ProxyHelper.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ProxySprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ProxySymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\QueryLoadedVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\RectShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ResetActorFlagVisitor.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\S2_Actor.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\S2_Mesh.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\S2_Sprite.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\S2_Symbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\Actor.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\Mesh.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\Sprite.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\Symbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Scale9.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Scale9Actor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Scale9Sprite.cpp" />
@@ -204,6 +212,7 @@
     <ClCompile Include="..\..\..\source\sprites\StatPingPong.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StatSprCount.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StatSymCount.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\StringHelper.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TexcoordsMap.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextboxActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextboxSprite.cpp" />
@@ -217,18 +226,21 @@
     <ClCompile Include="..\..\..\source\sprites\TrailSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TrailSymbol.cpp" />
     <ClCompile Include="..\..\..\source\utility\Blackboard.cpp" />
+    <ClCompile Include="..\..\..\source\utility\Callback.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatImages.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatSymDraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatTopNodes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
     <ClInclude Include="..\..\..\include\sprite2\AABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorGeo.h" />
+    <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnchorActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnchorSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnchorSymbol.h" />
@@ -240,10 +252,11 @@
     <ClInclude Include="..\..\..\include\sprite2\Animation2.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnimCopy.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnimCtrl.h" />
-    <ClInclude Include="..\..\..\include\sprite2\AnimCurr.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnimLerp.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnimSprite.h" />
+    <ClInclude Include="..\..\..\include\sprite2\AnimState.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnimSymbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\AnimCurr.h" />
     <ClInclude Include="..\..\..\include\sprite2\AudioContext.h" />
     <ClInclude Include="..\..\..\include\sprite2\AudioSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\AudioSymbol.h" />
@@ -251,12 +264,13 @@
     <ClInclude Include="..\..\..\include\sprite2\Blackboard.h" />
     <ClInclude Include="..\..\..\include\sprite2\BlendMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\BoundingBox.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CacheMatVisitor.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Callback.h" />
     <ClInclude Include="..\..\..\include\sprite2\Camera.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraType.h" />
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
-    <ClInclude Include="..\..\..\include\sprite2\ClearActorsVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Color.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
@@ -269,6 +283,7 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawGaussianBlur.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawMask.h" />
+    <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawNode.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawOuterGlow.h" />
@@ -302,11 +317,9 @@
     <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\OBB.h" />
     <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h" />
-    <ClInclude Include="..\..\..\include\sprite2\ObjectPool2.h" />
     <ClInclude Include="..\..\..\include\sprite2\OrthoCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\P3dEmitterCfg.h" />
     <ClInclude Include="..\..\..\include\sprite2\P3dRenderParams.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Package.h" />
     <ClInclude Include="..\..\..\include\sprite2\Particle2d.h" />
     <ClInclude Include="..\..\..\include\sprite2\Particle2dSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\Particle2dSymbol.h" />
@@ -321,19 +334,20 @@
     <ClInclude Include="..\..\..\include\sprite2\Polygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\PolygonShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\PolylineShape.h" />
-    <ClInclude Include="..\..\..\include\sprite2\PolyType.h" />
     <ClInclude Include="..\..\..\include\sprite2\pre_defined.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxyActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxyHelper.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxySprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxySymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h" />
+    <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderColor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />
+    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderShader.h" />
@@ -345,23 +359,26 @@
     <ClInclude Include="..\..\..\include\sprite2\RFGaussianBlur.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFGray.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFHeatHaze.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFNull.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFOuterGlow.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFOutline.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFRelief.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFShockWave.h" />
     <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Actor.h" />
-    <ClInclude Include="..\..\..\include\sprite2\s2_config.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Mesh.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Message.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderContext.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTarget.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTargetMgr.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_RVG.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Sprite.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Symbol.h" />
-    <ClInclude Include="..\..\..\include\sprite2\S2_Texture.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Actor.h" />
+    <ClInclude Include="..\..\..\include\sprite2\config.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Facade.h" />
+    <ClInclude Include="..\..\..\include\sprite2\macro.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Mesh.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Message.h" />
+    <ClInclude Include="..\..\..\include\sprite2\RenderContext.h" />
+    <ClInclude Include="..\..\..\include\sprite2\RenderTarget.h" />
+    <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h" />
+    <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Texture.h" />
+    <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
+    <ClInclude Include="..\..\..\include\sprite2\typedef.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9Actor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9Sprite.h" />
@@ -371,7 +388,6 @@
     <ClInclude Include="..\..\..\include\sprite2\ShapeConfig.h" />
     <ClInclude Include="..\..\..\include\sprite2\ShapeSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ShapeSymbol.h" />
-    <ClInclude Include="..\..\..\include\sprite2\ShapeType.h" />
     <ClInclude Include="..\..\..\include\sprite2\ShapeVertices.h" />
     <ClInclude Include="..\..\..\include\sprite2\Skeleton.h" />
     <ClInclude Include="..\..\..\include\sprite2\SkeletonPose.h" />
@@ -383,7 +399,9 @@
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprRender.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SprSRT.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SprVisitorParams.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticQuadIcon.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticRectIcon.h" />
@@ -395,6 +413,8 @@
     <ClInclude Include="..\..\..\include\sprite2\StatSymDraw.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSymType.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatTopNodes.h" />
+    <ClInclude Include="..\..\..\include\sprite2\StringHelper.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SymbolVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SymType.h" />
     <ClInclude Include="..\..\..\include\sprite2\TexcoordsMap.h" />
     <ClInclude Include="..\..\..\include\sprite2\Textbox.h" />
@@ -409,17 +429,25 @@
     <ClInclude Include="..\..\..\include\sprite2\TrailEmitterCfg.h" />
     <ClInclude Include="..\..\..\include\sprite2\TrailSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\TrailSymbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Utility.h" />
     <ClInclude Include="..\..\..\include\sprite2\VisitResult.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\AABB.inl" />
+    <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
     <None Include="..\..\..\include\sprite2\Color.inl" />
     <None Include="..\..\..\include\sprite2\Matrix.inl" />
     <None Include="..\..\..\include\sprite2\OBB.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
-    <None Include="..\..\..\include\sprite2\ObjectPool2.inl" />
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />
+    <None Include="..\..\..\include\sprite2\Actor.inl" />
+    <None Include="..\..\..\include\sprite2\Sprite.inl" />
+    <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\SprActors.inl" />
+    <None Include="..\..\..\include\sprite2\SprGeo.inl" />
+    <None Include="..\..\..\include\sprite2\SprSRT.inl" />
+    <None Include="..\..\..\include\sprite2\UpdateParams.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

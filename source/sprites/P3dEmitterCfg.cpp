@@ -31,4 +31,14 @@ void P3dEmitterCfg::SetStartRadius(float radius)
 	m_impl->start_radius = radius;
 }
 
+void P3dEmitterCfg::RemoveCachedSym(const Symbol* sym)
+{
+	for (auto itr = m_cached_sym.begin(); itr != m_cached_sym.end(); ++itr) {
+		if (itr->get() == sym) {
+			m_cached_sym.erase(itr);
+			break;
+		}
+	}
+}
+
 }

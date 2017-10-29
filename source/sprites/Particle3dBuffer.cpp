@@ -25,7 +25,7 @@ void Particle3dBuffer::Insert(const std::shared_ptr<Particle3dEmitter>& emitter)
 		return;
 	}
 
-	for (auto et : m_emitters) {
+	for (auto& et : m_emitters) {
 		if (et.lock() == emitter) {
 			return;
 		}
@@ -72,7 +72,7 @@ bool Particle3dBuffer::Update(float time)
 void Particle3dBuffer::Draw(const sm::vec2& pos, float scale) const
 {
 	P3dRenderParams rp;
-	for (auto et : m_emitters)
+	for (auto& et : m_emitters)
 	{
 		auto et_sp = et.lock();
 		if (!et_sp) {

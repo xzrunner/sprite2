@@ -2,181 +2,184 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="dataset">
-      <UniqueIdentifier>{4468e0ed-bd8f-4a11-a820-c007b7e42e18}</UniqueIdentifier>
+      <UniqueIdentifier>{09e2bc5f-1172-43f1-b26d-c4989000902a}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\render">
-      <UniqueIdentifier>{c03c987b-c6e8-4296-9618-5cad2c24e46d}</UniqueIdentifier>
+      <UniqueIdentifier>{83093737-1951-444f-853d-dc3954689a64}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\render\filter">
-      <UniqueIdentifier>{125bab9d-6ff9-472e-8731-32b533047acd}</UniqueIdentifier>
+      <UniqueIdentifier>{6642267c-87f4-4db4-9df6-92c5281153bf}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\render\filter\items">
-      <UniqueIdentifier>{509460e3-d60a-4921-b470-dc363004de13}</UniqueIdentifier>
+      <UniqueIdentifier>{f2c7a740-739b-4656-b30d-b1d4703fe637}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\render\blend">
-      <UniqueIdentifier>{8c54ed5f-6de4-4a3a-b741-be634f620a29}</UniqueIdentifier>
+      <UniqueIdentifier>{408215c3-daf6-483f-a052-19d524581ca3}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\render\camera">
-      <UniqueIdentifier>{62ab1603-8300-4678-9baf-eeb103c88463}</UniqueIdentifier>
+      <UniqueIdentifier>{fd1d2e71-da42-48e6-b60d-a3c450f76879}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\primitive">
-      <UniqueIdentifier>{ab59db80-ff7b-426d-910d-7afed87f5365}</UniqueIdentifier>
+      <UniqueIdentifier>{6e2faad1-d036-441c-88be-810151f8388e}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\resources">
-      <UniqueIdentifier>{3d6d4d0d-c2ea-47c4-a62a-284a3392d4f5}</UniqueIdentifier>
+      <UniqueIdentifier>{bd6b8894-c0f4-4142-8f78-8a781bd3c0d1}</UniqueIdentifier>
     </Filter>
     <Filter Include="dataset\bound">
-      <UniqueIdentifier>{14d514ad-80ac-4f8f-aec4-cf618e241260}</UniqueIdentifier>
+      <UniqueIdentifier>{56f682e2-f466-40a3-9efe-ce48bcef4e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dataset\others">
+      <UniqueIdentifier>{963adc33-5a55-4ee7-9619-85dc18ddfa15}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites">
-      <UniqueIdentifier>{ca72012d-43b0-4d97-a2e7-22c58811df4c}</UniqueIdentifier>
+      <UniqueIdentifier>{2ff2e976-8d15-458c-98a7-b12b46e11890}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\01.image">
-      <UniqueIdentifier>{de591786-c8a3-40d2-8e3b-bb11a51b3e38}</UniqueIdentifier>
+      <UniqueIdentifier>{9a71d57f-0e5b-4a39-999b-17423e71aca1}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\06.complex">
-      <UniqueIdentifier>{e978e19b-d67e-46f1-b16f-e58fc87c4141}</UniqueIdentifier>
+      <UniqueIdentifier>{aff00040-bc39-4676-b31b-11c7a4b162d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\00.anchor">
-      <UniqueIdentifier>{124de707-da6b-4826-b9f8-24d6579e2089}</UniqueIdentifier>
+      <UniqueIdentifier>{5b23f3f5-dfaa-4bc2-831e-359294961f2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\07.anim">
-      <UniqueIdentifier>{bc1562f8-9734-49a9-9879-30eeaaed488d}</UniqueIdentifier>
+      <UniqueIdentifier>{c12623d2-734c-42e5-9538-6684870b8614}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\07.anim\lerp">
-      <UniqueIdentifier>{a0c871d7-a67f-4b75-b9ee-651569f2a993}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprites\07.anim\lerp\types">
-      <UniqueIdentifier>{9d23bb76-3f07-4698-8875-29b3001f0b80}</UniqueIdentifier>
+      <UniqueIdentifier>{d105dba5-c42a-4d7d-8d24-10484f3fc06e}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\07.anim\cache">
-      <UniqueIdentifier>{c6ae0b98-f08a-43cb-8465-19401234a513}</UniqueIdentifier>
+      <UniqueIdentifier>{3aa196b4-b985-45b0-8334-056a6c4abb8f}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\08.particle3d">
-      <UniqueIdentifier>{a110f4e5-8f74-4944-b3fd-688ee7048183}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprites\08.particle3d\common">
-      <UniqueIdentifier>{53e91928-c634-4fac-b417-697de42a28e5}</UniqueIdentifier>
+      <UniqueIdentifier>{87452272-1333-429e-b728-1d7b28e40993}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\08.particle3d\wrap">
-      <UniqueIdentifier>{eb3af3be-7330-43d6-975d-65207979591b}</UniqueIdentifier>
+      <UniqueIdentifier>{8b29916a-5b40-4698-9222-a93b8f7c0b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\08.particle3d\common">
+      <UniqueIdentifier>{56938d45-7988-4d2d-8a50-a38e8647ba1e}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\02.scale9">
-      <UniqueIdentifier>{dcc26060-eefc-4a1b-994a-178320b69b7d}</UniqueIdentifier>
+      <UniqueIdentifier>{b72b8abb-72bd-43ce-8164-3434e165b8ae}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\09.particle2d">
-      <UniqueIdentifier>{f90661d7-e579-417d-9e5f-5aef861c47ff}</UniqueIdentifier>
+      <UniqueIdentifier>{60cb5f97-143d-44fd-910d-fb5d6a3d944b}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\05.textbox">
-      <UniqueIdentifier>{b82f3a36-337e-4795-88c4-d9b2b9cd9a18}</UniqueIdentifier>
+      <UniqueIdentifier>{da23a5a7-969b-455d-becc-bcb984d1e82f}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\10.shape">
-      <UniqueIdentifier>{3f0cb3bc-b481-48d0-8bd4-7953833160e6}</UniqueIdentifier>
+      <UniqueIdentifier>{8acb1e91-319c-4d9a-81be-5057bb230b84}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\10.shape\shape">
-      <UniqueIdentifier>{b46eceda-803f-4e24-b05a-3b82af6ac9ed}</UniqueIdentifier>
+      <UniqueIdentifier>{d9145597-1f73-4811-b7ce-1ab43ddf054a}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\10.shape\shape\base">
-      <UniqueIdentifier>{ec0cb83c-94e4-4a6d-a006-11d24fcffd06}</UniqueIdentifier>
+      <UniqueIdentifier>{415fbdd8-24f3-4918-8aec-a49110a1eb06}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\10.shape\shape\utility">
-      <UniqueIdentifier>{57c202eb-0d69-42f8-b519-e7f4bc19d404}</UniqueIdentifier>
+      <UniqueIdentifier>{ee37e186-a5b1-4863-b1bf-9e02a07c57b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\10.shape\shape\polygon">
-      <UniqueIdentifier>{9e24d633-869d-483a-ba74-81c8ecef73d5}</UniqueIdentifier>
+      <UniqueIdentifier>{800f30e0-d0a4-4f46-8a26-099372d85f68}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\11.mesh">
-      <UniqueIdentifier>{d18ae08c-64d5-4190-b2e1-c7dda4e38b62}</UniqueIdentifier>
+      <UniqueIdentifier>{f3cfc00c-3808-400c-b96d-7817fc9831c4}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\04.texture">
-      <UniqueIdentifier>{b3a993d2-b455-4e8f-99b9-469e5a8861c8}</UniqueIdentifier>
+      <UniqueIdentifier>{648e3a6a-d656-4dea-8154-d842d28e7e8f}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\12.mask">
-      <UniqueIdentifier>{7b3a8c0b-0706-4b74-977d-ce55f8a818dc}</UniqueIdentifier>
+      <UniqueIdentifier>{f2591f29-8c17-4440-b255-b77de9b31cb2}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\13.trail">
-      <UniqueIdentifier>{724e12cc-f055-4d41-950e-5f897562d0e8}</UniqueIdentifier>
+      <UniqueIdentifier>{d48bad48-da45-4e2c-9a5c-eed7e391f156}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\13.trail\wrap">
-      <UniqueIdentifier>{39bedd5b-3a6f-4403-a133-5a0c368cc2fb}</UniqueIdentifier>
+      <UniqueIdentifier>{6792a0de-70b9-4486-8bb2-b11470ce7af0}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\03.icon">
-      <UniqueIdentifier>{acb0c255-5bac-4bf4-8d71-ce4e41a004df}</UniqueIdentifier>
+      <UniqueIdentifier>{542bfc93-dbba-49ce-ade1-069a34e239ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\03.icon\icon">
-      <UniqueIdentifier>{32fb056c-78a2-44fc-b845-8471506fd84c}</UniqueIdentifier>
+      <UniqueIdentifier>{d6cc95da-f59e-479d-9434-1729de9daba6}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\03.icon\icon\base">
-      <UniqueIdentifier>{d2f937a6-1433-4136-8b64-47d37090a9ba}</UniqueIdentifier>
+      <UniqueIdentifier>{ffd11c79-c638-429e-91f3-3e31de10e2e5}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\14.skeleton">
-      <UniqueIdentifier>{dce2fc0a-586e-4938-925d-b78a3d97c098}</UniqueIdentifier>
+      <UniqueIdentifier>{4762dd1c-ec13-42f4-99f5-fa7dc6c0b963}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\07.anim2">
-      <UniqueIdentifier>{914b2791-2bf5-46c0-85be-daaf8fa95892}</UniqueIdentifier>
+      <UniqueIdentifier>{47a9ced5-7a28-49db-981a-d39967416982}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite">
-      <UniqueIdentifier>{eafc6e39-a1e3-418a-9970-ba3426444e4f}</UniqueIdentifier>
+      <UniqueIdentifier>{6f7b60db-f6ce-4203-9f15-ffb4ef17ae48}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite\visitor">
-      <UniqueIdentifier>{a64ede4c-6a93-4127-be3d-9c72dd5b15d5}</UniqueIdentifier>
+      <UniqueIdentifier>{65037eba-6530-45f7-b857-853dadc82262}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite\visitor\actor">
-      <UniqueIdentifier>{e698a840-bc5d-45b3-844b-daa2a2b0ddc4}</UniqueIdentifier>
+      <UniqueIdentifier>{e4f03989-0348-430d-9b77-a43a450e575b}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite\visitor\query">
-      <UniqueIdentifier>{361eb39c-30f7-40dd-b047-f3cc1a2f56fd}</UniqueIdentifier>
+      <UniqueIdentifier>{974c85a4-6084-4e08-bd39-e8583af012ab}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite\visitor\set">
-      <UniqueIdentifier>{16464de8-d701-4d30-a591-aa431d5cc779}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="sprites\sprite\utility">
-      <UniqueIdentifier>{e141099e-8f98-445c-9631-f4366654743a}</UniqueIdentifier>
+      <UniqueIdentifier>{29773de1-aa86-4157-9b46-69163ee50a52}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\sprite\component">
-      <UniqueIdentifier>{f11a2297-b218-4714-80c2-1febb613fa77}</UniqueIdentifier>
+      <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\utility">
+      <UniqueIdentifier>{38219385-a697-44fd-afe4-3afdfa89e2cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\symbol">
-      <UniqueIdentifier>{f3cee88b-fed3-43b6-b9a4-a6172ff05611}</UniqueIdentifier>
+      <UniqueIdentifier>{9c0394c6-91fe-4e56-a11a-866d45abd6b5}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\actor">
-      <UniqueIdentifier>{7a35f947-0185-4194-9229-e1c7b446bce2}</UniqueIdentifier>
+      <UniqueIdentifier>{bf261f14-ee03-4a45-b5b1-f381291af125}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sprites\15.model">
-      <UniqueIdentifier>{d742afad-6bec-4e1a-b369-14a14af297c0}</UniqueIdentifier>
+    <Filter Include="sprites\actor\aabb">
+      <UniqueIdentifier>{24b20695-7e7b-4ab9-a450-a645f421b43e}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\99.proxy">
-      <UniqueIdentifier>{bc05bde6-1fb4-4633-9ba8-ca330db66ba0}</UniqueIdentifier>
+      <UniqueIdentifier>{fcd4b6e5-98df-4a77-8c25-81169099ee79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\15.model">
+      <UniqueIdentifier>{faa8b174-d06e-4400-9b59-d775e66ee8ca}</UniqueIdentifier>
     </Filter>
     <Filter Include="sprites\16.audio">
-      <UniqueIdentifier>{4e976978-c050-499b-be46-d9c351be1a8b}</UniqueIdentifier>
+      <UniqueIdentifier>{6cd9c48a-a9cd-496e-b3c9-58926622c5e4}</UniqueIdentifier>
     </Filter>
     <Filter Include="utility">
-      <UniqueIdentifier>{359100ca-fad0-41e5-adba-26bd1f5e520d}</UniqueIdentifier>
+      <UniqueIdentifier>{07c6e23c-21a2-43aa-a71d-2281fb75105b}</UniqueIdentifier>
     </Filter>
     <Filter Include="utility\stat">
-      <UniqueIdentifier>{d55735e4-4c2d-4374-8ff2-9fd8bee9e92e}</UniqueIdentifier>
+      <UniqueIdentifier>{637add0e-4b9c-4a7b-aa88-714426bb808c}</UniqueIdentifier>
     </Filter>
     <Filter Include="render">
-      <UniqueIdentifier>{1f1e47c1-9aa3-4425-bc4a-f2a7bf9996e6}</UniqueIdentifier>
+      <UniqueIdentifier>{97df3b88-98dd-4ac9-8a79-ae66b30f7cd1}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\draw">
-      <UniqueIdentifier>{43c7c48b-5e2e-404a-9da5-f4be9562b24c}</UniqueIdentifier>
+      <UniqueIdentifier>{0d12773f-6616-49ed-8c1c-e20475cd801d}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\adapter">
-      <UniqueIdentifier>{c4dc6d17-efff-4edc-85c1-ca72fe9ff2c9}</UniqueIdentifier>
+      <UniqueIdentifier>{59c39a48-b1a9-4f16-a40f-0370e75705f4}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\rt">
-      <UniqueIdentifier>{85087e18-6ddd-4cc2-aab5-4919eb512650}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="render\scissor">
-      <UniqueIdentifier>{08076aa0-257b-4ba0-bf45-b49e7f63fbf8}</UniqueIdentifier>
+      <UniqueIdentifier>{b5e262a6-c7df-4834-905c-31a5e9c6ffd7}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\ctx">
-      <UniqueIdentifier>{a1e8545d-8533-4d2a-a233-b60399c093bd}</UniqueIdentifier>
+      <UniqueIdentifier>{af5619ab-75f4-4125-9e39-f52a75560719}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render\scissor">
+      <UniqueIdentifier>{e1df307e-391f-4be5-9bca-e580aeaa8753}</UniqueIdentifier>
     </Filter>
     <Filter Include="render\camera">
-      <UniqueIdentifier>{05def23e-657e-4293-88b1-22e9eb13949c}</UniqueIdentifier>
+      <UniqueIdentifier>{d094579b-efe0-40d1-a2d8-d61a0d799a78}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -191,12 +194,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp">
       <Filter>dataset\render\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\Package.cpp">
-      <Filter>dataset\resources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\S2_Texture.cpp">
-      <Filter>dataset\resources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp">
       <Filter>sprites</Filter>
@@ -244,16 +241,16 @@
       <Filter>sprites\07.anim\lerp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\LerpCircle.cpp">
-      <Filter>sprites\07.anim\lerp\types</Filter>
+      <Filter>sprites\07.anim\lerp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\LerpEase.cpp">
-      <Filter>sprites\07.anim\lerp\types</Filter>
+      <Filter>sprites\07.anim\lerp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\LerpSpiral.cpp">
-      <Filter>sprites\07.anim\lerp\types</Filter>
+      <Filter>sprites\07.anim\lerp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\LerpWiggle.cpp">
-      <Filter>sprites\07.anim\lerp\types</Filter>
+      <Filter>sprites\07.anim\lerp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\AnimCopy.cpp">
       <Filter>sprites\07.anim\cache</Filter>
@@ -270,9 +267,6 @@
     <ClCompile Include="..\..\..\source\sprites\Particle3dSymbol.cpp">
       <Filter>sprites\08.particle3d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\Particle3d.cpp">
-      <Filter>sprites\08.particle3d\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\P3dEmitterCfg.cpp">
       <Filter>sprites\08.particle3d\wrap</Filter>
     </ClCompile>
@@ -281,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\Particle3dEmitter.cpp">
       <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Particle3d.cpp">
+      <Filter>sprites\08.particle3d\common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\Scale9.cpp">
       <Filter>sprites\02.scale9</Filter>
@@ -355,9 +352,6 @@
       <Filter>sprites\11.mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\MeshSymbol.cpp">
-      <Filter>sprites\11.mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\S2_Mesh.cpp">
       <Filter>sprites\11.mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\TextureSprite.cpp">
@@ -441,17 +435,8 @@
     <ClCompile Include="..\..\..\source\sprites\Animation2.cpp">
       <Filter>sprites\07.anim2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\S2_Sprite.cpp">
-      <Filter>sprites\sprite</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
-      <Filter>sprites\sprite</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SpriteVisitor.cpp">
       <Filter>sprites\sprite\visitor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ClearActorsVisitor.cpp">
-      <Filter>sprites\sprite\visitor\actor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CreateActorsVisitor.cpp">
       <Filter>sprites\sprite\visitor\actor</Filter>
@@ -462,11 +447,11 @@
     <ClCompile Include="..\..\..\source\sprites\PointQueryVisitor.cpp">
       <Filter>sprites\sprite\visitor\query</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\QueryLoadedVisitor.cpp">
+      <Filter>sprites\sprite\visitor\query</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SetStaticFrameVisitor.cpp">
       <Filter>sprites\sprite\visitor\set</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp">
-      <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp">
       <Filter>sprites\sprite\component</Filter>
@@ -477,14 +462,11 @@
     <ClCompile Include="..\..\..\source\sprites\SprRender.cpp">
       <Filter>sprites\sprite\component</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\S2_Symbol.cpp">
-      <Filter>sprites\symbol</Filter>
+    <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
+      <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp">
-      <Filter>sprites\actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp">
-      <Filter>sprites\actor</Filter>
+    <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp">
+      <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp">
       <Filter>sprites\actor</Filter>
@@ -492,17 +474,11 @@
     <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp">
       <Filter>sprites\actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorGeo.cpp">
-      <Filter>sprites\actor</Filter>
+    <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp">
+      <Filter>sprites\actor\aabb</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\S2_Actor.cpp">
-      <Filter>sprites\actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ModelSprite.cpp">
-      <Filter>sprites\15.model</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ModelSymbol.cpp">
-      <Filter>sprites\15.model</Filter>
+    <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp">
+      <Filter>sprites\actor\aabb</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\ProxyActor.cpp">
       <Filter>sprites\99.proxy</Filter>
@@ -516,6 +492,12 @@
     <ClCompile Include="..\..\..\source\sprites\ProxySymbol.cpp">
       <Filter>sprites\99.proxy</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ModelSprite.cpp">
+      <Filter>sprites\15.model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ModelSymbol.cpp">
+      <Filter>sprites\15.model</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\AudioContext.cpp">
       <Filter>sprites\16.audio</Filter>
     </ClCompile>
@@ -526,6 +508,12 @@
       <Filter>sprites\16.audio</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\utility\Blackboard.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\utility\Callback.cpp">
+      <Filter>utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\StringHelper.cpp">
       <Filter>utility</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp">
@@ -582,26 +570,14 @@
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
       <Filter>render\draw</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\render\S2_RVG.cpp">
-      <Filter>render\adapter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\S2_RenderTarget.cpp">
-      <Filter>render\rt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\S2_RenderTargetMgr.cpp">
-      <Filter>render\rt</Filter>
+    <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp">
+      <Filter>render\ctx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\RenderScissor.cpp">
       <Filter>render\scissor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\RenderScreen.cpp">
       <Filter>render\scissor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp">
-      <Filter>render\ctx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\S2_RenderContext.cpp">
-      <Filter>render\ctx</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp">
       <Filter>render\camera</Filter>
@@ -612,15 +588,71 @@
     <ClCompile Include="..\..\..\source\render\Pseudo3DCamera.cpp">
       <Filter>render\camera</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CacheMatVisitor.cpp">
+      <Filter>sprites\sprite\visitor</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\AnimCurr.cpp">
       <Filter>sprites\07.anim\cache</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\AnimState.cpp">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp">
+      <Filter>render\draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\BoundingBox.cpp">
+      <Filter>dataset\bound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\OBB.cpp">
+      <Filter>dataset\bound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\AABB.cpp">
+      <Filter>dataset\bound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp">
+      <Filter>dataset\render\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RVG.cpp">
+      <Filter>render\adapter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderContext.cpp">
+      <Filter>render\ctx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderTarget.cpp">
+      <Filter>render\rt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp">
+      <Filter>render\rt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Actor.cpp">
+      <Filter>sprites\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Symbol.cpp">
+      <Filter>sprites\symbol</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Sprite.cpp">
+      <Filter>sprites\sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\dataset\Texture.cpp">
+      <Filter>dataset\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\Mesh.cpp">
+      <Filter>sprites\11.mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\Facade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\sprite2\RenderColor.h">
       <Filter>dataset\render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
+      <Filter>dataset\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h">
       <Filter>dataset\render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderShader.h">
@@ -656,9 +688,6 @@
     <ClInclude Include="..\..\..\include\sprite2\RFHeatHaze.h">
       <Filter>dataset\render\filter\items</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFNull.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RFOuterGlow.h">
       <Filter>dataset\render\filter\items</Filter>
     </ClInclude>
@@ -692,12 +721,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Matrix.h">
       <Filter>dataset\primitive</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Package.h">
-      <Filter>dataset\resources</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Texture.h">
-      <Filter>dataset\resources</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\AABB.h">
       <Filter>dataset\bound</Filter>
     </ClInclude>
@@ -706,6 +729,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\OBB.h">
       <Filter>dataset\bound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
+      <Filter>dataset\others</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h">
       <Filter>sprites</Filter>
@@ -755,20 +781,20 @@
     <ClInclude Include="..\..\..\include\sprite2\ILerp.h">
       <Filter>sprites\07.anim\lerp</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpCircle.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpEase.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\LerpSpiral.h">
+      <Filter>sprites\07.anim\lerp</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\LerpType.h">
       <Filter>sprites\07.anim\lerp</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\LerpCircle.h">
-      <Filter>sprites\07.anim\lerp\types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\LerpEase.h">
-      <Filter>sprites\07.anim\lerp\types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\LerpSpiral.h">
-      <Filter>sprites\07.anim\lerp\types</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\LerpWiggle.h">
-      <Filter>sprites\07.anim\lerp\types</Filter>
+      <Filter>sprites\07.anim\lerp</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\AnimCopy.h">
       <Filter>sprites\07.anim\cache</Filter>
@@ -785,12 +811,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Particle3dSymbol.h">
       <Filter>sprites\08.particle3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\P3dRenderParams.h">
-      <Filter>sprites\08.particle3d\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Particle3d.h">
-      <Filter>sprites\08.particle3d\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\P3dEmitterCfg.h">
       <Filter>sprites\08.particle3d\wrap</Filter>
     </ClInclude>
@@ -799,6 +819,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Particle3dEmitter.h">
       <Filter>sprites\08.particle3d\wrap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\P3dRenderParams.h">
+      <Filter>sprites\08.particle3d\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Particle3d.h">
+      <Filter>sprites\08.particle3d\common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Scale9.h">
       <Filter>sprites\02.scale9</Filter>
@@ -866,9 +892,6 @@
     <ClInclude Include="..\..\..\include\sprite2\ShapeConfig.h">
       <Filter>sprites\10.shape\shape\base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ShapeType.h">
-      <Filter>sprites\10.shape\shape\base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ShapeVertices.h">
       <Filter>sprites\10.shape\shape\utility</Filter>
     </ClInclude>
@@ -878,9 +901,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Polygon.h">
       <Filter>sprites\10.shape\shape\polygon</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\PolyType.h">
-      <Filter>sprites\10.shape\shape\polygon</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\TexturePolygon.h">
       <Filter>sprites\10.shape\shape\polygon</Filter>
     </ClInclude>
@@ -888,9 +908,6 @@
       <Filter>sprites\11.mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\MeshSymbol.h">
-      <Filter>sprites\11.mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Mesh.h">
       <Filter>sprites\11.mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\TextureSprite.h">
@@ -974,20 +991,11 @@
     <ClInclude Include="..\..\..\include\sprite2\Animation2.h">
       <Filter>sprites\07.anim2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Sprite.h">
-      <Filter>sprites\sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
-      <Filter>sprites\sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\VisitResult.h">
-      <Filter>sprites\sprite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h">
       <Filter>sprites\sprite\visitor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ClearActorsVisitor.h">
-      <Filter>sprites\sprite\visitor\actor</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\SprVisitorParams.h">
+      <Filter>sprites\sprite\visitor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CreateActorsVisitor.h">
       <Filter>sprites\sprite\visitor\actor</Filter>
@@ -998,14 +1006,11 @@
     <ClInclude Include="..\..\..\include\sprite2\PointQueryVisitor.h">
       <Filter>sprites\sprite\visitor\query</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h">
+      <Filter>sprites\sprite\visitor\query</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SetStaticFrameVisitor.h">
       <Filter>sprites\sprite\visitor\set</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h">
-      <Filter>sprites\sprite\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Message.h">
-      <Filter>sprites\sprite\component</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
       <Filter>sprites\sprite\component</Filter>
@@ -1016,17 +1021,20 @@
     <ClInclude Include="..\..\..\include\sprite2\SprRender.h">
       <Filter>sprites\sprite\component</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Symbol.h">
-      <Filter>sprites\symbol</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\SprSRT.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
+      <Filter>sprites\sprite\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h">
+      <Filter>sprites\sprite\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\VisitResult.h">
+      <Filter>sprites\sprite\utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SymType.h">
       <Filter>sprites\symbol</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h">
-      <Filter>sprites\actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h">
-      <Filter>sprites\actor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h">
       <Filter>sprites\actor</Filter>
@@ -1037,14 +1045,11 @@
     <ClInclude Include="..\..\..\include\sprite2\ActorGeo.h">
       <Filter>sprites\actor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_Actor.h">
-      <Filter>sprites\actor</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h">
+      <Filter>sprites\actor\aabb</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h">
-      <Filter>sprites\15.model</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h">
-      <Filter>sprites\15.model</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h">
+      <Filter>sprites\actor\aabb</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ProxyActor.h">
       <Filter>sprites\99.proxy</Filter>
@@ -1058,6 +1063,12 @@
     <ClInclude Include="..\..\..\include\sprite2\ProxySymbol.h">
       <Filter>sprites\99.proxy</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h">
+      <Filter>sprites\15.model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h">
+      <Filter>sprites\15.model</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\AudioContext.h">
       <Filter>sprites\16.audio</Filter>
     </ClInclude>
@@ -1070,16 +1081,16 @@
     <ClInclude Include="..\..\..\include\sprite2\Blackboard.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ObjectPool2.h">
+    <ClInclude Include="..\..\..\include\sprite2\Callback.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\pre_defined.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\s2_config.h">
+    <ClInclude Include="..\..\..\include\sprite2\StringHelper.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Utility.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h">
@@ -1139,26 +1150,14 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
       <Filter>render\draw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_RVG.h">
-      <Filter>render\adapter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTarget.h">
-      <Filter>render\rt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderTargetMgr.h">
-      <Filter>render\rt</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h">
+      <Filter>render\ctx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h">
       <Filter>render\scissor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h">
       <Filter>render\scissor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h">
-      <Filter>render\ctx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\S2_RenderContext.h">
-      <Filter>render\ctx</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Camera.h">
       <Filter>render\camera</Filter>
@@ -1175,8 +1174,70 @@
     <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h">
       <Filter>render\camera</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SymbolVisitor.h">
+      <Filter>sprites\symbol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CacheMatVisitor.h">
+      <Filter>sprites\sprite\visitor</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\AnimCurr.h">
       <Filter>sprites\07.anim\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\AnimState.h">
+      <Filter>sprites\07.anim\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h">
+      <Filter>render\draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RVG.h">
+      <Filter>render\adapter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderContext.h">
+      <Filter>render\ctx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderTarget.h">
+      <Filter>render\rt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h">
+      <Filter>render\rt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Actor.h">
+      <Filter>sprites\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Message.h">
+      <Filter>sprites\sprite\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Symbol.h">
+      <Filter>sprites\symbol</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Sprite.h">
+      <Filter>sprites\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Texture.h">
+      <Filter>dataset\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Mesh.h">
+      <Filter>sprites\11.mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Facade.h" />
+    <ClInclude Include="..\..\..\include\sprite2\typedef.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\config.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\macro.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\trans_color.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1195,13 +1256,31 @@
     <None Include="..\..\..\include\sprite2\OBB.inl">
       <Filter>dataset\bound</Filter>
     </None>
+    <None Include="..\..\..\include\sprite2\UpdateParams.inl">
+      <Filter>dataset\others</Filter>
+    </None>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
       <Filter>sprites\sprite\component</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\SprGeo.inl">
+      <Filter>sprites\sprite\component</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\SprSRT.inl">
+      <Filter>sprites\sprite\component</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\ActorGeo.inl">
+      <Filter>sprites\actor</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\ObjectPool.inl">
       <Filter>utility</Filter>
     </None>
-    <None Include="..\..\..\include\sprite2\ObjectPool2.inl">
+    <None Include="..\..\..\include\sprite2\Actor.inl">
+      <Filter>sprites\actor</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\Sprite.inl">
+      <Filter>sprites\sprite</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\trans_color.inl">
       <Filter>utility</Filter>
     </None>
   </ItemGroup>

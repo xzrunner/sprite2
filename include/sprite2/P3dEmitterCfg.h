@@ -27,13 +27,17 @@ public:
 	const p3d_emitter_cfg* GetImpl() const { return m_impl; }
 
 	void InsertCachedSym(const SymPtr& sym) { m_cached_sym.push_back(sym); }
-	
+	void RemoveCachedSym(const Symbol* sym);
+	void ClearCachedSym() { m_cached_sym.clear(); }
+
 private:
 	p3d_emitter_cfg* m_impl;
 
 	CU_VEC<SymPtr> m_cached_sym;
 
 }; // P3dEmitterCfg
+
+using P3dEmitterCfgPtr = std::shared_ptr<P3dEmitterCfg>;
 
 }
 

@@ -45,7 +45,7 @@ public:
 	bool Clear();
 	bool ResetOrder(const Sprite& spr, bool up);
 	bool ResetOrderMost(const Sprite& spr, bool up);
-//	bool Sort(CU_VEC<Sprite*>& sprs);
+	bool Sort(CU_VEC<SprPtr>& sprs);
 
 public:
 	struct Action

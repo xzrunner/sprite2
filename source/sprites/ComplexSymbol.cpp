@@ -316,31 +316,31 @@ bool ComplexSymbol::ResetOrderMost(const Sprite& spr, bool up)
 	return false;
 }
 
-//bool ComplexSymbol::Sort(CU_VEC<SprPtr>& sprs)
-//{
-//	CU_MAP<int, SprPtr> order_sorted;
-//	for (int i = 0, n = sprs.size(); i < n; ++i) {
-//		SprPtr obj = sprs[i];
-//		for (int j = 0, m = m_children.size(); j < m; ++j) {
-//			if (obj == m_children[j].get()) {
-//				order_sorted.insert(std::make_pair(j, obj));
-//			}
-//		}
-//	}
-//
-//	if (order_sorted.size() != sprs.size()) {
-//		return false;
-//	}
-//
-//	CU_VEC<SprPtr> list_dst;
-//	list_dst.reserve(sprs.size());
-//	CU_MAP<int, SprPtr>::iterator itr = order_sorted.begin();
-//	for ( ; itr != order_sorted.end(); ++itr) {
-//		list_dst.push_back(itr->second);
-//	}
-//	sprs = list_dst;
-//	return true;
-//}
+bool ComplexSymbol::Sort(CU_VEC<SprPtr>& sprs)
+{
+	CU_MAP<int, SprPtr> order_sorted;
+	for (int i = 0, n = sprs.size(); i < n; ++i) {
+		SprPtr obj = sprs[i];
+		for (int j = 0, m = m_children.size(); j < m; ++j) {
+			if (obj == m_children[j]) {
+				order_sorted.insert(std::make_pair(j, obj));
+			}
+		}
+	}
+
+	if (order_sorted.size() != sprs.size()) {
+		return false;
+	}
+
+	CU_VEC<SprPtr> list_dst;
+	list_dst.reserve(sprs.size());
+	CU_MAP<int, SprPtr>::iterator itr = order_sorted.begin();
+	for ( ; itr != order_sorted.end(); ++itr) {
+		list_dst.push_back(itr->second);
+	}
+	sprs = list_dst;
+	return true;
+}
 
 sm::rect ComplexSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {

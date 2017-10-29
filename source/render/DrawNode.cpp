@@ -569,7 +569,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 				}
 				break;
 			}
-			ret = DrawSprImplFinal(spr, *rp_child);
+			ret = DrawSprImplFinal(nullptr, spr, *rp_child);
 		}
 #else
 		auto& rf = rs.GetFilter();

@@ -14,16 +14,7 @@ public:
 	RectShape(const RectShape& rect);
 	RectShape(const sm::rect& r);
 	
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
 	virtual RectShape* Clone() const;
-
-	/**
-	 *  @interface
-	 *    Shape
-	 */
 	virtual int Type() const { return SHAPE_RECT; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;

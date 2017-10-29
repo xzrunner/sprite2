@@ -14,16 +14,7 @@ public:
 	BezierShape& operator = (const BezierShape& bezier);
 	BezierShape(const sm::vec2& start, const sm::vec2& end);
 	
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual BezierShape* Clone() const;	
-
-	/**
-	 *  @interface
-	 *    Shape
-	 */
+	virtual BezierShape* Clone() const;
 	virtual int Type() const { return SHAPE_BEZIER; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual void Draw(const RenderParams& rp) const;

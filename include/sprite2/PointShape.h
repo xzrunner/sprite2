@@ -14,16 +14,7 @@ public:
 	PointShape(const PointShape& point);
 	PointShape(const sm::vec2& pos);
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual PointShape* Clone() const;	
-
-	/**
-	 *  @interface
-	 *    Shape
-	 */
+	virtual PointShape* Clone() const;
 	virtual int Type() const { return SHAPE_POINT; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;

@@ -13,16 +13,7 @@ public:
 	CosineShape(const CosineShape& cosine);
 	CosineShape(const CU_VEC<sm::vec2>& vertices);
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
-	virtual CosineShape* Clone() const;	
-
-	/**
-	 *  @interface
-	 *    Shape
-	 */
+	virtual CosineShape* Clone() const;
 	virtual int Type() const { return SHAPE_COSINE; }
 	virtual void Draw(const RenderParams& rp) const;
 

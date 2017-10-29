@@ -14,16 +14,7 @@ public:
 	CircleShape(const CircleShape& circle);
 	CircleShape(const sm::vec2& center, float radius);
 
-	/**
-	 *  @interface
-	 *    Cloneable
-	 */
 	virtual CircleShape* Clone() const;
-
-	/**
-	 *  @interface
-	 *    Shape
-	 */
 	virtual int Type() const { return SHAPE_CIRCLE; }
 	virtual bool IsContain(const sm::vec2& pos) const;
 	virtual bool IsIntersect(const sm::rect& rect) const;

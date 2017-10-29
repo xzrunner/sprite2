@@ -31,7 +31,7 @@ public:
 	virtual bool Update(const UpdateParams& up, float time);
 
 	void SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>& cfg);
-	const std::shared_ptr<const P3dEmitterCfg>& GetEmitterCfg() const { return m_et_cfg; }
+	auto& GetEmitterCfg() const { return m_et_cfg; }
 
 	const std::shared_ptr<Particle3dEmitter>& GetEmitter() const { return m_et; }
 	std::shared_ptr<Particle3dEmitter>& GetEmitter() { return m_et; }

@@ -48,10 +48,10 @@ public:
 
 	void CreateEmitter(const std::shared_ptr<const P3dEmitterCfg>& cfg);
 
-	std::shared_ptr<P3dEmitterCfg>& GetEmitterCfg() { return m_cfg; }
+	auto& GetEmitterCfg() { return m_cfg; }
 
 private:
-	std::shared_ptr<P3dEmitterCfg> m_cfg;
+	std::shared_ptr<const P3dEmitterCfg> m_cfg;
 
 	int   m_et;
 	float m_mt[6];

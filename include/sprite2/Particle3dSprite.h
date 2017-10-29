@@ -38,8 +38,8 @@ public:
 	bool IsAlone() const { return m_alone; }
 	void SetAlone(bool alone);
 
-	const std::shared_ptr<Particle3dEmitter>& GetEmitter() const { return m_et; }
-	std::shared_ptr<Particle3dEmitter>& GetEmitter() { return m_et; }
+	auto& GetEmitter() const { return m_et; }
+	auto& GetEmitter() { return m_et; }
 
 	enum ReuseType
 	{

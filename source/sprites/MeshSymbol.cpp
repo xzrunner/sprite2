@@ -82,9 +82,9 @@ RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 
 	RenderReturn ret = RENDER_OK;
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
- 		ret = DrawMesh::DrawInfoXY(m_mesh, &rp_child->mt);
+ 		ret = DrawMesh::DrawInfoXY(*m_mesh, &rp_child->mt);
  	} else {
- 		ret = DrawMesh::DrawTexture(m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
+ 		ret = DrawMesh::DrawTexture(*m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
  	}
  
 //  	if (!m_pause && mesh_spr)

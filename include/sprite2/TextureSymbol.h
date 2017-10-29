@@ -31,12 +31,14 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
 
-	const CU_VEC<std::unique_ptr<PolygonShape>>& GetPolygons() const { return m_polygons; }
-	CU_VEC<std::unique_ptr<PolygonShape>>& GetPolygons() { return m_polygons; }
+	auto& GetPolygons() const { return m_polygons; }
+	auto& GetPolygons() { return m_polygons; }
 
-	void AddPolygon(std::unique_ptr<PolygonShape>& poly) {
-		m_polygons.push_back(std::move(poly));
-	}
+#ifndef S2_SHAPE_SHARED_PTR
+	void AddPolygon(std::unique_ptr<PolygonShape>& poly) { m_polygons.push_back(std::move(poly)); }
+#else
+	void AddPolygon(std::shared_ptr<PolygonShape>& poly) { m_polygons.push_back(poly); }
+#endif // S2_SHAPE_SHARED_PTR
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
@@ -44,7 +46,11 @@ protected:
 	void Clear();
 
 protected:
+#ifndef S2_SHAPE_SHARED_PTR
 	CU_VEC<std::unique_ptr<PolygonShape>> m_polygons;
+#else
+	CU_VEC<std::shared_ptr<PolygonShape>> m_polygons;
+#endif // S2_SHAPE_SHARED_PTR
 
 }; // TextureSymbol
 

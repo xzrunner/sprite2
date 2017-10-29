@@ -1,7 +1,9 @@
-#define S2_EDITOR
+//#define S2_EDITOR
 
 #ifdef S2_EDITOR
+#define S2_FILTER_FULL
 #define S2_VIRTUAL_INHERITANCE
+#define S2_SHAPE_SHARED_PTR
 #endif // S2_EDITOR
 
 //#define S2_MATRIX_FIX
@@ -19,8 +21,6 @@
 #ifdef _WIN32blend_names
 #define	S2_DEBUG
 #endif // _WIN32
-
-#define S2_FILTER_FULL
 
 //#define S2_MULTITHREAD
 

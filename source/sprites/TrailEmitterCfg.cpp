@@ -25,4 +25,14 @@ TrailEmitterCfg::~TrailEmitterCfg()
 	}
 }
 
+void TrailEmitterCfg::RemoveCachedSym(const Symbol* sym)
+{
+	for (auto itr = m_cached_sym.begin(); itr != m_cached_sym.end(); ++itr) {
+		if (itr->get() == sym) {
+			m_cached_sym.erase(itr);
+			break;
+		}
+	}
+}
+
 }

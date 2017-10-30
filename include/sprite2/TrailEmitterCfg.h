@@ -24,10 +24,14 @@ public:
 
 	const t2d_emitter_cfg* GetImpl() const { return m_impl; }
 
+	void InsertCachedSym(const SymPtr& sym) { m_cached_sym.push_back(sym); }
+	void RemoveCachedSym(const Symbol* sym);
+	void ClearCachedSym() { m_cached_sym.clear(); }
+
 private:
 	t2d_emitter_cfg* m_impl;
 
-	CU_VEC<SymPtr> m_symbols;
+	CU_VEC<SymPtr> m_cached_sym;
 
 }; // TrailEmitterCfg
 

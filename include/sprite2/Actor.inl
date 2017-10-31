@@ -40,7 +40,11 @@ inline
 void Actor::FlattenUpdate(bool force) 
 {
 	if (m_flatten.list) {
+#ifndef S2_DISABLE_DEFERRED
 		m_flatten.list->Update(m_flatten.pos, force, m_dlist);
+#else
+		m_flatten.list->Update(m_flatten.pos, force, nullptr);
+#endif // S2_DISABLE_DEFERRED
 	}
 }
 
@@ -49,7 +53,11 @@ void Actor::FlattenDraw(const RenderParams& rp) const
 {
 	if (m_flatten.list) {
 		if (rp.IsEnableDrawlist()) {
+#ifndef S2_DISABLE_DEFERRED
 			m_flatten.list->DrawDeferred(m_flatten.pos, rp, m_dlist);
+#else
+			m_flatten.list->DrawDeferred(m_flatten.pos, rp, nullptr);
+#endif // S2_DISABLE_DEFERRED
 		} else {
 			m_flatten.list->DrawForward(m_flatten.pos, rp);
 		}
@@ -60,7 +68,11 @@ inline
 void Actor::FlattenSetFrame(int frame)
 {
 	if (m_flatten.list) {
+#ifndef S2_DISABLE_DEFERRED
 		m_flatten.list->SetFrame(m_flatten.pos, false, frame, m_dlist);
+#else
+		m_flatten.list->SetFrame(m_flatten.pos, false, frame, nullptr);
+#endif // S2_DISABLE_DEFERRED
 	}
 }
 

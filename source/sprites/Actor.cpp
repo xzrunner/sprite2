@@ -135,7 +135,11 @@ void Actor::BuildFlatten()
 			if (!curr->m_flatten.list->IsDirty()) {
 				printf("++++++ should be dirty %d\n", GetSprRaw()->GetSymbol()->GetID());
 			} else {
+#ifndef S2_DISABLE_DEFERRED
 				curr->m_flatten.list->Build(curr->m_dlist);
+#else
+				curr->m_flatten.list->Build(nullptr);
+#endif // S2_DISABLE_DEFERRED
 			}
 			break;
 		}

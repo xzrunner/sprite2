@@ -111,9 +111,9 @@ RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 
 	RenderReturn ret = RENDER_OK;
 	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
-		ret = DrawMesh::DrawInfoXY(m_mesh, &rp.mt);
+		ret = DrawMesh::DrawInfoXY(*m_mesh, &rp.mt);
 	} else {
-		ret = DrawMesh::DrawTexture(m_mesh, rp, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
+		ret = DrawMesh::DrawTexture(*m_mesh, rp, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
 	}
 	return ret;
 }

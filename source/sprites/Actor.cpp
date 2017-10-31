@@ -156,11 +156,7 @@ void Actor::InitFlags()
 	m_flags = 0;
 
 	SetVisible(true);
-#ifdef S2_SPR_DEFAULT_EDITABLE
 	SetEditable(S2_SPR_DEFAULT_EDITABLE);
-#else
-	SetEditable(true);
-#endif // S2_SPR_DEFAULT_EDITABLE
 }
 
 void Actor::SetVisible(bool flag, bool up_aabb) const

@@ -4,6 +4,9 @@
 #define S2_FILTER_FULL
 #define S2_VIRTUAL_INHERITANCE
 #define S2_SHAPE_SHARED_PTR
+#define S2_SPR_DEFAULT_EDITABLE true
+#else
+#define S2_SPR_DEFAULT_EDITABLE false
 #endif // S2_EDITOR
 
 //#define S2_MATRIX_FIX

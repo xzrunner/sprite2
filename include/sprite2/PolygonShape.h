@@ -29,7 +29,7 @@ public:
 	const std::unique_ptr<Polygon>& GetPolygon() const { return m_poly; }
 
 protected:
-	std::unique_ptr<Polygon> m_poly;
+	std::unique_ptr<Polygon> m_poly = nullptr;
 	
 }; // PolygonShape
 

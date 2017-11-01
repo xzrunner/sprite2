@@ -33,7 +33,7 @@ private:
 	void Clear();
 
 protected:
-	std::shared_ptr<const Joint> m_root;
+	std::shared_ptr<const Joint> m_root = nullptr;
 
 	CU_VEC<std::shared_ptr<Joint>> m_all_joints;
 

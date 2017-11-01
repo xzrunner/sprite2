@@ -56,7 +56,7 @@ private:
 	bool CalcVertices(const RenderParams& rp, float* vertices) const;
 
 protected:
-	std::shared_ptr<Texture> m_tex;
+	std::shared_ptr<Texture> m_tex = nullptr;
 
 	sm::i16_rect m_region;
 	sm::rect     m_size;

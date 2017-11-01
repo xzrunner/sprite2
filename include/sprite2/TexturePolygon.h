@@ -37,7 +37,7 @@ private:
 	void CalTexcoords(const sm::rect& rect);
 
 protected:
-	std::shared_ptr<const ImageSymbol> m_img;
+	std::shared_ptr<const ImageSymbol> m_img = nullptr;
 
 	CU_VEC<sm::vec2> m_texcoords;
 

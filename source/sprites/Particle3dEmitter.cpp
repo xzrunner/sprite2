@@ -12,8 +12,7 @@ namespace s2
 {
 
 Particle3dEmitter::Particle3dEmitter()
-	: m_cfg(nullptr)
-	, m_et(0)
+	: m_et(0)
 	, m_loop(true)
 	, m_active(false)
 	, m_local(true)

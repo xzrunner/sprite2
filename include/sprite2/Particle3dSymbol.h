@@ -55,9 +55,9 @@ private:
 	static bool IsVisible(const RenderParams& rp, const Sprite* spr);
 
 private:
-	std::shared_ptr<const P3dEmitterCfg> m_et_cfg;
+	std::shared_ptr<const P3dEmitterCfg> m_et_cfg = nullptr;
 
-	std::shared_ptr<Particle3dEmitter> m_et;
+	std::shared_ptr<Particle3dEmitter> m_et = nullptr;
 
 	bool m_loop;
 	bool m_local;

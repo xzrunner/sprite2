@@ -33,7 +33,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 private:
-	std::shared_ptr<ua::Source> m_source;
+	std::shared_ptr<ua::Source> m_source = nullptr;
 
 }; // AudioSymbol
 

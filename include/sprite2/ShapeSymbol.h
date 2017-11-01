@@ -40,9 +40,9 @@ protected:
 
 protected:
 #ifndef S2_SHAPE_SHARED_PTR
-	std::unique_ptr<Shape> m_shape;
+	std::unique_ptr<Shape> m_shape = nullptr;
 #else
-	std::shared_ptr<Shape> m_shape;
+	std::shared_ptr<Shape> m_shape = nullptr;
 #endif // S2_SHAPE_SHARED_PTR
 
 }; // ShapeSymbol

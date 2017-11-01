@@ -51,7 +51,7 @@ public:
 	auto& GetEmitterCfg() { return m_cfg; }
 
 private:
-	std::shared_ptr<const P3dEmitterCfg> m_cfg;
+	std::shared_ptr<const P3dEmitterCfg> m_cfg = nullptr;
 
 	int   m_et;
 	float m_mt[6];

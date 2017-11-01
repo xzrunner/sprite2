@@ -26,9 +26,6 @@ class Mesh : private cu::Uncopyable
 public:
 	Mesh();
 	Mesh(const SymConstPtr& base);
-#ifdef S2_EDITOR
-	virtual ~Mesh() {}
-#endif // S2_EDITOR
 
 	const SymConstPtr& GetBaseSymbol() const { return m_base; }
 
@@ -53,10 +50,10 @@ public:
 	const std::unique_ptr<pm::Mesh>& GetMesh() const { return m_mesh; }
 
 protected:
-	std::unique_ptr<pm::Mesh> m_mesh;
+	std::unique_ptr<pm::Mesh> m_mesh = nullptr;
 
 private:
-	SymConstPtr m_base;
+	SymConstPtr m_base = nullptr;
 	float m_width, m_height;	
 
 	float m_node_radius;

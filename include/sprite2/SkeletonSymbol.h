@@ -34,7 +34,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
-	std::unique_ptr<Skeleton> m_skeleton;
+	std::unique_ptr<Skeleton> m_skeleton = nullptr;
 
 }; // SkeletonSymbol
 

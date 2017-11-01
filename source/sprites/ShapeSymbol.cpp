@@ -14,7 +14,6 @@ namespace s2
 {
 
 ShapeSymbol::ShapeSymbol()
-	: m_shape(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_SHAPE);
@@ -23,7 +22,6 @@ ShapeSymbol::ShapeSymbol()
 
 ShapeSymbol::ShapeSymbol(uint32_t id)
 	: Symbol(id)
-	, m_shape(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_SHAPE);

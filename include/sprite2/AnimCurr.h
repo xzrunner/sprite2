@@ -85,7 +85,7 @@ private:
 	void UpdateSlotsVisible();
 		
 private:
-	std::shared_ptr<const AnimCopy> m_copy;
+	std::shared_ptr<const AnimCopy> m_copy = nullptr;
 
 	AnimCtrl m_ctrl;
 

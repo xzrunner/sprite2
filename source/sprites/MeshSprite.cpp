@@ -14,8 +14,7 @@ namespace s2
 {
 
 MeshSprite::MeshSprite() 
-	: m_base(nullptr)
-	, m_only_draw_bound(false)
+	: m_only_draw_bound(false)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_MESH);

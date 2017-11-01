@@ -36,7 +36,7 @@ protected:
 	void CreateSpr();
 
 protected:
-	std::unique_ptr<TrailEmitter> m_et;
+	std::unique_ptr<TrailEmitter> m_et = nullptr;
 
 	bool m_local;
 	bool m_in_p3d;

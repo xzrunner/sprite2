@@ -44,7 +44,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
-	std::unique_ptr<Mesh> m_mesh;
+	std::unique_ptr<Mesh> m_mesh = nullptr;
 
 private:
 	bool m_pause;

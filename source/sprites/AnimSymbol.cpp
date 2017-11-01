@@ -30,7 +30,6 @@ namespace s2
 
 AnimSymbol::AnimSymbol()
 	: m_fps(30)
-	, m_copy(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ANIMATION);
@@ -40,7 +39,6 @@ AnimSymbol::AnimSymbol()
 AnimSymbol::AnimSymbol(uint32_t id)
 	: Symbol(id)
 	, m_fps(30)
-	, m_copy(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_ANIMATION);

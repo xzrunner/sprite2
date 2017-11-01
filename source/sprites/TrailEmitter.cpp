@@ -10,7 +10,6 @@ namespace s2
 
 TrailEmitter::TrailEmitter()
 {
-	m_et = nullptr;
 }
 
 TrailEmitter::~TrailEmitter()

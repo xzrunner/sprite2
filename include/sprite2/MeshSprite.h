@@ -44,7 +44,7 @@ protected:
 
 	pm::MeshTransform m_trans;
 
-	SymConstPtr m_base;
+	SymConstPtr m_base = nullptr;
 
 	bool m_only_draw_bound;
 

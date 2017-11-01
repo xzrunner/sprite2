@@ -19,8 +19,7 @@ namespace s2
 {
 
 MeshSymbol::MeshSymbol()
-	: m_mesh(nullptr)
-	, m_pause(false)
+	: m_pause(false)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_MESH);
@@ -29,7 +28,6 @@ MeshSymbol::MeshSymbol()
 
 MeshSymbol::MeshSymbol(uint32_t id)
 	: Symbol(id)
-	, m_mesh(nullptr)
 	, m_pause(false)
 {
 #ifndef S2_DISABLE_STATISTICS

@@ -18,7 +18,7 @@ public:
 	std::shared_ptr<Particle3dEmitter>& GetEmitter() { return m_et; }
 
 private:
-	std::shared_ptr<Particle3dEmitter> m_et;
+	std::shared_ptr<Particle3dEmitter> m_et = nullptr;
 
 }; // Particle3dActor
 

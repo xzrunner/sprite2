@@ -17,8 +17,7 @@ namespace s2
 {
 
 TrailSprite::TrailSprite()
-	: m_et(nullptr)
-	, m_local(false)
+	: m_local(false)
 	, m_in_p3d(false)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -28,7 +27,6 @@ TrailSprite::TrailSprite()
 
 TrailSprite::TrailSprite(const TrailSprite& spr)
 	: Sprite(spr)
-	, m_et(nullptr)
 	, m_local(spr.m_local)
 	, m_in_p3d(spr.m_in_p3d)
 {

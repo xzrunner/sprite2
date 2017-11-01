@@ -36,9 +36,9 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
-	std::shared_ptr<const TrailEmitterCfg> m_et_cfg;
+	std::shared_ptr<const TrailEmitterCfg> m_et_cfg = nullptr;
 
-	std::unique_ptr<TrailEmitter> m_et;
+	std::unique_ptr<TrailEmitter> m_et = nullptr;
 
 }; // TrailSymbol
 

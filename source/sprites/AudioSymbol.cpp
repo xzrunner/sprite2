@@ -10,7 +10,6 @@ namespace s2
 {
 
 AudioSymbol::AudioSymbol()
-	: m_source(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -19,7 +18,6 @@ AudioSymbol::AudioSymbol()
 
 AudioSymbol::AudioSymbol(uint32_t id)
 	: Symbol(id)
-	, m_source(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_AUDIO);

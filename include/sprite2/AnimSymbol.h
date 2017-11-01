@@ -97,7 +97,7 @@ protected:
 
 	mutable sm::rect m_aabb;
 
-	mutable std::shared_ptr<AnimCopy> m_copy;
+	mutable std::shared_ptr<AnimCopy> m_copy = nullptr;
 
 	AnimState m_state;
 

@@ -37,7 +37,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
-	std::unique_ptr<Icon> m_icon;
+	std::unique_ptr<Icon> m_icon = nullptr;
 
 }; // IconSymbol
 

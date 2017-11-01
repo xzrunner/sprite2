@@ -9,8 +9,7 @@ namespace s2
 {
 
 Mesh::Mesh()
-	: m_base(nullptr)
-	, m_width(0)
+	: m_width(0)
 	, m_height(0)
 	, m_node_radius(0)
 {

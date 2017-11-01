@@ -63,7 +63,7 @@ private:
 	static void ChangeEmitterBuffer(std::shared_ptr<Particle3dEmitter>& et, const std::shared_ptr<const P3dEmitterCfg>& cfg, bool add);
 
 protected:
-	std::shared_ptr<Particle3dEmitter> m_et;
+	std::shared_ptr<Particle3dEmitter> m_et = nullptr;
 
 	bool m_loop;
 	bool m_local;

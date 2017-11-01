@@ -31,7 +31,6 @@ namespace s2
 {
 
 AnimCurr::AnimCurr()
-	: m_copy(nullptr)
 {
 	ResetLayerCursor();
 }

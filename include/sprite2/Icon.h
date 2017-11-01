@@ -39,7 +39,7 @@ protected:
 	virtual void Update() {}
 
 protected:
-	std::shared_ptr<ImageSymbol> m_img;
+	std::shared_ptr<ImageSymbol> m_img = nullptr;
 
 }; // Icon
 

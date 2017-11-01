@@ -33,8 +33,7 @@ namespace s2
 {
 
 ImageSymbol::ImageSymbol()
-	: m_tex(nullptr)
-	, m_rotate(false)
+	: m_rotate(false)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_IMAGE);
@@ -43,7 +42,6 @@ ImageSymbol::ImageSymbol()
 
 ImageSymbol::ImageSymbol(uint32_t id)
 	: Symbol(id)
-	, m_tex(nullptr)
 	, m_rotate(false)
 {
 #ifndef S2_DISABLE_STATISTICS

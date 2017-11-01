@@ -35,7 +35,7 @@ public:
 	const std::shared_ptr<const TrailEmitterCfg>& GetEmitterCfg() const { return m_cfg; }
 
 private:
-	std::shared_ptr<const TrailEmitterCfg> m_cfg;
+	std::shared_ptr<const TrailEmitterCfg> m_cfg = nullptr;
 	t2d_emitter* m_et;
 
 }; // TrailEmitter

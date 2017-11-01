@@ -20,8 +20,6 @@ namespace s2
 {
 
 TrailSymbol::TrailSymbol()
-	: m_et_cfg(nullptr)
-	, m_et(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_TRAIL);
@@ -30,8 +28,6 @@ TrailSymbol::TrailSymbol()
 
 TrailSymbol::TrailSymbol(uint32_t id)
 	: Symbol(id)
-	, m_et_cfg(nullptr)
-	, m_et(nullptr)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymCount::Instance()->Add(STAT_SYM_TRAIL);

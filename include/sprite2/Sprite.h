@@ -204,7 +204,7 @@ public:
 	void SetUserFlag(uint32_t key, bool val) const;
 
 protected:
-	SymPtr m_sym;
+	SymPtr m_sym = nullptr;
 
 	/************************************************************************/
 	/* info                                                                 */

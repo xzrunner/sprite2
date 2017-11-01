@@ -34,8 +34,8 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
 
 protected:
-	SprPtr m_base;
-	SprPtr m_mask;
+	SprPtr m_base = nullptr;
+	SprPtr m_mask = nullptr;
 
 }; // MaskSymbol
 

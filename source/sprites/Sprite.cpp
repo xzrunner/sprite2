@@ -30,8 +30,7 @@ static const sm::vec2 POS1_PROXY = sm::vec2(1, 1);
 static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
-	: m_sym(nullptr)
-	, m_name(-1)
+	: m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
@@ -44,8 +43,7 @@ Sprite::Sprite()
 }
 
 Sprite::Sprite(const Sprite& spr)
-	: m_sym(nullptr)
-	, m_name(-1)
+	: m_name(-1)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)

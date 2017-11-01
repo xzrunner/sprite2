@@ -67,7 +67,6 @@ Particle3dSprite& Particle3dSprite::operator = (const Particle3dSprite& spr)
 
 Particle3dSprite::Particle3dSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_et(nullptr)
 	, m_alone(false)
 	, m_reuse(REUSE_COMMON)
 	, m_start_radius(FLT_MAX)

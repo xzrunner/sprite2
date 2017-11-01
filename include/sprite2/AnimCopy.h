@@ -48,7 +48,7 @@ private:
 		int16_t slot;
 		int16_t lerp;
 
-		SprConstPtr spr;
+		SprConstPtr spr = nullptr;
 
 		Item();
 	};

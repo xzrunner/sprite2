@@ -106,7 +106,6 @@ SprPtr MeshSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 	public:
 		FetchVisitor(int name) 
 			: m_name(name)
-			, m_spr(nullptr) 
 		{}
 
 		virtual void Visit(const SprPtr& spr) const
@@ -120,7 +119,7 @@ SprPtr MeshSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 		
 	private:
 		int m_name;
-		mutable SprPtr m_spr;
+		mutable SprPtr m_spr = nullptr;
 
 	}; // FetchVisitor
 

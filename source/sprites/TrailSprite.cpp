@@ -51,7 +51,6 @@ TrailSprite& TrailSprite::operator = (const TrailSprite& spr)
 
 TrailSprite::TrailSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
-	, m_et(nullptr)
 	, m_local(false)
 	, m_in_p3d(false)
 {

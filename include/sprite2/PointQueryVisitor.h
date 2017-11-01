@@ -57,7 +57,7 @@ private:
 private:
 	sm::vec2 m_pos;
 
-	SprConstPtr m_selected_spr;
+	SprConstPtr m_selected_spr = nullptr;
 	SprVisitorParams2 m_selected_params;
 
 	SprPath m_curr_path;

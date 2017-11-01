@@ -28,7 +28,7 @@ public:
 protected:
 	Scale9 m_s9;
 
-	SPRITE_CLONE_FUNC(Scale9Sprite)
+	S2_SPR_CLONE_FUNC(Scale9Sprite)
 
 	VI_DUMMY_FUNC
 

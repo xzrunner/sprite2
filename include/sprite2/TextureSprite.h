@@ -15,7 +15,7 @@ public:
 	TextureSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~TextureSprite();
 
-	SPRITE_CLONE_FUNC(TextureSprite)
+	S2_SPR_CLONE_FUNC(TextureSprite)
 
 	VI_DUMMY_FUNC
 

@@ -27,7 +27,7 @@ public:
 	void Pause();
 	void Resume();
 
-	SPRITE_CLONE_FUNC(AudioSprite)
+	S2_SPR_CLONE_FUNC(AudioSprite)
 
 	VI_DUMMY_FUNC
 

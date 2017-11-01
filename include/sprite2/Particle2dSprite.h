@@ -43,7 +43,7 @@ protected:
 
 	mutable S2_MAT m_mat;
 
-	SPRITE_CLONE_FUNC(Particle2dSprite)
+	S2_SPR_CLONE_FUNC(Particle2dSprite)
 
 	VI_DUMMY_FUNC
 

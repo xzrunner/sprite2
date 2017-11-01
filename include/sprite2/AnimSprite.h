@@ -65,7 +65,7 @@ protected:
 
 	AnimState m_state;
 
-	SPRITE_CLONE_FUNC(AnimSprite)
+	S2_SPR_CLONE_FUNC(AnimSprite)
 
 	VI_DUMMY_FUNC
 

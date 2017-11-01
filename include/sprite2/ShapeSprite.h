@@ -15,7 +15,7 @@ public:
 	ShapeSprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~ShapeSprite();
 
-	SPRITE_CLONE_FUNC(ShapeSprite)
+	S2_SPR_CLONE_FUNC(ShapeSprite)
 
 	VI_DUMMY_FUNC
 

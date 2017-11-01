@@ -23,7 +23,7 @@ public:
 
 	const Actor* QueryAnchor(const Actor* actor) const;
 
-	SPRITE_CLONE_FUNC(AnchorSprite)
+	S2_SPR_CLONE_FUNC(AnchorSprite)
 
 	VI_DUMMY_FUNC
 

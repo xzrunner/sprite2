@@ -35,7 +35,7 @@ public:
 	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
 	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
 
-	SPRITE_CLONE_FUNC(ProxySprite)
+	S2_SPR_CLONE_FUNC(ProxySprite)
 
 	VI_DUMMY_FUNC
 

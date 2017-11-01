@@ -21,7 +21,7 @@ public:
 protected:
 	float m_process;
 
-	SPRITE_CLONE_FUNC(IconSprite)
+	S2_SPR_CLONE_FUNC(IconSprite)
 
 	VI_DUMMY_FUNC
 

@@ -37,7 +37,7 @@ private:
 protected:
 	int m_action;
 
-	SPRITE_CLONE_FUNC(ComplexSprite)
+	S2_SPR_CLONE_FUNC(ComplexSprite)
 
 	VI_DUMMY_FUNC
 

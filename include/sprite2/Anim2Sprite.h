@@ -34,7 +34,7 @@ protected:
 
 	Anim2Curr m_curr;
 
-	SPRITE_CLONE_FUNC(Anim2Sprite)
+	S2_SPR_CLONE_FUNC(Anim2Sprite)
 
 	VI_DUMMY_FUNC
 

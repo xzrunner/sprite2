@@ -72,7 +72,7 @@ protected:
 
 	float m_start_radius;
 
-	SPRITE_CLONE_FUNC(Particle3dSprite)
+	S2_SPR_CLONE_FUNC(Particle3dSprite)
 
 	VI_DUMMY_FUNC
 

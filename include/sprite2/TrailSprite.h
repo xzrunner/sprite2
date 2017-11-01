@@ -41,7 +41,7 @@ protected:
 	bool m_local;
 	bool m_in_p3d;
 
-	SPRITE_CLONE_FUNC(TrailSprite)
+	S2_SPR_CLONE_FUNC(TrailSprite)
 	
 	VI_DUMMY_FUNC
 

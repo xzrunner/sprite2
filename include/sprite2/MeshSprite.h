@@ -48,7 +48,7 @@ protected:
 
 	bool m_only_draw_bound;
 
-	SPRITE_CLONE_FUNC(MeshSprite)
+	S2_SPR_CLONE_FUNC(MeshSprite)
 
 	VI_DUMMY_FUNC
 

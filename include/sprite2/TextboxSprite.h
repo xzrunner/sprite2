@@ -35,7 +35,7 @@ private:
 	// for dynamic draw
 	mutable int m_time;	
 
-	SPRITE_CLONE_FUNC(TextboxSprite)
+	S2_SPR_CLONE_FUNC(TextboxSprite)
 
 	VI_DUMMY_FUNC
 

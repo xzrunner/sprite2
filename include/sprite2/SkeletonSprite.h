@@ -23,7 +23,7 @@ public:
 protected:
 	SkeletonPose m_pose;
 
-	SPRITE_CLONE_FUNC(SkeletonSprite)
+	S2_SPR_CLONE_FUNC(SkeletonSprite)
 
 	VI_DUMMY_FUNC
 

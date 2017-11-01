@@ -71,6 +71,8 @@ public:
 	static void LoadSprLerpData(Sprite& spr, const AnimCopy::Lerp& lerp, int time);
 
 private:
+	void CloneSlots(const CU_VEC<SprPtr>& src);
+
 	int  UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor);
 
 	void ResetLayerCursor();

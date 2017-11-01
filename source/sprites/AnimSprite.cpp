@@ -42,12 +42,16 @@ AnimSprite::AnimSprite(const SymPtr& sym, uint32_t id)
 
 AnimSprite::AnimSprite(const AnimSprite& spr)
 	: Sprite(spr)
+	, m_loop(spr.m_loop)
+	, m_interval(spr.m_interval)
+	, m_fps(spr.m_fps)
+	, m_start_random(spr.m_start_random)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
-	this->operator = (spr);
+	m_state.Assign(spr.m_state, false);
 }
 
 AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
@@ -59,7 +63,7 @@ AnimSprite& AnimSprite::operator = (const AnimSprite& spr)
 
 	m_start_random = spr.m_start_random;
 
-	m_state.Assign(spr.m_state, &GetSymbol() == &spr.GetSymbol());
+	m_state.Assign(spr.m_state, GetSymbol() == spr.GetSymbol());
 
 	return *this;
 }

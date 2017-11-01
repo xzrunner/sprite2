@@ -43,6 +43,7 @@ AnimCurr::AnimCurr(const AnimCurr& curr)
 	, m_curr(curr.m_curr)
 	, m_curr_num(curr.m_curr_num)
 {
+	CloneSlots(curr.m_slots);
 }
 
 AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
@@ -50,10 +51,10 @@ AnimCurr& AnimCurr::operator = (const AnimCurr& curr)
 	m_copy = curr.m_copy;
 	m_layer_cursor = curr.m_layer_cursor;
 	m_layer_cursor_update = curr.m_layer_cursor_update;
-	m_slots = curr.m_slots;
 	m_curr = curr.m_curr;
 	m_curr_num = curr.m_curr_num;
 	m_ctrl = curr.m_ctrl;
+	CloneSlots(curr.m_slots);
 	return *this;
 }
 
@@ -368,6 +369,15 @@ void AnimCurr::LoadSprLerpData(Sprite& spr, const AnimCopy::Lerp& lerp, int time
 	col.SetMul(mul);
 	col.SetAdd(add);
 	spr.SetColor(col);
+}
+
+void AnimCurr::CloneSlots(const CU_VEC<SprPtr>& src)
+{
+	m_slots.clear();
+	m_slots.reserve(src.size());
+	for (auto& spr : src) {
+		m_slots.push_back(spr->Clone());
+	}
 }
 
 int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)

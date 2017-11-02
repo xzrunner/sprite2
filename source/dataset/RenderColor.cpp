@@ -70,17 +70,21 @@ void RenderColor::Reset()
 	m_colors[IDX_BMAP] = 0x00ff0000;
 }
 
-void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor& c)
+void RenderColor::Mul(const RenderColor& _c0, const RenderColor& _c1, RenderColor& _c)
 {
+	auto& c0(_c0.m_colors);
+	auto& c1(_c1.m_colors);
+	auto& c(_c.m_colors);
+
 	// MUL
-	uint32_t lmul = c0.m_colors[IDX_MUL],
-		     rmul = c1.m_colors[IDX_MUL];
+	uint32_t lmul = c0[IDX_MUL],
+		     rmul = c1[IDX_MUL];
 	if (lmul == 0xffffffff) {
-		c.m_colors[IDX_MUL] = rmul;
+		c[IDX_MUL] = rmul;
 	} else if (rmul == 0xffffffff) {
-		c.m_colors[IDX_MUL] = lmul;
+		c[IDX_MUL] = lmul;
 	} else if (lmul == 0 || rmul == 0) {
-		c.m_colors[IDX_MUL] = 0;
+		c[IDX_MUL] = 0;
 	} else {
 		uint8_t lr, lg, lb, la,
 			    rr, rg, rb, ra;
@@ -91,15 +95,15 @@ void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor&
 		g = static_cast<uint8_t>(lg * rg * INV_255);
 		b = static_cast<uint8_t>(lb * rb * INV_255);
 		a = static_cast<uint8_t>(la * ra * INV_255);
-		c.m_colors[IDX_MUL] = from_abgr(a, b, g, r);
+		c[IDX_MUL] = from_abgr(a, b, g, r);
 	}
 	// ADD
-	uint32_t ladd = c0.m_colors[IDX_ADD],
-		     radd = c1.m_colors[IDX_ADD];
+	uint32_t ladd = c0[IDX_ADD],
+		     radd = c1[IDX_ADD];
 	if (ladd == 0) {
-		c.m_colors[IDX_ADD] = radd;
+		c[IDX_ADD] = radd;
 	} else if (radd == 0) {
-		c.m_colors[IDX_ADD] = ladd;
+		c[IDX_ADD] = ladd;
 	} else {
 		uint8_t lr, lg, lb, la,
 			    rr, rg, rb, ra;
@@ -110,23 +114,23 @@ void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor&
 		g = clamp(lg + rg);
 		b = clamp(lb + rb);
 		a = clamp(la + ra);
-		c.m_colors[IDX_ADD] = from_abgr(a, b, g, r);
+		c[IDX_ADD] = from_abgr(a, b, g, r);
 	}
 	// MAP
-	uint32_t lrmap = c0.m_colors[IDX_RMAP],
-		     lgmap = c0.m_colors[IDX_GMAP],
-			 lbmap = c0.m_colors[IDX_BMAP];
-	uint32_t rrmap = c1.m_colors[IDX_RMAP],
-		     rgmap = c1.m_colors[IDX_GMAP],
-			 rbmap = c1.m_colors[IDX_BMAP];
+	uint32_t lrmap = c0[IDX_RMAP],
+		     lgmap = c0[IDX_GMAP],
+			 lbmap = c0[IDX_BMAP];
+	uint32_t rrmap = c1[IDX_RMAP],
+		     rgmap = c1[IDX_GMAP],
+			 rbmap = c1[IDX_BMAP];
 	if (lrmap == 0x000000ff && lgmap == 0x0000ff00 && lbmap == 0x00ff0000) {
-		c.m_colors[IDX_RMAP] = rrmap;
-		c.m_colors[IDX_GMAP] = rgmap;
-		c.m_colors[IDX_BMAP] = rbmap;
+		c[IDX_RMAP] = rrmap;
+		c[IDX_GMAP] = rgmap;
+		c[IDX_BMAP] = rbmap;
 	} else if (rrmap == 0x000000ff && rgmap == 0x0000ff00 && rbmap == 0x00ff0000) {
-		c.m_colors[IDX_RMAP] = lrmap;
-		c.m_colors[IDX_GMAP] = lgmap;
-		c.m_colors[IDX_BMAP] = lbmap;
+		c[IDX_RMAP] = lrmap;
+		c[IDX_GMAP] = lgmap;
+		c[IDX_BMAP] = lbmap;
 	} else {
 		uint8_t lrmapr, lrmapg, lrmapb, lrmapa,
 				lgmapr, lgmapg, lgmapb, lgmapa,
@@ -145,17 +149,17 @@ void RenderColor::Mul(const RenderColor& c0, const RenderColor& c1, RenderColor&
 		r = static_cast<uint8_t>((lrmapr * rrmapr + lrmapg * rgmapr + lrmapb * rbmapr) * INV_255);
 		g = static_cast<uint8_t>((lrmapr * rrmapg + lrmapg * rgmapg + lrmapb * rbmapg) * INV_255);
 		b = static_cast<uint8_t>((lrmapr * rrmapb + lrmapg * rgmapb + lrmapb * rbmapb) * INV_255);
-		c.m_colors[IDX_RMAP] = from_abgr(0, b, g, r);
+		c[IDX_RMAP] = from_abgr(0, b, g, r);
 
 		r = static_cast<uint8_t>((lgmapr * rrmapr + lgmapg * rgmapr + lgmapb * rbmapr) * INV_255);
 		g = static_cast<uint8_t>((lgmapr * rrmapg + lgmapg * rgmapg + lgmapb * rbmapg) * INV_255);
 		b = static_cast<uint8_t>((lgmapr * rrmapb + lgmapg * rgmapb + lgmapb * rbmapb) * INV_255);
-		c.m_colors[IDX_GMAP] = from_abgr(0, b, g, r);
+		c[IDX_GMAP] = from_abgr(0, b, g, r);
 
 		r = static_cast<uint8_t>((lbmapr * rrmapr + lbmapg * rgmapr + lbmapb * rbmapr) * INV_255);
 		g = static_cast<uint8_t>((lbmapr * rrmapg + lbmapg * rgmapg + lbmapb * rbmapg) * INV_255);
 		b = static_cast<uint8_t>((lbmapr * rrmapb + lbmapg * rgmapb + lbmapb * rbmapb) * INV_255);
-		c.m_colors[IDX_BMAP] = from_abgr(0, b, g, r);
+		c[IDX_BMAP] = from_abgr(0, b, g, r);
 	}
 }
 

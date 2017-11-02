@@ -10,7 +10,7 @@ LOCAL_MODULE := sprite2
 LOCAL_C_INCLUDES := \
 	${CLIB_PATH} \
 	${SPRITE2_SRC_PATH}/include \
-	${SPRITE2_SRC_PATH}/include/sprite2 \
+	${SPRITE2_SRC_PATH}/include \
 	${SM_SRC_PATH} \
 	${GTXT_SRC_PATH} \
 	${SHADERLAB_SRC_PATH}/include \

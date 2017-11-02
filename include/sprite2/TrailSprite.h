@@ -2,12 +2,12 @@
 #define _SPRITE2_TRAIL_SPRITE_H_
 
 #include "sprite2/Sprite.h"
+#include "sprite2/TrailEmitter.h"
 
 namespace s2
 {
 
 class RenderParams;
-class TrailEmitter;
 
 class TrailSprite : public VIRTUAL_INHERITANCE Sprite
 {

@@ -2,11 +2,11 @@
 #define _SPRITE2_TRAIL_SYMBOL_H_
 
 #include "sprite2/Symbol.h"
+#include "sprite2/TrailEmitter.h"
 
 namespace s2
 {
 
-class TrailEmitter;
 class TrailEmitterCfg;
 
 class TrailSymbol : public VIRTUAL_INHERITANCE Symbol

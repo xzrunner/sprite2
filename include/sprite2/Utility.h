@@ -35,7 +35,8 @@ public:
 				RenderColor::Mul(actor->GetColor(), tmp, dst);
 			} else {
 				RenderColor::Mul(spr->GetColor(), parent_rc, dst);
-			}}
+			}
+		}
 	}
 
 }; // Utility

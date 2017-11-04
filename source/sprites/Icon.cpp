@@ -6,7 +6,7 @@
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
-#include <cooking.h>
+#include <cooking/Facade.h>
 
 namespace s2
 {

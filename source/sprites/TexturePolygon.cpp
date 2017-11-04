@@ -8,7 +8,7 @@
 #include <SM_Triangulation.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
-#include <cooking.h>
+#include <cooking/Facade.h>
 
 #include <assert.h>
 

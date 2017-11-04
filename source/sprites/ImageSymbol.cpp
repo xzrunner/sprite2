@@ -25,7 +25,7 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Sprite3Shader.h>
-#include <cooking.h>
+#include <cooking/Facade.h>
 
 #include <assert.h>
 

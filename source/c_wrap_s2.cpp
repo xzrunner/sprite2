@@ -1306,9 +1306,8 @@ bool s2_actor_get_scissor(const void* actor, float* xmin, float* ymin, float* xm
 		*xmax = r.xmax;
 		*ymax = r.ymax;
 		return true;
-	}
-	else {
-		LOGW("s2_actor_get_scissor fail, sym_id %d", s2_actor->GetSprRaw()->GetSymbol()->GetID());
+	} else {
+		LOGW("s2_actor_get_scissor fail, sym_id %d", s2_actor->GetSpr()->GetSymbol()->GetID());
 		return false;
 	}
 }

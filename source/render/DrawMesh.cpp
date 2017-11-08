@@ -322,6 +322,7 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	RenderParams* rp_child = RenderParamsPool::Instance()->Pop();
 	*rp_child = rp;
 	rp_child->mt.Identity();
+	rp_child->view_region.MakeEmpty();
 
 	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
 

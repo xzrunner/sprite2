@@ -327,7 +327,8 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->mt.Identity();
-	rp_child->view_region.MakeEmpty();
+	// make empty
+	rp_child->SetViewRegion(sm::rect());
 
 	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
 

@@ -24,9 +24,9 @@ public:
 	DrawRT(RenderTarget* rt);
 	~DrawRT();
 
-	void Draw(const Sprite* spr, bool clear = false, int width = -1, int height = -1, float dx = 0, float dy = 0, float scale = 1);
+	void Draw(const Sprite& spr, bool clear = false, int width = -1, int height = -1, float dx = 0, float dy = 0, float scale = 1);
 	void Draw(const Symbol& sym, bool whitebg = false, float scale = 1.0f);
-	void Draw(const Shape* shape, bool clear = false, int width = -1, int height = -1);
+	void Draw(const Shape& shape, bool clear = false, int width = -1, int height = -1);
 
 	uint8_t* StoreToMemory(int width = -1, int height = -1, int channels = 4);
 	void StoreToFile(const CU_STR& filepath, int width = -1, int height = -1, int channels = 4);

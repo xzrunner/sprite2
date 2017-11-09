@@ -49,7 +49,7 @@ DrawRT::~DrawRT()
 	}
 }
 
-void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx, float dy, float scale)
+void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx, float dy, float scale)
 {
 	if (width == -1) {
 		width = m_rt->Width();
@@ -76,7 +76,7 @@ void DrawRT::Draw(const Sprite* spr, bool clear, int width, int height, float dx
 	params.mt.Scale(scale, -scale);
 	params.mt.Translate(-dx, dy);
 	params.SetChangeShader(false);
-	DrawNode::Draw(nullptr, spr, params);
+	DrawNode::Draw(nullptr, &spr, params);
 
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	mgr->FlushShader();
@@ -124,7 +124,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	m_rt->Unbind();
 }
 
-void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
+void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 {
 	if (width == -1) {
 		width = m_rt->Width();
@@ -146,7 +146,7 @@ void DrawRT::Draw(const Shape* shape, bool clear, int width, int height)
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);
-	shape->Draw(rp);
+	shape.Draw(rp);
 
 	RenderCtxStack::Instance()->Pop();
 

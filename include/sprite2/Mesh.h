@@ -1,6 +1,7 @@
 #ifndef _SPRITE2_MESH_H_
 #define _SPRITE2_MESH_H_
 
+#include "sprite2/config.h"
 #include "sprite2/typedef.h"
 
 #include <cu/uncopyable.h>
@@ -26,6 +27,11 @@ class Mesh : private cu::Uncopyable
 public:
 	Mesh();
 	Mesh(const SymConstPtr& base);
+#ifdef S2_MESH_VIRTUAL
+	virtual ~Mesh();
+#else
+	~Mesh();
+#endif // S2_MESH_VIRTUAL
 
 	const SymConstPtr& GetBaseSymbol() const { return m_base; }
 

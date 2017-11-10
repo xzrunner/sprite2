@@ -24,6 +24,8 @@ PolygonShape::PolygonShape(const CU_VEC<sm::vec2>& vertices)
 {
 }
 
+PolygonShape::~PolygonShape() = default;
+
 bool PolygonShape::IsContain(const sm::vec2& pos) const
 {
 	return sm::is_point_in_area(pos, m_vertices);

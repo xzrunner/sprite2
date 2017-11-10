@@ -25,6 +25,8 @@ Mesh::Mesh(const SymConstPtr& base)
 	m_node_radius = std::min(m_width * 0.1f, 5.0f);
 }
 
+Mesh::~Mesh() = default;
+
 void Mesh::DumpToTriangles(CU_VEC<sm::vec2>& vertices, 
 						   CU_VEC<sm::vec2>& texcoords,
 						   CU_VEC<int>& triangles) const

@@ -5,7 +5,6 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawMesh.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/Mesh.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"

@@ -5,6 +5,7 @@
 #define S2_VIRTUAL_INHERITANCE
 #define S2_SHAPE_SHARED_PTR
 #define S2_SPR_DEFAULT_EDITABLE true
+#define S2_MESH_VIRTUAL
 #else
 #define S2_SPR_DEFAULT_EDITABLE false
 #endif // S2_EDITOR

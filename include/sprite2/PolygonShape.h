@@ -14,6 +14,7 @@ public:
 	PolygonShape(const PolygonShape& ps);
 	const PolygonShape& operator = (const PolygonShape& ps);
 	PolygonShape(const CU_VEC<sm::vec2>& vertices);
+	virtual ~PolygonShape();
 
 	/**
 	 *  @interface

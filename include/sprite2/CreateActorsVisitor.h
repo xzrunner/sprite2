@@ -15,10 +15,10 @@ class CreateActorsVisitor : public SpriteVisitor
 public:
 	CreateActorsVisitor();
 
-	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params) override;
 
-	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params);
-	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams& params) override;
+	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams& params) override;
 
 private:
 	bool m_need_actor;

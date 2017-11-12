@@ -34,7 +34,7 @@ public:
 	std::unique_ptr<Icon>& GetIcon() { return m_icon; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	std::unique_ptr<Icon> m_icon = nullptr;

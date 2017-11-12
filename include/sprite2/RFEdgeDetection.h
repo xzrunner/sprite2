@@ -16,7 +16,7 @@ public:
 		, m_blend(0.5f)
 	{}
 
-	virtual bool operator == (const RenderFilter& rf) const {
+	virtual bool operator == (const RenderFilter& rf) const override {
 		return RenderFilter::operator == (rf) &&
 			   m_blend == static_cast<const RFEdgeDetection&>(rf).m_blend;
 	}

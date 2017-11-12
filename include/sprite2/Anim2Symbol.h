@@ -35,7 +35,7 @@ public:
 	void ClearCachedSym() { m_cached_syms.clear(); }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	rg_animation* m_anim;

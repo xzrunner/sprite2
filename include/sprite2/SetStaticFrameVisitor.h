@@ -11,7 +11,7 @@ class SetStaticFrameVisitor : public SpriteVisitor
 public:
 	SetStaticFrameVisitor(int static_frame);
 	
-	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params) override;
 
 private:
 	int m_static_frame;

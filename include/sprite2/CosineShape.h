@@ -13,9 +13,9 @@ public:
 	CosineShape(const CosineShape& cosine);
 	CosineShape(const CU_VEC<sm::vec2>& vertices);
 
-	virtual CosineShape* Clone() const;
-	virtual int Type() const { return SHAPE_COSINE; }
-	virtual void Draw(const RenderParams& rp) const;
+	virtual CosineShape* Clone() const override;
+	virtual int Type() const override { return SHAPE_COSINE; }
+	virtual void Draw(const RenderParams& rp) const override;
 
 private:
 	void UpdatePolyline();

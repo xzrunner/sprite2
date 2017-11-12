@@ -29,7 +29,7 @@ public:
 #ifndef S2_DISABLE_FLATTEN
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
-	virtual bool Update(const UpdateParams& up, float time);
+	virtual bool Update(const UpdateParams& up, float time) override;
 
 	void UpdateMesh(const rg_skeleton_pose* sk_pose);
 	void UpdateMesh(const rg_tl_deform_state* deform_state, const float* vertices);
@@ -41,7 +41,7 @@ public:
 	void SetPause(bool pause) { m_pause = pause; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	std::unique_ptr<Mesh> m_mesh = nullptr;

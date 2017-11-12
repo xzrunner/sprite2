@@ -16,7 +16,7 @@ public:
 		, m_iterations(9)
 	{}
 
-	virtual bool operator == (const RenderFilter& rf) const {
+	virtual bool operator == (const RenderFilter& rf) const override {
 		return RenderFilter::operator == (rf) &&
 			   m_iterations == static_cast<const RFOuterGlow&>(rf).m_iterations;
 	}

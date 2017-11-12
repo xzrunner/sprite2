@@ -36,7 +36,7 @@ public:
 	auto& GetShape() { return m_shape; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 #ifndef S2_SHAPE_SHARED_PTR

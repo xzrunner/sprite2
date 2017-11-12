@@ -31,7 +31,7 @@ public:
 	void SetMask(const SprPtr& mask) { m_mask = mask; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	SprPtr m_base = nullptr;

@@ -17,14 +17,14 @@ public:
 	ColorPolygon() {}
 	ColorPolygon(const Color& color);
 	
-	virtual std::unique_ptr<Polygon> Clone() {
+	virtual std::unique_ptr<Polygon> Clone() override {
 		return std::make_unique<ColorPolygon>(*this);
 	}
 
-	virtual int Type() const { return POLY_COLOR; }
+	virtual int Type() const override { return POLY_COLOR; }
 
-	virtual void Draw(const RenderParams& rp) const;
-	virtual void Build();
+	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Build() override;
 
 	const Color& GetColor() const { return m_color; }
 

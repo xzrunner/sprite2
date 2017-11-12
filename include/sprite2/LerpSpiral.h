@@ -17,9 +17,9 @@ public:
 	LerpSpiral& operator = (const LerpSpiral& lerp);
 	LerpSpiral(float angle_begin, float angle_end, float scale = 1);
 
-	virtual std::unique_ptr<ILerp> Clone() const { return std::make_unique<LerpSpiral>(*this); }
+	virtual std::unique_ptr<ILerp> Clone() const override { return std::make_unique<LerpSpiral>(*this); }
 
-	virtual int Type() const { return LERP_SPIRAL; }
+	virtual int Type() const override { return LERP_SPIRAL; }
 
 	sm::vec2 Lerp(const sm::vec2& begin, const sm::vec2& end, float process) const;
 

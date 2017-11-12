@@ -22,10 +22,10 @@ public:
 	Pseudo3DCamera& operator = (const Pseudo3DCamera& cam);
 	virtual ~Pseudo3DCamera();
 
-	virtual CameraType Type() const { return CAM_PSEUDO3D; }
-	virtual void OnSize(int width, int height);
-	virtual void Reset();
-	virtual void Bind() const;
+	virtual CameraType Type() const override { return CAM_PSEUDO3D; }
+	virtual void OnSize(int width, int height) override;
+	virtual void Reset() override;
+	virtual void Bind() const override;
 
 	sm::vec2 TransPosScreenToProject(int x, int y, int width, int height) const;
 	sm::vec2 TransPosProjectToScreen(const sm::vec3& proj, int width, int height) const;

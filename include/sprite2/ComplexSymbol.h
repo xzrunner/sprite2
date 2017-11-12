@@ -25,7 +25,7 @@ public:
 #ifndef S2_DISABLE_FLATTEN
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
-	virtual bool Update(const UpdateParams& up, float time);
+	virtual bool Update(const UpdateParams& up, float time) override;
 
 	const CU_VEC<SprPtr>& GetActionChildren(int action) const;
 	const CU_VEC<SprPtr>& GetAllChildren() const { return m_children; }
@@ -58,7 +58,7 @@ public:
 	void SetActions(const CU_VEC<Action>& actions) { m_actions = actions; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	sm::rect CalcAABB(const Sprite* spr, const Actor* actor) const;

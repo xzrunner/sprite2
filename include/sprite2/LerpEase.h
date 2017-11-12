@@ -56,9 +56,9 @@ public:
 	LerpEase& operator = (const LerpEase& lerp);
 	LerpEase(int type);
 
-	virtual std::unique_ptr<ILerp> Clone() const { return std::make_unique<LerpEase>(*this); }
+	virtual std::unique_ptr<ILerp> Clone() const override { return std::make_unique<LerpEase>(*this); }
 
-	virtual int Type() const { return LERP_EASE; }
+	virtual int Type() const override { return LERP_EASE; }
 
 	template<typename T>
 	T Lerp(const T& begin, const T& end, float t) const

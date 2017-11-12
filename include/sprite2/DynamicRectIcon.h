@@ -11,13 +11,13 @@ class DynamicRectIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	DynamicRectIcon();
 
-	virtual DynamicRectIcon* Clone() const { return new DynamicRectIcon(*this); }
+	virtual DynamicRectIcon* Clone() const override { return new DynamicRectIcon(*this); }
 
 	void SetRegion(const sm::rect& begin, const sm::rect& end);
 	void GetRegion(sm::rect& begin, sm::rect& end) const;
 	
 protected:
-	virtual void GetQuad(float process, sm::vec2 quad[4]) const;
+	virtual void GetQuad(float process, sm::vec2 quad[4]) const override;
 
 protected:
 	sm::rect m_begin, m_end;

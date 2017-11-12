@@ -16,7 +16,7 @@ public:
 		: RenderFilter(FM_COL_GRADING) 
 	{}
 
-	virtual bool operator == (const RenderFilter& rf) const {
+	virtual bool operator == (const RenderFilter& rf) const override {
 		return RenderFilter::operator == (rf) &&
 			   m_filepath == static_cast<const RFColGrading&>(rf).GetFilepath();
 	}

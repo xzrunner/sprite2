@@ -14,10 +14,10 @@ public:
 	BezierShape& operator = (const BezierShape& bezier);
 	BezierShape(const sm::vec2& start, const sm::vec2& end);
 	
-	virtual BezierShape* Clone() const;
-	virtual int Type() const { return SHAPE_BEZIER; }
-	virtual bool IsContain(const sm::vec2& pos) const;
-	virtual void Draw(const RenderParams& rp) const;
+	virtual BezierShape* Clone() const override;
+	virtual int Type() const override { return SHAPE_BEZIER; }
+	virtual bool IsContain(const sm::vec2& pos) const override;
+	virtual void Draw(const RenderParams& rp) const override;
 
 // 	const sm::vec2* GetCtrlNodes() const { return m_control_nodes; }
 // 	void SetCtrlNodes(const sm::vec2* ctrl_nodes) {

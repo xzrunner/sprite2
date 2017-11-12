@@ -20,14 +20,14 @@ public:
 	TexturePolygon() = default;
 	TexturePolygon(const std::shared_ptr<const ImageSymbol>& img);
 
-	virtual std::unique_ptr<Polygon> Clone() {
+	virtual std::unique_ptr<Polygon> Clone() override {
 		return std::make_unique<TexturePolygon>(*this);
 	}
 
-	virtual int Type() const { return POLY_TEXTURE; }
+	virtual int Type() const override { return POLY_TEXTURE; }
 
-	virtual void Draw(const RenderParams& rp) const;
-	virtual void Build();
+	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Build() override;
 
 	const CU_VEC<sm::vec2>& GetTexcoords() const { return m_texcoords; }
 

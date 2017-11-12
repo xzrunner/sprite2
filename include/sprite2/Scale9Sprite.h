@@ -18,8 +18,8 @@ public:
 	Scale9Sprite(const SymPtr& sym, uint32_t id = -1);
 	virtual ~Scale9Sprite();
 
-	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const;
-	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const;
+	virtual VisitResult TraverseChildren(SpriteVisitor& visitor, const SprVisitorParams& params) const override;
+	virtual VisitResult TraverseChildren2(SpriteVisitor2& visitor, const SprVisitorParams2& params) const override;
 
 	const Scale9& GetScale9() const { return m_s9; }
 

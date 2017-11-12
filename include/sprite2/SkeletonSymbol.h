@@ -31,7 +31,7 @@ public:
 	const std::unique_ptr<Skeleton>& GetSkeleton() const { return m_skeleton; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	std::unique_ptr<Skeleton> m_skeleton = nullptr;

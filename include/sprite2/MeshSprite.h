@@ -21,9 +21,9 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(const UpdateParams& up, Message msg);
-	virtual bool Update(const UpdateParams& up);
-	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const;
+	virtual void OnMessage(const UpdateParams& up, Message msg) override;
+	virtual bool Update(const UpdateParams& up) override;
+	virtual SprPtr FetchChildByName(int name, const ActorConstPtr& actor) const override;
 
 	void Lerp(const MeshSprite& begin, const MeshSprite& end, float process);
 

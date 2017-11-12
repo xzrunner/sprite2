@@ -108,7 +108,7 @@ SprPtr MeshSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 			: m_name(name)
 		{}
 
-		virtual void Visit(const SprPtr& spr) const
+		virtual void Visit(const SprPtr& spr) const override
 		{
 			if (!m_spr && spr->GetName() == m_name) {
 				m_spr = spr;

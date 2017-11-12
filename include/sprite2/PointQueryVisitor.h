@@ -18,10 +18,10 @@ class PointQueryVisitor : public SpriteVisitor2
 public:
 	PointQueryVisitor(const sm::vec2& pos);
 
-	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams2& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams2& params) override;
 
-	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams2& params);
-	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams2& params);
+	virtual VisitResult VisitChildrenBegin(const SprConstPtr& spr, const SprVisitorParams2& params) override;
+	virtual VisitResult VisitChildrenEnd(const SprConstPtr& spr, const SprVisitorParams2& params) override;
 
 	ActorConstPtr GetSelectedActor() const;
 	const S2_MAT& GetSelectedMat() const { return m_selected_params.mt; }

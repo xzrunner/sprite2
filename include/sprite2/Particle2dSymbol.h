@@ -32,7 +32,7 @@ public:
 	void SetEmitterCfg(const p2d_emitter_cfg* cfg) { m_et_cfg = cfg; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	const p2d_emitter_cfg* m_et_cfg;

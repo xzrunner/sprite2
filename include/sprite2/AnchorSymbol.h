@@ -27,7 +27,7 @@ public:
 #endif // S2_DISABLE_FLATTEN
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	static const Actor* GetRealActor(const Sprite* spr, const Actor* actor);

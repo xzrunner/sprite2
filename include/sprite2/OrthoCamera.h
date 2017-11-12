@@ -14,10 +14,10 @@ class OrthoCamera : public Camera
 public:
 	OrthoCamera();
 	
-	virtual CameraType Type() const { return CAM_ORTHO2D; }
-	virtual void OnSize(int width, int height);
-	virtual void Reset();
-	virtual void Bind() const;
+	virtual CameraType Type() const override { return CAM_ORTHO2D; }
+	virtual void OnSize(int width, int height) override;
+	virtual void Reset() override;
+	virtual void Bind() const override;
 
 	sm::vec2 TransPosScreenToProject(int x, int y, int width, int height) const;
 	sm::vec2 TransPosProjectToScreen(const sm::vec2& proj, int width, int height) const;

@@ -31,7 +31,7 @@ public:
 	auto& GetItems() const { return m_items; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	CU_VEC<std::pair<const ActorConstPtr, SprPtr>> m_items;

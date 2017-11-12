@@ -14,17 +14,17 @@ public:
 	RectShape(const RectShape& rect);
 	RectShape(const sm::rect& r);
 	
-	virtual RectShape* Clone() const;
-	virtual int Type() const { return SHAPE_RECT; }
-	virtual bool IsContain(const sm::vec2& pos) const;
-	virtual bool IsIntersect(const sm::rect& rect) const;
-	virtual void Draw(const RenderParams& rp) const;
+	virtual RectShape* Clone() const override;
+	virtual int Type() const override { return SHAPE_RECT; }
+	virtual bool IsContain(const sm::vec2& pos) const override;
+	virtual bool IsIntersect(const sm::rect& rect) const override;
+	virtual void Draw(const RenderParams& rp) const override;
 
 	const sm::rect& GetRect() const { return m_bounding; }
 	void SetRect(const sm::rect& r) { m_bounding = r; }
 
 protected:
-	virtual void UpdateBounding() {}
+	virtual void UpdateBounding() override {}
 
 	VI_DUMMY_FUNC
 

@@ -22,8 +22,8 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(const UpdateParams& up, Message msg);
-	virtual bool Update(const UpdateParams& up);
+	virtual void OnMessage(const UpdateParams& up, Message msg) override;
+	virtual bool Update(const UpdateParams& up) override;
 
 	void Draw(const RenderParams& rp) const;
 

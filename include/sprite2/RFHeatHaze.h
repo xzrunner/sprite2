@@ -18,7 +18,7 @@ public:
 		, m_rise_factor(0.2f)
 	{}
 
-	virtual bool operator == (const RenderFilter& rf) const {
+	virtual bool operator == (const RenderFilter& rf) const override {
 		const RFHeatHaze& rf_hh = static_cast<const RFHeatHaze&>(rf);
 		return RenderFilter::operator == (rf) &&
 			   m_filepath == rf_hh.m_filepath &&

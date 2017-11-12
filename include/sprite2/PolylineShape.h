@@ -20,17 +20,17 @@ public:
 	 *  @interface
 	 *    Shape
 	 */
-	virtual PolylineShape* Clone() const { return new PolylineShape(*this);  }
-	virtual int Type() const { return SHAPE_POLYLINE; }
-	virtual bool IsContain(const sm::vec2& pos) const;
-	virtual bool IsIntersect(const sm::rect& rect) const;
-	virtual void Draw(const RenderParams& rp) const;
+	virtual PolylineShape* Clone() const override { return new PolylineShape(*this);  }
+	virtual int Type() const override { return SHAPE_POLYLINE; }
+	virtual bool IsContain(const sm::vec2& pos) const override;
+	virtual bool IsIntersect(const sm::rect& rect) const override;
+	virtual void Draw(const RenderParams& rp) const override;
 
 	const CU_VEC<sm::vec2>& GetVertices() const { return m_vertices; }
 	void SetVertices(const CU_VEC<sm::vec2>& vertices);
 
 protected:
-	virtual void UpdateBounding();
+	virtual void UpdateBounding() override;
 
 protected:
 	CU_VEC<sm::vec2> m_vertices;

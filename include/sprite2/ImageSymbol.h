@@ -43,7 +43,7 @@ public:
 	bool IsLoaded() const;
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	void DrawBlend(const RenderParams& rp, float* vertices, const float* texcoords, int tex_id) const;

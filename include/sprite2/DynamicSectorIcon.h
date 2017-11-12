@@ -11,13 +11,13 @@ class DynamicSectorIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	DynamicSectorIcon();
 
-	virtual DynamicSectorIcon* Clone() const { return new DynamicSectorIcon(*this); }
+	virtual DynamicSectorIcon* Clone() const override { return new DynamicSectorIcon(*this); }
 
 	void SetRegion(float min, float max);
 	void GetRegion(float& min, float& max) const;
 
 protected:
-	virtual void GetQuad(float process, sm::vec2 quad[4]) const;
+	virtual void GetQuad(float process, sm::vec2 quad[4]) const override;
 
 private:
 	float m_min, m_max;

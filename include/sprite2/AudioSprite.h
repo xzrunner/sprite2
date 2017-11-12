@@ -20,7 +20,7 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual void OnMessage(const UpdateParams& up, Message msg);
+	virtual void OnMessage(const UpdateParams& up, Message msg) override;
 
 	void Play();
 	void Stop();

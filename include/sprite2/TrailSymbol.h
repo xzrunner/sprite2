@@ -33,7 +33,7 @@ public:
 	const std::unique_ptr<TrailEmitter>& GetEmitter() const { return m_et; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
 	std::shared_ptr<const TrailEmitterCfg> m_et_cfg = nullptr;

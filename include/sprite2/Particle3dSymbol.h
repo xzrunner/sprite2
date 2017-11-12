@@ -28,7 +28,7 @@ public:
 #ifndef S2_DISABLE_FLATTEN
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
-	virtual bool Update(const UpdateParams& up, float time);
+	virtual bool Update(const UpdateParams& up, float time) override;
 
 	void SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>& cfg);
 	auto& GetEmitterCfg() const { return m_et_cfg; }
@@ -43,7 +43,7 @@ public:
 	bool IsLocal() const { return m_local; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	RenderReturn DrawImpl(const RenderParams& rp, const Sprite* spr) const;

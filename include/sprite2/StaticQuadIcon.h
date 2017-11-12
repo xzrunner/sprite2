@@ -13,19 +13,19 @@ public:
 	StaticQuadIcon(const StaticQuadIcon& icon);
 	StaticQuadIcon& operator = (const StaticQuadIcon& icon);
 
-	virtual StaticQuadIcon* Clone() const { return new StaticQuadIcon(*this); }
+	virtual StaticQuadIcon* Clone() const override { return new StaticQuadIcon(*this); }
 
-	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
+	virtual RenderReturn Draw(const RenderParams& rp, float process) const override;
 
-	virtual sm::rect GetRegion(float process) const;
+	virtual sm::rect GetRegion(float process) const override;
 
 	const sm::vec2* GetScreen() const { return m_screen; }
 	void SetScreen(const sm::vec2* screen);
 
 protected:
-	virtual void GetQuad(float process, sm::vec2 quad[4]) const;
+	virtual void GetQuad(float process, sm::vec2 quad[4]) const override;
 
-	virtual void Update();
+	virtual void Update() override;
 
 protected:
 	sm::vec2 m_src[4], m_screen[4];

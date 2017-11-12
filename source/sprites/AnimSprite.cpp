@@ -127,7 +127,7 @@ SprPtr AnimSprite::FetchChildByName(int name, const ActorConstPtr& actor) const
 	return curr.FetchChildByName(name, actor);
 }
 
-SprPtr AnimSprite::FetchChildByIdx(int idx, const ActorConstPtr& actor) const
+SprPtr AnimSprite::FetchChildByIdx(int idx, const ActorPtr& actor) const
 {
 	const AnimCurr& curr = GetOriginCurr(actor.get());
 	return curr.FetchChildByIdx(idx);

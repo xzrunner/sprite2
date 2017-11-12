@@ -20,9 +20,9 @@ public:
 	 *  @interface
 	 *    Sprite
 	 */
-	virtual bool Update(const UpdateParams& up);
-	virtual bool NeedAutoUpdate(const Actor* actor) const { return true; }
-	virtual bool AutoUpdate(const Actor* actor);
+	virtual bool Update(const UpdateParams& up) override;
+	virtual bool NeedAutoUpdate(const Actor* actor) const override { return true; }
+	virtual bool AutoUpdate(const Actor* actor) override;
 
 	Anim2Curr& GetAnimCurr() { return m_curr; }
 

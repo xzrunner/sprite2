@@ -30,7 +30,7 @@ public:
 	const std::shared_ptr<ua::Source>& GetSource() { return m_source; }
 
 protected:
-	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const;
+	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
 	std::shared_ptr<ua::Source> m_source = nullptr;

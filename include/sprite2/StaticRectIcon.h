@@ -11,13 +11,13 @@ class StaticRectIcon : public VIRTUAL_INHERITANCE Icon
 public:
 	StaticRectIcon();
 	
-	virtual StaticRectIcon* Clone() const { return new StaticRectIcon(*this); }
+	virtual StaticRectIcon* Clone() const override { return new StaticRectIcon(*this); }
 
 	void SetRegion(const sm::rect& r);
 	void GetRegion(sm::vec2& min, sm::vec2& max) const;
 
 protected:
-	virtual void GetQuad(float process, sm::vec2 quad[4]) const;
+	virtual void GetQuad(float process, sm::vec2 quad[4]) const override;
 
 protected:
 	sm::vec2 m_min, m_max;

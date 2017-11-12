@@ -11,7 +11,7 @@ class QueryLoadedVisitor : public SpriteVisitor
 public:
 	QueryLoadedVisitor();
 
-	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params);
+	virtual VisitResult Visit(const SprConstPtr& spr, const SprVisitorParams& params) override;
 
 	bool IsLoaded() const { return m_loaded; }
 

@@ -43,21 +43,110 @@ Sprite::Sprite()
 }
 
 Sprite::Sprite(const Sprite& spr)
-	: m_name(-1)
+	: m_sym(spr.m_sym)
+	, m_name(spr.m_name)
 	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
+	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
 
-	InitFromSpr(spr);
+	if (m_geo != spr.m_geo) {
+		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
+		*m_geo = *spr.m_geo;
+	}
+
+	if (spr.m_bounding) {
+		m_bounding.reset(spr.m_bounding->Clone());
+	}
+
+	if (m_render != spr.m_render)
+	{
+		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+
+		auto& src_color = spr.m_render->GetColor();
+		if (src_color && *src_color != *SprDefault::Instance()->Color()) {
+			m_render->SetColor(*src_color);
+		}
+
+		auto& src_shader = spr.m_render->GetShader();
+		if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
+			m_render->SetShader(*src_shader);
+		}
+
+		auto& src_camera = spr.m_render->GetCamera();
+		if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
+			m_render->SetCamera(*src_camera);
+		}
+	}
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
 {
-	InitFromSpr(spr);
+	m_sym = spr.m_sym;
+
+	m_name = spr.m_name;
+
+	if (m_geo != spr.m_geo) 
+	{
+ 		if (spr.m_geo.get() == SprDefault::Instance()->Geo()) {
+ 			m_geo.reset(SprDefault::Instance()->Geo());
+ 		} else {
+			if (m_geo.get() == SprDefault::Instance()->Geo()) {
+				m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
+			}
+ 			*m_geo = *spr.m_geo;
+ 		}
+	}
+
+	if (spr.m_bounding) {
+		if (!m_bounding) {
+			CreateBounding();
+		}
+		*m_bounding = *spr.m_bounding;
+	} else {
+		m_bounding.reset();
+	}
+
+	if (m_render != spr.m_render) 
+	{
+		if (spr.m_render.get() == SprDefault::Instance()->Render()) 
+		{
+			m_render.reset(SprDefault::Instance()->Render());
+		} 
+		else 
+		{
+			if (m_render.get() == SprDefault::Instance()->Render()) {
+				m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+			}
+
+			auto& src_color = spr.m_render->GetColor();
+			if (src_color && *src_color != *SprDefault::Instance()->Color()) {
+				m_render->SetColor(*src_color);
+			}
+
+			auto& src_shader = spr.m_render->GetShader();
+			if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
+				m_render->SetShader(*src_shader);
+			}
+
+			auto& src_camera = spr.m_render->GetCamera();
+			if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
+				m_render->SetCamera(*src_camera);
+			}
+		}
+	}
+
+	m_flags = spr.m_flags;
+
+	if (m_actors) {
+		mm::AllocHelper::Delete(m_actors);
+		m_actors = nullptr;
+	}
+
 	return *this;
 }
 
@@ -621,70 +710,6 @@ void Sprite::InitFlags()
 	//if (INIT_FLAGS) {
 	//	INIT_FLAGS(shared_from_this());
 	//}
-}
-
-void Sprite::InitFromSpr(const Sprite& spr)
-{
-	m_sym = spr.m_sym;
-
-	m_name = spr.m_name;
-
-	if (m_geo != spr.m_geo) 
-	{
- 		if (spr.m_geo.get() == SprDefault::Instance()->Geo()) {
- 			m_geo.reset(SprDefault::Instance()->Geo());
- 		} else {
-			if (m_geo.get() == SprDefault::Instance()->Geo()) {
-				m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-			}
- 			*m_geo = *spr.m_geo;
- 		}
-	}
-
-	if (spr.m_bounding) {
-		if (!m_bounding) {
-			CreateBounding();
-		}
-		*m_bounding = *spr.m_bounding;
-	} else {
-		m_bounding.reset();
-	}
-
-	if (m_render != spr.m_render) 
-	{
-		if (spr.m_render.get() == SprDefault::Instance()->Render()) 
-		{
-			m_render.reset(SprDefault::Instance()->Render());
-		} 
-		else 
-		{
-			if (m_render.get() == SprDefault::Instance()->Render()) {
-				m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-			}
-
-			auto& src_color = spr.m_render->GetColor();
-			if (src_color && *src_color != *SprDefault::Instance()->Color()) {
-				m_render->SetColor(*src_color);
-			}
-
-			auto& src_shader = spr.m_render->GetShader();
-			if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
-				m_render->SetShader(*src_shader);
-			}
-
-			auto& src_camera = spr.m_render->GetCamera();
-			if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
-				m_render->SetCamera(*src_camera);
-			}
-		}
-	}
-
-	m_flags = spr.m_flags;
-
-	if (m_actors) {
-		mm::AllocHelper::Delete(m_actors);
-		m_actors = nullptr;
-	}
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

@@ -137,8 +137,6 @@ private:
 
 	void InitFlags();
 
-	void InitFromSpr(const Sprite& spr);
-
 	void UpdateInheritUpdate() const;
 
 	void CreateBounding() const;

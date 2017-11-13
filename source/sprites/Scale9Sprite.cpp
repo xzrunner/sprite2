@@ -108,6 +108,7 @@ VisitResult Scale9Sprite::TraverseChildren2(SpriteVisitor2& visitor, const SprVi
 void Scale9Sprite::Resize(float width, float height)
 {
 	m_s9.SetSize(width, height);
+	UpdateBounding();
 }
 
 }

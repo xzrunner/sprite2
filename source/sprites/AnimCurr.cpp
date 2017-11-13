@@ -551,8 +551,15 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 
-			bool last_frame = cursor == layer.frames.size() - 1;
-			if (!last_frame && *layer_cursor_update_ptr && actor.prev == -1)
+			//bool last_frame = cursor == layer.frames.size() - 1;
+			//if (!last_frame && *layer_cursor_update_ptr && actor.prev == -1)
+			//{
+			//	SprPtr& child = m_slots[actor.slot];
+			//	up_child.SetActor(child->QueryActor(up.GetActor()));
+			//	child->OnMessage(up_child, MSG_TRIGGER);
+			//}
+			// MSG_TRIGGER for the last frame
+			if (*layer_cursor_update_ptr && actor.prev == -1)
 			{
 				SprPtr& child = m_slots[actor.slot];
 				up_child.SetActor(child->QueryActor(up.GetActor()));

@@ -19,7 +19,7 @@ AudioSprite::AudioSprite()
 
 AudioSprite::AudioSprite(const AudioSprite& spr)
 	: Sprite(spr)
-	, m_source(spr.m_source)
+	, m_source(spr.m_source->Clone())
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -30,7 +30,7 @@ AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 {
 	Sprite::operator = (spr);
 
-	m_source = spr.m_source;
+	m_source = spr.m_source->Clone();
 	
 	return *this;
 }

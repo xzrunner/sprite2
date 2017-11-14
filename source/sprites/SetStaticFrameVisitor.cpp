@@ -6,7 +6,7 @@
 #include "sprite2/SprVisitorParams.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/Anim2Sprite.h"
-#include "sprite2/AudioSymbol.h"
+#include "sprite2/AudioSprite.h"
 
 #include <uniaudio/Source.h>
 
@@ -61,8 +61,8 @@ VisitResult SetStaticFrameVisitor::Visit(const SprConstPtr& spr, const SprVisito
 		break;
 	case SYM_AUDIO:
 		{
-			auto audio_sym = S2_VI_PTR_DOWN_CAST<const AudioSymbol>(spr->GetSymbol());
-			auto& source = std::const_pointer_cast<AudioSymbol>(audio_sym)->GetSource();
+			auto audio_spr = S2_VI_PTR_DOWN_CAST<const AudioSprite>(spr);
+			auto& source = audio_spr->GetSource();
 			if (source) {
 				source->Seek(m_static_frame / FPS);
 			}

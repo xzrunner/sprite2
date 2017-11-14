@@ -19,6 +19,7 @@ AudioSprite::AudioSprite()
 
 AudioSprite::AudioSprite(const AudioSprite& spr)
 	: Sprite(spr)
+	, m_source(spr.m_source)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -28,6 +29,8 @@ AudioSprite::AudioSprite(const AudioSprite& spr)
 AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 {
 	Sprite::operator = (spr);
+
+	m_source = spr.m_source;
 	
 	return *this;
 }
@@ -69,9 +72,8 @@ void AudioSprite::Play()
 		return;
 	}
 
-	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
-	if (source) {
-		source->Play();
+	if (m_source) {
+		m_source->Play();
 	}
 }
 
@@ -81,9 +83,8 @@ void AudioSprite::Stop()
 		return;
 	}
 
-	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
-	if (source) {
-		source->Stop();
+	if (m_source) {
+		m_source->Stop();
 	}
 }
 
@@ -93,9 +94,8 @@ void AudioSprite::Pause()
 		return;
 	}
 
-	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
-	if (source) {
-		source->Pause();
+	if (m_source) {
+		m_source->Pause();
 	}
 }
 
@@ -105,9 +105,8 @@ void AudioSprite::Resume()
 		return;
 	}
 
-	auto& source = S2_VI_PTR_DOWN_CAST<AudioSymbol>(GetSymbol())->GetSource();
-	if (source) {
-		source->Resume();
+	if (m_source) {
+		m_source->Resume();
 	}
 }
 

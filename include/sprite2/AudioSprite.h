@@ -32,11 +32,21 @@ public:
 	void Pause();
 	void Resume();
 
+	float GetFadeIn() const { return m_fade_in; }
+	void  SetFadeIn(float fade_in);
+	float GetFadeOut() const { return m_fade_out; }
+	void  SetFadeOut(float fade_out);
+
+	float GetAudioOffset() const { return m_offset; }
+	void  SetAudioOffset(float offset);
+	float GetAudioDuration() const { return m_duration; }
+	void  SetAudioDuration(float duration);
+
 private:
 	std::shared_ptr<ua::Source> m_source = nullptr;
 
-	//float m_offset, m_duration;
-	//float m_fade_in, m_fade_out;
+	float m_offset, m_duration;
+	float m_fade_in, m_fade_out;
 
 	S2_SPR_CLONE_FUNC(AudioSprite)
 

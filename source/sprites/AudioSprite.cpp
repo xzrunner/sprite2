@@ -11,6 +11,10 @@ namespace s2
 {
 
 AudioSprite::AudioSprite()
+	: m_offset(0)
+	, m_duration(0)
+	, m_fade_in(0)
+	, m_fade_out(0)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -20,6 +24,10 @@ AudioSprite::AudioSprite()
 AudioSprite::AudioSprite(const AudioSprite& spr)
 	: Sprite(spr)
 	, m_source(spr.m_source->Clone())
+	, m_offset(spr.m_offset)
+	, m_duration(spr.m_duration)
+	, m_fade_in(spr.m_fade_in)
+	, m_fade_out(spr.m_fade_out)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -31,12 +39,22 @@ AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 	Sprite::operator = (spr);
 
 	m_source = spr.m_source->Clone();
+
+	m_offset   = spr.m_offset;
+	m_duration = spr.m_duration;
+
+	m_fade_in  = spr.m_fade_in;
+	m_fade_out = spr.m_fade_out;
 	
 	return *this;
 }
 
 AudioSprite::AudioSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
+	, m_offset(0)
+	, m_duration(0)
+	, m_fade_in(0)
+	, m_fade_out(0)
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
@@ -107,6 +125,42 @@ void AudioSprite::Resume()
 
 	if (m_source) {
 		m_source->Resume();
+	}
+}
+
+void AudioSprite::SetFadeIn(float fade_in) 
+{ 
+	m_fade_in = fade_in;
+	
+	if (m_source) {
+		m_source->SetFadeIn(fade_in);
+	}
+}
+
+void AudioSprite::SetFadeOut(float fade_out) 
+{ 
+	m_fade_out = fade_out; 
+
+	if (m_source) {
+		m_source->SetFadeOut(fade_out);
+	}
+}
+
+void AudioSprite::SetAudioOffset(float offset) 
+{ 
+	m_offset = offset; 
+
+	if (m_source) {
+		m_source->SetOffset(offset);
+	}
+}
+
+void AudioSprite::SetAudioDuration(float duration) 
+{ 
+	m_duration = duration; 
+
+	if (m_source) {
+		m_source->SetDuration(duration);
 	}
 }
 

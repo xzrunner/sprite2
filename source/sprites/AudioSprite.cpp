@@ -23,7 +23,6 @@ AudioSprite::AudioSprite()
 
 AudioSprite::AudioSprite(const AudioSprite& spr)
 	: Sprite(spr)
-	, m_source(spr.m_source->Clone())
 	, m_offset(spr.m_offset)
 	, m_duration(spr.m_duration)
 	, m_fade_in(spr.m_fade_in)
@@ -32,13 +31,19 @@ AudioSprite::AudioSprite(const AudioSprite& spr)
 #ifndef S2_DISABLE_STATISTICS
 	StatSprCount::Instance()->Add(STAT_SYM_AUDIO);
 #endif // S2_DISABLE_STATISTICS
+
+	if (spr.m_source) {
+		m_source = spr.m_source->Clone();
+	}
 }
 
 AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 {
 	Sprite::operator = (spr);
 
-	m_source = spr.m_source->Clone();
+	if (spr.m_source) {
+		m_source = spr.m_source->Clone();
+	}
 
 	m_offset   = spr.m_offset;
 	m_duration = spr.m_duration;

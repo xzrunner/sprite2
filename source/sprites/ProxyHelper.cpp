@@ -39,8 +39,8 @@ SprPtr ProxyHelper::BuildGroup(const CU_VEC<std::pair<const ActorConstPtr, SprPt
 	} 
 	else if (items.size() > 1) 
 	{
-		auto sym = mm::allocate_shared<ProxySymbol>(items);
-		ret = mm::allocate_shared<ProxySprite>(sym);
+		auto sym = CU_MAKE_SHARED<ProxySymbol>(items);
+		ret = CU_MAKE_SHARED<ProxySprite>(sym);
 	}
 	return ret;
 }

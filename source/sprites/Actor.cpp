@@ -182,7 +182,7 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 
 void Actor::BuildDisplayList()
 {
-	m_dlist = mm::allocate_shared<cooking::DisplayList>();
+	m_dlist = CU_MAKE_SHARED<cooking::DisplayList>();
 }
 
 #endif // S2_DISABLE_DEFERRED

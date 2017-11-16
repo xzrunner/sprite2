@@ -25,7 +25,7 @@ void Actor::CreateFlatten()
 {
 #ifndef S2_DISABLE_FLATTEN
 	assert(!m_flatten.list);
-	m_flatten.list = mm::allocate_shared<ft::FTList>(shared_from_this());
+	m_flatten.list = CU_MAKE_SHARED<ft::FTList>(shared_from_this());
 	m_flatten.pos = 0;
 #endif // S2_DISABLE_FLATTEN
 }

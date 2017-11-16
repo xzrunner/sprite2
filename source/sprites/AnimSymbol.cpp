@@ -151,7 +151,7 @@ void AnimSymbol::CreateFrameSprites(int frame, CU_VEC<SprPtr>& sprs) const
 const std::shared_ptr<AnimCopy>& AnimSymbol::GetCopy() const
 {
 	if (!m_copy) {
-		m_copy = mm::allocate_shared<AnimCopy>();
+		m_copy = CU_MAKE_SHARED<AnimCopy>();
 		m_copy->LoadFromSym(*this);
 	}
 	return m_copy;
@@ -160,7 +160,7 @@ const std::shared_ptr<AnimCopy>& AnimSymbol::GetCopy() const
 void AnimSymbol::LoadCopy()
 {
 	if (!m_copy) {
-		m_copy = mm::allocate_shared<AnimCopy>();
+		m_copy = CU_MAKE_SHARED<AnimCopy>();
 	}
 	m_copy->LoadFromSym(*this);
 }

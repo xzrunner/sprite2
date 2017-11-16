@@ -15,7 +15,7 @@ Particle3dActor::Particle3dActor(const SprConstPtr& spr, const ActorConstPtr& pa
 	auto& cfg = p3d_sym->GetEmitterCfg();
 	if (cfg)
 	{
-		m_et = mm::allocate_shared<Particle3dEmitter>();
+		m_et = CU_MAKE_SHARED<Particle3dEmitter>();
 		m_et->CreateEmitter(cfg);
 		m_et->Start();
 

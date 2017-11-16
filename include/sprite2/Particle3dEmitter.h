@@ -62,7 +62,11 @@ private:
 
 }; // Particle3dEmitter
 
+#ifdef USE_MM_ALLOCATOR
 using Particle3dEmitterPtr = std::unique_ptr<Particle3dEmitter, mm::alloc_deleter<mm::Allocator<Particle3dEmitter>>>;
+#else
+using Particle3dEmitterPtr = std::unique_ptr<Particle3dEmitter>;
+#endif // USE_MM_ALLOCATOR
 
 }
 

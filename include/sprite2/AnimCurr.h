@@ -104,7 +104,11 @@ private:
 
 }; // AnimCurr
 
+#ifdef USE_MM_ALLOCATOR
 using AnimCurrPtr = std::unique_ptr<AnimCurr, mm::alloc_deleter<mm::Allocator<AnimCurr>>>;
+#else
+using AnimCurrPtr = std::unique_ptr<AnimCurr>;
+#endif // USE_MM_ALLOCATOR
 
 }
 

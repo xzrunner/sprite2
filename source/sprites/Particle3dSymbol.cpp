@@ -121,7 +121,7 @@ void Particle3dSymbol::SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>&
 		return;
 	}
 
-	m_et = mm::allocate_shared<Particle3dEmitter>();
+	m_et = CU_MAKE_SHARED<Particle3dEmitter>();
 	m_et->CreateEmitter(m_et_cfg);
 	m_et->Start();
 }

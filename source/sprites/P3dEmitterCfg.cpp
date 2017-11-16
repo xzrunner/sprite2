@@ -22,7 +22,11 @@ P3dEmitterCfg::~P3dEmitterCfg()
 {
 	if (m_impl) {
 		int sz = SIZEOF_P3D_EMITTER_CFG + SIZEOF_P3D_SYMBOL * m_impl->sym_count;
+#ifdef USE_MM_ALLOCATOR
 		mm::AllocHelper::Free(m_impl, sz);
+#else
+		delete reinterpret_cast<uint8_t*>(m_impl);
+#endif // USE_MM_ALLOCATOR
 	}
 }
 

@@ -30,31 +30,31 @@ ActorPtr ActorFactory::Create(const ActorConstPtr& parent, const SprConstPtr& ch
 	switch (child->GetSymbol()->Type())
 	{
 	case SYM_ANCHOR:
-		actor = mm::allocate_shared<AnchorActor>(child, parent);
+		actor = CU_MAKE_SHARED<AnchorActor>(child, parent);
 		break;
 	case SYM_SCALE9:
-		actor = mm::allocate_shared<Scale9Actor>(child, parent);
+		actor = CU_MAKE_SHARED<Scale9Actor>(child, parent);
 		break;
 	case SYM_TEXTBOX:
-		actor = mm::allocate_shared<TextboxActor>(child, parent);
+		actor = CU_MAKE_SHARED<TextboxActor>(child, parent);
 		break;
 	case SYM_COMPLEX:
-		actor = mm::allocate_shared<ComplexActor>(child, parent);
+		actor = CU_MAKE_SHARED<ComplexActor>(child, parent);
 		break;
 	case SYM_ANIMATION:
-		actor = mm::allocate_shared<AnimActor>(child, parent);
+		actor = CU_MAKE_SHARED<AnimActor>(child, parent);
 		break;
 	case SYM_PARTICLE3D:
-		actor = mm::allocate_shared<Particle3dActor>(child, parent);
+		actor = CU_MAKE_SHARED<Particle3dActor>(child, parent);
 		break;
 	case SYM_MASK:
-		actor = mm::allocate_shared<MaskActor>(child, parent);
+		actor = CU_MAKE_SHARED<MaskActor>(child, parent);
 		break;
 	case SYM_PROXY:
-		actor = mm::allocate_shared<ProxyActor>(child, parent);
+		actor = CU_MAKE_SHARED<ProxyActor>(child, parent);
 		break;
 	default:
-		actor = mm::allocate_shared<Actor>(child, parent);
+		actor = CU_MAKE_SHARED<Actor>(child, parent);
 	}
 
 	if (actor) {

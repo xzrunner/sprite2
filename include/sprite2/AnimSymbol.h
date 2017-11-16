@@ -31,7 +31,11 @@ public:
 
 	}; // Frame
 
+#ifdef USE_MM_ALLOCATOR
 	using FramePtr = std::unique_ptr<Frame, mm::alloc_deleter<mm::Allocator<Frame>>>;
+#else
+	using FramePtr = std::unique_ptr<Frame>;
+#endif // USE_MM_ALLOCATOR
 
 	class Layer
 	{
@@ -45,7 +49,11 @@ public:
 
 	}; // Layer
 
+#ifdef USE_MM_ALLOCATOR
 	using LayerPtr = std::unique_ptr<Layer, mm::alloc_deleter<mm::Allocator<Layer>>>;
+#else
+	using LayerPtr = std::unique_ptr<Layer>;
+#endif // USE_MM_ALLOCATOR
 
 public:
 	AnimSymbol();

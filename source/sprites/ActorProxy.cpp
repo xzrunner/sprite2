@@ -28,7 +28,7 @@ bool ActorProxyPool::Create(const ActorPtr& actor, ActorProxy*& out_proxy)
 		out_proxy = itr->second.get();
 		return false;
 	} else {
-		auto new_p = mm::allocate_shared<ActorProxy>(actor);
+		auto new_p = CU_MAKE_SHARED<ActorProxy>(actor);
 		m_hash.insert(std::make_pair(actor.get(), new_p));
 		out_proxy = new_p.get();
 		return true;

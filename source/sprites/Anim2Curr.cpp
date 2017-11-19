@@ -171,9 +171,9 @@ void Anim2Curr::UpdateRigging()
 	const rg_animation* anim = sym_sp->GetAnim();
 
 	// todo: GetFramePtr(i) as dims_ptr
-	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->timeline.joints, m_frame);
+	rg_skeleton_pose_update(m_sk_pose, anim->sk, anim->timeline.joints, m_frame, anim->curves);
 
-	rg_skeleton_skin_update(m_sk_skin, anim->sk, m_sk_pose, anim->timeline.skins, anim->timeline.deforms, m_frame);
+	rg_skeleton_skin_update(m_sk_skin, anim->sk, m_sk_pose, anim->timeline.skins, anim->timeline.deforms, m_frame, anim->curves);
 }
 
 }

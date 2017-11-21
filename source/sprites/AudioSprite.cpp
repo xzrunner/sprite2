@@ -11,7 +11,8 @@ namespace s2
 {
 
 AudioSprite::AudioSprite()
-	: m_offset(0)
+	: m_volume(1)
+	, m_offset(0)
 	, m_duration(0)
 	, m_fade_in(0)
 	, m_fade_out(0)
@@ -23,6 +24,7 @@ AudioSprite::AudioSprite()
 
 AudioSprite::AudioSprite(const AudioSprite& spr)
 	: Sprite(spr)
+	, m_volume(spr.m_volume)
 	, m_offset(spr.m_offset)
 	, m_duration(spr.m_duration)
 	, m_fade_in(spr.m_fade_in)
@@ -45,6 +47,8 @@ AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 		m_source = spr.m_source->Clone();
 	}
 
+	m_volume   = spr.m_volume;
+
 	m_offset   = spr.m_offset;
 	m_duration = spr.m_duration;
 
@@ -56,6 +60,7 @@ AudioSprite& AudioSprite::operator = (const AudioSprite& spr)
 
 AudioSprite::AudioSprite(const SymPtr& sym, uint32_t id)
 	: Sprite(sym, id)
+	, m_volume(1)
 	, m_offset(0)
 	, m_duration(0)
 	, m_fade_in(0)
@@ -87,6 +92,19 @@ void AudioSprite::OnMessage(const UpdateParams& up, Message msg)
 		Play();
 		break;
 	}
+}
+
+void AudioSprite::SetSource(const std::shared_ptr<ua::Source>& src)
+{
+	m_source = src;
+
+	m_volume = src->GetOriVolume();
+
+	m_offset   = src->GetOffset();
+	m_duration = src->GetDuration();
+
+	m_fade_in  = src->GetFadeIn();
+	m_fade_out = src->GetFadeOut();
 }
 
 void AudioSprite::Play()
@@ -130,6 +148,15 @@ void AudioSprite::Resume()
 
 	if (m_source) {
 		m_source->Resume();
+	}
+}
+
+void AudioSprite::SetVolume(float volume)
+{
+	m_volume = volume;
+
+	if (m_source) {
+		m_source->SetOriVolume(volume);
 	}
 }
 

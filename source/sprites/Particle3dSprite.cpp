@@ -327,7 +327,6 @@ void Particle3dSprite::CreateSpr()
 
 	m_et = CU_MAKE_SHARED<Particle3dEmitter>();
 	m_et->CreateEmitter(cfg);
-	m_et->Start();
 
 	m_et->SetLoop(m_loop);
 	m_et->SetLocal(m_local);

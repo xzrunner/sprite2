@@ -17,6 +17,7 @@ Particle3dActor::Particle3dActor(const SprConstPtr& spr, const ActorConstPtr& pa
 	{
 		m_et = CU_MAKE_SHARED<Particle3dEmitter>();
 		m_et->CreateEmitter(cfg);
+		m_et->Start();
 
 		m_et->SetLoop(p3d_spr->IsLoop());
 		m_et->SetLocal(p3d_spr->IsLocal());

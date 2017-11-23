@@ -123,6 +123,7 @@ void Particle3dSymbol::SetEmitterCfg(const std::shared_ptr<const P3dEmitterCfg>&
 
 	m_et = CU_MAKE_SHARED<Particle3dEmitter>();
 	m_et->CreateEmitter(m_et_cfg);
+	m_et->Start();
 }
 
 sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

@@ -111,14 +111,12 @@ void AudioSprite::SetSource(const std::shared_ptr<ua::Source>& src)
 
 void AudioSprite::Play()
 {
-	if (!AudioContext::IsEnable()) {
+	if (!AudioContext::IsEnable() || !m_source) {
 		return;
 	}
 
 	try {
-		if (m_source) {
-			m_source->Play();
-		}
+		m_source->Play();
 	} catch (ua::Exception& e) {
 		LOGW("audio play err: %s\n", e.what());
 	}
@@ -126,90 +124,128 @@ void AudioSprite::Play()
 
 void AudioSprite::Stop()
 {
-	if (!AudioContext::IsEnable()) {
+	if (!AudioContext::IsEnable() || !m_source) {
 		return;
 	}
 
-	if (m_source) {
+	try {
 		m_source->Stop();
+	} catch (ua::Exception& e) {
+		LOGW("audio stop err: %s\n", e.what());
 	}
 }
 
 void AudioSprite::Pause()
 {
-	if (!AudioContext::IsEnable()) {
+	if (!AudioContext::IsEnable() || !m_source) {
 		return;
 	}
 
-	if (m_source) {
+	try {
 		m_source->Pause();
+	} catch (ua::Exception& e) {
+		LOGW("audio pause err: %s\n", e.what());
 	}
 }
 
 void AudioSprite::Resume()
 {
-	if (!AudioContext::IsEnable()) {
+	if (!AudioContext::IsEnable() || !m_source) {
 		return;
 	}
 
-	if (m_source) {
+	try {
 		m_source->Resume();
+	} catch (ua::Exception& e) {
+		LOGW("audio resume err: %s\n", e.what());
 	}
 }
 
 void AudioSprite::Seek(float offset)
 {
-	if (!AudioContext::IsEnable()) {
+	if (!AudioContext::IsEnable() || !m_source) {
 		return;
 	}
 
-	if (m_source) {
+	try {
 		m_source->Seek(offset);
+	} catch (ua::Exception& e) {
+		LOGW("audio seek err: %s\n", e.what());
 	}
 }
 
 void AudioSprite::SetVolume(float volume)
 {
+	if (!m_source) {
+		return;
+	}
+
 	m_volume = volume;
 
-	if (m_source) {
+	try {
 		m_source->SetOriVolume(volume);
+	} catch (ua::Exception& e) {
+		LOGW("audio set volume err: %s\n", e.what());
 	}
 }
 
 void AudioSprite::SetFadeIn(float fade_in) 
 { 
+	if (!m_source) {
+		return;
+	}
+
 	m_fade_in = fade_in;
-	
-	if (m_source) {
+
+	try {
 		m_source->SetFadeIn(fade_in);
+	} catch (ua::Exception& e) {
+		LOGW("audio set fade in err: %s\n", e.what());
 	}
 }
 
-void AudioSprite::SetFadeOut(float fade_out) 
-{ 
-	m_fade_out = fade_out; 
+void AudioSprite::SetFadeOut(float fade_out)
+{
+	if (!m_source) {
+		return;
+	}
 
-	if (m_source) {
+	m_fade_out = fade_out;
+
+	try {
 		m_source->SetFadeOut(fade_out);
+	} catch (ua::Exception& e) {
+		LOGW("audio set fade out err: %s\n", e.what());
 	}
 }
 
-void AudioSprite::SetAudioOffset(float offset) 
-{ 
-	m_offset = offset; 
+void AudioSprite::SetAudioOffset(float offset)
+{
+	if (!m_source) {
+		return;
+	}
 
-	if (m_source) {
+	m_offset = offset;
+
+	try {
 		m_source->SetOffset(offset);
+	} catch (ua::Exception& e) {
+		LOGW("audio set offset err: %s\n", e.what());
 	}
 }
 
-void AudioSprite::SetAudioDuration(float duration) 
-{ 
-	m_duration = duration; 
+void AudioSprite::SetAudioDuration(float duration)
+{
+	if (!m_source) {
+		return;
+	}
 
-	if (m_source) {
+	m_duration = duration;
+
+	try {
 		m_source->SetDuration(duration);
+	} catch (ua::Exception& e) {
+		LOGW("audio set duration err: %s\n", e.what());
 	}
 }
 

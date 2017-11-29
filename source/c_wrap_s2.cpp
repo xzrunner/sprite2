@@ -607,6 +607,15 @@ void s2_spr_p3d_update(void* actor, float dt)
 }
 
 extern "C"
+void s2_spr_p3d_set_start_radius(void* actor, float radius)
+{
+	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
+	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
+
+	ProxyHelper::SprP3dSetStartRadius(*s2_spr, radius);
+}
+
+extern "C"
 void s2_spr_p3d_buffer_draw(float x, float y, float scale)
 {
 	Particle3d::Instance()->BufferDraw(x, y, scale);

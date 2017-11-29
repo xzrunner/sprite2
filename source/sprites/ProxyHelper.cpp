@@ -592,6 +592,24 @@ void ProxyHelper::SprP3dUpdate(const Sprite& spr, float dt)
 	}
 }
 
+void ProxyHelper::SprP3dSetStartRadius(const Sprite& spr, float radius)
+{
+	auto& sym = spr.GetSymbol();
+	int type = sym->Type();
+	if (type == SYM_PROXY)
+	{
+		auto& items = S2_VI_PTR_DOWN_CAST<const ProxySymbol>(sym)->GetItems();
+		for (int i = 0, n = items.size(); i < n; ++i) {
+			SprP3dSetStartRadius(*items[i].second, radius);
+		}
+	}
+	else if (type == SYM_PARTICLE3D)
+	{
+		auto& p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite&>(spr);
+		const_cast<Particle3dSprite&>(p3d_spr).SetStartRadius(radius);
+	}
+}
+
 void ProxyHelper::SprGetProxyChildren(const Sprite& spr, CU_VEC<ActorPtr>& actors)
 {
 	auto& sym = spr.GetSymbol();

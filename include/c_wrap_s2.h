@@ -127,6 +127,7 @@ void  s2_spr_p3d_set_local(void* actor, bool local);
 void  s2_spr_p3d_set_loop(void* actor, bool loop);
 bool  s2_spr_p3d_is_finished(const void* actor);
 void  s2_spr_p3d_update(void* actor, float dt);
+void  s2_spr_p3d_set_start_radius(void* actor, float radius);
 void  s2_spr_p3d_buffer_draw(float x, float y, float scale);
 void  s2_spr_p3d_tick();
 void  s2_spr_p3d_gc();

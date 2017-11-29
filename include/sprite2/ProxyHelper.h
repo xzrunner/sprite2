@@ -62,6 +62,7 @@ public:
 	static void SprP3dSetLoop(const Sprite& spr, bool loop);
 	static bool SprP3dIsFinished(const Sprite& spr);
 	static void SprP3dUpdate(const Sprite& spr, float dt);
+	static void SprP3dSetStartRadius(const Sprite& spr, float radius);
 
 	// proxy
 	static void SprGetProxyChildren(const Sprite& spr, CU_VEC<ActorPtr>& actors);

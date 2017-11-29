@@ -100,15 +100,10 @@ bool AnimCurr::Update(const UpdateParams& up, const Symbol* sym, const Sprite* s
 		return false;
 	}
 
-	int curr_frame = UpdateFrameCursor(loop, interval, fps, true);
-
-	bool dirty = false;
+	bool dirty = UpdateFrameCursor(loop, interval, fps, true);
 
 	// update curr frame
-	if (curr_frame != m_ctrl.GetFrame()) 
-	{
-		m_ctrl.SetFrame(curr_frame);
-		dirty = true;
+	if (dirty) {
 		LoadCurrSprites(up, spr);
 	}
 
@@ -380,8 +375,9 @@ void AnimCurr::CloneSlots(const CU_VEC<SprPtr>& src)
 	}
 }
 
-int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
+bool AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor)
 {
+	bool update = false;
 	int curr_frame = static_cast<int>((m_ctrl.GetCurrTime() - m_ctrl.GetStartTime()) * fps);
 	int max_frame = m_copy->m_max_frame_idx - 1;
 	int loop_max_frame = static_cast<int>(max_frame + interval * fps);
@@ -391,12 +387,14 @@ int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_c
 		} else if (curr_frame > max_frame && curr_frame <= loop_max_frame) {
 			curr_frame = 0;
 			m_ctrl.SetFrame(0);
+			update = true;
 			if (reset_cursor) {
 				ResetLayerCursor();
 			}
 		} else {
 			curr_frame = 0;
 			m_ctrl.SetFrame(0);
+			update = true;
 			m_ctrl.SetStartTime(m_ctrl.GetCurrTime());
 			if (reset_cursor) {
 				ResetLayerCursor();
@@ -407,7 +405,11 @@ int AnimCurr::UpdateFrameCursor(bool loop, float interval, int fps, bool reset_c
 			curr_frame = max_frame;
 		}
 	}
-	return curr_frame;
+	if (curr_frame != m_ctrl.GetFrame()) {
+		m_ctrl.SetFrame(curr_frame);
+		update = true;
+	}
+	return update;
 }
 
 void AnimCurr::ResetLayerCursor()

@@ -73,7 +73,7 @@ public:
 private:
 	void CloneSlots(const CU_VEC<SprPtr>& src);
 
-	int  UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor);
+	bool UpdateFrameCursor(bool loop, float interval, int fps, bool reset_cursor);
 
 	void ResetLayerCursor();
 

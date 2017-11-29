@@ -476,7 +476,7 @@ void AnimCurr::UpdateCursor(const s2::Actor* parent, UpdateParams& up_child)
 
 		// unload last frame
 		int last_cursor = m_layer_cursor[i];
-		if (last_cursor != cursor && last_cursor != -1 && last_cursor != INT_MAX)
+		if (last_cursor != cursor && last_cursor != -1 && last_cursor != INT_MAX && cursor != INT_MAX)
 		{
 			auto& frame = m_copy->m_layers[i].frames[last_cursor];
 			for (auto& item : frame.items) {

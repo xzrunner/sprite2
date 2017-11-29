@@ -31,6 +31,8 @@ public:
 	void Stop();
 	void Pause();
 	void Resume();
+	
+	void Seek(float offset);
 
 	float GetVolume() const { return m_volume; }
 	void SetVolume(float volume);

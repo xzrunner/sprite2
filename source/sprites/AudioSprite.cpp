@@ -157,6 +157,17 @@ void AudioSprite::Resume()
 	}
 }
 
+void AudioSprite::Seek(float offset)
+{
+	if (!AudioContext::IsEnable()) {
+		return;
+	}
+
+	if (m_source) {
+		m_source->Seek(offset);
+	}
+}
+
 void AudioSprite::SetVolume(float volume)
 {
 	m_volume = volume;

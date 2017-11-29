@@ -424,11 +424,14 @@ void AnimCurr::LoadCurrSprites(const UpdateParams& up, const Sprite* spr)
 		return;
 	}
 
-	UpdateCursor();
-	LoadCurrSpritesImpl(up, spr);
+	UpdateParams up_child(up);
+	up_child.Push(spr);
+
+	UpdateCursor(up.GetActor(), up_child);
+	LoadCurrSpritesImpl(up.GetActor(), up_child);
 }
 
-void AnimCurr::UpdateCursor()
+void AnimCurr::UpdateCursor(const s2::Actor* parent, UpdateParams& up_child)
 {
 	if (m_layer_cursor.empty()) {
 		return;
@@ -470,18 +473,32 @@ void AnimCurr::UpdateCursor()
 		if (cursor == frame_num - 1 && frame + 1 > (first_frame_ptr + cursor)->time) {
 			cursor = INT_MAX;
 		}
+
+		// unload last frame
+		int last_cursor = m_layer_cursor[i];
+		if (last_cursor != cursor && last_cursor != -1 && last_cursor != INT_MAX)
+		{
+			auto& frame = m_copy->m_layers[i].frames[last_cursor];
+			for (auto& item : frame.items) {
+				if (item.lerp == -1) {
+					auto& child = m_slots[item.slot];
+					if (child->GetSymbol()->Type() == SYM_AUDIO) {
+						up_child.SetActor(child->QueryActor(parent));
+						child->OnMessage(up_child, MSG_STOP);
+					}
+				}
+			}
+		}
+
 		*layer_cursor_ptr = cursor;
 	}
 }
 
-void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
+void AnimCurr::LoadCurrSpritesImpl(const s2::Actor* parent, UpdateParams& up_child)
 {
 	if (m_layer_cursor.empty()) {
 		return;
 	}
-
-	UpdateParams up_child(up);
-	up_child.Push(spr);
 
 	int ctrl_frame = m_ctrl.GetFrame();
 
@@ -510,10 +527,10 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 				const AnimCopy::Frame& next_frame = layer.frames[cursor + 1];
 
 				if (actor.slot != next_frame.items[actor.next].slot) {
-					int sym_id = 0;
-					if (spr) {
-						sym_id = spr->GetSymbol()->GetID();
-					}
+					//int sym_id = 0;
+					//if (spr) {
+					//	sym_id = spr->GetSymbol()->GetID();
+					//}
 //					fault("anim lerp err: sym_id %d, frame %d\n", sym_id, frame);
 					return;
 				}
@@ -562,7 +579,7 @@ void AnimCurr::LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr)
 			if (*layer_cursor_update_ptr && actor.prev == -1)
 			{
 				SprPtr& child = m_slots[actor.slot];
-				up_child.SetActor(child->QueryActor(up.GetActor()));
+				up_child.SetActor(child->QueryActor(parent));
 				child->OnMessage(up_child, MSG_TRIGGER);
 			}
 		}

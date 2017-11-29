@@ -78,8 +78,8 @@ private:
 	void ResetLayerCursor();
 
 	void LoadCurrSprites(const UpdateParams& up, const Sprite* spr);
-	void UpdateCursor();
-	void LoadCurrSpritesImpl(const UpdateParams& up, const Sprite* spr);
+	void UpdateCursor(const s2::Actor* parent, UpdateParams& up_child);
+	void LoadCurrSpritesImpl(const s2::Actor* parent, UpdateParams& up_child);
 	bool UpdateChildren(const UpdateParams& up, const Sprite* spr);
 
 	void SetChildrenFrame(const UpdateParams& up, const Sprite* spr, int frame, int fps);

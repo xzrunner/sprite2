@@ -6,6 +6,8 @@
 #include "sprite2/AudioContext.h"
 
 #include <uniaudio/Source.h>
+#include <uniaudio/Exception.h>
+#include <logger.h>
 
 namespace s2
 {
@@ -113,8 +115,12 @@ void AudioSprite::Play()
 		return;
 	}
 
-	if (m_source) {
-		m_source->Play();
+	try {
+		if (m_source) {
+			m_source->Play();
+		}
+	} catch (ua::Exception& e) {
+		LOGW("audio play err: %s\n", e.what());
 	}
 }
 

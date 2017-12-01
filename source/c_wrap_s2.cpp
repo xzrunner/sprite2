@@ -26,6 +26,8 @@
 #endif // S2_DISABLE_STATISTICS
 #include "sprite2/QueryLoadedVisitor.h"
 #include "sprite2/ActorProxy.h"
+#include "sprite2/RenderTask.h"
+#include "sprite2/Callback.h"
 
 #include "sprite2/ComplexSymbol.h"
 #include "sprite2/ComplexSprite.h"
@@ -52,7 +54,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
-#include <c_wrap_cooking.h>
+
 #include <cooking/DisplayList.h>
 
 #include <iostream>
@@ -226,9 +228,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 #ifdef S2_DISABLE_DEFERRED
 	DrawNode::Draw(nullptr, s2_actor->GetSprRaw(), *rp);
 #else
-	cooking::DisplayList dlist;
-	DrawNode::Draw(&dlist, s2_actor->GetSprRaw(), *rp);
-	dlist.Replay(-1, -1);
+	Callback::SubmitTask(RenderTaskMgr::Instance()->Fetch(s2_actor, *rp));
 #endif // S2_DISABLE_DEFERRED
 }
 

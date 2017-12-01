@@ -82,6 +82,7 @@ public:
 #ifndef S2_DISABLE_DEFERRED
 	void BuildDisplayList();
 	void SetDisplayList(const std::shared_ptr<cooking::DisplayList>& dlist);
+	auto& GetDisplayList() { return m_dlist; }
 #endif // S2_DISABLE_DEFERRED
 
 	static int GetAllActorCount();

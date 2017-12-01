@@ -44,7 +44,7 @@ private:
 	static void Intersection(const Rect& r, float& x, float& y, float& w, float& h);
 
 private:
-	CU_VEC<Rect> m_stack;
+	std::vector<Rect> m_stack;
 	
 	CU_SINGLETON_DECLARATION(RenderScissor)
 

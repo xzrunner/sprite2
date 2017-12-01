@@ -19,6 +19,7 @@ RenderTask::RenderTask(const ActorConstPtr& actor, const RenderParams& rp)
 void RenderTask::Run()
 {
 	auto& dlist = std::const_pointer_cast<Actor>(m_actor)->GetDisplayList();
+	dlist->Clear();
 	DrawNode::Draw(dlist.get(), m_actor->GetSprRaw(), m_rp);
 
 	RenderTaskMgr::Instance()->OneTaskFinished();

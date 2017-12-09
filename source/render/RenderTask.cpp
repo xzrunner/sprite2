@@ -18,17 +18,21 @@ RenderTask::RenderTask(const ActorConstPtr& actor, const RenderParams& rp)
 
 void RenderTask::Run()
 {
+	m_thread_id = std::this_thread::get_id();
+
+#ifndef S2_DISABLE_DEFERRED
 	auto& dlist = std::const_pointer_cast<Actor>(m_actor)->GetDisplayList();
-	dlist->Clear();
 	DrawNode::Draw(dlist.get(), m_actor->GetSprRaw(), m_rp);
 
 	RenderTaskMgr::Instance()->OneTaskFinished();
+#endif // S2_DISABLE_DEFERRED
 }
 
 void RenderTask::Flush()
 {
-	auto& dlist = std::const_pointer_cast<Actor>(m_actor)->GetDisplayList();
-	dlist->Replay(-1, -1);
+#ifndef S2_DISABLE_DEFERRED
+	std::const_pointer_cast<Actor>(m_actor)->GetDisplayList()->Replay(-1, -1);
+#endif // S2_DISABLE_DEFERRED
 }
 
 void RenderTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
@@ -40,9 +44,10 @@ void RenderTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
 	RenderTaskMgr::Instance()->AddResult(this);
 }
 
-//void RenderTask::Terminate()
-//{
-//}
+void RenderTask::Terminate()
+{
+	std::const_pointer_cast<Actor>(m_actor)->GetDisplayList()->Clear(m_thread_id);
+}
 
 /************************************************************************/
 /* class RenderTaskMgr                                                  */
@@ -80,7 +85,7 @@ void RenderTaskMgr::Flush()
 	{
 		RenderTask* tt = static_cast<RenderTask*>(t);
 		tt->Flush();
-//		tt->Terminate();
+		tt->Terminate();
 		m_freelist.Push(t);
 	}
 }

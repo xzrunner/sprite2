@@ -22,11 +22,13 @@ public:
 	void Flush();
 
 	void Initialize(const ActorConstPtr& actor, const RenderParams& rp);
-//	void Terminate();
-
+	void Terminate();
+	
 private:
 	ActorConstPtr m_actor;
 	RenderParams  m_rp;
+
+	std::thread::id m_thread_id;
 
 }; // RenderTask
 

@@ -10,6 +10,7 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
+#include <cooking/DisplayList.h>
 #include <rigging.h>
 
 #include <assert.h>
@@ -62,7 +63,11 @@ RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		return RENDER_NO_DATA;
 	}
 
+#ifndef S2_DISABLE_DEFERRED
+	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
+#else
 	RenderParamsProxy rp_proxy;
+#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

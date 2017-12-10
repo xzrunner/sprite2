@@ -16,6 +16,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterMode.h>
 #include <shaderlab/FilterShader.h>
+#include <cooking/DisplayList.h>
 
 #include <assert.h>
 
@@ -63,7 +64,11 @@ RenderReturn TextboxSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 		return RENDER_NO_DATA;
 	}
 
+#ifndef S2_DISABLE_DEFERRED
+	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
+#else
 	RenderParamsProxy rp_proxy;
+#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

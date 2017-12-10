@@ -1,6 +1,8 @@
 #ifndef _SPRITE2_CALLBACK_H_
 #define _SPRITE2_CALLBACK_H_
 
+#include <thread>
+
 namespace mt { class Task; }
 
 namespace s2
@@ -12,6 +14,7 @@ public:
 	struct Funs
 	{
 		void (*submit_task)(mt::Task*);
+		int  (*query_thread_idx)(std::thread::id id);
 	};
 
 	static void RegisterCallback(const Funs& funs);
@@ -19,6 +22,8 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 
 	static void SubmitTask(mt::Task*);
+
+	static int  QueryThreadIdx(std::thread::id id);
 
 }; // Callback
 

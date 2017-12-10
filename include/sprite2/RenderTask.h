@@ -28,8 +28,6 @@ private:
 	ActorConstPtr m_actor;
 	RenderParams  m_rp;
 
-	std::thread::id m_thread_id;
-
 }; // RenderTask
 
 class RenderTaskMgr

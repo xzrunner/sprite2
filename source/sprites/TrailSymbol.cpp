@@ -15,6 +15,7 @@
 #include <mt_2d.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
+#include <cooking/DisplayList.h>
 
 namespace s2
 {
@@ -57,7 +58,11 @@ RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		return RENDER_NO_DATA;
 	}
 
+#ifndef S2_DISABLE_DEFERRED
+	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
+#else
 	RenderParamsProxy rp_proxy;
+#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

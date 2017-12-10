@@ -14,6 +14,7 @@
 
 #include <memmgr/Allocator.h>
 #include <flatten/FTNode.h>
+#include <cooking/DisplayList.h>
 
 namespace s2
 {
@@ -62,7 +63,11 @@ RenderReturn MaskSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 //	StatSymDraw::DrawCostCP cp(STAT_SYM_MASK);
 #endif // S2_DISABLE_STATISTICS
 
+#ifndef S2_DISABLE_DEFERRED
+	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
+#else
 	RenderParamsProxy rp_proxy;
+#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

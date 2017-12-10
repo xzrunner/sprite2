@@ -10,7 +10,7 @@ template <typename T>
 class ObjectPool
 {
 public:
-	T* Pop();
+	T*   Pop();
 	void Push(T* obj);
 
 	static ObjectPool<T>* Instance();

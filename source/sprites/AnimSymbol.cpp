@@ -22,6 +22,7 @@
 #include "sprite2/UpdateParams.h"
 
 #include <memmgr/Allocator.h>
+#include <cooking/DisplayList.h>
 
 #include <assert.h>
 
@@ -82,7 +83,11 @@ RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 		//	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
+#ifndef S2_DISABLE_DEFERRED
+		RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
+#else
 		RenderParamsProxy rp_proxy;
+#endif // S2_DISABLE_DEFERRED
 		RenderParams* rp_child = rp_proxy.obj;
 		memcpy(rp_child, &rp, sizeof(rp));
 
@@ -93,7 +98,7 @@ RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			auto anim = S2_VI_DOWN_CAST<const AnimSprite*>(spr);
-			const AnimCurr& curr = anim->GetOriginCurr(rp.actor);
+			auto& curr = anim->GetDrawCurr(rp.actor);
 			ret = curr.Draw(dlist, *rp_child);
 		}
 	}

@@ -46,7 +46,9 @@ void RenderTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
 
 void RenderTask::Terminate()
 {
+#ifndef S2_DISABLE_DEFERRED
 	std::const_pointer_cast<Actor>(m_actor)->GetDisplayList()->Clear();
+#endif // S2_DISABLE_DEFERRED
 }
 
 /************************************************************************/

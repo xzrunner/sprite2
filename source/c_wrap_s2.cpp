@@ -228,10 +228,13 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 #ifdef S2_DISABLE_DEFERRED
 	DrawNode::Draw(nullptr, s2_actor->GetSprRaw(), *rp);
 #else
-	//cooking::DisplayList dlist;
-	//DrawNode::Draw(&dlist, s2_actor->GetSprRaw(), *rp);
-	//dlist.Replay(-1, -1);
+#ifdef S2_MULTITHREAD
 	Callback::SubmitTask(RenderTaskMgr::Instance()->Fetch(s2_actor, *rp));	
+#else
+	cooking::DisplayList dlist;
+	DrawNode::Draw(&dlist, s2_actor->GetSprRaw(), *rp);
+	dlist.Replay(-1, -1);
+#endif // S2_MULTITHREAD
 #endif // S2_DISABLE_DEFERRED
 }
 

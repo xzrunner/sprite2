@@ -26,7 +26,7 @@
 #define	S2_DEBUG
 #endif // _WIN32
 
-//#define S2_MULTITHREAD
+#define S2_MULTITHREAD
 
 #define S2_DISABLE_FLATTEN
-#define S2_DISABLE_DEFERRED
+//#define S2_DISABLE_DEFERRED

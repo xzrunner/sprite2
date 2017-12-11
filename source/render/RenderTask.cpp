@@ -12,8 +12,6 @@ RenderTask::RenderTask(const ActorConstPtr& actor, const RenderParams& rp)
 	: m_actor(actor)
 	, m_rp(rp)
 {
-	m_rp.SetDisableDTexC2(true);
-
 	RenderTaskMgr::Instance()->AddResult(this);
 }
 
@@ -42,7 +40,6 @@ void RenderTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
 {
 	m_actor = actor;
 	memcpy(&m_rp, &rp, sizeof(rp));
-	m_rp.SetDisableDTexC2(true);
 
 	RenderTaskMgr::Instance()->AddResult(this);
 }

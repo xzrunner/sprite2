@@ -124,7 +124,7 @@ RenderReturn DrawMesh::DrawTexture(const Mesh& mesh, const RenderParams& rp,
 	 	float texcoords[8];
 	 	int tex_id;
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-	 		img_sym->OnQueryTexcoordsFail();
+	 		img_sym->OnQueryTexcoordsFail(-1);
 	 	}
 		ret = DrawOnePass(mesh, rp, texcoords, tex_id);
 	} 

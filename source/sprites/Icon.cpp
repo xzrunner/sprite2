@@ -26,7 +26,7 @@ RenderReturn Icon::Draw(const RenderParams& rp, float process) const
 	float _texcoords[8];
 	int tex_id;
 	if (!m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id)) {
-		m_img->OnQueryTexcoordsFail();
+		m_img->OnQueryTexcoordsFail(-1);
 	}
 
 	// texcoords

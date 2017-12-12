@@ -834,6 +834,9 @@ get_actor_world_mat(const ActorConstPtr& actor) {
 extern "C"
 void s2_actor_update(void* actor, bool force) {
 	ActorPtr& s2_actor(static_cast<ActorProxy*>(actor)->actor);
+//#ifdef S2_MULTITHREAD
+//	Callback::SubmitTask(UpdateTaskMgr::Instance()->Fetch(s2_actor, force));
+//#else
 	auto s2_spr = const_cast<Sprite*>(s2_actor->GetSprRaw());
 
 	UpdateParams up(s2_actor.get());
@@ -848,6 +851,7 @@ void s2_actor_update(void* actor, bool force) {
 	} else {
 		s2_spr->Update(up);
 	}
+//#endif // S2_MULTITHREAD
 }
 
 #ifndef S2_DISABLE_FLATTEN

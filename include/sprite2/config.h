@@ -22,7 +22,7 @@
 #define S2_DISABLE_STATISTICS
 #endif // NDEBUG
 
-#ifdef _WIN32blend_names
+#ifdef _WIN32
 #define	S2_DEBUG
 #endif // _WIN32
 

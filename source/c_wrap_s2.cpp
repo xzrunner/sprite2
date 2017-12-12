@@ -26,8 +26,9 @@
 #endif // S2_DISABLE_STATISTICS
 #include "sprite2/QueryLoadedVisitor.h"
 #include "sprite2/ActorProxy.h"
-#include "sprite2/RenderTask.h"
+#include "sprite2/DrawTask.h"
 #include "sprite2/Callback.h"
+#include "sprite2/UpdateTask.h"
 
 #include "sprite2/ComplexSymbol.h"
 #include "sprite2/ComplexSprite.h"
@@ -229,7 +230,7 @@ void s2_spr_draw(const void* actor, float x, float y, float angle, float sx, flo
 	DrawNode::Draw(nullptr, s2_actor->GetSprRaw(), *rp);
 #else
 #ifdef S2_MULTITHREAD
-	Callback::SubmitTask(RenderTaskMgr::Instance()->Fetch(s2_actor, *rp));	
+	Callback::SubmitTask(DrawTaskMgr::Instance()->Fetch(s2_actor, *rp));	
 #else
 	cooking::DisplayList dlist;
 	DrawNode::Draw(&dlist, s2_actor->GetSprRaw(), *rp);

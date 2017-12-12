@@ -1,4 +1,4 @@
-#include "sprite2/RenderTask.h"
+#include "sprite2/DrawTask.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Actor.h"
 #include "sprite2/Callback.h"
@@ -8,14 +8,14 @@
 namespace s2
 {
 
-RenderTask::RenderTask(const ActorConstPtr& actor, const RenderParams& rp)
+DrawTask::DrawTask(const ActorConstPtr& actor, const RenderParams& rp)
 	: m_actor(actor)
 	, m_rp(rp)
 {
-	RenderTaskMgr::Instance()->AddResult(this);
+	DrawTaskMgr::Instance()->AddResult(this);
 }
 
-void RenderTask::Run()
+void DrawTask::Run()
 {
 #ifndef S2_DISABLE_DEFERRED
 	auto& dlist = std::const_pointer_cast<Actor>(m_actor)->GetDisplayList();
@@ -25,26 +25,26 @@ void RenderTask::Run()
 
 	DrawNode::Draw(dlist.get(), m_actor->GetSprRaw(), m_rp);
 
-	RenderTaskMgr::Instance()->OneTaskFinished();
+	DrawTaskMgr::Instance()->OneTaskFinished();
 #endif // S2_DISABLE_DEFERRED
 }
 
-void RenderTask::Flush()
+void DrawTask::Flush()
 {
 #ifndef S2_DISABLE_DEFERRED
 	std::const_pointer_cast<Actor>(m_actor)->GetDisplayList()->Replay(-1, -1);
 #endif // S2_DISABLE_DEFERRED
 }
 
-void RenderTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
+void DrawTask::Initialize(const ActorConstPtr& actor, const RenderParams& rp)
 {
 	m_actor = actor;
 	memcpy(&m_rp, &rp, sizeof(rp));
 
-	RenderTaskMgr::Instance()->AddResult(this);
+	DrawTaskMgr::Instance()->AddResult(this);
 }
 
-void RenderTask::Terminate()
+void DrawTask::Terminate()
 {
 #ifndef S2_DISABLE_DEFERRED
 	std::const_pointer_cast<Actor>(m_actor)->GetDisplayList()->Clear();
@@ -52,23 +52,23 @@ void RenderTask::Terminate()
 }
 
 /************************************************************************/
-/* class RenderTaskMgr                                                  */
+/* class DrawTaskMgr                                                  */
 /************************************************************************/
 
-CU_SINGLETON_DEFINITION(RenderTaskMgr)
+CU_SINGLETON_DEFINITION(DrawTaskMgr)
 
-RenderTaskMgr::RenderTaskMgr()
+DrawTaskMgr::DrawTaskMgr()
 	: m_working(0)
 {
 }
 
-RenderTask* RenderTaskMgr::Fetch(const ActorConstPtr& actor, const RenderParams& rp)
+DrawTask* DrawTaskMgr::Fetch(const ActorConstPtr& actor, const RenderParams& rp)
 {
 	++m_working;
 	mt::Task* t = m_freelist.Front();
-	RenderTask* tt = static_cast<RenderTask*>(t);
+	DrawTask* tt = static_cast<DrawTask*>(t);
 	if (!t) {
-		tt = new RenderTask(actor, rp);
+		tt = new DrawTask(actor, rp);
 	} else {
 		m_freelist.Pop();
 		tt->Initialize(actor, rp);
@@ -76,16 +76,16 @@ RenderTask* RenderTaskMgr::Fetch(const ActorConstPtr& actor, const RenderParams&
 	return tt;
 }
 
-void RenderTaskMgr::AddResult(RenderTask* task)
+void DrawTaskMgr::AddResult(DrawTask* task)
 {
 	m_result.Push(task);
 }
 
-void RenderTaskMgr::Flush()
+void DrawTaskMgr::Flush()
 {
 	while (mt::Task* t = m_result.TryPop())
 	{
-		RenderTask* tt = static_cast<RenderTask*>(t);
+		DrawTask* tt = static_cast<DrawTask*>(t);
 		tt->Flush();
 		tt->Terminate();
 		m_freelist.Push(t);

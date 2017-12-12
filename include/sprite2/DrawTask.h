@@ -1,5 +1,5 @@
-#ifndef _SPRITE2_RENDER_TASK_H_
-#define _SPRITE2_RENDER_TASK_H_
+#ifndef _SPRITE2_DRAW_TASK_H_
+#define _SPRITE2_DRAW_TASK_H_
 
 #include "sprite2/typedef.h"
 #include "sprite2/RenderParams.h"
@@ -12,10 +12,10 @@
 namespace s2
 {
 
-class RenderTask : public mt::Task
+class DrawTask : public mt::Task
 {
 public:
-	RenderTask(const ActorConstPtr& actor, const RenderParams& rp);
+	DrawTask(const ActorConstPtr& actor, const RenderParams& rp);
 
 	virtual void Run() override;
 
@@ -28,14 +28,14 @@ private:
 	ActorConstPtr m_actor;
 	RenderParams  m_rp;
 
-}; // RenderTask
+}; // DrawTask
 
-class RenderTaskMgr
+class DrawTaskMgr
 {
 public:
-	RenderTask* Fetch(const ActorConstPtr& actor, const RenderParams& rp);
+	DrawTask* Fetch(const ActorConstPtr& actor, const RenderParams& rp);
 
-	void AddResult(RenderTask* task);
+	void AddResult(DrawTask* task);
 
 	bool IsAllTaskFinished() const { return m_working == 0; }
 	void OneTaskFinished() { --m_working; }
@@ -48,10 +48,10 @@ private:
 
 	std::atomic<int> m_working;
 
-	CU_SINGLETON_DECLARATION(RenderTaskMgr)
+	CU_SINGLETON_DECLARATION(DrawTaskMgr)
 
-}; // RenderTaskMgr
+}; // DrawTaskMgr
 
 }
 
-#endif // _SPRITE2_RENDER_TASK_H_
+#endif // _SPRITE2_DRAW_TASK_H_

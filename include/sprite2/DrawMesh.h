@@ -9,6 +9,8 @@
 
 #include <stddef.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -20,11 +22,11 @@ class RenderTarget;
 class DrawMesh
 {
 public:
-	static RenderReturn DrawInfoUV(const Mesh& mesh, const S2_MAT* mt = nullptr);
-	static RenderReturn DrawInfoXY(const Mesh& mesh, const S2_MAT* mt = nullptr);
+	static RenderReturn DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt = nullptr);
+	static RenderReturn DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt = nullptr);
 
-	static RenderReturn DrawTexture(const Mesh& mesh, const RenderParams& rp, 
-		const SymConstPtr& base_sym = nullptr);
+	static RenderReturn DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
+		const RenderParams& rp, const SymConstPtr& base_sym = nullptr);
 
 	static RenderReturn DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_id);
 

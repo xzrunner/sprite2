@@ -22,6 +22,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <cu/cu_stl.h>
+#include <cooking/DisplayList.h>
 
 #include <assert.h>
 
@@ -32,7 +33,7 @@ static Color RED	(204, 51, 102, 128);
 static Color GREEN	(102, 204, 51, 128);
 static Color BLUE	(102, 51, 204, 128);
 
-RenderReturn DrawMesh::DrawInfoUV(const Mesh& mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -74,7 +75,7 @@ RenderReturn DrawMesh::DrawInfoUV(const Mesh& mesh, const S2_MAT* mt)
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawInfoXY(const Mesh& mesh, const S2_MAT* mt)
+RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -110,8 +111,8 @@ RenderReturn DrawMesh::DrawInfoXY(const Mesh& mesh, const S2_MAT* mt)
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTexture(const Mesh& mesh, const RenderParams& rp,
-	                               const SymConstPtr& base_sym)
+RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
+	                               const RenderParams& rp, const SymConstPtr& base_sym)
 {
 	RenderReturn ret = RENDER_OK;
 	auto& sym = base_sym ? base_sym : mesh.GetBaseSymbol();
@@ -124,7 +125,7 @@ RenderReturn DrawMesh::DrawTexture(const Mesh& mesh, const RenderParams& rp,
 	 	float texcoords[8];
 	 	int tex_id;
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-	 		img_sym->OnQueryTexcoordsFail(-1);
+	 		img_sym->OnQueryTexcoordsFail(dlist ? dlist->GetThreadIdx() : -1);
 	 	}
 		ret = DrawOnePass(mesh, rp, texcoords, tex_id);
 	} 

@@ -294,11 +294,7 @@ RenderReturn AnimCurr::Draw(cooking::DisplayList* dlist, const RenderParams& rp)
 
 	RenderReturn ret = RENDER_OK;
 
-#ifndef S2_DISABLE_DEFERRED
-	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 	RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

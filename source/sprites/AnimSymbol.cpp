@@ -83,11 +83,7 @@ RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 		//	StatSymDraw::DrawCostCP cp2(STAT_SYM_ANIMATION);
 #endif // S2_DISABLE_STATISTICS
 
-#ifndef S2_DISABLE_DEFERRED
-		RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 		RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 		RenderParams* rp_child = rp_proxy.obj;
 		memcpy(rp_child, &rp, sizeof(rp));
 

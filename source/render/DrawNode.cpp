@@ -575,11 +575,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 #else
 		auto& rf = rs.GetFilter();
 
-#ifndef S2_DISABLE_DEFERRED
-		RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 		RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 		RenderParams* rp_child = rp_proxy.obj;
 		memcpy(rp_child, &rp, sizeof(rp));
 
@@ -600,11 +596,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 			mgr->SetShader(sl::SPRITE2);
 		}
 
-#ifndef S2_DISABLE_DEFERRED
-		RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 		RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 		RenderParams* rp_child = rp_proxy.obj;
 		memcpy(rp_child, &rp, sizeof(rp));
 

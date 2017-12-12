@@ -61,11 +61,7 @@ RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 		return RENDER_NO_DATA;
 	}
 
-#ifndef S2_DISABLE_DEFERRED
-	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 	RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

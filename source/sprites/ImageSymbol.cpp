@@ -77,11 +77,7 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		return RENDER_ON_LOADING;
 	}
 
-#ifndef S2_DISABLE_DEFERRED
-	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 	RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

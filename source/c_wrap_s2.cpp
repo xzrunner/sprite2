@@ -792,11 +792,7 @@ void s2_actor_draw_ft(const void* actor, float x, float y, float angle, float sx
 		curr = curr->GetParent();
 	}
 
-#ifndef S2_DISABLE_DEFERRED
-	RenderParamsProxy rp_proxy(dlist->GetThreadIdx());
-#else
 	RenderParamsProxy rp_proxy;
-#endif // S2_DISABLE_DEFERRED
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 

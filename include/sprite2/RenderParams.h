@@ -7,11 +7,7 @@
 #include "sprite2/RenderCamera.h"
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
-#ifndef S2_MULTITHREAD
 #include "sprite2/ObjectPool.h"
-#else
-#include "sprite2/ThreadObjectPool.h"
-#endif // S2_MULTITHREAD
 
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
@@ -109,13 +105,8 @@ private:
 
 }; // RenderParams
 
-#ifndef S2_MULTITHREAD
 using RenderParamsPool  = ObjectPool<RenderParams>;
 using RenderParamsProxy = ObjProxy<RenderParams>;
-#else
-using RenderParamsPool  = ThreadObjectPool<RenderParams>;
-using RenderParamsProxy = ThreadObjProxy<RenderParams>;
-#endif // S2_MULTITHREAD
 
 }
 

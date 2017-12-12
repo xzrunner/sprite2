@@ -31,7 +31,7 @@ private:
 	int m_free_count = 0;
 	int m_tot_count = 0;
 
-	static ObjectPool<T>* m_instance;
+	thread_local static ObjectPool<T>* m_instance;
 
 }; // ObjectPool
 

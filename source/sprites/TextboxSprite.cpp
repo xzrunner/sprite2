@@ -24,6 +24,7 @@ TextboxSprite::TextboxSprite(const TextboxSprite& spr)
 	: Sprite(spr)
 	, m_tb(spr.m_tb)
 	, m_text(spr.m_text)
+	, m_tid(spr.m_tid)
 	, m_time(spr.m_time)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -37,6 +38,7 @@ TextboxSprite& TextboxSprite::operator = (const TextboxSprite& spr)
 
 	m_tb   = spr.m_tb;
 	m_text = spr.m_text;
+	m_tid  = spr.m_tid;
 	m_time = spr.m_time;
 
 	return *this;

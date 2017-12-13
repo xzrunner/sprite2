@@ -644,6 +644,9 @@
       <Filter>sprites\11.mesh</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Facade.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\TextTable.cpp">
+      <Filter>sprites\05.textbox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\sprite2\RenderColor.h">
@@ -1238,6 +1241,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h">
       <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\TextTable.h">
+      <Filter>sprites\05.textbox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

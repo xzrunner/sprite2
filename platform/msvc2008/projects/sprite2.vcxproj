@@ -217,6 +217,7 @@
     <ClCompile Include="..\..\..\source\sprites\TextboxActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextboxSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextboxSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\TextTable.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TexturePolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextureSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextureSymbol.cpp" />
@@ -376,6 +377,7 @@
     <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\TextTable.h" />
     <ClInclude Include="..\..\..\include\sprite2\Texture.h" />
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
     <ClInclude Include="..\..\..\include\sprite2\typedef.h" />

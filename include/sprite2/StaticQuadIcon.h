@@ -15,7 +15,7 @@ public:
 
 	virtual StaticQuadIcon* Clone() const override { return new StaticQuadIcon(*this); }
 
-	virtual RenderReturn Draw(const RenderParams& rp, float process) const override;
+	virtual RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const override;
 
 	virtual sm::rect GetRegion(float process) const override;
 

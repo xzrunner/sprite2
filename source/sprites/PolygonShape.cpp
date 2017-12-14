@@ -36,12 +36,12 @@ bool PolygonShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_polygon(rect, m_vertices);
 }
 
-void PolygonShape::Draw(const RenderParams& rp) const
+void PolygonShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	if (m_poly) {
-		m_poly->Draw(rp);
+		m_poly->Draw(dlist, rp);
 	} else {
-		PolylineShape::Draw(rp);
+		PolylineShape::Draw(dlist, rp);
 	}
 }
 

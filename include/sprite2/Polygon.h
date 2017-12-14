@@ -25,7 +25,7 @@ public:
 
 	virtual int Type() const = 0;
 
-	virtual void Draw(const RenderParams& rp) const = 0;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const = 0;
 	virtual void Build() = 0;
 
 	const CU_VEC<sm::vec2>& GetTriangles() const { return m_tris; }

@@ -26,7 +26,7 @@ public:
 
 	virtual int Type() const override { return POLY_TEXTURE; }
 
-	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 	virtual void Build() override;
 
 	const CU_VEC<sm::vec2>& GetTexcoords() const { return m_texcoords; }

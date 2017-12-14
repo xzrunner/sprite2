@@ -11,7 +11,7 @@
 namespace s2
 {
 
-RenderReturn Icon::Draw(const RenderParams& rp, float process) const
+RenderReturn Icon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
 {
 	if (!m_img) {
 		return RENDER_NO_DATA;
@@ -26,7 +26,7 @@ RenderReturn Icon::Draw(const RenderParams& rp, float process) const
 	float _texcoords[8];
 	int tex_id;
 	if (!m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id)) {
-		m_img->OnQueryTexcoordsFail(-1);
+		m_img->OnQueryTexcoordsFail(dlist);
 	}
 
 	// texcoords

@@ -32,7 +32,7 @@ bool RectShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_rect(rect, m_bounding);
 }
 
-void RectShape::Draw(const RenderParams& rp) const
+void RectShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	RVG::SetColor(rp.color.GetMul());
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),

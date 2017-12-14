@@ -22,7 +22,7 @@ TexturePolygon::TexturePolygon(const std::shared_ptr<const ImageSymbol>& img)
 {
 }
 
-void TexturePolygon::Draw(const RenderParams& rp) const
+void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	if (!m_img->GetTexture()->IsLoadFinished()) {
 		return;
@@ -49,7 +49,7 @@ void TexturePolygon::Draw(const RenderParams& rp) const
 		float _texcoords[8];
 		int tex_id;
 		if (!m_img->QueryTexcoords(!rp.IsDisableDTexC2(), _texcoords, tex_id)) {
-			m_img->OnQueryTexcoordsFail(-1);
+			m_img->OnQueryTexcoordsFail(dlist);
 		}
 
 		TexcoordsMap::Trans(_texcoords, texcoords);

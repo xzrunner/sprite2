@@ -125,7 +125,7 @@ RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh
 	 	float texcoords[8];
 	 	int tex_id;
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-	 		img_sym->OnQueryTexcoordsFail(dlist ? dlist->GetThreadIdx() : -1);
+	 		img_sym->OnQueryTexcoordsFail(dlist);
 	 	}
 		ret = DrawOnePass(mesh, rp, texcoords, tex_id);
 	} 

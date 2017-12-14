@@ -93,7 +93,7 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	float texcoords[8];
 	int tex_id;
 	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-		OnQueryTexcoordsFail(dlist ? dlist->GetThreadIdx() : -1);
+		OnQueryTexcoordsFail(dlist);
 	}
 
 //#ifndef S2_DISABLE_STATISTICS
@@ -146,7 +146,7 @@ RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 	float texcoords[8];
 	int tex_id;
 	if (!QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
-		OnQueryTexcoordsFail(dlist ? dlist->GetThreadIdx() : -1);
+		OnQueryTexcoordsFail(dlist);
 	}
 
 //#ifndef S2_DISABLE_STATISTICS

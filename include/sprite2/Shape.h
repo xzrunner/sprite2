@@ -31,7 +31,7 @@ public:
 	virtual bool IsContain(const sm::vec2& pos) const = 0;
 	virtual bool IsIntersect(const sm::rect& rect) const = 0;
 
-	virtual void Draw(const RenderParams& rp) const = 0;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const = 0;
 
 	const sm::rect& GetBounding() const {
 		return m_bounding;

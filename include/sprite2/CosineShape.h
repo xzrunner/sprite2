@@ -15,7 +15,7 @@ public:
 
 	virtual CosineShape* Clone() const override;
 	virtual int Type() const override { return SHAPE_COSINE; }
-	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 
 private:
 	void UpdatePolyline();

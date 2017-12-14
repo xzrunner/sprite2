@@ -96,7 +96,7 @@ bool PolylineShape::IsIntersect(const sm::rect& rect) const
 	return false;
 }
 
-void PolylineShape::Draw(const RenderParams& rp) const
+void PolylineShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	ShapeVertices::Draw(m_vertices, m_closed, rp);
 }

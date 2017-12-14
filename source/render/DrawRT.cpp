@@ -146,7 +146,7 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);
-	shape.Draw(rp);
+	shape.Draw(nullptr, rp);
 
 	RenderCtxStack::Instance()->Pop();
 

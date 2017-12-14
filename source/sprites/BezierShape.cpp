@@ -60,9 +60,9 @@ bool BezierShape::IsContain(const sm::vec2& pos) const
 	return ret;
 }
 
-void BezierShape::Draw(const RenderParams& rp) const
+void BezierShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
-	PolylineShape::Draw(rp);
+	PolylineShape::Draw(dlist, rp);
 	for (int i = 0; i < CTRL_NODE_COUNT; ++i) {
 		sm::vec2 pos = rp.mt * m_control_nodes[i];
 		RVG::Rect(pos, SHAPE_NODE_RADIUS, SHAPE_NODE_RADIUS, false);

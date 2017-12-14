@@ -82,7 +82,7 @@ RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 	if (spr) {
 		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
-	RenderReturn ret = m_icon->Draw(*rp_child, process);
+	RenderReturn ret = m_icon->Draw(dlist, *rp_child, process);
 
 	return ret;
 }

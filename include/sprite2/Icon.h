@@ -22,7 +22,7 @@ class Icon
 public:
 	virtual Icon* Clone() const = 0;
 
-	virtual RenderReturn Draw(const RenderParams& rp, float process) const;
+	virtual RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

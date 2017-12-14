@@ -31,7 +31,7 @@ CosineShape* CosineShape::Clone() const
 	return new CosineShape(*this);
 }
 
-void CosineShape::Draw(const RenderParams& rp) const
+void CosineShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	ShapeVertices::Draw(m_mid_points, m_closed, rp);
 }

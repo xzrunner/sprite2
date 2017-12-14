@@ -33,7 +33,7 @@ StaticQuadIcon& StaticQuadIcon::operator = (const StaticQuadIcon& icon)
 	return *this;
 }
 
-RenderReturn StaticQuadIcon::Draw(const RenderParams& rp, float process) const
+RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
 {
 	if (!m_img) {
 		return RENDER_NO_DATA;

@@ -17,7 +17,7 @@ public:
 	virtual BezierShape* Clone() const override;
 	virtual int Type() const override { return SHAPE_BEZIER; }
 	virtual bool IsContain(const sm::vec2& pos) const override;
-	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 
 // 	const sm::vec2* GetCtrlNodes() const { return m_control_nodes; }
 // 	void SetCtrlNodes(const sm::vec2* ctrl_nodes) {

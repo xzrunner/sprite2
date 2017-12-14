@@ -23,7 +23,7 @@ public:
 
 	virtual int Type() const override { return POLY_COLOR; }
 
-	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 	virtual void Build() override;
 
 	const Color& GetColor() const { return m_color; }

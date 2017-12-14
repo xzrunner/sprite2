@@ -68,7 +68,7 @@ bool CircleShape::IsIntersect(const sm::rect& rect) const
 	return false;
 }
 
-void CircleShape::Draw(const RenderParams& rp) const
+void CircleShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	sm::vec2 c = rp.mt * m_center;
 	float r = sm::mat_trans_len(m_radius, rp.mt);

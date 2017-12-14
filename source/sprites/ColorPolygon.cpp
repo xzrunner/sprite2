@@ -14,7 +14,7 @@ ColorPolygon::ColorPolygon(const Color& color)
 {
 }
 
-void ColorPolygon::Draw(const RenderParams& rp) const
+void ColorPolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	CU_VEC<sm::vec2> tris;
 	sm::trans_vertices(rp.mt, m_tris, tris);

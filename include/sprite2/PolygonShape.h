@@ -24,7 +24,7 @@ public:
 	virtual int Type() const override { return SHAPE_POLYGON; }
 	virtual bool IsContain(const sm::vec2& pos) const override;
 	virtual bool IsIntersect(const sm::rect& rect) const override;
-	virtual void Draw(const RenderParams& rp) const override;
+	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 
 	void SetPolygon(std::unique_ptr<Polygon> poly);
 	const std::unique_ptr<Polygon>& GetPolygon() const { return m_poly; }

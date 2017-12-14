@@ -32,7 +32,7 @@ public:
 	virtual sm::vec2 GetNoTrimedSize() const;
 
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& tex_id) const = 0;
-	virtual void OnQueryTexcoordsFail(int thread_idx) const = 0;
+	virtual void OnQueryTexcoordsFail(cooking::DisplayList* dlist) const = 0;
 
 	void InitTex(const std::shared_ptr<Texture>& tex, const sm::i16_rect& region);
 

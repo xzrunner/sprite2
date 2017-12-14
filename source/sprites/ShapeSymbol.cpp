@@ -60,7 +60,7 @@ RenderReturn ShapeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
 		// todo: shape's render ret
-		m_shape->Draw(*rp_child);
+		m_shape->Draw(dlist, *rp_child);
 		ret = RENDER_OK;
 	} else {
 		ret = RENDER_INVISIBLE;

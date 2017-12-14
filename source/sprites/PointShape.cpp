@@ -41,7 +41,7 @@ bool PointShape::IsIntersect(const sm::rect& rect) const
 	return sm::is_rect_intersect_rect(rect, m_bounding);
 }
 
-void PointShape::Draw(const RenderParams& rp) const
+void PointShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	sm::vec2 center = rp.mt * m_pos;
 	float r = sm::mat_trans_len(SHAPE_NODE_RADIUS, rp.mt);

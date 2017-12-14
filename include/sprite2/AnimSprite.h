@@ -40,6 +40,8 @@ public:
 	const AnimCurr& GetUpdateCurr(const Actor* actor) const;
 	const AnimCurr& GetDrawCurr(const Actor* actor) const;
 
+	const AnimCurrPtr& GetOriginCurrPtr(const Actor* actor) const;
+
 	void SetLoop(bool loop) { m_loop = loop; }
 	void SetInterval(float dt) { m_interval = dt; }
 

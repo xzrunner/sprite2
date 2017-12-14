@@ -36,6 +36,8 @@ public:
 	const AnimCurr& GetDraw() const { return *m_draw; }
 #endif // S2_MULTITHREAD
 
+	const AnimCurrPtr& GetOriginPtr() const { return m_origin; }
+
 #ifdef S2_MULTITHREAD
 	void Flush();
 #endif // S2_MULTITHREAD

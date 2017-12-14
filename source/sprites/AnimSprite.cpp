@@ -156,21 +156,21 @@ AnimCurr& AnimSprite::GetOriginCurr(const Actor* actor)
 AnimCurr& AnimSprite::GetUpdateCurr(const Actor* actor)
 {
 	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
-#ifdef S2_MULTITHREAD
-	return anim_actor ? anim_actor->GetState().GetUpdate() : m_state.GetUpdate();
-#else
+//#ifdef S2_MULTITHREAD
+//	return anim_actor ? anim_actor->GetState().GetUpdate() : m_state.GetUpdate();
+//#else
 	return anim_actor ? anim_actor->GetState().GetOrigin() : m_state.GetOrigin();
-#endif // S2_MULTITHREAD
+//#endif // S2_MULTITHREAD
 }
 
 AnimCurr& AnimSprite::GetDrawCurr(const Actor* actor)
 {
 	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
-#ifdef S2_MULTITHREAD
-	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
-#else
+//#ifdef S2_MULTITHREAD
+//	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
+//#else
 	return anim_actor ? anim_actor->GetState().GetOrigin() : m_state.GetOrigin();
-#endif // S2_MULTITHREAD
+//#endif // S2_MULTITHREAD
 }
 
 const AnimCurr& AnimSprite::GetOriginCurr(const Actor* actor) const
@@ -192,11 +192,17 @@ const AnimCurr& AnimSprite::GetUpdateCurr(const Actor* actor) const
 const AnimCurr& AnimSprite::GetDrawCurr(const Actor* actor) const
 {
 	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
-#ifdef S2_MULTITHREAD
-	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
-#else
+//#ifdef S2_MULTITHREAD
+//	return anim_actor ? anim_actor->GetState().GetDraw() : m_state.GetDraw();
+//#else
 	return anim_actor ? anim_actor->GetState().GetOrigin() : m_state.GetOrigin();
-#endif // S2_MULTITHREAD
+//#endif // S2_MULTITHREAD
+}
+
+const AnimCurrPtr& AnimSprite::GetOriginCurrPtr(const Actor* actor) const
+{
+	auto anim_actor = const_cast<AnimActor*>(S2_VI_DOWN_CAST<const AnimActor*>(actor));
+	return anim_actor ? anim_actor->GetState().GetOriginPtr() : m_state.GetOriginPtr();
 }
 
 void AnimSprite::SetStartRandom(const UpdateParams& up, bool random) 

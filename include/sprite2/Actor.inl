@@ -5,6 +5,7 @@
 
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
+#include <cu/cu_stl.h>
 #endif // S2_DISABLE_FLATTEN
 #include <memmgr/Allocator.h>
 

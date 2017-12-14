@@ -99,7 +99,7 @@ RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPa
 
 	// todo shape's draw return
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
-		m_polygons[i]->Draw(rp);
+		m_polygons[i]->Draw(dlist, rp);
 	}
 
 	return RENDER_OK;

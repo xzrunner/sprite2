@@ -103,7 +103,7 @@ RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 	if (spr) {
 		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
-	return m_icon->Draw(rp, process);
+	return m_icon->Draw(dlist, rp, process);
 }
 #endif // S2_DISABLE_FLATTEN
 

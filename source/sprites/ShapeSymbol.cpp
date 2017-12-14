@@ -76,7 +76,7 @@ RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 		return RENDER_NO_DATA;
 	}
 
-	m_shape->Draw(rp);
+	m_shape->Draw(dlist, rp);
 
 	return RENDER_OK;
 }

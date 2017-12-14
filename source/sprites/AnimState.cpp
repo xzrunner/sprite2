@@ -7,9 +7,9 @@ namespace s2
 
 #ifdef S2_MULTITHREAD
 AnimState::AnimState()
-	: m_origin(CU_MAKE_UNIQUE<AnimCurr>()),
-	, m_origin(CU_MAKE_UNIQUE<AnimCurr>()),
-	, m_origin(CU_MAKE_UNIQUE<AnimCurr>()),
+	: m_origin(CU_MAKE_UNIQUE<AnimCurr>())
+	, m_update(CU_MAKE_UNIQUE<AnimCurr>())
+	, m_draw(CU_MAKE_UNIQUE<AnimCurr>())
 {
 }
 #else

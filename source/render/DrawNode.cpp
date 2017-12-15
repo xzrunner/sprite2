@@ -27,6 +27,9 @@
 #include <shaderlab/EdgeDetectProg.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <cooking/DisplayList.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
@@ -489,6 +492,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		rc = spr->GetCamera() * rp.camera;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	ur::RenderContext* rctx = sl::ShaderMgr::Instance()->GetContext();
 	switch (rs.GetFastBlend())
 	{
@@ -505,6 +509,26 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		rctx->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
 	}
+#else 
+	switch (rs.GetFastBlend())
+	{
+	case FBM_NULL:
+		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		// BLEND_FUNC_ADD
+		cooking::set_blend(dlist, 2, 6, 0);
+		break;
+	case FBM_ADD:
+		// BLEND_GL_ONE, BLEND_GL_ONE
+		// BLEND_FUNC_ADD
+		cooking::set_blend(dlist, 2, 2, 0);
+		break;
+	case FBM_SUBTRACT:
+		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		// BLEND_FUNC_SUBTRACT
+		cooking::set_blend(dlist, 2, 6, 1);
+		break;
+	}
+#endif // S2_DISABLE_DEFERRED
 
 	BlendMode blend = BM_NULL;
 	if (!rp.IsDisableBlend()) {

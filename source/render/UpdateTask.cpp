@@ -5,6 +5,8 @@
 #include "sprite2/SymType.h"
 #include "sprite2/Symbol.h"
 
+#include <multitask/TaskStat.h>
+
 namespace s2
 {
 
@@ -16,6 +18,9 @@ UpdateTask::UpdateTask(const ActorPtr& actor, bool force)
 
 void UpdateTask::Run()
 {
+	mt::TaskStat::Checkpoint cp(std::this_thread::get_id(), 
+		UpdateTaskMgr::Instance()->GetTaskStatType());
+
 	auto s2_spr = const_cast<Sprite*>(m_actor->GetSprRaw());
 
 	UpdateParams up(m_actor.get());
@@ -60,6 +65,7 @@ CU_SINGLETON_DEFINITION(UpdateTaskMgr)
 
 UpdateTaskMgr::UpdateTaskMgr()
 {
+	m_task_stat_type = mt::TaskStat::Instance()->RegisterTaskType("update");
 }
 
 UpdateTask* UpdateTaskMgr::Fetch(const ActorPtr& actor, bool force)

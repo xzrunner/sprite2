@@ -42,11 +42,15 @@ public:
 
 	void Flush();
 
+	int GetTaskStatType() const { return m_task_stat_type; }
+
 private:
 	mt::TaskQueue m_freelist;
 	mt::SafeTaskQueue m_result;
 
 	std::atomic<int> m_working;
+
+	int m_task_stat_type;
 
 	CU_SINGLETON_DECLARATION(DrawTaskMgr)
 

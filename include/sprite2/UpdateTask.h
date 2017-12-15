@@ -37,9 +37,13 @@ public:
 
 	void AddResult(UpdateTask* task);
 
+	int GetTaskStatType() const { return m_task_stat_type; }
+
 private:
 	mt::TaskQueue m_freelist;
 	mt::SafeTaskQueue m_result;
+
+	int m_task_stat_type;
 
 	CU_SINGLETON_DECLARATION(UpdateTaskMgr)
 

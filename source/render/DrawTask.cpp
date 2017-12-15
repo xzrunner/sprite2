@@ -4,6 +4,7 @@
 #include "sprite2/Callback.h"
 
 #include <cooking/DisplayList.h>
+#include <multitask/TaskStat.h>
 
 namespace s2
 {
@@ -18,6 +19,10 @@ DrawTask::DrawTask(const ActorConstPtr& actor, const RenderParams& rp)
 void DrawTask::Run()
 {
 #ifndef S2_DISABLE_DEFERRED
+	DrawTaskMgr* task_mgr = DrawTaskMgr::Instance();
+
+	mt::TaskStat::Checkpoint cp(std::this_thread::get_id(), task_mgr->GetTaskStatType());
+
 	auto& dlist = std::const_pointer_cast<Actor>(m_actor)->GetDisplayList();
 
 	int thread_idx = Callback::QueryThreadIdx(std::this_thread::get_id());
@@ -25,7 +30,7 @@ void DrawTask::Run()
 
 	DrawNode::Draw(dlist.get(), m_actor->GetSprRaw(), m_rp);
 
-	DrawTaskMgr::Instance()->OneTaskFinished();
+	task_mgr->OneTaskFinished();
 #endif // S2_DISABLE_DEFERRED
 }
 
@@ -60,6 +65,7 @@ CU_SINGLETON_DEFINITION(DrawTaskMgr)
 DrawTaskMgr::DrawTaskMgr()
 	: m_working(0)
 {
+	m_task_stat_type = mt::TaskStat::Instance()->RegisterTaskType("draw");
 }
 
 DrawTask* DrawTaskMgr::Fetch(const ActorConstPtr& actor, const RenderParams& rp)

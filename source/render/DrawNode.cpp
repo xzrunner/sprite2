@@ -168,7 +168,7 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  	} else if (filter != FM_NULL) {
  		if (rp_child->IsChangeShader()) 
 		{
-#ifdef S2_DISABLE_STATISTICS
+#ifdef S2_DISABLE_DEFERRED
 			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 
  			mgr->SetShader(sl::FILTER);
@@ -178,17 +178,17 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 #else
 			cooking::change_shader(nullptr, sl::FILTER);
 			cooking::set_shader_filter_mode(nullptr, filter);
-#endif // S2_DISABLE_STATISTICS
+#endif // S2_DISABLE_DEFERRED
  		}
  	} else {
  		if (rp_child->IsChangeShader()) 
 		{
-#ifdef S2_DISABLE_STATISTICS
+#ifdef S2_DISABLE_DEFERRED
 			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
  			mgr->SetShader(sl::SPRITE2);
 #else
 			cooking::change_shader(nullptr, sl::SPRITE2);
-#endif // S2_DISABLE_STATISTICS
+#endif // S2_DISABLE_DEFERRED
  		}
  	}
 

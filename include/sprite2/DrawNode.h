@@ -42,7 +42,8 @@ public:
 		                     const RenderParams& rp,
 							 const S2_MAT& mt);
 
-	static RenderReturn DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col);
+	static RenderReturn DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
+		                         const RenderParams& rp, const Color& col);
 	
 	/**
 	 *  @return

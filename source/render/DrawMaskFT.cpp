@@ -21,11 +21,15 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shader.h>
 #include <shaderlab/MaskShader.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
 
-RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderParams& rp)
+RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft, 
+	                          int base, int mask, const RenderParams& rp)
 {
 	const ft::FTNode* ft_base = ft.GetNode(base);
 	const ft::FTNode* ft_mask = ft.GetNode(mask);
@@ -71,8 +75,12 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(
@@ -84,7 +92,7 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawBaseToRT(rt_base, ft, base, base_actor, rp);
+	ret |= DrawBaseToRT(dlist, rt_base, ft, base, base_actor, rp);
 
 	RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
@@ -93,12 +101,12 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 		RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
-	ret |= DrawMaskToRT(rt_mask, ft, mask, mask_actor, rp);
+	ret |= DrawMaskToRT(dlist, rt_mask, ft, mask, mask_actor, rp);
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	ret |= DrawMaskFromRT(rt_base, rt_mask, ft, mask, rp.mt);
+	ret |= DrawMaskFromRT(dlist, rt_base, rt_mask, ft, mask, rp.mt);
 
 	RT->Return(rt_base);
 	RT->Return(rt_mask);
@@ -106,16 +114,22 @@ RenderReturn DrawMaskFT::Draw(ft::FTList& ft, int base, int mask, const RenderPa
 	return ret;
 }
 
-RenderReturn DrawMaskFT::DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base, 
-	                                  const Actor* actor, const RenderParams& rp)
+RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, RenderTarget* rt, ft::FTList& ft, 
+	                                  int base, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->GetContext()->Clear(0);
 
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
+#else
+	cooking::render_clear(dlist, 0);
+	cooking::change_shader(dlist, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -128,23 +142,33 @@ RenderReturn DrawMaskFT::DrawBaseToRT(RenderTarget* rt, ft::FTList& ft, int base
 
 	ft.DrawForward(base, *rp_child);
 
+#ifdef S2_DISABLE_DEFERRED
 	shader->Commit();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	rt->Unbind();
 
 	return RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskToRT(RenderTarget* rt, ft::FTList& ft, int mask,
-	                                  const Actor* actor, const RenderParams& rp)
+RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, RenderTarget* rt, ft::FTList& ft, 
+	                                  int mask, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->GetContext()->Clear(0);
 
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
+#else
+	cooking::render_clear(dlist, 0);
+	cooking::change_shader(dlist, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -157,15 +181,19 @@ RenderReturn DrawMaskFT::DrawMaskToRT(RenderTarget* rt, ft::FTList& ft, int mask
 
 	ft.DrawForward(mask, *rp_child);
 
+#ifdef S2_DISABLE_DEFERRED
 	shader->Commit();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	rt->Unbind();
 
 	return RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_mask, 
-	                                    ft::FTList& ft, int mask, const S2_MAT& mt)
+RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, RenderTarget* rt_base, 
+	                                    RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt)
 {
 	const ft::FTNode* ft_n = ft.GetNode(mask);
 	if (!ft_n) {
@@ -221,10 +249,17 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(RenderTarget* rt_base, RenderTarget* rt_
 	StatOverdraw::Instance()->AddArea(area);
 #endif // S2_DISABLE_STATISTICS
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->SetShader(sl::MASK);
+
 	sl::MaskShader* shader = static_cast<sl::MaskShader*>(mgr->GetShader());
 	shader->Draw(&vertices[0].x, &texcoords[0].x, &texcoords_mask[0].x, rt_base->GetTexID(), rt_mask->GetTexID());
+#else
+	cooking::change_shader(dlist, sl::MASK);
+	cooking::draw_quad_mask(dlist, &vertices[0].x, &texcoords[0].x, &texcoords_mask[0].x, rt_base->GetTexID(), rt_mask->GetTexID());
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }

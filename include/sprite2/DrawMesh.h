@@ -28,14 +28,14 @@ public:
 	static RenderReturn DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
 		const RenderParams& rp, const SymConstPtr& base_sym = nullptr);
 
-	static RenderReturn DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_id);
+	static RenderReturn DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT& mt, int tex_id);
 
 private:
-	static RenderReturn DrawOnePass(const Mesh& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
+	static RenderReturn DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
-	static RenderReturn DrawTwoPass(const Mesh& mesh, const RenderParams& rp, const Symbol& sym);
-	static RenderReturn DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
-	static RenderReturn DrawRT2Screen(RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt);
+	static RenderReturn DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym);
+	static RenderReturn DrawMesh2RT(cooking::DisplayList* dlist, RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
+	static RenderReturn DrawRT2Screen(cooking::DisplayList* dlist, RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt);
 
 }; // DrawMesh
 

@@ -8,6 +8,8 @@
 
 #include <cu/cu_stl.h>
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -16,8 +18,8 @@ class RenderParams;
 class ShapeVertices
 {
 public:
-	static void Draw(const CU_VEC<sm::vec2>& vertices, bool closed,
-		const RenderParams& rp);
+	static void Draw(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices, 
+		bool closed, const RenderParams& rp);
 
 }; // ShapeVertices
 

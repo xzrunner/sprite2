@@ -19,7 +19,7 @@ void ColorPolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) con
 	CU_VEC<sm::vec2> tris;
 	sm::trans_vertices(rp.mt, m_tris, tris);
 	RVG::SetColor(m_color * rp.color.GetMul());
-	RVG::Triangles(tris);
+	RVG::Triangles(dlist, tris);
 }
 
 void ColorPolygon::Build()

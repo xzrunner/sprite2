@@ -5,7 +5,9 @@
 namespace s2
 {
 
-void ShapeVertices::Draw(const CU_VEC<sm::vec2>& vertices, bool closed,
+void ShapeVertices::Draw(cooking::DisplayList* dlist,
+	                     const CU_VEC<sm::vec2>& vertices, 
+	                     bool closed,
 						 const RenderParams& rp)
 {
 	if (vertices.empty()) {
@@ -17,7 +19,7 @@ void ShapeVertices::Draw(const CU_VEC<sm::vec2>& vertices, bool closed,
 		trans[i] = rp.mt * vertices[i];
 	}
 	RVG::SetColor(rp.color.GetMul());
-	RVG::Polyline(trans, closed);
+	RVG::Polyline(dlist, trans, closed);
 }
 
 }

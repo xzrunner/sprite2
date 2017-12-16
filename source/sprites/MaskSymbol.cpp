@@ -72,7 +72,7 @@ RenderReturn MaskSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 	}
 	RenderReturn ret = RENDER_OK;
 	if (m_base && m_mask) {
-		ret = DrawMask::Draw(m_base.get(), m_mask.get(), *rp_child);
+		ret = DrawMask::Draw(dlist, m_base.get(), m_mask.get(), *rp_child);
 //		ret = DrawMask::DrawByStencil(m_base, m_mask, *rp_child);
 	} else {
 		if (m_base) {

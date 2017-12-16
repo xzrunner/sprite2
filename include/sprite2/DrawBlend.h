@@ -15,10 +15,11 @@ public:
 	DrawBlend();
 
 protected:
-	virtual RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const override;
+	virtual RenderReturn DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, 
+		const RenderParams& rp, bool too_large) const override;
 
-	virtual RenderReturn DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
-		const RenderParams& rp, bool reset_color) const override;
+	virtual RenderReturn DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, 
+		const Sprite* spr, const RenderParams& rp, bool reset_color) const override;
 
 }; // DrawBlend
 

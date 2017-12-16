@@ -23,6 +23,9 @@
 #include <shaderlab/FilterShader.h>
 #include <cu/cu_stl.h>
 #include <cooking/DisplayList.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <assert.h>
 
@@ -57,7 +60,7 @@ RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh,
 				lines[j] = *mt * lines[j];
 			}
 		}
-		RVG::Polyline(lines, true);
+		RVG::Polyline(dlist, lines, true);
 	}
 
 	// points
@@ -69,7 +72,7 @@ RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh,
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(p, mesh.GetNodeRadius(), true);
+		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
 	return RENDER_OK;
@@ -95,7 +98,7 @@ RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh,
 				lines[j] = *mt * lines[j];
 			}
 		}
-		RVG::Polyline(lines, true);
+		RVG::Polyline(dlist, lines, true);
 	}
 
 	// points
@@ -105,7 +108,7 @@ RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh,
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(p, mesh.GetNodeRadius(), true);
+		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
 	return RENDER_OK;
@@ -127,11 +130,11 @@ RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh
 	 	if (!img_sym->QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, tex_id)) {
 	 		img_sym->OnQueryTexcoordsFail(dlist);
 	 	}
-		ret = DrawOnePass(mesh, rp, texcoords, tex_id);
+		ret = DrawOnePass(dlist, mesh, rp, texcoords, tex_id);
 	} 
 	else 
 	{
-		ret = DrawTwoPass(mesh, rp, *sym);
+		ret = DrawTwoPass(dlist, mesh, rp, *sym);
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +150,7 @@ RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_id)
+RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT& mt, int tex_id)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -156,11 +159,18 @@ RenderReturn DrawMesh::DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_
 		return RENDER_NO_DATA;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->SetShader(sl::SPRITE2);
+
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+	cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+#endif // S2_DISABLE_DEFERRED
 
 	int w = RenderTargetMgr::Instance()->WIDTH,
 		h = RenderTargetMgr::Instance()->HEIGHT;
@@ -179,35 +189,59 @@ RenderReturn DrawMesh::DrawOnlyMesh(const Mesh& mesh, const S2_MAT& mt, int tex_
 		_vertices[3] = _vertices[2];
 		_texcoords[3] = _texcoords[2];
 
+#ifdef S2_DISABLE_DEFERRED
 		shader->DrawQuad(&_vertices[0].x, &_texcoords[0].x, tex_id);
+#else
+		cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
 	}
 
 	return RENDER_OK;
 }
 
-static void draw_sprite2(const float* positions, const float* texcoords, int tex_id)
+static void draw_sprite2(cooking::DisplayList* dlist, const float* positions, const float* texcoords, int tex_id)
 {
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	assert(mgr->GetShaderType() == sl::SPRITE2);
+
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(positions, texcoords, tex_id);
+#else
+	cooking::draw_quad_sprite(dlist, positions, texcoords, tex_id);
+#endif // S2_DISABLE_DEFERRED
 }
 
-static void draw_filter(const float* positions, const float* texcoords, int tex_id)
+static void draw_filter(cooking::DisplayList* dlist, const float* positions, const float* texcoords, int tex_id)
 {
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	assert(mgr->GetShaderType() == sl::FILTER);
+
 	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 	shader->Draw(positions, texcoords, tex_id);
+#else
+	cooking::draw_quad_filter(dlist, positions, texcoords, tex_id);
+#endif // S2_DISABLE_DEFERRED
 }
 
-RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
+	sl::ShaderType shader_type;
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	sl::ShaderType type = mgr->GetShaderType();
-	if (type != sl::SPRITE2 && type != sl::FILTER) {
+	shader_type = mgr->GetShaderType();
+	if (shader_type != sl::SPRITE2 && shader_type != sl::FILTER) {
 		return RENDER_NO_DATA;
 	}
+#else
+	int _shader_type = dlist->GetShaderType();
+	assert(_shader_type >= 0);
+	shader_type = static_cast<sl::ShaderType>(_shader_type);
+	if (shader_type != sl::SPRITE2 && shader_type != sl::FILTER) {
+		return RENDER_NO_DATA;
+	}
+#endif // S2_DISABLE_DEFERRED
 
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -220,20 +254,36 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, con
 	float w = src_texcoords[4] - src_texcoords[0],
 		  h = src_texcoords[5] - src_texcoords[1];	
 
-	void (*draw)(const float* positions, const float* texcoords, int tex_id) = nullptr;
+	void (*draw)(cooking::DisplayList* dlist, const float* positions, const float* texcoords, int tex_id) = nullptr;
 
-	if (type == sl::SPRITE2)
+	switch (shader_type)
 	{
-		sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-		shader->SetColorMap(rp.color.GetRMapABGR(),rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
-		draw = draw_sprite2;
-	}
-	else if (type == sl::FILTER)
-	{
-		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-		shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-		draw = draw_filter;
+		case sl::SPRITE2:
+		{
+			auto& col = rp.color;
+#ifdef S2_DISABLE_DEFERRED
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+			shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+			shader->SetColorMap(col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+#else
+			cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
+				col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+#endif // S2_DISABLE_DEFERRED
+			draw = draw_sprite2;
+		}
+			break;
+		case sl::FILTER:
+		{
+			auto& col = rp.color;
+#ifdef S2_DISABLE_DEFERRED
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+			shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+#else
+			cooking::set_color_filter(dlist, col.GetMulABGR(), col.GetAddABGR());
+#endif // S2_DISABLE_DEFERRED
+			draw = draw_filter;
+		}
+			break;
 	}
 
 	// 3 2    1 0
@@ -253,7 +303,7 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, con
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];
 
-			draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
+			draw(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
 		}
 	}
 	// 0 3
@@ -273,7 +323,7 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, con
 			_vertices[3] = _vertices[2];
 			_texcoords[3] = _texcoords[2];
 
-			draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
+			draw(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
 		}
 	}
 	else
@@ -284,7 +334,7 @@ RenderReturn DrawMesh::DrawOnePass(const Mesh& mesh, const RenderParams& rp, con
 	return RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTwoPass(const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
+RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
@@ -304,24 +354,28 @@ RenderReturn DrawMesh::DrawTwoPass(const Mesh& mesh, const RenderParams& rp, con
 	RenderCtxStack::Instance()->Push(RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
-	ret |= DrawMesh2RT(rt, rp, sym);
+	ret |= DrawMesh2RT(dlist, rt, rp, sym);
 
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	ret |= DrawRT2Screen(rt, mesh, rp.mt);
+	ret |= DrawRT2Screen(dlist, rt, mesh, rp.mt);
 
 	RT->Return(rt);
 
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
+RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
 {
 	rt->Bind();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
+#else
+	cooking::render_clear(dlist, 0);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -333,16 +387,20 @@ RenderReturn DrawMesh::DrawMesh2RT(RenderTarget* rt, const RenderParams& rp, con
 
 	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
 
+#ifdef S2_DISABLE_DEFERRED
 	mgr->FlushShader();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	rt->Unbind();
 
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawRT2Screen(RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
+RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
 {
-	return DrawOnlyMesh(mesh, mt, rt->GetTexID());
+	return DrawOnlyMesh(dlist, mesh, mt, rt->GetTexID());
 }
 
 }

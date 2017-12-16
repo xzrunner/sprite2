@@ -20,26 +20,30 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/GaussianBlurHoriProg.h>
 #include <shaderlab/GaussianBlurVertProg.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
 
-RenderReturn DrawGaussianBlur::Draw(const Sprite* spr, const RenderParams& rp, int iterations)
+RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
 {
 	RenderReturn ret = RENDER_OK;
 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* rt = RT->Fetch();
 
-	ret |= DrawBlurToRT(rt, spr, rp, iterations);
-	ret |= DrawFromRT(rt, spr->GetPosition());
+	ret |= DrawBlurToRT(dlist, rt, spr, rp, iterations);
+	ret |= DrawFromRT(dlist, rt, spr->GetPosition());
 
 	RT->Return(rt);
 
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations)
+RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderTarget* rt, 
+	                                        const Sprite* spr, const RenderParams& rp, int iterations)
 {	
 	RenderReturn ret = RENDER_OK;
 
@@ -50,8 +54,12 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 	RenderTarget* tmp_rt = RT->Fetch();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->FlushShader();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderScissor::Instance()->Disable();
 	RenderCtxStack::Instance()->Push(RenderContext(
@@ -59,7 +67,11 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 
 	ret |= DrawInit(rt, spr, rp);
 
+#ifdef S2_DISABLE_DEFERRED
 	mgr->SetShader(sl::FILTER);
+#else
+	cooking::change_shader(dlist, sl::FILTER);
+#endif // S2_DISABLE_DEFERRED
 
 	sm::vec2 sz = spr->GetBounding()->GetSize().Size();
 	for (int i = 0; i < iterations; ++i) 
@@ -76,12 +88,8 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(RenderTarget* rt, const Sprite* spr,
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offset)
+RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, RenderTarget* rt, const sm::vec2& offset)
 {
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-
 	sm::vec2 vertices[4];
 	vertices[0].Set(-512, -512);
 	vertices[1].Set( 512, -512);
@@ -97,9 +105,21 @@ RenderReturn DrawGaussianBlur::DrawFromRT(RenderTarget* rt, const sm::vec2& offs
 	texcoords[2].Set(1, 1);
 	texcoords[3].Set(0, 1);
 
+#ifdef S2_DISABLE_DEFERRED
+	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
+	mgr->SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, rt->GetTexID());
 
 	shader->Commit();
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+	cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+	cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, rt->GetTexID());
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }

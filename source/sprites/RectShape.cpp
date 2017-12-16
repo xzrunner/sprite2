@@ -37,7 +37,7 @@ void RectShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 	RVG::SetColor(rp.color.GetMul());
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),
 		     max(m_bounding.xmax, m_bounding.ymax);
-	RVG::Rect(min, max, false);
+	RVG::Rect(dlist, min, max, false);
 }
 
 }

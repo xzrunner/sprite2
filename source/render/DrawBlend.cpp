@@ -11,6 +11,9 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/Sprite2Shader.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
@@ -20,16 +23,22 @@ DrawBlend::DrawBlend()
 {
 }
 
-RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bool too_large) const
+RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, 
+	                               const RenderParams& rp, bool too_large) const
 {
+	BlendMode mode = spr->GetShader().GetBlend();
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 
 	mgr->GetContext()->Clear(0);
-
 	mgr->SetShader(sl::BLEND);
-	BlendMode mode = spr->GetShader().GetBlend();
 	shader->SetMode(mode);
+#else
+	cooking::render_clear(dlist, 0);
+	cooking::change_shader(dlist, sl::BLEND);
+	cooking::set_shader_blend_mode(dlist, mode);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -44,12 +53,16 @@ RenderReturn DrawBlend::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, bo
 	}
 	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
+#ifdef S2_DISABLE_DEFERRED
 	shader->Commit();
+#else
+	cooking::flush_shader(dlist);
+#endif // S2_DISABLE_DEFERRED
 
 	return ret;
 }
 
-RenderReturn DrawBlend::DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										   const RenderParams& rp, bool reset_color) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -74,12 +87,20 @@ RenderReturn DrawBlend::DrawRT2ScreenSmall(int tex_id, const Sprite* spr,
 		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->SetShader(sl::SPRITE2);
+
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+	cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+	cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }

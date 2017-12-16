@@ -14,6 +14,9 @@
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
@@ -23,7 +26,7 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 {
 }
 
-RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
+RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -51,7 +54,7 @@ RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 	}
 
 	rt->Bind();
-	ret |= DrawSpr2RT(spr, rp, too_large);
+	ret |= DrawSpr2RT(dlist, spr, rp, too_large);
 	rt->Unbind();
 
 	if (!too_large) {
@@ -59,7 +62,7 @@ RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 	}
 	RenderScissor::Instance()->Enable();
 
-	ret |= DrawRT2Screen(rt->GetTexID(), spr, rp, too_large);
+	ret |= DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, too_large);
 	if (too_large) {
 		RT->ReturnScreen(rt);
 	} else {
@@ -69,19 +72,19 @@ RenderReturn DrawPingPong::Draw(const Sprite* spr, const RenderParams& rp) const
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2Screen(int tex_id, const Sprite* spr, 
+RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										 const RenderParams& rp, bool too_large) const
 {
 	RenderReturn ret = RENDER_OK;
 	if (too_large) {
-		ret |= DrawRT2ScreenLarge(tex_id, spr, rp, true);
+		ret |= DrawRT2ScreenLarge(dlist, tex_id, spr, rp, true);
 	} else {
-		ret |= DrawRT2ScreenSmall(tex_id, spr, rp, true);
+		ret |= DrawRT2ScreenSmall(dlist, tex_id, spr, rp, true);
 	}
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr, 
+RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
@@ -108,25 +111,43 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(int tex_id, const Sprite* spr,
 		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	if (reset_color) {
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
+	if (reset_color) 
+	{
+#ifdef S2_DISABLE_DEFERRED
 		shader->SetColor(0xffffffff, 0);
 		shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
-	} else {
+#else
+		cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+		cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
+	} 
+	else 
+	{
 		RenderColor col;
 		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+#ifdef S2_DISABLE_DEFERRED
 		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
 		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+#else
+		cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
+			col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+		cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
 	}
 
 	return RENDER_OK;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
+RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
 	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
@@ -143,19 +164,37 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(int tex_id, const Sprite* spr,
 	texcoords[4] = 1; texcoords[5] = 1;
 	texcoords[6] = 0; texcoords[7] = 1;
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-	if (reset_color) {
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
+	if (reset_color) 
+	{
+#ifdef S2_DISABLE_DEFERRED
 		shader->SetColor(0xffffffff, 0);
 		shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 		shader->DrawQuad(vertices, texcoords, tex_id);
-	} else {
+#else
+		cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+		cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
+#endif // S2_DISABLE_DEFERRED
+	} 
+	else 
+	{
 		RenderColor col;
 		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+#ifdef S2_DISABLE_DEFERRED
 		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
 		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);
+#else
+		cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
+			col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+		cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
+#endif // S2_DISABLE_DEFERRED
 	}
 
 	RenderCtxStack::Instance()->Pop();

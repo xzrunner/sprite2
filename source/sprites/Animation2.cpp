@@ -48,7 +48,7 @@ debug_draw_func(float x, float y, uint32_t color)
 	Color col;
 	col.FromRGBA(color);
 	RVG::SetColor(col);
-	RVG::Rect(sm::vec2(x, y), 5, 5, true);
+	RVG::Rect(nullptr, sm::vec2(x, y), 5, 5, true);
 }
 
 static void

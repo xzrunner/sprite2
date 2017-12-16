@@ -73,7 +73,7 @@ void CircleShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) cons
 	sm::vec2 c = rp.mt * m_center;
 	float r = sm::mat_trans_len(m_radius, rp.mt);
 	RVG::SetColor(rp.color.GetMul());
-	RVG::Circle(c, r, false, 32);
+	RVG::Circle(dlist, c, r, false, 32);
 }
 
 const sm::vec2& CircleShape::GetCenter() const 

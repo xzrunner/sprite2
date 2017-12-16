@@ -15,11 +15,15 @@
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {
 
-RenderReturn DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
+	                              const RenderParams& rp, float downsample)
 {
 	if (downsample <= 0) {
 		return RENDER_NO_DATA;
@@ -48,7 +52,7 @@ RenderReturn DrawDownsample::Draw(const Sprite* spr, const RenderParams& rp, flo
 	RenderCtxStack::Instance()->Pop();
 	RenderScissor::Instance()->Enable();
 
-	DrawRT2Screen(rt->GetTexID(), spr, rp, downsample);
+	DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, downsample);
 
 	RT->Return(rt);
 
@@ -77,7 +81,8 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 	return RENDER_OK;
 }
 
-RenderReturn DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, float downsample)
+RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
+	                                       const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -121,12 +126,20 @@ RenderReturn DrawDownsample::DrawRT2Screen(int tex_id, const Sprite* spr, const 
 		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
+#else
+	cooking::change_shader(dlist, sl::SPRITE2);
+	cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+	cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }

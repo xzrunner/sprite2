@@ -33,7 +33,7 @@ CosineShape* CosineShape::Clone() const
 
 void CosineShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
-	ShapeVertices::Draw(m_mid_points, m_closed, rp);
+	ShapeVertices::Draw(dlist, m_mid_points, m_closed, rp);
 }
 
 void CosineShape::UpdatePolyline()

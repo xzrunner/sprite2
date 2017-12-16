@@ -468,7 +468,7 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = m * vertices[i];
 	}
-	RVG::Polyline(vertices, true);
+	RVG::Polyline(nullptr, vertices, true);
 }
 
 extern "C"
@@ -1595,7 +1595,7 @@ void s2_rvg_set_line_width(float width)
 extern "C"
 void s2_rvg_draw_line(const float* vertices, int count)
 {
-	RVG::Polyline(vertices, count, false);
+	RVG::Polyline(nullptr, vertices, count, false);
 }
 
 extern "C"
@@ -1606,13 +1606,13 @@ void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h)
 	r.xmax = x + w;
 	r.ymin = y;
 	r.ymax = y + h;
-	RVG::Rect(r, filling);
+	RVG::Rect(nullptr, r, filling);
 }
 
 extern "C"
 void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segments)
 {
-	RVG::Circle(sm::vec2(cx, cy), radius, filling, segments);
+	RVG::Circle(nullptr, sm::vec2(cx, cy), radius, filling, segments);
 }
 
 /************************************************************************/

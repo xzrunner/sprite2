@@ -163,21 +163,35 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 	filter = rp.render_filter;
 #endif // S2_FILTER_FULL
 
- 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
  	if (blend != BM_NULL) {
  		;
  	} else if (filter != FM_NULL) {
- 		if (rp_child->IsChangeShader()) {
+ 		if (rp_child->IsChangeShader()) 
+		{
+#ifdef S2_DISABLE_STATISTICS
+			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
  			mgr->SetShader(sl::FILTER);
+
  			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
  			shader->SetMode(sl::FILTER_MODE(filter));
+#else
+			cooking::change_shader(nullptr, sl::FILTER);
+			cooking::set_shader_filter_mode(nullptr, filter);
+#endif // S2_DISABLE_STATISTICS
  		}
  	} else {
- 		if (rp_child->IsChangeShader()) {
+ 		if (rp_child->IsChangeShader()) 
+		{
+#ifdef S2_DISABLE_STATISTICS
+			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
  			mgr->SetShader(sl::SPRITE2);
+#else
+			cooking::change_shader(nullptr, sl::SPRITE2);
+#endif // S2_DISABLE_STATISTICS
  		}
  	}
- 
+
  	RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
 
 	return ret;
@@ -207,18 +221,30 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 	filter = rp.render_filter;
 #endif // S2_FILTER_FULL
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (blend != BM_NULL) {
 		;
 	} else if (filter != FM_NULL) {
-		if (rp_child->IsChangeShader()) {
+		if (rp_child->IsChangeShader()) 
+		{
+#ifdef S2_DISABLE_DEFERRED
+			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 			mgr->SetShader(sl::FILTER);
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
 			shader->SetMode(sl::FILTER_MODE(filter));
+#else
+			cooking::change_shader(nullptr, sl::FILTER);
+			cooking::set_shader_filter_mode(nullptr, filter);
+#endif // S2_DISABLE_DEFERRED
 		}
 	} else {
-		if (rp_child->IsChangeShader()) {
+		if (rp_child->IsChangeShader()) 
+		{
+#ifdef S2_DISABLE_DEFERRED
+			sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 			mgr->SetShader(sl::SPRITE2);
+#else
+			cooking::change_shader(nullptr, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
 		}
 	}
 
@@ -227,7 +253,8 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 	return ret;
 }
 
-RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const Color& col)
+RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
+	                            const RenderParams& rp, const Color& col)
 {
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -237,7 +264,12 @@ RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const
 		return RENDER_INVISIBLE;
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderType prev_shader = sl::ShaderMgr::Instance()->GetShaderType();
+#else
+	assert(dlist);
+	int prev_shader = dlist->GetShaderType();
+#endif // S2_DISABLE_DEFERRED
 
 	CU_VEC<sm::vec2> vertices;
 	vertices.resize(4);
@@ -251,9 +283,13 @@ RenderReturn DrawNode::DrawAABB(const Sprite* spr, const RenderParams& rp, const
 	}
 
 	RVG::SetColor(col);
-	RVG::Polyline(vertices, true);
+	RVG::Polyline(nullptr, vertices, true);
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);
+#else
+	cooking::change_shader(dlist, prev_shader);
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }
@@ -347,12 +383,21 @@ RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, 
 		vertices[i] = mt * vertices[i];
 	}
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+
 	mgr->SetShader(sl::SPRITE2);
+
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
+
 	shader->DrawQuad(&vertices[0].x, texcoords, tex_id);
+#else
+	cooking::change_shader(nullptr, sl::SPRITE2);
+	cooking::set_color_sprite(nullptr, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
+	cooking::draw_quad_sprite(nullptr, &vertices[0].x, texcoords, tex_id);
+#endif // S2_DISABLE_DEFERRED
 
 	return RENDER_OK;
 }
@@ -548,13 +593,15 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 
 	RenderReturn ret = RENDER_OK;
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+#endif // S2_DISABLE_DEFERRED
 	if (blend != BM_NULL) 
 	{
 		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
-		ret = DrawBlend().Draw(spr, rp);
-		//		}
+		ret = DrawBlend().Draw(dlist, spr, rp);
+		//		}s
 	} 
 	else if (filter != FM_NULL) 
 	{
@@ -580,10 +627,18 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		else 
 		{
 			if (rp.IsChangeShader()) {
+#ifdef S2_DISABLE_DEFERRED
 				mgr->SetShader(sl::FILTER);
+#else
+				cooking::change_shader(dlist, sl::FILTER);
+#endif // S2_DISABLE_DEFERRED
 			}
+#ifdef S2_DISABLE_DEFERRED
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 			shader->SetMode(sl::FILTER_MODE(filter));
+#else
+			cooking::set_shader_filter_mode(dlist, filter);
+#endif // S2_DISABLE_DEFERRED
 			switch (filter)
 			{
 			case FM_EDGE_DETECTION:
@@ -607,17 +662,30 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		rp_child->camera = rc;
 
 		if (rp.IsChangeShader()) {
+#ifdef S2_DISABLE_DEFERRED
 			mgr->SetShader(sl::FILTER);
+#else
+			cooking::change_shader(dlist, sl::FILTER);
+#endif // S2_DISABLE_DEFERRED
 		}
+#ifdef S2_DISABLE_DEFERRED
 		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
 		shader->SetMode(sl::FILTER_MODE(filter));
+#else
+		cooking::change_shader(dlist, sl::FILTER);
+		cooking::set_shader_filter_mode(dlist, filter);
+#endif // S2_DISABLE_DEFERRED
 		ret = DrawSprImplFinal(dlist, spr, *rp_child);
 #endif // S2_FILTER_FULL
 	} 
 	else 
 	{
 		if (rp.IsChangeShader()) {
+#ifdef S2_DISABLE_DEFERRED
 			mgr->SetShader(sl::SPRITE2);
+#else
+			cooking::change_shader(dlist, sl::SPRITE2);
+#endif // S2_DISABLE_DEFERRED
 		}
 
 		RenderParamsProxy rp_proxy;
@@ -641,7 +709,7 @@ RenderReturn DrawNode::DrawSprImplFinal(cooking::DisplayList* dlist, const Sprit
 	RenderReturn ret = RENDER_OK;
 	float ds = spr->GetShader().GetDownsample();
 	if (fabs(ds - 1) > FLT_EPSILON) {
-		DrawDownsample::Draw(spr, rp, ds);
+		DrawDownsample::Draw(dlist, spr, rp, ds);
 	} else {
 		ret = spr->GetSymbol()->DrawTree(dlist, rp, spr);
 	}

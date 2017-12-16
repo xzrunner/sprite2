@@ -12,6 +12,9 @@
 #include <shaderlab/ShaderMgr.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>
+#ifndef S2_DISABLE_DEFERRED
+#include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <string.h>
 
@@ -90,16 +93,27 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 {
 	m_rt->Bind();
 
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE2);
 
 	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 	rc->SetClearFlag(ur::MASKC);
+#else
+	cooking::change_shader(nullptr, sl::SPRITE2);
+	cooking::set_render_clear_flag(nullptr, ur::MASKC);
+#endif // S2_DISABLE_DEFERRED
+	uint32_t clear_color;
 	if (whitebg) {
-		rc->Clear(0xffffffff);
+		clear_color = 0xffffffff;
 	} else {
-		rc->Clear(0);
-	}	
+		clear_color = 0;
+	}
+#ifdef S2_DISABLE_DEFERRED
+	rc->Clear(clear_color);
+#else
+	cooking::render_clear(nullptr, clear_color);
+#endif // S2_DISABLE_DEFERRED
 
 	sm::rect rect = sym.GetBounding();
 	sm::vec2 sz = rect.Size();
@@ -117,7 +131,11 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	DrawNode::Draw(sym, params, sm::vec2(0, 0), 0.0f, sm::vec2(scale, -scale));
 
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
+#ifdef S2_DISABLE_DEFERRED
 	mgr->FlushShader();
+#else
+	cooking::flush_shader(nullptr);
+#endif // S2_DISABLE_DEFERRED
 
 	RenderCtxStack::Instance()->Pop();
 
@@ -135,10 +153,16 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 
 	m_rt->Bind();
 
-	if (clear) {
+	if (clear) 
+	{
+#ifdef S2_DISABLE_DEFERRED
 		ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 		rc->SetClearFlag(ur::MASKC);
 		rc->Clear(0);
+#else
+		cooking::set_render_clear_flag(nullptr, ur::MASKC);
+		cooking::render_clear(nullptr, 0);
+#endif // S2_DISABLE_DEFERRED
 	}
 
 	RenderCtxStack::Instance()->Push(RenderContext(

@@ -46,7 +46,7 @@ void PointShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 	sm::vec2 center = rp.mt * m_pos;
 	float r = sm::mat_trans_len(SHAPE_NODE_RADIUS, rp.mt);
 	RVG::SetColor(rp.color.GetMul());
-	RVG::Circle(center, r, true);
+	RVG::Circle(dlist, center, r, true);
 }
 
 const sm::vec2& PointShape::GetPos() const 

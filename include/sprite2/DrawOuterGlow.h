@@ -8,6 +8,8 @@
 
 #include "sprite2/typedef.h"
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -17,7 +19,7 @@ class RenderParams;
 class DrawOuterGlow
 {
 public:
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, int iterations);
+	static RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations);
 
 }; // DrawOuterGlow
 

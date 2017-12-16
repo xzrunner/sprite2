@@ -7,6 +7,8 @@
 
 #include S2_MAT_HEADER
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -18,10 +20,10 @@ class RenderTarget;
 class DrawGaussianBlur
 {
 public:
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, int iterations);
+	static RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations);
 
-	static RenderReturn DrawBlurToRT(RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations);
-	static RenderReturn DrawFromRT(RenderTarget* rt, const sm::vec2& offset);
+	static RenderReturn DrawBlurToRT(cooking::DisplayList* dlist, RenderTarget* rt, const Sprite* spr, const RenderParams& rp, int iterations);
+	static RenderReturn DrawFromRT(cooking::DisplayList* dlist, RenderTarget* rt, const sm::vec2& offset);
 
 private:
 	static RenderReturn DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& rp);

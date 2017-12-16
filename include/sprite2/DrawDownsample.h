@@ -4,6 +4,8 @@
 #include "sprite2/RenderReturn.h"
 #include "sprite2/typedef.h"
 
+namespace cooking { class DisplayList; }
+
 namespace s2
 {
 
@@ -13,11 +15,11 @@ class RenderParams;
 class DrawDownsample
 {
 public:
-	static RenderReturn Draw(const Sprite* spr, const RenderParams& rp, float downsample);
+	static RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, float downsample);
 
 private:
 	static RenderReturn DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample);
-	static RenderReturn DrawRT2Screen(int tex_id, const Sprite* spr, const RenderParams& rp, float downsample);
+	static RenderReturn DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr, const RenderParams& rp, float downsample);
 
 }; // DrawDownsample
 

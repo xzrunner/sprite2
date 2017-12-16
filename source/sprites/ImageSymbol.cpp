@@ -110,7 +110,7 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	} else {
 		//const Camera* cam = Blackboard::Instance()->GetCamera();
 		//if (cam && cam->Type() == CAM_PSEUDO3D) {
-		//	DrawPseudo3D(*rp_child, vertices, texcoords, tex_id);
+		//	DrawPseudo3D(dlist, *rp_child, vertices, texcoords, tex_id);
 		//} else {
 			if (dlist) {
 				DrawOrthoDeferred(dlist, *rp_child, vertices, texcoords, tex_id);
@@ -288,7 +288,7 @@ void ImageSymbol::DrawOrtho(const RenderParams& rp, const float* vertices, const
 	}
 }
 
-void ImageSymbol::DrawPseudo3D(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
+void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
 	const Camera* cam = Blackboard::Instance()->GetCamera();
 	assert(cam && cam->Type() == CAM_PSEUDO3D);
@@ -313,24 +313,50 @@ void ImageSymbol::DrawPseudo3D(const RenderParams& rp, const float* vertices, co
 	_texcoords.push_back(sm::vec2(texcoords[4], texcoords[5]));
 	_texcoords.push_back(sm::vec2(texcoords[6], texcoords[7]));
 
+	auto& col = rp.color;
+#ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
-	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
-	shader->SetColorMap(rp.color.GetRMapABGR(), rp.color.GetGMapABGR(), rp.color.GetBMapABGR());
+	shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+	shader->SetColorMap(col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
+#else
+	cooking::change_shader(dlist, sl::SPRITE3);
+	cooking::set_color_sprite3(dlist, col.GetMulABGR(), col.GetAddABGR(), 
+		col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+	cooking::draw_quad_sprite3(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
+#endif // S2_DISABLE_DEFERRED
 }
 
 void ImageSymbol::DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
 									const float* vertices, const float* texcoords, int tex_id) const
 {
-	const RenderColor& col = rp.color;
-	uint32_t col_mul = col.GetMulABGR(), 
-		     col_add = col.GetAddABGR();
-	uint32_t col_rmap = col.GetRMapABGR(),
-		     col_gmap = col.GetGMapABGR(),
-			 col_bmap = col.GetBMapABGR();
-	cooking::draw_quad(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap, vertices, texcoords, tex_id);
+	auto mgr = sl::ShaderMgr::Instance();
+	switch (mgr->GetShaderType())
+	{
+	case sl::SPRITE2:
+		{
+			const RenderColor& col = rp.color;
+			uint32_t col_mul = col.GetMulABGR(), 
+			         col_add = col.GetAddABGR();
+			uint32_t col_rmap = col.GetRMapABGR(),
+		             col_gmap = col.GetGMapABGR(),
+			         col_bmap = col.GetBMapABGR();
+			cooking::set_color_sprite(dlist, col_mul, col_add, col_rmap, col_gmap, col_bmap);
+			cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
+		}
+		break;
+	case sl::FILTER:
+		{
+			const RenderColor& col = rp.color;
+			uint32_t col_mul = col.GetMulABGR(), 
+			         col_add = col.GetAddABGR();
+			cooking::set_color_filter(dlist, col_mul, col_add);
+			cooking::draw_quad_filter(dlist, vertices, texcoords, tex_id);
+		}
+		break;
+	}
 }
 
 bool ImageSymbol::CalcVertices(const RenderParams& rp, float* vertices) const

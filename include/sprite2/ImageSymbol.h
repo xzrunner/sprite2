@@ -47,11 +47,8 @@ protected:
 
 private:
 	void DrawBlend(const RenderParams& rp, float* vertices, const float* texcoords, int tex_id) const;
-	void DrawOrtho(const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;
+	void DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;
 	void DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const;
-
-	void DrawOrthoDeferred(cooking::DisplayList* dlist, const RenderParams& rp, 
-		const float* vertices, const float* texcoords, int tex_id) const;
 
 	bool CalcVertices(const RenderParams& rp, float* vertices) const;
 

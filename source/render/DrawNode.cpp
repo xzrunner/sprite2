@@ -617,12 +617,12 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		if (filter == FM_GAUSSIAN_BLUR) 
 		{
 			int itrs = static_cast<RFGaussianBlur*>(rf.get())->GetIterations();
-			ret = DrawGaussianBlur::Draw(spr, *rp_child, itrs);
+			ret = DrawGaussianBlur::Draw(dlist, spr, *rp_child, itrs);
 		} 
 		else if (filter == FM_OUTER_GLOW) 
 		{
 			int itrs = static_cast<RFOuterGlow*>(rf.get())->GetIterations();
-			ret = DrawOuterGlow::Draw(spr, *rp_child, itrs);
+			ret = DrawOuterGlow::Draw(dlist, spr, *rp_child, itrs);
 		} 
 		else 
 		{

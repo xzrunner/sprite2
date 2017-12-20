@@ -4,7 +4,6 @@
 #include <SM_Vector.h>
 #include <SM_Rect.h>
 #include <cu/cu_stl.h>
-#include <shaderlab/ShaderType.h>
 
 namespace cooking { class DisplayList; }
 
@@ -56,7 +55,7 @@ public:
 	static void Arrow(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1, float len = 20);
 
 private:
-	static void SetShader(cooking::DisplayList* dlist, sl::ShaderType shader);
+	static void SetShader(cooking::DisplayList* dlist, int shader_type);
 
 }; // RVG
 

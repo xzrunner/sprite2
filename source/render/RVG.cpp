@@ -289,13 +289,13 @@ void RVG::Arrow(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2&
 	Line(dlist, p1, right);
 }
 
-void RVG::SetShader(cooking::DisplayList* dlist, sl::ShaderType shader)
+void RVG::SetShader(cooking::DisplayList* dlist, int shader_type)
 {
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr::Instance()->SetShader(shader);
 #else
 	assert(dlist);
-	cooking::change_shader(dlist, shader);
+	cooking::change_shader(dlist, shader_type);
 #endif // S2_DISABLE_DEFERRED
 }
 

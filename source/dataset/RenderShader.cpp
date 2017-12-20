@@ -60,7 +60,7 @@ bool RenderShader::operator == (const RenderShader& rs) const
 {
 	return
 #ifdef S2_FILTER_FULL
-		(!m_filter && !rs.m_filter) || (m_filter && rs.m_filter && *m_filter == *rs.m_filter) &&
+		((!m_filter && !rs.m_filter) || (m_filter && rs.m_filter && *m_filter == *rs.m_filter)) &&
 #else
 		m_filter == rs.m_filter &&
 #endif // S2_FILTER_FULL

@@ -15,6 +15,7 @@
     <ProjectGuid>{CCDD6DC3-9DA2-4215-BAC6-6031699FB7E4}</ProjectGuid>
     <RootNamespace>sprite2</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+	<WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>    
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

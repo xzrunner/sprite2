@@ -1,6 +1,7 @@
 #include "sprite2/RVG.h"
 #include "sprite2/CameraMgr.h"
 #include "sprite2/Color.h"
+#include "sprite2/config.h"
 
 #include <rvg.h>
 #include <SM_Calc.h>
@@ -292,7 +293,7 @@ void RVG::Arrow(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2&
 void RVG::SetShader(cooking::DisplayList* dlist, int shader_type)
 {
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr::Instance()->SetShader(shader);
+	sl::ShaderMgr::Instance()->SetShader(static_cast<sl::ShaderType>(shader_type));
 #else
 	assert(dlist);
 	cooking::change_shader(dlist, shader_type);

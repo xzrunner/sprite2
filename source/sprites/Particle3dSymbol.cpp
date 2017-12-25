@@ -206,8 +206,10 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
 	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
 	P3dRenderParams p3d_rp;
-	p3d_rp.mt    = rp_child->mt;
-	p3d_rp.rc    = rp_child->color;
+	p3d_rp.mt            = rp_child->mt;
+	p3d_rp.color         = rp_child->color;
+	p3d_rp.render_filter = rp_child->render_filter;
+	
 	if (spr) {
 		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		p3d_rp.local = p3d_spr->IsLocal();
@@ -254,7 +256,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 //		}
 //		P3dRenderParams* p3d_rp = static_cast<P3dRenderParams*>(p3d->draw_params);
 //		p3d_rp->mt    = rp_child->mt;
-//		p3d_rp->rc    = rp_child->color;
+//		p3d_rp->color    = rp_child->color;
 //		p3d_rp->local = m_local;
 //		S2_MAT mt = p3d_spr->GetLocalMat() * rp_child->mt;
 //		if (rp.actor) {
@@ -292,11 +294,12 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	}
 
 	P3dRenderParams p3d_rp;
-	p3d_rp.mt          = rp_child->mt;
-	p3d_rp.rc          = rp_child->color;
-	p3d_rp.local       = p3d_spr->IsLocal();
-	p3d_rp.view_region = rp.GetViewRegion();
-	p3d_rp.flags       = rp.GetFlags();
+	p3d_rp.mt            = rp_child->mt;
+	p3d_rp.color         = rp_child->color;
+	p3d_rp.render_filter = rp_child->render_filter;
+	p3d_rp.local         = p3d_spr->IsLocal();
+	p3d_rp.view_region   = rp.GetViewRegion();
+	p3d_rp.flags         = rp.GetFlags();
 
 	RenderReturn ret = et->Draw(p3d_rp, false);
 

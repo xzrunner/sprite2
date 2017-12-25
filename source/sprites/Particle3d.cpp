@@ -97,8 +97,10 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		rp_child->SetFlags(rp->flags);
 	}
 
-	rp_child->color.SetMul(mul * rp->rc.GetMul());
-	rp_child->color.SetAdd(add + rp->rc.GetAdd());
+	rp_child->color.SetMul(mul * rp->color.GetMul());
+	rp_child->color.SetAdd(add + rp->color.GetAdd());
+
+	rp_child->render_filter = rp->render_filter;
 
 	rp_child->render_fast_blend = static_cast<FastBlendMode>(fast_blend);
 

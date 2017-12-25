@@ -11,17 +11,23 @@
 namespace s2
 {
 
+#ifdef S2_FILTER_FULL
+class RenderFilter;
+#endif // S2_FILTER_FULL
+
 class P3dRenderParams
 {
 public:
-	S2_MAT      mt;
-	RenderColor rc;
-	bool        local;
-	sm::rect    view_region;
-	uint32_t    flags;
-
-public:
-	P3dRenderParams() : local(true), flags(0xffffffff) {}
+	S2_MAT        mt;
+	RenderColor   color;
+#ifdef S2_FILTER_FULL
+	RenderFilter* render_filter = nullptr;
+#else
+	FilterMode    render_filter = FM_NULL;
+#endif // S2_FILTER_FULL
+	bool          local = true;
+	sm::rect      view_region;
+	uint32_t      flags = 0xffffffff;
 
 }; // P3dRenderParams
 

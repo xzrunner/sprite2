@@ -19,7 +19,6 @@
 #include "sprite2/RenderTarget.h"
 #include "sprite2/RenderScissor.h"
 #include "sprite2/Blackboard.h"
-#include "sprite2/trans_color.h"
 #include "sprite2/StringHelper.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
@@ -55,6 +54,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
+#include <bsn/ColorParser.h>
 
 #include <cooking/DisplayList.h>
 
@@ -1622,7 +1622,7 @@ void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segm
 extern "C"
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
 {
-	return trans_color(src, PIXEL_TYPE(src_type), PIXEL_TYPE(dst_type));
+	return bsn::ColorParser::Trans(src, bsn::PIXEL_TYPE(src_type), bsn::PIXEL_TYPE(dst_type));
 }
 
 extern "C"

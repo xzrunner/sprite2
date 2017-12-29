@@ -71,7 +71,7 @@ CU_STR TextTable::Query(int lang, const CU_STR& tid) const
 	return itr->second[lang];
 }
 
-void TextTable::Insert(const CU_STR& tid, const std::vector<CU_STR>& languages)
+void TextTable::Insert(const CU_STR& tid, const CU_VEC<CU_STR>& languages)
 {
 	m_texts.insert(std::make_pair(tid, languages));
 }

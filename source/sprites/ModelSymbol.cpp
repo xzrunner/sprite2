@@ -55,7 +55,7 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		shader->SetMaterial(material.ambient, material.diffuse, material.specular, 
 			material.shininess, tex_id);
 		shader->SetLightPosition(sm::vec3(0.25f, 0.25f, 1));
-//		shader->SetModelview(mesh->GetMat());
+		shader->SetNormalMatrix(sm::mat4());
 
 		int vertex_type = mesh->GetVertexType();
 		bool normal = vertex_type & m3::VERTEX_FLAG_NORMALS;

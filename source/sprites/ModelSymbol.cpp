@@ -45,7 +45,7 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::MODEL3);
 	sl::Model3Shader* shader = static_cast<sl::Model3Shader*>(mgr->GetShader());
-	const CU_VEC<m3::Mesh*>& meshes = m_model->GetAllMeshes();
+	auto& meshes = m_model->GetAllMeshes();
 	for (int i = 0, n = meshes.size(); i < n; ++i) 
 	{
 		const m3::Mesh* mesh = meshes[i];
@@ -55,7 +55,7 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		shader->SetMaterial(material.ambient, material.diffuse, material.specular, 
 			material.shininess, tex_id);
 		shader->SetLightPosition(sm::vec3(0.25f, 0.25f, 1));
-		shader->SetModelview(mesh->GetMat());
+//		shader->SetModelview(mesh->GetMat());
 
 		int vertex_type = mesh->GetVertexType();
 		bool normal = vertex_type & m3::VERTEX_FLAG_NORMALS;

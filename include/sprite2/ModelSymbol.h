@@ -8,8 +8,7 @@
 #include "sprite2/Symbol.h"
 
 #include <model3/AABB.h>
-
-namespace m3 { class Model; }
+#include <model3/IModel.h>
 
 namespace s2
 {
@@ -18,7 +17,6 @@ class ModelSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
 	ModelSymbol();
-	virtual ~ModelSymbol();
 
 	/**
 	 *  @interface
@@ -31,7 +29,7 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
 
-	void SetModel(m3::Model* model);
+	void SetModel(const m3::ModelPtr& model) { m_model = model; }
 
 	void SetAABB(const m3::AABB& aabb) { m_aabb = aabb; }
 	const m3::AABB& GetAABB() const { return m_aabb; }
@@ -40,7 +38,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
-	m3::Model* m_model;
+	m3::ModelPtr m_model = nullptr;
 
 	m3::AABB m_aabb;
 

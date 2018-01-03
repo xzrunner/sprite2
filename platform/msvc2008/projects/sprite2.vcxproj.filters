@@ -1239,9 +1239,6 @@
     <ClInclude Include="..\..\..\include\sprite2\macro.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\trans_color.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h">
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>
@@ -1285,9 +1282,6 @@
     </None>
     <None Include="..\..\..\include\sprite2\Sprite.inl">
       <Filter>sprites\sprite</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\trans_color.inl">
-      <Filter>utility</Filter>
     </None>
   </ItemGroup>
 </Project>

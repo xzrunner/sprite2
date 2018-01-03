@@ -7,8 +7,8 @@
 
 #include "sprite2/Symbol.h"
 
-#include <model3/AABB.h>
-#include <model3/IModel.h>
+#include <node3/AABB.h>
+#include <node3/IModel.h>
 
 namespace s2
 {
@@ -29,18 +29,18 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
 
-	void SetModel(const m3::ModelPtr& model) { m_model = model; }
+	void SetModel(const n3::ModelPtr& model) { m_model = model; }
 
-	void SetAABB(const m3::AABB& aabb) { m_aabb = aabb; }
-	const m3::AABB& GetAABB() const { return m_aabb; }
+	void SetAABB(const n3::AABB& aabb) { m_aabb = aabb; }
+	const n3::AABB& GetAABB() const { return m_aabb; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
-	m3::ModelPtr m_model = nullptr;
+	n3::ModelPtr m_model = nullptr;
 
-	m3::AABB m_aabb;
+	n3::AABB m_aabb;
 
 }; // ModelSymbol
 

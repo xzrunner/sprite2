@@ -4,7 +4,7 @@
 
 #include "sprite2/SymType.h"
 
-#include <model3/RenderParams.h>
+#include <node3/RenderParams.h>
 
 namespace s2
 {
@@ -30,7 +30,7 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 // 	e3d::DrawCube(mat, m_aabb, ee::BLACK);
 
 	if (m_model) {
-		m_model->Draw(m3::RenderParams());
+		m_model->Draw(n3::RenderParams());
 	}
 
 	return RENDER_OK;

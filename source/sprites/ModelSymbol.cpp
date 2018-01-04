@@ -3,6 +3,7 @@
 #ifndef S2_DISABLE_MODEL
 
 #include "sprite2/SymType.h"
+#include "sprite2/ModelSprite.h"
 
 #include <node3/RenderParams.h>
 
@@ -20,18 +21,17 @@ int ModelSymbol::Type() const
 
 RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
-// 	if (!spr) {
-// 		return;
-// 	}
-//	const Sprite* s = dynamic_cast<const Sprite*>(spr);
+ 	if (!spr || !m_model) {
+ 		return RENDER_NO_DATA;
+ 	}
+	auto spr_model = dynamic_cast<const ModelSprite*>(spr);
 
-// 	sm::mat4 mat = sm::mat4(s->GetOri3().ToMatrix()) * 
-// 		sm::mat4::Translate(s->GetPos3().x, s->GetPos3().y, s->GetPos3().z);
+	auto& pos3 = spr_model->GetPos3();
+ 	sm::mat4 mat = sm::mat4(spr_model->GetOri3()) *
+ 		sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
 // 	e3d::DrawCube(mat, m_aabb, ee::BLACK);
 
-	if (m_model) {
-		m_model->Draw(n3::RenderParams());
-	}
+	m_model->Draw(n3::RenderParams(mat));
 
 	return RENDER_OK;
 }

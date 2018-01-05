@@ -6,6 +6,7 @@
 #include "sprite2/ModelSprite.h"
 
 #include <node3/RenderParams.h>
+#include <node3/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -29,9 +30,10 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	auto& pos3 = spr_model->GetPos3();
  	sm::mat4 mat = sm::mat4(spr_model->GetOri3()) *
  		sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
-// 	e3d::DrawCube(mat, m_aabb, ee::BLACK);
-
 	m_model->Draw(n3::RenderParams(mat));
+
+	n3::PrimitiveDraw::SetColor(0);
+	n3::PrimitiveDraw::Cube(mat, m_aabb);
 
 	return RENDER_OK;
 }

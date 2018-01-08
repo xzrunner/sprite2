@@ -54,7 +54,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -68,7 +68,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;GLEW_STATIC;EASY_EDITOR;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader />

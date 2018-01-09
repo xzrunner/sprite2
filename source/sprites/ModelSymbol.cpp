@@ -32,7 +32,7 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
  		sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
 	m_model->Draw(n3::RenderParams(mat));
 
-	n3::PrimitiveDraw::SetColor(0);
+	n3::PrimitiveDraw::SetColor(0xff00ff00);
 	n3::PrimitiveDraw::Cube(mat, m_aabb);
 
 	return RENDER_OK;

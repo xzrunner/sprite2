@@ -44,4 +44,9 @@ ModelSprite::~ModelSprite()
 #endif // S2_DISABLE_STATISTICS
 }
 
+void ModelSprite::Rotate3(const sm::Quaternion& delta)
+{
+	m_ori3 = delta.Rotated(m_ori3);
+}
+
 }

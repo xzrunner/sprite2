@@ -27,10 +27,7 @@ public:
 
 	const sm::Quaternion& GetOri3() const { return m_ori3; }
 	void SetOri3(const sm::Quaternion& ori) { m_ori3 = ori; }
-	void Rotate3(const sm::Quaternion& delta) {
-		m_ori3.Rotate(delta);
-		m_ori3 = delta.Rotated(m_ori3);
-	}
+	void Rotate3(const sm::Quaternion& delta);
 
 private:
 	sm::vec3       m_pos3;

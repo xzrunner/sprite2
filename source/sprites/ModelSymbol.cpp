@@ -44,16 +44,14 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	mt2d.x[1]  = mt6[1];
 	mt2d.x[4]  = mt6[2];
 	mt2d.x[5]  = mt6[3];
-	mt2d.x[12] = mt6[4] / 100;
-	mt2d.x[13] = mt6[5] / 100;
- 	sm::mat4 mat = 
-		mt2d *
-		sm::mat4(spr_model->GetOri3()) *
- 		sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
-	m_model->Draw(n3::RenderParams(mat));
+	mt2d.x[12] = mt6[4] / 128;
+	mt2d.x[13] = mt6[5] / 128;
+	sm::mat4 mt_rot = sm::mat4(spr_model->GetOri3());
+ 	sm::mat4 mt = mt2d * mt_rot * sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
+	m_model->Draw(n3::RenderParams(mt, mt_rot));
 
 	n3::PrimitiveDraw::SetColor(0xff00ff00);
-	n3::PrimitiveDraw::Cube(mat, m_aabb);
+	n3::PrimitiveDraw::Cube(mt, m_aabb);
 
 	return RENDER_OK;
 }

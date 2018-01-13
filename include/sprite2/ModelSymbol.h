@@ -6,6 +6,7 @@
 #ifndef S2_DISABLE_MODEL
 
 #include "sprite2/Symbol.h"
+#include S2_MAT_HEADER
 
 #include <node3/AABB.h>
 #include <node3/IModel.h>
@@ -36,6 +37,9 @@ public:
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
+
+private:
+	static sm::mat4 CalcMat2D(const S2_MAT& mt2);
 
 protected:
 	n3::ModelPtr m_model = nullptr;

@@ -5,6 +5,7 @@
 #include "sprite2/SymType.h"
 #include "sprite2/ModelSprite.h"
 #include "sprite2/DrawNode.h"
+#include "sprite2/RenderCtxStack.h"
 
 #include <node3/RenderParams.h>
 #include <node3/PrimitiveDraw.h>
@@ -35,18 +36,12 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		return RENDER_INVISIBLE;
 	}
 
-	auto spr_model = dynamic_cast<const ModelSprite*>(spr);
+	sm::mat4 mt2d = CalcMat2D(rp_child->mt);
 
-	auto& pos3 = spr_model->GetPos3();
-	const float* mt6 = rp_child->mt.x;
-	sm::mat4 mt2d;
-	mt2d.x[0]  = mt6[0];
-	mt2d.x[1]  = mt6[1];
-	mt2d.x[4]  = mt6[2];
-	mt2d.x[5]  = mt6[3];
-	mt2d.x[12] = mt6[4] / 128;
-	mt2d.x[13] = mt6[5] / 128;
+	auto spr_model = dynamic_cast<const ModelSprite*>(spr);
 	sm::mat4 mt_rot = sm::mat4(spr_model->GetOri3());
+	auto& pos3 = spr_model->GetPos3();
+
  	sm::mat4 mt = mt2d * mt_rot * sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
 	m_model->Draw(n3::RenderParams(mt, mt_rot));
 
@@ -60,6 +55,35 @@ sm::rect ModelSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, boo
 {
 	// empty
 	return sm::rect();
+}
+
+sm::mat4 ModelSymbol::CalcMat2D(const S2_MAT& mt2)
+{
+	sm::mat4 mt16;
+	
+	static const float SCALE = 1 / 128.0f;
+
+	const float* mt6 = mt2.x;
+	mt16.x[0] = mt6[0];
+	mt16.x[1] = mt6[1];
+	mt16.x[4] = mt6[2];
+	mt16.x[5] = mt6[3];
+	mt16.x[12] = mt6[4] * SCALE;
+	mt16.x[13] = mt6[5] * SCALE;
+
+	auto ctx = RenderCtxStack::Instance()->Top();
+	if (!ctx) {
+		return mt16;
+	}
+
+	auto& translate = ctx->GetMVOffset();
+	float scale = ctx->GetMVScale();
+	sm::mat4 cam2d_mt = sm::mat4::Scaled(scale, scale, 1);
+	cam2d_mt.Translate(translate.x * scale, translate.y * scale, 0);
+	cam2d_mt.x[12] *= SCALE;
+	cam2d_mt.x[13] *= SCALE;
+
+	return cam2d_mt * mt16;
 }
 
 }

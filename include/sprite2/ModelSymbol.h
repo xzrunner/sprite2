@@ -31,6 +31,7 @@ public:
 #endif // S2_DISABLE_FLATTEN
 
 	void SetModel(const n3::ModelPtr& model) { m_model = model; }
+	n3::ModelPtr GetModel() { return m_model; }
 
 	void SetAABB(const n3::AABB& aabb) { m_aabb = aabb; }
 	const n3::AABB& GetAABB() const { return m_aabb; }

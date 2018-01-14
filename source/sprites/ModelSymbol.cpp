@@ -41,9 +41,10 @@ RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	auto spr_model = dynamic_cast<const ModelSprite*>(spr);
 	sm::mat4 mt_rot = sm::mat4(spr_model->GetOri3());
 	auto& pos3 = spr_model->GetPos3();
+	sm::mat4 mt_trans = sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
 
- 	sm::mat4 mt = mt2d * mt_rot * sm::mat4::Translated(pos3.x, pos3.y, pos3.z);
-	m_model->Draw(n3::RenderParams(mt, mt_rot));
+ 	sm::mat4 mt = mt2d * mt_rot * mt_trans;
+	m_model->Draw(n3::RenderParams(mt));
 
 	n3::PrimitiveDraw::SetColor(0xff00ff00);
 	n3::PrimitiveDraw::Cube(mt, m_aabb);

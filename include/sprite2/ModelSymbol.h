@@ -8,7 +8,6 @@
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
-#include <node3/AABB.h>
 #include <node3/IModel.h>
 
 namespace s2
@@ -33,9 +32,6 @@ public:
 	void SetModel(const n3::ModelPtr& model) { m_model = model; }
 	n3::ModelPtr GetModel() { return m_model; }
 
-	void SetAABB(const n3::AABB& aabb) { m_aabb = aabb; }
-	const n3::AABB& GetAABB() const { return m_aabb; }
-
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
@@ -45,8 +41,6 @@ private:
 
 protected:
 	n3::ModelPtr m_model = nullptr;
-
-	n3::AABB m_aabb;
 
 }; // ModelSymbol
 

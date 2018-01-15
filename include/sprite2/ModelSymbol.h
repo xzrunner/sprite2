@@ -40,7 +40,8 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
-	static sm::mat4 CalcMat2D(const S2_MAT& mt2);
+	static sm::mat4 CalcCam2dMat(const S2_MAT& mt2);
+	static sm::mat4 CalcCam3dMat();
 
 protected:
 	n3::ModelPtr m_model = nullptr;

@@ -1537,14 +1537,15 @@ void* s2_cam_create()
 extern "C"
 void s2_cam_release(void* cam)
 {
-	Camera* c = static_cast<Camera*>(cam);
-	delete c;
+	// todo
+	auto c = *static_cast<std::shared_ptr<Camera>*>(cam);
+//	delete c;
 }
 
 extern "C"
 void s2_cam_bind(void* cam)
 {
-	Camera* c = static_cast<Camera*>(cam);
+	auto c = *static_cast<std::shared_ptr<Camera>*>(cam);
 	c->Bind();
 	Blackboard::Instance()->SetCamera(c);
 }
@@ -1552,14 +1553,14 @@ void s2_cam_bind(void* cam)
 extern "C"
 void s2_cam_set(void* cam, float x, float y, float scale)
 {
-	OrthoCamera* o_cam = static_cast<OrthoCamera*>(cam);
+	auto o_cam = *static_cast<std::shared_ptr<OrthoCamera>*>(cam);
 	o_cam->Set(sm::vec2(x, y), scale);
 }
 
 extern "C"
 void s2_cam_get(const void* cam, float* x, float* y, float* scale)
 {
-	const OrthoCamera* o_cam = static_cast<const OrthoCamera*>(cam);
+	auto o_cam = *static_cast<const std::shared_ptr<OrthoCamera>*>(cam);
 	const sm::vec2& pos = o_cam->GetPosition();
 	*x = pos.x;
 	*y = pos.y;
@@ -1569,7 +1570,7 @@ void s2_cam_get(const void* cam, float* x, float* y, float* scale)
 extern "C"
 void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, float* dst_y)
 {
-	const OrthoCamera* o_cam = static_cast<const OrthoCamera*>(cam);
+	auto o_cam = *static_cast<const std::shared_ptr<OrthoCamera>*>(cam);
 	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
 	sm::vec2 dst = o_cam->TransPosScreenToProject(src_x, src_y, sz.x, sz.y);
 	*dst_x = dst.x;

@@ -215,11 +215,11 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 	vertices_scr[2] = rp.mt * sm::vec2(m_size.xmax, m_size.ymax);
 	vertices_scr[3] = rp.mt * sm::vec2(m_size.xmin, m_size.ymax);
 
-	const Camera* cam = Blackboard::Instance()->GetCamera();
-	const OrthoCamera* ocam = nullptr;
+	auto cam = Blackboard::Instance()->GetCamera();
+	std::shared_ptr<const OrthoCamera> ocam = nullptr;
 	if (cam) {
 		assert(cam->Type() == CAM_ORTHO2D);
-		ocam = static_cast<const OrthoCamera*>(cam);
+		ocam = std::dynamic_pointer_cast<const OrthoCamera>(cam);
 	}
 	
 	sm::vec2 tex_coords_base[4];
@@ -294,9 +294,9 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 
 void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
-	const Camera* cam = Blackboard::Instance()->GetCamera();
+	auto cam = Blackboard::Instance()->GetCamera();
 	assert(cam && cam->Type() == CAM_PSEUDO3D);
-	const Pseudo3DCamera* pcam = static_cast<const Pseudo3DCamera*>(cam);
+	auto pcam = std::dynamic_pointer_cast<const Pseudo3DCamera>(cam);
 
 	float z[4];
 	rp.camera.CalculateZ(pcam->GetAngle(), vertices, z);

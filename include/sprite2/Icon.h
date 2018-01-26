@@ -20,6 +20,8 @@ class ImageSymbol;
 class Icon
 {
 public:
+	virtual ~Icon() {}
+
 	virtual Icon* Clone() const = 0;
 
 	virtual RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;

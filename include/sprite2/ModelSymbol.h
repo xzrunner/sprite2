@@ -8,7 +8,7 @@
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
-#include <node3/IModel.h>
+#include <node3/SceneNode.h>
 
 namespace s2
 {
@@ -29,8 +29,8 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
 
-	void SetModel(const n3::ModelPtr& model) { m_model = model; }
-	n3::ModelPtr GetModel() { return m_model; }
+	void SetNode(const n3::SceneNodePtr& node) { m_node = node; }
+	const n3::SceneNodePtr& GetNode() const { return m_node; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
@@ -40,7 +40,7 @@ private:
 	static sm::mat4 CalcCam3dMat();
 
 protected:
-	n3::ModelPtr m_model = nullptr;
+	n3::SceneNodePtr m_node = nullptr;
 
 }; // ModelSymbol
 

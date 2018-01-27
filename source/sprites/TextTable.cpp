@@ -64,7 +64,7 @@ CU_STR TextTable::Query(int lang, const CU_STR& tid) const
 	if (itr == m_texts.end()) {
 		return "";
 	}
-	if (lang < 0 || lang >= itr->second.size()) {
+	if (lang < 0 || static_cast<size_t>(lang) >= itr->second.size()) {
 		return "";
 	}
 

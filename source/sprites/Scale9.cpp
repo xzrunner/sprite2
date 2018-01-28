@@ -3,10 +3,10 @@
 #include "sprite2/Symbol.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/ImageSymbol.h"
-#include "sprite2/Texture.h"
 #include "sprite2/SymType.h"
 
 #include <SM_Calc.h>
+#include <painting2/Texture.h>
 
 #include <string.h>
 #include <assert.h>

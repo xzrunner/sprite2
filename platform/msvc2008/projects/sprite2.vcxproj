@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -86,7 +86,6 @@
     <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\Texture.cpp" />
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawBlend.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp" />
@@ -379,7 +378,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Texture.h" />
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
     <ClInclude Include="..\..\..\include\sprite2\typedef.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9.h" />

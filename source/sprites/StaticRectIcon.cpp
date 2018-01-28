@@ -1,6 +1,7 @@
 #include "sprite2/StaticRectIcon.h"
-#include "sprite2/Texture.h"
 #include "sprite2/ImageSymbol.h"
+
+#include <painting2/Texture.h>
 
 namespace s2
 {

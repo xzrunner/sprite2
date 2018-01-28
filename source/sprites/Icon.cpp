@@ -2,11 +2,11 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/ImageSymbol.h"
 #include "sprite2/TexcoordsMap.h"
-#include "sprite2/Texture.h"
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <cooking/Facade.h>
+#include <painting2/Texture.h>
 
 namespace s2
 {

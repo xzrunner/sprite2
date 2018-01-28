@@ -1,7 +1,6 @@
 #include "sprite2/TexturePolygon.h"
 #include "sprite2/ImageSymbol.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/Texture.h"
 #include "sprite2/TexcoordsMap.h"
 
 #include <SM_Process.h>
@@ -9,6 +8,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <cooking/Facade.h>
+#include <painting2/Texture.h>
 
 #include <assert.h>
 

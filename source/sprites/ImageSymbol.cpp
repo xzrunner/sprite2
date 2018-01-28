@@ -1,6 +1,5 @@
 #include "sprite2/ImageSymbol.h"
 #include "sprite2/SymType.h"
-#include "sprite2/Texture.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/DrawNode.h"
@@ -27,6 +26,7 @@
 #include <shaderlab/Sprite3Shader.h>
 #include <cooking/Facade.h>
 #include <cooking/DisplayList.h>
+#include <painting2/Texture.h>
 
 #include <assert.h>
 
@@ -178,7 +178,7 @@ sm::vec2 ImageSymbol::GetNoTrimedSize() const
 	}
 }
 
-void ImageSymbol::InitTex(const std::shared_ptr<Texture>& tex, const sm::i16_rect& region)
+void ImageSymbol::InitTex(const std::shared_ptr<pt2::Texture>& tex, const sm::i16_rect& region)
 {
 	m_tex = tex;
 	m_region = region;

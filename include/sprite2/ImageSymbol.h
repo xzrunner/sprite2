@@ -5,10 +5,10 @@
 
 #include <stdint.h>
 
+namespace pt2 { class Texture;  }
+
 namespace s2
 {
-
-class Texture;
 
 class ImageSymbol : public VIRTUAL_INHERITANCE Symbol
 {
@@ -34,9 +34,9 @@ public:
 	virtual bool QueryTexcoords(bool use_dtex, float* texcoords, int& tex_id) const = 0;
 	virtual void OnQueryTexcoordsFail(cooking::DisplayList* dlist) const = 0;
 
-	void InitTex(const std::shared_ptr<Texture>& tex, const sm::i16_rect& region);
+	void InitTex(const std::shared_ptr<pt2::Texture>& tex, const sm::i16_rect& region);
 
-	const std::shared_ptr<Texture>& GetTexture() const { return m_tex; }
+	const std::shared_ptr<pt2::Texture>& GetTexture() const { return m_tex; }
 
 	const sm::i16_rect& GetRegion() const { return m_region; }
 
@@ -53,7 +53,7 @@ private:
 	bool CalcVertices(const RenderParams& rp, float* vertices) const;
 
 protected:
-	std::shared_ptr<Texture> m_tex = nullptr;
+	std::shared_ptr<pt2::Texture> m_tex = nullptr;
 
 	sm::i16_rect m_region;
 	sm::rect     m_size;

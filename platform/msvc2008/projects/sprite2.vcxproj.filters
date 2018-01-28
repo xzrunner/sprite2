@@ -22,9 +22,6 @@
     <Filter Include="dataset\primitive">
       <UniqueIdentifier>{6e2faad1-d036-441c-88be-810151f8388e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\resources">
-      <UniqueIdentifier>{bd6b8894-c0f4-4142-8f78-8a781bd3c0d1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dataset\bound">
       <UniqueIdentifier>{56f682e2-f466-40a3-9efe-ce48bcef4e64}</UniqueIdentifier>
     </Filter>
@@ -637,9 +634,6 @@
     <ClCompile Include="..\..\..\source\sprites\Sprite.cpp">
       <Filter>sprites\sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\Texture.cpp">
-      <Filter>dataset\resources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\Mesh.cpp">
       <Filter>sprites\11.mesh</Filter>
     </ClCompile>
@@ -1222,9 +1216,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h">
       <Filter>sprites\sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Texture.h">
-      <Filter>dataset\resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Mesh.h">
       <Filter>sprites\11.mesh</Filter>

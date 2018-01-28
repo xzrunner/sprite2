@@ -11,11 +11,11 @@
 #include "sprite2/Symbol.h"
 #include "sprite2/SymType.h"
 #include "sprite2/ImageSymbol.h"
-#include "sprite2/Texture.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"
 #endif // S2_DISABLE_STATISTICS
 
+#include <painting2/Texture.h>
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>

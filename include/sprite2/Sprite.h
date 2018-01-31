@@ -10,7 +10,6 @@
 #include "sprite2/SprRender.h"
 #include "sprite2/SprDefault.h"
 #include "sprite2/BoundingBox.h"
-#include "sprite2/CompTransform.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
@@ -20,6 +19,8 @@
 #include <array>
 
 #include <stdint.h>
+
+namespace pt2 { class GeoTransform; }
 
 namespace s2
 {
@@ -91,11 +92,6 @@ public:
 	void Rotate(float rot);
 	void Scale(const sm::vec2& scale);
 
-	const CompTransform& GetTransform() const {
-		return HasComponent<CompTransform>() ?
-			GetComponent<CompTransform>() : SprDefault::Instance()->Transform();
-	}
-
 	const sm::vec2& GetCenter() const;
 	const sm::vec2& GetPosition() const;
 	float	 GetAngle() const;
@@ -165,6 +161,9 @@ private:
 	void CreateBounding() const;
 
 	void CopyComponentsFrom(const Sprite& spr);
+
+	const CompTransform& GetTransformComp() const;
+	const pt2::GeoTransform& GetTransform() const;
 
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;

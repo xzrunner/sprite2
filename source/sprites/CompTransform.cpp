@@ -3,11 +3,6 @@
 namespace s2
 {
 
-CompTransform::CompTransform()
-{
-	Reset();
-}
-
 CompTransform::~CompTransform()
 {
 	mm::AllocHelper::Delete(this);
@@ -20,16 +15,10 @@ CompTransform* CompTransform::Clone() const
 	return ret;
 }
 
-void CompTransform::Reset()
-{
-	m_srt.Reset();
-	m_mat.Identity();
-}
-
 CompTransform* CompTransform::Create()
 {
 	auto ret = static_cast<CompTransform*>(mm::AllocHelper::New<CompTransform>());
-	ret->Reset();
+	ret->m_transform.Reset();
 	return ret;
 }
 

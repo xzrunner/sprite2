@@ -10,8 +10,10 @@
 #include "sprite2/SprVisitorParams.h"
 #include "sprite2/Utility.h"
 #include "sprite2/UpdateParams.h"
+#include "sprite2/CompTransform.h"
 
 #include <rigging.h>
+#include <painting2/GeoTransform.h>
 
 #include <assert.h>
 
@@ -187,7 +189,7 @@ void Sprite::SetPosition(const sm::vec2& pos)
 	}
 
 	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
-	ctrans.SetPosition(pos);
+	ctrans.GetTrans().SetPosition(pos);
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
@@ -208,7 +210,7 @@ void Sprite::SetAngle(float angle)
 	}
 
 	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
-	ctrans.SetAngle(angle);
+	ctrans.GetTrans().SetAngle(angle);
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
@@ -241,13 +243,14 @@ void Sprite::SetScale(const sm::vec2& scale)
 		dscale.x = scale.x / old_scale.x;
 		dscale.y = scale.y / old_scale.y;
 
-		sm::vec2 old_offset = ctrans.GetOffset();
+		pt2::GeoTransform& trans = ctrans.GetTrans();
+		sm::vec2 old_offset = trans.GetOffset();
 		sm::vec2 new_offset(old_offset.x * dscale.x, old_offset.y * dscale.y);
-		ctrans.SetOffset(new_offset);
-		ctrans.SetPosition(ctrans.GetPosition() + old_offset - new_offset);
+		trans.SetOffset(new_offset);
+		trans.SetPosition(trans.GetPosition() + old_offset - new_offset);
 	}
 
-	ctrans.SetScale(scale);
+	ctrans.GetTrans().SetScale(scale);
 
 	// lazy
 	SetBoundingDirty(true);
@@ -268,26 +271,28 @@ void Sprite::SetShear(const sm::vec2& shear)
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
+	pt2::GeoTransform& trans = ctrans.GetTrans();
+
 	S2_MAT mat_old, mat_new;
 #ifdef S2_MATRIX_FIX
 	// todo
 #else
-	mat_old.Shear(ctrans.GetShear().x, ctrans.GetShear().y);
+	mat_old.Shear(trans.GetShear().x, trans.GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
 #endif // S2_MATRIX_FIX
 
-	sm::vec2 off = ctrans.GetOffset();
+	sm::vec2 off = trans.GetOffset();
 	sm::vec2 offset = mat_new * off - mat_old * off;
-	ctrans.SetOffset(off + offset);
-	ctrans.SetPosition(ctrans.GetPosition() - offset);
+	trans.SetOffset(off + offset);
+	trans.SetPosition(trans.GetPosition() - offset);
 
-	ctrans.SetShear(shear);
+	trans.SetShear(shear);
 
 	// immediately
 	if (!m_bounding) {
 		CreateBounding();
 	}
-	m_bounding->SetTransform(ctrans.GetPosition(), ctrans.GetOffset(), ctrans.GetAngle());
+	m_bounding->SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -308,17 +313,19 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
+	pt2::GeoTransform& trans = ctrans.GetTrans();
+
 	// rotate + offset -> offset + rotate	
-	sm::vec2 old_center = ctrans.GetCenter();
-	ctrans.SetOffset(offset);
-	sm::vec2 new_center = ctrans.GetCenter();
-	ctrans.SetPosition(ctrans.GetPosition() + old_center - new_center);
+	sm::vec2 old_center = trans.GetCenter();
+	trans.SetOffset(offset);
+	sm::vec2 new_center = trans.GetCenter();
+	trans.SetPosition(trans.GetPosition() + old_center - new_center);
 
 	// immediately
 	if (!m_bounding) {
 		CreateBounding();
 	}
-	m_bounding->SetTransform(ctrans.GetPosition(), ctrans.GetOffset(), ctrans.GetAngle());
+	m_bounding->SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -549,19 +556,19 @@ void Sprite::SetCamera(const RenderCamera& camera)
 
 void Sprite::GetLocalSRT(SprSRT& srt) const
 {
-	GetTransform().GetSRT(srt);
+	GetTransformComp().ToSprSrt(srt);
 }
 
 void Sprite::SetLocalSRT(const SprSRT& srt)
 {
 	SprSRT this_srt;
-	GetTransform().GetSRT(this_srt);
+	GetTransformComp().ToSprSrt(this_srt);
 	if (this_srt == srt) {
 		return;
 	}
 
 	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
-	ctrans.SetSRT(srt);
+	ctrans.FromSprSrt(srt);
 
 	// lazy
 	SetBoundingDirty(true);
@@ -707,6 +714,17 @@ void Sprite::CopyComponentsFrom(const Sprite& spr)
 	}
 	m_component_bitset = spr.m_component_bitset;
 	m_component_array = spr.m_component_array;
+}
+
+const CompTransform& Sprite::GetTransformComp() const
+{
+	return HasComponent<CompTransform>() ?
+		GetComponent<CompTransform>() : SprDefault::Instance()->Transform();
+}
+
+const pt2::GeoTransform& Sprite::GetTransform() const
+{
+	return GetTransformComp().GetTrans();
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

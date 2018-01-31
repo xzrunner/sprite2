@@ -33,6 +33,8 @@ public:
 	SprSRT(const SprSRT& srt);
 	SprSRT& operator = (const SprSRT& srt);
 
+	bool operator == (const SprSRT& srt) const;
+
 	void UpdateCenter();
 
 }; // SprSRT

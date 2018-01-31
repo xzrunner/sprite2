@@ -30,6 +30,12 @@ SprSRT& SprSRT::operator = (const SprSRT& srt)
 }
 
 inline
+bool SprSRT::operator == (const SprSRT& srt) const
+{
+	return memcmp(this->srt, srt.srt, sizeof(this->srt)) == 0;
+}
+
+inline
 void SprSRT::UpdateCenter()
 {
 	sm::vec2 position(srt[IDX_POS_X], srt[IDX_POS_Y]);

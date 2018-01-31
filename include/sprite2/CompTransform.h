@@ -1,8 +1,7 @@
-#ifndef _SPRITE2_SPR_GEO_H_
-#define _SPRITE2_SPR_GEO_H_
+#pragma once
 
 #include "sprite2/pre_defined.h"
-#include "sprite2/SprSRT.h"
+#include "sprite2/SprComponent.h"
 
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
@@ -10,13 +9,15 @@
 namespace s2
 {
 
-class SprGeo
+class SprSRT;
+
+class CompTransform : public SprComponent
 {
 public:
-	SprGeo();
-	SprGeo(const SprGeo& geo);
-	SprGeo& operator = (const SprGeo& geo);
-	~SprGeo();
+	CompTransform();
+	virtual ~CompTransform();
+
+	virtual CompTransform* Clone() const;
 
 	void Reset();
 
@@ -35,7 +36,7 @@ public:
 	const sm::vec2& GetOffset() const;
 	void SetOffset(const sm::vec2& offset);
 
- 	const sm::vec2& GetCenter() const;
+	const sm::vec2& GetCenter() const;
 
 	void GetSRT(SprSRT& srt) const;
 	void SetSRT(const SprSRT& srt);
@@ -47,32 +48,13 @@ public:
 
 	const S2_MAT& GetMatrix() const { return m_mat; }
 
+	static CompTransform* Create();
+
 private:
 	void UpdateCenter();
 	void UpdateMatrix();
 
 private:
-// 	union
-// 	{
-// 		struct {
-// 			float srt[SprSRT::SRT_MAX];
-// 
-// #ifdef S2_SPR_CACHE_LOCAL_MAT_COPY
-// 			float mat[6];
-// #endif // S2_SPR_CACHE_LOCAL_MAT_COPY
-// 		};
-// 
-//  #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-//  		struct {
-//  			float mat[6];
-//  		};
-//  #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-// 
-// 		SprGeo* next;
-// 	} m_state;
-
-	//////////////////////////////////////////////////////////////////////////
-
 	struct SRT
 	{
 		sm::vec2 position;
@@ -91,10 +73,8 @@ private:
 	SRT    m_srt;
 	S2_MAT m_mat;
 
-}; // SprGeo
+}; // CompTransform
 
 }
 
-#include "sprite2/SprGeo.inl"
-
-#endif // _SPRITE2_SPR_GEO_H_
+#include "sprite2/CompTransform.inl"

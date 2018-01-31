@@ -4,7 +4,6 @@
 #include "sprite2/RenderShader.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/Symbol.h"
-#include "sprite2/SprGeo.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS

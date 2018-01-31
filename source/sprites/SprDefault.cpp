@@ -1,5 +1,5 @@
 #include "sprite2/SprDefault.h"
-#include "sprite2/SprGeo.h"
+#include "sprite2/CompTransform.h"
 #include "sprite2/SprRender.h"
 #include "sprite2/RenderColor.h"
 #include "sprite2/RenderShader.h"
@@ -12,7 +12,7 @@ CU_SINGLETON_DEFINITION(SprDefault);
 
 SprDefault::SprDefault()
 {
-	m_geo    = new SprGeo();
+	m_transform = std::make_unique<CompTransform>();
 
 	m_color  = new RenderColor();
 	m_shader = new RenderShader();

@@ -3,10 +3,12 @@
 
 #include <cu/cu_macro.h>
 
+#include <memory>
+
 namespace s2
 {
 
-class SprGeo;
+class CompTransform;
 class SprRender;
 class RenderColor;
 class RenderShader;
@@ -15,7 +17,7 @@ class RenderCamera;
 class SprDefault
 {
 public:
-	auto& Geo() { return m_geo; }
+	const CompTransform& Transform() const { return *m_transform; }
 
 	auto& Render() { return m_render; }
 
@@ -24,7 +26,7 @@ public:
 	auto& Camera() { return m_camera; }
 
 private:
-	SprGeo*       m_geo;
+	std::unique_ptr<CompTransform> m_transform;
 
 	SprRender*    m_render;
 	

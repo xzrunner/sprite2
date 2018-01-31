@@ -1,5 +1,6 @@
-#ifndef _SPRITE2_SPR_GEO_INL_
-#define _SPRITE2_SPR_GEO_INL_
+#pragma once
+
+#include "sprite2/SprSRT.h"
 
 #include <SM_Calc.h>
 
@@ -7,13 +8,13 @@ namespace s2
 {
 
 inline
-const sm::vec2& SprGeo::GetPosition() const 
+const sm::vec2& CompTransform::GetPosition() const 
 { 
 	return m_srt.position;
 }
 
 inline
-void SprGeo::SetPosition(const sm::vec2& pos) 
+void CompTransform::SetPosition(const sm::vec2& pos) 
 {
 	if (pos != m_srt.position) {
 		m_srt.position = pos;
@@ -23,13 +24,13 @@ void SprGeo::SetPosition(const sm::vec2& pos)
 }
 
 inline
-float SprGeo::GetAngle() const 
+float CompTransform::GetAngle() const 
 {
 	return m_srt.angle;
 }
 
 inline
-void SprGeo::SetAngle(float angle) 
+void CompTransform::SetAngle(float angle) 
 {
 	if (angle != m_srt.angle) {
 		m_srt.angle = angle;
@@ -39,13 +40,13 @@ void SprGeo::SetAngle(float angle)
 }
 
 inline
-const sm::vec2& SprGeo::GetScale() const 
+const sm::vec2& CompTransform::GetScale() const 
 {
 	return m_srt.scale;
 }
 
 inline
-void SprGeo::SetScale(const sm::vec2& scale) 
+void CompTransform::SetScale(const sm::vec2& scale) 
 { 
 	if (scale != m_srt.scale) {
 		m_srt.scale = scale;
@@ -54,13 +55,13 @@ void SprGeo::SetScale(const sm::vec2& scale)
 }
 
 inline
-const sm::vec2& SprGeo::GetShear() const 
+const sm::vec2& CompTransform::GetShear() const 
 {
 	return m_srt.shear;
 }
 
 inline
-void SprGeo::SetShear(const sm::vec2& shear) 
+void CompTransform::SetShear(const sm::vec2& shear) 
 {
 	if (shear != m_srt.shear) {
 		m_srt.shear = shear;
@@ -69,13 +70,13 @@ void SprGeo::SetShear(const sm::vec2& shear)
 }
 
 inline
-const sm::vec2& SprGeo::GetOffset() const 
+const sm::vec2& CompTransform::GetOffset() const 
 { 
 	return m_srt.offset;
 }
 
 inline
-void SprGeo::SetOffset(const sm::vec2& offset) 
+void CompTransform::SetOffset(const sm::vec2& offset) 
 { 
 	if (offset != m_srt.offset) {
 		m_srt.offset = offset;
@@ -85,13 +86,13 @@ void SprGeo::SetOffset(const sm::vec2& offset)
 }
 
 inline
-const sm::vec2& SprGeo::GetCenter() const
+const sm::vec2& CompTransform::GetCenter() const
 {
 	return m_srt.center;
 }
 
 inline
-void SprGeo::GetSRT(SprSRT& srt) const
+void CompTransform::GetSRT(SprSRT& srt) const
 {
 	srt.srt[SprSRT::IDX_POS_X] = m_srt.position.x;
 	srt.srt[SprSRT::IDX_POS_Y] = m_srt.position.y;
@@ -112,7 +113,7 @@ void SprGeo::GetSRT(SprSRT& srt) const
 }
 
 inline
-void SprGeo::SetSRT(const SprSRT& srt)
+void CompTransform::SetSRT(const SprSRT& srt)
 {
 	m_srt.position.x = srt.srt[SprSRT::IDX_POS_X];
 	m_srt.position.y = srt.srt[SprSRT::IDX_POS_Y];
@@ -137,13 +138,13 @@ void SprGeo::SetSRT(const SprSRT& srt)
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 inline
-void SprGeo::SetMatrix(const S2_MAT& mat)
+void CompTransform::SetMatrix(const S2_MAT& mat)
 {
 	memcpy(m_state.mat, mat.x, sizeof(m_state.mat));
 }
 
 inline
-S2_MAT SprGeo::GetMatrix() const
+S2_MAT CompTransform::GetMatrix() const
 {
 	S2_MAT mat;
 	memcpy(mat.x, m_state.mat, sizeof(m_state.mat));
@@ -153,30 +154,30 @@ S2_MAT SprGeo::GetMatrix() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 inline
-void SprGeo::UpdateCenter()
+void CompTransform::UpdateCenter()
 {
 	m_srt.center = m_srt.position + sm::rotate_vector(-m_srt.offset, m_srt.angle) + m_srt.offset;
 }
 
 inline
-void SprGeo::UpdateMatrix()
+void CompTransform::UpdateMatrix()
 {
 	m_mat.SetTransformation(m_srt.center.x, m_srt.center.y, m_srt.angle, m_srt.scale.x, 
 		m_srt.scale.y, 0, 0, m_srt.shear.x, m_srt.shear.y);
 }
 
 /************************************************************************/
-/* class SprGeo::SRT                                                    */
+/* class CompTransform::SRT                                                    */
 /************************************************************************/
 
 inline
-SprGeo::SRT::SRT()
+CompTransform::SRT::SRT()
 {
 	Reset();
 }
 
 inline
-void SprGeo::SRT::Reset()
+void CompTransform::SRT::Reset()
 {
 	position.Set(0, 0);
 	angle = 0;
@@ -187,5 +188,3 @@ void SprGeo::SRT::Reset()
 }
 
 }
-
-#endif // _SPRITE2_SPR_GEO_INL_

@@ -31,7 +31,6 @@ static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
 	: m_name(-1)
-	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
@@ -45,7 +44,6 @@ Sprite::Sprite()
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(spr.m_sym)
 	, m_name(spr.m_name)
-	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
@@ -54,10 +52,7 @@ Sprite::Sprite(const Sprite& spr)
 {
 	++ALL_SPR_COUNT;
 
-	if (m_geo != spr.m_geo) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-		*m_geo = *spr.m_geo;
-	}
+	CopyComponentsFrom(spr);
 
 	if (spr.m_bounding) {
 		m_bounding.reset(spr.m_bounding->Clone());
@@ -90,17 +85,7 @@ Sprite& Sprite::operator = (const Sprite& spr)
 
 	m_name = spr.m_name;
 
-	if (m_geo != spr.m_geo) 
-	{
- 		if (spr.m_geo.get() == SprDefault::Instance()->Geo()) {
- 			m_geo.reset(SprDefault::Instance()->Geo());
- 		} else {
-			if (m_geo.get() == SprDefault::Instance()->Geo()) {
-				m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-			}
- 			*m_geo = *spr.m_geo;
- 		}
-	}
+	CopyComponentsFrom(spr);
 
 	if (spr.m_bounding) {
 		if (!m_bounding) {
@@ -153,7 +138,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
-	, m_geo(SprDefault::Instance()->Geo(), geo_deleter)
 	, m_bounding(nullptr, BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
@@ -193,22 +177,21 @@ void Sprite::SetSymbol(const SymPtr& sym)
 
 void Sprite::SetCenter(const sm::vec2& pos)
 {
-	SetPosition(pos - m_geo->GetCenter() + GetPosition());
+	SetPosition(pos - GetTransform().GetCenter() + GetPosition());
 }
 
 void Sprite::SetPosition(const sm::vec2& pos)
 {
-	if (m_geo->GetPosition() == pos) {
+	if (GetTransform().GetPosition() == pos) {
 		return;
 	}
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-	}
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
+	ctrans.SetPosition(pos);
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	m_geo->SetPosition(pos);
 
 // 	// immediately
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
@@ -220,17 +203,16 @@ void Sprite::SetPosition(const sm::vec2& pos)
 
 void Sprite::SetAngle(float angle)
 {
-	if (m_geo->GetAngle() == angle) {
+	if (GetTransform().GetAngle() == angle) {
 		return;
 	}
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-	}
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
+	ctrans.SetAngle(angle);
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	m_geo->SetAngle(angle);
 
 // 	// immediately
 // 	m_bounding->SetTransform(m_position, m_offset, m_angle);
@@ -242,31 +224,30 @@ void Sprite::SetAngle(float angle)
 
 void Sprite::SetScale(const sm::vec2& scale)
 {
-	if (m_geo->GetScale() == scale) {
+	const sm::vec2& old_scale = GetTransform().GetScale();
+	if (old_scale == scale) {
 		return;
 	}
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-	}
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	const sm::vec2& old_scale = m_geo->GetScale();
 	if (old_scale.x != 0 && old_scale.y != 0) 
 	{
 		sm::vec2 dscale;
 		dscale.x = scale.x / old_scale.x;
 		dscale.y = scale.y / old_scale.y;
 
-		sm::vec2 old_offset = m_geo->GetOffset();
+		sm::vec2 old_offset = ctrans.GetOffset();
 		sm::vec2 new_offset(old_offset.x * dscale.x, old_offset.y * dscale.y);
-		m_geo->SetOffset(new_offset);
-		m_geo->SetPosition(m_geo->GetPosition() + old_offset - new_offset);
+		ctrans.SetOffset(new_offset);
+		ctrans.SetPosition(ctrans.GetPosition() + old_offset - new_offset);
 	}
 
-	m_geo->SetScale(scale);
+	ctrans.SetScale(scale);
 
 	// lazy
 	SetBoundingDirty(true);
@@ -276,12 +257,12 @@ void Sprite::SetScale(const sm::vec2& scale)
 
 void Sprite::SetShear(const sm::vec2& shear)
 {
-	if (m_geo->GetShear() == shear) {
+	const sm::vec2& old_shear = GetTransform().GetShear();
+	if (old_shear == shear) {
 		return;
 	}
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-	}
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
@@ -291,22 +272,22 @@ void Sprite::SetShear(const sm::vec2& shear)
 #ifdef S2_MATRIX_FIX
 	// todo
 #else
-	mat_old.Shear(m_geo->GetShear().x, m_geo->GetShear().y);
+	mat_old.Shear(ctrans.GetShear().x, ctrans.GetShear().y);
 	mat_new.Shear(shear.x, shear.y);
 #endif // S2_MATRIX_FIX
 
-	sm::vec2 off = m_geo->GetOffset();
+	sm::vec2 off = ctrans.GetOffset();
 	sm::vec2 offset = mat_new * off - mat_old * off;
-	m_geo->SetOffset(off + offset);
-	m_geo->SetPosition(m_geo->GetPosition() - offset);
+	ctrans.SetOffset(off + offset);
+	ctrans.SetPosition(ctrans.GetPosition() - offset);
 
-	m_geo->SetShear(shear);
+	ctrans.SetShear(shear);
 
 	// immediately
 	if (!m_bounding) {
 		CreateBounding();
 	}
-	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
+	m_bounding->SetTransform(ctrans.GetPosition(), ctrans.GetOffset(), ctrans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -316,28 +297,28 @@ void Sprite::SetShear(const sm::vec2& shear)
 
 void Sprite::SetOffset(const sm::vec2& offset)
 {
-	if (m_geo->GetOffset() == offset) {
+	const sm::vec2& old_offset = GetTransform().GetOffset();
+	if (old_offset == offset) {
 		return;
 	}
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
-	}
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
 	// rotate + offset -> offset + rotate	
-	sm::vec2 old_center = m_geo->GetCenter();
-	m_geo->SetOffset(offset);
-	sm::vec2 new_center = m_geo->GetCenter();
-	m_geo->SetPosition(m_geo->GetPosition() + old_center - new_center);
+	sm::vec2 old_center = ctrans.GetCenter();
+	ctrans.SetOffset(offset);
+	sm::vec2 new_center = ctrans.GetCenter();
+	ctrans.SetPosition(ctrans.GetPosition() + old_center - new_center);
 
 	// immediately
 	if (!m_bounding) {
 		CreateBounding();
 	}
-	m_bounding->SetTransform(m_geo->GetPosition(), m_geo->GetOffset(), m_geo->GetAngle());
+	m_bounding->SetTransform(ctrans.GetPosition(), ctrans.GetOffset(), ctrans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -463,78 +444,79 @@ void Sprite::UpdateBounding(const Actor* actor) const
 	if (!m_bounding) {
 		CreateBounding();
 	}
-	m_bounding->Build(rect, m_geo->GetPosition(), m_geo->GetAngle(), m_geo->GetScale(), 
-		m_geo->GetShear(), m_geo->GetOffset());
+	auto& ctrans = GetTransform();
+	m_bounding->Build(rect, ctrans.GetPosition(), ctrans.GetAngle(), ctrans.GetScale(), 
+		ctrans.GetShear(), ctrans.GetOffset());
 
 	SetBoundingDirty(false);
 }
 
 void Sprite::Translate(const sm::vec2& trans) 
 { 
-	SetPosition(m_geo->GetPosition() + trans);
+	SetPosition(GetTransform().GetPosition() + trans);
 }
 
 void Sprite::Rotate(float rot) 
 { 
-	SetAngle(m_geo->GetAngle() + rot); 
+	SetAngle(GetTransform().GetAngle() + rot); 
 }
 
 void Sprite::Scale(const sm::vec2& scale) 
 { 
-	SetScale(m_geo->GetScale() * scale); 
+	SetScale(GetTransform().GetScale() * scale); 
 }
 
 const sm::vec2& Sprite::GetCenter() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetCenter();
+	return IsGeoMatrix() ? POS0_PROXY : GetTransform().GetCenter();
 #else
-	return m_geo->GetCenter();
+	return GetTransform().GetCenter();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 const sm::vec2& Sprite::GetPosition() const	
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetPosition();
+	return IsGeoMatrix() ? POS0_PROXY : GetTransform().GetPosition();
 #else
-	return m_geo->GetPosition();
+	return GetTransform().GetPosition();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 float Sprite::GetAngle() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? 0 : m_geo->GetAngle();
+	return IsGeoMatrix() ? 0 : GetTransform().GetAngle();
 #else
-	return m_geo->GetAngle();
+	return GetTransform().GetAngle();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 const sm::vec2& Sprite::GetScale() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? POS1_PROXY : m_geo->GetScale();
+	return IsGeoMatrix() ? POS1_PROXY : GetTransform().GetScale();
 #else
-	return m_geo->GetScale();
+	return GetTransform().GetScale();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 const sm::vec2& Sprite::GetShear() const
 {
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetShear();
+	return IsGeoMatrix() ? POS0_PROXY : GetTransform().GetShear();
 #else
-	return m_geo->GetShear();
+	return GetTransform().GetShear();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
 const sm::vec2& Sprite::GetOffset() const
 { 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	return IsGeoMatrix() ? POS0_PROXY : m_geo->GetOffset();
+	return IsGeoMatrix() ? POS0_PROXY : GetTransform().GetOffset();
 #else
-	return m_geo->GetOffset();
+	return GetTransform().GetOffset();
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
@@ -567,15 +549,19 @@ void Sprite::SetCamera(const RenderCamera& camera)
 
 void Sprite::GetLocalSRT(SprSRT& srt) const
 {
-	m_geo->GetSRT(srt);
+	GetTransform().GetSRT(srt);
 }
 
 void Sprite::SetLocalSRT(const SprSRT& srt)
 {
-	if (m_geo.get() == SprDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<SprGeo*>(mm::AllocHelper::New<SprGeo>()));
+	SprSRT this_srt;
+	GetTransform().GetSRT(this_srt);
+	if (this_srt == srt) {
+		return;
 	}
-	m_geo->SetSRT(srt);
+
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
+	ctrans.SetSRT(srt);
 
 	// lazy
 	SetBoundingDirty(true);
@@ -647,7 +633,7 @@ void Sprite::SetLocalSRT(const SprSRT& srt)
 
 const S2_MAT& Sprite::GetLocalMat() const
 {
-	return m_geo->GetMatrix();
+	return GetTransform().GetMatrix();
 }
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
@@ -710,6 +696,17 @@ void Sprite::InitFlags()
 	//if (INIT_FLAGS) {
 	//	INIT_FLAGS(shared_from_this());
 	//}
+}
+
+void Sprite::CopyComponentsFrom(const Sprite& spr)
+{
+	m_components.clear();
+	m_components.reserve(spr.m_components.size());
+	for (auto& comp : spr.m_components) {
+		m_components.push_back(std::unique_ptr<SprComponent>(comp->Clone()));
+	}
+	m_component_bitset = spr.m_component_bitset;
+	m_component_array = spr.m_component_array;
 }
 
 bool Sprite::GetUserFlag(uint32_t key) const

@@ -9,12 +9,15 @@
 #include "sprite2/SprActors.h"
 #include "sprite2/SprRender.h"
 #include "sprite2/SprDefault.h"
-#include "sprite2/SprGeo.h"
 #include "sprite2/BoundingBox.h"
+#include "sprite2/CompTransform.h"
 
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include S2_MAT_HEADER
+
+#include <bitset>
+#include <array>
 
 #include <stdint.h>
 
@@ -24,7 +27,6 @@ namespace s2
 class UpdateParams;
 class Symbol;
 class BoundingBox;
-class SprGeo;
 class RenderColor;
 class RenderShader;
 class SpriteVisitor;
@@ -33,6 +35,7 @@ class Actor;
 class SprVisitorParams;
 class SprVisitorParams2;
 class SprSRT;
+class SprComponent;
 
 class Sprite : public std::enable_shared_from_this<Sprite>
 {
@@ -88,6 +91,11 @@ public:
 	void Rotate(float rot);
 	void Scale(const sm::vec2& scale);
 
+	const CompTransform& GetTransform() const {
+		return HasComponent<CompTransform>() ?
+			GetComponent<CompTransform>() : SprDefault::Instance()->Transform();
+	}
+
 	const sm::vec2& GetCenter() const;
 	const sm::vec2& GetPosition() const;
 	float	 GetAngle() const;
@@ -132,6 +140,21 @@ public:
 	void ClearActors() const;
 	void ConnectActors(const ActorPtr& parent) const;
 
+	// components
+
+	template <typename T>
+	bool HasComponent() const;
+
+	template <typename T, typename... TArgs>
+	T& AddComponent(TArgs&&... args);
+
+	template <typename T>
+	T& GetComponent() const;
+
+	const std::vector<std::unique_ptr<SprComponent>>& GetAllComponents() const {
+		return m_components;
+	}
+
 private:
 	virtual SprPtr CloneImpl() const = 0;
 
@@ -140,6 +163,8 @@ private:
 	void UpdateInheritUpdate() const;
 
 	void CreateBounding() const;
+
+	void CopyComponentsFrom(const Sprite& spr);
 
 protected:
 	static const uint32_t FLAG_VISIBLE        = 0x00000001;
@@ -212,13 +237,6 @@ protected:
 	/************************************************************************/
 	/* geometry                                                             */
 	/************************************************************************/
-	static void geo_deleter(SprGeo* geo) { 
-		if (geo != SprDefault::Instance()->Geo()) {
-			mm::AllocHelper::Delete(geo);
-		}
-	};
-	mutable std::unique_ptr<SprGeo, decltype(&geo_deleter)> m_geo;
-
 	mutable std::unique_ptr<BoundingBox, decltype(&BoundingBox::Deleter)> m_bounding;
 
 	/************************************************************************/
@@ -240,6 +258,14 @@ protected:
 
 private:
 	int m_id;
+
+	// components
+
+	std::vector<std::unique_ptr<SprComponent>> m_components;
+
+	static const size_t MAX_COMPONENTS = 16;
+	std::array<uint8_t, MAX_COMPONENTS> m_component_array;
+	std::bitset<MAX_COMPONENTS>         m_component_bitset;
 
 }; // Sprite
 

@@ -127,9 +127,6 @@
     <Filter Include="sprites\sprite\visitor\set">
       <UniqueIdentifier>{29773de1-aa86-4157-9b46-69163ee50a52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sprites\sprite\component">
-      <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites\sprite\utility">
       <UniqueIdentifier>{38219385-a697-44fd-afe4-3afdfa89e2cb}</UniqueIdentifier>
     </Filter>
@@ -177,6 +174,12 @@
     </Filter>
     <Filter Include="render\camera">
       <UniqueIdentifier>{d094579b-efe0-40d1-a2d8-d61a0d799a78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\components">
+      <UniqueIdentifier>{f15caa29-2fbe-48b3-97ad-432bedec826c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\sprite\parts">
+      <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -451,13 +454,10 @@
       <Filter>sprites\sprite\visitor\set</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp">
-      <Filter>sprites\sprite\component</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\SprGeo.cpp">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprRender.cpp">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
       <Filter>sprites\sprite\utility</Filter>
@@ -640,6 +640,9 @@
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextTable.cpp">
       <Filter>sprites\05.textbox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompTransform.cpp">
+      <Filter>sprites\sprite\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1010,16 +1013,13 @@
       <Filter>sprites\sprite\visitor\set</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
-      <Filter>sprites\sprite\component</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprGeo.h">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprRender.h">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprSRT.h">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
       <Filter>sprites\sprite\utility</Filter>
@@ -1209,7 +1209,7 @@
       <Filter>sprites\actor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Message.h">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h">
       <Filter>sprites\symbol</Filter>
@@ -1234,6 +1234,12 @@
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SprComponent.h">
+      <Filter>sprites\sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompTransform.h">
+      <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\RenderParams.inl">
@@ -1255,13 +1261,10 @@
       <Filter>dataset\others</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
-      <Filter>sprites\sprite\component</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\SprGeo.inl">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\SprSRT.inl">
-      <Filter>sprites\sprite\component</Filter>
+      <Filter>sprites\sprite\parts</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\ActorGeo.inl">
       <Filter>sprites\actor</Filter>
@@ -1276,5 +1279,8 @@
       <Filter>sprites\sprite</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\trans_color.inl" />
+    <None Include="..\..\..\include\sprite2\CompTransform.inl">
+      <Filter>sprites\sprite\components</Filter>
+    </None>
   </ItemGroup>
 </Project>

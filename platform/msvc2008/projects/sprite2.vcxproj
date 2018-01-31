@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\particle\src;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\sns\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\editor-external\c99;..\..\..\..\editor-external\lua\include;..\..\..\..\editor-external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\source\sprites\ComplexActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompTransform.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CosineShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CreateActorsVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\DrawDownsample.cpp" />
@@ -201,7 +202,6 @@
     <ClCompile Include="..\..\..\source\sprites\SkeletonSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\SprGeo.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SpriteVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprRender.cpp" />
@@ -277,6 +277,7 @@
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSymbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompTransform.h" />
     <ClInclude Include="..\..\..\include\sprite2\CosineShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\CreateActorsVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawBlend.h" />
@@ -376,6 +377,7 @@
     <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SprComponent.h" />
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h" />
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
@@ -396,7 +398,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SkeletonSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprDefault.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprGeo.h" />
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprRender.h" />
@@ -438,6 +439,7 @@
     <None Include="..\..\..\include\sprite2\AABB.inl" />
     <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
     <None Include="..\..\..\include\sprite2\Color.inl" />
+    <None Include="..\..\..\include\sprite2\CompTransform.inl" />
     <None Include="..\..\..\include\sprite2\Matrix.inl" />
     <None Include="..\..\..\include\sprite2\OBB.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
@@ -446,7 +448,6 @@
     <None Include="..\..\..\include\sprite2\Sprite.inl" />
     <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\SprActors.inl" />
-    <None Include="..\..\..\include\sprite2\SprGeo.inl" />
     <None Include="..\..\..\include\sprite2\SprSRT.inl" />
     <None Include="..\..\..\include\sprite2\UpdateParams.inl" />
   </ItemGroup>

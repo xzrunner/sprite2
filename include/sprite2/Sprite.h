@@ -9,25 +9,24 @@
 #include "sprite2/SprActors.h"
 #include "sprite2/SprRender.h"
 #include "sprite2/SprDefault.h"
-#include "sprite2/BoundingBox.h"
 
+#include S2_MAT_HEADER
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
-#include S2_MAT_HEADER
+#include <painting2/BoundingBox.h>
 
 #include <bitset>
 #include <array>
 
 #include <stdint.h>
 
-namespace pt2 { class GeoTransform; }
+namespace pt2 { class GeoTransform; class BoundingBox; }
 
 namespace s2
 {
 
 class UpdateParams;
 class Symbol;
-class BoundingBox;
 class RenderColor;
 class RenderShader;
 class SpriteVisitor;
@@ -85,7 +84,7 @@ public:
 	int  GetName() const { return m_name; }
 	void SetName(const CU_STR& name);
 
-	const BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
+	const pt2::BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
 	void UpdateBounding(const Actor* actor = nullptr) const;
 
 	void Translate(const sm::vec2& trans);
@@ -236,7 +235,7 @@ protected:
 	/************************************************************************/
 	/* geometry                                                             */
 	/************************************************************************/
-	mutable std::unique_ptr<BoundingBox, decltype(&BoundingBox::Deleter)> m_bounding;
+	mutable std::unique_ptr<pt2::BoundingBox, decltype(&pt2::BoundingBox::Deleter)> m_bounding;
 
 	/************************************************************************/
 	/* draw                                                                 */

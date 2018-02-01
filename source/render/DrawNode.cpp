@@ -16,7 +16,6 @@
 #include "sprite2/RVG.h"
 #include "sprite2/DrawDownsample.h"
 #include "sprite2/Utility.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/DrawIntegrate.h"
 
 #include <memmgr/Allocator.h>

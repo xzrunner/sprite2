@@ -5,7 +5,6 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/Actor.h"
 #include "sprite2/PointQueryVisitor.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/RenderColor.h"
 #include "sprite2/SetStaticFrameVisitor.h"

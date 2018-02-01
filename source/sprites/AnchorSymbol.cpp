@@ -5,7 +5,6 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Sprite.h"
-#include "sprite2/BoundingBox.h"
 
 #include <memmgr/Allocator.h>
 #include <cooking/DisplayList.h>

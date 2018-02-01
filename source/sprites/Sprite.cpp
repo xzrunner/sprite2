@@ -33,7 +33,7 @@ static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
 	: m_name(-1)
-	, m_bounding(nullptr, BoundingBox::Deleter)
+	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -46,7 +46,7 @@ Sprite::Sprite()
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(spr.m_sym)
 	, m_name(spr.m_name)
-	, m_bounding(nullptr, BoundingBox::Deleter)
+	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
 	, m_actors(nullptr)
@@ -140,7 +140,7 @@ Sprite& Sprite::operator = (const Sprite& spr)
 Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
-	, m_bounding(nullptr, BoundingBox::Deleter)
+	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -421,7 +421,7 @@ VisitResult Sprite::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& 
 	return ret;
 }
 
-const BoundingBox* Sprite::GetBounding(const Actor* actor) const
+const pt2::BoundingBox* Sprite::GetBounding(const Actor* actor) const
 { 
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);

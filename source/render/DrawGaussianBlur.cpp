@@ -1,7 +1,6 @@
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/RenderCtxStack.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/FilterFactory.h"
 #include "sprite2/DrawNode.h"

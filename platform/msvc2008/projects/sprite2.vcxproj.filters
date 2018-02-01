@@ -22,9 +22,6 @@
     <Filter Include="dataset\primitive">
       <UniqueIdentifier>{6e2faad1-d036-441c-88be-810151f8388e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\bound">
-      <UniqueIdentifier>{56f682e2-f466-40a3-9efe-ce48bcef4e64}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dataset\others">
       <UniqueIdentifier>{963adc33-5a55-4ee7-9619-85dc18ddfa15}</UniqueIdentifier>
     </Filter>
@@ -601,15 +598,6 @@
     <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
       <Filter>sprites\actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\BoundingBox.cpp">
-      <Filter>dataset\bound</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\OBB.cpp">
-      <Filter>dataset\bound</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\AABB.cpp">
-      <Filter>dataset\bound</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp">
       <Filter>dataset\render\filter</Filter>
     </ClCompile>
@@ -720,15 +708,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Matrix.h">
       <Filter>dataset\primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\AABB.h">
-      <Filter>dataset\bound</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\BoundingBox.h">
-      <Filter>dataset\bound</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\OBB.h">
-      <Filter>dataset\bound</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
       <Filter>dataset\others</Filter>
@@ -1250,12 +1229,6 @@
     </None>
     <None Include="..\..\..\include\sprite2\Matrix.inl">
       <Filter>dataset\primitive</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\AABB.inl">
-      <Filter>dataset\bound</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\OBB.inl">
-      <Filter>dataset\bound</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\UpdateParams.inl">
       <Filter>dataset\others</Filter>

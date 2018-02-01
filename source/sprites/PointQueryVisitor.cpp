@@ -3,7 +3,6 @@
 #include "sprite2/Symbol.h"
 #include "sprite2/Actor.h"
 #include "sprite2/SymType.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/SprVisitorParams.h"
 #include "sprite2/AnchorSprite.h"
 #include "sprite2/ComplexSymbol.h"

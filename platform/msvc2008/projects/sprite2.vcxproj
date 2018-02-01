@@ -78,10 +78,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\AABB.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\BoundingBox.cpp" />
     <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\OBB.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp" />
@@ -235,7 +232,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
-    <ClInclude Include="..\..\..\include\sprite2\AABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h" />
@@ -264,7 +260,6 @@
     <ClInclude Include="..\..\..\include\sprite2\BezierShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\Blackboard.h" />
     <ClInclude Include="..\..\..\include\sprite2\BlendMode.h" />
-    <ClInclude Include="..\..\..\include\sprite2\BoundingBox.h" />
     <ClInclude Include="..\..\..\include\sprite2\CacheMatVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Callback.h" />
     <ClInclude Include="..\..\..\include\sprite2\Camera.h" />
@@ -317,7 +312,6 @@
     <ClInclude Include="..\..\..\include\sprite2\MeshSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h" />
-    <ClInclude Include="..\..\..\include\sprite2\OBB.h" />
     <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h" />
     <ClInclude Include="..\..\..\include\sprite2\OrthoCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\P3dEmitterCfg.h" />
@@ -436,12 +430,10 @@
     <ClInclude Include="..\..\..\include\sprite2\VisitResult.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\include\sprite2\AABB.inl" />
     <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
     <None Include="..\..\..\include\sprite2\Color.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl" />
     <None Include="..\..\..\include\sprite2\Matrix.inl" />
-    <None Include="..\..\..\include\sprite2\OBB.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />
     <None Include="..\..\..\include\sprite2\Actor.inl" />

@@ -2,9 +2,9 @@
 #define _SPRITE2_SPRITE_INL_
 
 #include "sprite2/SprNameMap.h"
-#include "sprite2/OBB.h"
 
 #include <guard/check.h>
+#include <painting2/OBB.h>
 
 namespace s2
 {
@@ -63,8 +63,8 @@ void Sprite::UpdateInheritUpdate() const
 inline
 void Sprite::CreateBounding() const
 {
-	void* ptr = mm::AllocHelper::Allocate(sizeof(OBB));
-	BoundingBox* bb = new (ptr) OBB();
+	void* ptr = mm::AllocHelper::Allocate(sizeof(pt2::OBB));
+	pt2::BoundingBox* bb = new (ptr) pt2::OBB();
 	m_bounding.reset(bb);
 }
 

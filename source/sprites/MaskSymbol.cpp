@@ -5,7 +5,6 @@
 #include "sprite2/DrawMask.h"
 #include "sprite2/DrawMaskFT.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/SymbolVisitor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"

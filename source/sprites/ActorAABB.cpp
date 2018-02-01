@@ -1,5 +1,4 @@
 #include "sprite2/ActorAABB.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Actor.h"
 #include "sprite2/Symbol.h"

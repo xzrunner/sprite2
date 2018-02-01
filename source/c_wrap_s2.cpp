@@ -11,7 +11,6 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/RVG.h"
 #include "sprite2/SprTimer.h"
 #include "sprite2/SprVisitorParams.h"

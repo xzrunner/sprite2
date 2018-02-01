@@ -3,7 +3,6 @@
 #include "sprite2/SymType.h"
 #include "sprite2/AnimSprite.h"
 #include "sprite2/Sprite.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/AnimLerp.h"
 #include "sprite2/DrawNode.h"

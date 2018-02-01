@@ -4,7 +4,6 @@
 #include "sprite2/RenderScissor.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
-#include "sprite2/BoundingBox.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/RenderTarget.h"
 #include "sprite2/Utility.h"

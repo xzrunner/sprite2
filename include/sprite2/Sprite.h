@@ -27,7 +27,6 @@ namespace s2
 
 class UpdateParams;
 class Symbol;
-class RenderColor;
 class RenderShader;
 class SpriteVisitor;
 class SpriteVisitor2;
@@ -98,11 +97,15 @@ public:
 	const sm::vec2& GetShear() const;
 	const sm::vec2& GetOffset() const;
 
-	const RenderColor&	GetColor() const { return *m_render->GetColor(); }
+	const pt2::RenderColorCommon& GetColorCommon() const;
+	const pt2::RenderColorMap&    GetColorMap() const;
+
 	const RenderShader& GetShader() const { return *m_render->GetShader(); }
 	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
-	void SetColor(const RenderColor& color);
+	void SetColorCommon(const pt2::RenderColorCommon& col);
+	void SetColorMap(const pt2::RenderColorMap& col);
+
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 

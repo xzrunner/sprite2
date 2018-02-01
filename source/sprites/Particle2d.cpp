@@ -53,8 +53,8 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 
 	RenderParams rp;
 	rp.mt = mt;
-	rp.color.SetMul(mul);
-	rp.color.SetAdd(add);
+	rp.col_common.mul = mul;
+	rp.col_common.add = add;
 
 	DrawNode::Draw(*s2_sym, rp, sm::vec2(x, y), angle, sm::vec2(scale, scale), sm::vec2(0, 0));
 }

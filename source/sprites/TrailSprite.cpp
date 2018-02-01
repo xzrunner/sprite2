@@ -135,7 +135,7 @@ void TrailSprite::Draw(const RenderParams& rp) const
 	}
 
 	TrailRenderParams trp;
-	trp.ct = rp.color;
+	trp.col = rp.col_common;
 	if (m_local || m_in_p3d) {
 		trp.mat = rp.mt;
 	}

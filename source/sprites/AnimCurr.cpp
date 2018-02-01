@@ -78,10 +78,12 @@ void AnimCurr::AssignSameStruct(const AnimCurr& src)
 		const SprPtr* s = &src.m_slots[0];
 		SprPtr* d = &m_slots[0];
 		SprSRT srt;
-		for (int i = 0, n = m_slots.size(); i < n; ++i, ++s, ++d) {
+		for (int i = 0, n = m_slots.size(); i < n; ++i, ++s, ++d) 
+		{
 			(*s)->GetLocalSRT(srt);
 			(*d)->SetLocalSRT(srt);
-			(*d)->SetColor((*s)->GetColor());
+			(*d)->SetColorCommon((*s)->GetColorCommon());
+			(*d)->SetColorMap((*s)->GetColorMap());
 		}
 
 		(*s)->SetVisible((*d)->IsVisible());
@@ -361,10 +363,7 @@ void AnimCurr::LoadSprLerpData(Sprite& spr, const AnimCopy::Lerp& lerp, int time
 	add.b += static_cast<uint8_t>(lerp.dcol_add[2] * time);
 	add.a += static_cast<uint8_t>(lerp.dcol_add[3] * time);
 
-	RenderColor col = spr.GetColor();
-	col.SetMul(mul);
-	col.SetAdd(add);
-	spr.SetColor(col);
+	spr.SetColorCommon(pt2::RenderColorCommon(mul, add));
 }
 
 void AnimCurr::CloneSlots(const CU_VEC<SprPtr>& src)

@@ -80,7 +80,6 @@
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
     <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp" />
     <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp" />
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp" />
@@ -133,6 +132,8 @@
     <ClCompile Include="..\..\..\source\sprites\CircleShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ColorPolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompBoundingBox.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompColorCommon.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompColorMap.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSymbol.cpp" />
@@ -270,6 +271,8 @@
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompColorCommon.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompColorMap.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSymbol.h" />
@@ -339,7 +342,6 @@
     <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderColor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />

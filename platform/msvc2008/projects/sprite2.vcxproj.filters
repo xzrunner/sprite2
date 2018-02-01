@@ -177,9 +177,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\dataset\RenderColor.cpp">
-      <Filter>dataset\render</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp">
       <Filter>dataset\render</Filter>
     </ClCompile>
@@ -632,11 +629,14 @@
     <ClCompile Include="..\..\..\source\sprites\CompBoundingBox.cpp">
       <Filter>sprites\sprite\components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompColorMap.cpp">
+      <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompColorCommon.cpp">
+      <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\sprite2\RenderColor.h">
-      <Filter>dataset\render</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
       <Filter>dataset\render</Filter>
     </ClInclude>
@@ -1214,6 +1214,12 @@
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h">
+      <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompColorMap.h">
+      <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompColorCommon.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
   </ItemGroup>

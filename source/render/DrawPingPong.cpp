@@ -130,11 +130,12 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int t
 	} 
 	else 
 	{
-		RenderColor col;
-		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+		pt2::RenderColorCommon col_common;
+		pt2::RenderColorMap    col_map;
+		Utility::PrepareColor(rp.col_common, rp.col_map, spr, rp.actor, col_common, col_map);
 #ifdef S2_DISABLE_DEFERRED
-		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
-		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
+		shader->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
+		shader->SetColorMap(col_map.rmap.ToABGR(), col_map.gmap.ToABGR(), col_map.bmap.ToABGR());
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 #else
 		cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
@@ -183,11 +184,12 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int t
 	} 
 	else 
 	{
-		RenderColor col;
-		Utility::PrepareColor(rp.color, spr, rp.actor, col);
+		pt2::RenderColorCommon col_common;
+		pt2::RenderColorMap    col_map;
+		Utility::PrepareColor(rp.col_common, rp.col_map, spr, rp.actor, col_common, col_map);
 #ifdef S2_DISABLE_DEFERRED
-		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
-		shader->SetColorMap(col.GetRMapABGR(),col.GetGMapABGR(), col.GetBMapABGR());
+		shader->SetColor(col_common.mul.ToABGR(), col_common.add.ToABGR());
+		shader->SetColorMap(col_map.rmap.ToABGR(), col_map.gmap.ToABGR(), col_map.bmap.ToABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);
 #else
 		cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),

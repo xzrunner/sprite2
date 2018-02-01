@@ -11,7 +11,6 @@
 #include "sprite2/LerpEase.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/SymType.h"
-#include "sprite2/RenderColor.h"
 
 #include <SM_Vector.h>
 #include <painting2/Color.h>
@@ -81,10 +80,10 @@ void AnimLerp::Lerp(const Sprite& begin, const Sprite& end, SprPtr& tween, int t
 	sm::vec2 base_t = (base_e - base_s) * process + base_s;
 	tween->SetPosition(base_t - offset);
 
-	RenderColor rc = tween->GetColor();
-	rc.SetAdd(color_interpolate(begin.GetColor().GetAdd(), end.GetColor().GetAdd(), process));
-	rc.SetMul(color_interpolate(begin.GetColor().GetMul(), end.GetColor().GetMul(), process));
-	tween->SetColor(rc);
+	auto color = tween->GetColorCommon();
+	color.add = color_interpolate(begin.GetColorCommon().add, end.GetColorCommon().add, process);
+	color.mul = color_interpolate(begin.GetColorCommon().mul, end.GetColorCommon().mul, process);
+	tween->SetColorCommon(color);
 
 	LerpSpecial(begin, end, tween, time, tot_time);
 	LerpExpression(begin, end, tween, time, tot_time, lerps);

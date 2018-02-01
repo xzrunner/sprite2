@@ -2,7 +2,6 @@
 #define _SPRITE2_RENDER_PARAMS_H_
 
 #include "sprite2/config.h"
-#include "sprite2/RenderColor.h"
 #include "sprite2/RenderShader.h"
 #include "sprite2/RenderCamera.h"
 #include "sprite2/pre_defined.h"
@@ -12,6 +11,8 @@
 #include S2_MAT_HEADER
 #include <SM_Rect.h>
 #include <cu/cu_macro.h>
+#include <painting2/RenderColorCommon.h>
+#include <painting2/RenderColorMap.h>
 
 #include <memory>
 
@@ -28,8 +29,9 @@ public:
 
 	S2_MAT mt;
 
-	RenderColor	color;
-	
+	pt2::RenderColorCommon col_common;
+	pt2::RenderColorMap    col_map;
+
 //	RenderShader shader;
 #ifdef S2_FILTER_FULL
 	RenderFilter* render_filter = nullptr;

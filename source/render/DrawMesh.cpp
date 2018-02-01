@@ -260,26 +260,25 @@ RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh
 	{
 		case sl::SPRITE2:
 		{
-			auto& col = rp.color;
 #ifdef S2_DISABLE_DEFERRED
 			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
-			shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
-			shader->SetColorMap(col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+			shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
+			shader->SetColorMap(rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 #else
-			cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
-				col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+			cooking::set_color_sprite(dlist, rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR(),
+				rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 #endif // S2_DISABLE_DEFERRED
 			draw = draw_sprite2;
 		}
 			break;
 		case sl::FILTER:
 		{
-			auto& col = rp.color;
+			auto& col = rp.col_common;
 #ifdef S2_DISABLE_DEFERRED
 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
-			shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+			shader->SetColor(col.mul.ToABGR(), col.add.ToABGR());
 #else
-			cooking::set_color_filter(dlist, col.GetMulABGR(), col.GetAddABGR());
+			cooking::set_color_filter(dlist, col.mul.ToABGR(), col.add.ToABGR());
 #endif // S2_DISABLE_DEFERRED
 			draw = draw_filter;
 		}

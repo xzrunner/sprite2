@@ -1,7 +1,6 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/FilterFactory.h"
-#include "sprite2/RenderColor.h"
 #include "sprite2/RenderShader.h"
 #include "sprite2/RenderCamera.h"
 #include "sprite2/SpriteVisitor.h"
@@ -12,6 +11,8 @@
 #include "sprite2/UpdateParams.h"
 #include "sprite2/CompTransform.h"
 #include "sprite2/CompBoundingBox.h"
+#include "sprite2/CompColorCommon.h"
+#include "sprite2/CompColorMap.h"
 
 #include <rigging.h>
 #include <painting2/GeoTransform.h>
@@ -59,11 +60,6 @@ Sprite::Sprite(const Sprite& spr)
 	{
 		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
 
-		auto& src_color = spr.m_render->GetColor();
-		if (src_color && *src_color != *SprDefault::Instance()->Color()) {
-			m_render->SetColor(*src_color);
-		}
-
 		auto& src_shader = spr.m_render->GetShader();
 		if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
 			m_render->SetShader(*src_shader);
@@ -94,11 +90,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 		{
 			if (m_render.get() == SprDefault::Instance()->Render()) {
 				m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-			}
-
-			auto& src_color = spr.m_render->GetColor();
-			if (src_color && *src_color != *SprDefault::Instance()->Color()) {
-				m_render->SetColor(*src_color);
 			}
 
 			auto& src_shader = spr.m_render->GetShader();
@@ -506,12 +497,37 @@ const sm::vec2& Sprite::GetOffset() const
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 }
 
-void Sprite::SetColor(const RenderColor& color)
+const pt2::RenderColorCommon& Sprite::GetColorCommon() const
 {
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+	return HasComponent<CompColorCommon>() ?
+		GetComponent<CompColorCommon>().GetColor() : SprDefault::Instance()->Color().GetColor();
+}
+
+const pt2::RenderColorMap& Sprite::GetColorMap() const
+{
+	return HasComponent<CompColorMap>() ?
+		GetComponent<CompColorMap>().GetColor() : SprDefault::Instance()->ColorMap().GetColor();
+}
+
+void Sprite::SetColorCommon(const pt2::RenderColorCommon& col)
+{
+	if (GetColorCommon() == col) {
+		return;
 	}
-	m_render->SetColor(color);
+
+	auto& ccol = HasComponent<CompColorCommon>() ? GetComponent<CompColorCommon>() : AddComponent<CompColorCommon>();
+	ccol.SetColor(col);
+	SetDirty(true);
+}
+
+void Sprite::SetColorMap(const pt2::RenderColorMap& col)
+{
+	if (GetColorMap() == col) {
+		return;
+	}
+
+	auto& ccol = HasComponent<CompColorMap>() ? GetComponent<CompColorMap>() : AddComponent<CompColorMap>();
+	ccol.SetColor(col);
 	SetDirty(true);
 }
 

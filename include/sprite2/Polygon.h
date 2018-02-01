@@ -15,7 +15,6 @@ namespace cooking { class DisplayList; }
 namespace s2
 {
 
-class RenderColor;
 class RenderParams;
 
 class Polygon

@@ -63,12 +63,13 @@ RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	rp_child->mt.x[4] = rp_child->mt.x[5] = 0;
-	rp_child->color = spr->GetColor() * rp.color;
+	rp_child->col_common = spr->GetColorCommon() * rp.col_common;
+	rp_child->col_map    = spr->GetColorMap() * rp.col_map;
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
-	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
+	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
+	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 
 	auto t2d_spr = S2_VI_DOWN_CAST<const TrailSprite*>(spr);
 	// todo: return trail's render ret

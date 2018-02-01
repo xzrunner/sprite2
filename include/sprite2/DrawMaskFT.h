@@ -18,7 +18,6 @@ namespace s2
 class Sprite;
 class Actor;
 class RenderParams;
-class RenderColor;
 class RenderTarget;
 
 class DrawMaskFT

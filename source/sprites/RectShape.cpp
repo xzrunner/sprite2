@@ -34,7 +34,7 @@ bool RectShape::IsIntersect(const sm::rect& rect) const
 
 void RectShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
-	RVG::SetColor(rp.color.GetMul());
+	RVG::SetColor(rp.col_common.mul);
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),
 		     max(m_bounding.xmax, m_bounding.ymax);
 	RVG::Rect(dlist, min, max, false);

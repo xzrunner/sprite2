@@ -1,7 +1,6 @@
 #include "sprite2/AnimCopy.h"
 #include "sprite2/AnimSymbol.h"
 #include "sprite2/Sprite.h"
-#include "sprite2/RenderColor.h"
 #include "sprite2/ILerp.h"
 
 #include <assert.h>
@@ -140,12 +139,12 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 					dst.dsrt.srt[i] = (esrt.srt[i] - bsrt.srt[i]) / dt;
 				}
 
-				const RenderColor& rcb = begin->GetColor();
-				const RenderColor& rce = end->GetColor();
-				dst.col_mul = rcb.GetMul();
-				dst.col_add = rcb.GetAdd();
-				CalcDeltaColor(rcb.GetMul(), rce.GetMul(), dt, dst.dcol_mul);
-				CalcDeltaColor(rcb.GetAdd(), rce.GetAdd(), dt, dst.dcol_add);
+				auto& begin_col = begin->GetColorCommon();
+				auto& end_col   = end->GetColorCommon();
+				dst.col_mul = end_col.mul;
+				dst.col_add = end_col.add;
+				CalcDeltaColor(begin_col.mul, end_col.mul, dt, dst.dcol_mul);
+				CalcDeltaColor(begin_col.add, end_col.add, dt, dst.dcol_add);
 
 				m_lerps.push_back(dst);
 				item.lerp = idx;

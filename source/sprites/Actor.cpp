@@ -79,15 +79,16 @@ void Actor::SetScale(const sm::vec2& scale)
 	m_aabb.Update(this);
 }
 
-void Actor::SetColor(const RenderColor& color)
-{
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-	}
-	m_render->SetColor(color);
-
-	SetColorDirty(true);
-}
+// todo zz
+//void Actor::SetColor(const RenderColor& color)
+//{
+//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+//	}
+//	m_render->SetColor(color);
+//
+//	SetColorDirty(true);
+//}
 
 void Actor::SetShader(const RenderShader& shader)
 {

@@ -91,7 +91,7 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 
 	child = rp;
 
-	Utility::PrepareColor(rp.color, spr, actor, child.color);
+	Utility::PrepareColor(rp.col_common, rp.col_map, spr, actor, child.col_common, child.col_map);
 	Utility::PrepareMat(rp.mt, spr, actor, child.mt);
 
 	if (PREPARE_REDNER_PARAMS) {

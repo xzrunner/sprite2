@@ -6,7 +6,6 @@
 #include "sprite2/Actor.h"
 #include "sprite2/PointQueryVisitor.h"
 #include "sprite2/UpdateParams.h"
-#include "sprite2/RenderColor.h"
 #include "sprite2/SetStaticFrameVisitor.h"
 
 #include "sprite2/ComplexSymbol.h"
@@ -1116,7 +1115,8 @@ bool ProxyHelper::ActorGetColMul(const Actor* actor, uint32_t& mul)
 	} 
 	else
 	{
-		mul = actor->GetColor().GetMulABGR();
+		// todo zz
+		//mul = actor->GetColor().GetMulABGR();
 		return true;
 	}
 }
@@ -1135,12 +1135,13 @@ void ProxyHelper::ActorSetColMul(Actor* actor, uint32_t mul)
 	} 
 	else
 	{
-		if (actor->GetColor().GetMulABGR() != mul) 
-		{
-			RenderColor rc = actor->GetColor();
-			rc.SetMulABGR(mul);
-			actor->SetColor(rc);
-		}
+		// todo zz
+		//if (actor->GetColor().GetMulABGR() != mul) 
+		//{
+		//	RenderColor rc = actor->GetColor();
+		//	rc.SetMulABGR(mul);
+		//	actor->SetColor(rc);
+		//}
 	}
 }
 
@@ -1170,7 +1171,8 @@ bool ProxyHelper::ActorGetColAdd(const Actor* actor, uint32_t& add)
 	} 
 	else
 	{
-		add = actor->GetColor().GetAddABGR();
+		// todo zz
+		//add = actor->GetColor().GetAddABGR();
 		return true;
 	}
 }
@@ -1189,12 +1191,13 @@ void ProxyHelper::ActorSetColAdd(Actor* actor, uint32_t add)
 	} 
 	else
 	{
-		if (actor->GetColor().GetAddABGR() != add) 
-		{
-			RenderColor rc = actor->GetColor();
-			rc.SetAddABGR(add);
-			actor->SetColor(rc);
-		}
+		// todo zz
+		//if (actor->GetColor().GetAddABGR() != add) 
+		//{
+		//	RenderColor rc = actor->GetColor();
+		//	rc.SetAddABGR(add);
+		//	actor->SetColor(rc);
+		//}
 	}
 }
 
@@ -1227,9 +1230,10 @@ bool ProxyHelper::ActorGetColMap(const Actor* actor, uint32_t& rmap, uint32_t& g
 	}
 	else
 	{
-		rmap = actor->GetColor().GetRMapABGR();
-		gmap = actor->GetColor().GetGMapABGR();
-		bmap = actor->GetColor().GetBMapABGR();
+		// todo zz
+		//rmap = actor->GetColor().GetRMapABGR();
+		//gmap = actor->GetColor().GetGMapABGR();
+		//bmap = actor->GetColor().GetBMapABGR();
 		return true;
 	}
 }
@@ -1248,16 +1252,17 @@ void ProxyHelper::ActorSetColMap(Actor* actor, uint32_t rmap, uint32_t gmap, uin
 	} 
 	else
 	{
-		if (actor->GetColor().GetRMapABGR() != rmap ||
-			actor->GetColor().GetGMapABGR() != gmap ||
-			actor->GetColor().GetBMapABGR() != bmap) 
-		{
-			RenderColor rc = actor->GetColor();
-			rc.SetRMapABGR(rmap);
-			rc.SetGMapABGR(gmap);
-			rc.SetBMapABGR(bmap);
-			actor->SetColor(rc);
-		}
+		// todo zz
+		//if (actor->GetColor().GetRMapABGR() != rmap ||
+		//	actor->GetColor().GetGMapABGR() != gmap ||
+		//	actor->GetColor().GetBMapABGR() != bmap) 
+		//{
+		//	RenderColor rc = actor->GetColor();
+		//	rc.SetRMapABGR(rmap);
+		//	rc.SetGMapABGR(gmap);
+		//	rc.SetBMapABGR(bmap);
+		//	actor->SetColor(rc);
+		//}
 	}
 }
 

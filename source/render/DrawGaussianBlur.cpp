@@ -22,6 +22,7 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderColorCommon.h>
 
 namespace s2
 {
@@ -75,8 +76,8 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderT
 	sm::vec2 sz = spr->GetBounding().GetSize().Size();
 	for (int i = 0; i < iterations; ++i) 
 	{
-		ret |= DrawBetweenRT(rt, tmp_rt, true, rp.color, sz.x);
-		ret |= DrawBetweenRT(tmp_rt, rt, false, rp.color, sz.y);
+		ret |= DrawBetweenRT(rt, tmp_rt, true, rp.col_common, sz.x);
+		ret |= DrawBetweenRT(tmp_rt, rt, false, rp.col_common, sz.y);
 	}
 
 	RenderCtxStack::Instance()->Pop();
@@ -152,7 +153,7 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const RenderColor& col, float tex_size)
+RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
 {
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
@@ -171,7 +172,7 @@ RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* ds
 		sl::GaussianBlurVertProg* prog = static_cast<sl::GaussianBlurVertProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_VERT));
 		prog->SetTexHeight(static_cast<float>(RT->HEIGHT));
 	}
-	shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+	shader->SetColor(col.mul.ToABGR(), col.add.ToABGR());
 
 	sm::vec2 vertices[4], texcoords[4];
 	vertices[0].Set(-512, -512);

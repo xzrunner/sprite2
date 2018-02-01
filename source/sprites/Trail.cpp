@@ -47,8 +47,8 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 	pt2::Color mul, add;
 	memcpy(&mul.r, mul_col, sizeof(uint8_t) * 4);
 	memcpy(&add.r, add_col, sizeof(uint8_t) * 4);
-	rp_child->color.SetMul(mul * rp->ct.GetMul());
-	rp_child->color.SetAdd(add + rp->ct.GetAdd());
+	rp_child->col_common.mul = mul * rp->col.mul;
+	rp_child->col_common.add = add + rp->col.add;
 
 	DrawNode::Draw(*s2_sym, *rp_child, sm::vec2(x, y), angle - SM_PI * 0.5f, sm::vec2(scale, scale));
 }
@@ -67,8 +67,8 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 			b = (col >> 16) & 0xff,
 			g = (col >>  8) & 0xff,
 			r = (col) & 0xff;
-		pt2::Color mul = rp->ct.GetMul();
-		pt2::Color add = rp->ct.GetAdd();
+		auto& mul = rp->col.mul;
+		auto& add = rp->col.add;
 		a = static_cast<int>(a * mul.a / 255.0f);
 		b = static_cast<int>(b * mul.b / 255.0f);
 		g = static_cast<int>(g * mul.g / 255.0f);

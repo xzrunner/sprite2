@@ -135,7 +135,8 @@ RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, RenderTarget*
 	RenderParams* rp_child = rp_proxy.obj;
 	rp_child->Reset();
 
-	rp_child->color = rp.color;
+	rp_child->col_common = rp.col_common;
+	rp_child->col_map    = rp.col_map;
 	rp_child->actor = actor;
 	rp_child->SetDisableDTexC2(rp.IsDisableDTexC2());
 //	rp_child->mt = rp.mt;

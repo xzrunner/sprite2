@@ -18,7 +18,7 @@ void ShapeVertices::Draw(cooking::DisplayList* dlist,
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		trans[i] = rp.mt * vertices[i];
 	}
-	RVG::SetColor(rp.color.GetMul());
+	RVG::SetColor(rp.col_common.mul);
 	RVG::Polyline(dlist, trans, closed);
 }
 

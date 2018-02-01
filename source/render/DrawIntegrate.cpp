@@ -26,7 +26,8 @@ RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite
 	RenderParams* rp_child = rp_proxy.obj;
 	memcpy(rp_child, &rp, sizeof(rp));
 
-	rp_child->color.Reset();
+	rp_child->col_common.Reset();
+	rp_child->col_map.Reset();
 	rp_child->ResetRender();
 	rp_child->mt.Identity();
 	rp_child->ClearViewRegion();

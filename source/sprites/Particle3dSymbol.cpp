@@ -203,11 +203,12 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
-	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
+	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
+	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 	P3dRenderParams p3d_rp;
 	p3d_rp.mt            = rp_child->mt;
-	p3d_rp.color         = rp_child->color;
+	p3d_rp.col_common    = rp_child->col_common;
+	p3d_rp.col_map       = rp_child->col_map;
 	p3d_rp.render_filter = rp_child->render_filter;
 	
 	if (spr) {
@@ -239,7 +240,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 
-	rp_child->color = p3d_spr->GetColor() * rp.color;
+	rp_child->col_common = p3d_spr->GetColorCommon() * rp.col_common;
 
 	if (p3d_spr->IsAlone()) 
 	{
@@ -283,8 +284,8 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
-	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
+	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
+	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 
 	if (!spr->IsMatDisable() && p3d_spr->IsLocal()) {
 		rp_child->mt = p3d_spr->GetLocalMat() * rp_child->mt;
@@ -295,7 +296,8 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 
 	P3dRenderParams p3d_rp;
 	p3d_rp.mt            = rp_child->mt;
-	p3d_rp.color         = rp_child->color;
+	p3d_rp.col_common    = rp_child->col_common;
+	p3d_rp.col_map       = rp_child->col_map;
 	p3d_rp.render_filter = rp_child->render_filter;
 	p3d_rp.local         = p3d_spr->IsLocal();
 	p3d_rp.view_region   = rp.GetViewRegion();

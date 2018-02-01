@@ -2,10 +2,10 @@
 #define _SPRITE2_TRAIL_H_
 
 #include "sprite2/pre_defined.h"
-#include "sprite2/RenderColor.h"
-#include S2_MAT_HEADER
 
+#include S2_MAT_HEADER
 #include <cu/cu_macro.h>
+#include <painting2/RenderColorCommon.h>
 
 namespace s2
 {
@@ -13,8 +13,8 @@ namespace s2
 class TrailRenderParams
 {
 public:
-	S2_MAT      mat;
-	RenderColor ct;
+	S2_MAT                 mat;
+	pt2::RenderColorCommon col;
 }; // TrailRenderParams
 
 class Trail

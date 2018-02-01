@@ -4,9 +4,9 @@
 #include "sprite2/pre_defined.h"
 
 #include S2_MAT_HEADER
-#include "sprite2/RenderColor.h"
-
 #include <SM_Rect.h>
+#include <painting2/RenderColorCommon.h>
+#include <painting2/RenderColorMap.h>
 
 namespace s2
 {
@@ -19,7 +19,8 @@ class P3dRenderParams
 {
 public:
 	S2_MAT        mt;
-	RenderColor   color;
+	pt2::RenderColorCommon col_common;
+	pt2::RenderColorMap    col_map;
 #ifdef S2_FILTER_FULL
 	RenderFilter* render_filter = nullptr;
 #else

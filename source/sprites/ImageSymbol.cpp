@@ -202,7 +202,7 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
-	shader->SetColor(rp.color.GetMulABGR(), rp.color.GetAddABGR());
+	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 
 	for (int i = 0, ptr = 0; i < 4; ++i) {
 		vertices[ptr++] += rp.vertex_offset.x;
@@ -260,17 +260,17 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 	shader = static_cast<sl::ShaderType>(dlist->GetShaderType());
 #endif // S2_DISABLE_DEFERRED
 
-	auto& col = rp.color;
+//	auto& col = rp.color;
 	switch (shader)
 	{
 	case sl::FILTER:
 		{
 #ifdef S2_DISABLE_DEFERRED
 		auto shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
-		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
+		shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 		shader->Draw(vertices, texcoords, tex_id);
 #else
-		cooking::set_color_filter(dlist, col.GetMulABGR(), col.GetAddABGR());
+		cooking::set_color_filter(dlist, rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 		cooking::draw_quad_filter(dlist, vertices, texcoords, tex_id);
 #endif // S2_DISABLE_DEFERRED
 		}
@@ -279,12 +279,12 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 		{
 #ifdef S2_DISABLE_DEFERRED
 		auto shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-		shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
-		shader->SetColorMap(col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+		shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
+		shader->SetColorMap(rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);
 #else
-		cooking::set_color_sprite(dlist, col.GetMulABGR(), col.GetAddABGR(),
-			col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+		cooking::set_color_sprite(dlist, rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR(),
+			rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 		cooking::draw_quad_sprite(dlist, vertices, texcoords, tex_id);
 #endif // S2_DISABLE_DEFERRED
 		}
@@ -317,18 +317,17 @@ void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& 
 	_texcoords.push_back(sm::vec2(texcoords[4], texcoords[5]));
 	_texcoords.push_back(sm::vec2(texcoords[6], texcoords[7]));
 
-	auto& col = rp.color;
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
-	shader->SetColor(col.GetMulABGR(), col.GetAddABGR());
-	shader->SetColorMap(col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
+	shader->SetColorMap(rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);
 #else
 	cooking::change_shader(dlist, sl::SPRITE3);
-	cooking::set_color_sprite3(dlist, col.GetMulABGR(), col.GetAddABGR(), 
-		col.GetRMapABGR(), col.GetGMapABGR(), col.GetBMapABGR());
+	cooking::set_color_sprite3(dlist, rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR(),
+		rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 	cooking::draw_quad_sprite3(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
 #endif // S2_DISABLE_DEFERRED
 }

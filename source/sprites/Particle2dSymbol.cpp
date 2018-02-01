@@ -74,8 +74,8 @@ RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
-	shader->SetColor(rp_child->color.GetMulABGR(), rp_child->color.GetAddABGR());
-	shader->SetColorMap(rp_child->color.GetRMapABGR(), rp_child->color.GetGMapABGR(), rp_child->color.GetBMapABGR());
+	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
+	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 
 	RenderReturn ret = p2d_spr->Draw(*rp_child);
 

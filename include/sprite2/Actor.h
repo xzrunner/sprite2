@@ -27,7 +27,6 @@ namespace s2
 
 class Sprite;
 class ActorGeo;
-class RenderColor;
 class RenderShader;
 class RenderCamera;
 class SprRender;
@@ -60,11 +59,11 @@ public:
 	ActorAABB& GetAABB() { return m_aabb; }
 	const ActorAABB& GetAABB() const { return m_aabb; }
 
-	const RenderColor&	GetColor() const { return *m_render->GetColor(); }
 	const RenderShader& GetShader() const { return *m_render->GetShader(); }
 	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
-	void SetColor(const RenderColor& color);
+	// todo zz
+//	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
 	void SetCamera(const RenderCamera& camera);
 	

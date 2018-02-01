@@ -97,8 +97,8 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 		rp_child->SetFlags(rp->flags);
 	}
 
-	rp_child->color.SetMul(mul * rp->color.GetMul());
-	rp_child->color.SetAdd(add + rp->color.GetAdd());
+	rp_child->col_common.mul = mul * rp->col_common.mul;
+	rp_child->col_common.add = add + rp->col_common.add;
 
 	rp_child->render_filter = rp->render_filter;
 

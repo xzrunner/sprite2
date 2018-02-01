@@ -175,7 +175,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 
 	s.overflow = tb.overflow;
 
-	DrawText(dlist, s, rp.mt, rp.color.GetMul(), rp.color.GetAdd(), *text, tb_spr->GetTime(), tb.richtext);
+	DrawText(dlist, s, rp.mt, rp.col_common.mul, rp.col_common.add, *text, tb_spr->GetTime(), tb.richtext);
 
 	tb_spr->UpdateTime();
 

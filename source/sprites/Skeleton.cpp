@@ -32,7 +32,7 @@ sm::rect Skeleton::GetBounding() const
 	{
 		auto& spr = joint->GetSkinSpr();
 		if (spr) {
-			spr->GetBounding()->CombineTo(b);
+			spr->GetBounding().CombineTo(b);
 		} else {
 			b.Combine(joint->GetWorldPose().trans);
 		}
@@ -46,7 +46,7 @@ std::shared_ptr<Joint> Skeleton::QueryByPos(const sm::vec2& pos) const
 	{
 		auto& spr = joint->GetSkinSpr();
 		if (spr) {
-			if (spr->GetBounding()->IsContain(pos)) {
+			if (spr->GetBounding().IsContain(pos)) {
 				return joint;
 			}
 		} else {

@@ -110,7 +110,7 @@ sm::rect MaskSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool
 {
 	if (m_mask) {
 		sm::rect b;
-		m_mask->GetBounding()->CombineTo(b);
+		m_mask->GetBounding().CombineTo(b);
 		return b;
 	} else {
 		return sm::rect(sm::vec2(0, 0), 100, 100);

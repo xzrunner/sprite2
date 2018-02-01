@@ -23,7 +23,7 @@ bool Sprite::HasComponent() const
 }
 
 template <typename T, typename... TArgs>
-T& Sprite::AddComponent(TArgs&&... args)
+T& Sprite::AddComponent(TArgs&&... args) const
 {
 	GD_ASSERT(!HasComponent<T>(), "already has the component");
 
@@ -58,14 +58,6 @@ void Sprite::UpdateInheritUpdate() const
 		SprNameMap::Instance()->IDToStr(m_name, name);
 		SetInheritUpdate(IsForceUpdate() || name.empty() || name[0] == '_');
 	}
-}
-
-inline
-void Sprite::CreateBounding() const
-{
-	void* ptr = mm::AllocHelper::Allocate(sizeof(pt2::OBB));
-	pt2::BoundingBox* bb = new (ptr) pt2::OBB();
-	m_bounding.reset(bb);
 }
 
 inline

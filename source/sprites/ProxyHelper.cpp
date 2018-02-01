@@ -216,7 +216,7 @@ bool ProxyHelper::SprPointTest(const Sprite& spr, const sm::vec2& pos)
 	}
 	else
 	{
-		return spr.GetBounding()->IsContain(pos);
+		return spr.GetBounding().IsContain(pos);
 	}
 }
 

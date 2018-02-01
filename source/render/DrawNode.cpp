@@ -731,7 +731,7 @@ bool DrawNode::IsSmall(const Sprite* spr,
 		}
 	}
 	if (spr) {
-		sm::vec2 sz = spr->GetBounding(actor)->GetSize().Size();
+		sm::vec2 sz = spr->GetBounding(actor).GetSize().Size();
 		if (sz.x < min_edge && sz.y < min_edge) {
 			return true;
 		}

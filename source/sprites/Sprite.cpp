@@ -11,6 +11,7 @@
 #include "sprite2/Utility.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/CompTransform.h"
+#include "sprite2/CompBoundingBox.h"
 
 #include <rigging.h>
 #include <painting2/GeoTransform.h>
@@ -33,7 +34,6 @@ static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
 	: m_name(-1)
-	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -46,7 +46,6 @@ Sprite::Sprite()
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(spr.m_sym)
 	, m_name(spr.m_name)
-	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
 	, m_actors(nullptr)
@@ -55,10 +54,6 @@ Sprite::Sprite(const Sprite& spr)
 	++ALL_SPR_COUNT;
 
 	CopyComponentsFrom(spr);
-
-	if (spr.m_bounding) {
-		m_bounding.reset(spr.m_bounding->Clone());
-	}
 
 	if (m_render != spr.m_render)
 	{
@@ -88,15 +83,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	m_name = spr.m_name;
 
 	CopyComponentsFrom(spr);
-
-	if (spr.m_bounding) {
-		if (!m_bounding) {
-			CreateBounding();
-		}
-		*m_bounding = *spr.m_bounding;
-	} else {
-		m_bounding.reset();
-	}
 
 	if (m_render != spr.m_render) 
 	{
@@ -140,7 +126,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
-	, m_bounding(nullptr, pt2::BoundingBox::Deleter)
 	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
@@ -265,12 +250,11 @@ void Sprite::SetShear(const sm::vec2& shear)
 		return;
 	}
 
-	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
-
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
+	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
 	pt2::GeoTransform& trans = ctrans.GetTrans();
 
 	S2_MAT mat_old, mat_new;
@@ -289,10 +273,9 @@ void Sprite::SetShear(const sm::vec2& shear)
 	trans.SetShear(shear);
 
 	// immediately
-	if (!m_bounding) {
-		CreateBounding();
-	}
-	m_bounding->SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
+	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbounding.GetBB();
+	bb.SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -322,10 +305,9 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	trans.SetPosition(trans.GetPosition() + old_center - new_center);
 
 	// immediately
-	if (!m_bounding) {
-		CreateBounding();
-	}
-	m_bounding->SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
+	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbounding.GetBB();
+	bb.SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
 	// 	SetBoundingDirty(true); 
@@ -421,15 +403,13 @@ VisitResult Sprite::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2& 
 	return ret;
 }
 
-const pt2::BoundingBox* Sprite::GetBounding(const Actor* actor) const
+const pt2::BoundingBox& Sprite::GetBounding(const Actor* actor) const
 { 
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
 	}
-	if (!m_bounding) {
-		CreateBounding();
-	}
-	return m_bounding.get(); 
+	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	return cbounding.GetBB();
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
@@ -448,11 +428,10 @@ void Sprite::UpdateBounding(const Actor* actor) const
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	if (!m_bounding) {
-		CreateBounding();
-	}
+	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbounding.GetBB();
 	auto& ctrans = GetTransform();
-	m_bounding->Build(rect, ctrans.GetPosition(), ctrans.GetAngle(), ctrans.GetScale(), 
+	bb.Build(rect, ctrans.GetPosition(), ctrans.GetAngle(), ctrans.GetScale(), 
 		ctrans.GetShear(), ctrans.GetOffset());
 
 	SetBoundingDirty(false);

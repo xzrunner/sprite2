@@ -84,7 +84,7 @@ public:
 	int  GetName() const { return m_name; }
 	void SetName(const CU_STR& name);
 
-	const pt2::BoundingBox* GetBounding(const Actor* actor = nullptr) const; 
+	const pt2::BoundingBox& GetBounding(const Actor* actor = nullptr) const; 
 	void UpdateBounding(const Actor* actor = nullptr) const;
 
 	void Translate(const sm::vec2& trans);
@@ -141,7 +141,7 @@ public:
 	bool HasComponent() const;
 
 	template <typename T, typename... TArgs>
-	T& AddComponent(TArgs&&... args);
+	T& AddComponent(TArgs&&... args) const;
 
 	template <typename T>
 	T& GetComponent() const;
@@ -156,8 +156,6 @@ private:
 	void InitFlags();
 
 	void UpdateInheritUpdate() const;
-
-	void CreateBounding() const;
 
 	void CopyComponentsFrom(const Sprite& spr);
 
@@ -233,11 +231,6 @@ protected:
 	int m_name;
 
 	/************************************************************************/
-	/* geometry                                                             */
-	/************************************************************************/
-	mutable std::unique_ptr<pt2::BoundingBox, decltype(&pt2::BoundingBox::Deleter)> m_bounding;
-
-	/************************************************************************/
 	/* draw                                                                 */
 	/************************************************************************/
 	static void render_deleter(SprRender* render) {
@@ -259,11 +252,11 @@ private:
 
 	// components
 
-	std::vector<std::unique_ptr<SprComponent>> m_components;
+	mutable std::vector<std::unique_ptr<SprComponent>> m_components;
 
 	static const size_t MAX_COMPONENTS = 16;
-	std::array<uint8_t, MAX_COMPONENTS> m_component_array;
-	std::bitset<MAX_COMPONENTS>         m_component_bitset;
+	mutable std::array<uint8_t, MAX_COMPONENTS> m_component_array;
+	mutable std::bitset<MAX_COMPONENTS>         m_component_bitset;
 
 }; // Sprite
 

@@ -30,7 +30,7 @@ RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 	RenderTargetMgr* RT = RenderTargetMgr::Instance();
 
 	sm::rect sz;
-	spr->GetBounding(rp.actor)->CombineTo(sz);
+	spr->GetBounding(rp.actor).CombineTo(sz);
 	const bool too_large = sz.Width() > RT->WIDTH || sz.Height() > RT->HEIGHT;
 
 	RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();

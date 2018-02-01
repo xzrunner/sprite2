@@ -72,7 +72,7 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderT
 	cooking::change_shader(dlist, sl::FILTER);
 #endif // S2_DISABLE_DEFERRED
 
-	sm::vec2 sz = spr->GetBounding()->GetSize().Size();
+	sm::vec2 sz = spr->GetBounding().GetSize().Size();
 	for (int i = 0; i < iterations; ++i) 
 	{
 		ret |= DrawBetweenRT(rt, tmp_rt, true, rp.color, sz.x);

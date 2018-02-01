@@ -21,7 +21,7 @@ public:
 
 	auto& Render() { return m_render; }
 
-	auto& Color() { return m_color; }
+	auto& Color()  { return m_color; }
 	auto& Shader() { return m_shader; }
 	auto& Camera() { return m_camera; }
 

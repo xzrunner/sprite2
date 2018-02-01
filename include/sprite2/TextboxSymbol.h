@@ -43,8 +43,8 @@ public:
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
-	virtual void DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const Color& mul,
-		const Color& add, const CU_STR& text, int time, bool richtext) const = 0;
+	virtual void DrawText(cooking::DisplayList* dlist, const gtxt_label_style& style, const S2_MAT& mt, const pt2::Color& mul,
+		const pt2::Color& add, const CU_STR& text, int time, bool richtext) const = 0;
 
 private:
 	RenderReturn DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const;

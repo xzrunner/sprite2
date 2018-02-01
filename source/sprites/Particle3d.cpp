@@ -85,7 +85,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 	assert(ud);
 	const P3dRenderParams* rp = (static_cast<const P3dRenderParams*>(ud));
 
-	Color mul, add;
+	pt2::Color mul, add;
 	memcpy(&mul, mul_col, sizeof(mul));
 	memcpy(&add, add_col, sizeof(add));
 

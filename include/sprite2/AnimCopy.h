@@ -1,12 +1,12 @@
 #ifndef _SPRITE2_ANIM_COPY_H_
 #define _SPRITE2_ANIM_COPY_H_
 
-#include "sprite2/Color.h"
 #include "sprite2/SprSRT.h"
 #include "sprite2/AnimLerp.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>
+#include <painting2/Color.h>
 
 #include <stdint.h>
 
@@ -31,14 +31,14 @@ private:
 	void LoadLerpData(const AnimSymbol& sym);
 	void CreateSprSlots(const AnimSymbol& sym);
 
-	static void CalcDeltaColor(const Color& begin, const Color& end, int time, float* ret);
+	static void CalcDeltaColor(const pt2::Color& begin, const pt2::Color& end, int time, float* ret);
 
 private:
 	struct Lerp
 	{
 		SprSRT srt, dsrt;
 
-		Color col_mul, col_add;
+		pt2::Color col_mul, col_add;
 		float dcol_mul[4], dcol_add[4];
 	};
 

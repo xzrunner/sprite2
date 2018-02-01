@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_TEXTBOX_H_
 #define _SPRITE2_TEXTBOX_H_
 
-#include "sprite2/Color.h"
+#include <painting2/Color.h>
 
 namespace s2
 {
@@ -31,11 +31,11 @@ public:
 
 	int			font_type;
 	int			font_size;
-	Color		font_color;
+	pt2::Color		font_color;
 
 	bool		has_edge;
 	float		edge_size;
-	Color		edge_color;
+	pt2::Color		edge_color;
 
 	HoriAlign	align_hori;
 	VertAlign	align_vert;

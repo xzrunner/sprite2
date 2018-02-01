@@ -1,7 +1,6 @@
 #include "sprite2/DrawMesh.h"
 #include "sprite2/Mesh.h"
 #include "sprite2/RVG.h"
-#include "sprite2/Color.h"
 #include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
@@ -16,6 +15,7 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <painting2/Texture.h>
+#include <painting2/Color.h>
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -32,9 +32,9 @@
 namespace s2
 {
 
-static Color RED	(204, 51, 102, 128);
-static Color GREEN	(102, 204, 51, 128);
-static Color BLUE	(102, 51, 204, 128);
+static pt2::Color RED	(204, 51, 102, 128);
+static pt2::Color GREEN	(102, 204, 51, 128);
+static pt2::Color BLUE	(102, 51, 204, 128);
 
 RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
 {

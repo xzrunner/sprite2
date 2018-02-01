@@ -19,9 +19,6 @@
     <Filter Include="dataset\render\camera">
       <UniqueIdentifier>{fd1d2e71-da42-48e6-b60d-a3c450f76879}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\primitive">
-      <UniqueIdentifier>{6e2faad1-d036-441c-88be-810151f8388e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dataset\others">
       <UniqueIdentifier>{963adc33-5a55-4ee7-9619-85dc18ddfa15}</UniqueIdentifier>
     </Filter>
@@ -706,9 +703,6 @@
     <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h">
       <Filter>dataset\render\camera</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Color.h">
-      <Filter>dataset\primitive</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
       <Filter>dataset\others</Filter>
     </ClInclude>
@@ -1226,9 +1220,6 @@
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\RenderParams.inl">
       <Filter>dataset\render</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\Color.inl">
-      <Filter>dataset\primitive</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\UpdateParams.inl">
       <Filter>dataset\others</Filter>

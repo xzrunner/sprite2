@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_COLOR_H_
 #define _SPRITE2_RENDER_COLOR_H_
 
-#include "sprite2/Color.h"
+#include <painting2/Color.h>
 
 namespace s2
 {
@@ -20,17 +20,17 @@ public:
 
 	void Reset();
 
-	Color GetMul() const { Color ret; ret.FromABGR(m_colors[IDX_MUL]); return ret; }
-	Color GetAdd() const { Color ret; ret.FromABGR(m_colors[IDX_ADD]); return ret; }
-	Color GetRMap() const { Color ret; ret.FromABGR(m_colors[IDX_RMAP]); return ret; }
-	Color GetGMap() const { Color ret; ret.FromABGR(m_colors[IDX_GMAP]); return ret; }
-	Color GetBMap() const { Color ret; ret.FromABGR(m_colors[IDX_BMAP]); return ret; }
+	pt2::Color GetMul() const { pt2::Color ret; ret.FromABGR(m_colors[IDX_MUL]); return ret; }
+	pt2::Color GetAdd() const { pt2::Color ret; ret.FromABGR(m_colors[IDX_ADD]); return ret; }
+	pt2::Color GetRMap() const { pt2::Color ret; ret.FromABGR(m_colors[IDX_RMAP]); return ret; }
+	pt2::Color GetGMap() const { pt2::Color ret; ret.FromABGR(m_colors[IDX_GMAP]); return ret; }
+	pt2::Color GetBMap() const { pt2::Color ret; ret.FromABGR(m_colors[IDX_BMAP]); return ret; }
 
-	void SetMul(const Color& mul) { m_colors[IDX_MUL] = mul.ToABGR(); }
-	void SetAdd(const Color& add) { m_colors[IDX_ADD] = add.ToABGR(); }
-	void SetRMap(const Color& rmap) { m_colors[IDX_RMAP] = rmap.ToABGR(); }
-	void SetGMap(const Color& gmap) { m_colors[IDX_GMAP] = gmap.ToABGR(); }
-	void SetBMap(const Color& bmap) { m_colors[IDX_BMAP] = bmap.ToABGR(); }
+	void SetMul(const pt2::Color& mul) { m_colors[IDX_MUL] = mul.ToABGR(); }
+	void SetAdd(const pt2::Color& add) { m_colors[IDX_ADD] = add.ToABGR(); }
+	void SetRMap(const pt2::Color& rmap) { m_colors[IDX_RMAP] = rmap.ToABGR(); }
+	void SetGMap(const pt2::Color& gmap) { m_colors[IDX_GMAP] = gmap.ToABGR(); }
+	void SetBMap(const pt2::Color& bmap) { m_colors[IDX_BMAP] = bmap.ToABGR(); }
 
 	uint32_t GetMulABGR() const { return m_colors[IDX_MUL]; }
 	uint32_t GetAddABGR() const { return m_colors[IDX_ADD]; }

@@ -9,7 +9,7 @@
 namespace s2
 {
 
-ColorPolygon::ColorPolygon(const Color& color)
+ColorPolygon::ColorPolygon(const pt2::Color& color)
 	: m_color(color)
 {
 }

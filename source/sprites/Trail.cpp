@@ -44,7 +44,7 @@ render_symbol_func(void* sym, float x, float y, float angle, float scale, uint8_
 
 	rp_child->mt = rp->mat;
 
-	Color mul, add;
+	pt2::Color mul, add;
 	memcpy(&mul.r, mul_col, sizeof(uint8_t) * 4);
 	memcpy(&add.r, add_col, sizeof(uint8_t) * 4);
 	rp_child->color.SetMul(mul * rp->ct.GetMul());
@@ -67,8 +67,8 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 			b = (col >> 16) & 0xff,
 			g = (col >>  8) & 0xff,
 			r = (col) & 0xff;
-		Color mul = rp->ct.GetMul();
-		Color add = rp->ct.GetAdd();
+		pt2::Color mul = rp->ct.GetMul();
+		pt2::Color add = rp->ct.GetAdd();
 		a = static_cast<int>(a * mul.a / 255.0f);
 		b = static_cast<int>(b * mul.b / 255.0f);
 		g = static_cast<int>(g * mul.g / 255.0f);

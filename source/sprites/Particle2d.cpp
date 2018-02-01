@@ -1,11 +1,11 @@
 #include "sprite2/Particle2d.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/Color.h"
 #include "sprite2/DrawNode.h"
 
 #include S2_MAT_HEADER
 #include <ps_2d.h>
+#include <painting2/Color.h>
 
 #include <string.h>
 
@@ -47,7 +47,7 @@ render_func(void* sym, float* mat, float x, float y, float angle, float scale,
 
 	Symbol* s2_sym(static_cast<Symbol*>(sym));
 
-	Color mul, add;
+	pt2::Color mul, add;
 	memcpy(&mul, mul_col, sizeof(*mul_col));
 	memcpy(&add, add_col, sizeof(*add_col));
 

@@ -1583,7 +1583,7 @@ void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, 
 extern "C"
 void s2_rvg_set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-	RVG::SetColor(Color(r, g, b, a));
+	RVG::SetColor(pt2::Color(r, g, b, a));
 }
 
 extern "C"

@@ -351,7 +351,7 @@ void AnimCurr::LoadSprLerpData(Sprite& spr, const AnimCopy::Lerp& lerp, int time
 	srt.UpdateCenter();
 	spr.SetLocalSRT(srt);
 
-	Color mul(lerp.col_mul), add(lerp.col_add);
+	pt2::Color mul(lerp.col_mul), add(lerp.col_add);
 	mul.r += static_cast<uint8_t>(lerp.dcol_mul[0] * time);
 	mul.g += static_cast<uint8_t>(lerp.dcol_mul[1] * time);
 	mul.b += static_cast<uint8_t>(lerp.dcol_mul[2] * time);

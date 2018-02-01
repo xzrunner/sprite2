@@ -253,7 +253,7 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 }
 
 RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
-	                            const RenderParams& rp, const Color& col)
+	                            const RenderParams& rp, const pt2::Color& col)
 {
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -702,7 +702,7 @@ RenderReturn DrawNode::DrawSprImplFinal(cooking::DisplayList* dlist, const Sprit
 {
 // 	// for debug
 // 	if (spr->GetSymbol()->GetID() == 1079524) {
-// 		DrawAABB(spr, rp, Color(255, 0, 0));
+// 		DrawAABB(spr, rp, pt2::Color(255, 0, 0));
 // 	}
 
 	RenderReturn ret = RENDER_OK;

@@ -45,7 +45,7 @@ render_func(void* sym, float* mat, const void* ud)
 static void
 debug_draw_func(float x, float y, uint32_t color)
 {
-	Color col;
+	pt2::Color col;
 	col.FromRGBA(color);
 	RVG::SetColor(col);
 	RVG::Rect(nullptr, sm::vec2(x, y), 5, 5, true);

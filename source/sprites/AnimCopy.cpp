@@ -186,7 +186,7 @@ void AnimCopy::CreateSprSlots(const AnimSymbol& sym)
 	}
 }
 
-void AnimCopy::CalcDeltaColor(const Color& begin, const Color& end, int time, float* ret)
+void AnimCopy::CalcDeltaColor(const pt2::Color& begin, const pt2::Color& end, int time, float* ret)
 {
 	ret[0] = (end.r - begin.r) / (float)time;
 	ret[1] = (end.g - begin.g) / (float)time;

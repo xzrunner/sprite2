@@ -1,6 +1,5 @@
 #include "sprite2/RVG.h"
 #include "sprite2/CameraMgr.h"
-#include "sprite2/Color.h"
 #include "sprite2/config.h"
 
 #include <rvg.h>
@@ -11,6 +10,7 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/Color.h>
 
 #include <assert.h>
 
@@ -22,7 +22,7 @@ void RVG::Init()
 	rvg_style_init();
 }
 
-void RVG::SetColor(const Color& color)
+void RVG::SetColor(const pt2::Color& color)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
@@ -197,7 +197,7 @@ void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangl
 	}
 }
 
-void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangles, const CU_VEC<Color>& colors)
+void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangles, const CU_VEC<pt2::Color>& colors)
 {
 	// todo
 }

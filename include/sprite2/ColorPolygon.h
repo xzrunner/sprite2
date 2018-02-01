@@ -4,18 +4,17 @@
 #include "sprite2/pre_defined.h"
 #include "sprite2/Polygon.h"
 #include "sprite2/PolyType.h"
-#include "sprite2/Color.h"
+
+#include <painting2/Color.h>
 
 namespace s2
 {
-
-class Color;
 
 class ColorPolygon : public VIRTUAL_INHERITANCE Polygon
 {
 public:
 	ColorPolygon() {}
-	ColorPolygon(const Color& color);
+	ColorPolygon(const pt2::Color& color);
 	
 	virtual std::unique_ptr<Polygon> Clone() override {
 		return std::make_unique<ColorPolygon>(*this);
@@ -26,10 +25,10 @@ public:
 	virtual void Draw(cooking::DisplayList* dlist, const RenderParams& rp) const override;
 	virtual void Build() override;
 
-	const Color& GetColor() const { return m_color; }
+	const pt2::Color& GetColor() const { return m_color; }
 
 protected:
-	Color m_color;
+	pt2::Color m_color;
 
 }; // ColorPolygon
 

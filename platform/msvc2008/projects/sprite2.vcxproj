@@ -268,7 +268,6 @@
     <ClInclude Include="..\..\..\include\sprite2\CameraMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraType.h" />
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Color.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
@@ -432,7 +431,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
-    <None Include="..\..\..\include\sprite2\Color.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />

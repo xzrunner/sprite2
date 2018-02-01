@@ -43,7 +43,7 @@ public:
 							 const S2_MAT& mt);
 
 	static RenderReturn DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
-		                         const RenderParams& rp, const Color& col);
+		                         const RenderParams& rp, const pt2::Color& col);
 	
 	/**
 	 *  @return

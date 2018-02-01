@@ -25,7 +25,7 @@ void Polygon::DebugDraw(const S2_MAT& mt) const
 		{
 			CU_VEC<sm::vec2> vertices;
 			sm::trans_vertices(mt, buf, vertices);
-			RVG::SetColor(Color(0, 255, 0));
+			RVG::SetColor(pt2::Color(0, 255, 0));
 			RVG::Polyline(nullptr, vertices, true);
 			buf.clear();
 		}

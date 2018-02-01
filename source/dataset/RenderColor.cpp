@@ -110,10 +110,10 @@ void RenderColor::Mul(const RenderColor& _c0, const RenderColor& _c1, RenderColo
 		to_abgr(ladd, la, lb, lg, lr);
 		to_abgr(radd, ra, rb, rg, rr);
 		uint8_t r, g, b, a;
-		r = clamp(lr + rr);
-		g = clamp(lg + rg);
-		b = clamp(lb + rb);
-		a = clamp(la + ra);
+		r = pt2::clamp(lr + rr);
+		g = pt2::clamp(lg + rg);
+		b = pt2::clamp(lb + rb);
+		a = pt2::clamp(la + ra);
 		c[IDX_ADD] = from_abgr(a, b, g, r);
 	}
 	// MAP

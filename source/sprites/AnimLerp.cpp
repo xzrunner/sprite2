@@ -1,5 +1,4 @@
 #include "sprite2/AnimLerp.h"
-#include "sprite2/Color.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Scale9Sprite.h"
 #include "sprite2/IconSprite.h"
@@ -15,6 +14,7 @@
 #include "sprite2/RenderColor.h"
 
 #include <SM_Vector.h>
+#include <painting2/Color.h>
 
 #include <assert.h>
 
@@ -44,9 +44,9 @@ void AnimLerp::Lerp(const CU_VEC<SprPtr>& begin, const CU_VEC<SprPtr>& end,
 }
 
 static inline
-Color color_interpolate(const Color& begin, const Color& end, float scale)
+pt2::Color color_interpolate(const pt2::Color& begin, const pt2::Color& end, float scale)
 {
-	Color ret;
+	pt2::Color ret;
 	ret.r = static_cast<uint8_t>(begin.r + (end.r - begin.r) * scale);
 	ret.g = static_cast<uint8_t>(begin.g + (end.g - begin.g) * scale);
 	ret.b = static_cast<uint8_t>(begin.b + (end.b - begin.b) * scale);

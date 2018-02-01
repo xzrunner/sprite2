@@ -309,7 +309,6 @@
     <ClInclude Include="..\..\..\include\sprite2\MaskActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\MaskSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\MaskSymbol.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Matrix.h" />
     <ClInclude Include="..\..\..\include\sprite2\MeshSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\MeshSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h" />
@@ -435,7 +434,6 @@
     <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
     <None Include="..\..\..\include\sprite2\Color.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl" />
-    <None Include="..\..\..\include\sprite2\Matrix.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />
     <None Include="..\..\..\include\sprite2\Actor.inl" />

@@ -2,6 +2,7 @@
 #define _SPRITE2_ACTOR_INL_
 
 #include "sprite2/RenderParams.h"
+#include "sprite2/CompActorAABB.h"
 
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
@@ -40,6 +41,18 @@ inline
 bool Actor::IsGeoDirty() const 
 { 
 	return HasComponent<CompActorTrans>();
+}
+
+inline
+ActorAABB& Actor::GetAABB() 
+{ 
+	return GetComponent<CompActorAABB>().AABB();
+}
+
+inline
+const ActorAABB& Actor::GetAABB() const 
+{ 
+	return GetComponent<CompActorAABB>().AABB();
 }
 
 #ifndef S2_DISABLE_FLATTEN

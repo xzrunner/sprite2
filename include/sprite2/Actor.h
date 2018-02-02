@@ -3,7 +3,6 @@
 
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
-#include "sprite2/ActorAABB.h"
 #include "sprite2/ActorDefault.h"
 #include "sprite2/SprDefault.h"
 #include "sprite2/ComponentsMgr.h"
@@ -28,6 +27,7 @@ class Sprite;
 class RenderShader;
 class SprRender;
 class RenderParams;
+class ActorAABB;
 
 class Actor : private cu::Uncopyable, public std::enable_shared_from_this<Actor>, public ComponentsMgr<8>
 {
@@ -54,8 +54,8 @@ public:
 	const S2_MAT& GetLocalMat() const;
 	bool IsGeoDirty() const;
 
-	ActorAABB& GetAABB() { return m_aabb; }
-	const ActorAABB& GetAABB() const { return m_aabb; }
+	ActorAABB& GetAABB();
+	const ActorAABB& GetAABB() const;
 
 	// todo zz
 //	const RenderShader& GetShader() const { return *m_render->GetShader(); }
@@ -148,10 +148,6 @@ private:
 	Spr m_spr;
 
 	Parent m_parent;
-
-	
-
-	mutable ActorAABB m_aabb;
 
 	// todo zz
 	//static void render_deleter(SprRender* render) {

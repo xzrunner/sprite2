@@ -25,7 +25,8 @@ Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 
 	InitFlags();
 
-	m_aabb.Init(this);
+	auto& caabb = AddComponent<CompActorAABB>();
+	caabb.AABB().Init(this);
 }
 
 Actor::~Actor()
@@ -42,8 +43,9 @@ void Actor::SetPosition(const sm::vec2& pos)
 	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
 	ctrans.GetTrans().SetPosition(pos);
 
-	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	auto& aabb = GetComponent<CompActorAABB>().AABB();
+	aabb.SetRect(sm::rect()); // make it empty
+	aabb.Update(this);
 }
 
 void Actor::SetAngle(float angle)
@@ -55,8 +57,9 @@ void Actor::SetAngle(float angle)
 	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
 	ctrans.GetTrans().SetAngle(angle);
 
-	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	auto& aabb = GetComponent<CompActorAABB>().AABB();
+	aabb.SetRect(sm::rect()); // make it empty
+	aabb.Update(this);
 }
 
 void Actor::SetScale(const sm::vec2& scale)
@@ -68,8 +71,9 @@ void Actor::SetScale(const sm::vec2& scale)
 	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
 	ctrans.GetTrans().SetScale(scale);
 
-	m_aabb.SetRect(sm::rect()); // make it empty
-	m_aabb.Update(this);
+	auto& aabb = GetComponent<CompActorAABB>().AABB();
+	aabb.SetRect(sm::rect()); // make it empty
+	aabb.Update(this);
 }
 
 // todo zz
@@ -170,7 +174,8 @@ void Actor::SetVisible(bool flag, bool up_aabb) const
 		m_flags &= ~FLAG_VISIBLE;
 	}
 	if (up_aabb) {
-		m_aabb.UpdateParent(this);
+		auto& aabb = GetComponent<CompActorAABB>().AABB();
+		aabb.UpdateParent(this);
 	}
 }
 

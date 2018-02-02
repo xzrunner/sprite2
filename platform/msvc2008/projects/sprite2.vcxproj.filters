@@ -626,6 +626,9 @@
     <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
       <Filter>sprites\actor\utility</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompActorTrans.cpp">
+      <Filter>sprites\components\actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h">
@@ -1161,6 +1164,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ActorGeoTrans.h">
       <Filter>sprites\actor\parts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompActorTrans.h">
+      <Filter>sprites\components\actor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

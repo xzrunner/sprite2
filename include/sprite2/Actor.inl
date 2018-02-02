@@ -12,6 +12,36 @@
 namespace s2
 {
 
+inline
+const sm::vec2& Actor::GetPosition() const 
+{ 
+	return GetTransform().GetPosition();
+}
+
+inline
+float Actor::GetAngle() const 
+{ 
+	return GetTransform().GetAngle();
+}
+
+inline
+const sm::vec2& Actor::GetScale() const 
+{ 
+	return GetTransform().GetScale();
+}
+
+inline
+const S2_MAT& Actor::GetLocalMat() const 
+{ 
+	return GetTransform().GetMatrix();
+}
+
+inline
+bool Actor::IsGeoDirty() const 
+{ 
+	return HasComponent<CompActorTrans>();
+}
+
 #ifndef S2_DISABLE_FLATTEN
 
 inline

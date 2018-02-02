@@ -4,9 +4,9 @@
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
 #include "sprite2/ActorAABB.h"
-#include "sprite2/ActorGeoTrans.h"
 #include "sprite2/ActorDefault.h"
 #include "sprite2/SprDefault.h"
+#include "sprite2/ComponentsMgr.h"
 
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
@@ -25,12 +25,11 @@ namespace s2
 {
 
 class Sprite;
-class ActorGeoTrans;
 class RenderShader;
 class SprRender;
 class RenderParams;
 
-class Actor : private cu::Uncopyable, public std::enable_shared_from_this<Actor>
+class Actor : private cu::Uncopyable, public std::enable_shared_from_this<Actor>, public ComponentsMgr<8>
 {
 public:
 	Actor() = delete;
@@ -44,15 +43,16 @@ public:
 	Actor*   GetParentRaw() const { return m_parent.raw_ptr; }
 	void SetParent(const ActorConstPtr& parent) { m_parent.Set(parent); }
 
+	const sm::vec2& GetPosition() const;
+	float GetAngle() const;
+	const sm::vec2& GetScale() const;
+
 	void SetPosition(const sm::vec2& pos);
-	const sm::vec2& GetPosition() const { return m_geo->GetPosition(); }
 	void SetAngle(float angle);
-	float GetAngle() const { return m_geo->GetAngle(); }
 	void SetScale(const sm::vec2& scale);
-	const sm::vec2& GetScale() const { return m_geo->GetScale(); }
 	
-	const S2_MAT& GetLocalMat() const { return m_geo->GetMatrix(); }
-	bool IsGeoDirty() const { return m_geo.get() != ActorDefault::Instance()->Geo(); }
+	const S2_MAT& GetLocalMat() const;
+	bool IsGeoDirty() const;
 
 	ActorAABB& GetAABB() { return m_aabb; }
 	const ActorAABB& GetAABB() const { return m_aabb; }
@@ -105,6 +105,10 @@ public:
 	CU_FLAG_METHOD(AABBTight, FLAG_AABB_TIGHT)
 	CU_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
+private:	
+	const CompActorTrans& GetTransformComp() const;
+	const ActorGeoTrans& GetTransform() const;
+
 private:
 	struct Flatten
 	{
@@ -145,12 +149,7 @@ private:
 
 	Parent m_parent;
 
-	static void geo_deleter(ActorGeoTrans* geo) {
-		if (geo != ActorDefault::Instance()->Geo()) {
-			mm::AllocHelper::Delete(geo);
-		}
-	};
-	std::unique_ptr<ActorGeoTrans, decltype(&geo_deleter)>  m_geo;
+	
 
 	mutable ActorAABB m_aabb;
 

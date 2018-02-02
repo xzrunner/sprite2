@@ -129,6 +129,7 @@
     <ClCompile Include="..\..\..\source\sprites\ColorPolygon.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompActorAABB.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompActors.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompActorTrans.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompBoundingBox.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompColorCommon.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompActorAABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompActors.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompActorTrans.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompColorCommon.h" />

@@ -1,20 +1,22 @@
 #ifndef _SPRITE2_ACTOR_DEFAULT_H_
 #define _SPRITE2_ACTOR_DEFAULT_H_
 
+#include "sprite2/CompActorTrans.h"
+
 #include <cu/cu_macro.h>
+
+#include <memory>
 
 namespace s2
 {
 
-class ActorGeoTrans;
-
 class ActorDefault
 {
 public:	
-	auto& Geo() { return m_geo; }
+	const CompActorTrans& Transform() const { return *m_transform; }
 
 private:
-	ActorGeoTrans* m_geo;
+	std::unique_ptr<CompActorTrans> m_transform;
 
 	CU_SINGLETON_DECLARATION(ActorDefault)
 

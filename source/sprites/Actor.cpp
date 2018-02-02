@@ -18,7 +18,6 @@ static int ALL_ACTOR_COUNT = 0;
 Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: m_spr(spr)
 	, m_parent(parent)
-	, m_geo(ActorDefault::Instance()->Geo(), geo_deleter)
 	// todo zz
 //	, m_render(SprDefault::Instance()->Render(), render_deleter)
 {
@@ -40,10 +39,8 @@ void Actor::SetPosition(const sm::vec2& pos)
 		return;
 	}
 
-	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
-	}
-	m_geo->SetPosition(pos);
+	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
+	ctrans.GetTrans().SetPosition(pos);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
 	m_aabb.Update(this);
@@ -55,10 +52,8 @@ void Actor::SetAngle(float angle)
 		return;
 	}
 
-	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
-	}
-	m_geo->SetAngle(angle);
+	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
+	ctrans.GetTrans().SetAngle(angle);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
 	m_aabb.Update(this);
@@ -70,10 +65,8 @@ void Actor::SetScale(const sm::vec2& scale)
 		return;
 	}
 
-	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
-	}
-	m_geo->SetScale(scale);
+	auto& ctrans = HasComponent<CompActorTrans>() ? GetComponent<CompActorTrans>() : AddComponent<CompActorTrans>();
+	ctrans.GetTrans().SetScale(scale);
 
 	m_aabb.SetRect(sm::rect()); // make it empty
 	m_aabb.Update(this);
@@ -193,6 +186,17 @@ void Actor::BuildDisplayList()
 int Actor::GetAllActorCount()
 {
 	return ALL_ACTOR_COUNT;
+}
+
+const CompActorTrans& Actor::GetTransformComp() const
+{
+	return HasComponent<CompActorTrans>() ?
+		GetComponent<CompActorTrans>() : ActorDefault::Instance()->Transform();
+}
+
+const ActorGeoTrans& Actor::GetTransform() const
+{
+	return GetTransformComp().GetTrans();
 }
 
 }

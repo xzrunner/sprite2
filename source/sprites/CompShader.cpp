@@ -13,7 +13,7 @@ CompShader::~CompShader()
 CompShader* CompShader::Clone() const
 {
 	auto ret = static_cast<CompShader*>(mm::AllocHelper::New<CompShader>());
-	memcpy(ret, this, sizeof(*this));
+	ret->m_shader = m_shader;
 	return ret;
 }
 

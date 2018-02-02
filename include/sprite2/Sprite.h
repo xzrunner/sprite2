@@ -6,8 +6,8 @@
 #include "sprite2/macro.h"
 #include "sprite2/typedef.h"
 #include "sprite2/VisitResult.h"
-#include "sprite2/SprActors.h"
 #include "sprite2/SprDefault.h"
+#include "sprite2/CompActors.h"
 
 #include S2_MAT_HEADER
 #include <cu/cu_macro.h>
@@ -120,19 +120,24 @@ public:
 	void AddActor(const ActorPtr& actor) const;
 	void DelActor(const ActorPtr& actor) const;
 	Actor* QueryActor(const Actor* prev) const {
-		return m_actors ? m_actors->Query(prev) : nullptr;
+		return HasComponent<CompActors>() ?
+			GetComponent<CompActors>().Actors().Query(prev) : nullptr;
 	}
 	ActorPtr QueryActorRef(const Actor* prev) const {
-		if (m_actors) {
-			const ActorPtr* ptr = m_actors->QueryPtr(prev);
+		if (HasComponent<CompActors>()) {
+			const ActorPtr* ptr = GetComponent<CompActors>().Actors().QueryPtr(prev);
 			if (ptr) {
 				return *ptr;
 			}
 		}
 		return nullptr;
 	}
-	bool HaveActor() const { return m_actors && !m_actors->IsEmpty(); }
-	int ActorCount() const { return m_actors ? m_actors->Size() : 0; }
+	bool HaveActor() const { 
+		return HasComponent<CompActors>() && !GetComponent<CompActors>().Actors().IsEmpty();
+	}
+	int ActorCount() const { 
+		return HasComponent<CompActors>() ? GetComponent<CompActors>().Actors().Size() : 0;
+	}
 	void ClearActors() const;
 	void ConnectActors(const ActorPtr& parent) const;
 
@@ -164,23 +169,23 @@ private:
 	const pt2::GeoTransform& GetTransform() const;
 
 protected:
-	static const uint32_t FLAG_VISIBLE        = 0x00000001;
-	static const uint32_t FLAG_EDITABLE       = 0x00000002;
-	static const uint32_t FLAG_DIRTY          = 0x00000004;
-	static const uint32_t FLAG_BOUNDING_DIRTY = 0x00000008;
-	static const uint32_t FLAG_INTEGRATE      = 0x00000010;
+	static const uint32_t FLAG_VISIBLE                 = 0x00000001;
+	static const uint32_t FLAG_EDITABLE                = 0x00000002;
+	static const uint32_t FLAG_DIRTY                   = 0x00000004;
+	static const uint32_t FLAG_BOUNDING_DIRTY          = 0x00000008;
+	static const uint32_t FLAG_INTEGRATE               = 0x00000010;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
-	static const uint32_t FLAG_GEO_MATRIX     = 0x00000020;
+	static const uint32_t FLAG_GEO_MATRIX              = 0x00000020;
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
-	static const uint32_t FLAG_FORCE_UPDATE   = 0x00000040;
-	static const uint32_t FLAG_INHERIT_UPDATE = 0x00000080;
+	static const uint32_t FLAG_FORCE_UPDATE            = 0x00000040;
+	static const uint32_t FLAG_INHERIT_UPDATE          = 0x00000080;
 
 	// actor
-	static const uint32_t FLAG_NEED_ACTOR           = 0x00000100;
-	static const uint32_t FLAG_NEED_ACTOR_FOR_CHILD = 0x00000200;
+	static const uint32_t FLAG_NEED_ACTOR              = 0x00000100;
+	static const uint32_t FLAG_NEED_ACTOR_FOR_CHILD    = 0x00000200;
 
-	static const uint32_t FLAG_MAT_DISABLE    = 0x00000400;	
-	static const uint32_t FLAG_COLOR_DISABLE  = 0x00000800;	
+	static const uint32_t FLAG_MAT_DISABLE             = 0x00000400;	
+	static const uint32_t FLAG_COLOR_DISABLE           = 0x00000800;	
 
 	// dtex
 	static const uint32_t FLAG_DTEX_DISABLE            = 0x00001000;
@@ -189,7 +194,7 @@ protected:
 	static const uint32_t FLAG_DTEX_CACHE_BEGIN        = 0x00008000;
 	// 0x00008000
 
-	static const uint32_t FLAG_MAX            = 0x00008000;
+	static const uint32_t FLAG_MAX                     = 0x00008000;
 
 public:
 	CU_FLAG_METHOD(Visible, FLAG_VISIBLE)
@@ -226,22 +231,16 @@ public:
 protected:
 	SymPtr m_sym = nullptr;
 
-	/************************************************************************/
-	/* info                                                                 */
-	/************************************************************************/
 	int m_name;
 
-	/************************************************************************/
-	/* extend                                                               */
-	/************************************************************************/
 	mutable uint32_t m_flags;
-
-	mutable SprActors* m_actors = nullptr;
 
 private:
 	int m_id;
 
-	// components
+	/************************************************************************/
+	/* components                                                           */
+	/************************************************************************/
 
 	mutable std::vector<std::unique_ptr<SprComponent>> m_components;
 

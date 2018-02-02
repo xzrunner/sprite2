@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="dataset">
-      <UniqueIdentifier>{09e2bc5f-1172-43f1-b26d-c4989000902a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites">
       <UniqueIdentifier>{2ff2e976-8d15-458c-98a7-b12b46e11890}</UniqueIdentifier>
     </Filter>
@@ -608,6 +605,9 @@
     <ClCompile Include="..\..\..\source\sprites\CompShader.cpp">
       <Filter>sprites\sprite\components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompActors.cpp">
+      <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h">
@@ -1126,16 +1126,19 @@
     <ClInclude Include="..\..\..\include\sprite2\CompCamera.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
-      <Filter>dataset</Filter>
+    <ClInclude Include="..\..\..\include\sprite2\CompShader.h">
+      <Filter>sprites\sprite\components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
-      <Filter>dataset</Filter>
+      <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h">
-      <Filter>dataset</Filter>
+      <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\CompShader.h">
+    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompActors.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1163,10 +1166,10 @@
       <Filter>sprites\sprite\components</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\UpdateParams.inl">
-      <Filter>dataset</Filter>
+      <Filter>utility</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\RenderParams.inl">
-      <Filter>dataset</Filter>
+      <Filter>utility</Filter>
     </None>
   </ItemGroup>
 </Project>

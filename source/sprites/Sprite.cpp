@@ -47,7 +47,6 @@ Sprite::Sprite(const Sprite& spr)
 	: m_sym(spr.m_sym)
 	, m_name(spr.m_name)
 	, m_flags(spr.m_flags)
-	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
@@ -64,11 +63,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	CopyComponentsFrom(spr);
 
 	m_flags = spr.m_flags;
-
-	if (m_actors) {
-		mm::AllocHelper::Delete(m_actors);
-		m_actors = nullptr;
-	}
 
 	return *this;
 }
@@ -87,10 +81,6 @@ Sprite::Sprite(const SymPtr& sym, uint32_t id)
 Sprite::~Sprite()
 {
 	--ALL_SPR_COUNT;
-
-	if (m_actors) {
-		mm::AllocHelper::Delete(m_actors);
-	}
 }
 
 SprPtr Sprite::Clone() const
@@ -631,30 +621,28 @@ void Sprite::CacheLocalMat()
 
 void Sprite::AddActor(const ActorPtr& actor) const
 {
-	if (!m_actors) {
-		m_actors = mm::AllocHelper::New<SprActors>();
-	}
-	m_actors->Add(actor);
+	auto& cactors = HasComponent<CompActors>() ? GetComponent<CompActors>() : AddComponent<CompActors>();
+	cactors.Actors().Add(actor);
 }
 
 void Sprite::DelActor(const ActorPtr& actor) const
 {
-	if (m_actors) {
-		m_actors->Del(actor);
+	if (HasComponent<CompActors>()) {
+		GetComponent<CompActors>().Actors().Del(actor);
 	}
 }
 
 void Sprite::ClearActors() const
 {
-	if (m_actors) {
-		m_actors->Clear();
+	if (HasComponent<CompActors>()) {
+		GetComponent<CompActors>().Actors().Clear();
 	}
 }
 
 void Sprite::ConnectActors(const ActorPtr& parent) const
 {
-	if (m_actors) {
-		m_actors->Connect(parent);
+	if (HasComponent<CompActors>()) {
+		GetComponent<CompActors>().Actors().Connect(parent);
 	}
 }
 

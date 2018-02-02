@@ -221,9 +221,9 @@ void Particle3dSprite::SetLoop(bool loop)
 	}
 
 	// reuse none
-	if (m_actors)
+	if (HasComponent<CompActors>())
 	{
-		auto& actors = m_actors->GetActors();
+		auto& actors = GetComponent<CompActors>().Actors().GetActors();
 		for (auto& actor : actors) 
 		{
 			if (!actor) {
@@ -255,9 +255,9 @@ void Particle3dSprite::SetLocal(bool local)
 	}
 
 	// reuse none
-	if (m_actors)
+	if (HasComponent<CompActors>())
 	{
-		auto& actors = m_actors->GetActors();
+		auto& actors = GetComponent<CompActors>().Actors().GetActors();
 		for (auto& actor : actors) 
 		{
 			if (!actor) {
@@ -398,9 +398,9 @@ void Particle3dSprite::ChangeEmitterBuffer(ReuseType reuse, const std::shared_pt
 		ChangeEmitterBuffer(m_et, cfg, add);
 		break;
 	case REUSE_NONE:
-		if (m_actors)
+		if (HasComponent<CompActors>())
 		{
-			auto& actors = m_actors->GetActors();
+			auto& actors = GetComponent<CompActors>().Actors().GetActors();
 			for (auto& actor : actors) 
 			{
 				if (!actor) {

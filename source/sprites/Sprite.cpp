@@ -1,7 +1,5 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
-#include "sprite2/FilterFactory.h"
-#include "sprite2/RenderShader.h"
 #include "sprite2/SpriteVisitor.h"
 #include "sprite2/Actor.h"
 #include "sprite2/SymType.h"
@@ -13,6 +11,7 @@
 #include "sprite2/CompColorCommon.h"
 #include "sprite2/CompColorMap.h"
 #include "sprite2/CompCamera.h"
+#include "sprite2/CompShader.h"
 
 #include <rigging.h>
 #include <painting2/GeoTransform.h>
@@ -36,7 +35,6 @@ static void (*INIT_FLAGS)(const SprPtr& spr);
 
 Sprite::Sprite()
 	: m_name(-1)
-	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
 {
@@ -48,7 +46,6 @@ Sprite::Sprite()
 Sprite::Sprite(const Sprite& spr)
 	: m_sym(spr.m_sym)
 	, m_name(spr.m_name)
-	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(spr.m_flags)
 	, m_actors(nullptr)
 	, m_id(NEXT_ID++)
@@ -56,16 +53,6 @@ Sprite::Sprite(const Sprite& spr)
 	++ALL_SPR_COUNT;
 
 	CopyComponentsFrom(spr);
-
-	if (m_render != spr.m_render)
-	{
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-
-		auto& src_shader = spr.m_render->GetShader();
-		if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
-			m_render->SetShader(*src_shader);
-		}
-	}
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
@@ -75,25 +62,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 	m_name = spr.m_name;
 
 	CopyComponentsFrom(spr);
-
-	if (m_render != spr.m_render) 
-	{
-		if (spr.m_render.get() == SprDefault::Instance()->Render()) 
-		{
-			m_render.reset(SprDefault::Instance()->Render());
-		} 
-		else 
-		{
-			if (m_render.get() == SprDefault::Instance()->Render()) {
-				m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-			}
-
-			auto& src_shader = spr.m_render->GetShader();
-			if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
-				m_render->SetShader(*src_shader);
-			}
-		}
-	}
 
 	m_flags = spr.m_flags;
 
@@ -108,7 +76,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 Sprite::Sprite(const SymPtr& sym, uint32_t id)
 	: m_sym(sym)
 	, m_name(-1)
-	, m_render(SprDefault::Instance()->Render(), render_deleter)
 	, m_flags(0)
 	, m_id(NEXT_ID++)
 {
@@ -506,6 +473,12 @@ const pt2::RenderCamera& Sprite::GetCamera() const
 		GetComponent<CompCamera>().GetCamera() : SprDefault::Instance()->Camera().GetCamera();
 }
 
+const pt2::RenderShader& Sprite::GetShader() const
+{
+	return HasComponent<CompShader>() ?
+		GetComponent<CompShader>().GetShader() : SprDefault::Instance()->Shader().GetShader();
+}
+
 void Sprite::SetColorCommon(const pt2::RenderColorCommon& col)
 {
 	if (GetColorCommon() == col) {
@@ -528,15 +501,6 @@ void Sprite::SetColorMap(const pt2::RenderColorMap& col)
 	SetDirty(true);
 }
 
-void Sprite::SetShader(const RenderShader& shader)
-{
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-	}
-	m_render->SetShader(shader);
-	SetDirty(true);
-}
-
 void Sprite::SetCamera(const pt2::RenderCamera& camera)
 {
 	if (GetCamera() == camera) {
@@ -544,6 +508,16 @@ void Sprite::SetCamera(const pt2::RenderCamera& camera)
 	}
 	auto& ccamera = HasComponent<CompCamera>() ? GetComponent<CompCamera>() : AddComponent<CompCamera>();
 	ccamera.SetCamera(camera);
+	SetDirty(true);
+}
+
+void Sprite::SetShader(const pt2::RenderShader& shader)
+{
+	if (GetShader() == shader) {
+		return;
+	}
+	auto& cshader = HasComponent<CompShader>() ? GetComponent<CompShader>() : AddComponent<CompShader>();
+	cshader.SetShader(shader);
 	SetDirty(true);
 }
 

@@ -3,8 +3,9 @@
 
 #include "sprite2/Sprite.h"
 #include "sprite2/Actor.h"
-#include "sprite2/RenderShader.h"
 #include "sprite2/Utility.h"
+
+#include <painting2/RenderShader.h>
 
 namespace s2
 {
@@ -69,10 +70,11 @@ void UpdateParams::Push(const Sprite* spr)
 		m_prev_filter = filter->GetMode();
 	}
 	if (m_actor) {
-		auto& filter = m_actor->GetShader().GetFilter();
-		if (filter && filter->GetMode() != pt2::FM_NULL) {
-			m_prev_filter = filter->GetMode();
-		}
+		// todo zz
+		//auto& filter = m_actor->GetShader().GetFilter();
+		//if (filter && filter->GetMode() != pt2::FM_NULL) {
+		//	m_prev_filter = filter->GetMode();
+		//}
 	}
 #else
 	if (filter != pt2::FM_NULL) {

@@ -12,9 +12,7 @@ class CompTransform;
 class CompColorCommon;
 class CompColorMap;
 class CompCamera;
-
-class SprRender;
-class RenderShader;
+class CompShader;
 
 class SprDefault
 {
@@ -26,9 +24,7 @@ public:
 
 	const CompCamera& Camera() { return *m_camera; }
 
-	auto& Render() { return m_render; }
-
-	auto& Shader() { return m_shader; }
+	const CompShader& Shader() { return *m_shader; }
 
 private:
 	std::unique_ptr<CompTransform>   m_transform;
@@ -38,9 +34,7 @@ private:
 
 	std::unique_ptr<CompCamera>      m_camera;
 
-	SprRender*    m_render;
-	
-	RenderShader* m_shader;
+	std::unique_ptr<CompShader>      m_shader;
 
 	CU_SINGLETON_DECLARATION(SprDefault)
 

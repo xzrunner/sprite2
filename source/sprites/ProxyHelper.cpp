@@ -1280,22 +1280,23 @@ void ProxyHelper::ActorSetFilter(Actor* actor, int mode)
 	} 
 	else
 	{
-		auto& filter = actor->GetShader().GetFilter();
-		pt2::FilterMode ori = pt2::FM_NULL;
-#ifdef S2_FILTER_FULL
-		if (filter) {
-			ori = filter->GetMode();
-		}
-#else
-		ori = filter;
-#endif // S2_FILTER_FULL
-		if (ori == mode) {
-			return;
-		}
-
-		RenderShader shader = actor->GetShader();
-		shader.SetFilter(pt2::FilterMode(mode));
-		actor->SetShader(shader);
+		// todo zz
+//		auto& filter = actor->GetShader().GetFilter();
+//		pt2::FilterMode ori = pt2::FM_NULL;
+//#ifdef S2_FILTER_FULL
+//		if (filter) {
+//			ori = filter->GetMode();
+//		}
+//#else
+//		ori = filter;
+//#endif // S2_FILTER_FULL
+//		if (ori == mode) {
+//			return;
+//		}
+//
+//		RenderShader shader = actor->GetShader();
+//		shader.SetFilter(pt2::FilterMode(mode));
+//		actor->SetShader(shader);
 	}
 }
 

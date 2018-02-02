@@ -3,9 +3,7 @@
 #include "sprite2/CompColorCommon.h"
 #include "sprite2/CompColorMap.h"
 #include "sprite2/CompCamera.h"
-
-#include "sprite2/SprRender.h"
-#include "sprite2/RenderShader.h"
+#include "sprite2/CompShader.h"
 
 namespace s2
 {
@@ -21,9 +19,7 @@ SprDefault::SprDefault()
 
 	m_camera       = std::make_unique<CompCamera>();
 
-	m_shader = new RenderShader();
-
-	m_render = new SprRender(m_shader);
+	m_shader       = std::make_unique<CompShader>();
 }
 
 }

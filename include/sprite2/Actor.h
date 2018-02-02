@@ -7,7 +7,6 @@
 #include "sprite2/ActorGeo.h"
 #include "sprite2/ActorDefault.h"
 #include "sprite2/SprDefault.h"
-#include "sprite2/SprRender.h"
 
 #include <cu/uncopyable.h>
 #include <SM_Vector.h>
@@ -58,7 +57,8 @@ public:
 	ActorAABB& GetAABB() { return m_aabb; }
 	const ActorAABB& GetAABB() const { return m_aabb; }
 
-	const RenderShader& GetShader() const { return *m_render->GetShader(); }
+	// todo zz
+//	const RenderShader& GetShader() const { return *m_render->GetShader(); }
 	// todo zz
 //	const pt2::RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
@@ -154,12 +154,13 @@ private:
 
 	mutable ActorAABB m_aabb;
 
-	static void render_deleter(SprRender* render) {
-		if (render != SprDefault::Instance()->Render()) {
-			mm::AllocHelper::Delete(render);
-		}
-	};
-	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
+	// todo zz
+	//static void render_deleter(SprRender* render) {
+	//	if (render != SprDefault::Instance()->Render()) {
+	//		mm::AllocHelper::Delete(render);
+	//	}
+	//};
+	//std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
 
 	mutable uint32_t m_flags;
 

@@ -14,6 +14,7 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderShader.h>
 
 namespace s2
 {

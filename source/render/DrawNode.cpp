@@ -3,11 +3,8 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/Actor.h"
 #include "sprite2/DrawBlend.h"
-#include "sprite2/RFGaussianBlur.h"
-#include "sprite2/RFEdgeDetection.h"
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/DrawOuterGlow.h"
-#include "sprite2/RFOuterGlow.h"
 #include "sprite2/SprDefault.h"
 #include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderTargetMgr.h"
@@ -18,6 +15,7 @@
 #include "sprite2/Utility.h"
 #include "sprite2/DrawIntegrate.h"
 #include "sprite2/CompCamera.h"
+#include "sprite2/CompShader.h"
 
 #include <memmgr/Allocator.h>
 #include <SM_Calc.h>
@@ -30,6 +28,11 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/FilterMode.h>
+#include <painting2/RenderFilter.h>
+#include <painting2/RFGaussianBlur.h>
+#include <painting2/RFOuterGlow.h>
+#include <painting2/RFEdgeDetection.h>
 
 namespace s2
 {
@@ -514,23 +517,21 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 
 RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
-	const RenderShader& spr_s = spr->GetShader();
-
 // 	if (!rp.IsDisableIntegrate() && spr->IsIntegrate()) {
 // 		return DrawIntegrate().Draw(spr, rp);
 // 	}
 
-	RenderShader rs;
+	pt2::RenderShader rs;
 	pt2::RenderCamera rc;
 	if (rp.IsDisableRenderDraw()) {
-		rs = *SprDefault::Instance()->Shader();
+		rs = SprDefault::Instance()->Shader().GetShader();
 		rc = SprDefault::Instance()->Camera().GetCamera();
 	} else if (spr->HaveActor()) {
 		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);
 		rc = spr->GetCamera() * rp.camera;
 		if (rp.actor) {
-			rs = rp.actor->GetShader() * rs;
 			// todo zz
+//			rs = rp.actor->GetShader() * rs;
 //			rc = rp.actor->GetCamera() * rc;
 		}
 	} else {
@@ -617,12 +618,12 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 		rp_child->camera = rc;
 		if (filter == pt2::FM_GAUSSIAN_BLUR) 
 		{
-			int itrs = static_cast<RFGaussianBlur*>(rf.get())->GetIterations();
+			int itrs = static_cast<pt2::RFGaussianBlur*>(rf.get())->GetIterations();
 			ret = DrawGaussianBlur::Draw(dlist, spr, *rp_child, itrs);
 		} 
 		else if (filter == pt2::FM_OUTER_GLOW) 
 		{
-			int itrs = static_cast<RFOuterGlow*>(rf.get())->GetIterations();
+			int itrs = static_cast<pt2::RFOuterGlow*>(rf.get())->GetIterations();
 			ret = DrawOuterGlow::Draw(dlist, spr, *rp_child, itrs);
 		} 
 		else 
@@ -644,7 +645,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 			{
 			case pt2::FM_EDGE_DETECTION:
 				{
-					auto ed = static_cast<RFEdgeDetection*>(rf.get());
+					auto ed = static_cast<pt2::RFEdgeDetection*>(rf.get());
 					sl::EdgeDetectProg* prog = static_cast<sl::EdgeDetectProg*>(shader->GetProgram(sl::FM_EDGE_DETECTION));
 					prog->SetBlend(ed->GetBlend());
 				}

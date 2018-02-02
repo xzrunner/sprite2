@@ -78,9 +78,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp" />
-    <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp" />
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawBlend.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp" />
@@ -137,6 +134,7 @@
     <ClCompile Include="..\..\..\source\sprites\ComplexActor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ComplexSymbol.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompShader.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompTransform.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CosineShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CreateActorsVisitor.cpp" />
@@ -203,7 +201,6 @@
     <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SpriteVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\SprRender.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StaticQuadIcon.cpp" />
@@ -275,6 +272,7 @@
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSymbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompShader.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompTransform.h" />
     <ClInclude Include="..\..\..\include\sprite2\CosineShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\CreateActorsVisitor.h" />
@@ -291,7 +289,6 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawRT.h" />
     <ClInclude Include="..\..\..\include\sprite2\DynamicRectIcon.h" />
     <ClInclude Include="..\..\..\include\sprite2\DynamicSectorIcon.h" />
-    <ClInclude Include="..\..\..\include\sprite2\FilterFactory.h" />
     <ClInclude Include="..\..\..\include\sprite2\Icon.h" />
     <ClInclude Include="..\..\..\include\sprite2\IconSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\IconSymbol.h" />
@@ -339,25 +336,11 @@
     <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderShader.h" />
     <ClInclude Include="..\..\..\include\sprite2\ResetActorFlagVisitor.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFBlur.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFBurningMap.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFColGrading.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFEdgeDetection.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFGaussianBlur.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFGray.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFHeatHaze.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFOuterGlow.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFOutline.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFRelief.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFShockWave.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h" />
     <ClInclude Include="..\..\..\include\sprite2\Actor.h" />
     <ClInclude Include="..\..\..\include\sprite2\config.h" />
     <ClInclude Include="..\..\..\include\sprite2\Facade.h" />
@@ -392,7 +375,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SprDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprRender.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprSRT.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprVisitorParams.h" />

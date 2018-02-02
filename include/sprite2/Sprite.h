@@ -7,7 +7,6 @@
 #include "sprite2/typedef.h"
 #include "sprite2/VisitResult.h"
 #include "sprite2/SprActors.h"
-#include "sprite2/SprRender.h"
 #include "sprite2/SprDefault.h"
 
 #include S2_MAT_HEADER
@@ -20,14 +19,13 @@
 
 #include <stdint.h>
 
-namespace pt2 { class GeoTransform; class BoundingBox; }
+namespace pt2 { class GeoTransform; class BoundingBox; class RenderShader; }
 
 namespace s2
 {
 
 class UpdateParams;
 class Symbol;
-class RenderShader;
 class SpriteVisitor;
 class SpriteVisitor2;
 class Actor;
@@ -100,14 +98,14 @@ public:
 	const pt2::RenderColorCommon& GetColorCommon() const;
 	const pt2::RenderColorMap&    GetColorMap() const;
 
-	const RenderShader& GetShader() const { return *m_render->GetShader(); }
 	const pt2::RenderCamera& GetCamera() const;
+	const pt2::RenderShader& GetShader() const;
 
 	void SetColorCommon(const pt2::RenderColorCommon& col);
 	void SetColorMap(const pt2::RenderColorMap& col);
 
-	void SetShader(const RenderShader& shader);
 	void SetCamera(const pt2::RenderCamera& camera);
+	void SetShader(const pt2::RenderShader& shader);
 
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);
@@ -232,16 +230,6 @@ protected:
 	/* info                                                                 */
 	/************************************************************************/
 	int m_name;
-
-	/************************************************************************/
-	/* draw                                                                 */
-	/************************************************************************/
-	static void render_deleter(SprRender* render) {
-		if (render != SprDefault::Instance()->Render()) {
-			mm::AllocHelper::Delete(render);
-		}
-	};
-	std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
 
 	/************************************************************************/
 	/* extend                                                               */

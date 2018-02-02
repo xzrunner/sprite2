@@ -4,18 +4,6 @@
     <Filter Include="dataset">
       <UniqueIdentifier>{09e2bc5f-1172-43f1-b26d-c4989000902a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\render">
-      <UniqueIdentifier>{83093737-1951-444f-853d-dc3954689a64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dataset\render\filter">
-      <UniqueIdentifier>{6642267c-87f4-4db4-9df6-92c5281153bf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dataset\render\filter\items">
-      <UniqueIdentifier>{f2c7a740-739b-4656-b30d-b1d4703fe637}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="dataset\others">
-      <UniqueIdentifier>{963adc33-5a55-4ee7-9619-85dc18ddfa15}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites">
       <UniqueIdentifier>{2ff2e976-8d15-458c-98a7-b12b46e11890}</UniqueIdentifier>
     </Filter>
@@ -171,12 +159,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\dataset\RenderShader.cpp">
-      <Filter>dataset\render</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp">
-      <Filter>dataset\render\filter</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp">
       <Filter>sprites</Filter>
     </ClCompile>
@@ -438,9 +420,6 @@
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp">
       <Filter>sprites\sprite\parts</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\SprRender.cpp">
-      <Filter>sprites\sprite\parts</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
       <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
@@ -583,9 +562,6 @@
     <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
       <Filter>sprites\actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\RenderFilter.cpp">
-      <Filter>dataset\render\filter</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\render\RVG.cpp">
       <Filter>render\adapter</Filter>
     </ClCompile>
@@ -629,62 +605,11 @@
     <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp">
       <Filter>sprites\sprite\components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompShader.cpp">
+      <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
-      <Filter>dataset\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h">
-      <Filter>dataset\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderShader.h">
-      <Filter>dataset\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\FilterFactory.h">
-      <Filter>dataset\render\filter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h">
-      <Filter>dataset\render\filter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFBlur.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFBurningMap.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFColGrading.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFEdgeDetection.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFGaussianBlur.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFGray.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFHeatHaze.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFOuterGlow.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFOutline.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFRelief.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFShockWave.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h">
-      <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
-      <Filter>dataset\others</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h">
       <Filter>sprites</Filter>
     </ClInclude>
@@ -967,9 +892,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
       <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprRender.h">
-      <Filter>sprites\sprite\parts</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprSRT.h">
       <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
@@ -1204,14 +1126,20 @@
     <ClInclude Include="..\..\..\include\sprite2\CompCamera.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
+      <Filter>dataset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
+      <Filter>dataset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h">
+      <Filter>dataset</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompShader.h">
+      <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\include\sprite2\RenderParams.inl">
-      <Filter>dataset\render</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\UpdateParams.inl">
-      <Filter>dataset\others</Filter>
-    </None>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
       <Filter>sprites\sprite\parts</Filter>
     </None>
@@ -1233,6 +1161,12 @@
     <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl">
       <Filter>sprites\sprite\components</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\UpdateParams.inl">
+      <Filter>dataset</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\RenderParams.inl">
+      <Filter>dataset</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -20,7 +20,8 @@ Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: m_spr(spr)
 	, m_parent(parent)
 	, m_geo(ActorDefault::Instance()->Geo(), geo_deleter)
-	, m_render(SprDefault::Instance()->Render(), render_deleter)
+	// todo zz
+//	, m_render(SprDefault::Instance()->Render(), render_deleter)
 {
 	++ALL_ACTOR_COUNT;
 
@@ -90,13 +91,14 @@ void Actor::SetScale(const sm::vec2& scale)
 //	SetColorDirty(true);
 //}
 
-void Actor::SetShader(const RenderShader& shader)
-{
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-	}
-	m_render->SetShader(shader);
-}
+// todo zz
+//void Actor::SetShader(const RenderShader& shader)
+//{
+//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+//	}
+//	m_render->SetShader(shader);
+//}
 
 // todo zz
 //void Actor::SetCamera(const pt2::RenderCamera& camera)

@@ -2,7 +2,6 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/FilterFactory.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/RenderScissor.h"
 #include "sprite2/RenderTargetMgr.h"

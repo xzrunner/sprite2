@@ -1,6 +1,4 @@
 #include "sprite2/ImageSprite.h"
-#include "sprite2/RenderShader.h"
-#include "sprite2/RenderShader.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/Symbol.h"
 #ifndef S2_DISABLE_STATISTICS

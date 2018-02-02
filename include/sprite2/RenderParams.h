@@ -2,7 +2,6 @@
 #define _SPRITE2_RENDER_PARAMS_H_
 
 #include "sprite2/config.h"
-#include "sprite2/RenderShader.h"
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
 #include "sprite2/ObjectPool.h"
@@ -13,8 +12,12 @@
 #include <painting2/RenderColorCommon.h>
 #include <painting2/RenderColorMap.h>
 #include <painting2/RenderCamera.h>
+#include <painting2/BlendMode.h>
+#include <painting2/FastBlendMode.h>
 
 #include <memory>
+
+namespace pt2 { class RenderFilter; }
 
 namespace s2
 {
@@ -32,9 +35,8 @@ public:
 	pt2::RenderColorCommon col_common;
 	pt2::RenderColorMap    col_map;
 
-//	RenderShader shader;
 #ifdef S2_FILTER_FULL
-	RenderFilter* render_filter = nullptr;
+	pt2::RenderFilter* render_filter = nullptr;
 #else
 	pt2::FilterMode    render_filter = pt2::FM_NULL;
 #endif // S2_FILTER_FULL

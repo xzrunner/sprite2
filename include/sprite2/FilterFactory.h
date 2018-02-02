@@ -1,10 +1,10 @@
 #ifndef _SPRITE2_FILTER_FACTORY_H_
 #define _SPRITE2_FILTER_FACTORY_H_
 
-#include "sprite2/FilterMode.h"
 #include "sprite2/RenderFilter.h"
 
 #include <cu/cu_macro.h>
+#include <painting2/FilterMode.h>
 
 #include <memory>
 
@@ -14,9 +14,9 @@ namespace s2
 class FilterFactory
 {
 public:
-	RenderFilterPtr Create(FilterMode mode);
+	RenderFilterPtr Create(pt2::FilterMode mode);
 
-	RenderFilter* GetTemp(FilterMode mode) {
+	RenderFilter* GetTemp(pt2::FilterMode mode) {
 		return m_temps[mode];
 	}
 

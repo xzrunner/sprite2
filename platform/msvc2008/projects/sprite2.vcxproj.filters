@@ -13,9 +13,6 @@
     <Filter Include="dataset\render\filter\items">
       <UniqueIdentifier>{f2c7a740-739b-4656-b30d-b1d4703fe637}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\render\blend">
-      <UniqueIdentifier>{408215c3-daf6-483f-a052-19d524581ca3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dataset\render\camera">
       <UniqueIdentifier>{fd1d2e71-da42-48e6-b60d-a3c450f76879}</UniqueIdentifier>
     </Filter>
@@ -649,9 +646,6 @@
     <ClInclude Include="..\..\..\include\sprite2\FilterFactory.h">
       <Filter>dataset\render\filter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\FilterMode.h">
-      <Filter>dataset\render\filter</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderFilter.h">
       <Filter>dataset\render\filter</Filter>
     </ClInclude>
@@ -690,15 +684,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h">
       <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\BlendMode.h">
-      <Filter>dataset\render\blend</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\FastBlendMode.h">
-      <Filter>dataset\render\blend</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\CameraMode.h">
-      <Filter>dataset\render\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h">
       <Filter>dataset\render\camera</Filter>

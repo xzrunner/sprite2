@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_CAMERA_H_
 #define _SPRITE2_RENDER_CAMERA_H_
 
-#include "sprite2/CameraMode.h"
+#include <painting2/CameraMode.h>
 
 namespace s2
 {
@@ -20,11 +20,11 @@ public:
 
 	void CalculateZ(float cam_angle, const float vertices[8], float z[4]) const;
 
-	CameraMode GetMode() const { return m_mode; }
-	void SetMode(CameraMode mode) { m_mode = mode; }
+	pt2::CameraMode GetMode() const { return m_mode; }
+	void SetMode(pt2::CameraMode mode) { m_mode = mode; }
 
 private:
-	CameraMode m_mode;
+	pt2::CameraMode m_mode;
 	float      m_base_y;
 
 }; // RenderCamera

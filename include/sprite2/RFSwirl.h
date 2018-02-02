@@ -12,7 +12,7 @@ class RFSwirl : public RenderFilter
 {
 public:
 	RFSwirl() 
-		: RenderFilter(FM_SWIRL) 
+		: RenderFilter(pt2::FM_SWIRL) 
 	{}
 
 	virtual RenderFilter* Clone() const override {

@@ -1,6 +1,5 @@
 #include "sprite2/Particle3d.h"
 #include "sprite2/Particle3dBuffer.h"
-#include "sprite2/FastBlendMode.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/DrawNode.h"
@@ -17,6 +16,7 @@
 #include <ps_3d.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
+#include <painting2/FastBlendMode.h>
 
 #include <assert.h>
 #include <string.h>
@@ -54,15 +54,15 @@ blend_begin_func(int blend)
 	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
 	switch (blend)
 	{
-	case FBM_NULL:
+	case pt2::FBM_NULL:
 		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
-	case FBM_ADD:
+	case pt2::FBM_ADD:
 		rc->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
 		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
-	case FBM_SUBTRACT:
+	case pt2::FBM_SUBTRACT:
 		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rc->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
@@ -102,7 +102,7 @@ render_func(void* spr, void* sym, float* mat, float x, float y, float angle, flo
 
 	rp_child->render_filter = rp->render_filter;
 
-	rp_child->render_fast_blend = static_cast<FastBlendMode>(fast_blend);
+	rp_child->render_fast_blend = static_cast<pt2::FastBlendMode>(fast_blend);
 
 	rp_child->SetViewRegion(rp->view_region);
 

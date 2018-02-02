@@ -12,7 +12,7 @@ class RFBlur : public RenderFilter
 {
 public:
 	RFBlur() 
-		: RenderFilter(FM_BLUR) 
+		: RenderFilter(pt2::FM_BLUR) 
 	{}
 
 	virtual RenderFilter* Clone() const override {

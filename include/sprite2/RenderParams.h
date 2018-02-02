@@ -36,10 +36,10 @@ public:
 #ifdef S2_FILTER_FULL
 	RenderFilter* render_filter = nullptr;
 #else
-	FilterMode    render_filter = FM_NULL;
+	pt2::FilterMode    render_filter = pt2::FM_NULL;
 #endif // S2_FILTER_FULL
-	BlendMode     render_blend = BM_NULL;
-	FastBlendMode render_fast_blend = FBM_NULL;
+	pt2::BlendMode     render_blend = pt2::BM_NULL;
+	pt2::FastBlendMode render_fast_blend = pt2::FBM_NULL;
 	float         render_downsample = 1;
 
 	RenderCamera camera;

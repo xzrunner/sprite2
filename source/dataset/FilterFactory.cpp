@@ -29,21 +29,21 @@ FilterFactory::FilterFactory()
 {
 	memset(m_temps, 0, sizeof(m_temps));
 
-	m_temps[FM_EDGE_DETECTION]	= new RFEdgeDetection;
-	m_temps[FM_RELIEF]			= new RFRelief;
-	m_temps[FM_OUTLINE]			= new RFOutline;
-	m_temps[FM_OUTER_GLOW]		= new RFOuterGlow;
+	m_temps[pt2::FM_EDGE_DETECTION]	= new RFEdgeDetection;
+	m_temps[pt2::FM_RELIEF]			= new RFRelief;
+	m_temps[pt2::FM_OUTLINE]			= new RFOutline;
+	m_temps[pt2::FM_OUTER_GLOW]		= new RFOuterGlow;
 
-	m_temps[FM_GRAY]			= new RFGray;
-	m_temps[FM_BLUR]			= new RFBlur;
-	m_temps[FM_GAUSSIAN_BLUR]	= new RFGaussianBlur;
+	m_temps[pt2::FM_GRAY]			= new RFGray;
+	m_temps[pt2::FM_BLUR]			= new RFBlur;
+	m_temps[pt2::FM_GAUSSIAN_BLUR]	= new RFGaussianBlur;
 
-	m_temps[FM_HEAT_HAZE]		= new RFHeatHaze;
-	m_temps[FM_SHOCK_WAVE]		= new RFShockWave;
-	m_temps[FM_SWIRL]			= new RFSwirl;
-	m_temps[FM_BURNING_MAP]		= new RFBurningMap;	
+	m_temps[pt2::FM_HEAT_HAZE]		= new RFHeatHaze;
+	m_temps[pt2::FM_SHOCK_WAVE]		= new RFShockWave;
+	m_temps[pt2::FM_SWIRL]			= new RFSwirl;
+	m_temps[pt2::FM_BURNING_MAP]		= new RFBurningMap;	
 
-	m_temps[FM_COL_GRADING]		= new RFColGrading;
+	m_temps[pt2::FM_COL_GRADING]		= new RFColGrading;
 }
 
 FilterFactory::~FilterFactory() 
@@ -55,51 +55,51 @@ FilterFactory::~FilterFactory()
 	}
 }
 
-RenderFilterPtr FilterFactory::Create(FilterMode mode)
+RenderFilterPtr FilterFactory::Create(pt2::FilterMode mode)
 {
 	RenderFilter* filter = nullptr;
 	switch (mode)
 	{
-	case FM_NULL:
+	case pt2::FM_NULL:
 		break;
 
-	case FM_EDGE_DETECTION:
+	case pt2::FM_EDGE_DETECTION:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFEdgeDetection))) RFEdgeDetection();
 		break;
-	case FM_RELIEF:
+	case pt2::FM_RELIEF:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFRelief))) RFRelief();
 		break;
-	case FM_OUTLINE:
+	case pt2::FM_OUTLINE:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFOutline))) RFOutline();
 		break;
-	case FM_OUTER_GLOW:
+	case pt2::FM_OUTER_GLOW:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFOuterGlow))) RFOuterGlow();
 		break;
 
-	case FM_GRAY:
+	case pt2::FM_GRAY:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFGray))) RFGray();
 		break;
-	case FM_BLUR:
+	case pt2::FM_BLUR:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFBlur))) RFBlur();
 		break;
-	case FM_GAUSSIAN_BLUR:
+	case pt2::FM_GAUSSIAN_BLUR:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFGaussianBlur))) RFGaussianBlur();
 		break;
 
-	case FM_HEAT_HAZE:
+	case pt2::FM_HEAT_HAZE:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFHeatHaze))) RFHeatHaze();
 		break;
-	case FM_SHOCK_WAVE:
+	case pt2::FM_SHOCK_WAVE:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFShockWave))) RFShockWave();
 		break;
-	case FM_SWIRL:
+	case pt2::FM_SWIRL:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFSwirl))) RFSwirl();
 		break;
-	case FM_BURNING_MAP:
+	case pt2::FM_BURNING_MAP:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFBurningMap))) RFBurningMap();
 		break;
 
-	case FM_COL_GRADING:
+	case pt2::FM_COL_GRADING:
 		filter = new (mm::AllocHelper::Allocate(sizeof(RFColGrading))) RFColGrading();
 		break;
 

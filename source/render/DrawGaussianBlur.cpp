@@ -141,7 +141,7 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 #ifdef S2_FILTER_FULL
 	rp_child->render_filter = nullptr;
 #else
-	rp_child->render_filter = FM_NULL;
+	rp_child->render_filter = pt2::FM_NULL;
 #endif // S2_FILTER_FULL
 	rp_child->SetDisableFilter(true);
 

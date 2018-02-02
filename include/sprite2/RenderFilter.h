@@ -1,7 +1,7 @@
 #ifndef _SPRITE2_RENDER_FILTER_H_
 #define _SPRITE2_RENDER_FILTER_H_
 
-#include "sprite2/FilterMode.h"
+#include <painting2/FilterMode.h>
 
 #include <memory>
 
@@ -11,11 +11,11 @@ namespace s2
 class RenderFilter
 {
 public:
-	RenderFilter() : m_mode(FM_NULL) {}
+	RenderFilter() : m_mode(pt2::FM_NULL) {}
 	RenderFilter(const RenderFilter& filter)
 		: m_mode(filter.m_mode)
 	{}
-	RenderFilter(FilterMode mode) 
+	RenderFilter(pt2::FilterMode mode) 
 		: m_mode(mode) 
 	{}
 	virtual ~RenderFilter() {}
@@ -28,12 +28,12 @@ public:
 
 	virtual size_t Size() const = 0;
 
-	FilterMode GetMode() const { return m_mode; }	
+	pt2::FilterMode GetMode() const { return m_mode; }	
 
 	static void Deleter(RenderFilter* filter);
 
 private:
-	FilterMode m_mode;
+	pt2::FilterMode m_mode;
 
 }; // RenderFilter
 

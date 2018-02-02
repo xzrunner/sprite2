@@ -7,7 +7,7 @@
 #include "sprite2/config.h"
 #include S2_MAT_HEADER
 
-#include "sprite2/FilterMode.h"
+#include <painting2/FilterMode.h>
 
 #include <memory>
 
@@ -32,7 +32,7 @@ public:
 	void SetPrevMat(const S2_MAT& mat);
 	const S2_MAT& GetPrevMat() const;
 
-	FilterMode    GetPrevFilter() const;
+	pt2::FilterMode    GetPrevFilter() const;
 	
 	void SetActor(const Actor* actor) { m_actor = actor; }
 	const Actor* GetActor() const { return m_actor; }
@@ -42,7 +42,7 @@ public:
 
 private:
 	S2_MAT        m_prev_mat;
-	FilterMode    m_prev_filter;
+	pt2::FilterMode    m_prev_filter;
 
 	const Actor*  m_actor;
 

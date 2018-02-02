@@ -11,7 +11,7 @@ namespace s2
 
 inline
 UpdateParams::UpdateParams()
-	: m_prev_filter(FM_NULL)
+	: m_prev_filter(pt2::FM_NULL)
 	, m_actor(nullptr)
 	, m_force(false)
 {
@@ -19,7 +19,7 @@ UpdateParams::UpdateParams()
 
 inline
 UpdateParams::UpdateParams(const Actor* actor)
-	: m_prev_filter(FM_NULL)
+	: m_prev_filter(pt2::FM_NULL)
 	, m_actor(actor)
 	, m_force(false)
 {
@@ -28,7 +28,7 @@ UpdateParams::UpdateParams(const Actor* actor)
 inline
 UpdateParams::UpdateParams(const UpdateParams& params)
 	: m_prev_mat(params.m_prev_mat)
-	, m_prev_filter(FM_NULL)
+	, m_prev_filter(pt2::FM_NULL)
 	, m_actor(params.m_actor)
 	, m_force(params.m_force)
 {
@@ -47,7 +47,7 @@ inline
 void UpdateParams::Reset()
 {
 	m_prev_mat.Identity();
-	m_prev_filter = FM_NULL;
+	m_prev_filter = pt2::FM_NULL;
 	m_actor = nullptr;
 	m_force = false;
 }
@@ -65,22 +65,22 @@ void UpdateParams::Push(const Sprite* spr)
 
 	auto& filter = spr->GetShader().GetFilter();
 #ifdef S2_FILTER_FULL
-	if (filter && filter->GetMode() != FM_NULL) {
+	if (filter && filter->GetMode() != pt2::FM_NULL) {
 		m_prev_filter = filter->GetMode();
 	}
 	if (m_actor) {
 		auto& filter = m_actor->GetShader().GetFilter();
-		if (filter && filter->GetMode() != FM_NULL) {
+		if (filter && filter->GetMode() != pt2::FM_NULL) {
 			m_prev_filter = filter->GetMode();
 		}
 	}
 #else
-	if (filter != FM_NULL) {
-		m_prev_filter = FM_NULL;
+	if (filter != pt2::FM_NULL) {
+		m_prev_filter = pt2::FM_NULL;
 	}
 	if (m_actor) {
 		auto& filter = m_actor->GetShader().GetFilter();
-		if (filter != FM_NULL) {
+		if (filter != pt2::FM_NULL) {
 			m_prev_filter = filter;
 		}
 	}
@@ -100,7 +100,7 @@ const S2_MAT& UpdateParams::GetPrevMat() const
 }
 
 inline
-FilterMode UpdateParams::GetPrevFilter() const
+pt2::FilterMode UpdateParams::GetPrevFilter() const
 {
 	return m_prev_filter;
 }

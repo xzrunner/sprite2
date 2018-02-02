@@ -11,14 +11,14 @@ namespace s2
 static const float HEIGHT_VAL = 1.414f;
 
 RenderCamera::RenderCamera()
-	: m_mode(CM_ORTHO)
+	: m_mode(pt2::CM_ORTHO)
 	, m_base_y(0)
 {
 }
 
 void RenderCamera::Reset()
 {
-	m_mode = CM_ORTHO;
+	m_mode = pt2::CM_ORTHO;
 	m_base_y = 0;
 }
 
@@ -36,12 +36,12 @@ bool RenderCamera::operator != (const RenderCamera& cam) const
 RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 {
 	RenderCamera ret;
-	if (rc.m_mode != CM_ORTHO) {
+	if (rc.m_mode != pt2::CM_ORTHO) {
 		ret.m_mode = rc.m_mode;
 	} else {
 		ret.m_mode = m_mode;
 	}
-	if (ret.m_mode == CM_PERSPECTIVE_AUTO_HEIGHT) {
+	if (ret.m_mode == pt2::CM_PERSPECTIVE_AUTO_HEIGHT) {
 		if (rc.m_base_y == FLT_MAX) {
 			ret.m_base_y = rc.m_base_y;
 			// todo pass spr
@@ -61,7 +61,7 @@ RenderCamera RenderCamera::operator * (const RenderCamera& rc) const
 
 void RenderCamera::CalculateZ(float cam_angle, const float vertices[8], float z[4]) const
 {
-	if (m_mode == CM_ORTHO || m_mode == CM_PERSPECTIVE_NO_HEIGHT) {
+	if (m_mode == pt2::CM_ORTHO || m_mode == pt2::CM_PERSPECTIVE_NO_HEIGHT) {
 		memset(z, 0, sizeof(float) * 4);
 		return;
 	}

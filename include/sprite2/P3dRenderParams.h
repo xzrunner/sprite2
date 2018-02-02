@@ -24,7 +24,7 @@ public:
 #ifdef S2_FILTER_FULL
 	RenderFilter* render_filter = nullptr;
 #else
-	FilterMode    render_filter = FM_NULL;
+	pt2::FilterMode    render_filter = pt2::FM_NULL;
 #endif // S2_FILTER_FULL
 	bool          local = true;
 	sm::rect      view_region;

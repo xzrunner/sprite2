@@ -1,4 +1,4 @@
-//#define S2_EDITOR
+#define S2_EDITOR
 
 #ifdef S2_EDITOR
 #define S2_FILTER_FULL

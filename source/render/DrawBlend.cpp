@@ -26,7 +26,7 @@ DrawBlend::DrawBlend()
 RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, 
 	                               const RenderParams& rp, bool too_large) const
 {
-	BlendMode mode = spr->GetShader().GetBlend();
+	pt2::BlendMode mode = spr->GetShader().GetBlend();
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));

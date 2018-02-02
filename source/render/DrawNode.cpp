@@ -148,12 +148,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 
  	rp_child->mt = mt;
  
-	BlendMode blend = BM_NULL;
+	pt2::BlendMode blend = pt2::BM_NULL;
 	if (!rp.IsDisableBlend()) {
 		blend = rp.render_blend;
 	}
 
-	FilterMode filter = FM_NULL;
+	pt2::FilterMode filter = pt2::FM_NULL;
 #ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rp.render_filter) {
 		filter = rp.render_filter->GetMode();
@@ -162,9 +162,9 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 	filter = rp.render_filter;
 #endif // S2_FILTER_FULL
 
- 	if (blend != BM_NULL) {
+ 	if (blend != pt2::BM_NULL) {
  		;
- 	} else if (filter != FM_NULL) {
+ 	} else if (filter != pt2::FM_NULL) {
  		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
@@ -206,12 +206,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 
 	rp_child->mt = mt;
 
-	BlendMode blend = BM_NULL;
+	pt2::BlendMode blend = pt2::BM_NULL;
 	if (!rp.IsDisableBlend()) {
 		blend = rp.render_blend;
 	}
 
-	FilterMode filter = FM_NULL;
+	pt2::FilterMode filter = pt2::FM_NULL;
 #ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rp.render_filter) {
 		filter = rp.render_filter->GetMode();
@@ -220,9 +220,9 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 	filter = rp.render_filter;
 #endif // S2_FILTER_FULL
 
-	if (blend != BM_NULL) {
+	if (blend != pt2::BM_NULL) {
 		;
-	} else if (filter != FM_NULL) {
+	} else if (filter != pt2::FM_NULL) {
 		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
@@ -540,15 +540,15 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 	ur::RenderContext* rctx = sl::ShaderMgr::Instance()->GetContext();
 	switch (rs.GetFastBlend())
 	{
-	case FBM_NULL:
+	case pt2::FBM_NULL:
 		rctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
-	case FBM_ADD:
+	case pt2::FBM_ADD:
 		rctx->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
 		rctx->SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
-	case FBM_SUBTRACT:
+	case pt2::FBM_SUBTRACT:
 		rctx->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		rctx->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
@@ -556,17 +556,17 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 #else 
 	switch (rs.GetFastBlend())
 	{
-	case FBM_NULL:
+	case pt2::FBM_NULL:
 		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		// BLEND_FUNC_ADD
 		cooking::set_blend(dlist, 2, 6, 0);
 		break;
-	case FBM_ADD:
+	case pt2::FBM_ADD:
 		// BLEND_GL_ONE, BLEND_GL_ONE
 		// BLEND_FUNC_ADD
 		cooking::set_blend(dlist, 2, 2, 0);
 		break;
-	case FBM_SUBTRACT:
+	case pt2::FBM_SUBTRACT:
 		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 		// BLEND_FUNC_SUBTRACT
 		cooking::set_blend(dlist, 2, 6, 1);
@@ -574,12 +574,12 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 	}
 #endif // S2_DISABLE_DEFERRED
 
-	BlendMode blend = BM_NULL;
+	pt2::BlendMode blend = pt2::BM_NULL;
 	if (!rp.IsDisableBlend()) {
 		blend = rs.GetBlend();
 	}
 
-	FilterMode filter = FM_NULL;
+	pt2::FilterMode filter = pt2::FM_NULL;
 #ifdef S2_FILTER_FULL
 	if (!rp.IsDisableFilter() && rs.GetFilter()) {
 		filter = rs.GetFilter()->GetMode();
@@ -595,14 +595,14 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 #endif // S2_DISABLE_DEFERRED
-	if (blend != BM_NULL) 
+	if (blend != pt2::BM_NULL) 
 	{
 		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
 		ret = DrawBlend().Draw(dlist, spr, rp);
 		//		}s
 	} 
-	else if (filter != FM_NULL) 
+	else if (filter != pt2::FM_NULL) 
 	{
 #ifdef S2_FILTER_FULL
 		auto& rf = rs.GetFilter();
@@ -613,12 +613,12 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 
 		rp_child->render_filter = rf.get();
 		rp_child->camera = rc;
-		if (filter == FM_GAUSSIAN_BLUR) 
+		if (filter == pt2::FM_GAUSSIAN_BLUR) 
 		{
 			int itrs = static_cast<RFGaussianBlur*>(rf.get())->GetIterations();
 			ret = DrawGaussianBlur::Draw(dlist, spr, *rp_child, itrs);
 		} 
-		else if (filter == FM_OUTER_GLOW) 
+		else if (filter == pt2::FM_OUTER_GLOW) 
 		{
 			int itrs = static_cast<RFOuterGlow*>(rf.get())->GetIterations();
 			ret = DrawOuterGlow::Draw(dlist, spr, *rp_child, itrs);
@@ -640,7 +640,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 #endif // S2_DISABLE_DEFERRED
 			switch (filter)
 			{
-			case FM_EDGE_DETECTION:
+			case pt2::FM_EDGE_DETECTION:
 				{
 					auto ed = static_cast<RFEdgeDetection*>(rf.get());
 					sl::EdgeDetectProg* prog = static_cast<sl::EdgeDetectProg*>(shader->GetProgram(sl::FM_EDGE_DETECTION));

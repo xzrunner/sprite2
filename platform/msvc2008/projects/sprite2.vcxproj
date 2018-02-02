@@ -261,12 +261,10 @@
     <ClInclude Include="..\..\..\include\sprite2\AudioSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\BezierShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\Blackboard.h" />
-    <ClInclude Include="..\..\..\include\sprite2\BlendMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\CacheMatVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Callback.h" />
     <ClInclude Include="..\..\..\include\sprite2\Camera.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraMgr.h" />
-    <ClInclude Include="..\..\..\include\sprite2\CameraMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\CameraType.h" />
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
@@ -292,9 +290,7 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawRT.h" />
     <ClInclude Include="..\..\..\include\sprite2\DynamicRectIcon.h" />
     <ClInclude Include="..\..\..\include\sprite2\DynamicSectorIcon.h" />
-    <ClInclude Include="..\..\..\include\sprite2\FastBlendMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\FilterFactory.h" />
-    <ClInclude Include="..\..\..\include\sprite2\FilterMode.h" />
     <ClInclude Include="..\..\..\include\sprite2\Icon.h" />
     <ClInclude Include="..\..\..\include\sprite2\IconSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\IconSymbol.h" />

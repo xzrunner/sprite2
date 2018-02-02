@@ -17,7 +17,7 @@
 
 #include <stdint.h>
 
-namespace pt2 { class GeoTransform; class BoundingBox; class RenderShader; }
+namespace pt2 { class GeoTransform; class BoundingBox; class RenderShader; class SRT; }
 
 namespace s2
 {
@@ -29,7 +29,6 @@ class SpriteVisitor2;
 class Actor;
 class SprVisitorParams;
 class SprVisitorParams2;
-class SprSRT;
 class Component;
 
 class Sprite : public std::enable_shared_from_this<Sprite>, public ComponentsMgr<16>
@@ -105,8 +104,8 @@ public:
 	void SetCamera(const pt2::RenderCamera& camera);
 	void SetShader(const pt2::RenderShader& shader);
 
-	void GetLocalSRT(SprSRT& srt) const;
-	void SetLocalSRT(const SprSRT& srt);
+	const pt2::SRT& GetLocalSRT() const;
+	void SetLocalSRT(const pt2::SRT& srt);
 
 	const S2_MAT& GetLocalMat() const;
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE

@@ -77,11 +77,9 @@ void AnimCurr::AssignSameStruct(const AnimCurr& src)
 	{
 		const SprPtr* s = &src.m_slots[0];
 		SprPtr* d = &m_slots[0];
-		SprSRT srt;
 		for (int i = 0, n = m_slots.size(); i < n; ++i, ++s, ++d) 
 		{
-			(*s)->GetLocalSRT(srt);
-			(*d)->SetLocalSRT(srt);
+			(*d)->SetLocalSRT((*s)->GetLocalSRT());
 			(*d)->SetColorCommon((*s)->GetColorCommon());
 			(*d)->SetColorMap((*s)->GetColorMap());
 		}
@@ -346,11 +344,7 @@ void AnimCurr::SetAnimCopy(const std::shared_ptr<AnimCopy>& copy)
 
 void AnimCurr::LoadSprLerpData(Sprite& spr, const AnimCopy::Lerp& lerp, int time)
 {
-	SprSRT srt;
-	for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
-		srt.srt[i] = lerp.srt.srt[i] + lerp.dsrt.srt[i] * time;
-	}
-	srt.UpdateCenter();
+	auto srt = lerp.srt + lerp.dsrt * static_cast<float>(time);
 	spr.SetLocalSRT(srt);
 
 	pt2::Color mul(lerp.col_mul), add(lerp.col_add);
@@ -565,8 +559,7 @@ void AnimCurr::LoadCurrSpritesImpl(const s2::Actor* parent, UpdateParams& up_chi
 			}
 			else
 			{
-				SprSRT srt;
-				m_copy->m_slots[actor.slot]->GetLocalSRT(srt);
+				auto& srt = m_copy->m_slots[actor.slot]->GetLocalSRT();
 				m_slots[actor.slot]->SetLocalSRT(srt);
 			}
 

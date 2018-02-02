@@ -510,21 +510,14 @@ void Sprite::SetShader(const pt2::RenderShader& shader)
 	SetDirty(true);
 }
 
-void Sprite::GetLocalSRT(SprSRT& srt) const
+const pt2::SRT& Sprite::GetLocalSRT() const
 {
-	GetTransformComp().ToSprSrt(srt);
+	return GetTransformComp().GetSrt();
 }
 
-void Sprite::SetLocalSRT(const SprSRT& srt)
+void Sprite::SetLocalSRT(const pt2::SRT& srt)
 {
-	SprSRT this_srt;
-	GetTransformComp().ToSprSrt(this_srt);
-	if (this_srt == srt) {
-		return;
-	}
-
-	auto& ctrans = HasComponent<CompTransform>() ? GetComponent<CompTransform>() : AddComponent<CompTransform>();
-	ctrans.FromSprSrt(srt);
+	const_cast<CompTransform&>(GetTransformComp()).SetSrt(srt);
 
 	// lazy
 	SetBoundingDirty(true);

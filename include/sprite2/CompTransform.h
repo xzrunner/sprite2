@@ -10,8 +10,6 @@
 namespace s2
 {
 
-class SprSRT;
-
 class CompTransform : public Component
 {
 public:
@@ -22,8 +20,8 @@ public:
 	const pt2::GeoTransform& GetTrans() const { return m_transform; }
 	pt2::GeoTransform& GetTrans() { return m_transform; }
 
-	void ToSprSrt(SprSRT& srt) const;
-	void FromSprSrt(const SprSRT& srt);
+	const pt2::SRT& GetSrt() const { return m_transform.GetSRT(); }
+	void SetSrt(const pt2::SRT& srt) { m_transform.SetSRT(srt); }
 
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 	void SetMatrix(const S2_MAT& mat);

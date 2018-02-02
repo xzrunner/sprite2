@@ -1,12 +1,12 @@
 #ifndef _SPRITE2_ANIM_COPY_H_
 #define _SPRITE2_ANIM_COPY_H_
 
-#include "sprite2/SprSRT.h"
 #include "sprite2/AnimLerp.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>
 #include <painting2/Color.h>
+#include <painting2/SRT.h>
 
 #include <stdint.h>
 
@@ -36,7 +36,7 @@ private:
 private:
 	struct Lerp
 	{
-		SprSRT srt, dsrt;
+		pt2::SRT srt, dsrt;
 
 		pt2::Color col_mul, col_add;
 		float dcol_mul[4], dcol_add[4];

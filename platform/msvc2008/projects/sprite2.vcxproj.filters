@@ -904,9 +904,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
       <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprSRT.h">
-      <Filter>sprites\sprite\parts</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
       <Filter>sprites\sprite\utility</Filter>
     </ClInclude>
@@ -1162,9 +1159,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
-      <Filter>sprites\sprite\parts</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\SprSRT.inl">
       <Filter>sprites\sprite\parts</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\ActorGeo.inl">

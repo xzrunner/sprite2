@@ -380,7 +380,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SprDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprSRT.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprVisitorParams.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h" />
@@ -424,7 +423,6 @@
     <None Include="..\..\..\include\sprite2\Sprite.inl" />
     <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\SprActors.inl" />
-    <None Include="..\..\..\include\sprite2\SprSRT.inl" />
     <None Include="..\..\..\include\sprite2\UpdateParams.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

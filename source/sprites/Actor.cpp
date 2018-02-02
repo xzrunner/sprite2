@@ -1,7 +1,6 @@
 #include "sprite2/Actor.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/SprVisitorParams.h"
-#include "sprite2/SprSRT.h"
 
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"

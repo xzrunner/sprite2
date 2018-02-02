@@ -131,13 +131,10 @@ void AnimCopy::LoadLerpData(const AnimSymbol& sym)
 				auto& end   = layers[ilayer]->frames[iframe+1]->sprs[item.next];
 				int dt = layer.frames[iframe + 1].time - layer.frames[iframe].time;
 
-				SprSRT bsrt, esrt;
-				begin->GetLocalSRT(bsrt);
-				end->GetLocalSRT(esrt);
+				auto& bsrt = begin->GetLocalSRT();
+				auto& esrt = end->GetLocalSRT();
 				dst.srt = bsrt;
-				for (int i = 0; i < SprSRT::SRT_MAX; ++i) {
-					dst.dsrt.srt[i] = (esrt.srt[i] - bsrt.srt[i]) / dt;
-				}
+				dst.dsrt = (esrt - bsrt) / static_cast<float>(dt);
 
 				auto& begin_col = begin->GetColorCommon();
 				auto& end_col   = end->GetColorCommon();

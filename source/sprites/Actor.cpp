@@ -98,13 +98,14 @@ void Actor::SetShader(const RenderShader& shader)
 	m_render->SetShader(shader);
 }
 
-void Actor::SetCamera(const RenderCamera& camera)
-{
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-	}
-	m_render->SetCamera(camera);
-}
+// todo zz
+//void Actor::SetCamera(const pt2::RenderCamera& camera)
+//{
+//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
+//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+//	}
+//	m_render->SetCamera(camera);
+//}
 
 #ifndef S2_DISABLE_FLATTEN
 

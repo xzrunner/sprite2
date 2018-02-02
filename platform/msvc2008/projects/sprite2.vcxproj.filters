@@ -13,9 +13,6 @@
     <Filter Include="dataset\render\filter\items">
       <UniqueIdentifier>{f2c7a740-739b-4656-b30d-b1d4703fe637}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dataset\render\camera">
-      <UniqueIdentifier>{fd1d2e71-da42-48e6-b60d-a3c450f76879}</UniqueIdentifier>
-    </Filter>
     <Filter Include="dataset\others">
       <UniqueIdentifier>{963adc33-5a55-4ee7-9619-85dc18ddfa15}</UniqueIdentifier>
     </Filter>
@@ -179,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\dataset\FilterFactory.cpp">
       <Filter>dataset\render\filter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\dataset\RenderCamera.cpp">
-      <Filter>dataset\render\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp">
       <Filter>sprites</Filter>
@@ -632,6 +626,9 @@
     <ClCompile Include="..\..\..\source\sprites\CompColorCommon.cpp">
       <Filter>sprites\sprite\components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp">
+      <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
@@ -684,9 +681,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RFSwirl.h">
       <Filter>dataset\render\filter\items</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderCamera.h">
-      <Filter>dataset\render\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">
       <Filter>dataset\others</Filter>
@@ -1205,6 +1199,9 @@
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompColorCommon.h">
+      <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompCamera.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
   </ItemGroup>

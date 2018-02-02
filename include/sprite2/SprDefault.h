@@ -11,34 +11,36 @@ namespace s2
 class CompTransform;
 class CompColorCommon;
 class CompColorMap;
+class CompCamera;
 
 class SprRender;
 class RenderShader;
-class RenderCamera;
 
 class SprDefault
 {
 public:
 	const CompTransform& Transform() const { return *m_transform; }
 
-	const CompColorCommon&    Color() const    { return *m_color; }
-	const CompColorMap& ColorMap() const { return *m_color_map; }
+	const CompColorCommon& Color() const    { return *m_color_common; }
+	const CompColorMap&    ColorMap() const { return *m_color_map; }
+
+	const CompCamera& Camera() { return *m_camera; }
 
 	auto& Render() { return m_render; }
 
 	auto& Shader() { return m_shader; }
-	auto& Camera() { return m_camera; }
 
 private:
-	std::unique_ptr<CompTransform> m_transform;
+	std::unique_ptr<CompTransform>   m_transform;
 
-	std::unique_ptr<CompColorCommon>     m_color;
-	std::unique_ptr<CompColorMap>  m_color_map;
+	std::unique_ptr<CompColorCommon> m_color_common;
+	std::unique_ptr<CompColorMap>    m_color_map;
+
+	std::unique_ptr<CompCamera>      m_camera;
 
 	SprRender*    m_render;
 	
 	RenderShader* m_shader;
-	RenderCamera* m_camera;
 
 	CU_SINGLETON_DECLARATION(SprDefault)
 

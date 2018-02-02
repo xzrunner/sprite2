@@ -2,7 +2,6 @@
 #include "sprite2/Symbol.h"
 #include "sprite2/FilterFactory.h"
 #include "sprite2/RenderShader.h"
-#include "sprite2/RenderCamera.h"
 #include "sprite2/SpriteVisitor.h"
 #include "sprite2/Actor.h"
 #include "sprite2/SymType.h"
@@ -13,9 +12,11 @@
 #include "sprite2/CompBoundingBox.h"
 #include "sprite2/CompColorCommon.h"
 #include "sprite2/CompColorMap.h"
+#include "sprite2/CompCamera.h"
 
 #include <rigging.h>
 #include <painting2/GeoTransform.h>
+#include <painting2/RenderCamera.h>
 
 #include <assert.h>
 
@@ -64,11 +65,6 @@ Sprite::Sprite(const Sprite& spr)
 		if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
 			m_render->SetShader(*src_shader);
 		}
-
-		auto& src_camera = spr.m_render->GetCamera();
-		if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
-			m_render->SetCamera(*src_camera);
-		}
 	}
 }
 
@@ -95,11 +91,6 @@ Sprite& Sprite::operator = (const Sprite& spr)
 			auto& src_shader = spr.m_render->GetShader();
 			if (src_shader && *src_shader != *SprDefault::Instance()->Shader()) {
 				m_render->SetShader(*src_shader);
-			}
-
-			auto& src_camera = spr.m_render->GetCamera();
-			if (src_camera && *src_camera != *SprDefault::Instance()->Camera()) {
-				m_render->SetCamera(*src_camera);
 			}
 		}
 	}
@@ -509,6 +500,12 @@ const pt2::RenderColorMap& Sprite::GetColorMap() const
 		GetComponent<CompColorMap>().GetColor() : SprDefault::Instance()->ColorMap().GetColor();
 }
 
+const pt2::RenderCamera& Sprite::GetCamera() const 
+{ 
+	return HasComponent<CompCamera>() ?
+		GetComponent<CompCamera>().GetCamera() : SprDefault::Instance()->Camera().GetCamera();
+}
+
 void Sprite::SetColorCommon(const pt2::RenderColorCommon& col)
 {
 	if (GetColorCommon() == col) {
@@ -540,12 +537,13 @@ void Sprite::SetShader(const RenderShader& shader)
 	SetDirty(true);
 }
 
-void Sprite::SetCamera(const RenderCamera& camera)
+void Sprite::SetCamera(const pt2::RenderCamera& camera)
 {
-	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
+	if (GetCamera() == camera) {
+		return;
 	}
-	m_render->SetCamera(camera);
+	auto& ccamera = HasComponent<CompCamera>() ? GetComponent<CompCamera>() : AddComponent<CompCamera>();
+	ccamera.SetCamera(camera);
 	SetDirty(true);
 }
 

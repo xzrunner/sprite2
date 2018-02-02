@@ -17,6 +17,7 @@
 #include "sprite2/DrawDownsample.h"
 #include "sprite2/Utility.h"
 #include "sprite2/DrawIntegrate.h"
+#include "sprite2/CompCamera.h"
 
 #include <memmgr/Allocator.h>
 #include <SM_Calc.h>
@@ -520,16 +521,17 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 // 	}
 
 	RenderShader rs;
-	RenderCamera rc;
+	pt2::RenderCamera rc;
 	if (rp.IsDisableRenderDraw()) {
 		rs = *SprDefault::Instance()->Shader();
-		rc = *SprDefault::Instance()->Camera();
+		rc = SprDefault::Instance()->Camera().GetCamera();
 	} else if (spr->HaveActor()) {
 		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);
 		rc = spr->GetCamera() * rp.camera;
 		if (rp.actor) {
 			rs = rp.actor->GetShader() * rs;
-			rc = rp.actor->GetCamera() * rc;
+			// todo zz
+//			rc = rp.actor->GetCamera() * rc;
 		}
 	} else {
 		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);

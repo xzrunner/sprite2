@@ -3,7 +3,6 @@
 
 #include "sprite2/config.h"
 #include "sprite2/RenderShader.h"
-#include "sprite2/RenderCamera.h"
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
 #include "sprite2/ObjectPool.h"
@@ -13,6 +12,7 @@
 #include <cu/cu_macro.h>
 #include <painting2/RenderColorCommon.h>
 #include <painting2/RenderColorMap.h>
+#include <painting2/RenderCamera.h>
 
 #include <memory>
 
@@ -42,7 +42,7 @@ public:
 	pt2::FastBlendMode render_fast_blend = pt2::FBM_NULL;
 	float         render_downsample = 1;
 
-	RenderCamera camera;
+	pt2::RenderCamera camera;
 	
 	const Actor* actor;
 

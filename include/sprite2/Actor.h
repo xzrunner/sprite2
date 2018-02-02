@@ -28,7 +28,6 @@ namespace s2
 class Sprite;
 class ActorGeo;
 class RenderShader;
-class RenderCamera;
 class SprRender;
 class RenderParams;
 
@@ -60,12 +59,14 @@ public:
 	const ActorAABB& GetAABB() const { return m_aabb; }
 
 	const RenderShader& GetShader() const { return *m_render->GetShader(); }
-	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
+	// todo zz
+//	const pt2::RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
 
 	// todo zz
 //	void SetColor(const RenderColor& color);
 	void SetShader(const RenderShader& shader);
-	void SetCamera(const RenderCamera& camera);
+	// todo zz
+//	void SetCamera(const pt2::RenderCamera& camera);
 	
 #ifndef S2_DISABLE_FLATTEN
 	virtual void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);

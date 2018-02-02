@@ -92,7 +92,7 @@ public:
 
 	const sm::vec2& GetCenter() const;
 	const sm::vec2& GetPosition() const;
-	float	 GetAngle() const;
+	float	        GetAngle() const;
 	const sm::vec2& GetScale() const;
 	const sm::vec2& GetShear() const;
 	const sm::vec2& GetOffset() const;
@@ -101,13 +101,13 @@ public:
 	const pt2::RenderColorMap&    GetColorMap() const;
 
 	const RenderShader& GetShader() const { return *m_render->GetShader(); }
-	const RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
+	const pt2::RenderCamera& GetCamera() const;
 
 	void SetColorCommon(const pt2::RenderColorCommon& col);
 	void SetColorMap(const pt2::RenderColorMap& col);
 
 	void SetShader(const RenderShader& shader);
-	void SetCamera(const RenderCamera& camera);
+	void SetCamera(const pt2::RenderCamera& camera);
 
 	void GetLocalSRT(SprSRT& srt) const;
 	void SetLocalSRT(const SprSRT& srt);

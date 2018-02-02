@@ -1,5 +1,4 @@
-#ifndef _SPRITE2_ACTOR_GEO_H_
-#define _SPRITE2_ACTOR_GEO_H_
+#pragma once
 
 #include "sprite2/pre_defined.h"
 
@@ -9,7 +8,7 @@
 namespace s2
 {
 
-class ActorGeo
+class ActorGeoTrans
 {
 public:
 	void Reset();
@@ -45,10 +44,8 @@ private:
 	SRT    m_srt;
 	S2_MAT m_mat;
 
-}; // ActorGeo
+}; // ActorGeoTrans
 
 }
 
-#include "sprite2/ActorGeo.inl"
-
-#endif // _SPRITE2_ACTOR_GEO_H_
+#include "sprite2/ActorGeoTrans.inl"

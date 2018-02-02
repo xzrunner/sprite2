@@ -237,7 +237,7 @@
     <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h" />
-    <ClInclude Include="..\..\..\include\sprite2\ActorGeo.h" />
+    <ClInclude Include="..\..\..\include\sprite2\ActorGeoTrans.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnchorActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\AnchorSprite.h" />
@@ -414,7 +414,7 @@
     <ClInclude Include="..\..\..\include\sprite2\VisitResult.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
+    <None Include="..\..\..\include\sprite2\ActorGeoTrans.inl" />
     <None Include="..\..\..\include\sprite2\ComponentsMgr.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />

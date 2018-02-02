@@ -4,7 +4,7 @@
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
 #include "sprite2/ActorAABB.h"
-#include "sprite2/ActorGeo.h"
+#include "sprite2/ActorGeoTrans.h"
 #include "sprite2/ActorDefault.h"
 #include "sprite2/SprDefault.h"
 
@@ -25,7 +25,7 @@ namespace s2
 {
 
 class Sprite;
-class ActorGeo;
+class ActorGeoTrans;
 class RenderShader;
 class SprRender;
 class RenderParams;
@@ -145,12 +145,12 @@ private:
 
 	Parent m_parent;
 
-	static void geo_deleter(ActorGeo* geo) {
+	static void geo_deleter(ActorGeoTrans* geo) {
 		if (geo != ActorDefault::Instance()->Geo()) {
 			mm::AllocHelper::Delete(geo);
 		}
 	};
-	std::unique_ptr<ActorGeo, decltype(&geo_deleter)>  m_geo;
+	std::unique_ptr<ActorGeoTrans, decltype(&geo_deleter)>  m_geo;
 
 	mutable ActorAABB m_aabb;
 

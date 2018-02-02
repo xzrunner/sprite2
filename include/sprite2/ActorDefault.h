@@ -6,7 +6,7 @@
 namespace s2
 {
 
-class ActorGeo;
+class ActorGeoTrans;
 
 class ActorDefault
 {
@@ -14,7 +14,7 @@ public:
 	auto& Geo() { return m_geo; }
 
 private:
-	ActorGeo* m_geo;
+	ActorGeoTrans* m_geo;
 
 	CU_SINGLETON_DECLARATION(ActorDefault)
 

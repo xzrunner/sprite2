@@ -109,9 +109,6 @@
     <Filter Include="sprites\actor">
       <UniqueIdentifier>{bf261f14-ee03-4a45-b5b1-f381291af125}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sprites\actor\aabb">
-      <UniqueIdentifier>{24b20695-7e7b-4ab9-a450-a645f421b43e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites\99.proxy">
       <UniqueIdentifier>{fcd4b6e5-98df-4a77-8c25-81169099ee79}</UniqueIdentifier>
     </Filter>
@@ -162,6 +159,15 @@
     </Filter>
     <Filter Include="sprites\components\common">
       <UniqueIdentifier>{a4215f7a-4cfd-4493-8c49-39b403a241b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\actor\parts">
+      <UniqueIdentifier>{6be27f61-6a15-4630-9b3d-08163c05b412}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\actor\utility">
+      <UniqueIdentifier>{eb618e02-af20-498c-ba74-21524816ffc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sprites\actor\parts\aabb">
+      <UniqueIdentifier>{24b20695-7e7b-4ab9-a450-a645f421b43e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -432,17 +438,11 @@
     <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp">
       <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp">
-      <Filter>sprites\actor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp">
-      <Filter>sprites\actor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp">
-      <Filter>sprites\actor\aabb</Filter>
+      <Filter>sprites\actor\parts\aabb</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp">
-      <Filter>sprites\actor\aabb</Filter>
+      <Filter>sprites\actor\parts\aabb</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\ProxyActor.cpp">
       <Filter>sprites\99.proxy</Filter>
@@ -565,9 +565,6 @@
     <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp">
       <Filter>render\draw</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
-      <Filter>sprites\actor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\render\RVG.cpp">
       <Filter>render\adapter</Filter>
     </ClCompile>
@@ -619,6 +616,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CompActorAABB.cpp">
       <Filter>sprites\components\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp">
+      <Filter>sprites\actor\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp">
+      <Filter>sprites\actor\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
+      <Filter>sprites\actor\utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -916,20 +922,11 @@
     <ClInclude Include="..\..\..\include\sprite2\SymType.h">
       <Filter>sprites\symbol</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h">
-      <Filter>sprites\actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h">
-      <Filter>sprites\actor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorGeo.h">
-      <Filter>sprites\actor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h">
-      <Filter>sprites\actor\aabb</Filter>
+      <Filter>sprites\actor\parts\aabb</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h">
-      <Filter>sprites\actor\aabb</Filter>
+      <Filter>sprites\actor\parts\aabb</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ProxyActor.h">
       <Filter>sprites\99.proxy</Filter>
@@ -1070,9 +1067,6 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h">
       <Filter>render\draw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h">
-      <Filter>sprites\actor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h">
       <Filter>utility</Filter>
     </ClInclude>
@@ -1156,13 +1150,22 @@
     <ClInclude Include="..\..\..\include\sprite2\ComponentsMgr.h">
       <Filter>sprites\components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h">
+      <Filter>sprites\actor\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h">
+      <Filter>sprites\actor\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h">
+      <Filter>sprites\actor\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\ActorGeoTrans.h">
+      <Filter>sprites\actor\parts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
       <Filter>sprites\sprite\parts</Filter>
-    </None>
-    <None Include="..\..\..\include\sprite2\ActorGeo.inl">
-      <Filter>sprites\actor</Filter>
     </None>
     <None Include="..\..\..\include\sprite2\ObjectPool.inl">
       <Filter>utility</Filter>
@@ -1185,6 +1188,9 @@
     </None>
     <None Include="..\..\..\include\sprite2\ComponentsMgr.inl">
       <Filter>sprites\components</Filter>
+    </None>
+    <None Include="..\..\..\include\sprite2\ActorGeoTrans.inl">
+      <Filter>sprites\actor\parts</Filter>
     </None>
   </ItemGroup>
 </Project>

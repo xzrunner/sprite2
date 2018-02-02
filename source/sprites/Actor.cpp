@@ -41,7 +41,7 @@ void Actor::SetPosition(const sm::vec2& pos)
 	}
 
 	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
+		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
 	}
 	m_geo->SetPosition(pos);
 
@@ -56,7 +56,7 @@ void Actor::SetAngle(float angle)
 	}
 
 	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
+		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
 	}
 	m_geo->SetAngle(angle);
 
@@ -71,7 +71,7 @@ void Actor::SetScale(const sm::vec2& scale)
 	}
 
 	if (m_geo.get() == ActorDefault::Instance()->Geo()) {
-		m_geo.reset(static_cast<ActorGeo*>(mm::AllocHelper::New<ActorGeo>()));
+		m_geo.reset(static_cast<ActorGeoTrans*>(mm::AllocHelper::New<ActorGeoTrans>()));
 	}
 	m_geo->SetScale(scale);
 

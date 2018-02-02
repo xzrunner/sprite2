@@ -432,9 +432,6 @@
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp">
       <Filter>sprites\sprite\parts</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp">
-      <Filter>sprites\sprite\utility</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp">
       <Filter>sprites\sprite\utility</Filter>
     </ClCompile>
@@ -608,9 +605,6 @@
     <ClCompile Include="..\..\..\source\sprites\CompBoundingBox.cpp">
       <Filter>sprites\components\sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp">
-      <Filter>sprites\components\sprite</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CompTransform.cpp">
       <Filter>sprites\components\sprite</Filter>
     </ClCompile>
@@ -620,14 +614,17 @@
     <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp">
       <Filter>sprites\actor\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp">
-      <Filter>sprites\actor\utility</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp">
       <Filter>sprites\actor\utility</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CompActorTrans.cpp">
       <Filter>sprites\components\actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp">
+      <Filter>sprites\components\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompDefault.cpp">
+      <Filter>sprites\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -913,9 +910,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h">
       <Filter>sprites\sprite\parts</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\SprDefault.h">
-      <Filter>sprites\sprite\utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h">
       <Filter>sprites\sprite\utility</Filter>
     </ClInclude>
@@ -1138,9 +1132,6 @@
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h">
       <Filter>sprites\components\sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\CompCamera.h">
-      <Filter>sprites\components\sprite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompTransform.h">
       <Filter>sprites\components\sprite</Filter>
     </ClInclude>
@@ -1156,9 +1147,6 @@
     <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h">
       <Filter>sprites\actor\utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h">
-      <Filter>sprites\actor\utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h">
       <Filter>sprites\actor\utility</Filter>
     </ClInclude>
@@ -1167,6 +1155,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompActorTrans.h">
       <Filter>sprites\components\actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompCamera.h">
+      <Filter>sprites\components\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompDefault.h">
+      <Filter>sprites\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

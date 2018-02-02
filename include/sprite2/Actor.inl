@@ -3,6 +3,8 @@
 
 #include "sprite2/RenderParams.h"
 #include "sprite2/CompActorAABB.h"
+#include "sprite2/ActorGeoTrans.h"
+#include "sprite2/CompActorTrans.h"
 
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>

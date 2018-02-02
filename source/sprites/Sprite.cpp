@@ -447,25 +447,25 @@ const sm::vec2& Sprite::GetOffset() const
 const pt2::RenderColorCommon& Sprite::GetColorCommon() const
 {
 	return HasComponent<CompColorCommon>() ?
-		GetComponent<CompColorCommon>().GetColor() : SprDefault::Instance()->Color().GetColor();
+		GetComponent<CompColorCommon>().GetColor() : CompDefault::Instance()->Color().GetColor();
 }
 
 const pt2::RenderColorMap& Sprite::GetColorMap() const
 {
 	return HasComponent<CompColorMap>() ?
-		GetComponent<CompColorMap>().GetColor() : SprDefault::Instance()->ColorMap().GetColor();
+		GetComponent<CompColorMap>().GetColor() : CompDefault::Instance()->ColorMap().GetColor();
 }
 
 const pt2::RenderCamera& Sprite::GetCamera() const 
 { 
 	return HasComponent<CompCamera>() ?
-		GetComponent<CompCamera>().GetCamera() : SprDefault::Instance()->Camera().GetCamera();
+		GetComponent<CompCamera>().GetCamera() : CompDefault::Instance()->Camera().GetCamera();
 }
 
 const pt2::RenderShader& Sprite::GetShader() const
 {
 	return HasComponent<CompShader>() ?
-		GetComponent<CompShader>().GetShader() : SprDefault::Instance()->Shader().GetShader();
+		GetComponent<CompShader>().GetShader() : CompDefault::Instance()->Shader().GetShader();
 }
 
 void Sprite::SetColorCommon(const pt2::RenderColorCommon& col)
@@ -527,7 +527,7 @@ void Sprite::SetLocalSRT(const pt2::SRT& srt)
 
 //S2_MAT Sprite::GetLocalMat() const
 //{
-//	if (m_geo == SprDefault::Instance()->Geo()) {
+//	if (m_geo == CompDefault::Instance()->Geo()) {
 //		return S2_MAT();
 //	}
 //
@@ -568,7 +568,7 @@ void Sprite::SetLocalSRT(const pt2::SRT& srt)
 //
 //S2_MAT Sprite::GetLocalInvMat() const
 //{
-//	if (m_geo == SprDefault::Instance()->Geo()) {
+//	if (m_geo == CompDefault::Instance()->Geo()) {
 //		return S2_MAT();
 //	} 
 //
@@ -595,7 +595,7 @@ const S2_MAT& Sprite::GetLocalMat() const
 #ifdef S2_SPR_CACHE_LOCAL_MAT_SHARE
 void Sprite::CacheLocalMat()
 {
-	if (m_geo == SprDefault::Instance()->Geo()) {
+	if (m_geo == CompDefault::Instance()->Geo()) {
 		return;
 	}
 	if (IsGeoMatrix()) {
@@ -655,7 +655,7 @@ void Sprite::InitFlags()
 const CompTransform& Sprite::GetTransformComp() const
 {
 	return HasComponent<CompTransform>() ?
-		GetComponent<CompTransform>() : SprDefault::Instance()->Transform();
+		GetComponent<CompTransform>() : CompDefault::Instance()->Transform();
 }
 
 const pt2::GeoTransform& Sprite::GetTransform() const

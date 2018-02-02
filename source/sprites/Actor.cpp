@@ -1,6 +1,12 @@
 #include "sprite2/Actor.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/SprVisitorParams.h"
+#include "sprite2/CompActorTrans.h"
+#include "sprite2/CompDefault.h"
+#include "sprite2/CompColorCommon.h"
+#include "sprite2/CompColorMap.h"
+#include "sprite2/CompCamera.h"
+#include "sprite2/CompShader.h"
 
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
@@ -18,8 +24,6 @@ static int ALL_ACTOR_COUNT = 0;
 Actor::Actor(const SprConstPtr& spr, const ActorConstPtr& parent)
 	: m_spr(spr)
 	, m_parent(parent)
-	// todo zz
-//	, m_render(SprDefault::Instance()->Render(), render_deleter)
 {
 	++ALL_ACTOR_COUNT;
 
@@ -76,34 +80,69 @@ void Actor::SetScale(const sm::vec2& scale)
 	aabb.Update(this);
 }
 
-// todo zz
-//void Actor::SetColor(const RenderColor& color)
-//{
-//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-//	}
-//	m_render->SetColor(color);
-//
-//	SetColorDirty(true);
-//}
+const pt2::RenderColorCommon& Actor::GetColorCommon() const
+{
+	return HasComponent<CompColorCommon>() ?
+		GetComponent<CompColorCommon>().GetColor() : CompDefault::Instance()->Color().GetColor();
+}
 
-// todo zz
-//void Actor::SetShader(const RenderShader& shader)
-//{
-//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-//	}
-//	m_render->SetShader(shader);
-//}
+const pt2::RenderColorMap& Actor::GetColorMap() const
+{
+	return HasComponent<CompColorMap>() ?
+		GetComponent<CompColorMap>().GetColor() : CompDefault::Instance()->ColorMap().GetColor();
+}
 
-// todo zz
-//void Actor::SetCamera(const pt2::RenderCamera& camera)
-//{
-//	if (m_render.get() == SprDefault::Instance()->Render() || !m_render) {
-//		m_render.reset(static_cast<SprRender*>(mm::AllocHelper::New<SprRender>()));
-//	}
-//	m_render->SetCamera(camera);
-//}
+const pt2::RenderCamera& Actor::GetCamera() const
+{
+	return HasComponent<CompCamera>() ?
+		GetComponent<CompCamera>().GetCamera() : CompDefault::Instance()->Camera().GetCamera();
+}
+
+const pt2::RenderShader& Actor::GetShader() const
+{
+	return HasComponent<CompShader>() ?
+		GetComponent<CompShader>().GetShader() : CompDefault::Instance()->Shader().GetShader();
+}
+
+void Actor::SetColorCommon(const pt2::RenderColorCommon& col)
+{
+	if (GetColorCommon() == col) {
+		return;
+	}
+
+	auto& ccol = HasComponent<CompColorCommon>() ? GetComponent<CompColorCommon>() : AddComponent<CompColorCommon>();
+	ccol.SetColor(col);
+	SetColorDirty(true);
+}
+
+void Actor::SetColorMap(const pt2::RenderColorMap& col)
+{
+	if (GetColorMap() == col) {
+		return;
+	}
+
+	auto& ccol = HasComponent<CompColorMap>() ? GetComponent<CompColorMap>() : AddComponent<CompColorMap>();
+	ccol.SetColor(col);
+	SetColorDirty(true);
+}
+
+void Actor::SetCamera(const pt2::RenderCamera& camera)
+{
+	if (GetCamera() == camera) {
+		return;
+	}
+	auto& ccamera = HasComponent<CompCamera>() ? GetComponent<CompCamera>() : AddComponent<CompCamera>();
+	ccamera.SetCamera(camera);
+}
+
+void Actor::SetShader(const pt2::RenderShader& shader)
+{
+	if (GetShader() == shader) {
+		return;
+	}
+	auto& cshader = HasComponent<CompShader>() ? GetComponent<CompShader>() : AddComponent<CompShader>();
+	cshader.SetShader(shader);
+}
 
 #ifndef S2_DISABLE_FLATTEN
 
@@ -193,15 +232,11 @@ int Actor::GetAllActorCount()
 	return ALL_ACTOR_COUNT;
 }
 
-const CompActorTrans& Actor::GetTransformComp() const
-{
-	return HasComponent<CompActorTrans>() ?
-		GetComponent<CompActorTrans>() : ActorDefault::Instance()->Transform();
-}
-
 const ActorGeoTrans& Actor::GetTransform() const
 {
-	return GetTransformComp().GetTrans();
+	auto& ctrans = HasComponent<CompActorTrans>() ?
+		GetComponent<CompActorTrans>() : CompDefault::Instance()->ActorTrans();
+	return ctrans.GetTrans();
 }
 
 }

@@ -1115,8 +1115,7 @@ bool ProxyHelper::ActorGetColMul(const Actor* actor, uint32_t& mul)
 	} 
 	else
 	{
-		// todo zz
-		//mul = actor->GetColor().GetMulABGR();
+		mul = actor->GetColorCommon().mul.ToABGR();
 		return true;
 	}
 }
@@ -1135,13 +1134,12 @@ void ProxyHelper::ActorSetColMul(Actor* actor, uint32_t mul)
 	} 
 	else
 	{
-		// todo zz
-		//if (actor->GetColor().GetMulABGR() != mul) 
-		//{
-		//	RenderColor rc = actor->GetColor();
-		//	rc.SetMulABGR(mul);
-		//	actor->SetColor(rc);
-		//}
+		if (actor->GetColorCommon().mul.ToABGR() != mul) 
+		{
+			auto col = actor->GetColorCommon();
+			col.mul.FromABGR(mul);
+			actor->SetColorCommon(col);
+		}
 	}
 }
 
@@ -1171,8 +1169,7 @@ bool ProxyHelper::ActorGetColAdd(const Actor* actor, uint32_t& add)
 	} 
 	else
 	{
-		// todo zz
-		//add = actor->GetColor().GetAddABGR();
+		add = actor->GetColorCommon().add.ToABGR();
 		return true;
 	}
 }
@@ -1191,13 +1188,12 @@ void ProxyHelper::ActorSetColAdd(Actor* actor, uint32_t add)
 	} 
 	else
 	{
-		// todo zz
-		//if (actor->GetColor().GetAddABGR() != add) 
-		//{
-		//	RenderColor rc = actor->GetColor();
-		//	rc.SetAddABGR(add);
-		//	actor->SetColor(rc);
-		//}
+		if (actor->GetColorCommon().add.ToABGR() != add) 
+		{
+			auto col = actor->GetColorCommon();
+			col.add.FromABGR(add);
+			actor->SetColorCommon(col);
+		}
 	}
 }
 
@@ -1230,10 +1226,10 @@ bool ProxyHelper::ActorGetColMap(const Actor* actor, uint32_t& rmap, uint32_t& g
 	}
 	else
 	{
-		// todo zz
-		//rmap = actor->GetColor().GetRMapABGR();
-		//gmap = actor->GetColor().GetGMapABGR();
-		//bmap = actor->GetColor().GetBMapABGR();
+		auto& col = actor->GetColorMap();
+		rmap = col.rmap.ToABGR();
+		gmap = col.gmap.ToABGR();
+		bmap = col.bmap.ToABGR();
 		return true;
 	}
 }
@@ -1252,17 +1248,17 @@ void ProxyHelper::ActorSetColMap(Actor* actor, uint32_t rmap, uint32_t gmap, uin
 	} 
 	else
 	{
-		// todo zz
-		//if (actor->GetColor().GetRMapABGR() != rmap ||
-		//	actor->GetColor().GetGMapABGR() != gmap ||
-		//	actor->GetColor().GetBMapABGR() != bmap) 
-		//{
-		//	RenderColor rc = actor->GetColor();
-		//	rc.SetRMapABGR(rmap);
-		//	rc.SetGMapABGR(gmap);
-		//	rc.SetBMapABGR(bmap);
-		//	actor->SetColor(rc);
-		//}
+		auto& col = actor->GetColorMap();
+		if (col.rmap.ToABGR() != rmap ||
+			col.gmap.ToABGR() != gmap ||
+			col.bmap.ToABGR() != bmap)
+		{
+			auto col = actor->GetColorMap();
+			col.rmap.FromABGR(rmap);
+			col.gmap.FromABGR(gmap);
+			col.bmap.FromABGR(bmap);
+			actor->SetColorMap(col);
+		}
 	}
 }
 
@@ -1280,23 +1276,21 @@ void ProxyHelper::ActorSetFilter(Actor* actor, int mode)
 	} 
 	else
 	{
-		// todo zz
-//		auto& filter = actor->GetShader().GetFilter();
-//		pt2::FilterMode ori = pt2::FM_NULL;
-//#ifdef S2_FILTER_FULL
-//		if (filter) {
-//			ori = filter->GetMode();
-//		}
-//#else
-//		ori = filter;
-//#endif // S2_FILTER_FULL
-//		if (ori == mode) {
-//			return;
-//		}
-//
-//		RenderShader shader = actor->GetShader();
-//		shader.SetFilter(pt2::FilterMode(mode));
-//		actor->SetShader(shader);
+		auto& filter = actor->GetShader().GetFilter();
+		pt2::FilterMode ori = pt2::FM_NULL;
+#ifdef S2_FILTER_FULL
+		if (filter) {
+			ori = filter->GetMode();
+		}
+#else
+		ori = filter;
+#endif // S2_FILTER_FULL
+		if (ori == mode) {
+			return;
+		}
+
+		const_cast<pt2::RenderShader&>(actor->GetShader()).
+			SetFilter(pt2::FilterMode(mode));
 	}
 }
 

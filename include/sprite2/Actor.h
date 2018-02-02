@@ -3,8 +3,7 @@
 
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
-#include "sprite2/ActorDefault.h"
-#include "sprite2/SprDefault.h"
+#include "sprite2/CompDefault.h"
 #include "sprite2/ComponentsMgr.h"
 
 #include <cu/uncopyable.h>
@@ -19,6 +18,7 @@
 
 namespace ft { class FTList; }
 namespace cooking { class DisplayList; }
+namespace pt2 { class RenderColorCommon; class RenderColorMap; class RenderCamera; class RenderShader; }
 
 namespace s2
 {
@@ -28,6 +28,7 @@ class RenderShader;
 class SprRender;
 class RenderParams;
 class ActorAABB;
+class ActorGeoTrans;
 
 class Actor : private cu::Uncopyable, public std::enable_shared_from_this<Actor>, public ComponentsMgr<8>
 {
@@ -57,16 +58,15 @@ public:
 	ActorAABB& GetAABB();
 	const ActorAABB& GetAABB() const;
 
-	// todo zz
-//	const RenderShader& GetShader() const { return *m_render->GetShader(); }
-	// todo zz
-//	const pt2::RenderCamera& GetCamera() const { return *m_render->GetCamera(); }
+	const pt2::RenderColorCommon& GetColorCommon() const;
+	const pt2::RenderColorMap&    GetColorMap() const;
+	const pt2::RenderCamera&      GetCamera() const;
+	const pt2::RenderShader&      GetShader() const;
 
-	// todo zz
-//	void SetColor(const RenderColor& color);
-	void SetShader(const RenderShader& shader);
-	// todo zz
-//	void SetCamera(const pt2::RenderCamera& camera);
+	void SetColorCommon(const pt2::RenderColorCommon& col);
+	void SetColorMap(const pt2::RenderColorMap& col);
+	void SetCamera(const pt2::RenderCamera& camera);
+	void SetShader(const pt2::RenderShader& shader);
 	
 #ifndef S2_DISABLE_FLATTEN
 	virtual void SetFlatten(const std::shared_ptr<ft::FTList>& ft, int pos);
@@ -106,7 +106,6 @@ public:
 	CU_FLAG_METHOD(ColorDirty, FLAG_COLOR_DIRTY)
 	
 private:	
-	const CompActorTrans& GetTransformComp() const;
 	const ActorGeoTrans& GetTransform() const;
 
 private:
@@ -148,14 +147,6 @@ private:
 	Spr m_spr;
 
 	Parent m_parent;
-
-	// todo zz
-	//static void render_deleter(SprRender* render) {
-	//	if (render != SprDefault::Instance()->Render()) {
-	//		mm::AllocHelper::Delete(render);
-	//	}
-	//};
-	//std::unique_ptr<SprRender, decltype(&render_deleter)> m_render;
 
 	mutable uint32_t m_flags;
 

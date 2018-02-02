@@ -101,7 +101,6 @@
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\ActorDefault.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorFactory.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorProxy.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AnchorActor.cpp" />
@@ -201,7 +200,7 @@
     <ClCompile Include="..\..\..\source\sprites\SkeletonSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SkeletonSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprActors.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\SprDefault.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompDefault.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SpriteVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprNameMap.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp" />
@@ -236,7 +235,6 @@
     <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
     <ClInclude Include="..\..\..\include\sprite2\AABBHelper.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorAABB.h" />
-    <ClInclude Include="..\..\..\include\sprite2\ActorDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorFactory.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorGeoTrans.h" />
     <ClInclude Include="..\..\..\include\sprite2\ActorProxy.h" />
@@ -379,7 +377,7 @@
     <ClInclude Include="..\..\..\include\sprite2\SkeletonSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\SkeletonSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprActors.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprDefault.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompDefault.h" />
     <ClInclude Include="..\..\..\include\sprite2\SpriteVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprNameMap.h" />
     <ClInclude Include="..\..\..\include\sprite2\SprTimer.h" />

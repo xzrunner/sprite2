@@ -5,7 +5,7 @@
 #include "sprite2/DrawBlend.h"
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/DrawOuterGlow.h"
-#include "sprite2/SprDefault.h"
+#include "sprite2/CompDefault.h"
 #include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderTargetMgr.h"
 #include "sprite2/RenderScissor.h"
@@ -524,15 +524,14 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 	pt2::RenderShader rs;
 	pt2::RenderCamera rc;
 	if (rp.IsDisableRenderDraw()) {
-		rs = SprDefault::Instance()->Shader().GetShader();
-		rc = SprDefault::Instance()->Camera().GetCamera();
+		rs = CompDefault::Instance()->Shader().GetShader();
+		rc = CompDefault::Instance()->Camera().GetCamera();
 	} else if (spr->HaveActor()) {
 		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);
 		rc = spr->GetCamera() * rp.camera;
 		if (rp.actor) {
-			// todo zz
-//			rs = rp.actor->GetShader() * rs;
-//			rc = rp.actor->GetCamera() * rc;
+			rs = rp.actor->GetShader() * rs;
+			rc = rp.actor->GetCamera() * rc;
 		}
 	} else {
 		rs = spr->GetShader().Multiply(rp.render_filter, rp.render_blend, rp.render_fast_blend, rp.render_downsample);

@@ -70,11 +70,10 @@ void UpdateParams::Push(const Sprite* spr)
 		m_prev_filter = filter->GetMode();
 	}
 	if (m_actor) {
-		// todo zz
-		//auto& filter = m_actor->GetShader().GetFilter();
-		//if (filter && filter->GetMode() != pt2::FM_NULL) {
-		//	m_prev_filter = filter->GetMode();
-		//}
+		auto& filter = m_actor->GetShader().GetFilter();
+		if (filter && filter->GetMode() != pt2::FM_NULL) {
+			m_prev_filter = filter->GetMode();
+		}
 	}
 #else
 	if (filter != pt2::FM_NULL) {

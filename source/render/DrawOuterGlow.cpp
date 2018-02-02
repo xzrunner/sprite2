@@ -3,7 +3,7 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/SprDefault.h"
+#include "sprite2/CompDefault.h"
 #include "sprite2/RenderTargetMgr.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatPingPong.h"

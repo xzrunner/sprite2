@@ -6,7 +6,7 @@
 #include "sprite2/macro.h"
 #include "sprite2/typedef.h"
 #include "sprite2/VisitResult.h"
-#include "sprite2/SprDefault.h"
+#include "sprite2/CompDefault.h"
 #include "sprite2/CompActors.h"
 #include "sprite2/ComponentsMgr.h"
 
@@ -94,13 +94,11 @@ public:
 
 	const pt2::RenderColorCommon& GetColorCommon() const;
 	const pt2::RenderColorMap&    GetColorMap() const;
-
-	const pt2::RenderCamera& GetCamera() const;
-	const pt2::RenderShader& GetShader() const;
+	const pt2::RenderCamera&      GetCamera() const;
+	const pt2::RenderShader&      GetShader() const;
 
 	void SetColorCommon(const pt2::RenderColorCommon& col);
 	void SetColorMap(const pt2::RenderColorMap& col);
-
 	void SetCamera(const pt2::RenderCamera& camera);
 	void SetShader(const pt2::RenderShader& shader);
 

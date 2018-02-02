@@ -42,9 +42,8 @@ public:
 				pt2::RenderColorMap    tmp_map;
 				pt2::RenderColorCommon::Mul(spr->GetColorCommon(), p_col_common, tmp_common);
 				pt2::RenderColorMap::Mul(spr->GetColorMap(), p_col_map, tmp_map);
-				// todo zz
-				//pt2::RenderColorCommon::Mul(actor->GetColorCommon(), tmp_common, dst_col_common);
-				//pt2::RenderColorMap::Mul(actor->GetColorMap(), tmp_map, dst_col_map);
+				pt2::RenderColorCommon::Mul(actor->GetColorCommon(), tmp_common, dst_col_common);
+				pt2::RenderColorMap::Mul(actor->GetColorMap(), tmp_map, dst_col_map);
 			} 
 			else 
 			{

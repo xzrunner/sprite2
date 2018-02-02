@@ -127,6 +127,7 @@
     <ClCompile Include="..\..\..\source\sprites\CacheMatVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CircleShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ColorPolygon.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\CompActorAABB.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompActors.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompBoundingBox.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CompCamera.cpp" />
@@ -266,6 +267,7 @@
     <ClInclude Include="..\..\..\include\sprite2\CameraType.h" />
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
+    <ClInclude Include="..\..\..\include\sprite2\CompActorAABB.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompActors.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompBoundingBox.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompCamera.h" />
@@ -354,7 +356,7 @@
     <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprComponent.h" />
+    <ClInclude Include="..\..\..\include\sprite2\Component.h" />
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h" />
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />

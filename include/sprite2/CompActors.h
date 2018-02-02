@@ -1,12 +1,12 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 #include "sprite2/SprActors.h"
 
 namespace s2
 {
 
-class CompActors : public SprComponent
+class CompActors : public Component
 {
 public:
 	virtual ~CompActors();

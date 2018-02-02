@@ -665,7 +665,7 @@ void Sprite::CopyComponentsFrom(const Sprite& spr)
 	m_components.clear();
 	m_components.reserve(spr.m_components.size());
 	for (auto& comp : spr.m_components) {
-		m_components.push_back(std::unique_ptr<SprComponent>(comp->Clone()));
+		m_components.push_back(std::unique_ptr<Component>(comp->Clone()));
 	}
 	m_component_bitset = spr.m_component_bitset;
 	m_component_array = spr.m_component_array;

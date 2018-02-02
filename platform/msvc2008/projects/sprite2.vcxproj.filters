@@ -148,11 +148,14 @@
     <Filter Include="render\camera">
       <UniqueIdentifier>{d094579b-efe0-40d1-a2d8-d61a0d799a78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sprites\sprite\parts">
+      <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
+    </Filter>
     <Filter Include="sprites\sprite\components">
       <UniqueIdentifier>{f15caa29-2fbe-48b3-97ad-432bedec826c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="sprites\sprite\parts">
-      <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
+    <Filter Include="sprites\actor\components">
+      <UniqueIdentifier>{60a827fa-a7f6-4ba3-8a0e-49ec60212d3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -607,6 +610,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CompActors.cpp">
       <Filter>sprites\sprite\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\CompActorAABB.cpp">
+      <Filter>sprites\actor\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1108,9 +1114,6 @@
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
-    <ClInclude Include="..\..\..\include\sprite2\SprComponent.h">
-      <Filter>sprites\sprite</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompTransform.h">
       <Filter>sprites\sprite\components</Filter>
     </ClInclude>
@@ -1140,6 +1143,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\CompActors.h">
       <Filter>sprites\sprite\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\CompActorAABB.h">
+      <Filter>sprites\actor\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\Component.h">
+      <Filter>sprites</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

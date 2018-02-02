@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include <painting2/RenderColorMap.h>
 
 namespace s2
 {
 
-class CompColorMap : public SprComponent
+class CompColorMap : public Component
 {
 public:
 	virtual ~CompColorMap();

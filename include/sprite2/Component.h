@@ -19,19 +19,19 @@ inline ComponentID GetUniqueComponentID() noexcept
 template <typename T>
 inline ComponentID GetComponentTypeID() noexcept
 {
-    static_assert(std::is_base_of<SprComponent, T>::value,
+    static_assert(std::is_base_of<Component, T>::value,
         "T must inherit from Component");
 
     static ComponentID type_id{Internal::GetUniqueComponentID()};
     return type_id;
 }
 
-class SprComponent : private cu::Uncopyable
+class Component : private cu::Uncopyable
 {
 public:
-	virtual ~SprComponent() {}
+	virtual ~Component() {}
 
-	virtual SprComponent* Clone() const = 0;
+	virtual Component* Clone() const = 0;
 
 	//virtual const char* Type() const = 0;
 
@@ -39,6 +39,6 @@ public:
 	//	rapidjson::MemoryPoolAllocator<>& alloc) const { return false; }
 	//virtual void LoadFromJson(const rapidjson::Value& val) {}
 
-}; // SprComponent
+}; // Component
 
 }

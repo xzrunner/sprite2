@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include <painting2/RenderColorCommon.h>
 
 namespace s2
 {
 
-class CompColorCommon : public SprComponent
+class CompColorCommon : public Component
 {
 public:
 	virtual ~CompColorCommon();

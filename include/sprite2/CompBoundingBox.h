@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include <painting2/OBB.h>
 
 namespace s2
 {
 
-class CompBoundingBox : public SprComponent
+class CompBoundingBox : public Component
 {
 public:
 	virtual ~CompBoundingBox();

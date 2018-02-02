@@ -32,7 +32,7 @@ class Actor;
 class SprVisitorParams;
 class SprVisitorParams2;
 class SprSRT;
-class SprComponent;
+class Component;
 
 class Sprite : public std::enable_shared_from_this<Sprite>
 {
@@ -152,7 +152,7 @@ public:
 	template <typename T>
 	T& GetComponent() const;
 
-	const std::vector<std::unique_ptr<SprComponent>>& GetAllComponents() const {
+	const std::vector<std::unique_ptr<Component>>& GetAllComponents() const {
 		return m_components;
 	}
 
@@ -242,7 +242,7 @@ private:
 	/* components                                                           */
 	/************************************************************************/
 
-	mutable std::vector<std::unique_ptr<SprComponent>> m_components;
+	mutable std::vector<std::unique_ptr<Component>> m_components;
 
 	static const size_t MAX_COMPONENTS = 16;
 	mutable std::array<uint8_t, MAX_COMPONENTS> m_component_array;

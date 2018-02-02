@@ -1,7 +1,7 @@
 #pragma once
 
 #include "sprite2/pre_defined.h"
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include S2_MAT_HEADER
 #include <SM_Vector.h>
@@ -12,7 +12,7 @@ namespace s2
 
 class SprSRT;
 
-class CompTransform : public SprComponent
+class CompTransform : public Component
 {
 public:
 	virtual ~CompTransform();

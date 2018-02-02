@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include <painting2/RenderShader.h>
 
 namespace s2
 {
 
-class CompShader : public SprComponent
+class CompShader : public Component
 {
 public:
 	virtual ~CompShader();

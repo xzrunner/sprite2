@@ -1,13 +1,13 @@
 #pragma once
 
-#include "sprite2/SprComponent.h"
+#include "sprite2/Component.h"
 
 #include <painting2/RenderCamera.h>
 
 namespace s2
 {
 
-class CompCamera : public SprComponent
+class CompCamera : public Component
 {
 public:
 	virtual ~CompCamera();

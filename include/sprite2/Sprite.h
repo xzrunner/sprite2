@@ -8,14 +8,12 @@
 #include "sprite2/VisitResult.h"
 #include "sprite2/SprDefault.h"
 #include "sprite2/CompActors.h"
+#include "sprite2/ComponentsMgr.h"
 
 #include S2_MAT_HEADER
 #include <cu/cu_macro.h>
 #include <SM_Vector.h>
 #include <painting2/BoundingBox.h>
-
-#include <bitset>
-#include <array>
 
 #include <stdint.h>
 
@@ -34,7 +32,7 @@ class SprVisitorParams2;
 class SprSRT;
 class Component;
 
-class Sprite : public std::enable_shared_from_this<Sprite>
+class Sprite : public std::enable_shared_from_this<Sprite>, public ComponentsMgr<16>
 {
 public:
 	Sprite();
@@ -141,29 +139,12 @@ public:
 	void ClearActors() const;
 	void ConnectActors(const ActorPtr& parent) const;
 
-	// components
-
-	template <typename T>
-	bool HasComponent() const;
-
-	template <typename T, typename... TArgs>
-	T& AddComponent(TArgs&&... args) const;
-
-	template <typename T>
-	T& GetComponent() const;
-
-	const std::vector<std::unique_ptr<Component>>& GetAllComponents() const {
-		return m_components;
-	}
-
 private:
 	virtual SprPtr CloneImpl() const = 0;
 
 	void InitFlags();
 
 	void UpdateInheritUpdate() const;
-
-	void CopyComponentsFrom(const Sprite& spr);
 
 	const CompTransform& GetTransformComp() const;
 	const pt2::GeoTransform& GetTransform() const;
@@ -237,16 +218,6 @@ protected:
 
 private:
 	int m_id;
-
-	/************************************************************************/
-	/* components                                                           */
-	/************************************************************************/
-
-	mutable std::vector<std::unique_ptr<Component>> m_components;
-
-	static const size_t MAX_COMPONENTS = 16;
-	mutable std::array<uint8_t, MAX_COMPONENTS> m_component_array;
-	mutable std::bitset<MAX_COMPONENTS>         m_component_bitset;
 
 }; // Sprite
 

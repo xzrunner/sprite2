@@ -276,6 +276,7 @@
     <ClInclude Include="..\..\..\include\sprite2\ComplexActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ComplexSymbol.h" />
+    <ClInclude Include="..\..\..\include\sprite2\ComponentsMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompShader.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompTransform.h" />
     <ClInclude Include="..\..\..\include\sprite2\CosineShape.h" />
@@ -415,6 +416,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\ActorGeo.inl" />
+    <None Include="..\..\..\include\sprite2\ComponentsMgr.inl" />
     <None Include="..\..\..\include\sprite2\CompTransform.inl" />
     <None Include="..\..\..\include\sprite2\ObjectPool.inl" />
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />

@@ -44,23 +44,22 @@ Sprite::Sprite()
 }
 
 Sprite::Sprite(const Sprite& spr)
-	: m_sym(spr.m_sym)
+	: ComponentsMgr(spr)
+	, m_sym(spr.m_sym)
 	, m_name(spr.m_name)
 	, m_flags(spr.m_flags)
 	, m_id(NEXT_ID++)
 {
 	++ALL_SPR_COUNT;
-
-	CopyComponentsFrom(spr);
 }
 
 Sprite& Sprite::operator = (const Sprite& spr)
 {
+	ComponentsMgr::operator = (spr);
+
 	m_sym = spr.m_sym;
 
 	m_name = spr.m_name;
-
-	CopyComponentsFrom(spr);
 
 	m_flags = spr.m_flags;
 
@@ -658,17 +657,6 @@ void Sprite::InitFlags()
 	//if (INIT_FLAGS) {
 	//	INIT_FLAGS(shared_from_this());
 	//}
-}
-
-void Sprite::CopyComponentsFrom(const Sprite& spr)
-{
-	m_components.clear();
-	m_components.reserve(spr.m_components.size());
-	for (auto& comp : spr.m_components) {
-		m_components.push_back(std::unique_ptr<Component>(comp->Clone()));
-	}
-	m_component_bitset = spr.m_component_bitset;
-	m_component_array = spr.m_component_array;
 }
 
 const CompTransform& Sprite::GetTransformComp() const

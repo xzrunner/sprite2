@@ -8,7 +8,7 @@
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
-#include <node0/SceneNode.h>
+#include <node0/typedef.h>
 #include <SM_Matrix.h>
 
 namespace s2

@@ -4,6 +4,9 @@
 #include "sprite2/pre_defined.h"
 #include "sprite2/RenderReturn.h"
 #include "sprite2/typedef.h"
+#ifdef S2_SYMBOL_COMPONENT
+#include "sprite2/ComponentsMgr.h"
+#endif // S2_SYMBOL_COMPONENT
 
 #include <cu/uncopyable.h>
 #include <SM_Rect.h>
@@ -25,7 +28,11 @@ class Sprite;
 class SymbolVisitor;
 class Actor;
 
+#ifdef S2_SYMBOL_COMPONENT
+class Symbol : private cu::Uncopyable, public ComponentsMgr<8>
+#else
 class Symbol : private cu::Uncopyable
+#endif // S2_SYMBOL_COMPONENT
 {
 public:
 	Symbol();

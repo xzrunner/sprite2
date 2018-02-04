@@ -6,6 +6,7 @@
 #define S2_SHAPE_SHARED_PTR
 #define S2_SPR_DEFAULT_EDITABLE true
 #define S2_MESH_VIRTUAL
+#define S2_SYMBOL_COMPONENT
 #else
 #define S2_DISABLE_MODEL
 #define S2_SPR_DEFAULT_EDITABLE false

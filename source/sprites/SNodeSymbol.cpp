@@ -4,8 +4,8 @@
 #include "sprite2/DrawNode.h"
 #include "sprite2/RenderCtxStack.h"
 
+#include <painting3/PrimitiveDraw.h>
 #include <node3/RenderParams.h>
-#include <node3/PrimitiveDraw.h>
 #include <node3/RenderCtxStack.h>
 #include <node3/DrawNode.h>
 
@@ -46,8 +46,8 @@ RenderReturn SNodeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
  	sm::mat4 mt = mt2d * mt3d * mt_rot * mt_trans;
 	n3::DrawNode::Draw(m_node, mt);
 
-	//n3::PrimitiveDraw::SetColor(0xff00ff00);
-	//n3::PrimitiveDraw::Cube(mt, m_aabb);
+	//pt3::PrimitiveDraw::SetColor(0xff00ff00);
+	//pt3::PrimitiveDraw::Cube(mt, m_aabb);
 
 	return RENDER_OK;
 }

@@ -8,7 +8,7 @@
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
-#include <node3/AABB.h>
+#include <painting3/AABB.h>
 #include <SM_Matrix.h>
 
 namespace n3 { class Model; }
@@ -35,8 +35,8 @@ public:
 	void SetModel(const std::shared_ptr<n3::Model>& model) { m_model = model; }
 	const std::shared_ptr<n3::Model>& GetModel() const { return m_model; }
 
-	void SetAABB(const n3::AABB& aabb) { m_aabb = aabb; }
-	const n3::AABB& GetAABB() const { return m_aabb; }
+	void SetAABB(const pt3::AABB& aabb) { m_aabb = aabb; }
+	const pt3::AABB& GetAABB() const { return m_aabb; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
@@ -44,7 +44,7 @@ protected:
 protected:
 	std::shared_ptr<n3::Model> m_model = nullptr;
 
-	n3::AABB m_aabb;
+	pt3::AABB m_aabb;
 
 }; // ModelSymbol
 

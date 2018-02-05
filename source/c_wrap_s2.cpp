@@ -53,7 +53,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
-#include <sns/ColorParser.h>
+#include <s2s/ColorParser.h>
 
 #include <cooking/DisplayList.h>
 
@@ -1622,7 +1622,7 @@ void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segm
 extern "C"
 uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL_TYPE dst_type)
 {
-	return sns::ColorParser::Trans(src, sns::PIXEL_TYPE(src_type), sns::PIXEL_TYPE(dst_type));
+	return s2s::ColorParser::Trans(src, s2s::PIXEL_TYPE(src_type), s2s::PIXEL_TYPE(dst_type));
 }
 
 extern "C"

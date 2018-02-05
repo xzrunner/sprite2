@@ -185,6 +185,8 @@
     <ClCompile Include="..\..\..\source\sprites\ResetActorFlagVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Actor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Mesh.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\SNodeSprite.cpp" />
+    <ClCompile Include="..\..\..\source\sprites\SNodeSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Sprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Symbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Scale9.cpp" />
@@ -356,11 +358,12 @@
     <ClInclude Include="..\..\..\include\sprite2\RenderTarget.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h" />
+    <ClInclude Include="..\..\..\include\sprite2\SNodeSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\Component.h" />
     <ClInclude Include="..\..\..\include\sprite2\Symbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h" />
-    <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
     <ClInclude Include="..\..\..\include\sprite2\typedef.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9.h" />
     <ClInclude Include="..\..\..\include\sprite2\Scale9Actor.h" />
@@ -421,7 +424,6 @@
     <None Include="..\..\..\include\sprite2\RenderParams.inl" />
     <None Include="..\..\..\include\sprite2\Actor.inl" />
     <None Include="..\..\..\include\sprite2\Sprite.inl" />
-    <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\SprActors.inl" />
     <None Include="..\..\..\include\sprite2\UpdateParams.inl" />
   </ItemGroup>

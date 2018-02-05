@@ -169,6 +169,9 @@
     <Filter Include="sprites\actor\parts\aabb">
       <UniqueIdentifier>{24b20695-7e7b-4ab9-a450-a645f421b43e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sprites\98.snode">
+      <UniqueIdentifier>{2e7f9f9c-4229-418f-b9eb-a85ea349bce4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\sprites\SprTimer.cpp">
@@ -625,6 +628,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\CompDefault.cpp">
       <Filter>sprites\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SNodeSymbol.cpp">
+      <Filter>sprites\98.snode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\SNodeSprite.cpp">
+      <Filter>sprites\98.snode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1107,7 +1116,6 @@
     <ClInclude Include="..\..\..\include\sprite2\TextTable.h">
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\trans_color.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
       <Filter>utility</Filter>
     </ClInclude>
@@ -1162,6 +1170,12 @@
     <ClInclude Include="..\..\..\include\sprite2\CompDefault.h">
       <Filter>sprites\components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SNodeSymbol.h">
+      <Filter>sprites\98.snode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h">
+      <Filter>sprites\98.snode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\include\sprite2\SprActors.inl">
@@ -1176,7 +1190,6 @@
     <None Include="..\..\..\include\sprite2\Sprite.inl">
       <Filter>sprites\sprite</Filter>
     </None>
-    <None Include="..\..\..\include\sprite2\trans_color.inl" />
     <None Include="..\..\..\include\sprite2\UpdateParams.inl">
       <Filter>utility</Filter>
     </None>

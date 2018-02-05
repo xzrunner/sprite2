@@ -1,25 +1,18 @@
-#ifndef _SPRITE2_MODEL_SYMBOL_H_
-#define _SPRITE2_MODEL_SYMBOL_H_
-
-#include "sprite2/config.h"
-
-#ifndef S2_DISABLE_MODEL
+#pragma once
 
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
-#include <node3/AABB.h>
+#include <node0/typedef.h>
 #include <SM_Matrix.h>
-
-namespace n3 { class Model; }
 
 namespace s2
 {
 
-class ModelSymbol : public VIRTUAL_INHERITANCE Symbol
+class SNodeSymbol : public VIRTUAL_INHERITANCE Symbol
 {
 public:
-	ModelSymbol();
+	SNodeSymbol();
 
 	/**
 	 *  @interface
@@ -32,24 +25,19 @@ public:
 	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
 
-	void SetModel(const std::shared_ptr<n3::Model>& model) { m_model = model; }
-	const std::shared_ptr<n3::Model>& GetModel() const { return m_model; }
-
-	void SetAABB(const n3::AABB& aabb) { m_aabb = aabb; }
-	const n3::AABB& GetAABB() const { return m_aabb; }
+	void SetNode(const n0::SceneNodePtr& node) { m_node = node; }
+	const n0::SceneNodePtr& GetNode() const { return m_node; }
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
+private:
+	static sm::mat4 CalcCam2dMat(const S2_MAT& mt2);
+	static sm::mat4 CalcCam3dMat();
+
 protected:
-	std::shared_ptr<n3::Model> m_model = nullptr;
+	n0::SceneNodePtr m_node = nullptr;
 
-	n3::AABB m_aabb;
-
-}; // ModelSymbol
+}; // SNodeSymbol
 
 }
-
-#endif // S2_DISABLE_MODEL
-
-#endif // _SPRITE2_MODEL_SYMBOL_H_

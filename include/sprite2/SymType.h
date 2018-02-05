@@ -27,6 +27,8 @@ enum SymType
 	SYM_MODEL,
 	SYM_AUDIO,
 
+	SYM_SNODE = 98,
+
 	SYM_PROXY = 99,
 	SYM_ANCHOR = 100,
 };

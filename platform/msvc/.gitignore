@@ -1,0 +1,5 @@
+sprite2/
+projects/*
+
+!projects/sprite2.vcxproj
+!projects/sprite2.vcxproj.filters

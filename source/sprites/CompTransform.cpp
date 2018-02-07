@@ -3,11 +3,6 @@
 namespace s2
 {
 
-CompTransform::~CompTransform()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompTransform* CompTransform::Clone() const
 {
 	auto ret = static_cast<CompTransform*>(mm::AllocHelper::New<CompTransform>());

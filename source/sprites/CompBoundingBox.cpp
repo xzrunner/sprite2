@@ -3,11 +3,6 @@
 namespace s2
 {
 
-CompBoundingBox::~CompBoundingBox()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompBoundingBox* CompBoundingBox::Clone() const
 {
 	auto ret = static_cast<CompBoundingBox*>(mm::AllocHelper::New<CompBoundingBox>());

@@ -9,9 +9,9 @@ namespace s2
 class CompActorAABB : public Component
 {
 public:
-	virtual ~CompActorAABB();
-
 	virtual CompActorAABB* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompActorAABB); }
 
 	const ActorAABB& AABB() const { return m_aabb; }
 	ActorAABB& AABB() { return m_aabb; }

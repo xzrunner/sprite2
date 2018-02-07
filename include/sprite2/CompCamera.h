@@ -10,9 +10,9 @@ namespace s2
 class CompCamera : public Component
 {
 public:
-	virtual ~CompCamera();
-
 	virtual CompCamera* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompCamera); }
 
 	const pt2::RenderCamera& GetCamera() const { return m_cam; }
 	pt2::RenderCamera& GetCamera() { return m_cam; }

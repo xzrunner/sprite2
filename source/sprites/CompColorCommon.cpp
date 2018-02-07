@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompColorCommon::~CompColorCommon()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompColorCommon* CompColorCommon::Clone() const
 {
 	auto ret = static_cast<CompColorCommon*>(mm::AllocHelper::New<CompColorCommon>());

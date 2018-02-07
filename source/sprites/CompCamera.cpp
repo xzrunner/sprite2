@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompCamera::~CompCamera()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompCamera* CompCamera::Clone() const
 {
 	auto ret = static_cast<CompCamera*>(mm::AllocHelper::New<CompCamera>());

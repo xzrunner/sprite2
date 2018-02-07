@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompShader::~CompShader()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompShader* CompShader::Clone() const
 {
 	auto ret = static_cast<CompShader*>(mm::AllocHelper::New<CompShader>());

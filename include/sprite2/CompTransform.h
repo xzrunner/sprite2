@@ -13,9 +13,9 @@ namespace s2
 class CompTransform : public Component
 {
 public:
-	virtual ~CompTransform();
-
 	virtual CompTransform* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompTransform); }
 
 	const pt2::GeoTransform& GetTrans() const { return m_transform; }
 	pt2::GeoTransform& GetTrans() { return m_transform; }

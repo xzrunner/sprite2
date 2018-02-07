@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompActorTrans::~CompActorTrans()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompActorTrans* CompActorTrans::Clone() const
 {
 	auto ret = static_cast<CompActorTrans*>(mm::AllocHelper::New<CompActorTrans>());

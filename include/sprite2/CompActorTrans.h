@@ -12,9 +12,9 @@ namespace s2
 class CompActorTrans : public Component
 {
 public:
-	virtual ~CompActorTrans();
-
 	virtual CompActorTrans* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompActorTrans); }
 
 	const ActorGeoTrans& GetTrans() const { return m_transform; }
 	ActorGeoTrans& GetTrans() { return m_transform; }

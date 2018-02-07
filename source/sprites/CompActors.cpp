@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompActors::~CompActors()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompActors* CompActors::Clone() const
 {
 	// no copy

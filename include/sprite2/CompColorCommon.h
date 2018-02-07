@@ -10,9 +10,9 @@ namespace s2
 class CompColorCommon : public Component
 {
 public:
-	virtual ~CompColorCommon();
-
 	virtual CompColorCommon* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompColorCommon); }
 
 	const pt2::RenderColorCommon& GetColor() const { return m_col; }
 	pt2::RenderColorCommon& GetColor() { return m_col; }

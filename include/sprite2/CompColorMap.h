@@ -10,9 +10,9 @@ namespace s2
 class CompColorMap : public Component
 {
 public:
-	virtual ~CompColorMap();
-
 	virtual CompColorMap* Clone() const;
+
+	virtual size_t GetSize() const { return sizeof(CompColorMap); }
 
 	const pt2::RenderColorMap& GetColor() const { return m_col; }
 	pt2::RenderColorMap& GetColor() { return m_col; }

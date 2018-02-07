@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompActorAABB::~CompActorAABB()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompActorAABB* CompActorAABB::Clone() const
 {
 	auto ret = static_cast<CompActorAABB*>(mm::AllocHelper::New<CompActorAABB>());

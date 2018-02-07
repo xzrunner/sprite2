@@ -5,11 +5,6 @@
 namespace s2
 {
 
-CompColorMap::~CompColorMap()
-{
-	mm::AllocHelper::Delete(this);
-}
-
 CompColorMap* CompColorMap::Clone() const
 {
 	auto ret = static_cast<CompColorMap*>(mm::AllocHelper::New<CompColorMap>());

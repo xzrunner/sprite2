@@ -18,8 +18,10 @@
 #include "sprite2/SetStaticFrameVisitor.h"
 #include "sprite2/AABBHelper.h"
 
+#ifndef S2_DISABLE_DEFERRED
 #include <cu/cu_stl.h>
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <algorithm>
 #include <climits>

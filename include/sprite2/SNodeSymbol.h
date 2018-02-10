@@ -1,5 +1,9 @@
 #pragma once
 
+#include "sprite2/config.h"
+
+#ifndef S2_DISABLE_SNODE
+
 #include "sprite2/Symbol.h"
 #include S2_MAT_HEADER
 
@@ -41,3 +45,5 @@ protected:
 }; // SNodeSymbol
 
 }
+
+#endif // S2_DISABLE_SNODE

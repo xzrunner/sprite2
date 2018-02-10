@@ -7,7 +7,9 @@
 #include "sprite2/Sprite.h"
 
 #include <memmgr/Allocator.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <assert.h>
 

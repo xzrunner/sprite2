@@ -11,7 +11,9 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {

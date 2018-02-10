@@ -14,7 +14,9 @@
 #ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
 #endif // S2_DISABLE_FLATTEN
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 namespace s2
 {

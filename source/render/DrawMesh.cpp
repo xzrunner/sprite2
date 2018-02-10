@@ -22,9 +22,9 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <cu/cu_stl.h>
-#include <cooking/DisplayList.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
+#include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
 
 #include <assert.h>

@@ -55,7 +55,9 @@
 #include <shaderlab/Statistics.h>
 #include <s2s/ColorParser.h>
 
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <iostream>
 #include <stack>

@@ -4,7 +4,9 @@
 
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
+#endif // S2_DISABLE_DEFERRED
 #include <painting2/Texture.h>
 
 #include <string.h>

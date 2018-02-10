@@ -1,5 +1,8 @@
-#ifndef _SPRITE2_DRAW_MASK_FT_H_
-#define _SPRITE2_DRAW_MASK_FT_H_
+#pragma once
+
+#include "sprite2/config.h"
+
+#ifndef S2_DISABLE_FLATTEN
 
 #include "sprite2/pre_defined.h"
 #include "sprite2/typedef.h"
@@ -39,4 +42,4 @@ private:
 
 }
 
-#endif // _SPRITE2_DRAW_MASK_FT_H_
+#endif // S2_DISABLE_FLATTEN

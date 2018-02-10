@@ -24,9 +24,9 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/EdgeDetectProg.h>
 #include <shaderlab/Sprite2Shader.h>
-#include <cooking/DisplayList.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
+#include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/FilterMode.h>
 #include <painting2/RenderFilter.h>

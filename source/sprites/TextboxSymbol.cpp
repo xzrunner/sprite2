@@ -16,7 +16,9 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterMode.h>
 #include <shaderlab/FilterShader.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <assert.h>
 

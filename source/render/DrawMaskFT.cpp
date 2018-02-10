@@ -1,4 +1,7 @@
 #include "sprite2/DrawMaskFT.h"
+
+#ifndef S2_DISABLE_FLATTEN
+
 #include "sprite2/Actor.h"
 #include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
@@ -14,8 +17,10 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
+#ifndef S2_DISABLE_FLATTEN
 #include <flatten/FTList.h>
 #include <flatten/FTNode.h>
+#endif // S2_DISABLE_FLATTEN
 #include <SM_Rect.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
@@ -266,3 +271,5 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, RenderTarge
 }
 
 }
+
+#endif // S2_DISABLE_FLATTEN

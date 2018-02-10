@@ -18,7 +18,9 @@
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 
 #include <cu/cu_stl.h>
 #include <SM_Test.h>

@@ -1,4 +1,7 @@
 #include "sprite2/SNodeSymbol.h"
+
+#ifndef S2_DISABLE_SNODE
+
 #include "sprite2/SNodeSprite.h"
 #include "sprite2/SymType.h"
 #include "sprite2/DrawNode.h"
@@ -92,3 +95,5 @@ sm::mat4 SNodeSymbol::CalcCam3dMat()
 }
 
 }
+
+#endif // S2_DISABLE_SNODE

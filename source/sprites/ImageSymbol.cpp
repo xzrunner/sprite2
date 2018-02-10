@@ -24,8 +24,10 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/Sprite3Shader.h>
+#ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #include <cooking/DisplayList.h>
+#endif // S2_DISABLE_DEFERRED
 #include <painting2/Texture.h>
 
 #include <assert.h>
@@ -294,6 +296,8 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 
 void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
+#ifndef S2_DISABLE_CAMERA25
+
 	auto cam = Blackboard::Instance()->GetCamera();
 	assert(cam && cam->Type() == CAM_PSEUDO3D);
 	auto pcam = std::dynamic_pointer_cast<const Pseudo3DCamera>(cam);
@@ -330,6 +334,8 @@ void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& 
 		rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 	cooking::draw_quad_sprite3(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
 #endif // S2_DISABLE_DEFERRED
+
+#endif // S2_DISABLE_CAMERA25
 }
 
 bool ImageSymbol::CalcVertices(const RenderParams& rp, float* vertices) const

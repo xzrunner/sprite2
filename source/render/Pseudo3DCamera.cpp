@@ -1,4 +1,7 @@
 #include "sprite2/Pseudo3DCamera.h"
+
+#ifndef S2_DISABLE_CAMERA25
+
 #include "sprite2/RenderContext.h"
 #include "sprite2/RenderCtxStack.h"
 
@@ -160,3 +163,5 @@ void Pseudo3DCamera::UpdateRender() const
 }
 
 }
+
+#endif // S2_DISABLE_CAMERA25

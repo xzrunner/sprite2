@@ -2,7 +2,9 @@
 #include "sprite2/CameraMgr.h"
 #include "sprite2/config.h"
 
+#ifndef S2_DISABLE_RVG
 #include <rvg.h>
+#endif // S2_DISABLE_RVG
 #include <SM_Calc.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shape2Shader.h>
@@ -19,7 +21,9 @@ namespace s2
 
 void RVG::Init()
 {
+#ifndef S2_DISABLE_RVG
 	rvg_style_init();
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::SetColor(const pt2::Color& color)
@@ -36,16 +40,21 @@ void RVG::SetColor(const pt2::Color& color)
 
 void RVG::PointSize(float size)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_point_size(size);
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::LineWidth(float width)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_line_width(width);
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Point(cooking::DisplayList* dlist, const sm::vec2& vertex)
 {
+#ifndef S2_DISABLE_RVG
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
 		rvg_point(vertex.x, vertex.y);
@@ -53,10 +62,12 @@ void RVG::Point(cooking::DisplayList* dlist, const sm::vec2& vertex)
 		SetShader(dlist, sl::SHAPE3);
 		rvg_point3(vertex.x, vertex.y, 0);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Points(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices)
 {
+#ifndef S2_DISABLE_RVG
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
 		for (int i = 0, n = vertices.size(); i < n; ++i) {
@@ -68,10 +79,12 @@ void RVG::Points(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices)
 			rvg_point3(vertices[i].x, vertices[i].y, 0);
 		}
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Line(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_line_style(LS_DEFAULT);
 
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
@@ -81,10 +94,12 @@ void RVG::Line(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& 
 		SetShader(dlist, sl::SHAPE3);
 		rvg_line3(p0.x, p0.y, 0, p1.x, p1.y, 0);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::DotLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_line_style(LS_DOT);
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
@@ -93,10 +108,12 @@ void RVG::DotLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec
 		SetShader(dlist, sl::SHAPE3);
 		rvg_line3(p0.x, p0.y, 0, p1.x, p1.y, 0);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::DashLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_line_style(LS_DASH);
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
@@ -105,10 +122,12 @@ void RVG::DashLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::ve
 		SetShader(dlist, sl::SHAPE3);
 		rvg_line3(p0.x, p0.y, 0, p1.x, p1.y, 0);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::DotDashLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1)
 {
+#ifndef S2_DISABLE_RVG
 	rvg_line_style(LS_DOT_DASH);
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
@@ -117,10 +136,12 @@ void RVG::DotDashLine(cooking::DisplayList* dlist, const sm::vec2& p0, const sm:
 		SetShader(dlist, sl::SHAPE3);
 		rvg_line3(p0.x, p0.y, 0, p1.x, p1.y, 0);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Lines(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices)
 {
+#ifndef S2_DISABLE_RVG
 	if (vertices.size() < 2) {
 		return;
 	}
@@ -137,10 +158,12 @@ void RVG::Lines(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices)
 		}
 		rvg_lines(&vertices3[0].x, vertices3.size());
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Polyline(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices, bool loop)
 {
+#ifndef S2_DISABLE_RVG
 	if (vertices.size() < 2) {
 		return;
 	}
@@ -157,10 +180,12 @@ void RVG::Polyline(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& vertices
 		}
 		rvg_polyline3(&vertices3[0].x, vertices3.size(), loop);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Polyline(cooking::DisplayList* dlist, const float* vertices, int count, bool loop)
 {
+#ifndef S2_DISABLE_RVG
 	if (count < 2) {
 		return;
 	}
@@ -178,10 +203,12 @@ void RVG::Polyline(cooking::DisplayList* dlist, const float* vertices, int count
 		}
 		rvg_polyline3(&vertices3[0].x, vertices3.size(), loop);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangles)
 {
+#ifndef S2_DISABLE_RVG
 	if (triangles.size() < 3) return;
 
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
@@ -195,6 +222,7 @@ void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangl
 		}
 		rvg_triangles3(&triangles3[0].x, triangles3.size());
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangles, const CU_VEC<pt2::Color>& colors)
@@ -204,6 +232,7 @@ void RVG::Triangles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangl
 
 void RVG::TriangleStrip(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& triangles)
 {
+#ifndef S2_DISABLE_RVG
 	if (triangles.size() < 3) return;
 
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
@@ -217,6 +246,7 @@ void RVG::TriangleStrip(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& tri
 		}
 		rvg_triangle_strip3(&triangles3[0].x, triangles3.size());
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Rect(cooking::DisplayList* dlist, const sm::vec2& center, float hw, float hh, bool filling)
@@ -226,6 +256,7 @@ void RVG::Rect(cooking::DisplayList* dlist, const sm::vec2& center, float hw, fl
 
 void RVG::Rect(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& p1, bool filling)
 {
+#ifndef S2_DISABLE_RVG
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
 		rvg_rect(p0.x, p0.y, p1.x, p1.y, filling);
@@ -234,6 +265,7 @@ void RVG::Rect(cooking::DisplayList* dlist, const sm::vec2& p0, const sm::vec2& 
 		SetShader(dlist, sl::SHAPE3);
 		rvg_rect3_on_z(p0.x, p0.y, p1.x, p1.y, 0, filling);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Rect(cooking::DisplayList* dlist, const sm::rect& r, bool filling)
@@ -243,6 +275,7 @@ void RVG::Rect(cooking::DisplayList* dlist, const sm::rect& r, bool filling)
 
 void RVG::Circle(cooking::DisplayList* dlist, const sm::vec2& center, float radius, bool filling, int segments)
 {
+#ifndef S2_DISABLE_RVG
 	if (CameraMgr::Instance()->IsType(CameraMgr::ORTHO)) {
 		SetShader(dlist, sl::SHAPE2);
 		rvg_circle(center.x, center.y, radius, filling, segments);
@@ -250,6 +283,7 @@ void RVG::Circle(cooking::DisplayList* dlist, const sm::vec2& center, float radi
 		SetShader(dlist, sl::SHAPE3);
 		rvg_circle3(center.x, center.y, 0, radius, filling, segments);
 	}
+#endif // S2_DISABLE_RVG
 }
 
 void RVG::Circles(cooking::DisplayList* dlist, const CU_VEC<sm::vec2>& circles, float radius, bool filling, int segments)

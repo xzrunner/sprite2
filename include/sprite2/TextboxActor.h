@@ -5,10 +5,10 @@
 
 #include <cu/cu_stl.h>
 
+namespace pt2 { class Textbox; }
+
 namespace s2
 {
-
-class Textbox;
 
 class TextboxActor : public Actor
 {
@@ -19,7 +19,7 @@ public:
 	void SetText(const CU_STR& text);
 	const auto& GetText() const { return m_text; }
 
-	static sm::rect CalcAABB(const Textbox& tb, const sm::rect& rect, const CU_STR& text);
+	static sm::rect CalcAABB(const pt2::Textbox& tb, const sm::rect& rect, const CU_STR& text);
 	
 private:
 	CU_STR m_text;

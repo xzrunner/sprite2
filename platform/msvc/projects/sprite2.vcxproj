@@ -400,7 +400,6 @@
     <ClInclude Include="..\..\..\include\sprite2\SymbolVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\SymType.h" />
     <ClInclude Include="..\..\..\include\sprite2\TexcoordsMap.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Textbox.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextboxActor.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextboxSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\TextboxSymbol.h" />

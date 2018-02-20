@@ -9,7 +9,7 @@ namespace s2
 {
 
 static void
-_init_gtxt_label_style(struct gtxt_label_style* dst, const Textbox& src) {
+_init_gtxt_label_style(struct gtxt_label_style* dst, const pt2::Textbox& src) {
 	dst->width  = src.width;
 	dst->height = src.height;
 
@@ -39,7 +39,7 @@ void TextboxActor::SetText(const CU_STR& text)
 	m_text = text;
 
 	auto text_spr = S2_VI_DOWN_CAST<const TextboxSprite*>(GetSprRaw());
-	const Textbox& tb = text_spr->GetTextbox();
+	const pt2::Textbox& tb = text_spr->GetTextbox();
 	sm::rect rect = CalcAABB(tb, GetSprRaw()->GetSymbol()->GetBounding(), m_text);
 
 	ActorAABB& aabb = GetAABB();
@@ -47,7 +47,7 @@ void TextboxActor::SetText(const CU_STR& text)
 	aabb.UpdateParent(this);
 }
 
-sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const CU_STR& text)
+sm::rect TextboxActor::CalcAABB(const pt2::Textbox& tb, const sm::rect& rect, const CU_STR& text)
 {
 	sm::rect ret = rect;
 
@@ -58,26 +58,26 @@ sm::rect TextboxActor::CalcAABB(const Textbox& tb, const sm::rect& rect, const C
 
 	switch (tb.align_hori)
 	{
-	case Textbox::HA_LEFT:
+	case pt2::Textbox::HA_LEFT:
 		ret.xmax = rect.xmin + w;
 		break;
-	case Textbox::HA_RIGHT:
+	case pt2::Textbox::HA_RIGHT:
 		ret.xmin = rect.xmax - w;
 		break;
-	case Textbox::HA_CENTER:
+	case pt2::Textbox::HA_CENTER:
 		ret.xmin = (rect.xmin + rect.xmax) * 0.5f - w * 0.5f;
 		ret.xmax = ret.xmin + w;
 		break;
 	}
 	switch (tb.align_vert)
 	{
-	case Textbox::VA_TOP:
+	case pt2::Textbox::VA_TOP:
 		ret.ymin = rect.ymax - h;
 		break;
-	case Textbox::VA_BOTTOM:
+	case pt2::Textbox::VA_BOTTOM:
 		ret.ymax = rect.ymin + h;
 		break;
-	case Textbox::VA_CENTER:
+	case pt2::Textbox::VA_CENTER:
 		ret.ymin = (rect.ymin + rect.ymax) * 0.5f - h * 0.5f;
 		ret.ymax = ret.ymin + h;
 		break;

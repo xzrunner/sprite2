@@ -751,9 +751,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Particle2dSymbol.h">
       <Filter>sprites\09.particle2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Textbox.h">
-      <Filter>sprites\05.textbox</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\TextboxActor.h">
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>

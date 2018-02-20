@@ -40,7 +40,7 @@ TextboxSymbol::TextboxSymbol(uint32_t id)
 #endif // S2_DISABLE_STATISTICS
 }
 
-TextboxSymbol::TextboxSymbol(Textbox tb)
+TextboxSymbol::TextboxSymbol(pt2::Textbox tb)
 	: m_tb(tb)
 {
 #ifndef S2_DISABLE_STATISTICS
@@ -154,7 +154,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 		mgr->SetShader(sl::SPRITE2);
 	}
 
-	const Textbox& tb = tb_spr->GetTextbox();
+	const pt2::Textbox& tb = tb_spr->GetTextbox();
 
 	gtxt_label_style s;
 

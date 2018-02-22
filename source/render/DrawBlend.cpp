@@ -1,26 +1,29 @@
 #include "sprite2/DrawBlend.h"
-#include "sprite2/StatPingPong.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/RenderTargetMgr.h"
 
 #include <memmgr/Allocator.h>
-#include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/Sprite2Shader.h>
+#include <unirender/RenderContext.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#ifndef S2_DISABLE_STATISTICS
+#include <stat/StatPingPong.h>
+#endif // S2_DISABLE_STATISTICS
 #include <painting2/RenderShader.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderContext.h>
 
 namespace s2
 {
 
 DrawBlend::DrawBlend()
-	: DrawPingPong(StatPingPong::BLEND)
+	: DrawPingPong(st::StatPingPong::BLEND)
 {
 }
 
@@ -66,7 +69,7 @@ RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* sp
 RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										   const RenderParams& rp, bool reset_color) const
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();

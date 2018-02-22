@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -91,12 +91,6 @@
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp" />
     <ClCompile Include="..\..\..\source\render\OrthoCamera.cpp" />
     <ClCompile Include="..\..\..\source\render\Pseudo3DCamera.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderScissor.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderScreen.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderContext.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderTarget.cpp" />
-    <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp" />
     <ClCompile Include="..\..\..\source\render\RVG.cpp" />
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp" />
@@ -209,7 +203,6 @@
     <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StaticQuadIcon.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StaticRectIcon.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\StatPingPong.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StatSprCount.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StatSymCount.cpp" />
     <ClCompile Include="..\..\..\source\sprites\StringHelper.cpp" />
@@ -228,7 +221,6 @@
     <ClCompile Include="..\..\..\source\sprites\TrailSymbol.cpp" />
     <ClCompile Include="..\..\..\source\utility\Blackboard.cpp" />
     <ClCompile Include="..\..\..\source\utility\Callback.cpp" />
-    <ClCompile Include="..\..\..\source\utility\StatImages.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatSymDraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatTopNodes.cpp" />
@@ -342,11 +334,8 @@
     <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h" />
     <ClInclude Include="..\..\..\include\sprite2\ResetActorFlagVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Actor.h" />
     <ClInclude Include="..\..\..\include\sprite2\config.h" />
@@ -354,9 +343,6 @@
     <ClInclude Include="..\..\..\include\sprite2\macro.h" />
     <ClInclude Include="..\..\..\include\sprite2\Mesh.h" />
     <ClInclude Include="..\..\..\include\sprite2\Message.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderContext.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderTarget.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h" />
     <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSymbol.h" />
@@ -388,9 +374,7 @@
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticQuadIcon.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticRectIcon.h" />
-    <ClInclude Include="..\..\..\include\sprite2\StatImages.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatOverdraw.h" />
-    <ClInclude Include="..\..\..\include\sprite2\StatPingPong.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSprCount.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSymCount.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSymDraw.h" />

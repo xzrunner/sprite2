@@ -1,13 +1,9 @@
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/Sprite.h"
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/RenderScissor.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #include "sprite2/StatOverdraw.h"
 #endif // S2_DISABLE_STATISTICS
 
@@ -22,6 +18,10 @@
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderColorCommon.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace s2
 {
@@ -30,8 +30,8 @@ RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* s
 {
 	RenderReturn ret = RENDER_OK;
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 
 	ret |= DrawBlurToRT(dlist, rt, spr, rp, iterations);
 	ret |= DrawFromRT(dlist, rt, spr->GetPosition());
@@ -41,17 +41,17 @@ RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* s
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderTarget* rt, 
+RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
 	                                        const Sprite* spr, const RenderParams& rp, int iterations)
 {	
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::GAUSSIAN_BLUR);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::GAUSSIAN_BLUR);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* tmp_rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* tmp_rt = RT->Fetch();
 
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -60,8 +60,8 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderT
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawInit(rt, spr, rp);
@@ -79,15 +79,15 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, RenderT
 		ret |= DrawBetweenRT(tmp_rt, rt, false, rp.col_common, sz.y);
 	}
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	RT->Return(tmp_rt);
 
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, RenderTarget* rt, const sm::vec2& offset)
+RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const sm::vec2& offset)
 {
 	sm::vec2 vertices[4];
 	vertices[0].Set(-512, -512);
@@ -123,7 +123,7 @@ RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, RenderTar
 	return RENDER_OK;
 }
 
-RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
+RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -152,9 +152,9 @@ RenderReturn DrawGaussianBlur::DrawInit(RenderTarget* rt, const Sprite* spr, con
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBetweenRT(RenderTarget* src, RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
+RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	dst->Bind();
 	

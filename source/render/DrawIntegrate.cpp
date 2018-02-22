@@ -1,5 +1,4 @@
 #include "sprite2/DrawIntegrate.h"
-#include "sprite2/StatPingPong.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/RenderParams.h"
@@ -8,12 +7,13 @@
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
 #include <shaderlab/ShaderMgr.h>
+#include <stat/StatPingPong.h>
 
 namespace s2
 {
 
 DrawIntegrate::DrawIntegrate()
-	: DrawPingPong(StatPingPong::INTEGRATE)
+	: DrawPingPong(st::StatPingPong::INTEGRATE)
 {	
 }
 

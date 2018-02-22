@@ -6,7 +6,6 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/RenderScissor.h"
 // #include "sprite2/FixActorPathVisitor.h"
 #include "sprite2/SprVisitorParams.h"
 #include "sprite2/SymbolVisitor.h"
@@ -21,6 +20,7 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderScissor.h>
 
 #include <cu/cu_stl.h>
 #include <SM_Test.h>
@@ -104,7 +104,7 @@ RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 		if (min.y > max.y) {
 			std::swap(min.y, max.y);
 		}
-		RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
+		pt2::RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
 	RenderReturn ret = RENDER_OK;
@@ -142,7 +142,7 @@ RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 	}
 
 	if (scissor) {
-		RenderScissor::Instance()->Pop();
+		pt2::RenderScissor::Instance()->Pop();
 	}
 
 	return ret;

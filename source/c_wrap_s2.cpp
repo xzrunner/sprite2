@@ -1,6 +1,5 @@
 #include "c_wrap_s2.h"
 
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/Actor.h"
 #include "sprite2/ActorFactory.h"
 #include "sprite2/Sprite.h"
@@ -14,14 +13,8 @@
 #include "sprite2/RVG.h"
 #include "sprite2/SprTimer.h"
 #include "sprite2/SprVisitorParams.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderTarget.h"
-#include "sprite2/RenderScissor.h"
 #include "sprite2/Blackboard.h"
 #include "sprite2/StringHelper.h"
-#ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
-#endif // S2_DISABLE_STATISTICS
 #include "sprite2/QueryLoadedVisitor.h"
 #include "sprite2/ActorProxy.h"
 #include "sprite2/DrawTask.h"
@@ -46,6 +39,9 @@
 #include "sprite2/ProxySprite.h"
 #include "sprite2/ProxyHelper.h"
 
+#ifndef S2_DISABLE_STATISTICS
+#include <stat/StatPingPong.h>
+#endif // S2_DISABLE_STATISTICS
 #include <memmgr/Allocator.h>
 #include <logger.h>
 #include <SM_Math.h>
@@ -54,6 +50,10 @@
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
 #include <s2s/ColorParser.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -84,10 +84,10 @@ void s2_init()
 extern "C"
 void s2_on_size(int w, int h) 
 {
-	RenderCtxStack* stack = RenderCtxStack::Instance();
+	pt2::RenderCtxStack* stack = pt2::RenderCtxStack::Instance();
 	if (stack->Size() <= 1) {
 		stack->Pop();
-		stack->Push(RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+		stack->Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	}
 }
 
@@ -1424,14 +1424,14 @@ void s2_actor_scale9_resize(void* actor, int w, int h) {
 extern "C"
 void* s2_rt_fetch()
 {
-	return RenderTargetMgr::Instance()->Fetch();
+	return pt2::RenderTargetMgr::Instance()->Fetch();
 }
 
 extern "C"
 void s2_rt_return(void* rt)
 {
-	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
-	RenderTargetMgr::Instance()->Return(s2_rt);
+	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
+	pt2::RenderTargetMgr::Instance()->Return(s2_rt);
 }
 
 static void _draw(const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
@@ -1481,47 +1481,47 @@ extern "C"
 void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::RT_OUTSIDE);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(2, 2, RT->WIDTH, RT->HEIGHT));
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, RT->WIDTH, RT->HEIGHT));
 
-	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	s2_rt->Bind();
 
 	_draw(dst, src, src_tex_id);
 
 	s2_rt->Unbind();
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 }
 
 extern "C"
 void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region* src)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::RT_OUTSIDE);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
 
-	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	int src_tex_id = s2_rt->GetTexID();
 	_draw(dst, src, src_tex_id);
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 }
 
 extern "C"
 int s2_rt_get_texid(void* rt)
 {
-	RenderTarget* s2_rt = static_cast<RenderTarget*>(rt);
+	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	return s2_rt->GetTexID();
 }
 
@@ -1630,7 +1630,7 @@ uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL
 extern "C"
 void s2_set_viewport(float x, float y, float w, float h)
 {
-	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
+	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
 	ctx->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 

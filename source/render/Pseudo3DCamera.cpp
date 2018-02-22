@@ -2,11 +2,10 @@
 
 #ifndef S2_DISABLE_CAMERA25
 
-#include "sprite2/RenderContext.h"
-#include "sprite2/RenderCtxStack.h"
-
 #include <c25_camera.h>
 #include <sm_c_vector.h>
+#include <painting2/RenderContext.h>
+#include <painting2/RenderCtxStack.h>
 
 #include <stddef.h>
 
@@ -20,7 +19,7 @@ static const float ANGLE = -20;
 Pseudo3DCamera::Pseudo3DCamera()
 	: m_cam(nullptr)
 {
-	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
 	if (ctx) {
 		OnSize(ctx->GetScreenWidth(), ctx->GetScreenHeight());
 	}
@@ -44,7 +43,7 @@ Pseudo3DCamera::~Pseudo3DCamera()
 
 void Pseudo3DCamera::OnSize(int width, int height)
 {
-	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
+	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
 	if (ctx) {
 		ctx->SetProjection(width, height);
 	}
@@ -141,7 +140,7 @@ const sm_mat4* Pseudo3DCamera::GetProjectMat() const
 
 void Pseudo3DCamera::Init(const Pseudo3DCamera& cam)
 {
-	const RenderContext* ctx = RenderCtxStack::Instance()->Top();
+	const pt2::RenderContext* ctx = pt2::RenderCtxStack::Instance()->Top();
 	if (!ctx) {
 		return;
 	}
@@ -157,7 +156,7 @@ void Pseudo3DCamera::UpdateRender() const
 {
 	float angle = c25_cam_get_angle(m_cam);
 
-	// todo: should change RenderContext, which will change sl mvp
+	// todo: should change pt2::RenderContext, which will change sl mvp
 // 	const sm_mat4* mat = c25_cam_get_modelview_mat(m_cam);
 // 	sl::SubjectMVP3::Instance()->NotifyModelview(*(const sm::mat4*)mat);
 }

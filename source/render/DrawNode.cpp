@@ -6,10 +6,6 @@
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/DrawOuterGlow.h"
 #include "sprite2/CompDefault.h"
-#include "sprite2/RenderCtxStack.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderScissor.h"
-#include "sprite2/RenderTarget.h"
 #include "sprite2/RVG.h"
 #include "sprite2/DrawDownsample.h"
 #include "sprite2/Utility.h"
@@ -33,6 +29,10 @@
 #include <painting2/RFGaussianBlur.h>
 #include <painting2/RFOuterGlow.h>
 #include <painting2/RFEdgeDetection.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace s2
 {
@@ -303,7 +303,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 		return false;
 	}
 
-	RenderScissor* rs = RenderScissor::Instance();
+	pt2::RenderScissor* rs = pt2::RenderScissor::Instance();
 	if (rs->IsEmpty() && !rp.IsViewRegionValid()) {
 		rp.SetDisableCulling(true);
 		return false;
@@ -347,7 +347,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 }
 
-RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt)
+RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -405,7 +405,7 @@ RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, 
 	return RENDER_OK;
 }
 
-RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, RenderTarget* rt)
+RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -427,8 +427,8 @@ RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, RenderTarget* rt)
 
 RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
 		return RENDER_NO_RT;
 	}
@@ -437,8 +437,8 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	RenderReturn r = DrawSymToRT(sym, rt);
@@ -446,8 +446,8 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 		ret = r;
 	}
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	DTEX_SYM_INSERT(GET_SYM_UID(sym), sym.GetBounding(), rt->GetTexID(), rt->Width(), rt->Height());
 
@@ -463,8 +463,8 @@ const float* DrawNode::DTexQuerySym(const Symbol& sym, int& tex_id, int& block_i
 
 RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
 		return RENDER_NO_RT;
 	}
@@ -473,15 +473,15 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawSprToRT(spr, rp, rt);
 	bool loading_finished = (ret & RENDER_ON_LOADING) == 0;
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	if (loading_finished) 
 	{

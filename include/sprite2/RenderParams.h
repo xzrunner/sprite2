@@ -42,7 +42,7 @@ public:
 #endif // S2_FILTER_FULL
 	pt2::BlendMode     render_blend = pt2::BM_NULL;
 	pt2::FastBlendMode render_fast_blend = pt2::FBM_NULL;
-	float         render_downsample = 1;
+	float              render_downsample = 1;
 
 	pt2::RenderCamera camera;
 	

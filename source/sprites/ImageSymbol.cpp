@@ -6,8 +6,6 @@
 #include "sprite2/Blackboard.h"
 #include "sprite2/OrthoCamera.h"
 #include "sprite2/Pseudo3DCamera.h"
-#include "sprite2/RenderContext.h"
-#include "sprite2/RenderCtxStack.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatOverdraw.h"
 #include "sprite2/StatSymDraw.h"
@@ -29,6 +27,7 @@
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/Texture.h>
+#include <painting2/RenderCtxStack.h>
 
 #include <assert.h>
 

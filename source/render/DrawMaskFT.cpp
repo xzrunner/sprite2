@@ -3,15 +3,11 @@
 #ifndef S2_DISABLE_FLATTEN
 
 #include "sprite2/Actor.h"
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
-#include "sprite2/RenderScissor.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderTarget.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #include "sprite2/StatOverdraw.h"
 #include "sprite2/Blackboard.h"
 #endif // S2_DISABLE_STATISTICS
@@ -29,6 +25,10 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace s2
 {
@@ -75,10 +75,10 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::MASK);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MASK);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -87,29 +87,29 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
-	RenderTarget* rt_base = RT->Fetch();
+	pt2::RenderTarget* rt_base = RT->Fetch();
 	if (!rt_base) {
-		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->Enable();
+		pt2::RenderCtxStack::Instance()->Pop();
+		pt2::RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
 	ret |= DrawBaseToRT(dlist, rt_base, ft, base, base_actor, rp);
 
-	RenderTarget* rt_mask = RT->Fetch();
+	pt2::RenderTarget* rt_mask = RT->Fetch();
 	if (!rt_mask) {
 		RT->Return(rt_base);
-		RenderCtxStack::Instance()->Pop();
-		RenderScissor::Instance()->Enable();
+		pt2::RenderCtxStack::Instance()->Pop();
+		pt2::RenderScissor::Instance()->Enable();
 		return RENDER_NO_RT;
 	}
 	ret |= DrawMaskToRT(dlist, rt_mask, ft, mask, mask_actor, rp);
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	ret |= DrawMaskFromRT(dlist, rt_base, rt_mask, ft, mask, rp.mt);
 
@@ -119,7 +119,7 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	return ret;
 }
 
-RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, RenderTarget* rt, ft::FTList& ft, 
+RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
 	                                  int base, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
@@ -159,7 +159,7 @@ RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, RenderTarget*
 	return RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, RenderTarget* rt, ft::FTList& ft, 
+RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
 	                                  int mask, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
@@ -198,15 +198,15 @@ RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, RenderTarget*
 	return RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, RenderTarget* rt_base, 
-	                                    RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt)
+RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt_base, 
+	                                    pt2::RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt)
 {
 	const ft::FTNode* ft_n = ft.GetNode(mask);
 	if (!ft_n) {
 		return RENDER_NO_DATA;
 	}
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	const Symbol* sym = nullptr;
 	if (ft_n->IsDataSpr()) {

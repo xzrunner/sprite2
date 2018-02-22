@@ -8,13 +8,13 @@
 #include <SM_Vector.h>
 
 namespace cooking { class DisplayList; }
+namespace pt2 { class RenderTarget; }
 
 namespace s2
 {
 
 class Sprite;
 class Symbol;
-class RenderTarget;
 
 class DrawNode
 {
@@ -51,9 +51,9 @@ public:
 	 */
 	static bool CullingTestOutside(const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprToRT(const Sprite* spr, const RenderParams& rp, RenderTarget* rt);
+	static RenderReturn DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt);
 	static RenderReturn DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
-	static RenderReturn DrawSymToRT(const Symbol& sym, RenderTarget* rt);
+	static RenderReturn DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt);
 
 	static RenderReturn DTexCacheSym(const Symbol& sym);
 	static const float* DTexQuerySym(const Symbol& sym, int& tex_id, int& block_id);

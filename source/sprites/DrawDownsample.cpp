@@ -1,14 +1,10 @@
 #include "sprite2/DrawDownsample.h"
-#include "sprite2/RenderTarget.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderScissor.h"
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/SymType.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
@@ -18,6 +14,11 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderContext.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace s2
 {
@@ -29,28 +30,28 @@ RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite* spr
 		return RENDER_NO_DATA;
 	}
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
 		return RENDER_NO_RT;
 	}
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::DOWN_SAMPLE);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::DOWN_SAMPLE);
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	rt->Bind();
 	DrawSpr2RT(spr, rp, downsample);
 	rt->Unbind();
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, downsample);
 
@@ -84,7 +85,7 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
 	                                       const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 

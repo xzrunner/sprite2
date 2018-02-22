@@ -8,20 +8,21 @@
 
 #include <stdint.h>
 
+namespace pt2 { class RenderTarget; }
+
 namespace s2
 {
 
 class Sprite;
 class Symbol;
 class Shape;
-class RenderTarget;
 
 class DrawRT : private cu::Uncopyable
 {
 public:
 	DrawRT();
 	DrawRT(int width, int height);
-	DrawRT(RenderTarget* rt);
+	DrawRT(pt2::RenderTarget* rt);
 	~DrawRT();
 
 	void Draw(const Sprite& spr, bool clear = false, int width = -1, int height = -1, float dx = 0, float dy = 0, float scale = 1);
@@ -41,7 +42,7 @@ private:
 
 private:
 	SourceRT m_rt_type;
-	RenderTarget* m_rt;
+	pt2::RenderTarget* m_rt;
 
 }; // DrawRT
 

@@ -1,6 +1,7 @@
 #include "sprite2/OrthoCamera.h"
-#include "sprite2/RenderContext.h"
-#include "sprite2/RenderCtxStack.h"
+
+#include <painting2/RenderContext.h>
+#include <painting2/RenderCtxStack.h>
 
 namespace s2
 {
@@ -14,7 +15,7 @@ OrthoCamera::OrthoCamera()
 
 void OrthoCamera::OnSize(int width, int height)
 {
-	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
+	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
 	if (ctx) {
 		ctx->SetProjection(width, height);
 		ctx->SetScreen(width, height);
@@ -86,7 +87,7 @@ void OrthoCamera::Set(const sm::vec2& pos, float scale)
 
 void OrthoCamera::UpdateRender() const
 {
-	RenderContext* ctx = const_cast<RenderContext*>(RenderCtxStack::Instance()->Top());
+	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
 	if (!ctx) {
 		return;
 	}

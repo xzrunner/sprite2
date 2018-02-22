@@ -133,15 +133,6 @@
     <Filter Include="render\adapter">
       <UniqueIdentifier>{59c39a48-b1a9-4f16-a40f-0370e75705f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="render\rt">
-      <UniqueIdentifier>{b5e262a6-c7df-4834-905c-31a5e9c6ffd7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="render\ctx">
-      <UniqueIdentifier>{af5619ab-75f4-4125-9e39-f52a75560719}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="render\scissor">
-      <UniqueIdentifier>{e1df307e-391f-4be5-9bca-e580aeaa8753}</UniqueIdentifier>
-    </Filter>
     <Filter Include="render\camera">
       <UniqueIdentifier>{d094579b-efe0-40d1-a2d8-d61a0d799a78}</UniqueIdentifier>
     </Filter>
@@ -483,13 +474,7 @@
     <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\utility\StatImages.cpp">
-      <Filter>utility\stat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp">
-      <Filter>utility\stat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\StatPingPong.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\StatSprCount.cpp">
@@ -534,15 +519,6 @@
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
       <Filter>render\draw</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderCtxStack.cpp">
-      <Filter>render\ctx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderScissor.cpp">
-      <Filter>render\scissor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderScreen.cpp">
-      <Filter>render\scissor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\render\CameraMgr.cpp">
       <Filter>render\camera</Filter>
     </ClCompile>
@@ -567,15 +543,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\RVG.cpp">
       <Filter>render\adapter</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderContext.cpp">
-      <Filter>render\ctx</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderTarget.cpp">
-      <Filter>render\rt</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RenderTargetMgr.cpp">
-      <Filter>render\rt</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\Actor.cpp">
       <Filter>sprites\actor</Filter>
@@ -976,13 +943,7 @@
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\StatImages.h">
-      <Filter>utility\stat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\StatOverdraw.h">
-      <Filter>utility\stat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\StatPingPong.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\StatSprCount.h">
@@ -1030,15 +991,6 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
       <Filter>render\draw</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderCtxStack.h">
-      <Filter>render\ctx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderScissor.h">
-      <Filter>render\scissor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderScreen.h">
-      <Filter>render\scissor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Camera.h">
       <Filter>render\camera</Filter>
     </ClInclude>
@@ -1075,15 +1027,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RVG.h">
       <Filter>render\adapter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderContext.h">
-      <Filter>render\ctx</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderTarget.h">
-      <Filter>render\rt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderTargetMgr.h">
-      <Filter>render\rt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Actor.h">
       <Filter>sprites\actor</Filter>

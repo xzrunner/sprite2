@@ -1,7 +1,4 @@
 #include "sprite2/DrawRT.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderTarget.h"
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Symbol.h"
@@ -15,6 +12,9 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
 
 #include <string.h>
 
@@ -23,17 +23,17 @@ namespace s2
 
 DrawRT::DrawRT()
 {
-	m_rt = RenderTargetMgr::Instance()->Fetch();
+	m_rt = pt2::RenderTargetMgr::Instance()->Fetch();
 	m_rt_type = SRC_MGR;
 }
 
 DrawRT::DrawRT(int width, int height)
 {
-	m_rt = new RenderTarget(width, height);
+	m_rt = new pt2::RenderTarget(width, height);
 	m_rt_type = SRC_NEW;
 }
 
-DrawRT::DrawRT(RenderTarget* rt)
+DrawRT::DrawRT(pt2::RenderTarget* rt)
 {
 	m_rt = rt;
 	m_rt_type = SRC_OUT;
@@ -47,7 +47,7 @@ DrawRT::~DrawRT()
 		delete m_rt;
 		break;
 	case SRC_MGR:
-		RenderTargetMgr::Instance()->Return(m_rt);
+		pt2::RenderTargetMgr::Instance()->Return(m_rt);
 		break;
 	}
 }
@@ -72,7 +72,7 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 		rc->Clear(0);
 	}
 
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams params;
@@ -84,7 +84,7 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	mgr->FlushShader();
 
-	RenderCtxStack::Instance()->Pop();
+	pt2::RenderCtxStack::Instance()->Pop();
 
 	m_rt->Unbind();
 }
@@ -120,7 +120,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	int w = static_cast<int>(sz.x * scale),
 		h = static_cast<int>(sz.y * scale);
 
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(w), static_cast<float>(h), w, h));
 
 	RenderParams params;
@@ -137,7 +137,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	cooking::flush_shader(nullptr);
 #endif // S2_DISABLE_DEFERRED
 
-	RenderCtxStack::Instance()->Pop();
+	pt2::RenderCtxStack::Instance()->Pop();
 
 	m_rt->Unbind();
 }
@@ -165,14 +165,14 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);
 	shape.Draw(nullptr, rp);
 
-	RenderCtxStack::Instance()->Pop();
+	pt2::RenderCtxStack::Instance()->Pop();
 
 	m_rt->Unbind();
 }

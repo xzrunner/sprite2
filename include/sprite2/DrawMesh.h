@@ -10,6 +10,7 @@
 #include <stddef.h>
 
 namespace cooking { class DisplayList; }
+namespace pt2 { class RenderTarget; }
 
 namespace s2
 {
@@ -17,7 +18,6 @@ namespace s2
 class Mesh;
 class RenderParams;
 class Symbol;
-class RenderTarget;
 
 class DrawMesh
 {
@@ -34,8 +34,8 @@ private:
 	static RenderReturn DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* texcoords, int tex_id);
 
 	static RenderReturn DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym);
-	static RenderReturn DrawMesh2RT(cooking::DisplayList* dlist, RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
-	static RenderReturn DrawRT2Screen(cooking::DisplayList* dlist, RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt);
+	static RenderReturn DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const RenderParams& rp, const Symbol& sym);
+	static RenderReturn DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt);
 
 }; // DrawMesh
 

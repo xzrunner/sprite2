@@ -14,6 +14,7 @@
 
 namespace ft { class FTList; }
 namespace cooking { class DisplayList; }
+namespace pt2 { class RenderTarget; }
 
 namespace s2
 {
@@ -21,7 +22,6 @@ namespace s2
 class Sprite;
 class Actor;
 class RenderParams;
-class RenderTarget;
 
 class DrawMaskFT
 {
@@ -30,13 +30,13 @@ public:
 		int base, int mask, const RenderParams& rp);
 
 private:
-	static RenderReturn DrawBaseToRT(cooking::DisplayList* dlist, RenderTarget* rt, 
+	static RenderReturn DrawBaseToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
 		ft::FTList& ft, int base,  const Actor* actor, const RenderParams& rp);
-	static RenderReturn DrawMaskToRT(cooking::DisplayList* dlist, RenderTarget* rt, 
+	static RenderReturn DrawMaskToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
 		ft::FTList& ft, int mask, const Actor* actor, const RenderParams& rp);
 
-	static RenderReturn DrawMaskFromRT(cooking::DisplayList* dlist, RenderTarget* rt_base, 
-		RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt);
+	static RenderReturn DrawMaskFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt_base, 
+		pt2::RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt);
 
 }; // DrawMaskFT
 

@@ -1,14 +1,10 @@
 #include "sprite2/DrawPingPong.h"
-#include "sprite2/RenderCtxStack.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderScissor.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/RenderTarget.h"
 #include "sprite2/Utility.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #endif // S2_DISABLE_STATISTICS
 
 #include <shaderlab/ShaderMgr.h>
@@ -16,6 +12,10 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 namespace s2
 {
@@ -27,13 +27,13 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 
 RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	sm::rect sz;
 	spr->GetBounding(rp.actor).CombineTo(sz);
 	const bool too_large = sz.Width() > RT->WIDTH || sz.Height() > RT->HEIGHT;
 
-	RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();
+	pt2::RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();
 	if (!rt) {
 		return RENDER_NO_RT;
 	}
@@ -41,14 +41,14 @@ RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::Type(m_stat_pp_type));
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::Type(m_stat_pp_type));
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Disable();
+	pt2::RenderScissor::Instance()->Disable();
 	if (!too_large) {
-		RenderCtxStack::Instance()->Push(RenderContext(
+		pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 			static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 	}
 
@@ -57,9 +57,9 @@ RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 	rt->Unbind();
 
 	if (!too_large) {
-		RenderCtxStack::Instance()->Pop();
+		pt2::RenderCtxStack::Instance()->Pop();
 	}
-	RenderScissor::Instance()->Enable();
+	pt2::RenderScissor::Instance()->Enable();
 
 	ret |= DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, too_large);
 	if (too_large) {
@@ -86,7 +86,7 @@ RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id
 RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
@@ -150,7 +150,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int t
 RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	RenderCtxStack::Instance()->Push(RenderContext(2, 2, 0, 0));
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
 
 	float xmin = -1, ymin = -1;
 	float xmax =  1, ymax =  1;
@@ -198,7 +198,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int t
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	RenderCtxStack::Instance()->Pop();
+	pt2::RenderCtxStack::Instance()->Pop();
 
 	return RENDER_OK;
 }

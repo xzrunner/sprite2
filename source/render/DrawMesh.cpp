@@ -1,17 +1,13 @@
 #include "sprite2/DrawMesh.h"
 #include "sprite2/Mesh.h"
 #include "sprite2/RVG.h"
-#include "sprite2/RenderCtxStack.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/RenderScissor.h"
-#include "sprite2/RenderTargetMgr.h"
-#include "sprite2/RenderTarget.h"
 #include "sprite2/Symbol.h"
 #include "sprite2/SymType.h"
 #include "sprite2/ImageSymbol.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #endif // S2_DISABLE_STATISTICS
 
 #include <painting2/Texture.h>
@@ -26,6 +22,10 @@
 #include <cooking/Facade.h>
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
+#include <painting2/RenderCtxStack.h>
+#include <painting2/RenderScissor.h>
 
 #include <assert.h>
 
@@ -172,8 +172,8 @@ RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mes
 	cooking::set_color_sprite(dlist, 0xffffffff, 0, 0x000000ff, 0x0000ff00, 0x00ff0000);
 #endif // S2_DISABLE_DEFERRED
 
-	int w = RenderTargetMgr::Instance()->WIDTH,
-		h = RenderTargetMgr::Instance()->HEIGHT;
+	int w = pt2::RenderTargetMgr::Instance()->WIDTH,
+		h = pt2::RenderTargetMgr::Instance()->HEIGHT;
 	float ori_w = mesh.GetWidth(),
 		  ori_h = mesh.GetHeight();
 	for (int i = 0, n = triangles.size(); i < n; )
@@ -335,8 +335,8 @@ RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh
 
 RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
 {
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
 		return RENDER_NO_RT;
 	}
@@ -344,19 +344,19 @@ RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh
 	RenderReturn ret = RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::MESH);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MESH);
 #endif // S2_DISABLE_STATISTICS
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
-	RenderScissor::Instance()->Disable();
-	RenderCtxStack::Instance()->Push(RenderContext(
+	pt2::RenderScissor::Instance()->Disable();
+	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawMesh2RT(dlist, rt, rp, sym);
 
-	RenderCtxStack::Instance()->Pop();
-	RenderScissor::Instance()->Enable();
+	pt2::RenderCtxStack::Instance()->Pop();
+	pt2::RenderScissor::Instance()->Enable();
 
 	ret |= DrawRT2Screen(dlist, rt, mesh, rp.mt);
 
@@ -365,7 +365,7 @@ RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
+RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
 {
 	rt->Bind();
 
@@ -397,7 +397,7 @@ RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, RenderTarget* rt
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
+RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
 {
 	return DrawOnlyMesh(dlist, mesh, mt, rt->GetTexID());
 }

@@ -4,9 +4,8 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/CompDefault.h"
-#include "sprite2/RenderTargetMgr.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatPingPong.h"
+#include <stat/StatPingPong.h>
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
@@ -14,6 +13,8 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/RenderTargetMgr.h>
+#include <painting2/RenderTarget.h>
 
 namespace s2
 {
@@ -21,11 +22,11 @@ namespace s2
 RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
 {
 #ifndef S2_DISABLE_STATISTICS
-	StatPingPong::Instance()->AddCount(StatPingPong::OUTER_GLOW);
+	st::StatPingPong::Instance()->AddCount(st::StatPingPong::OUTER_GLOW);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderTargetMgr* RT = RenderTargetMgr::Instance();
-	RenderTarget* rt = RT->Fetch();
+	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	pt2::RenderTarget* rt = RT->Fetch();
 	DrawGaussianBlur::DrawBlurToRT(dlist, rt, spr, rp, iterations);
 	DrawGaussianBlur::DrawFromRT(dlist, rt, spr->GetPosition());
 	RT->Return(rt);

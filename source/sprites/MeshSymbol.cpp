@@ -3,12 +3,12 @@
 #include "sprite2/MeshSprite.h"
 #include "sprite2/Sprite.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/DrawMesh.h"
 #include "sprite2/DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
+#include "sprite2/ImageSymbol.h"
 
 #include <memmgr/Allocator.h>
 #include <shaderlab/ShaderMgr.h>
@@ -16,6 +16,55 @@
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
+#include <painting2/DrawMesh.h>
+#include <painting2/Texture.h>
+
+namespace
+{
+
+class DrawMesh : public pt2::DrawMesh<s2::Symbol, s2::RenderParams>
+{
+public:
+	DrawMesh(const pt2::Mesh<s2::Symbol>& mesh)
+		: pt2::DrawMesh<s2::Symbol, s2::RenderParams>(mesh)
+	{
+	}
+
+protected:
+	virtual pt2::RenderReturn DrawNode(const s2::Symbol& sym, const s2::RenderParams& rp) const override
+	{
+		s2::RenderParamsProxy rp_proxy;
+		s2::RenderParams* rp_child = rp_proxy.obj;
+		memcpy(rp_child, &rp, sizeof(rp));
+
+		rp_child->mt.Identity();
+		// make empty
+		rp_child->SetViewRegion(sm::rect());
+
+		return s2::DrawNode::Draw(sym, *rp_child);
+	}
+
+	virtual bool IsNodeImage(const s2::Symbol& sym) const override
+	{
+		return sym.Type() == s2::SYM_IMAGE;
+	}
+
+	virtual pt2::RenderReturn PrepareDrawOnePass(
+		cooking::DisplayList* dlist, const s2::Symbol& sym, const s2::RenderParams& rp, float* texcoords, int* tex_id) const override
+	{
+		auto& img_sym = S2_VI_DOWN_CAST<const s2::ImageSymbol&>(sym);
+		if (!img_sym.GetTexture()->IsLoadFinished()) {
+			return pt2::RENDER_ON_LOADING;
+		}
+		if (!img_sym.QueryTexcoords(!rp.IsDisableDTexC2(), texcoords, *tex_id)) {
+			img_sym.OnQueryTexcoordsFail(dlist);
+		}
+		return pt2::RENDER_OK;
+	}
+
+}; // DrawMesh
+
+}
 
 namespace s2
 {
@@ -81,11 +130,13 @@ pt2::RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const Render
  	}
 
 	pt2::RenderReturn ret = pt2::RENDER_OK;
+
+	DrawMesh draw(*m_mesh);
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
- 		ret = DrawMesh::DrawInfoXY(dlist, *m_mesh, &rp_child->mt);
+ 		ret = draw.DrawInfoXY(dlist, &rp_child->mt);
  	} else {
- 		ret = DrawMesh::DrawTexture(dlist, *m_mesh, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
- 	}
+ 		ret = draw.DrawTexture(dlist, *rp_child, mesh_spr ? mesh_spr->GetBaseSym() : nullptr);
+ 	}	
  
 //  	if (!m_pause && mesh_spr)
 //  	{

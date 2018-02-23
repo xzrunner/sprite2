@@ -557,9 +557,6 @@
     <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp">
       <Filter>render</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawMesh.cpp">
-      <Filter>render</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\render\DrawNode.cpp">
       <Filter>render</Filter>
     </ClCompile>
@@ -1039,9 +1036,6 @@
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h">
-      <Filter>render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h">
       <Filter>render</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\DrawNode.h">

@@ -599,7 +599,7 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 #endif // S2_DISABLE_DEFERRED
 	if (blend != pt2::BM_NULL) 
 	{
-		// 		const Camera* cam = CameraMgr::Instance()->GetCamera();
+		// 		const pt2::Camera* cam = pt2::CameraMgr::Instance()->GetCamera();
 		// 		if (cam->Type() == "ortho") {
 		ret = DrawBlend().Draw(dlist, spr, rp);
 		//		}s

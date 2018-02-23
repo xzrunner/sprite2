@@ -4,8 +4,6 @@
 #include "sprite2/Sprite.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Blackboard.h"
-#include "sprite2/OrthoCamera.h"
-#include "sprite2/Pseudo3DCamera.h"
 #ifndef S2_DISABLE_STATISTICS
 #include <stat/StatOverdraw.h>
 #include "sprite2/StatSymDraw.h"
@@ -28,6 +26,8 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/Texture.h>
 #include <painting2/RenderCtxStack.h>
+#include <painting2/OrthoCamera.h>
+#include <painting2/Pseudo3DCamera.h>
 
 #include <assert.h>
 
@@ -109,7 +109,7 @@ pt2::RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 			DrawBlend(*rp_child, vertices, texcoords, tex_id);
 		}
 	} else {
-		//const Camera* cam = Blackboard::Instance()->GetCamera();
+		//const pt2::Camera* cam = Blackboard::Instance()->GetCamera();
 		//if (cam && cam->Type() == CAM_PSEUDO3D) {
 		//	DrawPseudo3D(dlist, *rp_child, vertices, texcoords, tex_id);
 		//} else {
@@ -158,7 +158,7 @@ pt2::RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 			DrawBlend(rp, vertices, texcoords, tex_id);
 		}
 	} else {
-		//const Camera* cam = Blackboard::Instance()->GetCamera();
+		//const pt2::Camera* cam = Blackboard::Instance()->GetCamera();
 		//if (cam && cam->Type() == CAM_PSEUDO3D) {
 		//	DrawPseudo3D(rp, vertices, texcoords, tex_id);
 		//} else {
@@ -217,10 +217,10 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 	vertices_scr[3] = rp.mt * sm::vec2(m_size.xmin, m_size.ymax);
 
 	auto cam = Blackboard::Instance()->GetCamera();
-	std::shared_ptr<const OrthoCamera> ocam = nullptr;
+	std::shared_ptr<const pt2::OrthoCamera> ocam = nullptr;
 	if (cam) {
-		assert(cam->Type() == CAM_ORTHO2D);
-		ocam = std::dynamic_pointer_cast<const OrthoCamera>(cam);
+		assert(cam->Type() == pt2::CAM_ORTHO2D);
+		ocam = std::dynamic_pointer_cast<const pt2::OrthoCamera>(cam);
 	}
 	
 	sm::vec2 tex_coords_base[4];
@@ -295,11 +295,11 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 
 void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& rp, const float* vertices, const float* texcoords, int tex_id) const
 {
-#ifndef S2_DISABLE_CAMERA25
+#ifndef PT2_DISABLE_CAMERA25
 
 	auto cam = Blackboard::Instance()->GetCamera();
-	assert(cam && cam->Type() == CAM_PSEUDO3D);
-	auto pcam = std::dynamic_pointer_cast<const Pseudo3DCamera>(cam);
+	assert(cam && cam->Type() == pt2::CAM_PSEUDO3D);
+	auto pcam = std::dynamic_pointer_cast<const pt2::Pseudo3DCamera>(cam);
 
 	float z[4];
 	rp.camera.CalculateZ(pcam->GetAngle(), vertices, z);
@@ -334,7 +334,7 @@ void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& 
 	cooking::draw_quad_sprite3(dlist, &_vertices[0].x, &_texcoords[0].x, tex_id);
 #endif // S2_DISABLE_DEFERRED
 
-#endif // S2_DISABLE_CAMERA25
+#endif // PT2_DISABLE_CAMERA25
 }
 
 bool ImageSymbol::CalcVertices(const RenderParams& rp, float* vertices) const

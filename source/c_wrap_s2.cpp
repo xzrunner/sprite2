@@ -34,7 +34,6 @@
 #include "sprite2/AnchorActor.h"
 #include "sprite2/Particle3dSprite.h"
 #include "sprite2/Particle3dEmitter.h"
-#include "sprite2/OrthoCamera.h"
 #include "sprite2/ProxySymbol.h"	// todo
 #include "sprite2/ProxySprite.h"
 #include "sprite2/ProxyHelper.h"
@@ -54,6 +53,7 @@
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/OrthoCamera.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -1532,21 +1532,21 @@ int s2_rt_get_texid(void* rt)
 extern "C"
 void* s2_cam_create()
 {
-	return new OrthoCamera();
+	return new pt2::OrthoCamera();
 }
 
 extern "C"
 void s2_cam_release(void* cam)
 {
 	// todo
-	auto c = *static_cast<std::shared_ptr<Camera>*>(cam);
+	auto c = *static_cast<std::shared_ptr<pt2::Camera>*>(cam);
 //	delete c;
 }
 
 extern "C"
 void s2_cam_bind(void* cam)
 {
-	auto c = *static_cast<std::shared_ptr<Camera>*>(cam);
+	auto c = *static_cast<std::shared_ptr<pt2::Camera>*>(cam);
 	c->Bind();
 	Blackboard::Instance()->SetCamera(c);
 }
@@ -1554,14 +1554,14 @@ void s2_cam_bind(void* cam)
 extern "C"
 void s2_cam_set(void* cam, float x, float y, float scale)
 {
-	auto o_cam = *static_cast<std::shared_ptr<OrthoCamera>*>(cam);
+	auto o_cam = *static_cast<std::shared_ptr<pt2::OrthoCamera>*>(cam);
 	o_cam->Set(sm::vec2(x, y), scale);
 }
 
 extern "C"
 void s2_cam_get(const void* cam, float* x, float* y, float* scale)
 {
-	auto o_cam = *static_cast<const std::shared_ptr<OrthoCamera>*>(cam);
+	auto o_cam = *static_cast<const std::shared_ptr<pt2::OrthoCamera>*>(cam);
 	const sm::vec2& pos = o_cam->GetPosition();
 	*x = pos.x;
 	*y = pos.y;
@@ -1571,7 +1571,7 @@ void s2_cam_get(const void* cam, float* x, float* y, float* scale)
 extern "C"
 void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, float* dst_y)
 {
-	auto o_cam = *static_cast<const std::shared_ptr<OrthoCamera>*>(cam);
+	auto o_cam = *static_cast<const std::shared_ptr<pt2::OrthoCamera>*>(cam);
 	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
 	sm::vec2 dst = o_cam->TransPosScreenToProject(src_x, src_y, sz.x, sz.y);
 	*dst_x = dst.x;

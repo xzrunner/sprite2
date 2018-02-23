@@ -133,9 +133,6 @@
     <Filter Include="render\adapter">
       <UniqueIdentifier>{59c39a48-b1a9-4f16-a40f-0370e75705f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="render\camera">
-      <UniqueIdentifier>{d094579b-efe0-40d1-a2d8-d61a0d799a78}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites\sprite\parts">
       <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
     </Filter>
@@ -512,15 +509,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
       <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\CameraMgr.cpp">
-      <Filter>render\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\OrthoCamera.cpp">
-      <Filter>render\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\Pseudo3DCamera.cpp">
-      <Filter>render\camera</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CacheMatVisitor.cpp">
@@ -978,21 +966,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
       <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Camera.h">
-      <Filter>render\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\CameraMgr.h">
-      <Filter>render\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\CameraType.h">
-      <Filter>render\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\OrthoCamera.h">
-      <Filter>render\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h">
-      <Filter>render\camera</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
     <ClInclude Include="..\..\..\include\sprite2\SymbolVisitor.h">

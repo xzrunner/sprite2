@@ -78,7 +78,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
-    <ClCompile Include="..\..\..\source\render\CameraMgr.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawBlend.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp" />
@@ -88,8 +87,6 @@
     <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawPingPong.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp" />
-    <ClCompile Include="..\..\..\source\render\OrthoCamera.cpp" />
-    <ClCompile Include="..\..\..\source\render\Pseudo3DCamera.cpp" />
     <ClCompile Include="..\..\..\source\render\RVG.cpp" />
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp" />
@@ -253,9 +250,6 @@
     <ClInclude Include="..\..\..\include\sprite2\Blackboard.h" />
     <ClInclude Include="..\..\..\include\sprite2\CacheMatVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Callback.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Camera.h" />
-    <ClInclude Include="..\..\..\include\sprite2\CameraMgr.h" />
-    <ClInclude Include="..\..\..\include\sprite2\CameraType.h" />
     <ClInclude Include="..\..\..\include\sprite2\CircleShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\ColorPolygon.h" />
     <ClInclude Include="..\..\..\include\sprite2\CompActorAABB.h" />
@@ -306,7 +300,6 @@
     <ClInclude Include="..\..\..\include\sprite2\ModelSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ModelSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h" />
-    <ClInclude Include="..\..\..\include\sprite2\OrthoCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\P3dEmitterCfg.h" />
     <ClInclude Include="..\..\..\include\sprite2\P3dRenderParams.h" />
     <ClInclude Include="..\..\..\include\sprite2\Particle2d.h" />
@@ -328,7 +321,6 @@
     <ClInclude Include="..\..\..\include\sprite2\ProxyHelper.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxySprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\ProxySymbol.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Pseudo3DCamera.h" />
     <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />

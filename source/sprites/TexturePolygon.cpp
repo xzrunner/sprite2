@@ -60,7 +60,7 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 	}
 
 	//sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	//const ee::Camera* cam = ee::CameraMgr::Instance()->GetCamera();
+	//const ee::pt2::Camera* cam = ee::pt2::CameraMgr::Instance()->GetCamera();
 	//if (cam->Type() == "ortho") 
 	//{
 	//	mgr->SetShader(sl::SPRITE2);

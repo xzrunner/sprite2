@@ -66,7 +66,7 @@ void ComplexSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -83,7 +83,7 @@ RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	int action = GetAction(spr, rp.actor);
@@ -107,7 +107,7 @@ RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 		pt2::RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	auto& children = GetActionChildren(action);
 	if (!children.empty())

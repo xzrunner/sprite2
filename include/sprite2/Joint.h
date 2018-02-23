@@ -3,12 +3,12 @@
 
 #include "sprite2/pre_defined.h"
 #include "sprite2/JointPose.h"
-#include "sprite2/RenderReturn.h"
 #include "sprite2/typedef.h"
 
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
 #include <SM_Rect.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -30,7 +30,7 @@ public:
 	VIRTUAL_INHERITANCE void Rotate(float rot);
 	VIRTUAL_INHERITANCE void Scale(const sm::vec2& scale);
 
-	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
+	pt2::RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	void Update();
 
 	bool ConnectChild(const std::shared_ptr<Joint>& child);

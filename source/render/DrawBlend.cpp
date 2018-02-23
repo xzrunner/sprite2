@@ -27,7 +27,7 @@ DrawBlend::DrawBlend()
 {
 }
 
-RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, 
+pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, 
 	                               const RenderParams& rp, bool too_large) const
 {
 	pt2::BlendMode mode = spr->GetShader().GetBlend();
@@ -55,7 +55,7 @@ RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* sp
 	} else {
 		rp_child->vertex_offset = - (rp_child->mt * spr->GetPosition());
 	}
-	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
+	pt2::RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 #ifdef S2_DISABLE_DEFERRED
 	shader->Commit();
@@ -66,7 +66,7 @@ RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* sp
 	return ret;
 }
 
-RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
+pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										   const RenderParams& rp, bool reset_color) const
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
@@ -106,7 +106,7 @@ RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_
 	cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

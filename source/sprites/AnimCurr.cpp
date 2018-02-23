@@ -288,13 +288,13 @@ VisitResult AnimCurr::Traverse2(SpriteVisitor2& visitor, const SprVisitorParams2
 //	return ret;
 //}
 
-RenderReturn AnimCurr::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
+pt2::RenderReturn AnimCurr::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	if (m_curr.empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;

@@ -36,13 +36,13 @@ static pt2::Color RED	(204, 51, 102, 128);
 static pt2::Color GREEN	(102, 204, 51, 128);
 static pt2::Color BLUE	(102, 51, 204, 128);
 
-RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
+pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
 	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 	
 	float w = mesh.GetWidth(),
@@ -75,16 +75,16 @@ RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh,
 		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
+pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
 	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	// lines
@@ -111,19 +111,19 @@ RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh,
 		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
+pt2::RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
 	                               const RenderParams& rp, const SymConstPtr& base_sym)
 {
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	auto& sym = base_sym ? base_sym : mesh.GetBaseSymbol();
 	if (sym->Type() == SYM_IMAGE) 
 	{
 	 	auto img_sym = S2_VI_PTR_DOWN_CAST<const ImageSymbol>(sym);
 	 	if(!img_sym->GetTexture()->IsLoadFinished()) {
-	 		return RENDER_ON_LOADING;
+	 		return pt2::RENDER_ON_LOADING;
 	 	}
 	 	float texcoords[8];
 	 	int tex_id;
@@ -150,13 +150,13 @@ RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT& mt, int tex_id)
+pt2::RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT& mt, int tex_id)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
 	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 #ifdef S2_DISABLE_DEFERRED
@@ -196,7 +196,7 @@ RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mes
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 static void draw_sprite2(cooking::DisplayList* dlist, const float* positions, const float* texcoords, int tex_id)
@@ -225,21 +225,21 @@ static void draw_filter(cooking::DisplayList* dlist, const float* positions, con
 #endif // S2_DISABLE_DEFERRED
 }
 
-RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+pt2::RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderType shader_type;
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	shader_type = mgr->GetShaderType();
 	if (shader_type != sl::SPRITE2 && shader_type != sl::FILTER) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 #else
 	int _shader_type = dlist->GetShaderType();
 	assert(_shader_type >= 0);
 	shader_type = static_cast<sl::ShaderType>(_shader_type);
 	if (shader_type != sl::SPRITE2 && shader_type != sl::FILTER) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 #endif // S2_DISABLE_DEFERRED
 
@@ -247,7 +247,7 @@ RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh
 	CU_VEC<int> triangles;
 	mesh.DumpToTriangles(vertices, texcoords, triangles);
 	if (triangles.empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	float x = src_texcoords[0], y = src_texcoords[1];
@@ -330,18 +330,18 @@ RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh
 		assert(0);
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
+pt2::RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MESH);
@@ -365,7 +365,7 @@ RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
+pt2::RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const RenderParams& rp, const Symbol& sym)
 {
 	rt->Bind();
 
@@ -384,7 +384,7 @@ RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarge
 	// make empty
 	rp_child->SetViewRegion(sm::rect());
 
-	RenderReturn ret = DrawNode::Draw(sym, *rp_child);
+	pt2::RenderReturn ret = DrawNode::Draw(sym, *rp_child);
 
 #ifdef S2_DISABLE_DEFERRED
 	mgr->FlushShader();
@@ -397,7 +397,7 @@ RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::RenderTarge
 	return ret;
 }
 
-RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
+pt2::RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
 {
 	return DrawOnlyMesh(dlist, mesh, mt, rt->GetTexID());
 }

@@ -24,10 +24,10 @@ int SNodeSymbol::Type() const
 	return SYM_SNODE;
 }
 
-RenderReturn SNodeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn SNodeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
  	if (!spr || !m_node) {
- 		return RENDER_NO_DATA;
+ 		return pt2::RENDER_NO_DATA;
  	}
 
 	RenderParamsProxy rp_proxy;
@@ -35,7 +35,7 @@ RenderReturn SNodeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	sm::mat4 mt2d = CalcCam2dMat(rp_child->mt);
@@ -52,7 +52,7 @@ RenderReturn SNodeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	//pt3::PrimitiveDraw::SetColor(0xff00ff00);
 	//pt3::PrimitiveDraw::Cube(mt, m_aabb);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 sm::rect SNodeSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

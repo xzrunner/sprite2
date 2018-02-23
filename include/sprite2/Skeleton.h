@@ -1,11 +1,10 @@
 #ifndef _SPRITE2_SKELETON_H_
 #define _SPRITE2_SKELETON_H_
 
-#include "sprite2/RenderReturn.h"
-
 #include <cu/uncopyable.h>
 #include <cu/cu_stl.h>
 #include <SM_Rect.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -22,7 +21,7 @@ class Skeleton : private cu::Uncopyable
 public:
 	Skeleton(const std::shared_ptr<Joint>& root, const CU_VEC<std::shared_ptr<Joint>>& all_joints);
 
-	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
+	pt2::RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 	sm::rect GetBounding() const;
 
 	std::shared_ptr<Joint> QueryByPos(const sm::vec2& pos) const;

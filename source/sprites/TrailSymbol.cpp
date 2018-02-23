@@ -49,7 +49,7 @@ int TrailSymbol::Type() const
 	return SYM_TRAIL; 
 }
 
-RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TRAIL);
@@ -57,7 +57,7 @@ RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -77,7 +77,7 @@ RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	// todo: return trail's render ret
 	t2d_spr->Draw(*rp_child);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 void TrailSymbol::SetEmitterCfg(const std::shared_ptr<const TrailEmitterCfg>& cfg)

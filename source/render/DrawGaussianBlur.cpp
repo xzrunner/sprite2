@@ -4,7 +4,7 @@
 #include "sprite2/DrawNode.h"
 #ifndef S2_DISABLE_STATISTICS
 #include <stat/StatPingPong.h>
-#include "sprite2/StatOverdraw.h"
+#include <stat/StatOverdraw.h>
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
@@ -26,9 +26,9 @@
 namespace s2
 {
 
-RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
+pt2::RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
 {
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
@@ -41,10 +41,10 @@ RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Sprite* s
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
+pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
 	                                        const Sprite* spr, const RenderParams& rp, int iterations)
 {	
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::GAUSSIAN_BLUR);
@@ -87,7 +87,7 @@ RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt2::Re
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const sm::vec2& offset)
+pt2::RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const sm::vec2& offset)
 {
 	sm::vec2 vertices[4];
 	vertices[0].Set(-512, -512);
@@ -120,10 +120,10 @@ RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, pt2::Rend
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite* spr, const RenderParams& rp)
 {
 	rt->Bind();
 
@@ -145,14 +145,14 @@ RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite* spr
 	rp_child->SetDisableFilter(true);
 
 	mgr->SetShader(sl::SPRITE2);
-	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
+	pt2::RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	rt->Unbind();
 
 	return ret;
 }
 
-RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
+pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
@@ -184,7 +184,7 @@ RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::Render
 	texcoords[3].Set(0, 1);
 
 #ifndef S2_DISABLE_STATISTICS
-	StatOverdraw::Instance()->AddArea(1);
+	st::StatOverdraw::Instance()->AddArea(1);
 #endif // S2_DISABLE_STATISTICS
 
 	shader->Draw(&vertices[0].x, &texcoords[0].x, src->GetTexID());
@@ -193,7 +193,7 @@ RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::Render
 
 	dst->Unbind();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

@@ -56,14 +56,14 @@ void Scale9Symbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn Scale9Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Scale9Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SCALE9);
 //	StatSymDraw::DrawCostCP cp(STAT_SYM_SCALE9);
 #endif // S2_DISABLE_STATISTICS
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (rp.actor) {
 		RenderParamsProxy rp_proxy;
 	    RenderParams* rp_child = rp_proxy.obj;
@@ -72,7 +72,7 @@ RenderReturn Scale9Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPar
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			ret = S2_VI_DOWN_CAST<const Scale9Actor*>(rp.actor)->GetScale9().Draw(dlist, *rp_child);
 		} else {
-			ret = RENDER_INVISIBLE;
+			ret = pt2::RENDER_INVISIBLE;
 		}
 	} else if (spr) {
 		RenderParamsProxy rp_proxy;
@@ -82,7 +82,7 @@ RenderReturn Scale9Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPar
 		if (DrawNode::Prepare(rp, spr, *rp_child)) {
 			ret = S2_VI_DOWN_CAST<const Scale9Sprite*>(spr)->GetScale9().Draw(dlist, *rp_child);
 		} else {
-			ret = RENDER_INVISIBLE;
+			ret = pt2::RENDER_INVISIBLE;
 		}
 	} else {
 		ret = m_s9.Draw(dlist, rp);

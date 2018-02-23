@@ -8,7 +8,7 @@
 #include "sprite2/Symbol.h"
 #ifndef S2_DISABLE_STATISTICS
 #include <stat/StatPingPong.h>
-#include "sprite2/StatOverdraw.h"
+#include <stat/StatOverdraw.h>
 #include "sprite2/Blackboard.h"
 #endif // S2_DISABLE_STATISTICS
 
@@ -33,25 +33,25 @@
 namespace s2
 {
 
-RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft, 
+pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft, 
 	                          int base, int mask, const RenderParams& rp)
 {
 	const ft::FTNode* ft_base = ft.GetNode(base);
 	const ft::FTNode* ft_mask = ft.GetNode(mask);
 	if (!ft_base || !ft_mask) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	const Actor* base_actor = nullptr;
 	if (ft_base->IsDataSpr()) {
 		auto spr(static_cast<const s2::Sprite*>(ft_base->GetData()));
 		if (!spr->IsVisible()) {
-			return RENDER_INVISIBLE;
+			return pt2::RENDER_INVISIBLE;
 		}
 	} else {
 		auto actor(static_cast<const s2::Actor*>(ft_base->GetData()));
 		if (!actor->IsVisible()) {
-			return RENDER_INVISIBLE;
+			return pt2::RENDER_INVISIBLE;
 		} else {
 			base_actor = actor;
 		}
@@ -61,18 +61,18 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	if (ft_mask->IsDataSpr()) {
 		auto spr(static_cast<const s2::Sprite*>(ft_mask->GetData()));
 		if (!spr->IsVisible()) {
-			return RENDER_INVISIBLE;
+			return pt2::RENDER_INVISIBLE;
 		}
 	} else {
 		auto actor(static_cast<const s2::Actor*>(ft_mask->GetData()));
 		if (!actor->IsVisible()) {
-			return RENDER_INVISIBLE;
+			return pt2::RENDER_INVISIBLE;
 		} else {
 			mask_actor = actor;
 		}
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MASK);
@@ -95,7 +95,7 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	if (!rt_base) {
 		pt2::RenderCtxStack::Instance()->Pop();
 		pt2::RenderScissor::Instance()->Enable();
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawBaseToRT(dlist, rt_base, ft, base, base_actor, rp);
 
@@ -104,7 +104,7 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 		RT->Return(rt_base);
 		pt2::RenderCtxStack::Instance()->Pop();
 		pt2::RenderScissor::Instance()->Enable();
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawMaskToRT(dlist, rt_mask, ft, mask, mask_actor, rp);
 
@@ -119,7 +119,7 @@ RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	return ret;
 }
 
-RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
+pt2::RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
 	                                  int base, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
@@ -156,10 +156,10 @@ RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::RenderTa
 
 	rt->Unbind();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
+pt2::RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, ft::FTList& ft, 
 	                                  int mask, const Actor* actor, const RenderParams& rp)
 {
 	rt->Bind();
@@ -195,15 +195,15 @@ RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::RenderTa
 
 	rt->Unbind();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt_base, 
+pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt_base, 
 	                                    pt2::RenderTarget* rt_mask, ft::FTList& ft, int mask, const S2_MAT& mt)
 {
 	const ft::FTNode* ft_n = ft.GetNode(mask);
 	if (!ft_n) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
@@ -252,7 +252,7 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::Render
 	}
 	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
 	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-	StatOverdraw::Instance()->AddArea(area);
+	st::StatOverdraw::Instance()->AddArea(area);
 #endif // S2_DISABLE_STATISTICS
 
 #ifdef S2_DISABLE_DEFERRED
@@ -267,7 +267,7 @@ RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::Render
 	cooking::draw_quad_mask(dlist, &vertices[0].x, &texcoords[0].x, &texcoords_mask[0].x, rt_base->GetTexID(), rt_mask->GetTexID());
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

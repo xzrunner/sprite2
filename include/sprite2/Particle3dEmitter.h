@@ -1,10 +1,9 @@
 #ifndef _SPRITE2_PARTICLE3D_EMITTER_H_
 #define _SPRITE2_PARTICLE3D_EMITTER_H_
 
-#include "sprite2/RenderReturn.h"
-
 #include <cu/uncopyable.h>
 #include <memmgr/Allocator.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -21,7 +20,7 @@ public:
 	~Particle3dEmitter();
 
 	bool Update(float time);
-	RenderReturn Draw(const P3dRenderParams& rp, bool alone) const;
+	pt2::RenderReturn Draw(const P3dRenderParams& rp, bool alone) const;
 	bool PrepareEmitter();
 
 	bool IsLoop() const;

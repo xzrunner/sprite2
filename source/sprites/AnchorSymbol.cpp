@@ -21,15 +21,15 @@ int AnchorSymbol::Type() const
 	return SYM_ANCHOR; 
 }
 
-RenderReturn AnchorSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn AnchorSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	assert(spr);
 	auto anchor = S2_VI_DOWN_CAST<const AnchorSprite*>(spr)->QueryAnchor(rp.actor);
 	if (!anchor) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -43,7 +43,7 @@ RenderReturn AnchorSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPar
 //		rp_child->SetDisableCulling(true);
 		ret = DrawNode::Draw(dlist, rp_child->actor->GetSprRaw(), *rp_child);
 	} else {
-		ret = RENDER_NO_DATA;
+		ret = pt2::RENDER_NO_DATA;
 	}
 
 	return ret;

@@ -16,9 +16,9 @@ Skeleton::Skeleton(const std::shared_ptr<Joint>& root, const CU_VEC<std::shared_
 {
 }
 
-RenderReturn Skeleton::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
+pt2::RenderReturn Skeleton::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	for (int i = 0, n = m_all_joints.size(); i < n; ++i) {
 		ret |= m_all_joints[i]->Draw(dlist, rp);
 	}

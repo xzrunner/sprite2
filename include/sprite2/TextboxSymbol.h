@@ -30,9 +30,9 @@ public:
 	 */
 	virtual int Type() const override;
 	virtual void Traverse(const SymbolVisitor& visitor) override {}
-	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+	virtual pt2::RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
 #ifndef S2_DISABLE_FLATTEN
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
+	virtual pt2::RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
 
 	const pt2::Textbox& GetTextbox() const { return m_tb; }
@@ -47,7 +47,7 @@ protected:
 		const pt2::Color& add, const CU_STR& text, int time, bool richtext) const = 0;
 
 private:
-	RenderReturn DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const;
+	pt2::RenderReturn DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const;
 
 protected:
 	pt2::Textbox m_tb;

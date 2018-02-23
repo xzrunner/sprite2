@@ -16,9 +16,9 @@ int ModelSymbol::Type() const
 	return SYM_MODEL;
 }
 
-RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn ModelSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 sm::rect ModelSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const

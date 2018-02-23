@@ -3,7 +3,8 @@
 
 #include "sprite2/Sprite.h"
 #include "sprite2/Particle2d.h"
-#include "sprite2/RenderReturn.h"
+
+#include <painting2/RenderReturn.h>
 
 struct p2d_emitter;
 
@@ -28,7 +29,7 @@ public:
 	virtual void OnMessage(const UpdateParams& up, Message msg) override;
 	virtual bool Update(const UpdateParams& up) override;
 
-	RenderReturn Draw(const RenderParams& rp) const;
+	pt2::RenderReturn Draw(const RenderParams& rp) const;
 
 	void SetMatrix(const S2_MAT& mat) const { m_mat = mat; }
 

@@ -43,7 +43,7 @@ int ShapeSymbol::Type() const
 	return SYM_SHAPE; 
 }
 
-RenderReturn ShapeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn ShapeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SHAPE);
@@ -51,10 +51,10 @@ RenderReturn ShapeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_shape || !spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -63,24 +63,24 @@ RenderReturn ShapeSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	if (DrawNode::Prepare(rp, spr, *rp_child)) {
 		// todo: shape's render ret
 		m_shape->Draw(dlist, *rp_child);
-		ret = RENDER_OK;
+		ret = pt2::RENDER_OK;
 	} else {
-		ret = RENDER_INVISIBLE;
+		ret = pt2::RENDER_INVISIBLE;
 	}
 
 	return ret;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn ShapeSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_shape || !spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	m_shape->Draw(dlist, rp);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 #endif // S2_DISABLE_FLATTEN
 

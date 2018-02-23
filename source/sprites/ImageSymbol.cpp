@@ -7,7 +7,7 @@
 #include "sprite2/OrthoCamera.h"
 #include "sprite2/Pseudo3DCamera.h"
 #ifndef S2_DISABLE_STATISTICS
-#include "sprite2/StatOverdraw.h"
+#include <stat/StatOverdraw.h>
 #include "sprite2/StatSymDraw.h"
 #include "sprite2/StatSymCount.h"
 #endif // S2_DISABLE_STATISTICS
@@ -63,10 +63,10 @@ int ImageSymbol::Type() const
 	return SYM_IMAGE; 
 }
 
-RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_tex) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 #ifndef S2_DISABLE_STATISTICS
@@ -75,7 +75,7 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {
-		return RENDER_ON_LOADING;
+		return pt2::RENDER_ON_LOADING;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -83,12 +83,12 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	float vertices[8];
 	if (!CalcVertices(*rp_child, vertices)) {
-		return RENDER_OUTSIDE;
+		return pt2::RENDER_OUTSIDE;
 	}
 
 	float texcoords[8];
@@ -100,7 +100,7 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 //#ifndef S2_DISABLE_STATISTICS
 //	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();	
 //	float area = (xmax - xmin) * (ymax - ymin) / sz.x / sz.y;
-//	StatOverdraw::Instance()->AddArea(area);
+//	st::StatOverdraw::Instance()->AddArea(area);
 //#endif // S2_DISABLE_STATISTICS
 	
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -117,11 +117,11 @@ RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 		//}
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
+pt2::RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 	                               const RenderParams& rp, 
 	                               const Sprite* spr,
 	                               ft::FTList& ft, 
@@ -132,12 +132,12 @@ RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 //#endif // S2_DISABLE_STATISTICS
 
 	if (!m_tex->IsLoadFinished()) {
-		return RENDER_ON_LOADING;
+		return pt2::RENDER_ON_LOADING;
 	}
 
 	float vertices[8];
 	if (!CalcVertices(rp, vertices)) {
-		return RENDER_OUTSIDE;
+		return pt2::RENDER_OUTSIDE;
 	}
 
 	float texcoords[8];
@@ -166,7 +166,7 @@ RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 		//}
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 #endif // S2_DISABLE_FLATTEN
 

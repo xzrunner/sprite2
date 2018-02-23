@@ -60,10 +60,10 @@ int TextboxSymbol::Type() const
 	return SYM_TEXTBOX; 
 }
 
-RenderReturn TextboxSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn TextboxSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 	if (!spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -71,16 +71,16 @@ RenderReturn TextboxSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
-	RenderReturn ret = DrawImpl(dlist, *rp_child, spr);
+	pt2::RenderReturn ret = DrawImpl(dlist, *rp_child, spr);
 
 	return ret;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	assert(spr);
 	return DrawImpl(dlist, rp, spr);
@@ -120,7 +120,7 @@ sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, b
 	}
 }
 
-RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTBOX);
@@ -138,7 +138,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 		text = &tb_spr->GetText(UpdateParams());
 	}
 	if (!text || text->empty()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -181,7 +181,7 @@ RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const RenderPa
 
 	tb_spr->UpdateTime();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

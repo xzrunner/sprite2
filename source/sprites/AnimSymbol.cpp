@@ -72,9 +72,9 @@ void AnimSymbol::Traverse(const SymbolVisitor& visitor)
 	}
 }
 
-RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn AnimSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {	
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (spr)
 	{
 #ifndef S2_DISABLE_STATISTICS

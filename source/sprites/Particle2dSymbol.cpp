@@ -52,7 +52,7 @@ int Particle2dSymbol::Type() const
 	return SYM_PARTICLE2D; 
 }
 
-RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_PARTICLE2D);
@@ -60,7 +60,7 @@ RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 #endif // S2_DISABLE_STATISTICS
 
 	if (!spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -68,7 +68,7 @@ RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	auto p2d_spr = S2_VI_DOWN_CAST<const Particle2dSprite*>(spr);
@@ -79,16 +79,16 @@ RenderReturn Particle2dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
 	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 
-	RenderReturn ret = p2d_spr->Draw(*rp_child);
+	pt2::RenderReturn ret = p2d_spr->Draw(*rp_child);
 
 	return ret;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn Particle2dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn Particle2dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	auto p2d_spr = S2_VI_DOWN_CAST<const Particle2dSprite*>(spr);

@@ -474,9 +474,6 @@
     <ClCompile Include="..\..\..\source\sprites\StatDrawCall.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp">
-      <Filter>utility\stat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\StatSprCount.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
@@ -499,9 +496,6 @@
       <Filter>render\draw</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawMask.cpp">
       <Filter>render\draw</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\render\DrawMesh.cpp">
@@ -943,9 +937,6 @@
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\StatOverdraw.h">
-      <Filter>utility\stat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\StatSprCount.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
@@ -971,9 +962,6 @@
       <Filter>render\draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawMask.h">
       <Filter>render\draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h">
@@ -1057,9 +1045,6 @@
       <Filter>sprites\05.textbox</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h">
-      <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h">
       <Filter>utility</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\UpdateParams.h">

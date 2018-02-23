@@ -56,7 +56,7 @@ int IconSymbol::Type() const
 	return SYM_ICON; 
 }
 
-RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ICON);
@@ -64,7 +64,7 @@ RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_icon) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -72,7 +72,7 @@ RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -84,16 +84,16 @@ RenderReturn IconSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 	if (spr) {
 		process = S2_VI_DOWN_CAST<const IconSprite*>(spr)->GetProcess();
 	}
-	RenderReturn ret = m_icon->Draw(dlist, *rp_child, process);
+	pt2::RenderReturn ret = m_icon->Draw(dlist, *rp_child, process);
 
 	return ret;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn IconSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_icon) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();

@@ -105,10 +105,10 @@ bool DrawNode::Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& 
 	return true;
 }
 
-RenderReturn DrawNode::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawNode::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 	if (!rp.IsDisableCulling() && CullingTestOutside(spr, rp)) {
-		return RENDER_OUTSIDE;
+		return pt2::RENDER_OUTSIDE;
 	}
 	if (!spr->IsDTexForceCached()) {
 		return DrawSprImpl(dlist, spr, rp);
@@ -116,10 +116,10 @@ RenderReturn DrawNode::Draw(cooking::DisplayList* dlist, const Sprite* spr, cons
 
 	// todo: not support deferred draw
 	if (dlist) {
-		return RENDER_SKIP;
+		return pt2::RENDER_SKIP;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (spr->IsDTexForceCachedDirty()) {
 		// todo: not draw to cache at the first time
 		// i don't know why, but it works
@@ -138,7 +138,7 @@ RenderReturn DrawNode::Draw(cooking::DisplayList* dlist, const Sprite* spr, cons
 	return ret;
 }
 
-RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
+pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
 							const sm::vec2& pos, float angle, 
 							const sm::vec2& scale, const sm::vec2& shear)
 {
@@ -195,12 +195,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  		}
  	}
 
- 	RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
+ 	pt2::RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
 
 	return ret;
 }
 
-RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_MAT& _mt)
+pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_MAT& _mt)
 {
 	S2_MAT mt = _mt * rp.mt;
 
@@ -251,12 +251,12 @@ RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, const S2_
 		}
 	}
 
-	RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
+	pt2::RenderReturn ret = sym.DrawTree(nullptr, *rp_child);
 
 	return ret;
 }
 
-RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
+pt2::RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
 	                            const RenderParams& rp, const pt2::Color& col)
 {
 	RenderParamsProxy rp_proxy;
@@ -264,7 +264,7 @@ RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr,
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 #ifdef S2_DISABLE_DEFERRED
@@ -294,7 +294,7 @@ RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* spr,
 	cooking::change_shader(dlist, prev_shader);
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
@@ -347,7 +347,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 	}
 }
 
-RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt)
+pt2::RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -363,7 +363,7 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt
 	} else {
 		rp_child->mt = spr->GetLocalMat().Inverted();
 	}
-	RenderReturn ret = DrawSprImpl(nullptr, spr, *rp_child);
+	pt2::RenderReturn ret = DrawSprImpl(nullptr, spr, *rp_child);
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
@@ -372,7 +372,7 @@ RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
+pt2::RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id)
 {
 	sm::vec2 vertices[4];
 	sm::rect r = spr->GetSymbol()->GetBounding(spr, rp.actor);
@@ -402,10 +402,10 @@ RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams& rp, 
 	cooking::draw_quad_sprite(nullptr, &vertices[0].x, texcoords, tex_id);
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt)
+pt2::RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt)
 {
 	rt->Bind();
 
@@ -416,7 +416,7 @@ RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt)
 	RenderParams* rp = rp_proxy.obj;
 	rp->Reset();
 
-	RenderReturn ret = Draw(sym, *rp, S2_MAT());
+	pt2::RenderReturn ret = Draw(sym, *rp, S2_MAT());
 
 	sl::ShaderMgr::Instance()->GetShader()->Commit();
 
@@ -425,15 +425,15 @@ RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt)
 	return ret;
 }
 
-RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
+pt2::RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
@@ -441,8 +441,8 @@ RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
-	RenderReturn r = DrawSymToRT(sym, rt);
-	if (r != RENDER_OK) {
+	pt2::RenderReturn r = DrawSymToRT(sym, rt);
+	if (r != pt2::RENDER_OK) {
 		ret = r;
 	}
 
@@ -461,15 +461,15 @@ const float* DrawNode::DTexQuerySym(const Symbol& sym, int& tex_id, int& block_i
 	return DTEX_SYM_QUERY(GET_SYM_UID(sym), tex_id, block_id);
 }
 
-RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	sl::ShaderMgr::Instance()->FlushShader();
 
@@ -478,7 +478,7 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
 
 	ret |= DrawSprToRT(spr, rp, rt);
-	bool loading_finished = (ret & RENDER_ON_LOADING) == 0;
+	bool loading_finished = (ret & pt2::RENDER_ON_LOADING) == 0;
 
 	pt2::RenderCtxStack::Instance()->Pop();
 	pt2::RenderScissor::Instance()->Enable();
@@ -488,7 +488,7 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 		uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
 		const sm::rect& bounding = spr->GetSymbol()->GetBounding(spr, rp.actor);
 		DTEX_SYM_INSERT(uid, bounding, rt->GetTexID(), rt->Width(), rt->Height());
-		ret |= RENDER_UNKNOWN;
+		ret |= pt2::RENDER_UNKNOWN;
 	}
 
 	RT->Return(rt);
@@ -500,12 +500,12 @@ RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 	return ret;
 }
 
-RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 {
 	int tex_id, block_id;
 	uint64_t uid = rp.actor ? GET_ACTOR_UID(rp.actor) : GET_SPR_UID(spr);
 	const float* texcoords = DTEX_SYM_QUERY(uid, tex_id, block_id);
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (!texcoords) {
 		ret = DrawSprImpl(nullptr, spr, rp);
 		spr->SetDTexForceCachedDirty(true);
@@ -515,7 +515,7 @@ RenderReturn DrawNode::DTexQuerySpr(const Sprite* spr, const RenderParams& rp)
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 // 	if (!rp.IsDisableIntegrate() && spr->IsIntegrate()) {
 // 		return DrawIntegrate().Draw(spr, rp);
@@ -592,7 +592,7 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 	}
 #endif // S2_FILTER_FULL
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -700,14 +700,14 @@ RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprite* sp
 	return ret;
 }
 
-RenderReturn DrawNode::DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
+pt2::RenderReturn DrawNode::DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp)
 {
 // 	// for debug
 // 	if (spr->GetSymbol()->GetID() == 1079524) {
 // 		DrawAABB(spr, rp, pt2::Color(255, 0, 0));
 // 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	float ds = spr->GetShader().GetDownsample();
 	if (fabs(ds - 1) > FLT_EPSILON) {
 		DrawDownsample::Draw(dlist, spr, rp, ds);

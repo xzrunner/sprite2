@@ -25,7 +25,7 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 {
 }
 
-RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
+pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
@@ -35,10 +35,10 @@ RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 
 	pt2::RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();
 	if (!rt) {
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifndef S2_DISABLE_STATISTICS
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::Type(m_stat_pp_type));
@@ -71,10 +71,10 @@ RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
+pt2::RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										 const RenderParams& rp, bool too_large) const
 {
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (too_large) {
 		ret |= DrawRT2ScreenLarge(dlist, tex_id, spr, rp, true);
 	} else {
@@ -83,7 +83,7 @@ RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id
 	return ret;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
+pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
@@ -144,10 +144,10 @@ RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int t
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
+pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
@@ -200,7 +200,7 @@ RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int t
 
 	pt2::RenderCtxStack::Instance()->Pop();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

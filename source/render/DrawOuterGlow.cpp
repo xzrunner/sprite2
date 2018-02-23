@@ -19,7 +19,7 @@
 namespace s2
 {
 
-RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
+pt2::RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, int iterations)
 {
 #ifndef S2_DISABLE_STATISTICS
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::OUTER_GLOW);
@@ -44,7 +44,7 @@ RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite* spr,
 #else
 	cooking::change_shader(nullptr, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED
-	RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
+	pt2::RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	return ret;
 }

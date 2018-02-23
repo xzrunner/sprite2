@@ -49,7 +49,7 @@ int MeshSymbol::Type() const
 	return SYM_MESH; 
 }
 
-RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_MESH);
@@ -57,7 +57,7 @@ RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_mesh) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -65,7 +65,7 @@ RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 // 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -80,7 +80,7 @@ RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 		m_mesh->LoadFromTransform(mtrans);
  	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
  	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
  		ret = DrawMesh::DrawInfoXY(dlist, *m_mesh, &rp_child->mt);
  	} else {
@@ -99,10 +99,10 @@ RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParam
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_mesh) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	auto mesh_spr = S2_VI_DOWN_CAST<const MeshSprite*>(spr);
@@ -111,7 +111,7 @@ RenderReturn MeshSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParam
 		m_mesh->LoadFromTransform(mtrans);
 	}
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (mesh_spr && mesh_spr->OnlyDrawBound()) {
 		ret = DrawMesh::DrawInfoXY(dlist, *m_mesh, &rp.mt);
 	} else {

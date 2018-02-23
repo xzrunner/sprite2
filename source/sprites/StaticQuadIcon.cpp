@@ -35,10 +35,10 @@ StaticQuadIcon& StaticQuadIcon::operator = (const StaticQuadIcon& icon)
 	return *this;
 }
 
-RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
+pt2::RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
 {
 	if (!m_img) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	sm::vec2 vertices[4];
@@ -51,7 +51,7 @@ RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const RenderParam
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 sm::rect StaticQuadIcon::GetRegion(float process) const

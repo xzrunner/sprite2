@@ -61,7 +61,7 @@ int TextureSymbol::Type() const
 	return SYM_TEXTURE; 
 }
 
-RenderReturn TextureSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn TextureSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_TEXTURE);
@@ -73,7 +73,7 @@ RenderReturn TextureSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -81,7 +81,7 @@ RenderReturn TextureSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
 	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 	// todo shape's draw return
 	for (int i = 0, n = m_polygons.size(); i < n; ++i) {
@@ -92,7 +92,7 @@ RenderReturn TextureSymbol::DrawTree(cooking::DisplayList* dlist, const RenderPa
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
@@ -104,7 +104,7 @@ RenderReturn TextureSymbol::DrawNode(cooking::DisplayList* dlist, const RenderPa
 		m_polygons[i]->Draw(dlist, rp);
 	}
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 #endif // S2_DISABLE_FLATTEN
 

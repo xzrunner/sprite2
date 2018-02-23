@@ -54,12 +54,12 @@ void Joint::Scale(const sm::vec2& scale)
 	}
 }
 
-RenderReturn Joint::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
+pt2::RenderReturn Joint::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	if (m_skin.spr) {
 		return DrawNode::Draw(dlist, m_skin.spr.get(), rp);
 	} else {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 }
 

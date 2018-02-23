@@ -45,7 +45,7 @@ int SkeletonSymbol::Type() const
 	return SYM_SKELETON; 
 }
 
-RenderReturn SkeletonSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn SkeletonSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_SKELETON);
@@ -53,7 +53,7 @@ RenderReturn SkeletonSymbol::DrawTree(cooking::DisplayList* dlist, const RenderP
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_skeleton) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -61,7 +61,7 @@ RenderReturn SkeletonSymbol::DrawTree(cooking::DisplayList* dlist, const RenderP
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	if (spr) {

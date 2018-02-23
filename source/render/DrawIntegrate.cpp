@@ -17,7 +17,7 @@ DrawIntegrate::DrawIntegrate()
 {	
 }
 
-RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, bool too_large) const
+pt2::RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, bool too_large) const
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -42,13 +42,13 @@ RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite
 
 	mgr->FlushShader();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawIntegrate::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
+pt2::RenderReturn DrawIntegrate::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										  const RenderParams& rp, bool too_large) const
 {
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	if (too_large) {
 		ret |= DrawRT2ScreenLarge(dlist, tex_id, spr, rp, false);
 	} else {

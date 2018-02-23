@@ -27,9 +27,9 @@ public:
 	 */
 	virtual int Type() const override;
 	virtual void Traverse(const SymbolVisitor& visitor) override {}
-	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+	virtual pt2::RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
 #ifndef S2_DISABLE_FLATTEN
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return RENDER_SKIP; }
+	virtual pt2::RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override { return pt2::RENDER_SKIP; }
 #endif // S2_DISABLE_FLATTEN
 
 	void SetModel(const std::shared_ptr<n3::Model>& model) { m_model = model; }

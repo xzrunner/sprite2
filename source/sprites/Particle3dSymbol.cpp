@@ -59,7 +59,7 @@ int Particle3dSymbol::Type() const
 	return SYM_PARTICLE3D; 
 }
 
-RenderReturn Particle3dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Particle3dSymbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	int id = -1;
@@ -75,7 +75,7 @@ RenderReturn Particle3dSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn Particle3dSymbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	return DrawImpl(rp, spr);
 }
@@ -130,14 +130,14 @@ sm::rect Particle3dSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor
 	return sm::rect(); // empty
 }
 
-RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* spr) const
 {
 	if (rp.IsDisableParticle3d()) {
-		return RENDER_SKIP;
+		return pt2::RENDER_SKIP;
 	}
 
 	if (!IsVisible(rp, spr)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	Particle3dSprite::ReuseType reuse;
@@ -148,7 +148,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 	else {
 		reuse = Particle3dSprite::REUSE_ALL;
 	}
-	RenderReturn ret = RENDER_OK;
+	pt2::RenderReturn ret = pt2::RENDER_OK;
 	switch (reuse)
 	{
 	case Particle3dSprite::REUSE_ALL:
@@ -167,7 +167,7 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 			ret = DrawEmitter(rp, spr, actor->GetEmitter());
 		}
 		else {
-			ret = RENDER_NO_DATA;
+			ret = pt2::RENDER_NO_DATA;
 		}
 	}
 	break;
@@ -177,15 +177,15 @@ RenderReturn Particle3dSymbol::DrawImpl(const RenderParams& rp, const Sprite* sp
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* spr) const
 {
 	if (!m_et) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 	if (spr) {
 		auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 		if (p3d_spr->IsAlone()) {
-			return RENDER_NO_DATA;
+			return pt2::RENDER_NO_DATA;
 		}
 	}
 
@@ -198,7 +198,7 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	rp_child->level = rp.level + 1;
 #endif // S2_DISABLE_STATISTICS
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -217,18 +217,18 @@ RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Sprite* 
 	} else {
 		p3d_rp.local = m_local;
 	}
-	RenderReturn ret = m_et->Draw(p3d_rp, false);
+	pt2::RenderReturn ret = m_et->Draw(p3d_rp, false);
 
 	return ret;
 }
 
-RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
+pt2::RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite* spr,
 	                                       const std::shared_ptr<Particle3dEmitter>& et) const
 {
 	auto p3d_spr = S2_VI_DOWN_CAST<const Particle3dSprite*>(spr);
 
 	if (p3d_spr->IsAlone() || !et) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -279,7 +279,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 //		p3d->mat[5] = mt.x[13];
 //#endif // S2_MATRIX_FIX
 
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
@@ -303,7 +303,7 @@ RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sprite*
 	p3d_rp.view_region   = rp.GetViewRegion();
 	p3d_rp.flags         = rp.GetFlags();
 
-	RenderReturn ret = et->Draw(p3d_rp, false);
+	pt2::RenderReturn ret = et->Draw(p3d_rp, false);
 
 	return ret;
 }

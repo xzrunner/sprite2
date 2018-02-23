@@ -3,9 +3,9 @@
 
 #include "sprite2/pre_defined.h"
 #include "sprite2/RenderParams.h"
-#include "sprite2/RenderReturn.h"
 
 #include <SM_Vector.h>
+#include <painting2/RenderReturn.h>
 
 namespace cooking { class DisplayList; }
 namespace pt2 { class RenderTarget; }
@@ -29,20 +29,20 @@ public:
 
 	static bool Prepare(const RenderParams& rp, const Sprite* spr, RenderParams& child);
 
-	static RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp = RenderParams());
+	static pt2::RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp = RenderParams());
 
-	static RenderReturn Draw(const Symbol& sym,
+	static pt2::RenderReturn Draw(const Symbol& sym,
 		                     const RenderParams& rp = RenderParams(),
 							 const sm::vec2& pos = sm::vec2(0, 0),
 							 float angle = 0,
 							 const sm::vec2& scale = sm::vec2(1, 1),
 							 const sm::vec2& shear = sm::vec2(0, 0));	
 
-	static RenderReturn Draw(const Symbol& sym,
+	static pt2::RenderReturn Draw(const Symbol& sym,
 		                     const RenderParams& rp,
 							 const S2_MAT& mt);
 
-	static RenderReturn DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
+	static pt2::RenderReturn DrawAABB(cooking::DisplayList* dlist, const Sprite* spr, 
 		                         const RenderParams& rp, const pt2::Color& col);
 	
 	/**
@@ -51,20 +51,20 @@ public:
 	 */
 	static bool CullingTestOutside(const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt);
-	static RenderReturn DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
-	static RenderReturn DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt);
+	static pt2::RenderReturn DrawSprToRT(const Sprite* spr, const RenderParams& rp, pt2::RenderTarget* rt);
+	static pt2::RenderReturn DrawSprFromRT(const Sprite* spr, const RenderParams& rp, const float* texcoords, int tex_id);
+	static pt2::RenderReturn DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt);
 
-	static RenderReturn DTexCacheSym(const Symbol& sym);
+	static pt2::RenderReturn DTexCacheSym(const Symbol& sym);
 	static const float* DTexQuerySym(const Symbol& sym, int& tex_id, int& block_id);
 
 private:
-	static RenderReturn DTexCacheSpr(const Sprite* spr, const RenderParams& rp);
-	static RenderReturn DTexQuerySpr(const Sprite* spr, const RenderParams& rp);
+	static pt2::RenderReturn DTexCacheSpr(const Sprite* spr, const RenderParams& rp);
+	static pt2::RenderReturn DTexQuerySpr(const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
+	static pt2::RenderReturn DrawSprImpl(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
 
-	static RenderReturn DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
+	static pt2::RenderReturn DrawSprImplFinal(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp);
 
 	static bool IsSmall(const Sprite* spr, const Actor* actor, int min_edge);
 

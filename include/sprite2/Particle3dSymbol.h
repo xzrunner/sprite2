@@ -24,9 +24,9 @@ public:
 	 */
 	virtual int Type() const override;
 	virtual void Traverse(const SymbolVisitor& visitor) override {}
-	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+	virtual pt2::RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
 #ifndef S2_DISABLE_FLATTEN
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
+	virtual pt2::RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
 	virtual bool Update(const UpdateParams& up, float time) override;
 
@@ -46,10 +46,10 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 private:
-	RenderReturn DrawImpl(const RenderParams& rp, const Sprite* spr) const;
+	pt2::RenderReturn DrawImpl(const RenderParams& rp, const Sprite* spr) const;
 
-	RenderReturn DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
-	RenderReturn DrawEmitter(const RenderParams& rp, const Sprite* spr,
+	pt2::RenderReturn DrawSymbol(const RenderParams& rp, const Sprite* spr) const;
+	pt2::RenderReturn DrawEmitter(const RenderParams& rp, const Sprite* spr,
 		const std::shared_ptr<Particle3dEmitter>& et) const;
 
 	static bool IsVisible(const RenderParams& rp, const Sprite* spr);

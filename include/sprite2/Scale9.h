@@ -1,11 +1,11 @@
 #ifndef _SPRITE2_SCALE9_H_
 #define _SPRITE2_SCALE9_H_
 
-#include "sprite2/RenderReturn.h"
 #include "sprite2/typedef.h"
 
 #include <SM_Vector.h>
 #include <cu/cu_stl.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -49,7 +49,7 @@ public:
 	Scale9(const Scale9& s9);
 	Scale9& operator = (const Scale9& s9);
 
-	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
+	pt2::RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void SetSize(float width, float height);
 	sm::vec2 GetSize() const { return sm::vec2(m_width, m_height); }

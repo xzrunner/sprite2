@@ -84,14 +84,14 @@ bool Particle3dEmitter::PrepareEmitter()
 	return true;
 }
 
-RenderReturn Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
+pt2::RenderReturn Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) const
 {
 	if (!m_et) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	if (!const_cast<Particle3dEmitter*>(this)->PrepareEmitter()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	P3dRenderParams rp_child(rp);
@@ -116,7 +116,7 @@ RenderReturn Particle3dEmitter::Draw(const P3dRenderParams& rp, bool alone) cons
 	// todo: return emitter's render ret
 	p3d_emitter_draw(m_et, &rp_child);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 bool Particle3dEmitter::IsLoop() const

@@ -13,13 +13,13 @@
 namespace s2
 {
 
-RenderReturn Icon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
+pt2::RenderReturn Icon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const
 {
 	if (!m_img) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 	if (!m_img->GetTexture()->IsLoadFinished()) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 //	process = 0.5;
@@ -50,7 +50,7 @@ RenderReturn Icon::Draw(cooking::DisplayList* dlist, const RenderParams& rp, flo
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 sm::rect Icon::GetRegion(float process) const

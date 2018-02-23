@@ -2,10 +2,10 @@
 #define _SPRITE2_ICON_H_
 
 #include "sprite2/pre_defined.h"
-#include "sprite2/RenderReturn.h"
 
 #include <SM_Vector.h>
 #include <SM_Rect.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -24,7 +24,7 @@ public:
 
 	virtual Icon* Clone() const = 0;
 
-	virtual RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;
+	virtual pt2::RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp, float process) const;
 	
 	virtual sm::rect GetRegion(float process) const;
 

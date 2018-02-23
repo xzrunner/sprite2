@@ -23,9 +23,9 @@ public:
 	 */
 	virtual int Type() const override;
 	virtual void Traverse(const SymbolVisitor& visitor) override {}
-	virtual RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
+	virtual pt2::RenderReturn DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr = nullptr) const override;
 #ifndef S2_DISABLE_FLATTEN
-	virtual RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
+	virtual pt2::RenderReturn DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const override;
 #endif // S2_DISABLE_FLATTEN
 
 	const p2d_emitter_cfg* GetEmitterCfg() const { return m_et_cfg; }

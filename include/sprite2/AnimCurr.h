@@ -5,9 +5,9 @@
 #include "sprite2/AnimCopy.h"
 #include "sprite2/VisitResult.h"
 #include "sprite2/AnimCtrl.h"
-#include "sprite2/RenderReturn.h"
 
 #include <cu/cu_stl.h>
+#include <painting2/RenderReturn.h>
 
 #include <memory>
 
@@ -53,7 +53,7 @@ public:
 
 	int GetSlotSize() const { return m_slots.size(); }
 
-	RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
+	pt2::RenderReturn Draw(cooking::DisplayList* dlist, const RenderParams& rp) const;
 
 	void Clear();
 

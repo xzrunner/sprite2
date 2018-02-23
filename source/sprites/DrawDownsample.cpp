@@ -23,17 +23,17 @@
 namespace s2
 {
 
-RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
+pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite* spr, 
 	                              const RenderParams& rp, float downsample)
 {
 	if (downsample <= 0) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
 	if (!rt) {
-		return RENDER_NO_RT;
+		return pt2::RENDER_NO_RT;
 	}
 
 #ifndef S2_DISABLE_STATISTICS
@@ -57,10 +57,10 @@ RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite* spr
 
 	RT->Return(rt);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
+pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
 	mgr->GetContext()->Clear(0);
@@ -79,10 +79,10 @@ RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& r
 
 	mgr->FlushShader();
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
-RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
+pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
 	                                       const Sprite* spr, const RenderParams& rp, float downsample)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
@@ -142,7 +142,7 @@ RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_
 	cooking::draw_quad_sprite(dlist, &vertices[0].x, &texcoords[0].x, tex_id);
 #endif // S2_DISABLE_DEFERRED
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 }

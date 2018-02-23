@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -67,7 +67,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\gtxt\src\gtxt;..\..\..\..\rigging\src\rigging;..\..\..\..\ps\src\ps;..\..\..\..\ds\src\ds;..\..\..\..\mtrail\src\mtrail;..\..\..\..\rapidvg\src\rapidvg;..\..\..\..\ds\src\ds;..\..\..\..\sm\src\sm;..\..\..\..\cu\src;..\..\..\..\guard\include;..\..\..\..\stat\include;..\..\..\..\logger\src\logger;..\..\..\..\gimg\src\gimg;..\..\..\..\guard\include;..\..\..\..\s2serializer\include;..\..\..\..\shaderlab\include\;..\..\..\..\painting2\include;..\..\..\..\painting3\include;..\..\..\..\multitask\include;..\..\..\..\memmgr\include;..\..\..\..\flatten\include;..\..\..\..\unirender\include;..\..\..\..\cooking\include;..\..\..\..\uniaudio\include;..\..\..\..\node0\include;..\..\..\..\node3\include;..\..\..\..\camera25\src\camera25;..\..\..\..\polymesh\include;..\..\..\..\glp\src\glp;..\..\..\..\external\c99;..\..\..\..\external\lua\include;..\..\..\..\external\rapidjson\include;..\..\..\..\external\boost\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;__STDC_LIMIT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -82,7 +82,6 @@
     <ClCompile Include="..\..\..\source\render\DrawBlend.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp" />
-    <ClCompile Include="..\..\..\source\render\DrawMask.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawMesh.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawNode.cpp" />
@@ -221,7 +220,6 @@
     <ClCompile Include="..\..\..\source\sprites\TrailSymbol.cpp" />
     <ClCompile Include="..\..\..\source\utility\Blackboard.cpp" />
     <ClCompile Include="..\..\..\source\utility\Callback.cpp" />
-    <ClCompile Include="..\..\..\source\utility\StatOverdraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatSymDraw.cpp" />
     <ClCompile Include="..\..\..\source\utility\StatTopNodes.cpp" />
   </ItemGroup>
@@ -279,7 +277,6 @@
     <ClInclude Include="..\..\..\include\sprite2\DrawDownsample.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawGaussianBlur.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h" />
-    <ClInclude Include="..\..\..\include\sprite2\DrawMask.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h" />
     <ClInclude Include="..\..\..\include\sprite2\DrawNode.h" />
@@ -335,7 +332,6 @@
     <ClInclude Include="..\..\..\include\sprite2\QueryLoadedVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\RectShape.h" />
     <ClInclude Include="..\..\..\include\sprite2\RenderParams.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RenderReturn.h" />
     <ClInclude Include="..\..\..\include\sprite2\ResetActorFlagVisitor.h" />
     <ClInclude Include="..\..\..\include\sprite2\Actor.h" />
     <ClInclude Include="..\..\..\include\sprite2\config.h" />
@@ -374,7 +370,6 @@
     <ClInclude Include="..\..\..\include\sprite2\StatDrawCall.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticQuadIcon.h" />
     <ClInclude Include="..\..\..\include\sprite2\StaticRectIcon.h" />
-    <ClInclude Include="..\..\..\include\sprite2\StatOverdraw.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSprCount.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSymCount.h" />
     <ClInclude Include="..\..\..\include\sprite2\StatSymDraw.h" />

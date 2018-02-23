@@ -54,7 +54,7 @@ int Anim2Symbol::Type() const
 	return SYM_ANIM2;
 }
 
-RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
+pt2::RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr) const
 {
 #ifndef S2_DISABLE_STATISTICS
 	StatSymDraw::Instance()->AddDrawCount(STAT_SYM_ANIM2);
@@ -62,7 +62,7 @@ RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 #endif // S2_DISABLE_STATISTICS
 
 	if (!m_anim || !spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	RenderParamsProxy rp_proxy;
@@ -70,7 +70,7 @@ RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	memcpy(rp_child, &rp, sizeof(rp));
 
 	if (!DrawNode::Prepare(rp, spr, *rp_child)) {
-		return RENDER_INVISIBLE;
+		return pt2::RENDER_INVISIBLE;
 	}
 
 	auto anim_spr = S2_VI_DOWN_CAST<const Anim2Sprite*>(spr);
@@ -78,14 +78,14 @@ RenderReturn Anim2Symbol::DrawTree(cooking::DisplayList* dlist, const RenderPara
 	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), rp_child);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 
 #ifndef S2_DISABLE_FLATTEN
-RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
+pt2::RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderParams& rp, const Sprite* spr, ft::FTList& ft, int pos) const
 {
 	if (!m_anim || !spr) {
-		return RENDER_NO_DATA;
+		return pt2::RENDER_NO_DATA;
 	}
 
 	auto anim_spr = S2_VI_DOWN_CAST<const Anim2Sprite*>(spr);
@@ -93,7 +93,7 @@ RenderReturn Anim2Symbol::DrawNode(cooking::DisplayList* dlist, const RenderPara
 	// todo return rg's render ret
 	rg_skeleton_draw(m_anim->sk, curr.GetSkPose(), curr.GetSkSkin(), &rp);
 
-	return RENDER_OK;
+	return pt2::RENDER_OK;
 }
 #endif // S2_DISABLE_FLATTEN
 

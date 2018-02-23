@@ -496,9 +496,6 @@
     <ClCompile Include="..\..\..\source\sprites\Sprite.cpp">
       <Filter>sprites\sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\Mesh.cpp">
-      <Filter>sprites\11.mesh</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\TextTable.cpp">
       <Filter>sprites\05.textbox</Filter>
@@ -958,9 +955,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h">
       <Filter>sprites\sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\Mesh.h">
-      <Filter>sprites\11.mesh</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Facade.h" />
     <ClInclude Include="..\..\..\include\sprite2\typedef.h">

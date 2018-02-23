@@ -1,12 +1,13 @@
 #include "sprite2/MeshSprite.h"
 #include "sprite2/MeshSymbol.h"
-#include "sprite2/Mesh.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/SymbolVisitor.h"
 #include "sprite2/Actor.h"
 #ifndef S2_DISABLE_STATISTICS
 #include "sprite2/StatSprCount.h"
 #endif // S2_DISABLE_STATISTICS
+
+#include <painting2/Mesh.h>
 
 #include <stddef.h>
 
@@ -53,7 +54,7 @@ MeshSprite::MeshSprite(const SymPtr& sym, uint32_t id)
 	StatSprCount::Instance()->Add(STAT_SYM_MESH);
 #endif // S2_DISABLE_STATISTICS
 
-	const std::unique_ptr<Mesh>& mesh = S2_VI_PTR_DOWN_CAST<const MeshSymbol>(sym)->GetMesh();
+	const std::unique_ptr<pt2::Mesh<Symbol>>& mesh = S2_VI_PTR_DOWN_CAST<const MeshSymbol>(sym)->GetMesh();
 	m_base = mesh->GetBaseSymbol();
 
 //	m_speed.set(0, -0.01f);

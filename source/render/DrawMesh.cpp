@@ -1,5 +1,4 @@
 #include "sprite2/DrawMesh.h"
-#include "sprite2/Mesh.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Symbol.h"
@@ -36,7 +35,7 @@ static pt2::Color RED	(204, 51, 102, 128);
 static pt2::Color GREEN	(102, 204, 51, 128);
 static pt2::Color BLUE	(102, 51, 204, 128);
 
-pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
+pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -78,7 +77,7 @@ pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& 
 	return pt2::RENDER_OK;
 }
 
-pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT* mt)
+pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, const S2_MAT* mt)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -114,7 +113,7 @@ pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& 
 	return pt2::RENDER_OK;
 }
 
-pt2::RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh& mesh, 
+pt2::RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, 
 	                               const RenderParams& rp, const SymConstPtr& base_sym)
 {
 	pt2::RenderReturn ret = pt2::RENDER_OK;
@@ -150,7 +149,7 @@ pt2::RenderReturn DrawMesh::DrawTexture(cooking::DisplayList* dlist, const Mesh&
 	return ret;
 }
 
-pt2::RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const Mesh& mesh, const S2_MAT& mt, int tex_id)
+pt2::RenderReturn DrawMesh::DrawOnlyMesh(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, const S2_MAT& mt, int tex_id)
 {
 	CU_VEC<sm::vec2> vertices, texcoords;
 	CU_VEC<int> triangles;
@@ -225,7 +224,7 @@ static void draw_filter(cooking::DisplayList* dlist, const float* positions, con
 #endif // S2_DISABLE_DEFERRED
 }
 
-pt2::RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
+pt2::RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, const RenderParams& rp, const float* src_texcoords, int tex_id)
 {
 	sl::ShaderType shader_type;
 #ifdef S2_DISABLE_DEFERRED
@@ -333,7 +332,7 @@ pt2::RenderReturn DrawMesh::DrawOnePass(cooking::DisplayList* dlist, const Mesh&
 	return pt2::RENDER_OK;
 }
 
-pt2::RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const Mesh& mesh, const RenderParams& rp, const Symbol& sym)
+pt2::RenderReturn DrawMesh::DrawTwoPass(cooking::DisplayList* dlist, const pt2::Mesh<Symbol>& mesh, const RenderParams& rp, const Symbol& sym)
 {
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 	pt2::RenderTarget* rt = RT->Fetch();
@@ -397,7 +396,7 @@ pt2::RenderReturn DrawMesh::DrawMesh2RT(cooking::DisplayList* dlist, pt2::Render
 	return ret;
 }
 
-pt2::RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const Mesh& mesh, const S2_MAT& mt)
+pt2::RenderReturn DrawMesh::DrawRT2Screen(cooking::DisplayList* dlist, pt2::RenderTarget* rt, const pt2::Mesh<Symbol>& mesh, const S2_MAT& mt)
 {
 	return DrawOnlyMesh(dlist, mesh, mt, rt->GetTexID());
 }

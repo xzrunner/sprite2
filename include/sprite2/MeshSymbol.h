@@ -2,7 +2,8 @@
 #define _SPRITE2_MESH_SYMBOL_H_
 
 #include "sprite2/Symbol.h"
-#include "sprite2/Mesh.h"
+
+#include <painting2/Mesh.h>
 
 #include <stdint.h>
 
@@ -34,9 +35,9 @@ public:
 	void UpdateMesh(const rg_skeleton_pose* sk_pose);
 	void UpdateMesh(const rg_tl_deform_state* deform_state, const float* vertices);
 
-	const std::unique_ptr<Mesh>& GetMesh() const { return m_mesh; }
-	std::unique_ptr<Mesh>& GetMesh() { return m_mesh; }
-	void SetMesh(std::unique_ptr<Mesh>& mesh) { m_mesh = std::move(mesh); }
+	const std::unique_ptr<pt2::Mesh<Symbol>>& GetMesh() const { return m_mesh; }
+	std::unique_ptr<pt2::Mesh<Symbol>>& GetMesh() { return m_mesh; }
+	void SetMesh(std::unique_ptr<pt2::Mesh<Symbol>>& mesh) { m_mesh = std::move(mesh); }
 
 	void SetPause(bool pause) { m_pause = pause; }
 
@@ -44,7 +45,7 @@ protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;
 
 protected:
-	std::unique_ptr<Mesh> m_mesh = nullptr;
+	std::unique_ptr<pt2::Mesh<Symbol>> m_mesh = nullptr;
 
 private:
 	bool m_pause;

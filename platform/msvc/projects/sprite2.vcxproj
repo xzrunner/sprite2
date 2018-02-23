@@ -173,7 +173,6 @@
     <ClCompile Include="..\..\..\source\sprites\RectShape.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ResetActorFlagVisitor.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Actor.cpp" />
-    <ClCompile Include="..\..\..\source\sprites\Mesh.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SNodeSprite.cpp" />
     <ClCompile Include="..\..\..\source\sprites\SNodeSymbol.cpp" />
     <ClCompile Include="..\..\..\source\sprites\Sprite.cpp" />
@@ -328,7 +327,6 @@
     <ClInclude Include="..\..\..\include\sprite2\config.h" />
     <ClInclude Include="..\..\..\include\sprite2\Facade.h" />
     <ClInclude Include="..\..\..\include\sprite2\macro.h" />
-    <ClInclude Include="..\..\..\include\sprite2\Mesh.h" />
     <ClInclude Include="..\..\..\include\sprite2\Message.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSymbol.h" />

@@ -1,9 +1,9 @@
 #include "sprite2/BezierShape.h"
 #include "sprite2/ShapeConfig.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 
 #include <SM_Calc.h>
+#include <painting2/PrimitiveDraw.h>
 
 #include <string.h>
 
@@ -65,7 +65,7 @@ void BezierShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) cons
 	PolylineShape::Draw(dlist, rp);
 	for (int i = 0; i < CTRL_NODE_COUNT; ++i) {
 		sm::vec2 pos = rp.mt * m_control_nodes[i];
-		RVG::Rect(dlist, pos, SHAPE_NODE_RADIUS, SHAPE_NODE_RADIUS, false);
+		pt2::PrimitiveDraw::Rect(dlist, pos, SHAPE_NODE_RADIUS, SHAPE_NODE_RADIUS, false);
 	}
 }
 

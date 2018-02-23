@@ -127,12 +127,6 @@
     <Filter Include="render">
       <UniqueIdentifier>{97df3b88-98dd-4ac9-8a79-ae66b30f7cd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="render\draw">
-      <UniqueIdentifier>{0d12773f-6616-49ed-8c1c-e20475cd801d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="render\adapter">
-      <UniqueIdentifier>{59c39a48-b1a9-4f16-a40f-0370e75705f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="sprites\sprite\parts">
       <UniqueIdentifier>{c0155d4f-5921-46b9-947c-58e0cd71a2f7}</UniqueIdentifier>
     </Filter>
@@ -483,33 +477,6 @@
     <ClCompile Include="..\..\..\source\utility\StatTopNodes.cpp">
       <Filter>utility\stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawBlend.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\sprites\DrawDownsample.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawMesh.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawNode.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawPingPong.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\c_wrap_s2.cpp" />
     <ClCompile Include="..\..\..\source\sprites\CacheMatVisitor.cpp">
       <Filter>sprites\sprite\visitor</Filter>
@@ -519,12 +486,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\AnimState.cpp">
       <Filter>sprites\07.anim\cache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp">
-      <Filter>render\draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\render\RVG.cpp">
-      <Filter>render\adapter</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\Actor.cpp">
       <Filter>sprites\actor</Filter>
@@ -583,6 +544,36 @@
     </ClCompile>
     <ClCompile Include="..\..\..\source\sprites\SNodeSprite.cpp">
       <Filter>sprites\98.snode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawBlend.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\sprites\DrawDownsample.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawGaussianBlur.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawIntegrate.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawMaskFT.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawMesh.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawNode.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawPingPong.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\render\DrawRT.cpp">
+      <Filter>render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -940,33 +931,6 @@
     <ClInclude Include="..\..\..\include\sprite2\StatTopNodes.h">
       <Filter>utility\stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawBlend.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawDownsample.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawGaussianBlur.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawNode.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawOuterGlow.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawPingPong.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\c_wrap_s2.h" />
     <ClInclude Include="..\..\..\include\sprite2\SymbolVisitor.h">
       <Filter>sprites\symbol</Filter>
@@ -980,14 +944,8 @@
     <ClInclude Include="..\..\..\include\sprite2\AnimState.h">
       <Filter>sprites\07.anim\cache</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h">
-      <Filter>render\draw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\ObjectPool.h">
       <Filter>utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\include\sprite2\RVG.h">
-      <Filter>render\adapter</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\Actor.h">
       <Filter>sprites\actor</Filter>
@@ -1073,6 +1031,36 @@
     </ClInclude>
     <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h">
       <Filter>sprites\98.snode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawBlend.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawDownsample.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawGaussianBlur.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawIntegrate.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawMaskFT.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawMesh.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawNode.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawOuterGlow.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawPingPong.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\sprite2\DrawRT.h">
+      <Filter>render</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

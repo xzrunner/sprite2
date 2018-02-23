@@ -1,6 +1,5 @@
 #include "sprite2/DrawMesh.h"
 #include "sprite2/Mesh.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 #include "sprite2/DrawNode.h"
 #include "sprite2/Symbol.h"
@@ -26,6 +25,7 @@
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/PrimitiveDraw.h>
 
 #include <assert.h>
 
@@ -49,7 +49,7 @@ pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& 
 		  h = mesh.GetHeight();
 
 	// lines
-	RVG::SetColor(RED);
+	pt2::PrimitiveDraw::SetColor(RED);
 	CU_VEC<sm::vec2> lines;
 	lines.resize(3);
 	for (int i = 0, n = triangles.size(); i < n; ) {
@@ -60,11 +60,11 @@ pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& 
 				lines[j] = *mt * lines[j];
 			}
 		}
-		RVG::Polyline(dlist, lines, true);
+		pt2::PrimitiveDraw::Polyline(dlist, lines, true);
 	}
 
 	// points
-	RVG::SetColor(BLUE);
+	pt2::PrimitiveDraw::SetColor(BLUE);
 	for (int i = 0, n = texcoords.size(); i < n; ++i) {
 		sm::vec2 p;
 		p.x = (texcoords[i].x - 0.5f) * w;
@@ -72,7 +72,7 @@ pt2::RenderReturn DrawMesh::DrawInfoUV(cooking::DisplayList* dlist, const Mesh& 
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
+		pt2::PrimitiveDraw::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
 	return pt2::RENDER_OK;
@@ -88,7 +88,7 @@ pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& 
 	}
 
 	// lines
-	RVG::SetColor(RED);
+	pt2::PrimitiveDraw::SetColor(RED);
 	CU_VEC<sm::vec2> lines;
 	lines.resize(3);
 	for (int i = 0, n = triangles.size(); i < n; ) {
@@ -98,17 +98,17 @@ pt2::RenderReturn DrawMesh::DrawInfoXY(cooking::DisplayList* dlist, const Mesh& 
 				lines[j] = *mt * lines[j];
 			}
 		}
-		RVG::Polyline(dlist, lines, true);
+		pt2::PrimitiveDraw::Polyline(dlist, lines, true);
 	}
 
 	// points
-	RVG::SetColor(BLUE);
+	pt2::PrimitiveDraw::SetColor(BLUE);
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		sm::vec2 p = vertices[i];
 		if (mt) {
 			p = *mt * p;
 		}
-		RVG::Circle(dlist, p, mesh.GetNodeRadius(), true);
+		pt2::PrimitiveDraw::Circle(dlist, p, mesh.GetNodeRadius(), true);
 	}
 
 	return pt2::RENDER_OK;

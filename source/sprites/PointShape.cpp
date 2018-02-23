@@ -1,10 +1,10 @@
 #include "sprite2/PointShape.h"
 #include "sprite2/ShapeConfig.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 
 #include <SM_Test.h>
 #include <SM_Calc.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -45,8 +45,8 @@ void PointShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
 	sm::vec2 center = rp.mt * m_pos;
 	float r = sm::mat_trans_len(SHAPE_NODE_RADIUS, rp.mt);
-	RVG::SetColor(rp.col_common.mul);
-	RVG::Circle(dlist, center, r, true);
+	pt2::PrimitiveDraw::SetColor(rp.col_common.mul);
+	pt2::PrimitiveDraw::Circle(dlist, center, r, true);
 }
 
 const sm::vec2& PointShape::GetPos() const 

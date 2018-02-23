@@ -3,9 +3,9 @@
 #include "sprite2/Symbol.h"
 #include "sprite2/SymType.h"
 #include "sprite2/MeshSymbol.h"
-#include "sprite2/RVG.h"
 
 #include <rigging.h>
+#include <painting2/PrimitiveDraw.h>
 
 #include <string.h>
 
@@ -47,8 +47,8 @@ debug_draw_func(float x, float y, uint32_t color)
 {
 	pt2::Color col;
 	col.FromRGBA(color);
-	RVG::SetColor(col);
-	RVG::Rect(nullptr, sm::vec2(x, y), 5, 5, true);
+	pt2::PrimitiveDraw::SetColor(col);
+	pt2::PrimitiveDraw::Rect(nullptr, sm::vec2(x, y), 5, 5, true);
 }
 
 static void

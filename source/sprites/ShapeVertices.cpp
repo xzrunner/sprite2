@@ -1,6 +1,7 @@
 #include "sprite2/ShapeVertices.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
+
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -18,8 +19,8 @@ void ShapeVertices::Draw(cooking::DisplayList* dlist,
 	for (int i = 0, n = vertices.size(); i < n; ++i) {
 		trans[i] = rp.mt * vertices[i];
 	}
-	RVG::SetColor(rp.col_common.mul);
-	RVG::Polyline(dlist, trans, closed);
+	pt2::PrimitiveDraw::SetColor(rp.col_common.mul);
+	pt2::PrimitiveDraw::Polyline(dlist, trans, closed);
 }
 
 }

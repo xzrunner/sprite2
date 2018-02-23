@@ -10,7 +10,6 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/UpdateParams.h"
 #include "sprite2/DrawNode.h"
-#include "sprite2/RVG.h"
 #include "sprite2/SprTimer.h"
 #include "sprite2/SprVisitorParams.h"
 #include "sprite2/Blackboard.h"
@@ -54,6 +53,7 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/OrthoCamera.h>
+#include <painting2/PrimitiveDraw.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -469,7 +469,7 @@ void s2_spr_draw_aabb(const void* actor, float x, float y, float angle, float sx
 	for (int i = 0; i < 4; ++i) {
 		vertices[i] = m * vertices[i];
 	}
-	RVG::Polyline(nullptr, vertices, true);
+	pt2::PrimitiveDraw::Polyline(nullptr, vertices, true);
 }
 
 extern "C"
@@ -1585,19 +1585,19 @@ void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, 
 extern "C"
 void s2_rvg_set_color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
-	RVG::SetColor(pt2::Color(r, g, b, a));
+	pt2::PrimitiveDraw::SetColor(pt2::Color(r, g, b, a));
 }
 
 extern "C"
 void s2_rvg_set_line_width(float width)
 {
-	RVG::LineWidth(width);
+	pt2::PrimitiveDraw::LineWidth(width);
 }
 
 extern "C"
 void s2_rvg_draw_line(const float* vertices, int count)
 {
-	RVG::Polyline(nullptr, vertices, count, false);
+	pt2::PrimitiveDraw::Polyline(nullptr, vertices, count, false);
 }
 
 extern "C"
@@ -1608,13 +1608,13 @@ void s2_rvg_draw_rect(bool filling, float x, float y, float w, float h)
 	r.xmax = x + w;
 	r.ymin = y;
 	r.ymax = y + h;
-	RVG::Rect(nullptr, r, filling);
+	pt2::PrimitiveDraw::Rect(nullptr, r, filling);
 }
 
 extern "C"
 void s2_rvg_draw_circle(bool filling, float cx, float cy, float radius, int segments)
 {
-	RVG::Circle(nullptr, sm::vec2(cx, cy), radius, filling, segments);
+	pt2::PrimitiveDraw::Circle(nullptr, sm::vec2(cx, cy), radius, filling, segments);
 }
 
 /************************************************************************/

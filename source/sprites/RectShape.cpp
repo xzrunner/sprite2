@@ -1,8 +1,8 @@
 #include "sprite2/RectShape.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 
 #include <SM_Test.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -34,10 +34,10 @@ bool RectShape::IsIntersect(const sm::rect& rect) const
 
 void RectShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) const
 {
-	RVG::SetColor(rp.col_common.mul);
+	pt2::PrimitiveDraw::SetColor(rp.col_common.mul);
 	sm::vec2 min(m_bounding.xmin, m_bounding.ymin),
 		     max(m_bounding.xmax, m_bounding.ymax);
-	RVG::Rect(dlist, min, max, false);
+	pt2::PrimitiveDraw::Rect(dlist, min, max, false);
 }
 
 }

@@ -6,7 +6,6 @@
 #include "sprite2/DrawGaussianBlur.h"
 #include "sprite2/DrawOuterGlow.h"
 #include "sprite2/CompDefault.h"
-#include "sprite2/RVG.h"
 #include "sprite2/DrawDownsample.h"
 #include "sprite2/Utility.h"
 #include "sprite2/DrawIntegrate.h"
@@ -33,6 +32,7 @@
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -285,8 +285,8 @@ pt2::RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* 
 		vertices[i] = rp_child->mt * vertices[i];
 	}
 
-	RVG::SetColor(col);
-	RVG::Polyline(nullptr, vertices, true);
+	pt2::PrimitiveDraw::SetColor(col);
+	pt2::PrimitiveDraw::Polyline(nullptr, vertices, true);
 
 #ifdef S2_DISABLE_DEFERRED
 	sl::ShaderMgr::Instance()->SetShader(prev_shader);

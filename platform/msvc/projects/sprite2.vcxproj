@@ -87,7 +87,6 @@
     <ClCompile Include="..\..\..\source\render\DrawOuterGlow.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawPingPong.cpp" />
     <ClCompile Include="..\..\..\source\render\DrawRT.cpp" />
-    <ClCompile Include="..\..\..\source\render\RVG.cpp" />
     <ClCompile Include="..\..\..\source\Facade.cpp" />
     <ClCompile Include="..\..\..\source\sprites\AABBHelper.cpp" />
     <ClCompile Include="..\..\..\source\sprites\ActorAABB.cpp" />
@@ -331,7 +330,6 @@
     <ClInclude Include="..\..\..\include\sprite2\macro.h" />
     <ClInclude Include="..\..\..\include\sprite2\Mesh.h" />
     <ClInclude Include="..\..\..\include\sprite2\Message.h" />
-    <ClInclude Include="..\..\..\include\sprite2\RVG.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSprite.h" />
     <ClInclude Include="..\..\..\include\sprite2\SNodeSymbol.h" />
     <ClInclude Include="..\..\..\include\sprite2\Sprite.h" />

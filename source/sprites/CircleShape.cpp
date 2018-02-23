@@ -1,10 +1,10 @@
 #include "sprite2/CircleShape.h"
 #include "sprite2/ShapeConfig.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 
 #include <SM_Calc.h>
 #include <SM_Test.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -72,8 +72,8 @@ void CircleShape::Draw(cooking::DisplayList* dlist, const RenderParams& rp) cons
 {
 	sm::vec2 c = rp.mt * m_center;
 	float r = sm::mat_trans_len(m_radius, rp.mt);
-	RVG::SetColor(rp.col_common.mul);
-	RVG::Circle(dlist, c, r, false, 32);
+	pt2::PrimitiveDraw::SetColor(rp.col_common.mul);
+	pt2::PrimitiveDraw::Circle(dlist, c, r, false, 32);
 }
 
 const sm::vec2& CircleShape::GetCenter() const 

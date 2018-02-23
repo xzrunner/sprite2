@@ -1,9 +1,9 @@
 #include "sprite2/ColorPolygon.h"
-#include "sprite2/RVG.h"
 #include "sprite2/RenderParams.h"
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>
+#include <painting2/PrimitiveDraw.h>
 
 namespace s2
 {
@@ -17,8 +17,8 @@ void ColorPolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) con
 {
 	CU_VEC<sm::vec2> tris;
 	sm::trans_vertices(rp.mt, m_tris, tris);
-	RVG::SetColor(m_color * rp.col_common.mul);
-	RVG::Triangles(dlist, tris);
+	pt2::PrimitiveDraw::SetColor(m_color * rp.col_common.mul);
+	pt2::PrimitiveDraw::Triangles(dlist, tris);
 }
 
 void ColorPolygon::Build()

@@ -9,6 +9,7 @@
 #endif // S2_DISABLE_STATISTICS
 
 #include <memmgr/Allocator.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
@@ -39,7 +40,7 @@ pt2::RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite*
 	rp_child->SetDisableRenderDraw(true);
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 #else
 	cooking::change_shader(nullptr, sl::SPRITE2);

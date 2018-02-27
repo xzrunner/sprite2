@@ -117,7 +117,7 @@ pt2::RenderReturn MeshSymbol::DrawTree(cooking::DisplayList* dlist, const Render
 		return pt2::RENDER_INVISIBLE;
 	}
 
-// 	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+// 	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 // 	mgr->SetShader(sl::SPRITE2);
 // 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 // 	shader->SetColor(p.color.GetMulABGR(), p.color.GetAddABGR());

@@ -5,6 +5,7 @@
 
 #include <SM_Process.h>
 #include <SM_Triangulation.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
@@ -35,7 +36,7 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 	assert(m_tris.size() == m_texcoords.size()
 		&& m_tris.size() % 3 == 0);
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
 	for (int i = 0, n = m_tris.size(); i < n; i += 3) 
@@ -59,7 +60,7 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 	}
 
-	//sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	//sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	//const ee::pt2::Camera* cam = ee::pt2::CameraMgr::Instance()->GetCamera();
 	//if (cam->Type() == "ortho") 
 	//{

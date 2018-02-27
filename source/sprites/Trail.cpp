@@ -8,6 +8,7 @@
 #include <mt_2d.h>
 #include <sm_const.h>
 #include <unirender/RenderContext.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shape2Shader.h>
 
@@ -80,13 +81,13 @@ render_shape_func(const float* positions, const uint32_t* colors, int count, con
 		t_colors[i] = (a << 24) | (b << 16) | (g << 8) | r;
 	}
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SHAPE2);
 	sl::Shape2Shader* shader = static_cast<sl::Shape2Shader*>(mgr->GetShader());
 
-	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-	rc->SetBlend(5, 6);		// BLEND_SRC_COLOR, BLEND_ONE_MINUS_SRC_ALPHA
-	rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
+	auto& ur_rc = mgr->GetContext();
+	ur_rc.SetBlend(5, 6);		// BLEND_SRC_COLOR, BLEND_ONE_MINUS_SRC_ALPHA
+	ur_rc.SetBlendEquation(0);	// BLEND_FUNC_ADD
 
 	//	shader->Commit();
 

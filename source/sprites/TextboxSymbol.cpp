@@ -13,6 +13,7 @@
 
 #include <memmgr/Allocator.h>
 #include <gtxt_label.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/FilterMode.h>
 #include <shaderlab/FilterShader.h>
@@ -141,7 +142,7 @@ pt2::RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const Ren
 		return pt2::RENDER_NO_DATA;
 	}
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 #ifdef S2_FILTER_FULL
 	if (rp.render_filter && rp.render_filter->GetMode() == pt2::FM_GRAY) {
 #else

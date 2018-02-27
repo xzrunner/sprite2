@@ -3,6 +3,7 @@
 #include "sprite2/ImageSymbol.h"
 #include "sprite2/TexcoordsMap.h"
 
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
@@ -45,7 +46,7 @@ pt2::RenderReturn Icon::Draw(cooking::DisplayList* dlist, const RenderParams& rp
 	TexcoordsMap::Trans(_texcoords, texcoords);
 
 	// draw
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);

@@ -15,6 +15,7 @@
 #include <memmgr/Allocator.h>
 #include <ps_3d.h>
 #include <unirender/RenderContext.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <painting2/FastBlendMode.h>
 
@@ -51,20 +52,20 @@ void Particle3d::BufferClear()
 static void
 blend_begin_func(int blend)
 {
-	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
 	switch (blend)
 	{
 	case pt2::FBM_NULL:
-		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
+		ur_rc.SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		ur_rc.SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case pt2::FBM_ADD:
-		rc->SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
-		rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
+		ur_rc.SetBlend(2, 2);		// BLEND_GL_ONE, BLEND_GL_ONE
+		ur_rc.SetBlendEquation(0);	// BLEND_FUNC_ADD
 		break;
 	case pt2::FBM_SUBTRACT:
-		rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-		rc->SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
+		ur_rc.SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+		ur_rc.SetBlendEquation(1);	// BLEND_FUNC_SUBTRACT
 		break;
 	}
 }
@@ -72,9 +73,9 @@ blend_begin_func(int blend)
 static void
 blend_end_func()
 {
-	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-	rc->SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
-	rc->SetBlendEquation(0);	// BLEND_FUNC_ADD
+	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	ur_rc.SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
+	ur_rc.SetBlendEquation(0);	// BLEND_FUNC_ADD
 }
 
 static void 

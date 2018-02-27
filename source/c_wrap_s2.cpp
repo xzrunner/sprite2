@@ -43,6 +43,7 @@
 #include <memmgr/Allocator.h>
 #include <logger.h>
 #include <SM_Math.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
@@ -1456,7 +1457,7 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 	texcoords[4] = t_xmax; texcoords[5] = t_ymax;
 	texcoords[6] = t_xmin; texcoords[7] = t_ymax;	
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	switch (mgr->GetShaderType())
 	{
 	case sl::SPRITE2:

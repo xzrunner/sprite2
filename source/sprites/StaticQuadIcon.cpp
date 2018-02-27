@@ -2,6 +2,7 @@
 #include "sprite2/RenderParams.h"
 #include "sprite2/ImageSymbol.h"
 
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
@@ -46,7 +47,7 @@ pt2::RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const Render
 		vertices[i] = rp.mt * m_screen[i];
 	}
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
 	shader->DrawQuad(&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());

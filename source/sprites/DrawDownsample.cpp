@@ -9,6 +9,7 @@
 
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
@@ -40,7 +41,7 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::DOWN_SAMPLE);
 #endif // S2_DISABLE_STATISTICS
 
-	sl::ShaderMgr::Instance()->FlushShader();
+	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
 
 	pt2::RenderScissor::Instance()->Disable();
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
@@ -62,8 +63,8 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 
 pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
-	mgr->GetContext()->Clear(0);
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	mgr->GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -128,7 +129,7 @@ pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 
 	mgr->SetShader(sl::SPRITE2);
 	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));

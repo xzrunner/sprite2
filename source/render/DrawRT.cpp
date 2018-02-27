@@ -6,6 +6,7 @@
 
 #include <SM_Rect.h>
 #include <unirender/RenderContext.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <gimg_typedef.h>
 #include <gimg_export.h>
@@ -63,13 +64,13 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 
 	m_rt->Bind();
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 
 	if (clear) {
-		ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-		rc->SetClearFlag(ur::MASKC);
-		rc->Clear(0);
+		ur::RenderContext& ur_rc = mgr->GetContext();
+		ur_rc.SetClearFlag(ur::MASKC);
+		ur_rc.Clear(0);
 	}
 
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
@@ -94,11 +95,11 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	m_rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE2);
 
-	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-	rc->SetClearFlag(ur::MASKC);
+	ur::RenderContext& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	ur_rc.SetClearFlag(ur::MASKC);
 #else
 	cooking::change_shader(nullptr, sl::SPRITE2);
 	cooking::set_render_clear_flag(nullptr, ur::MASKC);
@@ -110,7 +111,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 		clear_color = 0;
 	}
 #ifdef S2_DISABLE_DEFERRED
-	rc->Clear(clear_color);
+	ur_rc.Clear(clear_color);
 #else
 	cooking::render_clear(nullptr, clear_color);
 #endif // S2_DISABLE_DEFERRED
@@ -156,9 +157,9 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 	if (clear) 
 	{
 #ifdef S2_DISABLE_DEFERRED
-		ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
-		rc->SetClearFlag(ur::MASKC);
-		rc->Clear(0);
+		ur::RenderContext& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+		ur_rc.SetClearFlag(ur::MASKC);
+		ur_rc.Clear(0);
 #else
 		cooking::set_render_clear_flag(nullptr, ur::MASKC);
 		cooking::render_clear(nullptr, 0);
@@ -198,9 +199,9 @@ uint8_t* DrawRT::StoreToMemory(int width, int height, int channels)
 
 	memset(pixels, 0, sz);
 
-	ur::RenderContext* rc = sl::ShaderMgr::Instance()->GetContext();
+	ur::RenderContext& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
 	m_rt->Bind();
-	rc->ReadPixels(pixels, channels, 0, 0, width, height);
+	ur_rc.ReadPixels(pixels, channels, 0, 0, width, height);
 	m_rt->Unbind();
 	return pixels;
 }

@@ -81,7 +81,7 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->FlushShader();
 #else
 	cooking::flush_shader(dlist);
@@ -125,9 +125,9 @@ pt2::RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 
-	mgr->GetContext()->Clear(0);
+	mgr->GetContext().Clear(0);
 
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
@@ -165,9 +165,9 @@ pt2::RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 
-	mgr->GetContext()->Clear(0);
+	mgr->GetContext().Clear(0);
 
 	mgr->SetShader(sl::SPRITE2);
 	sl::Shader* shader = mgr->GetShader();
@@ -256,7 +256,7 @@ pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::R
 #endif // S2_DISABLE_STATISTICS
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 
 	mgr->SetShader(sl::MASK);
 

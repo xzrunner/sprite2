@@ -15,6 +15,7 @@
 #include <logger.h>
 #endif // S2_DEBUG
 #include S2_MAT_HEADER
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/FilterShader.h>
@@ -103,7 +104,7 @@ pt2::RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 //	st::StatOverdraw::Instance()->AddArea(area);
 //#endif // S2_DISABLE_STATISTICS
 	
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	if (mgr->GetShaderType() == sl::BLEND) {
 		if (!dlist) {
 			DrawBlend(*rp_child, vertices, texcoords, tex_id);
@@ -152,7 +153,7 @@ pt2::RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 //	StatOverdraw::Instance()->AddArea(area);
 //#endif // S2_DISABLE_STATISTICS
 	
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	if (mgr->GetShaderType() == sl::BLEND) {
 		if (!dlist) {
 			DrawBlend(rp, vertices, texcoords, tex_id);
@@ -201,7 +202,7 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 		return;
 	}
 
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 
@@ -254,7 +255,7 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 {
 	sl::ShaderType shader;
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	shader = mgr->GetShaderType();
 #else
 	assert(dlist);
@@ -321,7 +322,7 @@ void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& 
 	_texcoords.push_back(sm::vec2(texcoords[6], texcoords[7]));
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	mgr->SetShader(sl::SPRITE3);
 	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
 	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());

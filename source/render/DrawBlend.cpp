@@ -5,6 +5,7 @@
 #include "sprite2/DrawNode.h"
 
 #include <memmgr/Allocator.h>
+#include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -32,10 +33,10 @@ pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprit
 {
 	pt2::BlendMode mode = spr->GetShader().GetBlend();
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
 
-	mgr->GetContext()->Clear(0);
+	mgr->GetContext().Clear(0);
 	mgr->SetShader(sl::BLEND);
 	shader->SetMode(mode);
 #else
@@ -92,7 +93,7 @@ pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::ShaderMgr::Instance();
+	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
 
 	mgr->SetShader(sl::SPRITE2);
 

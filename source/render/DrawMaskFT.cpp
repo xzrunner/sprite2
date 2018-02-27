@@ -81,8 +81,8 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->FlushShader();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.FlushShader();
 #else
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
@@ -125,12 +125,11 @@ pt2::RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
-	mgr->GetContext().Clear(0);
-
-	mgr->SetShader(sl::SPRITE2);
-	sl::Shader* shader = mgr->GetShader();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Shader* shader = shader_mgr.GetShader();
 #else
 	cooking::render_clear(dlist, 0);
 	cooking::change_shader(dlist, sl::SPRITE2);
@@ -165,12 +164,11 @@ pt2::RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
-	mgr->GetContext().Clear(0);
-
-	mgr->SetShader(sl::SPRITE2);
-	sl::Shader* shader = mgr->GetShader();
+	rc.GetShaderMgr().SetShader(sl::SPRITE2);
+	sl::Shader* shader = shader_mgr.GetShader();
 #else
 	cooking::render_clear(dlist, 0);
 	cooking::change_shader(dlist, sl::SPRITE2);
@@ -256,11 +254,11 @@ pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::R
 #endif // S2_DISABLE_STATISTICS
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 
-	mgr->SetShader(sl::MASK);
+	shader_mgr.SetShader(sl::MASK);
 
-	sl::MaskShader* shader = static_cast<sl::MaskShader*>(mgr->GetShader());
+	sl::MaskShader* shader = static_cast<sl::MaskShader*>(shader_mgr.GetShader());
 	shader->Draw(&vertices[0].x, &texcoords[0].x, &texcoords_mask[0].x, rt_base->GetTexID(), rt_mask->GetTexID());
 #else
 	cooking::change_shader(dlist, sl::MASK);

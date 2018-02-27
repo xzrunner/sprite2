@@ -15,6 +15,7 @@
 #include <gtxt_label.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/FilterMode.h>
 #include <shaderlab/FilterShader.h>
 #ifndef S2_DISABLE_DEFERRED
@@ -142,17 +143,17 @@ pt2::RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const Ren
 		return pt2::RENDER_NO_DATA;
 	}
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 #ifdef S2_FILTER_FULL
 	if (rp.render_filter && rp.render_filter->GetMode() == pt2::FM_GRAY) {
 #else
 	if (rp.render_filter == pt2::FM_GRAY) {
 #endif // S2_FILTER_FULL
-		mgr->SetShader(sl::FILTER);
-		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+		shader_mgr.SetShader(sl::FILTER);
+		sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
 		shader->SetMode(sl::FM_GRAY);
 	} else {
-		mgr->SetShader(sl::SPRITE2);
+		shader_mgr.SetShader(sl::SPRITE2);
 	}
 
 	const pt2::Textbox& tb = tb_spr->GetTextbox();

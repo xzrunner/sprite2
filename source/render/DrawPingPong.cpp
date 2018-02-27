@@ -9,6 +9,7 @@
 
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
@@ -45,7 +46,7 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::Type(m_stat_pp_type));
 #endif // S2_DISABLE_STATISTICS
 
-	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	pt2::RenderScissor::Instance()->Disable();
 	if (!too_large) {
@@ -112,9 +113,9 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, 
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 #else
 	cooking::change_shader(dlist, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED
@@ -166,9 +167,9 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, 
 	texcoords[6] = 0; texcoords[7] = 1;
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 #else
 	cooking::change_shader(dlist, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED

@@ -4,6 +4,7 @@
 
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
@@ -47,9 +48,9 @@ pt2::RenderReturn StaticQuadIcon::Draw(cooking::DisplayList* dlist, const Render
 		vertices[i] = rp.mt * m_screen[i];
 	}
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 	shader->DrawQuad(&vertices[0].x, &m_src[0].x, m_img->GetTexture()->GetTexID());
 
 	return pt2::RENDER_OK;

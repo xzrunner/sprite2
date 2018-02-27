@@ -17,6 +17,7 @@
 #include <unirender/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <painting2/FastBlendMode.h>
 
 #include <assert.h>
@@ -52,7 +53,7 @@ void Particle3d::BufferClear()
 static void
 blend_begin_func(int blend)
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	switch (blend)
 	{
 	case pt2::FBM_NULL:
@@ -73,7 +74,7 @@ blend_begin_func(int blend)
 static void
 blend_end_func()
 {
-	auto& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	ur_rc.SetBlend(2, 6);		// BLEND_GL_ONE, BLEND_GL_ONE_MINUS_SRC_ALPHA
 	ur_rc.SetBlendEquation(0);	// BLEND_FUNC_ADD
 }

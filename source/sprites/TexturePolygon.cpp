@@ -7,6 +7,7 @@
 #include <SM_Triangulation.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
@@ -36,9 +37,9 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 	assert(m_tris.size() == m_texcoords.size()
 		&& m_tris.size() % 3 == 0);
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	for (int i = 0, n = m_tris.size(); i < n; i += 3) 
 	{
 		sm::vec2 vertices[4], texcoords[4];
@@ -60,12 +61,12 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 		shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);
 	}
 
-	//sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	//auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 	//const ee::pt2::Camera* cam = ee::pt2::CameraMgr::Instance()->GetCamera();
 	//if (cam->Type() == "ortho") 
 	//{
-	//	mgr->SetShader(sl::SPRITE2);
-	//	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	//	shader_mgr.SetShader(sl::SPRITE2);
+	//	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	//	for (int i = 0, n = m_tris.size(); i < n; i += 3) {
 	//		sm::vec2 vertices[4], texcoords[4];
 	//		for (int j = 0; j < 3; ++j) {
@@ -86,8 +87,8 @@ void TexturePolygon::Draw(cooking::DisplayList* dlist, const RenderParams& rp) c
 	//else
 	//{
 	//	const ee::Pseudo3DCamera* pcam = static_cast<const ee::Pseudo3DCamera*>(cam);
-	//	mgr->SetShader(sl::SPRITE3);
-	//	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
+	//	shader_mgr.SetShader(sl::SPRITE3);
+	//	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(shader_mgr.GetShader(sl::SPRITE3));
 	//	for (int i = 0, n = m_tris.size(); i < n; i += 3) {
 	//		CU_VEC<sm::vec3> vertices; 
 	//		vertices.resize(3);

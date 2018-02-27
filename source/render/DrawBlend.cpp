@@ -9,6 +9,7 @@
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/RenderContext.h>
 #include <unirender/RenderContext.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
@@ -33,11 +34,11 @@ pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprit
 {
 	pt2::BlendMode mode = spr->GetShader().GetBlend();
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	sl::BlendShader* shader = static_cast<sl::BlendShader*>(rc.GetShaderMgr().GetShader(sl::BLEND));
 
-	mgr->GetContext().Clear(0);
-	mgr->SetShader(sl::BLEND);
+	rc.GetContext().Clear(0);
+	rc.GetShaderMgr().SetShader(sl::BLEND);
 	shader->SetMode(mode);
 #else
 	cooking::render_clear(dlist, 0);
@@ -93,11 +94,11 @@ pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 
-	mgr->SetShader(sl::SPRITE2);
+	shader_mgr.SetShader(sl::SPRITE2);
 
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, tex_id);

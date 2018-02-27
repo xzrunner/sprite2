@@ -45,6 +45,7 @@
 #include <SM_Math.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Statistics.h>
@@ -1457,12 +1458,12 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 	texcoords[4] = t_xmax; texcoords[5] = t_ymax;
 	texcoords[6] = t_xmin; texcoords[7] = t_ymax;	
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	switch (mgr->GetShaderType())
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	switch (shader_mgr.GetShaderType())
 	{
 	case sl::SPRITE2:
 		{
-			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+			sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 			shader->DrawQuad(vertices, texcoords, src_tex_id);
@@ -1470,7 +1471,7 @@ static void _draw(const struct s2_region* dst, const struct s2_region* src, int 
 		break;
 	case sl::FILTER:
 		{
-			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
 			shader->SetColor(0xffffffff, 0);
 			shader->Draw(vertices, texcoords, src_tex_id);
 		}

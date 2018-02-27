@@ -15,6 +15,7 @@
 #include <mt_2d.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -69,8 +70,8 @@ pt2::RenderReturn TrailSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 	rp_child->col_common = spr->GetColorCommon() * rp.col_common;
 	rp_child->col_map    = spr->GetColorMap() * rp.col_map;
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
 	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 

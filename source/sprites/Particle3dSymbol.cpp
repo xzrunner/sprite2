@@ -18,6 +18,7 @@
 #include <ps_3d.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 
 #include <assert.h>
@@ -202,8 +203,8 @@ pt2::RenderReturn Particle3dSymbol::DrawSymbol(const RenderParams& rp, const Spr
 		return pt2::RENDER_INVISIBLE;
 	}
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
 	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 	P3dRenderParams p3d_rp;
@@ -283,8 +284,8 @@ pt2::RenderReturn Particle3dSymbol::DrawEmitter(const RenderParams& rp, const Sp
 		return pt2::RENDER_NO_DATA;
 	}
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	shader->SetColor(rp_child->col_common.mul.ToABGR(), rp_child->col_common.add.ToABGR());
 	shader->SetColorMap(rp_child->col_map.rmap.ToABGR(), rp_child->col_map.gmap.ToABGR(), rp_child->col_map.bmap.ToABGR());
 

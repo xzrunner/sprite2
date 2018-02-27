@@ -11,6 +11,7 @@
 #include <unirender/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/GaussianBlurHoriProg.h>
@@ -43,7 +44,7 @@ pt2::RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Spri
 }
 
 pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt2::RenderTarget* rt, 
-	                                        const Sprite* spr, const RenderParams& rp, int iterations)
+	                                             const Sprite* spr, const RenderParams& rp, int iterations)
 {	
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
@@ -55,8 +56,8 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	pt2::RenderTarget* tmp_rt = RT->Fetch();
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->FlushShader();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.FlushShader();
 #else
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
@@ -68,7 +69,7 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	ret |= DrawInit(rt, spr, rp);
 
 #ifdef S2_DISABLE_DEFERRED
-	mgr->SetShader(sl::FILTER);
+	shader_mgr.SetShader(sl::FILTER);
 #else
 	cooking::change_shader(dlist, sl::FILTER);
 #endif // S2_DISABLE_DEFERRED
@@ -106,10 +107,9 @@ pt2::RenderReturn DrawGaussianBlur::DrawFromRT(cooking::DisplayList* dlist, pt2:
 	texcoords[3].Set(0, 1);
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader());
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader());
 
 	shader->DrawQuad(&vertices[0].x, &texcoords[0].x, rt->GetTexID());
 
@@ -128,8 +128,8 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 {
 	rt->Bind();
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -145,7 +145,7 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 #endif // S2_FILTER_FULL
 	rp_child->SetDisableFilter(true);
 
-	mgr->SetShader(sl::SPRITE2);
+	rc.GetShaderMgr().SetShader(sl::SPRITE2);
 	pt2::RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	rt->Unbind();
@@ -159,10 +159,10 @@ pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::R
 
 	dst->Bind();
 	
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 	
-	sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+	sl::FilterShader* shader = static_cast<sl::FilterShader*>(rc.GetShaderMgr().GetShader(sl::FILTER));
 	if (hori) {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_HORI);
 		sl::GaussianBlurHoriProg* prog = static_cast<sl::GaussianBlurHoriProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_HORI));

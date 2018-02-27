@@ -17,6 +17,7 @@
 #include S2_MAT_HEADER
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/BlendShader.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -104,8 +105,8 @@ pt2::RenderReturn ImageSymbol::DrawTree(cooking::DisplayList* dlist, const Rende
 //	st::StatOverdraw::Instance()->AddArea(area);
 //#endif // S2_DISABLE_STATISTICS
 	
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	if (mgr->GetShaderType() == sl::BLEND) {
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	if (shader_mgr.GetShaderType() == sl::BLEND) {
 		if (!dlist) {
 			DrawBlend(*rp_child, vertices, texcoords, tex_id);
 		}
@@ -153,8 +154,8 @@ pt2::RenderReturn ImageSymbol::DrawNode(cooking::DisplayList* dlist,
 //	StatOverdraw::Instance()->AddArea(area);
 //#endif // S2_DISABLE_STATISTICS
 	
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	if (mgr->GetShaderType() == sl::BLEND) {
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	if (shader_mgr.GetShaderType() == sl::BLEND) {
 		if (!dlist) {
 			DrawBlend(rp, vertices, texcoords, tex_id);
 		}
@@ -202,8 +203,8 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 		return;
 	}
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	sl::BlendShader* shader = static_cast<sl::BlendShader*>(mgr->GetShader(sl::BLEND));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::BlendShader* shader = static_cast<sl::BlendShader*>(shader_mgr.GetShader(sl::BLEND));
 	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 
 	for (int i = 0, ptr = 0; i < 4; ++i) {
@@ -255,8 +256,8 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 {
 	sl::ShaderType shader;
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	shader = mgr->GetShaderType();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader = shader_mgr.GetShaderType();
 #else
 	assert(dlist);
 	shader = static_cast<sl::ShaderType>(dlist->GetShaderType());
@@ -268,7 +269,7 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 	case sl::FILTER:
 		{
 #ifdef S2_DISABLE_DEFERRED
-		auto shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+		auto shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader(sl::FILTER));
 		shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 		shader->Draw(vertices, texcoords, tex_id);
 #else
@@ -280,7 +281,7 @@ void ImageSymbol::DrawOrtho(cooking::DisplayList* dlist, const RenderParams& rp,
 	case sl::SPRITE2:
 		{
 #ifdef S2_DISABLE_DEFERRED
-		auto shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+		auto shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 		shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 		shader->SetColorMap(rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 		shader->DrawQuad(vertices, texcoords, tex_id);
@@ -322,9 +323,9 @@ void ImageSymbol::DrawPseudo3D(cooking::DisplayList* dlist, const RenderParams& 
 	_texcoords.push_back(sm::vec2(texcoords[6], texcoords[7]));
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->SetShader(sl::SPRITE3);
-	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(mgr->GetShader(sl::SPRITE3));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE3);
+	sl::Sprite3Shader* shader = static_cast<sl::Sprite3Shader*>(shader_mgr.GetShader(sl::SPRITE3));
 	shader->SetColor(rp.col_common.mul.ToABGR(), rp.col_common.add.ToABGR());
 	shader->SetColorMap(rp.col_map.rmap.ToABGR(), rp.col_map.gmap.ToABGR(), rp.col_map.bmap.ToABGR());
 	shader->Draw(&_vertices[0].x, &_texcoords[0].x, tex_id);

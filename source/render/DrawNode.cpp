@@ -17,6 +17,7 @@
 #include <unirender/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <shaderlab/FilterShader.h>
 #include <shaderlab/EdgeDetectProg.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -173,11 +174,11 @@ pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
-			sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+			auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 
- 			mgr->SetShader(sl::FILTER);
+ 			shader_mgr.SetShader(sl::FILTER);
 
- 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+ 			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
  			shader->SetMode(sl::FILTER_MODE(filter));
 #else
 			cooking::change_shader(nullptr, sl::FILTER);
@@ -188,8 +189,8 @@ pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp,
  		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
-			sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
- 			mgr->SetShader(sl::SPRITE2);
+			auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+ 			shader_mgr.SetShader(sl::SPRITE2);
 #else
 			cooking::change_shader(nullptr, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED
@@ -231,9 +232,9 @@ pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, cons
 		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
-			sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-			mgr->SetShader(sl::FILTER);
-			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader());
+			auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+			shader_mgr.SetShader(sl::FILTER);
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader());
 			shader->SetMode(sl::FILTER_MODE(filter));
 #else
 			cooking::change_shader(nullptr, sl::FILTER);
@@ -244,8 +245,8 @@ pt2::RenderReturn DrawNode::Draw(const Symbol& sym, const RenderParams& rp, cons
 		if (rp_child->IsChangeShader()) 
 		{
 #ifdef S2_DISABLE_DEFERRED
-			sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-			mgr->SetShader(sl::SPRITE2);
+			auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+			shader_mgr.SetShader(sl::SPRITE2);
 #else
 			cooking::change_shader(nullptr, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED
@@ -269,7 +270,7 @@ pt2::RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* 
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderType prev_shader = sl::Blackboard::Instance()->GetShaderMgr()->GetShaderType();
+	sl::ShaderType prev_shader = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().GetShaderType();
 #else
 	assert(dlist);
 	int prev_shader = dlist->GetShaderType();
@@ -290,7 +291,7 @@ pt2::RenderReturn DrawNode::DrawAABB(cooking::DisplayList* dlist, const Sprite* 
 	pt2::PrimitiveDraw::Polyline(nullptr, vertices, true);
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::Blackboard::Instance()->GetShaderMgr()->SetShader(prev_shader);
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().SetShader(prev_shader);
 #else
 	cooking::change_shader(dlist, prev_shader);
 #endif // S2_DISABLE_DEFERRED
@@ -352,8 +353,8 @@ pt2::RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& r
 {
 	rt->Bind();
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -366,7 +367,7 @@ pt2::RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& r
 	}
 	pt2::RenderReturn ret = DrawSprImpl(nullptr, spr, *rp_child);
 
-	sl::Blackboard::Instance()->GetShaderMgr()->GetShader()->Commit();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().GetShader()->Commit();
 
 	rt->Unbind();
 
@@ -388,11 +389,11 @@ pt2::RenderReturn DrawNode::DrawSprFromRT(const Sprite* spr, const RenderParams&
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 
-	mgr->SetShader(sl::SPRITE2);
+	shader_mgr.SetShader(sl::SPRITE2);
 
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);
 
@@ -410,8 +411,8 @@ pt2::RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt
 {
 	rt->Bind();
 
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp = rp_proxy.obj;
@@ -419,7 +420,7 @@ pt2::RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt
 
 	pt2::RenderReturn ret = Draw(sym, *rp, S2_MAT());
 
-	sl::Blackboard::Instance()->GetShaderMgr()->GetShader()->Commit();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().GetShader()->Commit();
 
 	rt->Unbind();
 
@@ -436,7 +437,7 @@ pt2::RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
-	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	pt2::RenderScissor::Instance()->Disable();
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
@@ -472,7 +473,7 @@ pt2::RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& 
 
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
-	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	pt2::RenderScissor::Instance()->Disable();
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
@@ -540,7 +541,7 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	ur::RenderContext& ur_rc = sl::Blackboard::Instance()->GetShaderMgr()->GetContext();
+	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
 	switch (rs.GetFastBlend())
 	{
 	case pt2::FBM_NULL:
@@ -596,7 +597,7 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 #endif // S2_DISABLE_DEFERRED
 	if (blend != pt2::BM_NULL) 
 	{
@@ -630,13 +631,13 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 		{
 			if (rp.IsChangeShader()) {
 #ifdef S2_DISABLE_DEFERRED
-				mgr->SetShader(sl::FILTER);
+				shader_mgr.SetShader(sl::FILTER);
 #else
 				cooking::change_shader(dlist, sl::FILTER);
 #endif // S2_DISABLE_DEFERRED
 			}
 #ifdef S2_DISABLE_DEFERRED
-			sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+			sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader(sl::FILTER));
 			shader->SetMode(sl::FILTER_MODE(filter));
 #else
 			cooking::set_shader_filter_mode(dlist, filter);
@@ -665,13 +666,13 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 
 		if (rp.IsChangeShader()) {
 #ifdef S2_DISABLE_DEFERRED
-			mgr->SetShader(sl::FILTER);
+			shader_mgr.SetShader(sl::FILTER);
 #else
 			cooking::change_shader(dlist, sl::FILTER);
 #endif // S2_DISABLE_DEFERRED
 		}
 #ifdef S2_DISABLE_DEFERRED
-		sl::FilterShader* shader = static_cast<sl::FilterShader*>(mgr->GetShader(sl::FILTER));
+		sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader(sl::FILTER));
 		shader->SetMode(sl::FILTER_MODE(filter));
 #else
 		cooking::change_shader(dlist, sl::FILTER);
@@ -684,7 +685,7 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 	{
 		if (rp.IsChangeShader()) {
 #ifdef S2_DISABLE_DEFERRED
-			mgr->SetShader(sl::SPRITE2);
+			shader_mgr.SetShader(sl::SPRITE2);
 #else
 			cooking::change_shader(dlist, sl::SPRITE2);
 #endif // S2_DISABLE_DEFERRED

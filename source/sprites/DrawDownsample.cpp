@@ -12,6 +12,7 @@
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
+#include <shaderlab/RenderContext.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
@@ -41,7 +42,7 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::DOWN_SAMPLE);
 #endif // S2_DISABLE_STATISTICS
 
-	sl::Blackboard::Instance()->GetShaderMgr()->FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	pt2::RenderScissor::Instance()->Disable();
 	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
@@ -63,8 +64,8 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 
 pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -78,7 +79,7 @@ pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderPara
 	spr->GetSymbol()->DrawTree(nullptr, *rp_child, spr);
 	spr->SetMatDisable(false);
 
-	mgr->FlushShader();
+	rc.GetShaderMgr().FlushShader();
 
 	return pt2::RENDER_OK;
 }
@@ -129,10 +130,10 @@ pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 
-	mgr->SetShader(sl::SPRITE2);
-	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(mgr->GetShader(sl::SPRITE2));
+	shader_mgr.SetShader(sl::SPRITE2);
+	sl::Sprite2Shader* shader = static_cast<sl::Sprite2Shader*>(shader_mgr.GetShader(sl::SPRITE2));
 
 	shader->SetColor(0xffffffff, 0);
 	shader->SetColorMap(0x000000ff, 0x0000ff00, 0x00ff0000);

@@ -8,6 +8,7 @@
 #include <unirender/RenderContext.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
+#include <shaderlab/RenderContext.h>
 #include <stat/StatPingPong.h>
 
 namespace s2
@@ -20,8 +21,8 @@ DrawIntegrate::DrawIntegrate()
 
 pt2::RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, bool too_large) const
 {
-	sl::ShaderMgr* mgr = sl::Blackboard::Instance()->GetShaderMgr();
-	mgr->GetContext().Clear(0);
+	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
+	rc.GetContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -41,7 +42,7 @@ pt2::RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const S
 	spr->SetColorDisable(false);
 //	spr->SetMatDisable(false);
 
-	mgr->FlushShader();
+	rc.GetShaderMgr().FlushShader();
 
 	return pt2::RENDER_OK;
 }

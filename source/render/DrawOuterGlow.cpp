@@ -17,6 +17,8 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -27,11 +29,12 @@ pt2::RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite*
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::OUTER_GLOW);
 #endif // S2_DISABLE_STATISTICS
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	DrawGaussianBlur::DrawBlurToRT(dlist, rt, spr, rp, iterations);
 	DrawGaussianBlur::DrawFromRT(dlist, rt, spr->GetPosition());
-	RT->Return(rt);
+	rt_mgr.Return(rt);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;

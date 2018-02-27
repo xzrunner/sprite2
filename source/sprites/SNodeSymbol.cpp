@@ -7,6 +7,8 @@
 #include "sprite2/DrawNode.h"
 
 #include <painting2/RenderCtxStack.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 #include <painting3/PrimitiveDraw.h>
 #include <node3/RenderParams.h>
 #include <node3/RenderCtxStack.h>
@@ -75,7 +77,8 @@ sm::mat4 SNodeSymbol::CalcCam2dMat(const S2_MAT& mt2)
 	mt16.x[12] = mt6[4] * SCALE;
 	mt16.x[13] = mt6[5] * SCALE;
 
-	auto ctx = pt2::RenderCtxStack::Instance()->Top();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto ctx = pt2_ctx.GetCtxStack().Top();
 	if (!ctx) {
 		return mt16;
 	}

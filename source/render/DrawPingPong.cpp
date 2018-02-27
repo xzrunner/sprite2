@@ -18,6 +18,8 @@
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -29,13 +31,14 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 
 pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	sm::rect sz;
 	spr->GetBounding(rp.actor).CombineTo(sz);
-	const bool too_large = sz.Width() > RT->WIDTH || sz.Height() > RT->HEIGHT;
+	const bool too_large = sz.Width() > rt_mgr.WIDTH || sz.Height() > rt_mgr.HEIGHT;
 
-	pt2::RenderTarget* rt = too_large ? RT->FetchScreen() : RT->Fetch();
+	pt2::RenderTarget* rt = too_large ? rt_mgr.FetchScreen() : rt_mgr.Fetch();
 	if (!rt) {
 		return pt2::RENDER_NO_RT;
 	}
@@ -48,10 +51,10 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2::RenderScissor::Instance()->Disable();
+	pt2_ctx.GetScissor().Disable();
 	if (!too_large) {
-		pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-			static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+		pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+			static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 	}
 
 	rt->Bind();
@@ -59,15 +62,15 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 	rt->Unbind();
 
 	if (!too_large) {
-		pt2::RenderCtxStack::Instance()->Pop();
+		pt2_ctx.GetCtxStack().Pop();
 	}
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetScissor().Enable();
 
 	ret |= DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, too_large);
 	if (too_large) {
-		RT->ReturnScreen(rt);
+		rt_mgr.ReturnScreen(rt);
 	} else {
-		RT->Return(rt);
+		rt_mgr.Return(rt);
 	}
 
 	return ret;
@@ -88,7 +91,8 @@ pt2::RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int t
 pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
@@ -108,8 +112,8 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, 
 	texcoords[2] = sm::vec2(r.xmax, r.ymax);
 	texcoords[3] = sm::vec2(r.xmax, r.ymin);
 	for (int i = 0; i < 4; ++i) {
-		texcoords[i].x = texcoords[i].x / RT->WIDTH  + 0.5f;
-		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
+		texcoords[i].x = texcoords[i].x / rt_mgr.WIDTH  + 0.5f;
+		texcoords[i].y = texcoords[i].y / rt_mgr.HEIGHT + 0.5f;
 	}
 
 #ifdef S2_DISABLE_DEFERRED
@@ -152,7 +156,8 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, 
 pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
 
 	float xmin = -1, ymin = -1;
 	float xmax =  1, ymax =  1;
@@ -200,7 +205,7 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, 
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	pt2::RenderCtxStack::Instance()->Pop();
+	pt2_ctx.GetCtxStack().Pop();
 
 	return pt2::RENDER_OK;
 }

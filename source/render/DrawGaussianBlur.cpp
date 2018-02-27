@@ -24,6 +24,8 @@
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -32,13 +34,14 @@ pt2::RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Spri
 {
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* rt = rt_mgr.Fetch();
 
 	ret |= DrawBlurToRT(dlist, rt, spr, rp, iterations);
 	ret |= DrawFromRT(dlist, rt, spr->GetPosition());
 
-	RT->Return(rt);
+	rt_mgr.Return(rt);
 
 	return ret;
 }
@@ -52,8 +55,9 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::GAUSSIAN_BLUR);
 #endif // S2_DISABLE_STATISTICS
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* tmp_rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* tmp_rt = rt_mgr.Fetch();
 
 #ifdef S2_DISABLE_DEFERRED
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
@@ -62,9 +66,9 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	ret |= DrawInit(rt, spr, rp);
 
@@ -81,10 +85,10 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 		ret |= DrawBetweenRT(tmp_rt, rt, false, rp.col_common, sz.y);
 	}
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
-	RT->Return(tmp_rt);
+	rt_mgr.Return(tmp_rt);
 
 	return ret;
 }
@@ -155,7 +159,8 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 
 pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	dst->Bind();
 	
@@ -166,11 +171,11 @@ pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::R
 	if (hori) {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_HORI);
 		sl::GaussianBlurHoriProg* prog = static_cast<sl::GaussianBlurHoriProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_HORI));
-		prog->SetTexWidth(static_cast<float>(RT->WIDTH));
+		prog->SetTexWidth(static_cast<float>(rt_mgr.WIDTH));
 	} else {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_VERT);
 		sl::GaussianBlurVertProg* prog = static_cast<sl::GaussianBlurVertProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_VERT));
-		prog->SetTexHeight(static_cast<float>(RT->HEIGHT));
+		prog->SetTexHeight(static_cast<float>(rt_mgr.HEIGHT));
 	}
 	shader->SetColor(col.mul.ToABGR(), col.add.ToABGR());
 

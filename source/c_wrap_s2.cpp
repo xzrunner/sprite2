@@ -56,6 +56,8 @@
 #include <painting2/RenderScissor.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -86,10 +88,10 @@ void s2_init()
 extern "C"
 void s2_on_size(int w, int h) 
 {
-	pt2::RenderCtxStack* stack = pt2::RenderCtxStack::Instance();
-	if (stack->Size() <= 1) {
-		stack->Pop();
-		stack->Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+	auto& stack = pt2::Blackboard::Instance()->GetContext().GetCtxStack();
+	if (stack.Size() <= 1) {
+		stack.Pop();
+		stack.Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	}
 }
 
@@ -1426,14 +1428,14 @@ void s2_actor_scale9_resize(void* actor, int w, int h) {
 extern "C"
 void* s2_rt_fetch()
 {
-	return pt2::RenderTargetMgr::Instance()->Fetch();
+	return pt2::Blackboard::Instance()->GetContext().GetRTMgr().Fetch();
 }
 
 extern "C"
 void s2_rt_return(void* rt)
 {
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
-	pt2::RenderTargetMgr::Instance()->Return(s2_rt);
+	pt2::Blackboard::Instance()->GetContext().GetRTMgr().Return(s2_rt);
 }
 
 static void _draw(const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
@@ -1486,10 +1488,11 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	s2_rt->Bind();
@@ -1498,8 +1501,8 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 
 	s2_rt->Unbind();
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 }
 
 extern "C"
@@ -1509,15 +1512,16 @@ void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(2, 2, 0, 0));
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	int src_tex_id = s2_rt->GetTexID();
 	_draw(dst, src, src_tex_id);
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 }
 
 extern "C"
@@ -1632,7 +1636,8 @@ uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL
 extern "C"
 void s2_set_viewport(float x, float y, float w, float h)
 {
-	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2::RenderCtxStack::Instance()->Top());
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2_ctx.GetCtxStack().Top());
 	ctx->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 

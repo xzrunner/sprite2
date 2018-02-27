@@ -17,6 +17,8 @@
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderCtxStack.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 #include <string.h>
 
@@ -25,7 +27,7 @@ namespace s2
 
 DrawRT::DrawRT()
 {
-	m_rt = pt2::RenderTargetMgr::Instance()->Fetch();
+	m_rt = pt2::Blackboard::Instance()->GetContext().GetRTMgr().Fetch();
 	m_rt_type = SRC_MGR;
 }
 
@@ -49,7 +51,7 @@ DrawRT::~DrawRT()
 		delete m_rt;
 		break;
 	case SRC_MGR:
-		pt2::RenderTargetMgr::Instance()->Return(m_rt);
+		pt2::Blackboard::Instance()->GetContext().GetRTMgr().Return(m_rt);
 		break;
 	}
 }
@@ -74,7 +76,8 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 		ur_rc.Clear(0);
 	}
 
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams params;
@@ -86,7 +89,7 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	rc.GetShaderMgr().FlushShader();
 
-	pt2::RenderCtxStack::Instance()->Pop();
+	pt2_ctx.GetCtxStack().Pop();
 
 	m_rt->Unbind();
 }
@@ -122,7 +125,8 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	int w = static_cast<int>(sz.x * scale),
 		h = static_cast<int>(sz.y * scale);
 
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
 		static_cast<float>(w), static_cast<float>(h), w, h));
 
 	RenderParams params;
@@ -139,7 +143,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	cooking::flush_shader(nullptr);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2::RenderCtxStack::Instance()->Pop();
+	pt2_ctx.GetCtxStack().Pop();
 
 	m_rt->Unbind();
 }
@@ -167,14 +171,15 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);
 	shape.Draw(nullptr, rp);
 
-	pt2::RenderCtxStack::Instance()->Pop();
+	pt2_ctx.GetCtxStack().Pop();
 
 	m_rt->Unbind();
 }

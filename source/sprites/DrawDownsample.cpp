@@ -21,6 +21,8 @@
 #include <painting2/RenderContext.h>
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -32,8 +34,10 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 		return pt2::RENDER_NO_DATA;
 	}
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	if (!rt) {
 		return pt2::RENDER_NO_RT;
 	}
@@ -44,20 +48,20 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	rt->Bind();
 	DrawSpr2RT(spr, rp, downsample);
 	rt->Unbind();
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
 	DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, downsample);
 
-	RT->Return(rt);
+	rt_mgr.Return(rt);
 
 	return pt2::RENDER_OK;
 }
@@ -87,16 +91,17 @@ pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderPara
 pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
 	                                       const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 
 	sm::rect r;
 	if (spr->GetSymbol()->Type() == SYM_PARTICLE3D) {
-// 		float hw = RT->WIDTH * downsample;
-// 		float hh = RT->HEIGHT * downsample;
-		float hw = RT->WIDTH * 0.5f;
-		float hh = RT->HEIGHT * 0.5f;
+// 		float hw = rt_mgr.WIDTH * downsample;
+// 		float hh = rt_mgr.HEIGHT * downsample;
+		float hw = rt_mgr.WIDTH * 0.5f;
+		float hh = rt_mgr.HEIGHT * 0.5f;
 		r.xmin = -hw;
 		r.xmax =  hw;
 		r.ymin = -hh;
@@ -125,8 +130,8 @@ pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int
 		texcoords[i] = mt * texcoords[i];
 	}
 	for (int i = 0; i < 4; ++i) {
-		texcoords[i].x = texcoords[i].x / RT->WIDTH  + 0.5f;
-		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
+		texcoords[i].x = texcoords[i].x / rt_mgr.WIDTH  + 0.5f;
+		texcoords[i].y = texcoords[i].y / rt_mgr.HEIGHT + 0.5f;
 	}
 
 #ifdef S2_DISABLE_DEFERRED

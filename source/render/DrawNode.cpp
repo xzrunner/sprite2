@@ -35,6 +35,8 @@
 #include <painting2/RenderCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/PrimitiveDraw.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -305,8 +307,8 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 		return false;
 	}
 
-	pt2::RenderScissor* rs = pt2::RenderScissor::Instance();
-	if (rs->IsEmpty() && !rp.IsViewRegionValid()) {
+	auto& rs = pt2::Blackboard::Instance()->GetContext().GetScissor();
+	if (rs.IsEmpty() && !rp.IsViewRegionValid()) {
 		rp.SetDisableCulling(true);
 		return false;
 	}
@@ -322,7 +324,7 @@ bool DrawNode::CullingTestOutside(const Sprite* spr, const RenderParams& rp)
 
 	sm::rect sr(r_min, r_max);
 
-	if (!rs->IsEmpty() && rs->CullingTestOutside(sr)) {
+	if (!rs.IsEmpty() && rs.CullingTestOutside(sr)) {
 		rp.SetDisableCulling(true);
 		return true;
 	}
@@ -429,8 +431,9 @@ pt2::RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt
 
 pt2::RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	if (!rt) {
 		return pt2::RENDER_NO_RT;
 	}
@@ -439,21 +442,21 @@ pt2::RenderReturn DrawNode::DTexCacheSym(const Symbol& sym)
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	pt2::RenderReturn r = DrawSymToRT(sym, rt);
 	if (r != pt2::RENDER_OK) {
 		ret = r;
 	}
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
 	DTEX_SYM_INSERT(GET_SYM_UID(sym), sym.GetBounding(), rt->GetTexID(), rt->Width(), rt->Height());
 
-	RT->Return(rt);
+	rt_mgr.Return(rt);
 
 	return ret;
 }
@@ -465,8 +468,9 @@ const float* DrawNode::DTexQuerySym(const Symbol& sym, int& tex_id, int& block_i
 
 pt2::RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& rp)
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
-	pt2::RenderTarget* rt = RT->Fetch();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	if (!rt) {
 		return pt2::RENDER_NO_RT;
 	}
@@ -475,15 +479,15 @@ pt2::RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& 
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	ret |= DrawSprToRT(spr, rp, rt);
 	bool loading_finished = (ret & pt2::RENDER_ON_LOADING) == 0;
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
 	if (loading_finished) 
 	{
@@ -493,7 +497,7 @@ pt2::RenderReturn DrawNode::DTexCacheSpr(const Sprite* spr, const RenderParams& 
 		ret |= pt2::RENDER_UNKNOWN;
 	}
 
-	RT->Return(rt);
+	rt_mgr.Return(rt);
 
 	if (loading_finished) {
 		spr->SetDTexForceCachedDirty(false);

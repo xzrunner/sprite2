@@ -20,6 +20,8 @@
 #include <painting2/RenderShader.h>
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderContext.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 namespace s2
 {
@@ -71,7 +73,8 @@ pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprit
 pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										   const RenderParams& rp, bool reset_color) const
 {
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
@@ -89,8 +92,8 @@ pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int
 	sm::vec2 vertex_offset = - (rp.mt * spr->GetPosition());
 	for (int i = 0; i < 4; ++i) {
 		texcoords[i] = vertices[i] + vertex_offset;
-		texcoords[i].x = texcoords[i].x / RT->WIDTH  + 0.5f;
-		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
+		texcoords[i].x = texcoords[i].x / rt_mgr.WIDTH  + 0.5f;
+		texcoords[i].y = texcoords[i].y / rt_mgr.HEIGHT + 0.5f;
 	}
 
 #ifdef S2_DISABLE_DEFERRED

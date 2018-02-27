@@ -78,7 +78,7 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MASK);
 #endif // S2_DISABLE_STATISTICS
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 #ifdef S2_DISABLE_DEFERRED
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
@@ -87,34 +87,34 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2::RenderScissor::Instance()->Disable();
-	pt2::RenderCtxStack::Instance()->Push(pt2::RenderContext(
-		static_cast<float>(RT->WIDTH), static_cast<float>(RT->HEIGHT), RT->WIDTH, RT->HEIGHT));
+	pt2_ctx.GetScissor().Disable();
+	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
-	pt2::RenderTarget* rt_base = RT->Fetch();
+	pt2::RenderTarget* rt_base = rt_mgr.Fetch();
 	if (!rt_base) {
-		pt2::RenderCtxStack::Instance()->Pop();
-		pt2::RenderScissor::Instance()->Enable();
+		pt2_ctx.GetCtxStack().Pop();
+		pt2_ctx.GetScissor().Enable();
 		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawBaseToRT(dlist, rt_base, ft, base, base_actor, rp);
 
-	pt2::RenderTarget* rt_mask = RT->Fetch();
+	pt2::RenderTarget* rt_mask = rt_mgr.Fetch();
 	if (!rt_mask) {
-		RT->Return(rt_base);
-		pt2::RenderCtxStack::Instance()->Pop();
-		pt2::RenderScissor::Instance()->Enable();
+		rt_mgr.Return(rt_base);
+		pt2_ctx.GetCtxStack().Pop();
+		pt2_ctx.GetScissor().Enable();
 		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawMaskToRT(dlist, rt_mask, ft, mask, mask_actor, rp);
 
-	pt2::RenderCtxStack::Instance()->Pop();
-	pt2::RenderScissor::Instance()->Enable();
+	pt2_ctx.GetCtxStack().Pop();
+	pt2_ctx.GetScissor().Enable();
 
 	ret |= DrawMaskFromRT(dlist, rt_base, rt_mask, ft, mask, rp.mt);
 
-	RT->Return(rt_base);
-	RT->Return(rt_mask);
+	rt_mgr.Return(rt_base);
+	rt_mgr.Return(rt_mask);
 
 	return ret;
 }
@@ -204,7 +204,7 @@ pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::R
 		return pt2::RENDER_NO_DATA;
 	}
 
-	pt2::RenderTargetMgr* RT = pt2::RenderTargetMgr::Instance();
+	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	const Symbol* sym = nullptr;
 	if (ft_n->IsDataSpr()) {
@@ -223,15 +223,15 @@ pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::R
 	sm::vec2 texcoords[4];
 	for (int i = 0; i < 4; ++i) {
 		texcoords[i] = vertices[i];
-		texcoords[i].x = texcoords[i].x / RT->WIDTH  + 0.5f;
-		texcoords[i].y = texcoords[i].y / RT->HEIGHT + 0.5f;
+		texcoords[i].x = texcoords[i].x / rt_mgr.WIDTH  + 0.5f;
+		texcoords[i].y = texcoords[i].y / rt_mgr.HEIGHT + 0.5f;
 	}
 
 	sm::vec2 texcoords_mask[4];
 	for (int i = 0; i < 4; ++i) {
 		texcoords_mask[i] = vertices[i];
-		texcoords_mask[i].x = texcoords_mask[i].x / RT->WIDTH  + 0.5f;
-		texcoords_mask[i].y = texcoords_mask[i].y / RT->HEIGHT + 0.5f;
+		texcoords_mask[i].x = texcoords_mask[i].x / rt_mgr.WIDTH  + 0.5f;
+		texcoords_mask[i].y = texcoords_mask[i].y / rt_mgr.HEIGHT + 0.5f;
 	}
 
 	for (int i = 0; i < 4; ++i) {

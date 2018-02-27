@@ -21,6 +21,8 @@
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderScissor.h>
+#include <painting2/Blackboard.h>
+#include <painting2/Context.h>
 
 #include <cu/cu_stl.h>
 #include <SM_Test.h>
@@ -104,7 +106,8 @@ pt2::RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const Ren
 		if (min.y > max.y) {
 			std::swap(min.y, max.y);
 		}
-		pt2::RenderScissor::Instance()->Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
+		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+		pt2_ctx.GetScissor().Push(min.x, min.y, max.x-min.x, max.y-min.y, true, false);
 	}
 
 	pt2::RenderReturn ret = pt2::RENDER_OK;
@@ -142,7 +145,8 @@ pt2::RenderReturn ComplexSymbol::DrawTree(cooking::DisplayList* dlist, const Ren
 	}
 
 	if (scissor) {
-		pt2::RenderScissor::Instance()->Pop();
+		auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+		pt2_ctx.GetScissor().Pop();
 	}
 
 	return ret;

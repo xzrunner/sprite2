@@ -6,6 +6,7 @@
 
 #include <SM_Rect.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
@@ -71,7 +72,7 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 	rc.GetShaderMgr().SetShader(sl::SPRITE2);
 
 	if (clear) {
-		ur::RenderContext& ur_rc = rc.GetContext();
+		auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 		ur_rc.SetClearFlag(ur::MASKC);
 		ur_rc.Clear(0);
 	}
@@ -102,7 +103,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 	shader_mgr.SetShader(sl::SPRITE2);
 
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	ur_rc.SetClearFlag(ur::MASKC);
 #else
 	cooking::change_shader(nullptr, sl::SPRITE2);
@@ -162,7 +163,7 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 	if (clear) 
 	{
 #ifdef S2_DISABLE_DEFERRED
-		auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+		auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 		ur_rc.SetClearFlag(ur::MASKC);
 		ur_rc.Clear(0);
 #else
@@ -205,7 +206,7 @@ uint8_t* DrawRT::StoreToMemory(int width, int height, int channels)
 
 	memset(pixels, 0, sz);
 
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	m_rt->Bind();
 	ur_rc.ReadPixels(pixels, channels, 0, 0, width, height);
 	m_rt->Unbind();

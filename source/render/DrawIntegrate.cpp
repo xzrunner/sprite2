@@ -6,6 +6,7 @@
 
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
@@ -21,8 +22,7 @@ DrawIntegrate::DrawIntegrate()
 
 pt2::RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp, bool too_large) const
 {
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -42,7 +42,7 @@ pt2::RenderReturn DrawIntegrate::DrawSpr2RT(cooking::DisplayList* dlist, const S
 	spr->SetColorDisable(false);
 //	spr->SetMatDisable(false);
 
-	rc.GetShaderMgr().FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	return pt2::RENDER_OK;
 }

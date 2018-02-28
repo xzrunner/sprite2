@@ -15,6 +15,7 @@
 #include <memmgr/Allocator.h>
 #include <SM_Calc.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
@@ -355,8 +356,7 @@ pt2::RenderReturn DrawNode::DrawSprToRT(const Sprite* spr, const RenderParams& r
 {
 	rt->Bind();
 
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -413,8 +413,7 @@ pt2::RenderReturn DrawNode::DrawSymToRT(const Symbol& sym, pt2::RenderTarget* rt
 {
 	rt->Bind();
 
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp = rp_proxy.obj;
@@ -545,7 +544,7 @@ pt2::RenderReturn DrawNode::DrawSprImpl(cooking::DisplayList* dlist, const Sprit
 	}
 
 #ifdef S2_DISABLE_DEFERRED
-	auto& ur_rc = sl::Blackboard::Instance()->GetRenderContext().GetContext();
+	auto& ur_rc = ur::Blackboard::Instance()->GetRenderContext();
 	switch (rs.GetFastBlend())
 	{
 	case pt2::FBM_NULL:

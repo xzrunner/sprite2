@@ -9,6 +9,7 @@
 
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Sprite2Shader.h>
@@ -68,8 +69,7 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 
 pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -83,7 +83,7 @@ pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderPara
 	spr->GetSymbol()->DrawTree(nullptr, *rp_child, spr);
 	spr->SetMatDisable(false);
 
-	rc.GetShaderMgr().FlushShader();
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	return pt2::RENDER_OK;
 }

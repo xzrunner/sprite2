@@ -19,6 +19,7 @@
 #endif // S2_DISABLE_FLATTEN
 #include <SM_Rect.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/Shader.h>
 #include <shaderlab/MaskShader.h>
@@ -125,9 +126,9 @@ pt2::RenderReturn DrawMaskFT::DrawBaseToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
 	shader_mgr.SetShader(sl::SPRITE2);
 	sl::Shader* shader = shader_mgr.GetShader();
 #else
@@ -164,10 +165,10 @@ pt2::RenderReturn DrawMaskFT::DrawMaskToRT(cooking::DisplayList* dlist, pt2::Ren
 	rt->Bind();
 
 #ifdef S2_DISABLE_DEFERRED
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
-	rc.GetShaderMgr().SetShader(sl::SPRITE2);
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	shader_mgr.SetShader(sl::SPRITE2);
 	sl::Shader* shader = shader_mgr.GetShader();
 #else
 	cooking::render_clear(dlist, 0);

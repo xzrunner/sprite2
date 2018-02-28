@@ -11,6 +11,7 @@
 #include <shaderlab/Sprite2Shader.h>
 #include <shaderlab/RenderContext.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/Facade.h>
 #endif // S2_DISABLE_DEFERRED
@@ -39,7 +40,7 @@ pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprit
 	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
 	sl::BlendShader* shader = static_cast<sl::BlendShader*>(rc.GetShaderMgr().GetShader(sl::BLEND));
 
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 	rc.GetShaderMgr().SetShader(sl::BLEND);
 	shader->SetMode(mode);
 #else

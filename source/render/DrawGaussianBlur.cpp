@@ -9,6 +9,7 @@
 
 #include <memmgr/Allocator.h>
 #include <unirender/RenderContext.h>
+#include <unirender/Blackboard.h>
 #include <shaderlab/Blackboard.h>
 #include <shaderlab/ShaderMgr.h>
 #include <shaderlab/RenderContext.h>
@@ -132,8 +133,7 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 {
 	rt->Bind();
 
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 
 	RenderParamsProxy rp_proxy;
 	RenderParams* rp_child = rp_proxy.obj;
@@ -149,7 +149,7 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 #endif // S2_FILTER_FULL
 	rp_child->SetDisableFilter(true);
 
-	rc.GetShaderMgr().SetShader(sl::SPRITE2);
+	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().SetShader(sl::SPRITE2);
 	pt2::RenderReturn ret = DrawNode::Draw(nullptr, spr, *rp_child);
 
 	rt->Unbind();
@@ -164,10 +164,10 @@ pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::R
 
 	dst->Bind();
 	
-	auto& rc = sl::Blackboard::Instance()->GetRenderContext();
-	rc.GetContext().Clear(0);
+	ur::Blackboard::Instance()->GetRenderContext().Clear(0);
 	
-	sl::FilterShader* shader = static_cast<sl::FilterShader*>(rc.GetShaderMgr().GetShader(sl::FILTER));
+	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
+	sl::FilterShader* shader = static_cast<sl::FilterShader*>(shader_mgr.GetShader(sl::FILTER));
 	if (hori) {
 		shader->SetMode(sl::FM_GAUSSIAN_BLUR_HORI);
 		sl::GaussianBlurHoriProg* prog = static_cast<sl::GaussianBlurHoriProg*>(shader->GetProgram(sl::FM_GAUSSIAN_BLUR_HORI));

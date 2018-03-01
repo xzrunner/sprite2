@@ -74,8 +74,8 @@ pt2::RenderReturn DrawBlend::DrawSpr2RT(cooking::DisplayList* dlist, const Sprit
 pt2::RenderReturn DrawBlend::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 										   const RenderParams& rp, bool reset_color) const
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();

@@ -29,8 +29,8 @@ pt2::RenderReturn DrawOuterGlow::Draw(cooking::DisplayList* dlist, const Sprite*
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::OUTER_GLOW);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	DrawGaussianBlur::DrawBlurToRT(dlist, rt, spr, rp, iterations);
 	DrawGaussianBlur::DrawFromRT(dlist, rt, spr->GetPosition());

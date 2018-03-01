@@ -17,9 +17,9 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 #include <string.h>
 
@@ -28,7 +28,7 @@ namespace s2
 
 DrawRT::DrawRT()
 {
-	m_rt = pt2::Blackboard::Instance()->GetContext().GetRTMgr().Fetch();
+	m_rt = pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr().Fetch();
 	m_rt_type = SRC_MGR;
 }
 
@@ -52,7 +52,7 @@ DrawRT::~DrawRT()
 		delete m_rt;
 		break;
 	case SRC_MGR:
-		pt2::Blackboard::Instance()->GetContext().GetRTMgr().Return(m_rt);
+		pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr().Return(m_rt);
 		break;
 	}
 }
@@ -77,9 +77,11 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 		ur_rc.Clear(0);
 	}
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(width), static_cast<float>(height), width, height));
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(width), static_cast<float>(height), width, height);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	RenderParams params;
 	params.mt.Scale(scale, -scale);
@@ -90,7 +92,8 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 	// todo 连续画symbol，不批量的话会慢。需要加个参数控制。
 	rc.GetShaderMgr().FlushShader();
 
-	pt2_ctx.GetCtxStack().Pop();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
 
 	m_rt->Unbind();
 }
@@ -126,9 +129,11 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	int w = static_cast<int>(sz.x * scale),
 		h = static_cast<int>(sz.y * scale);
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(w), static_cast<float>(h), w, h));
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(w), static_cast<float>(h), w, h);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	RenderParams params;
 	sm::vec2 center = rect.Center();
@@ -144,7 +149,8 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 	cooking::flush_shader(nullptr);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2_ctx.GetCtxStack().Pop();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
 
 	m_rt->Unbind();
 }
@@ -172,15 +178,18 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(width), static_cast<float>(height), width, height));
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(width), static_cast<float>(height), width, height);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	RenderParams rp;
 	rp.mt.Scale(1, -1);
 	shape.Draw(nullptr, rp);
 
-	pt2_ctx.GetCtxStack().Pop();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
 
 	m_rt->Unbind();
 }

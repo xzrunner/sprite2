@@ -23,10 +23,10 @@
 #include <painting2/RenderColorCommon.h>
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 namespace s2
 {
@@ -35,8 +35,8 @@ pt2::RenderReturn DrawGaussianBlur::Draw(cooking::DisplayList* dlist, const Spri
 {
 	pt2::RenderReturn ret = pt2::RENDER_OK;
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 	pt2::RenderTarget* rt = rt_mgr.Fetch();
 
 	ret |= DrawBlurToRT(dlist, rt, spr, rp, iterations);
@@ -56,8 +56,8 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::GAUSSIAN_BLUR);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 	pt2::RenderTarget* tmp_rt = rt_mgr.Fetch();
 
 #ifdef S2_DISABLE_DEFERRED
@@ -67,9 +67,13 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	ret |= DrawInit(rt, spr, rp);
 
@@ -86,8 +90,10 @@ pt2::RenderReturn DrawGaussianBlur::DrawBlurToRT(cooking::DisplayList* dlist, pt
 		ret |= DrawBetweenRT(tmp_rt, rt, false, rp.col_common, sz.y);
 	}
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 
 	rt_mgr.Return(tmp_rt);
 
@@ -159,8 +165,8 @@ pt2::RenderReturn DrawGaussianBlur::DrawInit(pt2::RenderTarget* rt, const Sprite
 
 pt2::RenderReturn DrawGaussianBlur::DrawBetweenRT(pt2::RenderTarget* src, pt2::RenderTarget* dst, bool hori, const pt2::RenderColorCommon& col, float tex_size)
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	dst->Bind();
 	

@@ -6,11 +6,12 @@
 #include "sprite2/SymType.h"
 #include "sprite2/DrawNode.h"
 
-#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 #include <painting3/PrimitiveDraw.h>
-#include <painting3/WndCtxStack.h>
+#include <painting3/Blackboard.h>
+#include <painting3/WindowContext.h>
 #include <node3/RenderParams.h>
 #include <node3/DrawNode.h>
 
@@ -77,14 +78,10 @@ sm::mat4 SNodeSymbol::CalcCam2dMat(const S2_MAT& mt2)
 	mt16.x[12] = mt6[4] * SCALE;
 	mt16.x[13] = mt6[5] * SCALE;
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto ctx = pt2_ctx.GetCtxStack().Top();
-	if (!ctx) {
-		return mt16;
-	}
-
-	auto& translate = ctx->GetMVOffset();
-	float scale = ctx->GetMVScale();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	GD_ASSERT(wc, "null wc");
+	auto& translate = wc->GetMVOffset();
+	float scale = wc->GetMVScale();
 	sm::mat4 mt_scale = sm::mat4::Scaled(scale, scale, 1);
 	sm::mat4 mt_translate = sm::mat4::Translated(translate.x * SCALE, translate.y * SCALE, 0);
 
@@ -93,8 +90,8 @@ sm::mat4 SNodeSymbol::CalcCam2dMat(const S2_MAT& mt2)
 
 sm::mat4 SNodeSymbol::CalcCam3dMat()
 {
-	auto ctx = pt3::WndCtxStack::Instance()->Top();
-	return ctx ? ctx->GetModelViewMat() : sm::mat4();
+	auto wc = pt3::Blackboard::Instance()->GetWindowContext();
+	return wc ? wc->GetModelViewMat() : sm::mat4();
 }
 
 }

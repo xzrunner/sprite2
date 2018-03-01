@@ -16,10 +16,10 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 namespace s2
 {
@@ -31,8 +31,8 @@ DrawPingPong::DrawPingPong(int stat_pp_type)
 
 pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	sm::rect sz;
 	spr->GetBounding(rp.actor).CombineTo(sz);
@@ -51,10 +51,16 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2_ctx.GetScissor().Disable();
-	if (!too_large) {
-		pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-			static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	if (!too_large) 
+	{
+		auto new_wc = std::make_shared<pt2::WindowContext>(
+			static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT);
+		new_wc->Bind();
+		pt2::Blackboard::Instance()->SetWindowContext(new_wc);
+
 	}
 
 	rt->Bind();
@@ -62,9 +68,10 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 	rt->Unbind();
 
 	if (!too_large) {
-		pt2_ctx.GetCtxStack().Pop();
+		old_wc->Bind();
+		pt2::Blackboard::Instance()->SetWindowContext(old_wc);
 	}
-	pt2_ctx.GetScissor().Enable();
+	pt2_rc.GetScissor().Enable();
 
 	ret |= DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, too_large);
 	if (too_large) {
@@ -91,8 +98,8 @@ pt2::RenderReturn DrawPingPong::DrawRT2Screen(cooking::DisplayList* dlist, int t
 pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 	sm::rect r = spr->GetSymbol()->GetBounding();
@@ -156,8 +163,10 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenSmall(cooking::DisplayList* dlist, 
 pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, int tex_id, const Sprite* spr,
 											  const RenderParams& rp, bool reset_color) const
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	float xmin = -1, ymin = -1;
 	float xmax =  1, ymax =  1;
@@ -205,7 +214,8 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, 
 #endif // S2_DISABLE_DEFERRED
 	}
 
-	pt2_ctx.GetCtxStack().Pop();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
 
 	return pt2::RENDER_OK;
 }

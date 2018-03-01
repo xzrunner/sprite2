@@ -19,11 +19,10 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderTargetMgr.h>
-#include <painting2/WindowContext.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 namespace s2
 {
@@ -35,9 +34,9 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 		return pt2::RENDER_NO_DATA;
 	}
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
 
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 	pt2::RenderTarget* rt = rt_mgr.Fetch();
 	if (!rt) {
 		return pt2::RENDER_NO_RT;
@@ -49,16 +48,22 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	rt->Bind();
 	DrawSpr2RT(spr, rp, downsample);
 	rt->Unbind();
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 
 	DrawRT2Screen(dlist, rt->GetTexID(), spr, rp, downsample);
 
@@ -91,8 +96,8 @@ pt2::RenderReturn DrawDownsample::DrawSpr2RT(const Sprite* spr, const RenderPara
 pt2::RenderReturn DrawDownsample::DrawRT2Screen(cooking::DisplayList* dlist, int tex_id, 
 	                                       const Sprite* spr, const RenderParams& rp, float downsample)
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	S2_MAT t = spr->GetLocalMat() * rp.mt;
 

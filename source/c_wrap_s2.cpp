@@ -52,12 +52,12 @@
 #include <s2s/ColorParser.h>
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
 #include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -88,11 +88,10 @@ void s2_init()
 extern "C"
 void s2_on_size(int w, int h) 
 {
-	auto& stack = pt2::Blackboard::Instance()->GetContext().GetCtxStack();
-	if (stack.Size() <= 1) {
-		stack.Pop();
-		stack.Push(pt2::WindowContext(static_cast<float>(w), static_cast<float>(h), w, h));
-	}
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(w), static_cast<float>(h), w, h);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 }
 
 extern "C"
@@ -1428,14 +1427,14 @@ void s2_actor_scale9_resize(void* actor, int w, int h) {
 extern "C"
 void* s2_rt_fetch()
 {
-	return pt2::Blackboard::Instance()->GetContext().GetRTMgr().Fetch();
+	return pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr().Fetch();
 }
 
 extern "C"
 void s2_rt_return(void* rt)
 {
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
-	pt2::Blackboard::Instance()->GetContext().GetRTMgr().Return(s2_rt);
+	pt2::Blackboard::Instance()->GetRenderContext().GetRTMgr().Return(s2_rt);
 }
 
 static void _draw(const struct s2_region* dst, const struct s2_region* src, int src_tex_id)
@@ -1488,11 +1487,15 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	s2_rt->Bind();
@@ -1501,8 +1504,10 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 
 	s2_rt->Unbind();
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 }
 
 extern "C"
@@ -1512,16 +1517,22 @@ void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::RT_OUTSIDE);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
+	auto& pt2_rc = pt2::Blackboard::Instance()->GetRenderContext();
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	int src_tex_id = s2_rt->GetTexID();
 	_draw(dst, src, src_tex_id);
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 }
 
 extern "C"
@@ -1636,9 +1647,8 @@ uint32_t s2_trans_color(uint32_t src, enum S2_PIXEL_TYPE src_type, enum S2_PIXEL
 extern "C"
 void s2_set_viewport(float x, float y, float w, float h)
 {
-	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	auto ctx = const_cast<pt2::WindowContext*>(pt2_ctx.GetCtxStack().Top());
-	ctx->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	wc->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 
 }

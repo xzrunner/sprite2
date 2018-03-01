@@ -28,7 +28,6 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 
 namespace s2
@@ -79,7 +78,7 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	st::StatPingPong::Instance()->AddCount(st::StatPingPong::MASK);
 #endif // S2_DISABLE_STATISTICS
 
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 #ifdef S2_DISABLE_DEFERRED
 	auto& shader_mgr = sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr();
@@ -88,29 +87,44 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 	cooking::flush_shader(dlist);
 #endif // S2_DISABLE_DEFERRED
 
-	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
-		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_rc.GetScissor().Disable();
+
+	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
+	auto new_wc = std::make_shared<pt2::WindowContext>(
+		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT);
+	new_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
 	pt2::RenderTarget* rt_base = rt_mgr.Fetch();
-	if (!rt_base) {
-		pt2_ctx.GetCtxStack().Pop();
-		pt2_ctx.GetScissor().Enable();
+	if (!rt_base) 
+	{
+		old_wc->Bind();
+		pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+		pt2_rc.GetScissor().Enable();
+
 		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawBaseToRT(dlist, rt_base, ft, base, base_actor, rp);
 
 	pt2::RenderTarget* rt_mask = rt_mgr.Fetch();
-	if (!rt_mask) {
+	if (!rt_mask) 
+	{
 		rt_mgr.Return(rt_base);
-		pt2_ctx.GetCtxStack().Pop();
-		pt2_ctx.GetScissor().Enable();
+
+		old_wc->Bind();
+		pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+		pt2_rc.GetScissor().Enable();
+
 		return pt2::RENDER_NO_RT;
 	}
 	ret |= DrawMaskToRT(dlist, rt_mask, ft, mask, mask_actor, rp);
 
-	pt2_ctx.GetCtxStack().Pop();
-	pt2_ctx.GetScissor().Enable();
+	old_wc->Bind();
+	pt2::Blackboard::Instance()->SetWindowContext(old_wc);
+
+	pt2_rc.GetScissor().Enable();
 
 	ret |= DrawMaskFromRT(dlist, rt_base, rt_mask, ft, mask, rp.mt);
 
@@ -205,7 +219,7 @@ pt2::RenderReturn DrawMaskFT::DrawMaskFromRT(cooking::DisplayList* dlist, pt2::R
 		return pt2::RENDER_NO_DATA;
 	}
 
-	auto& rt_mgr = pt2_ctx.GetRTMgr();
+	auto& rt_mgr = pt2_rc.GetRTMgr();
 
 	const Symbol* sym = nullptr;
 	if (ft_n->IsDataSpr()) {

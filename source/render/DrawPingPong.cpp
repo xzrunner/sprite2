@@ -16,10 +16,10 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 namespace s2
 {
@@ -53,7 +53,7 @@ pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* 
 
 	pt2_ctx.GetScissor().Disable();
 	if (!too_large) {
-		pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+		pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 			static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 	}
 
@@ -157,7 +157,7 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, 
 											  const RenderParams& rp, bool reset_color) const
 {
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
 
 	float xmin = -1, ymin = -1;
 	float xmax =  1, ymax =  1;

@@ -6,12 +6,12 @@
 #include "sprite2/SymType.h"
 #include "sprite2/DrawNode.h"
 
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 #include <painting3/PrimitiveDraw.h>
+#include <painting3/WndCtxStack.h>
 #include <node3/RenderParams.h>
-#include <node3/RenderCtxStack.h>
 #include <node3/DrawNode.h>
 
 namespace s2
@@ -93,7 +93,7 @@ sm::mat4 SNodeSymbol::CalcCam2dMat(const S2_MAT& mt2)
 
 sm::mat4 SNodeSymbol::CalcCam3dMat()
 {
-	auto ctx = n3::RenderCtxStack::Instance()->Top();
+	auto ctx = pt3::WndCtxStack::Instance()->Top();
 	return ctx ? ctx->GetModelViewMat() : sm::mat4();
 }
 

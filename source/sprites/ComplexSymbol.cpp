@@ -22,7 +22,7 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 #include <cu/cu_stl.h>
 #include <SM_Test.h>

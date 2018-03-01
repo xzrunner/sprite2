@@ -20,9 +20,9 @@
 #endif // S2_DISABLE_STATISTICS
 #include <painting2/RenderShader.h>
 #include <painting2/RenderTargetMgr.h>
-#include <painting2/RenderContext.h>
+#include <painting2/WindowContext.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 namespace s2
 {

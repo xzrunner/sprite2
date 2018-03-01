@@ -27,7 +27,7 @@
 #include <cooking/DisplayList.h>
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/Texture.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>
 

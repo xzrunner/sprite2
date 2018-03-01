@@ -19,11 +19,11 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTarget.h>
 #include <painting2/RenderTargetMgr.h>
-#include <painting2/RenderContext.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WindowContext.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 namespace s2
 {
@@ -50,7 +50,7 @@ pt2::RenderReturn DrawDownsample::Draw(cooking::DisplayList* dlist, const Sprite
 	sl::Blackboard::Instance()->GetRenderContext().GetShaderMgr().FlushShader();
 
 	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	rt->Bind();

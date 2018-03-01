@@ -17,9 +17,9 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 #include <string.h>
 
@@ -78,7 +78,7 @@ void DrawRT::Draw(const Sprite& spr, bool clear, int width, int height, float dx
 	}
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams params;
@@ -127,7 +127,7 @@ void DrawRT::Draw(const Symbol& sym, bool whitebg, float scale)
 		h = static_cast<int>(sz.y * scale);
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 		static_cast<float>(w), static_cast<float>(h), w, h));
 
 	RenderParams params;
@@ -173,7 +173,7 @@ void DrawRT::Draw(const Shape& shape, bool clear, int width, int height)
 	}
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 		static_cast<float>(width), static_cast<float>(height), width, height));
 
 	RenderParams rp;

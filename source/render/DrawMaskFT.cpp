@@ -28,7 +28,7 @@
 #endif // S2_DISABLE_DEFERRED
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 
 namespace s2
@@ -89,7 +89,7 @@ pt2::RenderReturn DrawMaskFT::Draw(cooking::DisplayList* dlist, ft::FTList& ft,
 #endif // S2_DISABLE_DEFERRED
 
 	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(
 		static_cast<float>(rt_mgr.WIDTH), static_cast<float>(rt_mgr.HEIGHT), rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	pt2::RenderTarget* rt_base = rt_mgr.Fetch();

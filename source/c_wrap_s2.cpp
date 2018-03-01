@@ -52,12 +52,12 @@
 #include <s2s/ColorParser.h>
 #include <painting2/RenderTargetMgr.h>
 #include <painting2/RenderTarget.h>
-#include <painting2/RenderCtxStack.h>
+#include <painting2/WndCtxStack.h>
 #include <painting2/RenderScissor.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/PrimitiveDraw.h>
 #include <painting2/Blackboard.h>
-#include <painting2/Context.h>
+#include <painting2/RenderContext.h>
 
 #ifndef S2_DISABLE_DEFERRED
 #include <cooking/DisplayList.h>
@@ -91,7 +91,7 @@ void s2_on_size(int w, int h)
 	auto& stack = pt2::Blackboard::Instance()->GetContext().GetCtxStack();
 	if (stack.Size() <= 1) {
 		stack.Pop();
-		stack.Push(pt2::RenderContext(static_cast<float>(w), static_cast<float>(h), w, h));
+		stack.Push(pt2::WindowContext(static_cast<float>(w), static_cast<float>(h), w, h));
 	}
 }
 
@@ -1492,7 +1492,7 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	auto& rt_mgr = pt2_ctx.GetRTMgr();
 
 	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT));
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT));
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	s2_rt->Bind();
@@ -1514,7 +1514,7 @@ void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region
 
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
 	pt2_ctx.GetScissor().Disable();
-	pt2_ctx.GetCtxStack().Push(pt2::RenderContext(2, 2, 0, 0));
+	pt2_ctx.GetCtxStack().Push(pt2::WindowContext(2, 2, 0, 0));
 
 	pt2::RenderTarget* s2_rt = static_cast<pt2::RenderTarget*>(rt);
 	int src_tex_id = s2_rt->GetTexID();
@@ -1637,7 +1637,7 @@ extern "C"
 void s2_set_viewport(float x, float y, float w, float h)
 {
 	auto& pt2_ctx = pt2::Blackboard::Instance()->GetContext();
-	pt2::RenderContext* ctx = const_cast<pt2::RenderContext*>(pt2_ctx.GetCtxStack().Top());
+	auto ctx = const_cast<pt2::WindowContext*>(pt2_ctx.GetCtxStack().Top());
 	ctx->SetViewport(static_cast<int>(x), static_cast<int>(y), static_cast<int>(w), static_cast<int>(h));
 }
 

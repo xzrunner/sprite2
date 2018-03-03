@@ -29,6 +29,8 @@
 #include <painting2/Texture.h>
 #include <painting2/OrthoCamera.h>
 #include <painting2/Pseudo3DCamera.h>
+#include <painting2/Blackboard.h>
+#include <painting2/WindowContext.h>
 
 #include <assert.h>
 
@@ -225,22 +227,24 @@ void ImageSymbol::DrawBlend(const RenderParams& rp, float* vertices, const float
 	}
 	
 	sm::vec2 tex_coords_base[4];
-	const sm::ivec2& screen_sz = Blackboard::Instance()->GetScreenSize();
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	int scr_w = wc->GetScreenWidth();
+	int scr_h = wc->GetScreenHeight();
 	if (cam) {
 		for (int i = 0; i < 4; ++i)  {
-			tex_coords_base[i] = ocam->TransPosProjectToScreen(vertices_scr[i], screen_sz.x, screen_sz.y);
+			tex_coords_base[i] = ocam->TransPosProjectToScreen(vertices_scr[i], scr_w, scr_h);
 		}
 	} else {
 		for (int i = 0; i < 4; ++i)  {
-			tex_coords_base[i].x = screen_sz.x * 0.5f + vertices_scr[i].x;
-			tex_coords_base[i].y = screen_sz.y * 0.5f - vertices_scr[i].y;
+			tex_coords_base[i].x = scr_w * 0.5f + vertices_scr[i].x;
+			tex_coords_base[i].y = scr_h * 0.5f - vertices_scr[i].y;
 		}
 	}
 	for (int i = 0; i < 4; ++i) 
 	{
-		tex_coords_base[i].y = screen_sz.y - 1 - tex_coords_base[i].y;
-		tex_coords_base[i].x /= screen_sz.x;
-		tex_coords_base[i].y /= screen_sz.y;
+		tex_coords_base[i].y = scr_h - 1 - tex_coords_base[i].y;
+		tex_coords_base[i].x /= scr_w;
+		tex_coords_base[i].y /= scr_h;
 	}
 
 	int screen_cache_texid = Blackboard::Instance()->GetScreenCacheTexID();

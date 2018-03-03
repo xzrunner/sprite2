@@ -20,7 +20,6 @@ public:
 	const std::shared_ptr<pt2::Camera>& GetCamera() const { return m_cam; }
 	void SetCamera(const std::shared_ptr<pt2::Camera>& cam) { m_cam = cam; }
 
-	const sm::ivec2& GetScreenSize() const { return m_screen_sz; }
 	void SetScreenSize(int w, int h);
 
 	void SetDlistEnable(bool enable) { m_dlist_enable = enable; }
@@ -32,8 +31,6 @@ private:
 	int m_screen_cache_texid;
 
 	std::shared_ptr<pt2::Camera> m_cam = nullptr;
-
-	sm::ivec2 m_screen_sz;
 
 	bool m_dlist_enable;
 	

@@ -16,9 +16,6 @@ Blackboard::Blackboard()
 
 void Blackboard::SetScreenSize(int w, int h) 
 { 
-	m_screen_sz.x = w; 
-	m_screen_sz.y = h; 
-
 	if (m_cam) {
 		m_cam->OnSize(w, h);
 	}

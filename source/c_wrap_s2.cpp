@@ -97,9 +97,9 @@ void s2_on_size(int w, int h)
 extern "C"
 void s2_get_screen_size(int* w, int* h)
 {
-	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
-	*w = sz.x;
-	*h = sz.y;
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	*w = wc->GetScreenWidth();
+	*h = wc->GetScreenHeight();;
 }
 
 /************************************************************************/
@@ -1493,7 +1493,7 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	pt2_rc.GetScissor().Disable();
 
 	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
-	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, rt_mgr.WIDTH, rt_mgr.HEIGHT);
+	auto new_wc = std::make_shared<pt2::WindowContext>(2.0f, 2.0f, rt_mgr.WIDTH, rt_mgr.HEIGHT);
 	new_wc->Bind();
 	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
@@ -1501,7 +1501,7 @@ void s2_rt_draw_from(void* rt, const struct s2_region* dst, const struct s2_regi
 	s2_rt->Bind();
 
 	_draw(dst, src, src_tex_id);
-
+	
 	s2_rt->Unbind();
 
 	old_wc->Bind();
@@ -1521,7 +1521,7 @@ void s2_rt_draw_to(void* rt, const struct s2_region* dst, const struct s2_region
 	pt2_rc.GetScissor().Disable();
 
 	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
-	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+	auto new_wc = std::make_shared<pt2::WindowContext>(2.0f, 2.0f, 0, 0);
 	new_wc->Bind();
 	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 
@@ -1589,8 +1589,9 @@ extern "C"
 void s2_cam_screen2project(const void* cam, int src_x, int src_y, float* dst_x, float* dst_y)
 {
 	auto o_cam = *static_cast<const std::shared_ptr<pt2::OrthoCamera>*>(cam);
-	const sm::ivec2& sz = Blackboard::Instance()->GetScreenSize();
-	sm::vec2 dst = o_cam->TransPosScreenToProject(src_x, src_y, sz.x, sz.y);
+	auto& wc = pt2::Blackboard::Instance()->GetWindowContext();
+	sm::vec2 dst = o_cam->TransPosScreenToProject(
+		src_x, src_y, wc->GetScreenWidth(), wc->GetScreenHeight());
 	*dst_x = dst.x;
 	*dst_y = dst.y;
 }

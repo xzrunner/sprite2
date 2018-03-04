@@ -164,7 +164,7 @@ pt2::RenderReturn DrawPingPong::DrawRT2ScreenLarge(cooking::DisplayList* dlist, 
 											  const RenderParams& rp, bool reset_color) const
 {
 	auto old_wc = pt2::Blackboard::Instance()->GetWindowContext();
-	auto new_wc = std::make_shared<pt2::WindowContext>(2, 2, 0, 0);
+	auto new_wc = std::make_shared<pt2::WindowContext>(2.0f, 2.0f, 0, 0);
 	new_wc->Bind();
 	pt2::Blackboard::Instance()->SetWindowContext(new_wc);
 

@@ -211,8 +211,8 @@ void Sprite::SetShear(const sm::vec2& shear)
 	trans.SetShear(shear);
 
 	// immediately
-	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
-	auto& bb = cbounding.GetBB();
+	auto& cbb = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbb.GetBB();
 	bb.SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
@@ -243,8 +243,8 @@ void Sprite::SetOffset(const sm::vec2& offset)
 	trans.SetPosition(trans.GetPosition() + old_center - new_center);
 
 	// immediately
-	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
-	auto& bb = cbounding.GetBB();
+	auto& cbb = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbb.GetBB();
 	bb.SetTransform(trans.GetPosition(), trans.GetOffset(), trans.GetAngle());
 
 	// 	// lazy
@@ -346,8 +346,8 @@ const pt2::BoundingBox& Sprite::GetBounding(const Actor* actor) const
 	if (IsBoundingDirty()) {
 		UpdateBounding(actor);
 	}
-	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
-	return cbounding.GetBB();
+	auto& cbb = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	return cbb.GetBB();
 }
 
 // todo: m_sym->GetBounding too slow, should be cached
@@ -366,8 +366,8 @@ void Sprite::UpdateBounding(const Actor* actor) const
 	assert(!IsGeoMatrix());
 #endif // S2_SPR_CACHE_LOCAL_MAT_SHARE
 
-	auto& cbounding = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
-	auto& bb = cbounding.GetBB();
+	auto& cbb = HasComponent<CompBoundingBox>() ? GetComponent<CompBoundingBox>() : AddComponent<CompBoundingBox>();
+	auto& bb = cbb.GetBB();
 	auto& ctrans = GetTransform();
 	bb.Build(rect, ctrans.GetPosition(), ctrans.GetAngle(), ctrans.GetScale(), 
 		ctrans.GetShear(), ctrans.GetOffset());

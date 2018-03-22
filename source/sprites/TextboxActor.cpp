@@ -21,11 +21,13 @@ _init_gtxt_label_style(struct gtxt_label_style* dst, const pt2::Textbox& src) {
 
 	dst->gs.font = src.font_type;
 	dst->gs.font_size = src.font_size;
-	dst->gs.font_color.integer = src.font_color.ToRGBA();
+	dst->gs.font_color.mode_type = 0;
+	dst->gs.font_color.mode.ONE.color.integer = src.font_color.ToRGBA();
 
 	dst->gs.edge = src.has_edge;
 	dst->gs.edge_size = src.edge_size;
-	dst->gs.edge_color.integer = src.edge_color.ToRGBA();
+	dst->gs.edge_color.mode_type = 0;
+	dst->gs.edge_color.mode.ONE.color.integer = src.edge_color.ToRGBA();
 
 	dst->overflow = src.overflow;
 }

@@ -165,11 +165,13 @@ pt2::RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const Ren
 
 	s.gs.font = tb.font_type;
 	s.gs.font_size = tb.font_size;
-	s.gs.font_color.integer = tb.font_color.ToRGBA();
+	s.gs.font_color.mode_type = 0;
+	s.gs.font_color.mode.ONE.color.integer = tb.font_color.ToRGBA();
 
 	s.gs.edge = tb.has_edge;
 	s.gs.edge_size = tb.edge_size;
-	s.gs.edge_color.integer = tb.edge_color.ToRGBA();
+	s.gs.edge_color.mode_type = 0;
+	s.gs.edge_color.mode.ONE.color.integer = tb.edge_color.ToRGBA();
 
 	s.align_h = tb.align_hori;
 	s.align_v = tb.align_vert;

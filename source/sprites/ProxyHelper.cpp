@@ -465,7 +465,9 @@ void ProxyHelper::SprTextboxSetFontColor(const Sprite& spr, uint32_t abgr)
 	else if (type == SYM_TEXTBOX)
 	{
 		auto& tb_spr = S2_VI_DOWN_CAST<const TextboxSprite&>(spr);
-		const_cast<TextboxSprite&>(tb_spr).GetTextbox().font_color.FromABGR(abgr);
+		pt2::GradientColor& col = const_cast<TextboxSprite&>(tb_spr).GetTextbox().font_color;
+		col.items.resize(1);
+		col.items[0].col.FromABGR(abgr);
 	}
 }
 
@@ -483,7 +485,9 @@ void ProxyHelper::SprTextboxSetEdgeColor(const Sprite& spr, uint32_t abgr)
 	else if (type == SYM_TEXTBOX)
 	{
 		auto& tb_spr = S2_VI_DOWN_CAST<const TextboxSprite&>(spr);
-		const_cast<TextboxSprite&>(tb_spr).GetTextbox().edge_color.FromABGR(abgr);
+		pt2::GradientColor& col = const_cast<TextboxSprite&>(tb_spr).GetTextbox().edge_color;
+		col.items.resize(1);
+		col.items[0].col.FromABGR(abgr);
 	}
 }
 

@@ -89,6 +89,36 @@ pt2::RenderReturn TextboxSymbol::DrawNode(cooking::DisplayList* dlist, const Ren
 }
 #endif // S2_DISABLE_FLATTEN
 
+void TextboxSymbol::CopyColor(gtxt_glyph_color& dst, const pt2::GradientColor& src)
+{
+	if (src.items.size() == 3)
+	{
+		dst.mode_type = 2;
+		dst.mode.THREE.begin_col.integer = src.items[0].col.ToRGBA();
+		dst.mode.THREE.mid_col.integer = src.items[1].col.ToRGBA();
+		dst.mode.THREE.end_col.integer = src.items[2].col.ToRGBA();
+		dst.mode.THREE.begin_pos = src.items[0].pos;
+		dst.mode.THREE.mid_pos = src.items[1].pos;
+		dst.mode.THREE.end_pos = src.items[2].pos;
+		dst.mode.THREE.angle = src.angle * SM_DEG_TO_RAD;
+	}
+	else if (src.items.size() == 2)
+	{
+		dst.mode_type = 1;
+		dst.mode.TWO.begin_col.integer = src.items[0].col.ToRGBA();
+		dst.mode.TWO.end_col.integer = src.items[1].col.ToRGBA();
+		dst.mode.TWO.begin_pos = src.items[0].pos;
+		dst.mode.TWO.end_pos = src.items[1].pos;
+		dst.mode.TWO.angle = src.angle * SM_DEG_TO_RAD;
+	}
+	else
+	{
+		assert(src.items.size() == 1);
+		dst.mode_type = 0;
+		dst.mode.ONE.color.integer = src.items[0].col.ToRGBA();
+	}
+}
+
 sm::rect TextboxSymbol::GetBoundingImpl(const Sprite* spr, const Actor* actor, bool cache) const
 {
 	if (actor)
@@ -165,13 +195,11 @@ pt2::RenderReturn TextboxSymbol::DrawImpl(cooking::DisplayList* dlist, const Ren
 
 	s.gs.font = tb.font_type;
 	s.gs.font_size = tb.font_size;
-	s.gs.font_color.mode_type = 0;
-	s.gs.font_color.mode.ONE.color.integer = tb.font_color.ToRGBA();
+	CopyColor(s.gs.font_color, tb.font_color);
 
 	s.gs.edge = tb.has_edge;
 	s.gs.edge_size = tb.edge_size;
-	s.gs.edge_color.mode_type = 0;
-	s.gs.edge_color.mode.ONE.color.integer = tb.edge_color.ToRGBA();
+	CopyColor(s.gs.edge_color, tb.edge_color);
 
 	s.align_h = tb.align_hori;
 	s.align_v = tb.align_vert;

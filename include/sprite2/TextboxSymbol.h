@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 struct gtxt_label_style;
+struct gtxt_glyph_color;
 
 namespace s2
 {
@@ -39,6 +40,8 @@ public:
 	pt2::Textbox& GetTextbox() { return m_tb; }
 
 	void SetTextbox(const pt2::Textbox& tb) { m_tb = tb; }
+
+	static void CopyColor(gtxt_glyph_color& dst, const pt2::GradientColor& src);
 
 protected:
 	virtual sm::rect GetBoundingImpl(const Sprite* spr = nullptr, const Actor* actor = nullptr, bool cache = true) const override;

@@ -16,7 +16,9 @@ namespace s2
 {
 
 DrawIntegrate::DrawIntegrate()
+#ifndef S2_DISABLE_STATISTICS
 	: DrawPingPong(st::StatPingPong::INTEGRATE)
+#endif // S2_DISABLE_STATISTICS
 {	
 }
 

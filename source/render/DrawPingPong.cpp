@@ -24,10 +24,16 @@
 namespace s2
 {
 
+#ifndef S2_DISABLE_STATISTICS
 DrawPingPong::DrawPingPong(int stat_pp_type)
 	: m_stat_pp_type(stat_pp_type)
 {
 }
+#else
+DrawPingPong::DrawPingPong()
+{
+}
+#endif // S2_DISABLE_STATISTICS
 
 pt2::RenderReturn DrawPingPong::Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const
 {

@@ -2,6 +2,7 @@
 #define _SPRITE2_DRAW_PINGPONG_H_
 
 #include "sprite2/typedef.h"
+#include "sprite2/config.h"
 
 #include <painting2/RenderReturn.h>
 
@@ -16,7 +17,11 @@ class RenderParams;
 class DrawPingPong
 {
 public:
+#ifndef S2_DISABLE_STATISTICS
 	DrawPingPong(int stat_pp_type);
+#else
+	DrawPingPong();
+#endif // S2_DISABLE_STATISTICS
 
 	pt2::RenderReturn Draw(cooking::DisplayList* dlist, const Sprite* spr, const RenderParams& rp) const;
 

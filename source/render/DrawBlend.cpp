@@ -28,7 +28,9 @@ namespace s2
 {
 
 DrawBlend::DrawBlend()
+#ifndef S2_DISABLE_STATISTICS
 	: DrawPingPong(st::StatPingPong::BLEND)
+#endif // S2_DISABLE_STATISTICS
 {
 }
 
